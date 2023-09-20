@@ -6,7 +6,7 @@ using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Content;
-using Medicraft.Entites;
+using Medicraft.Entities;
 
 namespace Medicraft.Screens
 {
@@ -17,17 +17,17 @@ namespace Medicraft.Screens
 
         public TestScreen()
         {
-            Singleton.Instance._playerPosition = new Vector2((Singleton.Instance.gameScreen.X - 70) / 2, (Singleton.Instance.gameScreen.Y - 110) / 2);
+            Singleton.Instance.playerPosition = new Vector2((Singleton.Instance.gameScreen.X - 70) / 2, (Singleton.Instance.gameScreen.Y - 110) / 2);
         }
 
         public override void LoadContent(Camera camera)
         {
-            base.LoadContent();
+            base.LoadContent(camera);
 
             // Test Player
             var _spriteSheet = Content.Load<SpriteSheet>("animation/MCSpriteSheet.sf", new JsonContentLoader());
             var _playerSprite = new AnimatedSprite(_spriteSheet);
-            Singleton.Instance._player = EntityManager.Instance.AddEntity(new Player(_playerSprite, Singleton.Instance._playerPosition));
+            Singleton.Instance._player = EntityManager.Instance.AddEntity(new Player(_playerSprite, Singleton.Instance.playerPosition));
 
             // Test Load Data
             // Load Data Game from JSON file
@@ -44,6 +44,7 @@ namespace Medicraft.Screens
         public override void Update(GameTime gameTime)
         {
             EntityManager.Instance.Update(gameTime);
+            Camera.SetPosition(Singleton.Instance._player.Position);
 
             base.Update(gameTime);
         }

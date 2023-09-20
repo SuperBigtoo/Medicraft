@@ -10,11 +10,6 @@ namespace Medicraft.Screens
         protected ContentManager Content;
         protected Camera Camera;
 
-        public virtual void LoadContent()
-        {
-            Content = new ContentManager(ScreenManager.Instance.Content.ServiceProvider, "Content");
-        }
-
         public virtual void LoadContent(Camera camera)
         {
             Content = new ContentManager(ScreenManager.Instance.Content.ServiceProvider, "Content");

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
 
-namespace Medicraft.Entites
+namespace Medicraft.Entities
 {
     public class Player : Entity
     {

@@ -1,4 +1,4 @@
-﻿using Medicraft.Entites;
+﻿using Medicraft.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
@@ -11,15 +11,15 @@ namespace Medicraft.Systems
 
         public MouseState mousePreviose, mouseCurrent;
         public KeyboardState keyboardPreviose, keyboardCurrent;
-        public Vector2 gameScreen = new Vector2(1920, 1080);
-        public Vector2 _playerPosition;
+        public Vector2 gameScreen;
+        public Vector2 playerPosition;
         public bool IsGameActive;
 
         private static Singleton instance;
 
         private Singleton()
         {
-            
+            gameScreen = new Vector2(1440, 900);
         }
 
         public static Singleton Instance

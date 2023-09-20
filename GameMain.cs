@@ -2,9 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
-using MonoGame.Extended.BitmapFonts;
-
 
 namespace Medicraft
 {
@@ -12,8 +9,8 @@ namespace Medicraft
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private Camera _camera;
 
-        private readonly Camera _camera;
         private readonly EntityManager _entityManager;
         private readonly Singleton _singleton;
 
@@ -22,7 +19,6 @@ namespace Medicraft
             _singleton = Singleton.Instance;
             _entityManager = EntityManager.Instance;
             _graphics = new GraphicsDeviceManager(this);
-            _camera = new Camera(GraphicsDevice.Viewport);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -37,7 +33,9 @@ namespace Medicraft
                 , (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2) - (_graphics.PreferredBackBufferHeight / 2));
             _graphics.ToggleFullScreen();
             _graphics.ApplyChanges();
-                        
+
+            _camera = new Camera(GraphicsDevice.Viewport);
+
             base.Initialize();
         }
 

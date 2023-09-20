@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 
-namespace Medicraft.Entites
+namespace Medicraft.Entities
 {
     public abstract class Entity
     {

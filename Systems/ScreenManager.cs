@@ -39,7 +39,7 @@ namespace Medicraft.Systems
             {
                 case GameScreen.TestScreen:
                     currentScreen = new TestScreen();
-                    currentScreen.LoadContent();
+                    currentScreen.LoadContent(Camera);
                     break;
             }
         }
@@ -49,7 +49,7 @@ namespace Medicraft.Systems
             Content = new ContentManager(content.ServiceProvider, "Content");
             Camera = camera;
 
-            currentScreen.LoadContent();
+            currentScreen.LoadContent(camera);
         }
 
         public void UnloadContent()
