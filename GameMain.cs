@@ -1,13 +1,10 @@
-﻿using Medicraft.Data.Models;
-using Medicraft.Entites;
-using Medicraft.Systems;
+﻿using Medicraft.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.Serialization;
-using MonoGame.Extended.Sprites;
-using MonoGame.Extended.Content;
+
 
 namespace Medicraft
 {
@@ -16,16 +13,16 @@ namespace Medicraft
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        private readonly Camera _camera;
         private readonly EntityManager _entityManager;
         private readonly Singleton _singleton;
-        private EntityStats _slime;
-        private BitmapFont _font;
 
         public GameMain()
         {
             _singleton = Singleton.Instance;
-            _entityManager = new EntityManager();
+            _entityManager = EntityManager.Instance;
             _graphics = new GraphicsDeviceManager(this);
+            _camera = new Camera(GraphicsDevice.Viewport);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -40,9 +37,7 @@ namespace Medicraft
                 , (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2) - (_graphics.PreferredBackBufferHeight / 2));
             _graphics.ToggleFullScreen();
             _graphics.ApplyChanges();
-
-            Singleton.Instance._playerPosition = new Vector2((_singleton.gameScreen.X - 70) / 2, (_singleton.gameScreen.Y - 110) / 2);
-
+                        
             base.Initialize();
         }
 
@@ -51,19 +46,13 @@ namespace Medicraft
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            // Test Player
-            var _spriteSheet = Content.Load<SpriteSheet>("animation/MCSpriteSheet.sf", new JsonContentLoader());
-            var _playerSprite = new AnimatedSprite(_spriteSheet);
-            Singleton.Instance._player = _entityManager.AddEntity(new Player(_playerSprite, Singleton.Instance._playerPosition));
-
-            // Test Load Data
-            // Load Data Game from JSON file
-            _slime = Content.Load<EntityStats>("data/models/slime");
-            // Load bitmap font
-            _font = Content.Load<BitmapFont>("fonts/Mincraft_Ten/Mincraft_Ten");
+            ScreenManager.Instance.LoadContent(Content, _camera);
         }
 
-        protected override void UnloadContent() { }
+        protected override void UnloadContent()
+        {
+            ScreenManager.Instance.UnloadContent();
+        }
 
         protected override void Update(GameTime gameTime)
         {
@@ -76,7 +65,7 @@ namespace Medicraft
             }
 
             // TODO: Add your update logic here
-            _entityManager.Update(gameTime);
+            ScreenManager.Instance.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -86,16 +75,10 @@ namespace Medicraft
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            // Test Sceen
-            _spriteBatch.Begin();
-            _spriteBatch.DrawString(_font, _slime.Name, new Vector2(50, 50), Color.White);
-            _spriteBatch.DrawString(_font, "" + _slime.HP, new Vector2(50, 80), Color.White);
-            _spriteBatch.DrawString(_font, "" + _slime.Atk, new Vector2(50, 110), Color.White);
-            _spriteBatch.DrawString(_font, "" + _slime.Def, new Vector2(50, 140), Color.White);
+            _spriteBatch.Begin(transformMatrix: _camera.GetTransform());
+            ScreenManager.Instance.Draw(_spriteBatch);
 
-            _entityManager.Draw(_spriteBatch);
             _spriteBatch.End();
-
             base.Draw(gameTime);
         }
     }
