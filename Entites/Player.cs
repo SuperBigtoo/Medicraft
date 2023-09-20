@@ -23,7 +23,6 @@ namespace Medicraft.Entites
             };
             BoundingCircle = new CircleF(_transform.Position, 40);
 
-
             this._sprite.Play("idle");
         }
 
