@@ -38,6 +38,7 @@ namespace Medicraft
             _graphics.SynchronizeWithVerticalRetrace = false;
             Window.Position = new Point((GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2) - (_graphics.PreferredBackBufferWidth / 2)
                 , (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2) - (_graphics.PreferredBackBufferHeight / 2));
+            _graphics.ToggleFullScreen();
             _graphics.ApplyChanges();
 
             Singleton.Instance._playerPosition = new Vector2((_singleton.gameScreen.X - 70) / 2, (_singleton.gameScreen.Y - 110) / 2);
