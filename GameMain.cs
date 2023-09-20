@@ -51,7 +51,7 @@ namespace Medicraft
 
             // TODO: use this.Content to load your game content here
             // Test Player
-            var _spriteSheet = Content.Load<SpriteSheet>("animation/MC1_animation.sf", new JsonContentLoader());
+            var _spriteSheet = Content.Load<SpriteSheet>("animation/MCSpriteSheet.sf", new JsonContentLoader());
             var _playerSprite = new AnimatedSprite(_spriteSheet);
             Singleton.Instance._player = _entityManager.AddEntity(new Player(_playerSprite, Singleton.Instance._playerPosition));
 
