@@ -24,5 +24,6 @@ namespace Medicraft.Data
     }
 
     //Reader Entity Stats
+    public class PlayerStatsReader : JsonContentTypeReader<PlayerStats> { }
     public class EntityStatsReader : JsonContentTypeReader<EntityStats> { }
 }

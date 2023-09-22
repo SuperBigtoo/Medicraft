@@ -12,7 +12,8 @@ namespace Medicraft.Screens
 {
     internal class TestScreen : Screen
     {
-        private EntityStats _slime;
+        private PlayerStats _playerStats;
+        private EntityStats _slimeStats;
         private BitmapFont _font;
 
         public TestScreen()
@@ -24,16 +25,25 @@ namespace Medicraft.Screens
         {
             base.LoadContent(camera);
 
-            // Test Player
-            var _spriteSheet = Content.Load<SpriteSheet>("animation/MCSpriteSheet.sf", new JsonContentLoader());
-            var _playerSprite = new AnimatedSprite(_spriteSheet);
-            Singleton.Instance._player = EntityManager.Instance.AddEntity(new Player(_playerSprite, Singleton.Instance.playerPosition));
-
             // Test Load Data
             // Load Data Game from JSON file
-            _slime = Content.Load<EntityStats>("data/models/slime");
+            _playerStats = Content.Load<PlayerStats>("data/models/player_stats");
+            _slimeStats = Content.Load<EntityStats>("data/models/slime");
+
             // Load bitmap font
             _font = Content.Load<BitmapFont>("fonts/Mincraft_Ten/Mincraft_Ten");
+
+            // Adding Player to EntityList
+            var _playerAnimation = Content.Load<SpriteSheet>("animation/MCSpriteSheet.sf", new JsonContentLoader());
+            var _playerSprite = new AnimatedSprite(_playerAnimation);
+            Singleton.Instance._player = EntityManager.Instance.AddEntity(new Player(_playerSprite
+                ,Singleton.Instance.playerPosition, _playerStats));
+
+            // Adding Slime to EntityList
+            var _slimeAnimation = Content.Load<SpriteSheet>("animation/Slime_Green.sf", new JsonContentLoader());
+            var _slimeSprite = new AnimatedSprite(_slimeAnimation);
+            Vector2 _slimePos = new Vector2(((Singleton.Instance.gameScreen.X - 48) / 2) - 250, (Singleton.Instance.gameScreen.Y - 48) / 2);
+            EntityManager.Instance.AddEntity(new Slime(_slimeSprite, _slimePos, _slimeStats));
         }
 
         public override void UnloadContent()
@@ -51,10 +61,12 @@ namespace Medicraft.Screens
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(_font, _slime.Name, new Vector2(50, 50), Color.White);
-            spriteBatch.DrawString(_font, "" + _slime.HP, new Vector2(50, 80), Color.White);
-            spriteBatch.DrawString(_font, "" + _slime.Atk, new Vector2(50, 110), Color.White);
-            spriteBatch.DrawString(_font, "" + _slime.Def, new Vector2(50, 140), Color.White);
+            spriteBatch.DrawString(_font, _slimeStats.Name, new Vector2(50, 50), Color.White);
+            spriteBatch.DrawString(_font, "" + _slimeStats.HP, new Vector2(50, 80), Color.White);
+            spriteBatch.DrawString(_font, "" + _slimeStats.ATK, new Vector2(50, 110), Color.White);
+            spriteBatch.DrawString(_font, "" + _slimeStats.DEF_Percent, new Vector2(50, 140), Color.White);
+            spriteBatch.DrawString(_font, "" + _slimeStats.Speed, new Vector2(50, 170), Color.White);
+            spriteBatch.DrawString(_font, "" + _slimeStats.Evasion, new Vector2(50, 200), Color.White);
 
             EntityManager.Instance.Draw(spriteBatch);
         }

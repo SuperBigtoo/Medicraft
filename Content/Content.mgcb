@@ -26,6 +26,24 @@
 /processorParam:TextureFormat=Color
 /build:animation/MCSpriteSheet.png
 
+#begin animation/Slime_Green.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:animation/Slime_Green.png
+
+#begin data/models/player_stats.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.PlayerStatsReader, Medicraft
+/build:data/models/player_stats.json
+
 #begin data/models/slime.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor

@@ -7,8 +7,8 @@ namespace Medicraft.Systems
     {
         private Matrix transform;
         private Vector2 position;
-        private float viewportWidth;
-        private float viewportHeight;
+        private readonly float viewportWidth;
+        private readonly float viewportHeight;
 
         public Camera(Viewport viewport)
         {

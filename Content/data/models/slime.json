@@ -1,6 +1,8 @@
 {
   "Name": "Slime",
+  "ATK": 20,
   "HP": 100,
-  "Def": 25,
-  "Atk": 20
+  "DEF_Percent": 0.25,
+  "Speed": 200,
+  "Evasion": 0.05
 }

@@ -7,7 +7,7 @@ namespace Medicraft
 {
     public class GameMain : Game
     {
-        private GraphicsDeviceManager _graphics;
+        private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Camera _camera;
 

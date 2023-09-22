@@ -3,8 +3,10 @@
     public class EntityStats
     {
         public string Name { get; set; }
+        public int ATK { get; set; }
         public int HP { get; set; }
-        public int Atk { get; set; }
-        public int Def { get; set; }
+        public double DEF_Percent { get; set; }
+        public int Speed { get; set; }
+        public double Evasion { get; set; }
     }
 }

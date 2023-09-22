@@ -1,0 +1,12 @@
+﻿{
+  "Name": "PlayerOne",
+  "Level": 1,
+  "EXP": 0,
+  "ATK": 10,
+  "HP": 100,
+  "DEF_Percent": 0.25,
+  "Crit_Percent": 0.1,
+  "CritDMG_Percent": 0.5,
+  "Speed": 300,
+  "Evasion": 0.1
+}
