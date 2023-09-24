@@ -18,7 +18,8 @@ namespace Medicraft.Screens
 
         public TestScreen()
         {
-            Singleton.Instance.playerPosition = new Vector2((Singleton.Instance.gameScreen.X - 70) / 2, (Singleton.Instance.gameScreen.Y - 110) / 2);
+            Singleton.Instance.playerPosition = new Vector2((Singleton.Instance.gameScreen.X - 70) / 2
+                , (Singleton.Instance.gameScreen.Y - 110) / 2);
         }
 
         public override void LoadContent(Camera camera)
@@ -36,14 +37,15 @@ namespace Medicraft.Screens
             // Adding Player to EntityList
             var _playerAnimation = Content.Load<SpriteSheet>("animation/MCSpriteSheet.sf", new JsonContentLoader());
             var _playerSprite = new AnimatedSprite(_playerAnimation);
-            Singleton.Instance._player = EntityManager.Instance.AddEntity(new Player(_playerSprite
-                ,Singleton.Instance.playerPosition, _playerStats));
+            Singleton.Instance.player = new Player(_playerSprite, _playerStats, Singleton.Instance.playerPosition);
 
             // Adding Slime to EntityList
             var _slimeAnimation = Content.Load<SpriteSheet>("animation/Slime_Green.sf", new JsonContentLoader());
             var _slimeSprite = new AnimatedSprite(_slimeAnimation);
-            Vector2 _slimePos = new Vector2(((Singleton.Instance.gameScreen.X - 48) / 2) - 250, (Singleton.Instance.gameScreen.Y - 48) / 2);
-            EntityManager.Instance.AddEntity(new Slime(_slimeSprite, _slimePos, _slimeStats));
+            Vector2 _slimePos = new Vector2(((Singleton.Instance.gameScreen.X - 48) / 2) - 250
+                , (Singleton.Instance.gameScreen.Y - 48) / 2);
+            Vector2 _slimeScale = new Vector2(2.0f, 1.5f);
+            EntityManager.Instance.AddEntity(new Slime(_slimeSprite, _slimeStats, _slimePos, _slimeScale));
         }
 
         public override void UnloadContent()
@@ -53,8 +55,11 @@ namespace Medicraft.Screens
 
         public override void Update(GameTime gameTime)
         {
-            EntityManager.Instance.Update(gameTime);
-            Camera.SetPosition(Singleton.Instance._player.Position);
+            if (Singleton.Instance.IsGameActive)
+            {
+                EntityManager.Instance.Update(gameTime);
+                Camera.SetPosition(Singleton.Instance.player.Position);
+            }
 
             base.Update(gameTime);
         }
@@ -62,11 +67,11 @@ namespace Medicraft.Screens
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(_font, _slimeStats.Name, new Vector2(50, 50), Color.White);
-            spriteBatch.DrawString(_font, "" + _slimeStats.HP, new Vector2(50, 80), Color.White);
-            spriteBatch.DrawString(_font, "" + _slimeStats.ATK, new Vector2(50, 110), Color.White);
-            spriteBatch.DrawString(_font, "" + _slimeStats.DEF_Percent, new Vector2(50, 140), Color.White);
-            spriteBatch.DrawString(_font, "" + _slimeStats.Speed, new Vector2(50, 170), Color.White);
-            spriteBatch.DrawString(_font, "" + _slimeStats.Evasion, new Vector2(50, 200), Color.White);
+            spriteBatch.DrawString(_font, "HP: " + _slimeStats.HP, new Vector2(50, 80), Color.White);
+            spriteBatch.DrawString(_font, "ATK: " + _slimeStats.ATK, new Vector2(50, 110), Color.White);
+            spriteBatch.DrawString(_font, "DEF: " + _slimeStats.DEF_Percent, new Vector2(50, 140), Color.White);
+            spriteBatch.DrawString(_font, "Speed: " + _slimeStats.Speed, new Vector2(50, 170), Color.White);
+            spriteBatch.DrawString(_font, "Evasion: " + _slimeStats.Evasion, new Vector2(50, 200), Color.White);
 
             EntityManager.Instance.Draw(spriteBatch);
         }

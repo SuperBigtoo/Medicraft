@@ -73,7 +73,7 @@ namespace Medicraft
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            _spriteBatch.Begin(transformMatrix: _camera.GetTransform());
+            _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, transformMatrix: _camera.GetTransform());
             ScreenManager.Instance.Draw(_spriteBatch);
 
             _spriteBatch.End();

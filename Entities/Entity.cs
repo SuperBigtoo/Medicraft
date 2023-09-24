@@ -8,7 +8,9 @@ namespace Medicraft.Entities
     {
         public string _name;
         public Transform2 _transform;
+        public Vector2 Velocity;
         public CircleF BoundingCircle;
+        public CircleF BoundingDetectEntity;
 
         public Vector2 Position
         {
@@ -17,13 +19,19 @@ namespace Medicraft.Entities
             {
                 _transform.Position = value;
                 BoundingCircle.Center = value;
+                BoundingDetectEntity.Center = value;
             }
         }
 
+        public float StunTime { get; set; }
+        public bool IsKnockback { get; set; }
         public bool IsDestroyed { get; set; }
 
         protected Entity()
         {
+            Velocity = Vector2.Zero;
+            StunTime = 0;
+            IsKnockback = false;
             IsDestroyed = false;
         }
 

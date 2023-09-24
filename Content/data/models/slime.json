@@ -3,6 +3,6 @@
   "ATK": 20,
   "HP": 100,
   "DEF_Percent": 0.25,
-  "Speed": 200,
+  "Speed": 50,
   "Evasion": 0.05
 }

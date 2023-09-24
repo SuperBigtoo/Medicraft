@@ -6,7 +6,7 @@ namespace Medicraft.Systems
 {
     public class Singleton
     {
-        public Player _player;
+        public Player player;
 
         public MouseState mousePreviose, mouseCurrent;
         public KeyboardState keyboardPreviose, keyboardCurrent;

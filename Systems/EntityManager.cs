@@ -15,34 +15,38 @@ namespace Medicraft.Systems
     {
         private static EntityManager instance;
 
-        public readonly List<Entity> _entities;
+        public readonly List<Entity> entities;
 
-        public IEnumerable<Entity> Entities => _entities;
+        public IEnumerable<Entity> Entities => entities;
 
         private EntityManager()
         {
-            _entities = new List<Entity>();
+            entities = new List<Entity>();
         }
 
         public T AddEntity<T>(T entity) where T : Entity
         {
-            _entities.Add(entity);
+            entities.Add(entity);
             return entity;
         }
 
         public void Update(GameTime gameTime)
         {
-            foreach (var entity in _entities.Where(e => !e.IsDestroyed))
+            Singleton.Instance.player.Update(gameTime);
+
+            foreach (var entity in entities.Where(e => !e.IsDestroyed))
             {
                 entity.Update(gameTime);
             }
 
-            _entities.RemoveAll(e => e.IsDestroyed);
+            entities.RemoveAll(e => e.IsDestroyed);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (var entity in _entities.Where(e => !e.IsDestroyed))
+            Singleton.Instance.player.Draw(spriteBatch);
+
+            foreach (var entity in entities.Where(e => !e.IsDestroyed))
             {
                 entity.Draw(spriteBatch);
             }
