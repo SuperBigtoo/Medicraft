@@ -67,3 +67,20 @@
 /processor:BitmapFontProcessor
 /build:fonts/Mincraft_Ten/Mincraft_Ten.fnt
 
+#begin fonts/Sensation/Sensation_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:fonts/Sensation/Sensation_0.png
+
+#begin fonts/Sensation/Sensation.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:fonts/Sensation/Sensation.fnt
+

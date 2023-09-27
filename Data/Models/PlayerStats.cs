@@ -2,6 +2,7 @@
 {
     public class PlayerStats
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public int Level { get; set; }
         public int EXP { get; set; }
@@ -12,5 +13,6 @@
         public double CritDMG_Percent { get; set; }
         public int Speed { get; set; }
         public double Evasion { get; set; }
+        public double[] Position { get; set; }
     }
 }

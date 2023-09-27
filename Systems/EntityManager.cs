@@ -32,7 +32,7 @@ namespace Medicraft.Systems
 
         public void Update(GameTime gameTime)
         {
-            Singleton.Instance.player.Update(gameTime);
+            PlayerManager.Instance.player.Update(gameTime);
 
             foreach (var entity in entities.Where(e => !e.IsDestroyed))
             {
@@ -44,7 +44,7 @@ namespace Medicraft.Systems
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            Singleton.Instance.player.Draw(spriteBatch);
+            PlayerManager.Instance.player.Draw(spriteBatch);
 
             foreach (var entity in entities.Where(e => !e.IsDestroyed))
             {

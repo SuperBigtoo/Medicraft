@@ -17,21 +17,22 @@ namespace Medicraft.Entities
 
         private float _aggroTime;
 
-        public Slime(AnimatedSprite _sprite, EntityStats _entityStats, Vector2 _position, Vector2 _scale)
+        public Slime(AnimatedSprite _sprite, EntityStats _entityStats, Vector2 _scale)
         {
             this._sprite = _sprite;
             this._entityStats = _entityStats;
             _aggroTime = 0f;
 
-            _transform = new Transform2
+            Vector2 _position = new Vector2((float)_entityStats.Position[0], (float)_entityStats.Position[1]);
+            Transform = new Transform2
             {
                 Scale = _scale,
                 Rotation = 0f,
                 Position = _position
             };
 
-            BoundingCircle = new CircleF(_transform.Position, 25);
-            BoundingDetectEntity = new CircleF(_transform.Position, 200);
+            BoundingCircle = new CircleF(Transform.Position, 25);
+            BoundingDetectEntity = new CircleF(Transform.Position, 200);
 
             this._sprite.Play("idle");
         }
@@ -44,7 +45,7 @@ namespace Medicraft.Entities
             // MovementControl
             MovementControl(deltaSeconds);
 
-            if (BoundingCircle.Intersects(Singleton.Instance.player.BoundingCircle))
+            if (BoundingCircle.Intersects(PlayerManager.Instance.player.BoundingCircle))
             {
                 var animation = "dead";
 
@@ -57,13 +58,13 @@ namespace Medicraft.Entities
         // Draw Slime
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (_transform.Position.Y >= (Singleton.Instance.player.Position.Y + 50f))
+            if (Transform.Position.Y >= (PlayerManager.Instance.player.Position.Y + 40f))
             {
                 _sprite.Depth = 0.1f; // In front Player
             }
             else _sprite.Depth = 0.3f; // Behide Player
 
-            spriteBatch.Draw(_sprite, _transform);
+            spriteBatch.Draw(_sprite, Transform);
         }
 
         private void MovementControl(float deltaSeconds)
@@ -72,7 +73,7 @@ namespace Medicraft.Entities
             _movementAnimation = "idle";
 
             // Aggro
-            if (BoundingDetectEntity.Intersects(Singleton.Instance.player.BoundingCircle))
+            if (BoundingDetectEntity.Intersects(PlayerManager.Instance.player.BoundingCircle))
             {
                 _aggroTime = 5f;
             }
@@ -81,25 +82,25 @@ namespace Medicraft.Entities
             {
                 if (!IsKnockback)
                 {
-                    if (Position.Y >= (Singleton.Instance.player.Position.Y + 50f))
+                    if (Position.Y >= (PlayerManager.Instance.player.Position.Y + 50f))
                     {
                         _movementAnimation = "idle";
                         Position -= new Vector2(0, walkSpeed);
                     }
 
-                    if (Position.Y < (Singleton.Instance.player.Position.Y - 50f))
+                    if (Position.Y < (PlayerManager.Instance.player.Position.Y - 10f))
                     {
                         _movementAnimation = "idle";
                         Position += new Vector2(0, walkSpeed);
                     }
 
-                    if (Position.X > (Singleton.Instance.player.Position.X + 50f))
+                    if (Position.X > (PlayerManager.Instance.player.Position.X + 50f))
                     {
                         _movementAnimation = "idle";
                         Position -= new Vector2(walkSpeed, 0);
                     }
 
-                    if (Position.X < (Singleton.Instance.player.Position.X - 50f))
+                    if (Position.X < (PlayerManager.Instance.player.Position.X - 50f))
                     {
                         _movementAnimation = "idle";
                         Position += new Vector2(walkSpeed, 0);

@@ -6,18 +6,19 @@ namespace Medicraft.Entities
 {
     public abstract class Entity
     {
-        public string _name;
-        public Transform2 _transform;
+        public int Id;
+        public string Name;
+        public Transform2 Transform;
         public Vector2 Velocity;
         public CircleF BoundingCircle;
         public CircleF BoundingDetectEntity;
 
         public Vector2 Position
         {
-            get => _transform.Position;
+            get => Transform.Position;
             set
             {
-                _transform.Position = value;
+                Transform.Position = value;
                 BoundingCircle.Center = value;
                 BoundingDetectEntity.Center = value;
             }

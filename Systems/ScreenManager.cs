@@ -15,6 +15,11 @@ namespace Medicraft.Systems
             private set; get;
         }
 
+        public GraphicsDevice GraphicsDevice
+        {
+            private set; get;
+        }
+
         public Camera Camera
         {
             private set; get;
@@ -38,17 +43,18 @@ namespace Medicraft.Systems
             {
                 case GameScreen.TestScreen:
                     currentScreen = new TestScreen();
-                    currentScreen.LoadContent(Camera);
+                    currentScreen.LoadContent();
                     break;
             }
         }
 
-        public void LoadContent(ContentManager content, Camera camera)
+        public void LoadContent(ContentManager content, GraphicsDevice graphicsDevice, Camera camera)
         {
             Content = new ContentManager(content.ServiceProvider, "Content");
+            GraphicsDevice = graphicsDevice;
             Camera = camera;
 
-            currentScreen.LoadContent(camera);
+            currentScreen.LoadContent();
         }
 
         public void UnloadContent()

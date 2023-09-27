@@ -1,7 +1,9 @@
-﻿using Medicraft.Systems;
+﻿using Medicraft.Data;
+using Medicraft.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.BitmapFonts;
 
 namespace Medicraft
 {
@@ -9,7 +11,7 @@ namespace Medicraft
     {
         private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Camera _camera;
+        private Camera Camera;
 
         private readonly EntityManager _entityManager;
         private readonly Singleton _singleton;
@@ -28,13 +30,23 @@ namespace Medicraft
             // TODO: Add your initialization logic here
             _graphics.PreferredBackBufferWidth = (int)_singleton.gameScreen.X;
             _graphics.PreferredBackBufferHeight = (int)_singleton.gameScreen.Y;
-            _graphics.SynchronizeWithVerticalRetrace = false;
+            _graphics.SynchronizeWithVerticalRetrace = true;
             Window.Position = new Point((GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2) - (_graphics.PreferredBackBufferWidth / 2)
                 , (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2) - (_graphics.PreferredBackBufferHeight / 2));
             _graphics.ToggleFullScreen();
             _graphics.ApplyChanges();
 
-            _camera = new Camera(GraphicsDevice.Viewport);
+            Camera = new Camera(GraphicsDevice.Viewport);
+
+            // Load GameSave
+            var gameSave = JsonFileManager.LoadFlie("data/stats.json");
+            if (gameSave.Count != 0)
+            {
+                foreach (var save in gameSave)
+                {
+                    _singleton.gameSave.Add(save);
+                }
+            }
 
             base.Initialize();
         }
@@ -44,7 +56,7 @@ namespace Medicraft
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            ScreenManager.Instance.LoadContent(Content, _camera);
+            ScreenManager.Instance.LoadContent(Content, GraphicsDevice, Camera);
         }
 
         protected override void UnloadContent()
@@ -73,7 +85,7 @@ namespace Medicraft
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, transformMatrix: _camera.GetTransform());
+            _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, transformMatrix: Camera.GetTransform());
             ScreenManager.Instance.Draw(_spriteBatch);
 
             _spriteBatch.End();

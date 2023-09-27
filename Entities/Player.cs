@@ -21,7 +21,7 @@ namespace Medicraft.Entities
         private float _attackSpeed;
         private float _knockbackForce;
 
-        public Player(AnimatedSprite _sprite, PlayerStats _playerStats, Vector2 _position)
+        public Player(AnimatedSprite _sprite, PlayerStats _playerStats)
         {
             this._sprite = _sprite;
             this._playerStats = _playerStats;
@@ -30,15 +30,16 @@ namespace Medicraft.Entities
             _attackSpeed = 0.25f;  // Stat
             _knockbackForce = 50f;  // Stat
 
-            _transform = new Transform2
+            Vector2 _position = new Vector2((float)_playerStats.Position[0], (float)_playerStats.Position[1]);
+            Transform = new Transform2
             {
                 Scale = Vector2.One,
                 Rotation = 0f,
                 Position = _position
             };
 
-            BoundingCircle = new CircleF(_transform.Position, 47.5f);
-            BoundingDetectEntity = new CircleF(_transform.Position, 80f);
+            BoundingCircle = new CircleF(Transform.Position, 47.5f);
+            BoundingDetectEntity = new CircleF(Transform.Position, 80f);
 
             this._sprite.Depth = 0.2f;
             this._sprite.Play("idle");
@@ -61,14 +62,17 @@ namespace Medicraft.Entities
         // Draw Player
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_sprite, _transform);
+            spriteBatch.Draw(_sprite, Transform);
         }
 
         // Movement
         private void MovementControl(float deltaSeconds)
         {
             var walkSpeed = deltaSeconds * _playerStats.Speed;
-            var keyboardState = Keyboard.GetState();
+            Singleton.Instance.keyboardPreviose = Singleton.Instance.keyboardCurrent;
+            Singleton.Instance.keyboardCurrent = Keyboard.GetState();
+            var keyboardState = Singleton.Instance.keyboardCurrent;
+
             _movementAnimation = "idle";
 
             if (!_isAttack)
@@ -77,24 +81,32 @@ namespace Medicraft.Entities
                 {
                     _movementAnimation = "walking";
                     Position -= new Vector2(0, walkSpeed);
+                    Singleton.Instance.addingHudPos -= new Vector2(0, walkSpeed);
+                    Singleton.Instance.addingCameraPos -= new Vector2(0, walkSpeed);
                 }
 
                 if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
                 {
                     _movementAnimation = "walking";
                     Position += new Vector2(0, walkSpeed);
+                    Singleton.Instance.addingHudPos += new Vector2(0, walkSpeed);
+                    Singleton.Instance.addingCameraPos += new Vector2(0, walkSpeed);
                 }
 
                 if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
                 {
                     _movementAnimation = "walking";
                     Position -= new Vector2(walkSpeed, 0);
+                    Singleton.Instance.addingHudPos -= new Vector2(walkSpeed, 0);
+                    Singleton.Instance.addingCameraPos -= new Vector2(walkSpeed, 0);
                 }
 
                 if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
                 {
                     _movementAnimation = "walking";
                     Position += new Vector2(walkSpeed, 0);
+                    Singleton.Instance.addingHudPos += new Vector2(walkSpeed, 0);
+                    Singleton.Instance.addingCameraPos += new Vector2(walkSpeed, 0);
                 }
             }
 
@@ -145,6 +157,11 @@ namespace Medicraft.Entities
                     }
                 }
             }
+        }
+
+        public PlayerStats GetPlayerStats()
+        {
+            return _playerStats;
         }
     }
 }

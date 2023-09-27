@@ -8,12 +8,14 @@ namespace Medicraft.Screens
     public class Screen
     {
         protected ContentManager Content;
+        protected GraphicsDevice GraphicsDevice;
         protected Camera Camera;
 
-        public virtual void LoadContent(Camera camera)
+        public virtual void LoadContent()
         {
             Content = new ContentManager(ScreenManager.Instance.Content.ServiceProvider, "Content");
-            Camera = camera;
+            GraphicsDevice = ScreenManager.Instance.GraphicsDevice;
+            Camera = ScreenManager.Instance.Camera;
         }
 
         public virtual void UnloadContent()
