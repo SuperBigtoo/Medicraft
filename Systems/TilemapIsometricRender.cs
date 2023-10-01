@@ -29,34 +29,16 @@ namespace Medicraft.Systems
         private void SetObjectOnTile() 
         {
             Singleton.Instance.CollistionObject.Clear();
-            for (int i = 0; i < _tileMap.TileLayers.Count; i++)
+            Singleton.Instance.OnGroundObject.Clear();
+
+            foreach (var o in _tileMap.ObjectGroups["Collision"].Objects)
             {
-                for (int j = 0; j < _tileMap.TileLayers[i].Tiles.Count; j++)
-                {
-                    int gid = _tileMap.TileLayers[i].Tiles[j].Gid;
-                    if (gid != 0)
-                    {
-                        int tileFrame = gid - 1;
+                Singleton.Instance.CollistionObject.Add(new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+            }
 
-                        if (tileFrame == 1 || tileFrame == 36)
-                        {
-                            int x = ((j % _tileMap.Width) * (_tileMap.TileWidth / 2));
-                            int y = (int)((int)Math.Floor((double)(j / _tileMap.Width)) * _tileMap.TileHeight);
-
-                            int isoX = (x - y);
-                            int isoY = (int)((x + y) / 2);
-
-                            Debug.WriteLine($"isoX: {isoX}");
-                            Debug.WriteLine($"isoY: {isoY}");
-
-                            var point = new Point2(isoX + (_tileWidth / 2), isoY + (_tileHeight / 2));
-                            var tileBound = new CircleF(point, _tileHeight);
-
-                            //Singleton.Instance.ObjectOnTile.Add(tileBound, isoY + (_tileHeight / 2));
-                            //Singleton.Instance.tileHeight = _tileHeight;
-                        }
-                    }
-                }
+            foreach (var o in _tileMap.ObjectGroups["ObjectLayer3"].Objects)
+            {
+                Singleton.Instance.OnGroundObject.Add(new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
         }
 
@@ -113,7 +95,7 @@ namespace Medicraft.Systems
                         //        , Vector2.Zero, SpriteEffects.None, layerDepth);
                         //}
 
-                        if (tileFrame == 1 || tileFrame == 36)
+                        if (_tileMap.TileLayers[i].Name.Equals("Tile Layer 3"))
                         {
                             spriteBatch.Draw(_tileSet, tileRec, tilesetRec, Color.White, 0f
                                 , Vector2.Zero, SpriteEffects.None, layerDepthFront);

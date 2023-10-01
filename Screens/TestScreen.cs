@@ -10,6 +10,7 @@ using Medicraft.Entities;
 using Medicraft.Data;
 using Microsoft.Xna.Framework.Input;
 using TiledSharp;
+using System.Collections.Generic;
 
 namespace Medicraft.Screens
 {
@@ -23,10 +24,12 @@ namespace Medicraft.Screens
         private bool wasBButtonPressed = false;
 
         private PlayerStats _playerStats;
-        private EntityStats _slimeStats;
+        private List<EntityStats> _slimeStatsList;
         private BitmapFont _fontMinecraft, _fontSensation;
 
-        public TestScreen() { }
+        public TestScreen()
+        {
+        }
 
         public override void LoadContent()
         {
@@ -56,7 +59,7 @@ namespace Medicraft.Screens
             }
 
             // Load Data Game from JSON file
-            _slimeStats = Content.Load<EntityStats>("data/models/slime");
+            _slimeStatsList = Content.Load<List<EntityStats>>("data/models/slime");
 
             // Load bitmap font
             _fontMinecraft = Content.Load<BitmapFont>("fonts/Mincraft_Ten/Mincraft_Ten");
@@ -71,7 +74,8 @@ namespace Medicraft.Screens
             var _slimeAnimation = Content.Load<SpriteSheet>("animation/Slime_Green.sf", new JsonContentLoader());
             var _slimeSprite = new AnimatedSprite(_slimeAnimation);
             Vector2 _slimeScale = new Vector2(2.0f, 1.5f);
-            EntityManager.Instance.AddEntity(new Slime(_slimeSprite, _slimeStats, _slimeScale));
+            EntityManager.Instance.AddEntity(new Slime(_slimeSprite, _slimeStatsList[0], _slimeScale));
+            EntityManager.Instance.AddEntity(new Slime(_slimeSprite, _slimeStatsList[1], _slimeScale));
 
             // Adding HUD
             _hudSystem = new HudSystem(_fontSensation);
@@ -123,12 +127,12 @@ namespace Medicraft.Screens
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(_fontMinecraft, $"Name: {_slimeStats.Name}", new Vector2(50, 50), Color.White);
-            spriteBatch.DrawString(_fontMinecraft, $"HP: {_slimeStats.HP}", new Vector2(50, 80), Color.White);
-            spriteBatch.DrawString(_fontMinecraft, $"ATK: {_slimeStats.ATK}", new Vector2(50, 110), Color.White);
-            spriteBatch.DrawString(_fontMinecraft, $"DEF: {_slimeStats.DEF_Percent}", new Vector2(50, 140), Color.White);
-            spriteBatch.DrawString(_fontMinecraft, $"Speed: {_slimeStats.Speed}", new Vector2(50, 170), Color.White);
-            spriteBatch.DrawString(_fontMinecraft, $"Evasion: {_slimeStats.Evasion}", new Vector2(50, 200), Color.White);
+            spriteBatch.DrawString(_fontMinecraft, $"Name: {_slimeStatsList[0].Name}", new Vector2(50, 50), Color.White);
+            spriteBatch.DrawString(_fontMinecraft, $"HP: {_slimeStatsList[0].HP}", new Vector2(50, 80), Color.White);
+            spriteBatch.DrawString(_fontMinecraft, $"ATK: {_slimeStatsList[0].ATK}", new Vector2(50, 110), Color.White);
+            spriteBatch.DrawString(_fontMinecraft, $"DEF: {_slimeStatsList[0].DEF_Percent}", new Vector2(50, 140), Color.White);
+            spriteBatch.DrawString(_fontMinecraft, $"Speed: {_slimeStatsList[0].Speed}", new Vector2(50, 170), Color.White);
+            spriteBatch.DrawString(_fontMinecraft, $"Evasion: {_slimeStatsList[0].Evasion}", new Vector2(50, 200), Color.White);
 
             //_mapManager.Draw(spriteBatch, _hudSystem);
             EntityManager.Instance.Draw(spriteBatch);

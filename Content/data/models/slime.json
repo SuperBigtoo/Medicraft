@@ -1,10 +1,22 @@
-{
-  "Id": 0,
-  "Name": "Slime",
-  "ATK": 20,
-  "HP": 100,
-  "DEF_Percent": 0.25,
-  "Speed": 50,
-  "Evasion": 0.05,
-  "Position": [ 446, 426 ]
-}
+[
+  {
+    "Id": 0,
+    "Name": "Slime",
+    "ATK": 20,
+    "HP": 100,
+    "DEF_Percent": 0.25,
+    "Speed": 50,
+    "Evasion": 0.05,
+    "Position": [ 446, 426 ]
+  },
+  {
+    "Id": 1,
+    "Name": "Slime",
+    "ATK": 20,
+    "HP": 100,
+    "DEF_Percent": 0.25,
+    "Speed": 50,
+    "Evasion": 0.05,
+    "Position": [ 446, 226 ]
+  }
+]
