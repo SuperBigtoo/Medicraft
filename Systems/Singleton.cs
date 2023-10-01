@@ -10,25 +10,17 @@ namespace Medicraft.Systems
     {
         public MouseState mousePreviose, mouseCurrent;
         public KeyboardState keyboardPreviose, keyboardCurrent;
-        public Vector2 addingHudPos;
-        public Vector2 cameraPosition;
-        public Vector2 addingCameraPos;
-        public bool IsGameActive;
-        public Vector2 gameScreen
-        {
-            private set; get;
-        }
-        public Vector2 gameScreen_Center
-        {
-            private set; get;
-        }
-
-        public int gameSaveIdex;
-        public readonly List<GameSave> gameSave;
-
-        public List<Rectangle> CollistionObject;
-        public List<Rectangle> OnGroundObject;
-        public int tileHeight;
+        public Vector2 addingHudPos { set; get; }
+        public Vector2 cameraPosition { set; get; }
+        public Vector2 addingCameraPos { set; get; }        
+        public Vector2 gameScreen { private set; get; }
+        public Vector2 gameScreen_Center { private set; get; }
+        public bool IsGameActive { set; get; }
+        public bool IsShowDetectBox { set; get; }
+        public int gameSaveIdex { private set; get; }
+        public List<GameSave> gameSave {private set; get;}
+        public List<Rectangle> CollistionObject { private set; get; }
+        public List<Rectangle> OnGroundObject { private set; get; }
 
         private static Singleton instance;
 
@@ -41,6 +33,8 @@ namespace Medicraft.Systems
             addingCameraPos = Vector2.Zero;
             gameSave = new List<GameSave>();
             gameSaveIdex = 0; // to be initial
+
+            IsShowDetectBox = false;
 
             CollistionObject = new List<Rectangle>();
             OnGroundObject = new List<Rectangle>();

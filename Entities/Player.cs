@@ -75,9 +75,12 @@ namespace Medicraft.Entities
             spriteBatch.Draw(sprite, Transform);
 
             // Test Draw BoundingRec for Collision
-            Texture2D pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
-            pixelTexture.SetData(new Color[] { Color.White });
-            spriteBatch.Draw(pixelTexture, BoundingRec, Color.Red);
+            if (Singleton.Instance.IsShowDetectBox)
+            {
+                Texture2D pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
+                pixelTexture.SetData(new Color[] { Color.White });
+                spriteBatch.Draw(pixelTexture, BoundingRec, Color.Red);
+            }
         }
 
         // Movement

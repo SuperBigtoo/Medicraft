@@ -53,7 +53,7 @@ namespace Medicraft.Systems
                             var tileBound = new CircleF(point, _tileHeight);
 
                             //Singleton.Instance.ObjectOnTile.Add(tileBound, isoY + (_tileHeight / 2));
-                            Singleton.Instance.tileHeight = _tileHeight;
+                            //Singleton.Instance.tileHeight = _tileHeight;
                         }
                     }
                 }

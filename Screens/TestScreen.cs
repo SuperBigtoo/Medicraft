@@ -20,6 +20,8 @@ namespace Medicraft.Screens
         //private TilemapIsometricRender _tileMapRender;
         private TilemapOrthogonalRender _tileMapRender;
 
+        private bool wasBButtonPressed = false;
+
         private PlayerStats _playerStats;
         private EntityStats _slimeStats;
         private BitmapFont _fontMinecraft, _fontSensation;
@@ -99,6 +101,20 @@ namespace Medicraft.Screens
                 if (Singleton.Instance.keyboardCurrent.IsKeyDown(Keys.M))
                 {
                     JsonFileManager.SaveGame();
+                }
+
+                if (Singleton.Instance.keyboardCurrent.IsKeyDown(Keys.B) && !wasBButtonPressed)
+                {
+                    // Toggle the IsShowDetectBox flag
+                    Singleton.Instance.IsShowDetectBox = !Singleton.Instance.IsShowDetectBox;
+
+                    // Update the boolean variable to indicate that the "B" button has been pressed
+                    wasBButtonPressed = true;
+                }
+                else if (Singleton.Instance.keyboardCurrent.IsKeyUp(Keys.B))
+                {
+                    // Update the boolean variable to indicate that the "B" button is not currently pressed
+                    wasBButtonPressed = false;
                 }
             }
 
