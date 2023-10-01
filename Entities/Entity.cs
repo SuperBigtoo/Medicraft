@@ -1,15 +1,18 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
+using MonoGame.Extended.Sprites;
 
 namespace Medicraft.Entities
 {
-    public abstract class Entity
+    public class Entity
     {
         public int Id;
         public string Name;
+        public AnimatedSprite sprite;
         public Transform2 Transform;
         public Vector2 Velocity;
+        public Rectangle BoundingRec; // For dectect collisions
         public CircleF BoundingCircle;
         public CircleF BoundingDetectEntity;
 
@@ -19,6 +22,8 @@ namespace Medicraft.Entities
             set
             {
                 Transform.Position = value;
+                BoundingRec.X = (int)value.X - sprite.TextureRegion.Width / 5;
+                BoundingRec.Y = (int)value.Y + sprite.TextureRegion.Height / 3;
                 BoundingCircle.Center = value;
                 BoundingDetectEntity.Center = value;
             }
@@ -27,6 +32,7 @@ namespace Medicraft.Entities
         public float StunTime { get; set; }
         public bool IsKnockback { get; set; }
         public bool IsDestroyed { get; set; }
+        public bool IsDetectCollistionObject { get; set; }
 
         protected Entity()
         {
@@ -36,8 +42,9 @@ namespace Medicraft.Entities
             IsDestroyed = false;
         }
 
-        public abstract void Update(GameTime gameTime);
-        public abstract void Draw(SpriteBatch spriteBatch);
+        public virtual void Update(GameTime gameTime, float depthFrontTile, float depthBehideTile) { }
+        public virtual void Update(GameTime gameTime, float playerDepth, float depthFrontTile, float depthBehideTile) { }
+        public virtual void Draw(SpriteBatch spriteBatch) { }
 
         public virtual void Destroy()
         {

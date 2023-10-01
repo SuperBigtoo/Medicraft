@@ -56,12 +56,19 @@ namespace Medicraft
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            ScreenManager.Instance.LoadContent(Content, GraphicsDevice, Camera);
+            ScreenManager.Instance.LoadContent(Content, GraphicsDevice, Window, Camera);
         }
 
         protected override void UnloadContent()
         {
             ScreenManager.Instance.UnloadContent();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            ScreenManager.Instance.Dispose();
+
+            base.Dispose(disposing);
         }
 
         protected override void Update(GameTime gameTime)
@@ -85,10 +92,18 @@ namespace Medicraft
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, transformMatrix: Camera.GetTransform());
+            _spriteBatch.Begin
+            (
+                SpriteSortMode.BackToFront,
+                samplerState: SamplerState.PointClamp,
+                blendState: BlendState.AlphaBlend,
+                transformMatrix: Camera.GetTransform()
+            );
+
             ScreenManager.Instance.Draw(_spriteBatch);
 
             _spriteBatch.End();
+
             base.Draw(gameTime);
         }
     }

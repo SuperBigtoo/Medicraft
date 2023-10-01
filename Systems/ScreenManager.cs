@@ -20,6 +20,11 @@ namespace Medicraft.Systems
             private set; get;
         }
 
+        public GameWindow Window
+        {
+            private set; get;
+        }
+
         public Camera Camera
         {
             private set; get;
@@ -48,10 +53,11 @@ namespace Medicraft.Systems
             }
         }
 
-        public void LoadContent(ContentManager content, GraphicsDevice graphicsDevice, Camera camera)
+        public void LoadContent(ContentManager content, GraphicsDevice graphicsDevice, GameWindow window, Camera camera)
         {
             Content = new ContentManager(content.ServiceProvider, "Content");
             GraphicsDevice = graphicsDevice;
+            Window = window;
             Camera = camera;
 
             currentScreen.LoadContent();
@@ -60,6 +66,11 @@ namespace Medicraft.Systems
         public void UnloadContent()
         {
             currentScreen.UnloadContent();
+        }
+
+        public void Dispose()
+        {
+            currentScreen.Dispose();
         }
 
         public void Update(GameTime gameTime)

@@ -32,11 +32,18 @@ namespace Medicraft.Systems
 
         public void Update(GameTime gameTime)
         {
-            PlayerManager.Instance.player.Update(gameTime);
+            var playerFrontDepth = 0.3f;
+            var playerBehideDepth = 0.7f;
 
+            PlayerManager.Instance.player.Update(gameTime, playerFrontDepth, playerBehideDepth);
+
+            var playerDepth = PlayerManager.Instance.player.GetPlayerDepth();
             foreach (var entity in entities.Where(e => !e.IsDestroyed))
             {
-                entity.Update(gameTime);
+                playerDepth -= 0.00001f;
+                playerFrontDepth -= 0.00001f;
+                playerBehideDepth -= 0.00001f;
+                entity.Update(gameTime, playerDepth, playerFrontDepth, playerBehideDepth);
             }
 
             entities.RemoveAll(e => e.IsDestroyed);

@@ -10,7 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:..\..\..\..\..\..\.nuget\packages\monogame.extended.content.pipeline\3.8.0\tools\MonoGame.Extended.Content.Pipeline.dll
+/reference:..\.nuget\packages\monogame.extended.content.pipeline\3.9.0-alpha0093\tools\MonoGame.Extended.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -83,4 +83,22 @@
 /importer:BitmapFontImporter
 /processor:BitmapFontProcessor
 /build:fonts/Sensation/Sensation.fnt
+
+#begin tiledmaps/test1/rpg_maker_vx_rtp_tileset_by_telles0808.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:tiledmaps/test1/rpg_maker_vx_rtp_tileset_by_telles0808.png
+
+#begin tiledmaps/test1/tilemap.tmx
+/copy:tiledmaps/test1/tilemap.tmx
+
+#begin tiledmaps/test1/tilemapTest.tmx
+/copy:tiledmaps/test1/tilemapTest.tmx
 

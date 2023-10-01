@@ -1,6 +1,7 @@
 ﻿using Medicraft.Data.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using System.Collections.Generic;
 
 namespace Medicraft.Systems
@@ -25,6 +26,10 @@ namespace Medicraft.Systems
         public int gameSaveIdex;
         public readonly List<GameSave> gameSave;
 
+        public List<Rectangle> CollistionObject;
+        public List<Rectangle> OnGroundObject;
+        public int tileHeight;
+
         private static Singleton instance;
 
         private Singleton()
@@ -36,6 +41,9 @@ namespace Medicraft.Systems
             addingCameraPos = Vector2.Zero;
             gameSave = new List<GameSave>();
             gameSaveIdex = 0; // to be initial
+
+            CollistionObject = new List<Rectangle>();
+            OnGroundObject = new List<Rectangle>();
         }
 
         public static Singleton Instance

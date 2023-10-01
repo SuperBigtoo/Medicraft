@@ -8,29 +8,35 @@ using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Content;
 using Medicraft.Entities;
 using Medicraft.Data;
-using System;
 using Microsoft.Xna.Framework.Input;
+using TiledSharp;
 
 namespace Medicraft.Screens
 {
     public class TestScreen : Screen
     {
         private HudSystem _hudSystem;
+        //private TiledmapBGExtended _mapManager;
+        //private TilemapIsometricRender _tileMapRender;
+        private TilemapOrthogonalRender _tileMapRender;
 
         private PlayerStats _playerStats;
         private EntityStats _slimeStats;
         private BitmapFont _fontMinecraft, _fontSensation;
 
-        public TestScreen()
-        {
-        }
+        public TestScreen() { }
 
         public override void LoadContent()
         {
             base.LoadContent();
 
+            // Load Tile Map
+            //_mapManager = new TiledMapBackgroundManager(Content, GraphicsDevice, Window, "tiledmaps/test1/level02");
+            var _tileSet = Content.Load<Texture2D>("tiledmaps/test1/rpg_maker_vx_rtp_tileset_by_telles0808");
+            var _tileMap = new TmxMap("Content/tiledmaps/test1/tilemap.tmx");
+            _tileMapRender = new TilemapOrthogonalRender(_tileMap, _tileSet);
+
             // Test Load Data
-            var _playerPos = Vector2.Zero;
             if (Singleton.Instance.gameSave.Count != 0)
             {
                 var gameSave = Singleton.Instance.gameSave[Singleton.Instance.gameSaveIdex];
@@ -74,6 +80,11 @@ namespace Medicraft.Screens
             base.UnloadContent();
         }
 
+        public override void Dispose()
+        {
+            base.Dispose();
+        }
+
         public override void Update(GameTime gameTime)
         {
             if (Singleton.Instance.IsGameActive)
@@ -82,8 +93,9 @@ namespace Medicraft.Screens
                 Singleton.Instance.keyboardCurrent = Keyboard.GetState();
 
                 EntityManager.Instance.Update(gameTime);
-                Camera.SetPosition(Singleton.Instance.cameraPosition + Singleton.Instance.addingCameraPos);
 
+                Camera.SetPosition(Singleton.Instance.cameraPosition + Singleton.Instance.addingCameraPos);
+                                
                 if (Singleton.Instance.keyboardCurrent.IsKeyDown(Keys.M))
                 {
                     JsonFileManager.SaveGame();
@@ -102,9 +114,14 @@ namespace Medicraft.Screens
             spriteBatch.DrawString(_fontMinecraft, $"Speed: {_slimeStats.Speed}", new Vector2(50, 170), Color.White);
             spriteBatch.DrawString(_fontMinecraft, $"Evasion: {_slimeStats.Evasion}", new Vector2(50, 200), Color.White);
 
+            //_mapManager.Draw(spriteBatch, _hudSystem);
             EntityManager.Instance.Draw(spriteBatch);
 
+            _tileMapRender.Draw(spriteBatch);
+
             _hudSystem.DrawTest(spriteBatch);
+
+            
         }
     }
 }
