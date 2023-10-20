@@ -65,6 +65,7 @@ namespace Medicraft.Systems
 
                         Rectangle tileRec = new Rectangle(x, y, _tileWidth, _tileHeight);
 
+                        // Check layer depth here
                         if (_tileMap.TileLayers[i].Name.Equals("Tile Layer 3"))
                         {
                             spriteBatch.Draw(_tileSet, tileRec, tilesetRec, Color.White, 0f

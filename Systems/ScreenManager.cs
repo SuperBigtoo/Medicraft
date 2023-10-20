@@ -7,6 +7,7 @@ namespace Medicraft.Systems
 {
     public class ScreenManager
     {
+        private SpriteBatch spriteBatch;
         private Screen currentScreen;
         private static ScreenManager instance;
 
@@ -39,7 +40,7 @@ namespace Medicraft.Systems
 
         public ScreenManager()
         {
-            currentScreen = new TestScreen();
+            currentScreen = new TestScreen(); // TBC
         }
 
         public void LoadScreen(GameScreen gameScreen)
@@ -53,12 +54,13 @@ namespace Medicraft.Systems
             }
         }
 
-        public void LoadContent(ContentManager content, GraphicsDevice graphicsDevice, GameWindow window, Camera camera)
-        {
+        public void LoadContent(ContentManager content, GraphicsDevice graphicsDevice, GameWindow window)
+        {  
             Content = new ContentManager(content.ServiceProvider, "Content");
             GraphicsDevice = graphicsDevice;
             Window = window;
-            Camera = camera;
+            spriteBatch = new SpriteBatch(graphicsDevice);
+            Camera = new Camera(graphicsDevice.Viewport);
 
             currentScreen.LoadContent();
         }
@@ -78,9 +80,21 @@ namespace Medicraft.Systems
             currentScreen.Update(gameTime);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw()
         {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            spriteBatch.Begin
+            (
+                SpriteSortMode.BackToFront,
+                samplerState: SamplerState.PointClamp,
+                blendState: BlendState.AlphaBlend,
+                transformMatrix: Camera.GetTransform()
+            );
+
             currentScreen.Draw(spriteBatch);
+
+            spriteBatch.End();
         }
 
         public static ScreenManager Instance

@@ -10,27 +10,22 @@ namespace Medicraft.Entities
 {
     public class Player : Entity
     {
-        GraphicsDevice graphicsDevice;
-
         private PlayerStats _playerStats;
 
-        private string _movementAnimation;
-        private string _combatAnimation;
+        private string _currentAnimation;
 
         private Vector2 _initPos, _initHudPos, _initCamPos;
 
-        private bool _isAttack;
-        private float _attackTime;
-        private float _attackSpeed;
-        private float _knockbackForce;
+        private float _attackTime, _attackSpeed, _knockbackForce;
 
         public Player(AnimatedSprite sprite, PlayerStats _playerStats)
         {
             this.sprite = sprite;
             this._playerStats = _playerStats;
-            _isAttack = false;
+            IsMoving = false;
+            IsAttacking = false;
             _attackTime = 0f;
-            _attackSpeed = 0.25f;  // Stat
+            _attackSpeed = 0.50f;  // Stat
             _knockbackForce = 50f;  // Stat
 
             IsDetectCollistionObject = false;
@@ -57,15 +52,16 @@ namespace Medicraft.Entities
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            // Update layer depth
-            UpdateLayerDepth(depthFrontTile, depthBehideTile);
-
             // Movement Control
             MovementControl(deltaSeconds);
+
+            // Update layer depth
+            UpdateLayerDepth(depthFrontTile, depthBehideTile);
 
             // Combat Control
             CombatControl(deltaSeconds);
 
+            sprite.Play(_currentAnimation);
             sprite.Update(deltaSeconds);
         }
 
@@ -90,36 +86,35 @@ namespace Medicraft.Entities
             Velocity = Vector2.Zero;
             _initPos = Position;
             _initHudPos = Singleton.Instance.addingHudPos;
-            _initCamPos = Singleton.Instance.addingCameraPos;                        
-            _movementAnimation = "idle";
+            _initCamPos = Singleton.Instance.addingCameraPos;                                   
 
             Singleton.Instance.keyboardPreviose = Singleton.Instance.keyboardCurrent;
             Singleton.Instance.keyboardCurrent = Keyboard.GetState();
             var keyboardState = Singleton.Instance.keyboardCurrent;
 
-            if (!_isAttack)
+            if (!IsAttacking)
             {
                 if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
                 {
-                    _movementAnimation = "walking";
+                    IsMoving = true;   
                     Velocity -= Vector2.UnitY;
                 }
 
                 if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
                 {
-                    _movementAnimation = "walking";
-                    Velocity += Vector2.UnitY;;
+                    IsMoving = true;
+                    Velocity += Vector2.UnitY;
                 }
 
                 if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
                 {
-                    _movementAnimation = "walking";
+                    IsMoving = true;
                     Velocity -= Vector2.UnitX;
                 }
 
                 if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
                 {
-                    _movementAnimation = "walking";
+                    IsMoving = true;
                     Velocity += Vector2.UnitX;
                     //Position += new Vector2(walkSpeed, 0);
                     //Singleton.Instance.addingHudPos += new Vector2(walkSpeed, 0);
@@ -134,6 +129,13 @@ namespace Medicraft.Entities
                     Singleton.Instance.addingHudPos += Velocity * walkSpeed;
                     Singleton.Instance.addingCameraPos += Velocity * walkSpeed;
                 }
+                else IsMoving = false;
+
+                if (IsMoving)
+                {
+                    _currentAnimation = "walking";
+                }
+                else _currentAnimation = "idle";
 
                 // Detect Object Collsion
                 var ObjectOnTile = Singleton.Instance.CollistionObject;
@@ -151,9 +153,10 @@ namespace Medicraft.Entities
                         IsDetectCollistionObject = false;
                     }
                 }
-            }
 
-            sprite.Play(_movementAnimation);
+                // Update Camera Position
+                ScreenManager.Instance.Camera.Update(deltaSeconds);
+            }
         }
 
         // Combat
@@ -163,9 +166,11 @@ namespace Medicraft.Entities
             Singleton.Instance.mouseCurrent = Mouse.GetState();
 
             if (Singleton.Instance.mouseCurrent.LeftButton == ButtonState.Pressed
-                    && Singleton.Instance.mousePreviose.LeftButton == ButtonState.Released && !_isAttack)
+                    && Singleton.Instance.mousePreviose.LeftButton == ButtonState.Released && !IsAttacking)
             {
-                _isAttack = true;
+                _currentAnimation = "attacking";
+
+                IsAttacking = true;
                 _attackTime = _attackSpeed;
 
                 CheckAttackDetection();
@@ -175,7 +180,7 @@ namespace Medicraft.Entities
             {
                 _attackTime -= deltaSeconds;
             }
-            else _isAttack = false;
+            else IsAttacking = false;
         }
 
         private void CheckAttackDetection()

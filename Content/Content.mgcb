@@ -14,19 +14,10 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin animation/MCSpriteSheet.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:animation/MCSpriteSheet.png
+#begin animation/mc/mc_animation.sf
+/copy:animation/mc/mc_animation.sf
 
-#begin animation/Slime_Green.png
+#begin animation/mc/mc_spritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -36,7 +27,22 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:animation/Slime_Green.png
+/build:animation/mc/mc_spritesheet.png
+
+#begin animation/mobs/slime/slime_green.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:animation/mobs/slime/slime_green.png
+
+#begin animation/mobs/slime/slime_green.sf
+/copy:animation/mobs/slime/slime_green.sf
 
 #begin data/models/player_stats.json
 /importer:JsonContentImporter
@@ -98,7 +104,4 @@
 
 #begin tiledmaps/test1/tilemap.tmx
 /copy:tiledmaps/test1/tilemap.tmx
-
-#begin tiledmaps/test1/tilemapTest.tmx
-/copy:tiledmaps/test1/tilemapTest.tmx
 

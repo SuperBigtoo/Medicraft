@@ -10,14 +10,12 @@ namespace Medicraft.Screens
         protected ContentManager Content;
         protected GraphicsDevice GraphicsDevice;
         protected GameWindow Window;
-        protected Camera Camera;
 
         public virtual void LoadContent()
         {
             Content = new ContentManager(ScreenManager.Instance.Content.ServiceProvider, "Content");
             GraphicsDevice = ScreenManager.Instance.GraphicsDevice;
             Window = ScreenManager.Instance.Window;
-            Camera = ScreenManager.Instance.Camera;
         }
 
         public virtual void UnloadContent()

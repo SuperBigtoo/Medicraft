@@ -9,8 +9,7 @@ namespace Medicraft
     public class GameMain : Game
     {
         private readonly GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
-        private Camera Camera;
+        //private Camera Camera;
 
         private readonly EntityManager _entityManager;
         private readonly Singleton _singleton;
@@ -35,7 +34,7 @@ namespace Medicraft
             _graphics.ToggleFullScreen();
             _graphics.ApplyChanges();
 
-            Camera = new Camera(GraphicsDevice.Viewport);
+            //Camera = new Camera(GraphicsDevice.Viewport);
 
             // Load GameSave
             var gameSave = JsonFileManager.LoadFlie("data/stats.json");
@@ -52,10 +51,8 @@ namespace Medicraft
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-
             // TODO: use this.Content to load your game content here
-            ScreenManager.Instance.LoadContent(Content, GraphicsDevice, Window, Camera);
+            ScreenManager.Instance.LoadContent(Content, GraphicsDevice, Window);
         }
 
         protected override void UnloadContent()
@@ -88,20 +85,9 @@ namespace Medicraft
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
             // TODO: Add your drawing code here
-            _spriteBatch.Begin
-            (
-                SpriteSortMode.BackToFront,
-                samplerState: SamplerState.PointClamp,
-                blendState: BlendState.AlphaBlend,
-                transformMatrix: Camera.GetTransform()
-            );
-
-            ScreenManager.Instance.Draw(_spriteBatch);
-
-            _spriteBatch.End();
+            
+            ScreenManager.Instance.Draw(); 
 
             base.Draw(gameTime);
         }

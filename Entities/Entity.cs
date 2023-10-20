@@ -32,6 +32,8 @@ namespace Medicraft.Entities
         public float StunTime { get; set; }
         public bool IsKnockback { get; set; }
         public bool IsDestroyed { get; set; }
+        public bool IsMoving { get; set; }
+        public bool IsAttacking { get; set; }
         public bool IsDetectCollistionObject { get; set; }
 
         protected Entity()

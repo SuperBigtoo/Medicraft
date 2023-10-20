@@ -70,31 +70,6 @@ namespace Medicraft.Systems
 
                         Rectangle tileRec = new Rectangle(isoX, isoY, _tileWidth, _tileHeight);
 
-                        // define layerDepth
-                        //if (i == 1)
-                        //{
-                        //    int playerPosY = (int)((int)PlayerManager.Instance.player.Position.Y + (float)_tileHeight / 2);
-                        //    int tilePosY = (isoY + (_tileHeight / 2));
-
-                        //    if (tilePosY >= playerPosY)
-                        //    {
-                        //        // In front Player
-                        //        spriteBatch.Draw(_tileSet, tileRec, tilesetRec, Color.White, 0f
-                        //            , Vector2.Zero, SpriteEffects.None, layerDepth);
-                        //    }
-                        //    else
-                        //    {   
-                        //        // Behide Player
-                        //        spriteBatch.Draw(_tileSet, tileRec, tilesetRec, Color.White, 0f
-                        //            , Vector2.Zero, SpriteEffects.None, layerDepth);
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    spriteBatch.Draw(_tileSet, tileRec, tilesetRec, Color.White, 0f
-                        //        , Vector2.Zero, SpriteEffects.None, layerDepth);
-                        //}
-
                         if (_tileMap.TileLayers[i].Name.Equals("Tile Layer 3"))
                         {
                             spriteBatch.Draw(_tileSet, tileRec, tilesetRec, Color.White, 0f

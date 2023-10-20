@@ -19,8 +19,8 @@ namespace Medicraft.Data
             string dateTimeString = dateTime.ToString().Replace(' ', '_');
 
             // Get Player Position
-            PlayerManager.Instance.player.GetPlayerStats().Position[0] = (double)PlayerManager.Instance.player.Position.X;
-            PlayerManager.Instance.player.GetPlayerStats().Position[1] = (double)PlayerManager.Instance.player.Position.Y;
+            PlayerManager.Instance.GetPlayer().GetPlayerStats().Position[0] = (double)PlayerManager.Instance.GetPlayer().Position.X;
+            PlayerManager.Instance.GetPlayer().GetPlayerStats().Position[1] = (double)PlayerManager.Instance.GetPlayer().Position.Y;
 
             // Get HUD Position
             double[] hudPosition =
@@ -46,7 +46,7 @@ namespace Medicraft.Data
                     Last_Updated = dateTimeString,
                     Camera_Position = cameraPosition,
                     HUD_Position = hudPosition,
-                    PlayerStats = PlayerManager.Instance.player.GetPlayerStats(),
+                    PlayerStats = PlayerManager.Instance.GetPlayer().GetPlayerStats(),
                 };
             }
             else
@@ -58,7 +58,7 @@ namespace Medicraft.Data
                     Last_Updated = dateTimeString,
                     Camera_Position = cameraPosition,
                     HUD_Position = hudPosition,
-                    PlayerStats = PlayerManager.Instance.player.GetPlayerStats(),
+                    PlayerStats = PlayerManager.Instance.GetPlayer().GetPlayerStats(),
                 });
             }
             SaveFile(Singleton.Instance.gameSave, "data/stats.json");

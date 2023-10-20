@@ -11,8 +11,7 @@ namespace Medicraft.Entities
     {
         private EntityStats _entityStats;
 
-        private string _movementAnimation;
-        private string _combatAnimation;
+        private string _currentAnimation;
 
         private float _aggroTime;
 
@@ -51,7 +50,7 @@ namespace Medicraft.Entities
             // MovementControl
             MovementControl(deltaSeconds);
 
-            if (BoundingCircle.Intersects(PlayerManager.Instance.player.BoundingCircle))
+            if (BoundingCircle.Intersects(PlayerManager.Instance.GetPlayer().BoundingCircle))
             {
                 var animation = "dead";
 
@@ -60,6 +59,9 @@ namespace Medicraft.Entities
 
             // Update layer depth
             UpdateLayerDepth(playerDepth, depthFrontTile, depthBehideTile);
+
+            // Combat Control
+            CombatControl(deltaSeconds);
 
             sprite.Update(deltaSeconds);
         }
@@ -81,11 +83,11 @@ namespace Medicraft.Entities
         private void MovementControl(float deltaSeconds)
         {
             var walkSpeed = deltaSeconds * _entityStats.Speed;
-            _movementAnimation = "idle";
+            _currentAnimation = "idle";
             _initPos = Position;
 
             // Aggro
-            if (BoundingDetectEntity.Intersects(PlayerManager.Instance.player.BoundingCircle))
+            if (BoundingDetectEntity.Intersects(PlayerManager.Instance.GetPlayer().BoundingCircle))
             {
                 _aggroTime = 5f;
             }
@@ -94,32 +96,31 @@ namespace Medicraft.Entities
             {
                 if (!IsKnockback && !IsDetectCollistionObject)
                 {                   
-                    if (Position.Y >= (PlayerManager.Instance.player.Position.Y + 50f))
+                    if (Position.Y >= (PlayerManager.Instance.GetPlayer().Position.Y + 50f))
                     {
-                        _movementAnimation = "idle";
+                        _currentAnimation = "idle";
                         Position -= new Vector2(0, walkSpeed);
                     }
 
-                    if (Position.Y < (PlayerManager.Instance.player.Position.Y - 30f))
+                    if (Position.Y < (PlayerManager.Instance.GetPlayer().Position.Y - 30f))
                     {
-                        _movementAnimation = "idle";
+                        _currentAnimation = "idle";
                         Position += new Vector2(0, walkSpeed);
 
                     }
 
-                    if (Position.X > (PlayerManager.Instance.player.Position.X + 50f))
+                    if (Position.X > (PlayerManager.Instance.GetPlayer().Position.X + 50f))
                     {
-                        _movementAnimation = "idle";
+                        _currentAnimation = "idle";
                         Position -= new Vector2(walkSpeed, 0);
 
                     }
 
-                    if (Position.X < (PlayerManager.Instance.player.Position.X - 50f))
+                    if (Position.X < (PlayerManager.Instance.GetPlayer().Position.X - 50f))
                     {
-                        _movementAnimation = "idle";
+                        _currentAnimation = "idle";
                         Position += new Vector2(walkSpeed, 0);
                     }
-
                 }
 
                 _aggroTime -= deltaSeconds;
@@ -156,7 +157,7 @@ namespace Medicraft.Entities
                 }
             }
 
-            sprite.Play(_movementAnimation);
+            sprite.Play(_currentAnimation);
         }
 
         private void CombatControl(float deltaSeconds)
@@ -168,9 +169,9 @@ namespace Medicraft.Entities
         {
             // Detect for LayerDepth
             sprite.Depth = depthFrontTile; // Default depth
-            if (BoundingCircle.Intersects(PlayerManager.Instance.player.BoundingDetectEntity))
+            if (BoundingCircle.Intersects(PlayerManager.Instance.GetPlayer().BoundingDetectEntity))
             {
-                if (Transform.Position.Y >= (PlayerManager.Instance.player.Position.Y + 40f))
+                if (Transform.Position.Y >= (PlayerManager.Instance.GetPlayer().Position.Y + 40f))
                 {
                     sprite.Depth = playerDepth - 0.1f; // In front Player
                 }

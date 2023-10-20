@@ -35,9 +35,9 @@ namespace Medicraft.Systems
             var playerFrontDepth = 0.3f;
             var playerBehideDepth = 0.7f;
 
-            PlayerManager.Instance.player.Update(gameTime, playerFrontDepth, playerBehideDepth);
+            PlayerManager.Instance.GetPlayer().Update(gameTime, playerFrontDepth, playerBehideDepth);
 
-            var playerDepth = PlayerManager.Instance.player.GetPlayerDepth();
+            var playerDepth = PlayerManager.Instance.GetPlayer().GetPlayerDepth();
             foreach (var entity in entities.Where(e => !e.IsDestroyed))
             {
                 playerDepth -= 0.00001f;
@@ -51,7 +51,7 @@ namespace Medicraft.Systems
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            PlayerManager.Instance.player.Draw(spriteBatch);
+            PlayerManager.Instance.GetPlayer().Draw(spriteBatch);
 
             foreach (var entity in entities.Where(e => !e.IsDestroyed))
             {
