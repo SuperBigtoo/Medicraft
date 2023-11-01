@@ -28,17 +28,17 @@ namespace Medicraft.Systems
 
         private void SetObjectOnTile() 
         {
-            Singleton.Instance.CollistionObject.Clear();
-            Singleton.Instance.OnGroundObject.Clear();
+            GameGlobals.Instance.CollistionObject.Clear();
+            GameGlobals.Instance.OnGroundObject.Clear();
 
             foreach (var o in _tileMap.ObjectGroups["Collision"].Objects)
             {
-                Singleton.Instance.CollistionObject.Add(new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+                GameGlobals.Instance.CollistionObject.Add(new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
 
             foreach (var o in _tileMap.ObjectGroups["ObjectLayer3"].Objects)
             {
-                Singleton.Instance.OnGroundObject.Add(new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+                GameGlobals.Instance.OnGroundObject.Add(new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
         }
 

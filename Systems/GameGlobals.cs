@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Medicraft.Systems
 {
-    public class Singleton
+    public class GameGlobals
     {
         public MouseState mousePreviose, mouseCurrent;
         public KeyboardState keyboardPreviose, keyboardCurrent;
@@ -22,32 +22,32 @@ namespace Medicraft.Systems
         public List<Rectangle> CollistionObject { private set; get; }  // "Collision"
         public List<Rectangle> OnGroundObject { private set; get; }  // "ObjectLayer3"
 
-        private static Singleton instance;
+        private static GameGlobals instance;
 
-        private Singleton()
+        private GameGlobals()
         {
             gameScreen = new Vector2(1440, 900);
             gameScreen_Center = new Vector2(1440/2, 900/2);
             addingHudPos = Vector2.Zero;
             cameraPosition = gameScreen_Center;
             addingCameraPos = Vector2.Zero;
-            gameSave = new List<GameSave>();
             gameSaveIdex = 0; // to be initial
 
             IsDebugMode = false;
             IsShowDetectBox = false;
 
+            gameSave = new List<GameSave>();
             CollistionObject = new List<Rectangle>();
             OnGroundObject = new List<Rectangle>();
         }
 
-        public static Singleton Instance
+        public static GameGlobals Instance
         {
             get
             {
                 if (instance == null)
                 {
-                    instance = new Singleton();
+                    instance = new GameGlobals();
                 }
                 return instance;
             }

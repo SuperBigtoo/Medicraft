@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended;
-using MonoGame.Extended.ViewportAdapters;
-using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Medicraft.Systems
 {
@@ -28,8 +26,8 @@ namespace Medicraft.Systems
 
         public void Update(float deltaSeconds)
         {
-            SetPosition(Singleton.Instance.cameraPosition + Singleton.Instance.addingCameraPos);
-
+            // if cutscene is false do dis
+            SetPosition(GameGlobals.Instance.cameraPosition + GameGlobals.Instance.addingCameraPos);
             if (PlayerManager.Instance.GetPlayer().IsMoving)
             {
                 targetZoom -= zoomSpeed * deltaSeconds;
@@ -56,10 +54,20 @@ namespace Medicraft.Systems
             this.zoom = MathHelper.Clamp(zoom, zoomMin, zoomMax);
         }
 
-        public Matrix GetTransform()
+        public Matrix GetTransform(int screenWidth, int screenHeight)
         {
+            float scaleX = (float)screenWidth / viewportWidth;
+            float scaleY = (float)screenHeight / viewportHeight;
+            float scale = MathHelper.Min(scaleX, scaleY);
+
+            // Calculate the letterbox bars (if any)
+            int barsWidth = screenWidth - (int)(viewportWidth * scale);
+            int barsHeight = screenHeight - (int)(viewportHeight * scale);
+
             transform = Matrix.CreateTranslation(-position.X, -position.Y, 0)
-                    * Matrix.CreateScale(zoom, zoom, 1);
+                * Matrix.CreateScale(zoom, zoom, 1)
+                * Matrix.CreateTranslation(barsWidth / 2, barsHeight / 2, 0);
+
             return transform;
         }
 

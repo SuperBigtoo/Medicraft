@@ -75,30 +75,30 @@ namespace Medicraft.Screens
 
         public override void Update(GameTime gameTime)
         {
-            if (Singleton.Instance.IsGameActive)
+            if (GameGlobals.Instance.IsGameActive)
             {
-                Singleton.Instance.keyboardPreviose = Singleton.Instance.keyboardCurrent;
-                Singleton.Instance.keyboardCurrent = Keyboard.GetState();
+                GameGlobals.Instance.keyboardPreviose = GameGlobals.Instance.keyboardCurrent;
+                GameGlobals.Instance.keyboardCurrent = Keyboard.GetState();
 
                 EntityManager.Instance.Update(gameTime);
                                 
-                if (Singleton.Instance.keyboardCurrent.IsKeyDown(Keys.M))
+                if (GameGlobals.Instance.keyboardCurrent.IsKeyDown(Keys.M))
                 {
                     JsonFileManager.SaveGame();
                 }
 
-                if (Singleton.Instance.keyboardCurrent.IsKeyDown(Keys.B) && !Singleton.Instance.IsDebugMode)
+                if (GameGlobals.Instance.keyboardCurrent.IsKeyDown(Keys.B) && !GameGlobals.Instance.IsDebugMode)
                 {
                     // Toggle the IsShowDetectBox flag
-                    Singleton.Instance.IsShowDetectBox = !Singleton.Instance.IsShowDetectBox;
+                    GameGlobals.Instance.IsShowDetectBox = !GameGlobals.Instance.IsShowDetectBox;
 
                     // Update the boolean variable to indicate that the "B" button has been pressed
-                    Singleton.Instance.IsDebugMode = true;
+                    GameGlobals.Instance.IsDebugMode = true;
                 }
-                else if (Singleton.Instance.keyboardCurrent.IsKeyUp(Keys.B))
+                else if (GameGlobals.Instance.keyboardCurrent.IsKeyUp(Keys.B))
                 {
                     // Update the boolean variable to indicate that the "B" button is not currently pressed
-                    Singleton.Instance.IsDebugMode = false;
+                    GameGlobals.Instance.IsDebugMode = false;
                 }
             }
 

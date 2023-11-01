@@ -13,26 +13,28 @@ namespace Medicraft.Systems
         public HudSystem(BitmapFont font)
         {
             _font = font;
-            _hudPosition = Singleton.Instance.addingHudPos;
+            _hudPosition = GameGlobals.Instance.addingHudPos;
         }
 
         public void DrawTest(SpriteBatch spriteBatch)
         {
-            _hudPosition = Singleton.Instance.addingHudPos;
+            var _graphicsDevice = ScreenManager.Instance.GraphicsDevice;
+            _hudPosition = GameGlobals.Instance.addingHudPos;
 
-            float addingX = Singleton.Instance.addingHudPos.X;
-            float addingY = Singleton.Instance.addingHudPos.Y;
+            float addingX = GameGlobals.Instance.addingHudPos.X;
+            float addingY = GameGlobals.Instance.addingHudPos.Y;
 
             spriteBatch.End();
             spriteBatch.Begin(
                 SpriteSortMode.Deferred,
                 samplerState: SamplerState.PointClamp,
                 blendState: BlendState.AlphaBlend,
-                transformMatrix: ScreenManager.Instance.Camera.GetTransform()
+                transformMatrix: ScreenManager.Instance.Camera.GetTransform(_graphicsDevice.Viewport.Width
+                , _graphicsDevice.Viewport.Height)
             );
 
             // Draw HUD
-            spriteBatch.FillRectangle(0 + addingX, 0 + addingY, Singleton.Instance.gameScreen.X
+            spriteBatch.FillRectangle(0 + addingX, 0 + addingY, GameGlobals.Instance.gameScreen.X
                 , 20, Color.Black * 0.4f);
             spriteBatch.DrawString(_font, $" Mobs: {EntityManager.Instance.entities.Count}"
                 , Vector2.Zero + _hudPosition, Color.White);

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace Medicraft.Systems
 {
@@ -27,6 +28,11 @@ namespace Medicraft.Systems
         }
 
         public Camera Camera
+        {
+            private set; get;
+        }
+
+        public ScalingViewportAdapter scalingViewportAdapter
         {
             private set; get;
         }
@@ -58,9 +64,12 @@ namespace Medicraft.Systems
         {  
             Content = new ContentManager(content.ServiceProvider, "Content");
             GraphicsDevice = graphicsDevice;
-            Window = window;
             spriteBatch = new SpriteBatch(graphicsDevice);
             Camera = new Camera(graphicsDevice.Viewport);
+            Window = window;
+
+            scalingViewportAdapter = new ScalingViewportAdapter(GraphicsDevice
+                , (int)GameGlobals.Instance.gameScreen.X, (int)GameGlobals.Instance.gameScreen.Y);
 
             currentScreen.LoadContent();
         }
@@ -89,7 +98,8 @@ namespace Medicraft.Systems
                 SpriteSortMode.BackToFront,
                 samplerState: SamplerState.PointClamp,
                 blendState: BlendState.AlphaBlend,
-                transformMatrix: Camera.GetTransform()
+                transformMatrix: Camera.GetTransform(GraphicsDevice.Viewport.Width
+                , GraphicsDevice.Viewport.Height)
             );
 
             currentScreen.Draw(spriteBatch);

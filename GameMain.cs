@@ -12,11 +12,11 @@ namespace Medicraft
         //private Camera Camera;
 
         private readonly EntityManager _entityManager;
-        private readonly Singleton _singleton;
+        private readonly GameGlobals _singleton;
 
         public GameMain()
         {
-            _singleton = Singleton.Instance;
+            _singleton = GameGlobals.Instance;
             _entityManager = EntityManager.Instance;
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -28,13 +28,11 @@ namespace Medicraft
             // TODO: Add your initialization logic here
             _graphics.PreferredBackBufferWidth = (int)_singleton.gameScreen.X;
             _graphics.PreferredBackBufferHeight = (int)_singleton.gameScreen.Y;
-            _graphics.SynchronizeWithVerticalRetrace = true;
-            Window.Position = new Point((GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2) - (_graphics.PreferredBackBufferWidth / 2)
-                , (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2) - (_graphics.PreferredBackBufferHeight / 2));
+            //_graphics.SynchronizeWithVerticalRetrace = true;
+            //Window.Position = new Point((GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2) - (_graphics.PreferredBackBufferWidth / 2)
+            //    , (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2) - (_graphics.PreferredBackBufferHeight / 2));
             _graphics.ToggleFullScreen();
             _graphics.ApplyChanges();
-
-            //Camera = new Camera(GraphicsDevice.Viewport);
 
             // Load GameSave
             var gameSave = JsonFileManager.LoadFlie("data/stats.json");
@@ -69,7 +67,7 @@ namespace Medicraft
 
         protected override void Update(GameTime gameTime)
         {
-            Singleton.Instance.IsGameActive = IsActive;
+            GameGlobals.Instance.IsGameActive = IsActive;
 
             if (IsActive)
             {

@@ -72,7 +72,7 @@ namespace Medicraft.Entities
             spriteBatch.Draw(sprite, Transform);
 
             // Test Draw BoundingRec for Collision
-            if (Singleton.Instance.IsShowDetectBox)
+            if (GameGlobals.Instance.IsShowDetectBox)
             {
                 Texture2D pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
                 pixelTexture.SetData(new Color[] { Color.White });
@@ -143,7 +143,7 @@ namespace Medicraft.Entities
             }
 
             // Detect Object Collsion
-            var ObjectOnTile = Singleton.Instance.CollistionObject;
+            var ObjectOnTile = GameGlobals.Instance.CollistionObject;
             foreach (var rect in ObjectOnTile)
             {
                 if (rect.Intersects(BoundingRec))
@@ -182,7 +182,7 @@ namespace Medicraft.Entities
             }
             else
             {
-                var OnGroundObject = Singleton.Instance.OnGroundObject;
+                var OnGroundObject = GameGlobals.Instance.OnGroundObject;
                 foreach (var obj in OnGroundObject)
                 {
                     if (obj.Intersects(BoundingRec))

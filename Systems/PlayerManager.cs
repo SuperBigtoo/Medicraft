@@ -16,15 +16,15 @@ namespace Medicraft.Systems
 
         public void Initialize(AnimatedSprite playerSprite, PlayerStats playerStats)
         {
-            if (Singleton.Instance.gameSave.Count != 0)
+            if (GameGlobals.Instance.gameSave.Count != 0)
             {
-                var gameSave = Singleton.Instance.gameSave[Singleton.Instance.gameSaveIdex];
+                var gameSave = GameGlobals.Instance.gameSave[GameGlobals.Instance.gameSaveIdex];
                 playerStats = gameSave.PlayerStats;
 
-                Singleton.Instance.cameraPosition = new Vector2((float)gameSave.Camera_Position[0]
+                GameGlobals.Instance.cameraPosition = new Vector2((float)gameSave.Camera_Position[0]
                     , (float)gameSave.Camera_Position[1]);
 
-                Singleton.Instance.addingHudPos = new Vector2((float)gameSave.HUD_Position[0]
+                GameGlobals.Instance.addingHudPos = new Vector2((float)gameSave.HUD_Position[0]
                     , (float)gameSave.HUD_Position[1]);
 
                 player = new Player(playerSprite, playerStats);

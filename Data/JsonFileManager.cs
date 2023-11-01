@@ -25,21 +25,21 @@ namespace Medicraft.Data
             // Get HUD Position
             double[] hudPosition =
             {
-                (double)Singleton.Instance.addingHudPos.X,
-                (double)Singleton.Instance.addingHudPos.Y
+                (double)GameGlobals.Instance.addingHudPos.X,
+                (double)GameGlobals.Instance.addingHudPos.Y
             };
 
             // Get Camera Position
-            Vector2 camPos = Singleton.Instance.cameraPosition + Singleton.Instance.addingCameraPos;
+            Vector2 camPos = GameGlobals.Instance.cameraPosition + GameGlobals.Instance.addingCameraPos;
             double[] cameraPosition =
             {
                 (double)camPos.X,
                 (double)camPos.Y
             };
 
-            if (Singleton.Instance.gameSave.Count != 0)
+            if (GameGlobals.Instance.gameSave.Count != 0)
             {
-                Singleton.Instance.gameSave[Singleton.Instance.gameSaveIdex] = new GameSave()
+                GameGlobals.Instance.gameSave[GameGlobals.Instance.gameSaveIdex] = new GameSave()
                 {
                     Name = "Save_" + dateTimeString,
                     Created_Time = dateTimeString,
@@ -51,7 +51,7 @@ namespace Medicraft.Data
             }
             else
             {
-                Singleton.Instance.gameSave.Add(new GameSave()
+                GameGlobals.Instance.gameSave.Add(new GameSave()
                 {
                     Name = "Save_" + dateTimeString,
                     Created_Time = dateTimeString,
@@ -61,7 +61,7 @@ namespace Medicraft.Data
                     PlayerStats = PlayerManager.Instance.GetPlayer().GetPlayerStats(),
                 });
             }
-            SaveFile(Singleton.Instance.gameSave, "data/stats.json");
+            SaveFile(GameGlobals.Instance.gameSave, "data/stats.json");
         }
 
         public static List<GameSave> LoadFlie(string PATH)

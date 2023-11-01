@@ -26,7 +26,7 @@ namespace Medicraft.Systems
             _tiledMapLayer = _tiledMap.GetLayer<TiledMapLayer>("Tiles2");
 
             var viewportadapter  = new BoxingViewportAdapter(Window, GraphicsDevice
-                , (int)Singleton.Instance.gameScreen.X, (int)Singleton.Instance.gameScreen.Y);
+                , (int)GameGlobals.Instance.gameScreen.X, (int)GameGlobals.Instance.gameScreen.Y);
             _orthographicCamera = new OrthographicCamera(viewportadapter);
         }
 
@@ -57,7 +57,7 @@ namespace Medicraft.Systems
             //EntityManager.Instance.Update(gameTime);
 
             // Camera
-            _orthographicCamera.LookAt((Singleton.Instance.cameraPosition + Singleton.Instance.addingCameraPos)
+            _orthographicCamera.LookAt((GameGlobals.Instance.cameraPosition + GameGlobals.Instance.addingCameraPos)
                 + new Vector2(0, _tiledMap.HeightInPixels + _tiledMap.TileHeight) * 0.5f);
             _tiledMapRenderer.Update(gameTime);
         }

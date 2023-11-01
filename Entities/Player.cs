@@ -71,7 +71,7 @@ namespace Medicraft.Entities
             spriteBatch.Draw(sprite, Transform);
 
             // Test Draw BoundingRec for Collision
-            if (Singleton.Instance.IsShowDetectBox)
+            if (GameGlobals.Instance.IsShowDetectBox)
             {
                 Texture2D pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
                 pixelTexture.SetData(new Color[] { Color.White });
@@ -85,12 +85,12 @@ namespace Medicraft.Entities
             var walkSpeed = deltaSeconds * _playerStats.Speed;
             Velocity = Vector2.Zero;
             _initPos = Position;
-            _initHudPos = Singleton.Instance.addingHudPos;
-            _initCamPos = Singleton.Instance.addingCameraPos;                                   
+            _initHudPos = GameGlobals.Instance.addingHudPos;
+            _initCamPos = GameGlobals.Instance.addingCameraPos;                                   
 
-            Singleton.Instance.keyboardPreviose = Singleton.Instance.keyboardCurrent;
-            Singleton.Instance.keyboardCurrent = Keyboard.GetState();
-            var keyboardState = Singleton.Instance.keyboardCurrent;
+            GameGlobals.Instance.keyboardPreviose = GameGlobals.Instance.keyboardCurrent;
+            GameGlobals.Instance.keyboardCurrent = Keyboard.GetState();
+            var keyboardState = GameGlobals.Instance.keyboardCurrent;
 
             if (!IsAttacking)
             {
@@ -126,8 +126,8 @@ namespace Medicraft.Entities
                 {
                     Velocity.Normalize();
                     Position += Velocity * walkSpeed;
-                    Singleton.Instance.addingHudPos += Velocity * walkSpeed;
-                    Singleton.Instance.addingCameraPos += Velocity * walkSpeed;
+                    GameGlobals.Instance.addingHudPos += Velocity * walkSpeed;
+                    GameGlobals.Instance.addingCameraPos += Velocity * walkSpeed;
                 }
                 else IsMoving = false;
 
@@ -138,15 +138,15 @@ namespace Medicraft.Entities
                 else _currentAnimation = "idle";
 
                 // Detect Object Collsion
-                var ObjectOnTile = Singleton.Instance.CollistionObject;
+                var ObjectOnTile = GameGlobals.Instance.CollistionObject;
                 foreach (var rect in ObjectOnTile)
                 {
                     if (rect.Intersects(BoundingRec))
                     {   
                         IsDetectCollistionObject = true;
                         Position = _initPos;
-                        Singleton.Instance.addingHudPos = _initHudPos;
-                        Singleton.Instance.addingCameraPos = _initCamPos;
+                        GameGlobals.Instance.addingHudPos = _initHudPos;
+                        GameGlobals.Instance.addingCameraPos = _initCamPos;
                     }
                     else
                     {
@@ -162,11 +162,11 @@ namespace Medicraft.Entities
         // Combat
         private void CombatControl(float deltaSeconds)
         {
-            Singleton.Instance.mousePreviose = Singleton.Instance.mouseCurrent;
-            Singleton.Instance.mouseCurrent = Mouse.GetState();
+            GameGlobals.Instance.mousePreviose = GameGlobals.Instance.mouseCurrent;
+            GameGlobals.Instance.mouseCurrent = Mouse.GetState();
 
-            if (Singleton.Instance.mouseCurrent.LeftButton == ButtonState.Pressed
-                    && Singleton.Instance.mousePreviose.LeftButton == ButtonState.Released && !IsAttacking)
+            if (GameGlobals.Instance.mouseCurrent.LeftButton == ButtonState.Pressed
+                    && GameGlobals.Instance.mousePreviose.LeftButton == ButtonState.Released && !IsAttacking)
             {
                 _currentAnimation = "attacking";
 
@@ -208,7 +208,7 @@ namespace Medicraft.Entities
         private void UpdateLayerDepth(float depthFrontTile, float depthBehideTile)
         {
             // Detect for LayerDepth
-            var OnGroundObject = Singleton.Instance.OnGroundObject;
+            var OnGroundObject = GameGlobals.Instance.OnGroundObject;
             sprite.Depth = depthFrontTile; // Default depth
             foreach (var obj in OnGroundObject)
             {
