@@ -26,12 +26,12 @@ namespace Medicraft
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            _graphics.PreferredBackBufferWidth = (int)_singleton.gameScreen.X;
-            _graphics.PreferredBackBufferHeight = (int)_singleton.gameScreen.Y;
-            //_graphics.SynchronizeWithVerticalRetrace = true;
+            _graphics.PreferredBackBufferWidth = (int)_singleton.GameScreen.X;
+            _graphics.PreferredBackBufferHeight = (int)_singleton.GameScreen.Y;
+            _graphics.SynchronizeWithVerticalRetrace = true;
             //Window.Position = new Point((GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2) - (_graphics.PreferredBackBufferWidth / 2)
             //    , (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2) - (_graphics.PreferredBackBufferHeight / 2));
-            _graphics.ToggleFullScreen();
+            //_graphics.ToggleFullScreen();
             _graphics.ApplyChanges();
 
             // Load GameSave
@@ -40,7 +40,7 @@ namespace Medicraft
             {
                 foreach (var save in gameSave)
                 {
-                    _singleton.gameSave.Add(save);
+                    _singleton.GameSave.Add(save);
                 }
             }
 

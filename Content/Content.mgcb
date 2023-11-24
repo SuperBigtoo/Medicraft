@@ -90,6 +90,21 @@
 /processor:BitmapFontProcessor
 /build:fonts/Sensation/Sensation.fnt
 
+#begin tiledmaps/demo/Demo.tmx
+/copy:tiledmaps/demo/Demo.tmx
+
+#begin tiledmaps/demo/rpg_maker_vx_rtp_tileset_by_telles0808.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:tiledmaps/demo/rpg_maker_vx_rtp_tileset_by_telles0808.png
+
 #begin tiledmaps/test1/rpg_maker_vx_rtp_tileset_by_telles0808.png
 /importer:TextureImporter
 /processor:TextureProcessor

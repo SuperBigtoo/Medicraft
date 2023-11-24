@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Tiled;
 using System;
 using TiledSharp;
 
@@ -13,6 +14,13 @@ namespace Medicraft.Systems
         private int _tileWidth;
         private int _tileHeight;
 
+        // Maintain tile types by number representation
+        private const int BLOCK = 0;
+        private const int ROAD = 1;
+        private const int START = 2;
+        private const int END = 3;
+        private const int BLANK = 4;
+
         public TilemapOrthogonalRender(TmxMap _tileMap, Texture2D _tileSet)
         {
             this._tileMap = _tileMap;
@@ -21,10 +29,10 @@ namespace Medicraft.Systems
             _tileHeight = _tileMap.Tilesets[0].TileHeight;
             _tilesetTileWide = _tileSet.Width / _tileWidth;
 
-            SetObjectOnTile();
+            Initialize();
         }
 
-        private void SetObjectOnTile()
+        private void Initialize()
         {
             GameGlobals.Instance.CollistionObject.Clear();
             GameGlobals.Instance.OnGroundObject.Clear();
@@ -34,10 +42,12 @@ namespace Medicraft.Systems
                 GameGlobals.Instance.CollistionObject.Add(new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
 
-            foreach (var o in _tileMap.ObjectGroups["ObjectLayer3"].Objects)
+            foreach (var o in _tileMap.ObjectGroups["ObjectOnLayer"].Objects)
             {
                 GameGlobals.Instance.OnGroundObject.Add(new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
+
+            MapArray();
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -66,7 +76,7 @@ namespace Medicraft.Systems
                         Rectangle tileRec = new Rectangle(x, y, _tileWidth, _tileHeight);
 
                         // Check layer depth here
-                        if (_tileMap.TileLayers[i].Name.Equals("Tile Layer 3"))
+                        if (_tileMap.TileLayers[i].Name.Equals("ObjectOnLayer"))
                         {
                             spriteBatch.Draw(_tileSet, tileRec, tilesetRec, Color.White, 0f
                                 , Vector2.Zero, SpriteEffects.None, layerDepthFront);
@@ -79,6 +89,68 @@ namespace Medicraft.Systems
                             layerDepthBack -= 0.00001f;
                         }
                     }
+                }
+            }
+        }
+
+        public void MapArray()
+        {
+            GameGlobals.Instance.TILE_SIZE = _tileWidth;
+            GameGlobals.Instance.NUM_ROWS = _tileMap.Height;
+            GameGlobals.Instance.NUM_COLUMNS = _tileMap.Width;
+            GameGlobals.Instance.Map = new int[_tileMap.Height, _tileMap.Width];
+
+            int x = 0;
+            int y = 0;
+
+            if (_tileMap.TileLayers[0].Name.Equals("Block"))
+            {
+                for (int j = 0; j < _tileMap.TileLayers[0].Tiles.Count; j++)
+                {
+                    int gid = _tileMap.TileLayers[0].Tiles[j].Gid;
+                    if (gid != 0)
+                    {
+                        if (gid - 1 == 1765)
+                        {
+                            //System.Diagnostics.Debug.WriteLine($"Block {num}: {x} {y}");
+                            GameGlobals.Instance.Map[y, x] = BLOCK;
+                        }
+                    }
+                    else
+                    {
+                        GameGlobals.Instance.Map[y, x] = BLANK;
+                    }
+
+                    if (x == _tileMap.Width - 1)
+                    {
+                        x = 0;
+                        y++;
+                        if (y == _tileMap.Height) y = 0;
+                    }
+                    else x++;
+                }
+            }
+
+            if (_tileMap.TileLayers[1].Name.Equals("Tile Layer 1"))
+            {
+                for (int j = 0; j < _tileMap.TileLayers[1].Tiles.Count; j++)
+                {
+                    int gid = _tileMap.TileLayers[1].Tiles[j].Gid;
+                    if (gid != 0)
+                    {
+                        if (GameGlobals.Instance.Map[y, x] != BLOCK)
+                        {
+                            GameGlobals.Instance.Map[y, x] = ROAD;
+                        }
+                    }
+
+                    if (x == _tileMap.Width - 1)
+                    {
+                        x = 0;
+                        y++;
+                        if (y == _tileMap.Height) y = 0;
+                    }
+                    else x++;
                 }
             }
         }

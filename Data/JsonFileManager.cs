@@ -19,49 +19,49 @@ namespace Medicraft.Data
             string dateTimeString = dateTime.ToString().Replace(' ', '_');
 
             // Get Player Position
-            PlayerManager.Instance.GetPlayer().GetPlayerStats().Position[0] = (double)PlayerManager.Instance.GetPlayer().Position.X;
-            PlayerManager.Instance.GetPlayer().GetPlayerStats().Position[1] = (double)PlayerManager.Instance.GetPlayer().Position.Y;
+            PlayerManager.Instance.Player.GetPlayerStats().Position[0] = PlayerManager.Instance.Player.Position.X;
+            PlayerManager.Instance.Player.GetPlayerStats().Position[1] = PlayerManager.Instance.Player.Position.Y;
 
             // Get HUD Position
             double[] hudPosition =
             {
-                (double)GameGlobals.Instance.addingHudPos.X,
-                (double)GameGlobals.Instance.addingHudPos.Y
+                (double)GameGlobals.Instance.HUDPosition.X,
+                (double)GameGlobals.Instance.HUDPosition.Y
             };
 
             // Get Camera Position
-            Vector2 camPos = GameGlobals.Instance.cameraPosition + GameGlobals.Instance.addingCameraPos;
+            Vector2 camPos = GameGlobals.Instance.InitialCameraPos + GameGlobals.Instance.AddingCameraPos;
             double[] cameraPosition =
             {
                 (double)camPos.X,
                 (double)camPos.Y
             };
 
-            if (GameGlobals.Instance.gameSave.Count != 0)
+            if (GameGlobals.Instance.GameSave.Count != 0)
             {
-                GameGlobals.Instance.gameSave[GameGlobals.Instance.gameSaveIdex] = new GameSave()
+                GameGlobals.Instance.GameSave[GameGlobals.Instance.GameSaveIdex] = new GameSave()
                 {
                     Name = "Save_" + dateTimeString,
                     Created_Time = dateTimeString,
                     Last_Updated = dateTimeString,
                     Camera_Position = cameraPosition,
                     HUD_Position = hudPosition,
-                    PlayerStats = PlayerManager.Instance.GetPlayer().GetPlayerStats(),
+                    PlayerStats = PlayerManager.Instance.Player.GetPlayerStats(),
                 };
             }
             else
             {
-                GameGlobals.Instance.gameSave.Add(new GameSave()
+                GameGlobals.Instance.GameSave.Add(new GameSave()
                 {
                     Name = "Save_" + dateTimeString,
                     Created_Time = dateTimeString,
                     Last_Updated = dateTimeString,
                     Camera_Position = cameraPosition,
                     HUD_Position = hudPosition,
-                    PlayerStats = PlayerManager.Instance.GetPlayer().GetPlayerStats(),
+                    PlayerStats = PlayerManager.Instance.Player.GetPlayerStats(),
                 });
             }
-            SaveFile(GameGlobals.Instance.gameSave, "data/stats.json");
+            SaveFile(GameGlobals.Instance.GameSave, "data/stats.json");
         }
 
         public static List<GameSave> LoadFlie(string PATH)

@@ -48,18 +48,19 @@ namespace Medicraft.Entities
         }
 
         // Update Player
-        public override void Update(GameTime gameTime, float depthFrontTile, float depthBehideTile)
+        public override void Update(GameTime gameTime, KeyboardState keyboardCurrentState, KeyboardState keyboardPrevioseState
+            , MouseState mouseCurrentState, MouseState mousePrevioseState, float depthFrontTile, float depthBehideTile)
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // Movement Control
-            MovementControl(deltaSeconds);
+            MovementControl(deltaSeconds, keyboardCurrentState);
 
             // Update layer depth
             UpdateLayerDepth(depthFrontTile, depthBehideTile);
 
             // Combat Control
-            CombatControl(deltaSeconds);
+            CombatControl(deltaSeconds, keyboardCurrentState, keyboardPrevioseState, mouseCurrentState, mousePrevioseState);
 
             sprite.Play(_currentAnimation);
             sprite.Update(deltaSeconds);
@@ -80,17 +81,13 @@ namespace Medicraft.Entities
         }
 
         // Movement
-        private void MovementControl(float deltaSeconds)
+        private void MovementControl(float deltaSeconds, KeyboardState keyboardState)
         {
             var walkSpeed = deltaSeconds * _playerStats.Speed;
             Velocity = Vector2.Zero;
             _initPos = Position;
-            _initHudPos = GameGlobals.Instance.addingHudPos;
-            _initCamPos = GameGlobals.Instance.addingCameraPos;                                   
-
-            GameGlobals.Instance.keyboardPreviose = GameGlobals.Instance.keyboardCurrent;
-            GameGlobals.Instance.keyboardCurrent = Keyboard.GetState();
-            var keyboardState = GameGlobals.Instance.keyboardCurrent;
+            _initHudPos = GameGlobals.Instance.HUDPosition;
+            _initCamPos = GameGlobals.Instance.AddingCameraPos;                                             
 
             if (!IsAttacking)
             {
@@ -126,8 +123,8 @@ namespace Medicraft.Entities
                 {
                     Velocity.Normalize();
                     Position += Velocity * walkSpeed;
-                    GameGlobals.Instance.addingHudPos += Velocity * walkSpeed;
-                    GameGlobals.Instance.addingCameraPos += Velocity * walkSpeed;
+                    GameGlobals.Instance.HUDPosition += Velocity * walkSpeed;
+                    GameGlobals.Instance.AddingCameraPos += Velocity * walkSpeed;
                 }
                 else IsMoving = false;
 
@@ -145,8 +142,8 @@ namespace Medicraft.Entities
                     {   
                         IsDetectCollistionObject = true;
                         Position = _initPos;
-                        GameGlobals.Instance.addingHudPos = _initHudPos;
-                        GameGlobals.Instance.addingCameraPos = _initCamPos;
+                        GameGlobals.Instance.HUDPosition = _initHudPos;
+                        GameGlobals.Instance.AddingCameraPos = _initCamPos;
                     }
                     else
                     {
@@ -160,13 +157,11 @@ namespace Medicraft.Entities
         }
 
         // Combat
-        private void CombatControl(float deltaSeconds)
+        private void CombatControl(float deltaSeconds, KeyboardState keyboardCurrentState, KeyboardState keyboardPrevioseState
+            , MouseState mouseCurrentState, MouseState mousePrevioseState)
         {
-            GameGlobals.Instance.mousePreviose = GameGlobals.Instance.mouseCurrent;
-            GameGlobals.Instance.mouseCurrent = Mouse.GetState();
-
-            if (GameGlobals.Instance.mouseCurrent.LeftButton == ButtonState.Pressed
-                    && GameGlobals.Instance.mousePreviose.LeftButton == ButtonState.Released && !IsAttacking)
+            if (mouseCurrentState.LeftButton == ButtonState.Pressed
+                && mousePrevioseState.LeftButton == ButtonState.Released && !IsAttacking)
             {
                 _currentAnimation = "attacking";
 

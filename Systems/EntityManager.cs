@@ -32,18 +32,18 @@ namespace Medicraft.Systems
 
         public void Update(GameTime gameTime)
         {
-            var playerFrontDepth = 0.3f;
-            var playerBehideDepth = 0.7f;
+            var frontDepth = 0.3f;
+            var behideDepth = 0.7f;
 
-            PlayerManager.Instance.GetPlayer().Update(gameTime, playerFrontDepth, playerBehideDepth);
+            PlayerManager.Instance.Update(gameTime, frontDepth, behideDepth);
+            var playerDepth = PlayerManager.Instance.Player.GetPlayerDepth();
 
-            var playerDepth = PlayerManager.Instance.GetPlayer().GetPlayerDepth();
             foreach (var entity in entities.Where(e => !e.IsDestroyed))
             {
                 playerDepth -= 0.00001f;
-                playerFrontDepth -= 0.00001f;
-                playerBehideDepth -= 0.00001f;
-                entity.Update(gameTime, playerDepth, playerFrontDepth, playerBehideDepth);
+                frontDepth -= 0.00001f;
+                behideDepth -= 0.00001f;
+                entity.Update(gameTime, playerDepth, frontDepth, behideDepth);
             }
 
             entities.RemoveAll(e => e.IsDestroyed);
@@ -51,12 +51,12 @@ namespace Medicraft.Systems
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            PlayerManager.Instance.GetPlayer().Draw(spriteBatch);
-
             foreach (var entity in entities.Where(e => !e.IsDestroyed))
             {
                 entity.Draw(spriteBatch);
             }
+
+            PlayerManager.Instance.Player.Draw(spriteBatch);
         }
 
         public static EntityManager Instance

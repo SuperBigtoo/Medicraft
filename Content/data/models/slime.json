@@ -7,7 +7,7 @@
     "DEF_Percent": 0.25,
     "Speed": 50,
     "Evasion": 0.05,
-    "Position": [ 446, 426 ]
+    "Position": [ 1096, 566 ]
   },
   {
     "Id": 1,
@@ -17,6 +17,6 @@
     "DEF_Percent": 0.25,
     "Speed": 50,
     "Evasion": 0.05,
-    "Position": [ 446, 226 ]
+    "Position": [ 1276, 566 ]
   }
 ]

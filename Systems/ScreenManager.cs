@@ -69,7 +69,7 @@ namespace Medicraft.Systems
             Window = window;
 
             scalingViewportAdapter = new ScalingViewportAdapter(GraphicsDevice
-                , (int)GameGlobals.Instance.gameScreen.X, (int)GameGlobals.Instance.gameScreen.Y);
+                , (int)GameGlobals.Instance.GameScreen.X, (int)GameGlobals.Instance.GameScreen.Y);
 
             currentScreen.LoadContent();
         }

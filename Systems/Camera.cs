@@ -11,36 +11,36 @@ namespace Medicraft.Systems
         private float zoom;
         private readonly float viewportWidth;
         private readonly float viewportHeight;
-
         private const float MinZoom = 1.0f;
-        private const float MaxZoom = 1.15f;
-        private float targetZoom = 1.15f;
+        private const float MaxZoom = 1.0f;
+        private float targetZoom = 1.0f;
         private float zoomSpeed = 0.25f;
 
         public Camera(Viewport viewport)
         {
             viewportWidth = viewport.Width;
             viewportHeight = viewport.Height;
-            zoom = 1.15f;
+            zoom = 1.0f;
         }
 
         public void Update(float deltaSeconds)
         {
             // if cutscene is false do dis
-            SetPosition(GameGlobals.Instance.cameraPosition + GameGlobals.Instance.addingCameraPos);
-            if (PlayerManager.Instance.GetPlayer().IsMoving)
-            {
-                targetZoom -= zoomSpeed * deltaSeconds;
-            }
-            else
-            {
-                targetZoom += zoomSpeed * deltaSeconds;
+            SetPosition(GameGlobals.Instance.InitialCameraPos + GameGlobals.Instance.AddingCameraPos);
 
-                if (targetZoom > MaxZoom) targetZoom = 1.15f;
-            }
+            //if (PlayerManager.Instance.Player.IsMoving)
+            //{
+            //    targetZoom -= zoomSpeed * deltaSeconds;
+            //}
+            //else
+            //{
+            //    targetZoom += zoomSpeed * deltaSeconds;
 
-            // Clamp the zoom within the defined range.
-            zoom = MathHelper.Clamp(targetZoom, MinZoom, MaxZoom);
+            //    if (targetZoom > MaxZoom) targetZoom = 1.0f;
+            //}
+
+            //// Clamp the zoom within the defined range.
+            //zoom = MathHelper.Clamp(targetZoom, MinZoom, MaxZoom);
         }
 
         public void SetPosition(Vector2 targetPosition)

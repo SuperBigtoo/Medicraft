@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
+using Microsoft.Xna.Framework.Input;
 
 namespace Medicraft.Entities
 {
@@ -44,7 +45,8 @@ namespace Medicraft.Entities
             IsDestroyed = false;
         }
 
-        public virtual void Update(GameTime gameTime, float depthFrontTile, float depthBehideTile) { }
+        public virtual void Update(GameTime gameTime, KeyboardState keyboardCurrentState, KeyboardState keyboardPrevioseState
+            , MouseState mouseCurrentState, MouseState mousePrevioseState, float depthFrontTile, float depthBehideTile) { }
         public virtual void Update(GameTime gameTime, float playerDepth, float depthFrontTile, float depthBehideTile) { }
         public virtual void Draw(SpriteBatch spriteBatch) { }
 
