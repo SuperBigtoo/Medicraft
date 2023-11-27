@@ -1,0 +1,69 @@
+{
+  "textureAtlas": {
+    "texture": "slimes_spritesheet.png",
+    "regionWidth": 32,
+    "regionHeight": 32
+  },
+  "cycles": {
+    "yellow_attacking": {
+      "frames": [0,1,2,3,4,5],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "yellow_walking": {
+      "frames": [6,7,8,9,10,11],
+      "isLooping": false,
+      "frameDuration": 0.1
+    },
+    "yellow_dying": {
+      "frames": [12,13,14,15,16,17],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "red_attacking": {
+      "frames": [18,19,20,21,22,23],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "red_walking": {
+      "frames": [24,25,26,27,28,29],
+      "isLooping": false,
+      "frameDuration": 0.1
+    },
+    "red_dying": {
+      "frames": [30,31,32,33,34,35],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "green_attacking": {
+      "frames": [36,37,38,39,40,41],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "green_walking": {
+      "frames": [42,43,44,45,46,47],
+      "isLooping": false,
+      "frameDuration": 0.1
+    },
+    "green_dying": {
+      "frames": [48,49,50,51,52,53],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "blue_attacking": {
+      "frames": [54,55,56,57,58,59],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "blue_walking": {
+      "frames": [60,61,62,63,64,65],
+      "isLooping": false,
+      "frameDuration": 0.1
+    },
+    "blue_dying": {
+      "frames": [66,67,68,69,70,71],
+      "isLooping": false,
+      "frameDuration": 0.2
+    }
+  }
+}

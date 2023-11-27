@@ -1,89 +1,115 @@
 ﻿using Medicraft.Data.Models;
+using Medicraft.Items;
 using Medicraft.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
+using System;
 
 namespace Medicraft.Entities
 {
     public class Player : Entity
     {
-        private PlayerStats _playerStats;
+        private readonly PlayerStats _playerStats;
 
         private string _currentAnimation;
 
         private Vector2 _initPos, _initHudPos, _initCamPos;
 
-        private float _attackTime, _attackSpeed, _knockbackForce;
+        private float _normalHitSpeed, _burstSkillSpeed;
+        private float _knockbackForce;
 
-        public Player(AnimatedSprite sprite, PlayerStats _playerStats)
+        public Player(AnimatedSprite sprite, PlayerStats playerStats)
         {
-            this.sprite = sprite;
-            this._playerStats = _playerStats;
-            IsMoving = false;
-            IsAttacking = false;
-            _attackTime = 0f;
-            _attackSpeed = 0.50f;  // Stat
-            _knockbackForce = 50f;  // Stat
+            _playerStats = playerStats;
+            
+            // Initial stats
+            Id = playerStats.Id;
+            Name = playerStats.Name;
+            Level = playerStats.Level;
+            EXP = playerStats.EXP;
+            ATK = playerStats.ATK;
+            HP = playerStats.HP;
+            DEF_Percent = (float)playerStats.DEF_Percent;
+            Crit_Percent = (float)playerStats.Crit_Percent;
+            CritDMG_Percent = (float)playerStats.CritDMG_Percent;
+            Speed = playerStats.Speed;
+            Evasion = (float)playerStats.Evasion;
 
-            IsDetectCollistionObject = false;
+            Sprite = sprite;
 
-            Vector2 _position = new Vector2((float)_playerStats.Position[0], (float)_playerStats.Position[1]);
+            _normalHitSpeed = 0.40f;    // Stat
+            _burstSkillSpeed = 0.70f;   // Stat
+            _knockbackForce = 50f;      // Stat
+
+            var position = new Vector2((float)playerStats.Position[0], (float)playerStats.Position[1]);
             Transform = new Transform2
             {
                 Scale = Vector2.One,
                 Rotation = 0f,
-                Position = _position
+                Position = position
             };
 
-            BoundingRec = new Rectangle((int)Position.X - sprite.TextureRegion.Width / 5, (int)Position.Y + sprite.TextureRegion.Height / 3
-                , (int)(sprite.TextureRegion.Width / 2.5), sprite.TextureRegion.Height / 6);
-            BoundingCircle = new CircleF(Position, 47.5f);
-            BoundingDetectEntity = new CircleF(Position, 80f);
+            BoundingCollisionX = 20;
+            BoundingCollisionY = 2.40;
+            BoundingDetectCollisions = new Rectangle((int)((int)Position.X - sprite.TextureRegion.Width / BoundingCollisionX)
+                , (int)((int)Position.Y + sprite.TextureRegion.Height / BoundingCollisionY)
+                , (int)(sprite.TextureRegion.Width / 8), sprite.TextureRegion.Height / 10);
 
-            this.sprite.Depth = 0.3f;
-            this.sprite.Play("idle");
+            BoundingHitBox = new CircleF(Position + new Vector2(0f, 32f), 40f);
+
+            BoundingDetection = new CircleF(Position + new Vector2(0f, 32f), 80f);
+
+            BoundingCollection = new CircleF(Position + new Vector2(0f, 64f), 30f);
+
+            Sprite.Depth = 0.3f;
+            Sprite.Play("idle");
         }
 
         // Update Player
-        public override void Update(GameTime gameTime, KeyboardState keyboardCurrentState, KeyboardState keyboardPrevioseState
-            , MouseState mouseCurrentState, MouseState mousePrevioseState, float depthFrontTile, float depthBehideTile)
+        public override void Update(GameTime gameTime, KeyboardState keyboardCur, KeyboardState keyboardPrev
+            , MouseState mouseCur, MouseState mousePrev, float depthFrontTile, float depthBehideTile)
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // Movement Control
-            MovementControl(deltaSeconds, keyboardCurrentState);
+            MovementControl(deltaSeconds, keyboardCur);
 
             // Update layer depth
             UpdateLayerDepth(depthFrontTile, depthBehideTile);
 
             // Combat Control
-            CombatControl(deltaSeconds, keyboardCurrentState, keyboardPrevioseState, mouseCurrentState, mousePrevioseState);
+            CombatControl(deltaSeconds, keyboardCur, keyboardPrev, mouseCur, mousePrev);
 
-            sprite.Play(_currentAnimation);
-            sprite.Update(deltaSeconds);
+            // Collect Item
+            CheckInteraction(keyboardCur, keyboardPrev);
+
+            Sprite.Play(_currentAnimation);
+            Sprite.Update(deltaSeconds);
         }
 
         // Draw Player
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sprite, Transform);
+            spriteBatch.Draw(Sprite, Transform);
 
             // Test Draw BoundingRec for Collision
             if (GameGlobals.Instance.IsShowDetectBox)
             {
                 Texture2D pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
                 pixelTexture.SetData(new Color[] { Color.White });
-                spriteBatch.Draw(pixelTexture, BoundingRec, Color.Red);
+                spriteBatch.Draw(pixelTexture, BoundingDetectCollisions, Color.Red);
+
+                //spriteBatch.Draw(pixelTexture, BoundingAttack);
             }
         }
 
         // Movement
         private void MovementControl(float deltaSeconds, KeyboardState keyboardState)
         {
-            var walkSpeed = deltaSeconds * _playerStats.Speed;
+            var walkSpeed = deltaSeconds * Speed;
             Velocity = Vector2.Zero;
             _initPos = Position;
             _initHudPos = GameGlobals.Instance.HUDPosition;
@@ -93,26 +119,31 @@ namespace Medicraft.Entities
             {
                 if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
                 {
+                    _currentAnimation = "walking_up";
                     IsMoving = true;   
                     Velocity -= Vector2.UnitY;
                 }
 
                 if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
                 {
+                    _currentAnimation = "walking_down";
                     IsMoving = true;
                     Velocity += Vector2.UnitY;
                 }
 
                 if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
                 {
+                    _currentAnimation = "walking_left";
                     IsMoving = true;
                     Velocity -= Vector2.UnitX;
                 }
 
                 if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
                 {
+                    _currentAnimation = "walking_right";
                     IsMoving = true;
                     Velocity += Vector2.UnitX;
+
                     //Position += new Vector2(walkSpeed, 0);
                     //Singleton.Instance.addingHudPos += new Vector2(walkSpeed, 0);
                     //Singleton.Instance.addingCameraPos += new Vector2(walkSpeed, 0);
@@ -128,17 +159,16 @@ namespace Medicraft.Entities
                 }
                 else IsMoving = false;
 
-                if (IsMoving)
+                if (!IsMoving)
                 {
-                    _currentAnimation = "walking";
+                    _currentAnimation = "idle";
                 }
-                else _currentAnimation = "idle";
 
                 // Detect Object Collsion
                 var ObjectOnTile = GameGlobals.Instance.CollistionObject;
                 foreach (var rect in ObjectOnTile)
                 {
-                    if (rect.Intersects(BoundingRec))
+                    if (rect.Intersects(BoundingDetectCollisions))
                     {   
                         IsDetectCollistionObject = true;
                         Position = _initPos;
@@ -157,44 +187,174 @@ namespace Medicraft.Entities
         }
 
         // Combat
-        private void CombatControl(float deltaSeconds, KeyboardState keyboardCurrentState, KeyboardState keyboardPrevioseState
-            , MouseState mouseCurrentState, MouseState mousePrevioseState)
+        private void CombatControl(float deltaSeconds, KeyboardState keyboardCur, KeyboardState keyboardPrev
+            , MouseState mouseCur, MouseState mousePrev)
         {
-            if (mouseCurrentState.LeftButton == ButtonState.Pressed
-                && mousePrevioseState.LeftButton == ButtonState.Released && !IsAttacking)
+            // Normal Hit
+            if (mouseCur.LeftButton == ButtonState.Pressed
+                && mousePrev.LeftButton == ButtonState.Released && !IsAttacking)
             {
-                _currentAnimation = "attacking";
+                _currentAnimation = "attacking_normal_hit";
 
                 IsAttacking = true;
-                _attackTime = _attackSpeed;
+                AttackingTime = _normalHitSpeed;
 
-                CheckAttackDetection();
+                CheckAttackDetection(ATK, 1f);
             }
 
-            if (_attackTime > 0)
+            // Burst Skill
+            if (keyboardCur.IsKeyDown(Keys.Q) && !IsAttacking)
             {
-                _attackTime -= deltaSeconds;
+                _currentAnimation = "attacking_burst_skill";
+
+                IsAttacking = true;
+                AttackingTime = _burstSkillSpeed;
+
+                CheckAttackDetection(ATK, 1f);
+            }
+
+            // Check attack timing
+            if (AttackingTime > 0)
+            {
+                AttackingTime -= deltaSeconds;
             }
             else IsAttacking = false;
         }
 
-        private void CheckAttackDetection()
+        private void CheckAttackDetection(int ATK, float PercentATK)
         {
             if (EntityManager.Instance.entities.Count != 0) 
             {
-                foreach (Entity en in EntityManager.Instance.entities)
+                foreach (var entity in EntityManager.Instance.entities)
                 {
-                    if (BoundingDetectEntity.Intersects(en.BoundingCircle))
+                    if (BoundingDetection.Intersects(entity.BoundingHitBox))
                     {
-                        if (!en.IsDestroyed)
+                        if (!entity.IsDestroyed)
                         {
-                            Vector2 knockBackDirection = en.Position - this.Position;
+                            entity.HP -= TotalDamage(ATK, PercentATK, entity.DEF_Percent);
+
+                            Vector2 knockBackDirection = entity.Position - Position;
                             knockBackDirection.Normalize();
 
-                            en.Velocity = knockBackDirection * _knockbackForce;
-                            en.IsKnockback = true;
-                            en.StunTime = 0.2f;                           
+                            entity.Velocity = knockBackDirection * _knockbackForce;
+                            entity.IsKnockback = true;
+                            entity.StunTime = 0.2f;
+
+                            if (entity.HP <= 0)
+                            {
+                                entity.DyingTime = 1.3f;
+                                entity.IsDying = true;
+                            }
                         }
+                    }
+                }
+            }
+        }
+
+        private int TotalDamage(int ATK, float PercentATK, float PercentDEF)
+        {
+            // Default case
+            int totalDamage = (int)(ATK * PercentATK);
+
+            // Check crit chance
+            Random random = new Random();
+            int critChance = random.Next(1, 101);
+
+            if (critChance <= Crit_Percent * 100)
+            {
+                totalDamage += (int)(totalDamage * CritDMG_Percent);
+            }
+
+            // Calculate DEF
+            totalDamage -= (int)(totalDamage * PercentDEF);
+
+            return totalDamage;
+        }
+
+        private void CheckInteraction(KeyboardState keyboardCur, KeyboardState keyboardPrev)
+        {
+            GameGlobals.Instance.IsDetectedItem = false;
+
+            // Check Item Dectection
+            if (ItemManager.Instance.items.Count != 0)
+            {
+                var items = ItemManager.Instance.items;
+                foreach (var item in items)
+                {
+                    if (BoundingCollection.Intersects(item.BoundingCollection))
+                    {
+                        GameGlobals.Instance.IsDetectedItem = true;
+                        break;
+                    }
+                }
+            }
+
+            // Check Table Craft
+            var TableCraft = GameGlobals.Instance.TableCraft;
+            foreach (var obj in TableCraft)
+            {
+                if (BoundingDetectCollisions.Intersects(obj))
+                {
+                    GameGlobals.Instance.IsDetectedItem = true;
+                    break;
+                }
+            }
+
+            // Check Interaction
+            if (keyboardCur.IsKeyUp(Keys.F) && keyboardPrev.IsKeyDown(Keys.F))
+            {
+                if (GameGlobals.Instance.IsDetectedItem)
+                {
+                    CheckItemDetection();
+                    CheckTableCraftDetection();
+                }
+            }
+        }
+
+        private void CheckItemDetection()
+        {
+            if (ItemManager.Instance.items.Count != 0)
+            {
+                foreach (var item in ItemManager.Instance.items)
+                {
+                    if (BoundingCollection.Intersects(item.BoundingCollection))
+                    {
+                        if (!item.IsCollected)
+                        {
+                            item.IsCollected = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void CheckTableCraftDetection()
+        {
+            if (GameGlobals.Instance.TableCraft.Count != 0)
+            {
+                var TableCraft = GameGlobals.Instance.TableCraft;
+                foreach (var obj in TableCraft)
+                {
+                    if (BoundingDetectCollisions.Intersects(obj))
+                    {
+                        if (PlayerManager.Instance.Inventory["herb_1"] >= 1
+                            && PlayerManager.Instance.Inventory["herb_2"] >= 1)
+                        {
+                            HudSystem.AddFeed("drug");
+
+                            if (PlayerManager.Instance.Inventory.ContainsKey("drug"))
+                            {
+                                PlayerManager.Instance.Inventory["drug"] += 1;
+                                PlayerManager.Instance.Inventory["herb_1"] -= 1;
+                                PlayerManager.Instance.Inventory["herb_2"] -= 1;
+                            }
+                        }
+                        else
+                        {
+                            HudSystem.ShowInsufficientSign();
+                        }
+
+                        break;
                     }
                 }
             }
@@ -203,26 +363,37 @@ namespace Medicraft.Entities
         private void UpdateLayerDepth(float depthFrontTile, float depthBehideTile)
         {
             // Detect for LayerDepth
-            var OnGroundObject = GameGlobals.Instance.OnGroundObject;
-            sprite.Depth = depthFrontTile; // Default depth
-            foreach (var obj in OnGroundObject)
+            Sprite.Depth = depthFrontTile; // Default depth
+
+            var ObjectOnLayer1 = GameGlobals.Instance.ObjectOnLayer1;
+            foreach (var obj in ObjectOnLayer1)
             {
-                if (obj.Intersects(BoundingRec))
+                if (obj.Intersects(BoundingDetectCollisions))
                 {
-                    sprite.Depth = depthBehideTile;
+                    Sprite.Depth = depthBehideTile;
+                    break; // Exit the loop as soon as an intersection is found
+                }
+            }
+
+            var ObjectOnLayer2 = GameGlobals.Instance.ObjectOnLayer2;
+            foreach (var obj in ObjectOnLayer2)
+            {
+                if (obj.Intersects(BoundingDetectCollisions))
+                {
+                    Sprite.Depth = depthBehideTile + 0.2f;
                     break; // Exit the loop as soon as an intersection is found
                 }
             }
         }
 
-        public PlayerStats GetPlayerStats()
+        public PlayerStats GetStats()
         {
             return _playerStats;
         }
 
-        public float GetPlayerDepth()
+        public float GetDepth()
         {
-            return sprite.Depth;
+            return Sprite.Depth;
         }
     }
 }

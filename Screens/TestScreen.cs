@@ -9,6 +9,8 @@ using MonoGame.Extended.Content;
 using Medicraft.Entities;
 using TiledSharp;
 using System.Collections.Generic;
+using Medicraft.Systems.Spawners;
+using Medicraft.Items;
 
 namespace Medicraft.Screens
 {
@@ -19,6 +21,7 @@ namespace Medicraft.Screens
         private TilemapOrthogonalRender _tileMapRender;
 
         private List<EntityStats> _slimeStatsList;
+        private List<ItemStats> _itemStatsList;
 
         private BitmapFont _fontMinecraft, _fontSensation;
 
@@ -33,10 +36,10 @@ namespace Medicraft.Screens
             base.LoadContent();
 
             // Initialize Player's Data !! Gonna be move to Load GameSave later !!
-            var playerStats = ScreenManager.Instance.Content.Load<PlayerStats>("data/models/player_stats");
-            var playerAnimation = ScreenManager.Instance.Content.Load<SpriteSheet>("animation/mc/mc_animation.sf", new JsonContentLoader());
+            var basePlayerStats = Content.Load<PlayerStats>("data/models/player_stats");
+            var playerAnimation = Content.Load<SpriteSheet>("animation/mc/mc_spritesheet.sf", new JsonContentLoader());
             var playerSprite = new AnimatedSprite(playerAnimation);
-            PlayerManager.Instance.Initialize(playerSprite, playerStats);
+            PlayerManager.Instance.Initialize(playerSprite, basePlayerStats);
 
             // Load Tile Map
             //_mapManager = new TiledMapBackgroundManager(Content, GraphicsDevice, Window, "tiledmaps/test1/level02");
@@ -46,19 +49,39 @@ namespace Medicraft.Screens
 
             // Load Data Game from JSON file
             _slimeStatsList = Content.Load<List<EntityStats>>("data/models/slime");
+            _itemStatsList = Content.Load<List<ItemStats>>("data/models/items_demo");
 
             // Load bitmap font
             _fontMinecraft = Content.Load<BitmapFont>("fonts/Mincraft_Ten/Mincraft_Ten");
             _fontSensation = Content.Load<BitmapFont>("fonts/Sensation/Sensation");
 
-            // Adding Slime to EntityList
-            var _slimeAnimation = Content.Load<SpriteSheet>("animation/mobs/slime/slime_green.sf", new JsonContentLoader());
-            Vector2 _slimeScale = new Vector2(2.0f, 1.5f);
-            EntityManager.Instance.AddEntity(new Slime(new AnimatedSprite(_slimeAnimation), _slimeStatsList[0], _slimeScale));
-            //EntityManager.Instance.AddEntity(new Slime(new AnimatedSprite(_slimeAnimation), _slimeStatsList[1], _slimeScale));           
+            // Adding Slime to MobSpawner
+            var _slimeAnimation = Content.Load<SpriteSheet>("animation/mobs/slime/slimes_spritesheet.sf", new JsonContentLoader());
+            var _slimeScale = new Vector2(3.0f, 2.5f);
+            var _mobSpawner = new MobSpawner(10f);
+            _mobSpawner.AddEntity(new Slime(new AnimatedSprite(_slimeAnimation), _slimeStatsList[0], _slimeScale));
+            EntityManager.Instance.Initialize(_mobSpawner);
+
+            // Adding Items to ItemSpawner
+            var _itemAnimation = Content.Load<SpriteSheet>("items/items_demo.sf", new JsonContentLoader());
+            var _itemSpawner = new ItemSpawner(10f);
+            _itemSpawner.AddItem(new Herb1(new AnimatedSprite(_itemAnimation), _itemStatsList[0], Vector2.One));
+            _itemSpawner.AddItem(new Herb1(new AnimatedSprite(_itemAnimation), _itemStatsList[1], Vector2.One));
+            _itemSpawner.AddItem(new Herb1(new AnimatedSprite(_itemAnimation), _itemStatsList[2], Vector2.One));
+            ItemManager.Instance.Initialize(_itemSpawner);
 
             // Adding HUD
-            _hudSystem = new HudSystem(_fontSensation);
+            var textureList = new Texture2D[]
+            {
+                Content.Load<Texture2D>("items/heart"),
+                Content.Load<Texture2D>("items/herb_1"),
+                Content.Load<Texture2D>("items/herb_2"),
+                Content.Load<Texture2D>("items/drug_1"),
+                Content.Load<Texture2D>("items/gold_coin"),
+                Content.Load<Texture2D>("ui/PressF"),
+                Content.Load<Texture2D>("ui/insufficient"),
+            };
+            _hudSystem = new HudSystem(_fontSensation, _fontMinecraft, textureList);
         }
 
         public override void UnloadContent()
@@ -68,7 +91,6 @@ namespace Medicraft.Screens
 
         public override void Dispose()
         {
-            //_mapManager.Dispose();
             base.Dispose();
         }
 
@@ -77,8 +99,12 @@ namespace Medicraft.Screens
             if (GameGlobals.Instance.IsGameActive)
             {
                 EntityManager.Instance.Update(gameTime);
-            }
 
+                ItemManager.Instance.Update(gameTime);
+
+                _hudSystem.Update(gameTime);
+            }
+       
             base.Update(gameTime);
         }
 
@@ -89,18 +115,18 @@ namespace Medicraft.Screens
             //spriteBatch.DrawString(_fontMinecraft, $"ATK: {_slimeStatsList[0].ATK}", new Vector2(50, 110), Color.White);
             //spriteBatch.DrawString(_fontMinecraft, $"Player: {PlayerManager.Instance.Player.Position.X} {PlayerManager.Instance.Player.Position.Y}", new Vector2(50, 140), Color.White);
             //spriteBatch.DrawString(_fontMinecraft, $"CameraPosition: {GameGlobals.Instance.InitialCameraPos}", new Vector2(50, 170), Color.White);
-            spriteBatch.DrawString(_fontMinecraft, $"ROWS: {GameGlobals.Instance.NUM_ROWS}", new Vector2(50, 200), Color.White);
+            //spriteBatch.DrawString(_fontMinecraft, $"ROWS: {GameGlobals.Instance.NUM_ROWS}", new Vector2(50, 200), Color.White);
 
-            //_mapManager.Draw(spriteBatch, _hudSystem);
             EntityManager.Instance.Draw(spriteBatch);
 
+            ItemManager.Instance.Draw(spriteBatch);
 
             if (!GameGlobals.Instance.IsShowPath)
             {
                 _tileMapRender.Draw(spriteBatch);
             }
 
-            _hudSystem.DrawTest(spriteBatch);
+            _hudSystem.Draw(spriteBatch);
         }
     }
 }

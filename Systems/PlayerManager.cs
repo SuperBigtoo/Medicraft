@@ -1,11 +1,12 @@
 ﻿using Medicraft.Data;
 using Medicraft.Data.Models;
 using Medicraft.Entities;
+using Medicraft.Items;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Sprites;
-using MonoGame.Extended.Tiled;
-using System.IO;
+using System.Collections.Generic;
 
 namespace Medicraft.Systems
 {
@@ -13,13 +14,29 @@ namespace Medicraft.Systems
     {
         public Player Player { private set; get; }
 
+        public PlayerStats BasePlayerStats { private set; get; }
+
+        public Dictionary<string, int> Inventory { private set; get; }
+
+        public int Coin { set; get; }
+
         private static PlayerManager instance;
         private PlayerManager()
         {
+            Inventory = new Dictionary<string, int>()
+            {
+                {"herb_1", 0},
+                {"herb_2", 0},
+                {"drug", 0}
+            };
+
+            Coin = 0;
         }
 
-        public void Initialize(AnimatedSprite playerSprite, PlayerStats playerStats)
+        public void Initialize(AnimatedSprite playerSprite, PlayerStats basePlayerStats)
         {
+            BasePlayerStats = basePlayerStats;
+
             if (GameGlobals.Instance.GameSave.Count != 0)
             {
                 // Load save game according to selected index. 
@@ -33,16 +50,16 @@ namespace Medicraft.Systems
                 GameGlobals.Instance.HUDPosition = new Vector2((float)gameSave.HUD_Position[0]
                     , (float)gameSave.HUD_Position[1]);
 
-                playerStats = gameSave.PlayerStats;
+                var playerStats = gameSave.PlayerStats;
                 Player = new Player(playerSprite, playerStats);
             }
-            else
+            else // In case New Game
             {
-                Player = new Player(playerSprite, playerStats);
+                Player = new Player(playerSprite, basePlayerStats);
 
                 // Initialize camera position
-                GameGlobals.Instance.InitialCameraPos = new Vector2((float)playerStats.Position[0]
-                    , (float)playerStats.Position[1]);
+                GameGlobals.Instance.InitialCameraPos = new Vector2((float)basePlayerStats.Position[0]
+                    , (float)basePlayerStats.Position[1]);
             }
         }
 

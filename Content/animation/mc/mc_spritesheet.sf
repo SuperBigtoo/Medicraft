@@ -1,0 +1,44 @@
+{
+  "textureAtlas": {
+    "texture": "mc_spritesheet.png",
+    "regionWidth": 276,
+    "regionHeight": 173
+  },
+  "cycles": {
+    "idle": {
+      "frames": [9,10,11,12],
+      "isLooping": false,
+      "frameDuration": 0.15
+    },
+    "walking_down": {
+      "frames": [0,1,2,3,4,5],
+      "isLooping": false,
+      "frameDuration": 0.1
+    },
+    "walking_left": {
+      "frames": [18,19,20,21,22,23],
+      "isLooping": false,
+      "frameDuration": 0.1
+    },
+    "walking_right": {
+      "frames": [27,28,29,30,31,32],
+      "isLooping": false,
+      "frameDuration": 0.1
+    },
+    "walking_up": {
+      "frames": [36,37,38,39,40,41],
+      "isLooping": false,
+      "frameDuration": 0.1
+    },
+    "attacking_normal_hit": {
+      "frames": [45,46,47,48,49],
+      "isLooping": false,
+      "frameDuration": 0.1
+    },
+    "attacking_burst_skill": {
+      "frames": [54,55,56,57,58,59,60,61,62],
+      "isLooping": false,
+      "frameDuration": 0.08
+    }
+  }
+}

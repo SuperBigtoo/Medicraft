@@ -14,9 +14,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin animation/mc/mc_animation.sf
-/copy:animation/mc/mc_animation.sf
-
 #begin animation/mc/mc_spritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -29,7 +26,10 @@
 /processorParam:TextureFormat=Color
 /build:animation/mc/mc_spritesheet.png
 
-#begin animation/mobs/slime/slime_green.png
+#begin animation/mc/mc_spritesheet.sf
+/copy:animation/mc/mc_spritesheet.sf
+
+#begin animation/mobs/slime/slimes_spritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -39,10 +39,16 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:animation/mobs/slime/slime_green.png
+/build:animation/mobs/slime/slimes_spritesheet.png
 
-#begin animation/mobs/slime/slime_green.sf
-/copy:animation/mobs/slime/slime_green.sf
+#begin animation/mobs/slime/slimes_spritesheet.sf
+/copy:animation/mobs/slime/slimes_spritesheet.sf
+
+#begin data/models/items_demo.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.ItemStatsReader, Medicraft
+/build:data/models/items_demo.json
 
 #begin data/models/player_stats.json
 /importer:JsonContentImporter
@@ -90,6 +96,81 @@
 /processor:BitmapFontProcessor
 /build:fonts/Sensation/Sensation.fnt
 
+#begin items/drug_1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:items/drug_1.png
+
+#begin items/gold_coin.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:items/gold_coin.png
+
+#begin items/heart.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:items/heart.png
+
+#begin items/herb_1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:items/herb_1.png
+
+#begin items/herb_2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:items/herb_2.png
+
+#begin items/items_demo.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:items/items_demo.png
+
+#begin items/items_demo.sf
+/copy:items/items_demo.sf
+
 #begin tiledmaps/demo/Demo.tmx
 /copy:tiledmaps/demo/Demo.tmx
 
@@ -119,4 +200,28 @@
 
 #begin tiledmaps/test1/tilemap.tmx
 /copy:tiledmaps/test1/tilemap.tmx
+
+#begin ui/insufficient.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ui/insufficient.png
+
+#begin ui/PressF.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ui/PressF.png
 

@@ -35,16 +35,28 @@ namespace Medicraft.Systems
         private void Initialize()
         {
             GameGlobals.Instance.CollistionObject.Clear();
-            GameGlobals.Instance.OnGroundObject.Clear();
+            GameGlobals.Instance.ObjectOnLayer1.Clear();
+            GameGlobals.Instance.ObjectOnLayer2.Clear();
+            GameGlobals.Instance.TableCraft.Clear();
 
             foreach (var o in _tileMap.ObjectGroups["Collision"].Objects)
             {
                 GameGlobals.Instance.CollistionObject.Add(new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
 
-            foreach (var o in _tileMap.ObjectGroups["ObjectOnLayer"].Objects)
+            foreach (var o in _tileMap.ObjectGroups["ObjectOnLayer1"].Objects)
             {
-                GameGlobals.Instance.OnGroundObject.Add(new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+                GameGlobals.Instance.ObjectOnLayer1.Add(new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+            }
+
+            foreach (var o in _tileMap.ObjectGroups["ObjectOnLayer2"].Objects)
+            {
+                GameGlobals.Instance.ObjectOnLayer2.Add(new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+            }
+
+            foreach (var o in _tileMap.ObjectGroups["TableCraft"].Objects)
+            {
+                GameGlobals.Instance.TableCraft.Add(new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
 
             MapArray();
@@ -54,7 +66,8 @@ namespace Medicraft.Systems
         {
             // Tile Layer
             float layerDepthBack = 0.9f;
-            float layerDepthFront = 0.5f;
+            float layerDepthFront_1 = 0.3f;
+            float layerDepthFront_2 = 0.5f;
 
             for (int i = 0; i < _tileMap.TileLayers.Count; i++)
             {
@@ -76,11 +89,17 @@ namespace Medicraft.Systems
                         Rectangle tileRec = new Rectangle(x, y, _tileWidth, _tileHeight);
 
                         // Check layer depth here
-                        if (_tileMap.TileLayers[i].Name.Equals("ObjectOnLayer"))
+                        if (_tileMap.TileLayers[i].Name.Equals("OnjectOnLayer1"))
                         {
                             spriteBatch.Draw(_tileSet, tileRec, tilesetRec, Color.White, 0f
-                                , Vector2.Zero, SpriteEffects.None, layerDepthFront);
-                            layerDepthFront -= 0.00001f;
+                                , Vector2.Zero, SpriteEffects.None, layerDepthFront_1);
+                            layerDepthFront_1 -= 0.00001f;
+                        }
+                        else if (_tileMap.TileLayers[i].Name.Equals("ObjectOnLayer2"))
+                        {
+                            spriteBatch.Draw(_tileSet, tileRec, tilesetRec, Color.White, 0f
+                                , Vector2.Zero, SpriteEffects.None, layerDepthFront_2);
+                            layerDepthFront_2 -= 0.00001f;
                         }
                         else
                         {

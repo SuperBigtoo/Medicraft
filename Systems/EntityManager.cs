@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using Medicraft.Entities;
+using Medicraft.Systems.Spawners;
 
 namespace Medicraft.Systems
 {
@@ -14,6 +15,10 @@ namespace Medicraft.Systems
     public class EntityManager : IEntityManager
     {
         private static EntityManager instance;
+
+        private MobSpawner mobSpawner;
+
+        public float spawnTime = 0f;
 
         public readonly List<Entity> entities;
 
@@ -30,13 +35,20 @@ namespace Medicraft.Systems
             return entity;
         }
 
+        public void Initialize(MobSpawner mobSpawner)
+        {
+            entities.Clear();
+            this.mobSpawner = mobSpawner;
+            this.mobSpawner.Initialize();
+        }
+
         public void Update(GameTime gameTime)
         {
-            var frontDepth = 0.3f;
-            var behideDepth = 0.7f;
+            var frontDepth = 0.2f;
+            var behideDepth = 0.4f;
 
             PlayerManager.Instance.Update(gameTime, frontDepth, behideDepth);
-            var playerDepth = PlayerManager.Instance.Player.GetPlayerDepth();
+            var playerDepth = PlayerManager.Instance.Player.GetDepth();
 
             foreach (var entity in entities.Where(e => !e.IsDestroyed))
             {
@@ -46,11 +58,17 @@ namespace Medicraft.Systems
                 entity.Update(gameTime, playerDepth, frontDepth, behideDepth);
             }
 
+            // MobSpawner
+            mobSpawner.Update(gameTime);
+            spawnTime = mobSpawner.spawnTime;
+
             entities.RemoveAll(e => e.IsDestroyed);
+
+            mobSpawner.Spawn();
         }
 
         public void Draw(SpriteBatch spriteBatch)
-        {
+        {      
             foreach (var entity in entities.Where(e => !e.IsDestroyed))
             {
                 entity.Draw(spriteBatch);

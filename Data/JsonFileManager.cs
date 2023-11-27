@@ -19,8 +19,8 @@ namespace Medicraft.Data
             string dateTimeString = dateTime.ToString().Replace(' ', '_');
 
             // Get Player Position
-            PlayerManager.Instance.Player.GetPlayerStats().Position[0] = PlayerManager.Instance.Player.Position.X;
-            PlayerManager.Instance.Player.GetPlayerStats().Position[1] = PlayerManager.Instance.Player.Position.Y;
+            PlayerManager.Instance.Player.GetStats().Position[0] = PlayerManager.Instance.Player.Position.X;
+            PlayerManager.Instance.Player.GetStats().Position[1] = PlayerManager.Instance.Player.Position.Y;
 
             // Get HUD Position
             double[] hudPosition =
@@ -46,7 +46,7 @@ namespace Medicraft.Data
                     Last_Updated = dateTimeString,
                     Camera_Position = cameraPosition,
                     HUD_Position = hudPosition,
-                    PlayerStats = PlayerManager.Instance.Player.GetPlayerStats(),
+                    PlayerStats = PlayerManager.Instance.Player.GetStats(),
                 };
             }
             else
@@ -58,7 +58,7 @@ namespace Medicraft.Data
                     Last_Updated = dateTimeString,
                     Camera_Position = cameraPosition,
                     HUD_Position = hudPosition,
-                    PlayerStats = PlayerManager.Instance.Player.GetPlayerStats(),
+                    PlayerStats = PlayerManager.Instance.Player.GetStats(),
                 });
             }
             SaveFile(GameGlobals.Instance.GameSave, "data/stats.json");
@@ -91,7 +91,10 @@ namespace Medicraft.Data
         }
     }
 
-    //Reader Entity Stats
+    // Reader Entity Stats
     public class PlayerStatsReader : JsonContentTypeReader<PlayerStats> { }
     public class EntityStatsReader : JsonContentTypeReader<List<EntityStats>> { }
+
+    // Reader Items
+    public class ItemStatsReader : JsonContentTypeReader<List<ItemStats>> { }
 }

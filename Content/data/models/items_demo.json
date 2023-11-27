@@ -1,0 +1,32 @@
+﻿[
+  {
+    "Id": 0,
+    "Name": "herb_1",
+    "Description": "Use for crafting drug",
+    "Position": [ 753, 1005 ]
+  },
+  {
+    "Id": 1,
+    "Name": "herb_1",
+    "Description": "Use for crafting drug",
+    "Position": [ 751, 1133 ]
+  },
+  {
+    "Id": 2,
+    "Name": "herb_1",
+    "Description": "Use for crafting drug",
+    "Position": [ 750, 1262 ]
+  },
+  {
+    "Id": 3,
+    "Name": "herb_2",
+    "Description": "Use for crafting drug",
+    "Position": [ 0, 0 ]
+  },
+  {
+    "Id": 4,
+    "Name": "drug",
+    "Description": "drug drug drug for demo",
+    "Position": [ 0, 0 ]
+  }
+]

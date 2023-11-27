@@ -3,52 +3,137 @@ using Medicraft.Systems;
 using Medicraft.Systems.PathFinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
-using MonoGame.Extended.Tiled;
 using System;
-using System.IO;
 
 namespace Medicraft.Entities
 {
     public class Slime : Entity
     {
-        private EntityStats _entityStats;
+        private readonly EntityStats _entityStats;
+        private enum SlimeColor
+        {
+            yellow,
+            red,
+            green,
+            blue
+        }
+        private string _slimeColor;
 
         private AStar _pathFinding;
-        private int[] prevStart = new int[]
-        {
-            0, 0
-        };
+
+        private Vector2 _initPos;
 
         private string _currentAnimation;
 
         private float _aggroTime;
 
-        public Slime(AnimatedSprite _sprite, EntityStats _entityStats, Vector2 _scale)
+        public Slime(AnimatedSprite sprite, EntityStats entityStats, Vector2 scale)
         {
-            this.sprite = _sprite;
-            this._entityStats = _entityStats;
+            _entityStats = entityStats;
+            Id = entityStats.Id;
+            Name = entityStats.Name;
+            ATK = entityStats.ATK;
+            HP = entityStats.HP;
+            DEF_Percent = (float)entityStats.DEF_Percent;
+            Speed = entityStats.Speed;
+            Evasion = (float)entityStats.Evasion;
+            Sprite = sprite;
             _aggroTime = 0f;
 
-            IsDetectCollistionObject = false;
-
-            Vector2 _position = new Vector2((float)_entityStats.Position[0], (float)_entityStats.Position[1]);
+            var position = new Vector2((float)entityStats.Position[0], (float)entityStats.Position[1]);
             Transform = new Transform2
             {
-                Scale = _scale,
+                Scale = scale,
                 Rotation = 0f,
-                Position = _position
+                Position = position
             };
 
-            BoundingRec = new Rectangle((int)Position.X - sprite.TextureRegion.Width / 5, (int)Position.Y + sprite.TextureRegion.Height / 3
-                , (int)(sprite.TextureRegion.Width / 3), sprite.TextureRegion.Height / 6);
-            BoundingCircle = new CircleF(Position, 30);
-            BoundingDetectEntity = new CircleF(Position, 150);
+            BoundingCollisionX = 5.5;
+            BoundingCollisionY = 5;
+            BoundingDetectCollisions = new Rectangle((int)((int)Position.X - Sprite.TextureRegion.Width / BoundingCollisionX)
+                , (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY)
+                , (int)(Sprite.TextureRegion.Width / 3), Sprite.TextureRegion.Height / 5);
 
-            this.sprite.Depth = 0.3f;
-            this.sprite.Play("idle");
+            BoundingHitBox = new CircleF(Position, 20);
+
+            // For Aggro
+            BoundingDetection = new CircleF(Position, 150);
+
+            RandomSlimeColor();
+
+            Sprite.Depth = 0.3f;
+            Sprite.Play(_slimeColor + "walking");
+        }
+
+        private Slime(Slime slime)
+        {
+            _entityStats = slime._entityStats;
+
+            Id = _entityStats.Id;
+            Name = _entityStats.Name;
+            ATK = _entityStats.ATK;
+            HP = _entityStats.HP;
+            DEF_Percent = (float)_entityStats.DEF_Percent;
+            Speed = _entityStats.Speed;
+            Evasion = (float)_entityStats.Evasion;
+
+            Sprite = slime.Sprite;
+
+            _aggroTime = slime._aggroTime;
+
+            Transform = new Transform2
+            {
+                Scale = slime.Transform.Scale,
+                Rotation = slime.Transform.Rotation,
+                Position = slime.Transform.Position,
+            };
+
+            BoundingCollisionX = 5.5;
+            BoundingCollisionY = 5;
+            BoundingDetectCollisions = slime.BoundingDetectCollisions;
+
+            BoundingHitBox = slime.BoundingHitBox;
+
+            BoundingDetection = slime.BoundingDetection;
+
+            RandomSlimeColor();
+
+            Sprite.Depth = 0.3f;
+            Sprite.Play(_slimeColor + "walking");
+        }
+
+        public override object Clone()
+        {
+            return new Slime(this);
+        }
+
+        private void RandomSlimeColor()
+        {
+            Random random = new Random();
+            Array slimeColors = Enum.GetValues(typeof(SlimeColor));
+            int randomIndex = random.Next(slimeColors.Length);
+            SlimeColor randomColor = (SlimeColor)slimeColors.GetValue(randomIndex);
+
+            switch (randomColor)
+            {
+                case SlimeColor.yellow:
+                    _slimeColor = "yellow_";
+                    break;
+
+                case SlimeColor.red:
+                    _slimeColor = "red_";
+                    break;
+
+                case SlimeColor.green:
+                    _slimeColor = "green_";
+                    break;
+
+                case SlimeColor.blue:
+                    _slimeColor = "blue_";
+                    break;
+            }
         }
 
         // Update Slime
@@ -56,27 +141,45 @@ namespace Medicraft.Entities
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            _pathFinding = new AStar((int)Position.X, (int)Position.Y + sprite.TextureRegion.Height / 3);
-            //prevStart[0] = _pathFinding.GetPath()[0].row;
-            //prevStart[1] = _pathFinding.GetPath()[0].col;
-
-            // MovementControl
-            MovementControl(deltaSeconds);
-
-            if (BoundingCircle.Intersects(PlayerManager.Instance.Player.BoundingCircle))
+            if (!IsDying)
             {
-                var animation = "dead";
+                _pathFinding = new AStar((int)Position.X, (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY));
 
-                sprite.Play(animation);
+                // Combat Control
+                CombatControl(deltaSeconds);
+
+                // MovementControl
+                MovementControl(deltaSeconds);
+
+                // Update layer depth
+                UpdateLayerDepth(playerDepth, depthFrontTile, depthBehideTile);
+            }
+            else
+            {
+                // Dying time before destroy
+                _currentAnimation = _slimeColor + "dying";
+
+                if (DyingTime > 0)
+                {
+                    DyingTime -= deltaSeconds;
+                }
+                else
+                {
+                    HudSystem.AddFeed("herb_2");
+
+                    if (PlayerManager.Instance.Inventory.ContainsKey("herb_2"))
+                    {
+                        PlayerManager.Instance.Inventory["herb_2"] += 1;
+                    }
+
+                    PlayerManager.Instance.Coin += 10;
+
+                    Destroy();
+                }
             }
 
-            // Update layer depth
-            UpdateLayerDepth(playerDepth, depthFrontTile, depthBehideTile);
-
-            // Combat Control
-            CombatControl(deltaSeconds);
-
-            sprite.Update(deltaSeconds);
+            Sprite.Play(_currentAnimation);
+            Sprite.Update(deltaSeconds);
         }
 
         // Draw Slime
@@ -87,25 +190,27 @@ namespace Medicraft.Entities
                 _pathFinding.Draw(spriteBatch);
             }
 
-            spriteBatch.Draw(sprite, Transform);
+            spriteBatch.Draw(Sprite, Transform);
 
             // Test Draw BoundingRec for Collision
             if (GameGlobals.Instance.IsShowDetectBox)
             {
                 Texture2D pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
                 pixelTexture.SetData(new Color[] { Color.White });
-                spriteBatch.Draw(pixelTexture, BoundingRec, Color.Red);
+                spriteBatch.Draw(pixelTexture, BoundingDetectCollisions, Color.Red);
             }
         }
 
         private int currentNodeIndex = 0; // Index of the current node in the path
         private void MovementControl(float deltaSeconds)
         {
-            var walkSpeed = deltaSeconds * _entityStats.Speed;
-            _currentAnimation = "idle";
+            var walkSpeed = deltaSeconds * Speed;
+            _initPos = Position;
+
+            if (!IsAttacking) _currentAnimation = _slimeColor + "walking";
 
             // Aggro
-            if (BoundingDetectEntity.Intersects(PlayerManager.Instance.Player.BoundingCircle))
+            if (BoundingDetection.Intersects(PlayerManager.Instance.Player.BoundingHitBox))
             {
                 _aggroTime = 5f;
             }
@@ -138,33 +243,33 @@ namespace Medicraft.Entities
                             //System.Diagnostics.Debug.WriteLine($"Pos Mob: {Position.X} {Position.Y}");
                             //System.Diagnostics.Debug.WriteLine($"Pos Node: {(_pathFinding.GetPath()[currentNodeIndex + 1].col * 64) + 32} {(_pathFinding.GetPath()[currentNodeIndex + 1].row * 64) + 32}");
                         }
-                    }
-                    else if (_pathFinding.GetPath().Count <= 4)
-                    {
-                        if (Position.Y >= (PlayerManager.Instance.Player.Position.Y + 50f))
+                        else if (_pathFinding.GetPath().Count <= 4)
                         {
-                            _currentAnimation = "idle";
-                            Position -= new Vector2(0, walkSpeed);
-                        }
+                            if (Position.Y >= (PlayerManager.Instance.Player.Position.Y + 50f))
+                            {
+                                _currentAnimation = _slimeColor + "walking";
+                                Position -= new Vector2(0, walkSpeed);
+                            }
 
-                        if (Position.Y < (PlayerManager.Instance.Player.Position.Y - 30f))
-                        {
-                            _currentAnimation = "idle";
-                            Position += new Vector2(0, walkSpeed);
+                            if (Position.Y < (PlayerManager.Instance.Player.Position.Y - 30f))
+                            {
+                                _currentAnimation = _slimeColor + "walking";
+                                Position += new Vector2(0, walkSpeed);
 
-                        }
+                            }
 
-                        if (Position.X > (PlayerManager.Instance.Player.Position.X + 50f))
-                        {
-                            _currentAnimation = "idle";
-                            Position -= new Vector2(walkSpeed, 0);
+                            if (Position.X > (PlayerManager.Instance.Player.Position.X + 50f))
+                            {
+                                _currentAnimation = _slimeColor + "walking";
+                                Position -= new Vector2(walkSpeed, 0);
 
-                        }
+                            }
 
-                        if (Position.X < (PlayerManager.Instance.Player.Position.X - 50f))
-                        {
-                            _currentAnimation = "idle";
-                            Position += new Vector2(walkSpeed, 0);
+                            if (Position.X < (PlayerManager.Instance.Player.Position.X - 50f))
+                            {
+                                _currentAnimation = _slimeColor + "walking";
+                                Position += new Vector2(walkSpeed, 0);
+                            }
                         }
                     }
                 }
@@ -191,72 +296,98 @@ namespace Medicraft.Entities
             var ObjectOnTile = GameGlobals.Instance.CollistionObject;
             foreach (var rect in ObjectOnTile)
             {
-                if (rect.Intersects(BoundingRec))
+                if (rect.Intersects(BoundingDetectCollisions))
                 {
                     IsDetectCollistionObject = true;
-
-                    // Calculate the intersection depth
-                    Rectangle intersection = Rectangle.Intersect(rect, BoundingRec);
-                    Vector2 depth = new Vector2(intersection.Width, intersection.Height);
-
-                    // Determine the direction of the collision
-                    float absDepthX = Math.Abs(depth.X);
-                    float absDepthY = Math.Abs(depth.Y);
-
-                    if (absDepthX < absDepthY)
-                    {
-                        // Adjust the position horizontally
-                        if (depth.X < 0)
-                            Position += new Vector2(absDepthX, 0);
-                        else
-                            Position -= new Vector2(absDepthX, 0);
-                    }
-                    else
-                    {
-                        // Adjust the position vertically
-                        if (depth.Y < 0)
-                            Position += new Vector2(0, absDepthY);
-                        else
-                            Position -= new Vector2(0, absDepthY);
-                    }
+                    Position = _initPos;
                 }
                 else
                 {
                     IsDetectCollistionObject = false;
                 }
             }
-
-            sprite.Play(_currentAnimation);
         }
 
         private void CombatControl(float deltaSeconds)
         {
+            // Do Attack
+            if (BoundingHitBox.Intersects(PlayerManager.Instance.Player.BoundingHitBox) && !IsAttacking)
+            {
+                _currentAnimation = _slimeColor + "attacking";
 
+                IsAttacking = true;
+                AttackingTime = 1f;
+            }
+
+            if (IsAttacking)
+            {
+                // Check attack timing
+                if (AttackingTime > 0)
+                {
+                    AttackingTime -= deltaSeconds;
+                }
+                else
+                {
+                    // CheckAttackDetection
+                    CheckAttackDetection();
+
+                    IsAttacking = false;
+                }
+            }
+        }
+
+        private void CheckAttackDetection()
+        {
+            if (BoundingHitBox.Intersects(PlayerManager.Instance.Player.BoundingHitBox))
+            {
+                if (PlayerManager.Instance.Player.HP > 0)
+                {
+                    int totalDamage = ATK;
+                    totalDamage -= (int)(totalDamage * PlayerManager.Instance.Player.DEF_Percent);
+
+                    PlayerManager.Instance.Player.HP -= totalDamage;
+
+                    if (PlayerManager.Instance.Player.HP <= 0)
+                    {
+                        PlayerManager.Instance.Player.HP = 100; // For testing
+                    }
+                }
+            }
         }
 
         private void UpdateLayerDepth(float playerDepth, float depthFrontTile, float depthBehideTile)
         {
             // Detect for LayerDepth
-            sprite.Depth = depthFrontTile; // Default depth
-            if (BoundingCircle.Intersects(PlayerManager.Instance.Player.BoundingDetectEntity))
+            Sprite.Depth = depthFrontTile; // Default depth
+            if (BoundingHitBox.Intersects(PlayerManager.Instance.Player.BoundingDetection))
             {
                 if (Transform.Position.Y >= (PlayerManager.Instance.Player.Position.Y + 40f))
                 {
-                    sprite.Depth = playerDepth - 0.1f; // In front Player
+                    Sprite.Depth = playerDepth - 0.1f; // In front Player
                 }
                 else
                 {
-                    sprite.Depth = playerDepth + 0.1f; // Behide Player
+                    Sprite.Depth = playerDepth + 0.1f; // Behide Player
                 }
             }
             else
             {
-                var OnGroundObject = GameGlobals.Instance.OnGroundObject;
-                foreach (var obj in OnGroundObject)
+                var ObjectOnLayer1 = GameGlobals.Instance.ObjectOnLayer1;
+                foreach (var obj in ObjectOnLayer1)
                 {
-                    if (obj.Intersects(BoundingRec))
+                    if (obj.Intersects(BoundingDetectCollisions))
                     {
-                        sprite.Depth = depthBehideTile;
+                        Sprite.Depth = depthBehideTile;
+                        break; // Exit the loop as soon as an intersection is found
+                    }
+                }
+
+                var ObjectOnLayer2 = GameGlobals.Instance.ObjectOnLayer2;
+                foreach (var obj in ObjectOnLayer2)
+                {
+                    if (obj.Intersects(BoundingDetectCollisions))
+                    {
+                        Sprite.Depth = depthBehideTile + 0.2f;
                         break; // Exit the loop as soon as an intersection is found
                     }
                 }

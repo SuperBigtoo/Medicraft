@@ -18,15 +18,22 @@ namespace Medicraft.Systems
         public bool SwitchDetectBox { set; get; }
         public bool IsShowDetectBox { set; get; }
         public bool SwitchShowPath { set; get; }
+        public bool IsDetectedItem { set; get; }
+        public bool ShowInsufficientSign { set; get; } 
         public bool IsShowPath { set; get; }
+        public float DisplayFeedTime { set; get; }
         public int GameSaveIdex { private set; get; }
         public List<GameSave> GameSave {private set; get;}
+        public List<string> ItemsFeed { private set; get; }
         public List<Rectangle> CollistionObject { private set; get; }  // "Collision"
-        public List<Rectangle> OnGroundObject { private set; get; }  // "ObjectOnLayer"
+        public List<Rectangle> ObjectOnLayer1 { private set; get; }  // "ObjectOnLayer"
+        public List<Rectangle> ObjectOnLayer2 { private set; get; }
+        public List<Rectangle> TableCraft { private set; get; }
         public int TILE_SIZE { set; get; }
         public int NUM_ROWS { set; get; }
         public int NUM_COLUMNS { set; get; }
         public int[,] Map { set; get; }
+
 
         private static GameGlobals instance;
 
@@ -51,9 +58,17 @@ namespace Medicraft.Systems
             SwitchShowPath = false;
             IsShowPath = false;
 
+            IsDetectedItem = false;
+            ShowInsufficientSign = false;
+
+            DisplayFeedTime = 6f;
+
             GameSave = new List<GameSave>();
+            ItemsFeed = new List<string>();
             CollistionObject = new List<Rectangle>();
-            OnGroundObject = new List<Rectangle>();
+            ObjectOnLayer1 = new List<Rectangle>();
+            ObjectOnLayer2 = new List<Rectangle>();
+            TableCraft = new List<Rectangle>();
         }
 
         public static GameGlobals Instance

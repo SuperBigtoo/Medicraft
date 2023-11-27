@@ -138,7 +138,7 @@ namespace Medicraft.Systems.PathFinding
 
         public void SetStart(float x, float y)
         {
-            Vector2 mobPos = new Vector2(x, y);
+            var mobPos = new Vector2(x, y);
             int posX = (int)(mobPos.X / TILE_SIZE);
             int posY = (int)(mobPos.Y / TILE_SIZE);
 
@@ -155,7 +155,7 @@ namespace Medicraft.Systems.PathFinding
 
         public void SetEnd(float x, float y)
         {
-            Vector2 playerPos = new Vector2(x, y + 64);
+            var playerPos = new Vector2(x, y + 75f);
             int posX = (int)(playerPos.X / TILE_SIZE);
             int posY = (int)(playerPos.Y / TILE_SIZE);
 
@@ -164,7 +164,7 @@ namespace Medicraft.Systems.PathFinding
 
         public void SetRoad(float x, float y)
         {
-            Vector2 pos = new Vector2(x, y);
+            var pos = new Vector2(x, y);
             int posX = (int)(pos.X / TILE_SIZE);
             int posY = (int)(pos.Y / TILE_SIZE);
 

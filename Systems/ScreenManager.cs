@@ -32,7 +32,7 @@ namespace Medicraft.Systems
             private set; get;
         }
 
-        public ScalingViewportAdapter scalingViewportAdapter
+        public ScalingViewportAdapter ScalingViewportAdapter
         {
             private set; get;
         }
@@ -51,6 +51,8 @@ namespace Medicraft.Systems
 
         public void LoadScreen(GameScreen gameScreen)
         {
+            UnloadContent();
+
             switch (gameScreen)
             {
                 case GameScreen.TestScreen:
@@ -68,7 +70,7 @@ namespace Medicraft.Systems
             Camera = new Camera(graphicsDevice.Viewport);
             Window = window;
 
-            scalingViewportAdapter = new ScalingViewportAdapter(GraphicsDevice
+            ScalingViewportAdapter = new ScalingViewportAdapter(GraphicsDevice
                 , (int)GameGlobals.Instance.GameScreen.X, (int)GameGlobals.Instance.GameScreen.Y);
 
             currentScreen.LoadContent();
@@ -76,12 +78,12 @@ namespace Medicraft.Systems
 
         public void UnloadContent()
         {
-            currentScreen.UnloadContent();
+            currentScreen?.UnloadContent();
         }
 
         public void Dispose()
         {
-            currentScreen.Dispose();
+            currentScreen?.Dispose();
         }
 
         public void Update(GameTime gameTime)
@@ -91,7 +93,7 @@ namespace Medicraft.Systems
 
         public void Draw()
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin
             (

@@ -2,9 +2,9 @@
   {
     "Id": 0,
     "Name": "Slime",
-    "ATK": 20,
+    "ATK": 5,
     "HP": 100,
-    "DEF_Percent": 0.25,
+    "DEF_Percent": 0.1,
     "Speed": 50,
     "Evasion": 0.05,
     "Position": [ 1096, 566 ]
@@ -12,9 +12,9 @@
   {
     "Id": 1,
     "Name": "Slime",
-    "ATK": 20,
+    "ATK": 5,
     "HP": 100,
-    "DEF_Percent": 0.25,
+    "DEF_Percent": 0.1,
     "Speed": 50,
     "Evasion": 0.05,
     "Position": [ 1276, 566 ]

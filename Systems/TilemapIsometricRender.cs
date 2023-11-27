@@ -29,7 +29,7 @@ namespace Medicraft.Systems
         private void SetObjectOnTile() 
         {
             GameGlobals.Instance.CollistionObject.Clear();
-            GameGlobals.Instance.OnGroundObject.Clear();
+            GameGlobals.Instance.ObjectOnLayer1.Clear();
 
             foreach (var o in _tileMap.ObjectGroups["Collision"].Objects)
             {
@@ -38,7 +38,7 @@ namespace Medicraft.Systems
 
             foreach (var o in _tileMap.ObjectGroups["ObjectLayer3"].Objects)
             {
-                GameGlobals.Instance.OnGroundObject.Add(new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+                GameGlobals.Instance.ObjectOnLayer1.Add(new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
         }
 
