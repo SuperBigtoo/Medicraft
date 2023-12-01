@@ -41,12 +41,15 @@ namespace Medicraft.Systems
         {
             TestScreen,
             SplashScreen,
-            PlayScreen
+            PlayScreen,
+            MainMenu
         }
 
         public ScreenManager()
         {
-            currentScreen = new TestScreen(); // TBC
+            //currentScreen = new TestScreen(); // TBC
+
+            currentScreen = new SplashScreen();
         }
 
         public void LoadScreen(GameScreen gameScreen)
@@ -57,6 +60,11 @@ namespace Medicraft.Systems
             {
                 case GameScreen.TestScreen:
                     currentScreen = new TestScreen();
+                    currentScreen.LoadContent();
+                    break;
+
+                case GameScreen.SplashScreen:
+                    currentScreen = new SplashScreen();
                     currentScreen.LoadContent();
                     break;
             }

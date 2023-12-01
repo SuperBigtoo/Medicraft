@@ -53,10 +53,10 @@ namespace Medicraft.Entities
             };
 
             BoundingCollisionX = 20;
-            BoundingCollisionY = 2.40;
+            BoundingCollisionY = 2.60;
             BoundingDetectCollisions = new Rectangle((int)((int)Position.X - sprite.TextureRegion.Width / BoundingCollisionX)
                 , (int)((int)Position.Y + sprite.TextureRegion.Height / BoundingCollisionY)
-                , (int)(sprite.TextureRegion.Width / 8), sprite.TextureRegion.Height / 10);
+                , (int)(sprite.TextureRegion.Width / 8), sprite.TextureRegion.Height / 8);
 
             BoundingHitBox = new CircleF(Position + new Vector2(0f, 32f), 40f);
 
@@ -101,8 +101,6 @@ namespace Medicraft.Entities
                 Texture2D pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
                 pixelTexture.SetData(new Color[] { Color.White });
                 spriteBatch.Draw(pixelTexture, BoundingDetectCollisions, Color.Red);
-
-                //spriteBatch.Draw(pixelTexture, BoundingAttack);
             }
         }
 

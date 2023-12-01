@@ -21,6 +21,7 @@ namespace Medicraft.Screens
         private TilemapOrthogonalRender _tileMapRender;
 
         private List<EntityStats> _slimeStatsList;
+
         private List<ItemStats> _itemStatsList;
 
         private BitmapFont _fontMinecraft, _fontSensation;
@@ -127,6 +128,8 @@ namespace Medicraft.Screens
             }
 
             _hudSystem.Draw(spriteBatch);
+
+
         }
     }
 }

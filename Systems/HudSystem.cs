@@ -95,7 +95,7 @@ namespace Medicraft.Systems
             DrawHPMobs(spriteBatch);
 
             // Draw HUD Bar
-            spriteBatch.FillRectangle(0 + addingX, 0 + addingY, GameGlobals.Instance.GameScreen.X
+            spriteBatch.FillRectangle(-720 + addingX, 0 + addingY, 2640
                 , 25, Color.Black * 0.4f);
             spriteBatch.DrawString(_font1, $" Mobs: {EntityManager.Instance.entities.Count}"
                 , Vector2.Zero + _hudPosition, Color.White);

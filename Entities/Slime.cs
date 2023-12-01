@@ -19,6 +19,7 @@ namespace Medicraft.Entities
             green,
             blue
         }
+
         private string _slimeColor;
 
         private AStar _pathFinding;

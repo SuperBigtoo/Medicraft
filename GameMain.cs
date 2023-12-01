@@ -83,8 +83,7 @@ namespace Medicraft
 
         protected override void Draw(GameTime gameTime)
         {
-            // TODO: Add your drawing code here
-            
+            // TODO: Add your drawing code here          
             ScreenManager.Instance.Draw(); 
 
             base.Draw(gameTime);
