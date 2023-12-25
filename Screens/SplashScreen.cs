@@ -93,8 +93,8 @@ namespace Medicraft.Screens
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            String textString1;
-            String textString2;
+            string textString1;
+            string textString2;
             Vector2 textSize1;
             Vector2 textSize2;
             float totalHeight;

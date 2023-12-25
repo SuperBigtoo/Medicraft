@@ -50,7 +50,7 @@ namespace Medicraft
         protected override void LoadContent()
         {
             // TODO: use this.Content to load your game content here
-            ScreenManager.Instance.LoadContent(Content, GraphicsDevice, Window);
+            ScreenManager.Instance.LoadContent(this, Content);
         }
 
         protected override void UnloadContent()
@@ -67,14 +67,6 @@ namespace Medicraft
 
         protected override void Update(GameTime gameTime)
         {
-            GameGlobals.Instance.IsGameActive = IsActive;
-
-            if (IsActive)
-            {
-                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                    Exit();
-            }
-
             // TODO: Add your update logic here
             ScreenManager.Instance.Update(gameTime);
 

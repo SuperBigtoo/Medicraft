@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
 using System;
+using System.Linq;
 
 namespace Medicraft.Entities
 {
@@ -14,12 +15,9 @@ namespace Medicraft.Entities
     {
         private readonly PlayerStats _playerStats;
 
-        private string _currentAnimation;
+        private Vector2 _initHudPos, _initCamPos;
 
-        private Vector2 _initPos, _initHudPos, _initCamPos;
-
-        private float _normalHitSpeed, _burstSkillSpeed;
-        private float _knockbackForce;
+        private float _normalHitSpeed, _burstSkillSpeed, _knockbackForce;
 
         public Player(AnimatedSprite sprite, PlayerStats playerStats)
         {
@@ -86,7 +84,7 @@ namespace Medicraft.Entities
             // Collect Item
             CheckInteraction(keyboardCur, keyboardPrev);
 
-            Sprite.Play(_currentAnimation);
+            Sprite.Play(CurrentAnimation);
             Sprite.Update(deltaSeconds);
         }
 
@@ -98,7 +96,7 @@ namespace Medicraft.Entities
             // Test Draw BoundingRec for Collision
             if (GameGlobals.Instance.IsShowDetectBox)
             {
-                Texture2D pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
+                var pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
                 pixelTexture.SetData(new Color[] { Color.White });
                 spriteBatch.Draw(pixelTexture, BoundingDetectCollisions, Color.Red);
             }
@@ -109,7 +107,7 @@ namespace Medicraft.Entities
         {
             var walkSpeed = deltaSeconds * Speed;
             Velocity = Vector2.Zero;
-            _initPos = Position;
+            InitPos = Position;
             _initHudPos = GameGlobals.Instance.HUDPosition;
             _initCamPos = GameGlobals.Instance.AddingCameraPos;                                             
 
@@ -117,28 +115,28 @@ namespace Medicraft.Entities
             {
                 if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
                 {
-                    _currentAnimation = "walking_up";
+                    CurrentAnimation = "walking_up";
                     IsMoving = true;   
                     Velocity -= Vector2.UnitY;
                 }
 
                 if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
                 {
-                    _currentAnimation = "walking_down";
+                    CurrentAnimation = "walking_down";
                     IsMoving = true;
                     Velocity += Vector2.UnitY;
                 }
 
                 if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
                 {
-                    _currentAnimation = "walking_left";
+                    CurrentAnimation = "walking_left";
                     IsMoving = true;
                     Velocity -= Vector2.UnitX;
                 }
 
                 if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
                 {
-                    _currentAnimation = "walking_right";
+                    CurrentAnimation = "walking_right";
                     IsMoving = true;
                     Velocity += Vector2.UnitX;
 
@@ -159,7 +157,7 @@ namespace Medicraft.Entities
 
                 if (!IsMoving)
                 {
-                    _currentAnimation = "idle";
+                    CurrentAnimation = "idle";
                 }
 
                 // Detect Object Collsion
@@ -169,7 +167,7 @@ namespace Medicraft.Entities
                     if (rect.Intersects(BoundingDetectCollisions))
                     {   
                         IsDetectCollistionObject = true;
-                        Position = _initPos;
+                        Position = InitPos;
                         GameGlobals.Instance.HUDPosition = _initHudPos;
                         GameGlobals.Instance.AddingCameraPos = _initCamPos;
                     }
@@ -192,7 +190,7 @@ namespace Medicraft.Entities
             if (mouseCur.LeftButton == ButtonState.Pressed
                 && mousePrev.LeftButton == ButtonState.Released && !IsAttacking)
             {
-                _currentAnimation = "attacking_normal_hit";
+                CurrentAnimation = "attacking_normal_hit";
 
                 IsAttacking = true;
                 AttackingTime = _normalHitSpeed;
@@ -203,7 +201,7 @@ namespace Medicraft.Entities
             // Burst Skill
             if (keyboardCur.IsKeyDown(Keys.Q) && !IsAttacking)
             {
-                _currentAnimation = "attacking_burst_skill";
+                CurrentAnimation = "attacking_burst_skill";
 
                 IsAttacking = true;
                 AttackingTime = _burstSkillSpeed;
@@ -223,11 +221,11 @@ namespace Medicraft.Entities
         {
             if (EntityManager.Instance.entities.Count != 0) 
             {
-                foreach (var entity in EntityManager.Instance.entities)
+                foreach (var entity in EntityManager.Instance.entities.Where(e => !e.IsDestroyed))
                 {
                     if (BoundingDetection.Intersects(entity.BoundingHitBox))
                     {
-                        if (!entity.IsDestroyed)
+                        if (!entity.IsDying)
                         {
                             entity.HP -= TotalDamage(ATK, PercentATK, entity.DEF_Percent);
 
@@ -255,7 +253,7 @@ namespace Medicraft.Entities
             int totalDamage = (int)(ATK * PercentATK);
 
             // Check crit chance
-            Random random = new Random();
+            var random = new Random();
             int critChance = random.Next(1, 101);
 
             if (critChance <= Crit_Percent * 100)

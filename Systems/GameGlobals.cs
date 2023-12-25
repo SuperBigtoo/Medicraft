@@ -34,14 +34,9 @@ namespace Medicraft.Systems
         public int NUM_COLUMNS { set; get; }
         public int[,] Map { set; get; }
 
+        public int test_int { set; get; }
 
         private static GameGlobals instance;
-
-        public const int BLOCK = 0;
-        public const int ROAD = 1;
-        public const int START = 2;
-        public const int END = 3;
-        public const int BLANK = 4;
 
         private GameGlobals()
         {
@@ -69,6 +64,8 @@ namespace Medicraft.Systems
             ObjectOnLayer1 = new List<Rectangle>();
             ObjectOnLayer2 = new List<Rectangle>();
             TableCraft = new List<Rectangle>();
+
+            test_int = 0;
         }
 
         public static GameGlobals Instance

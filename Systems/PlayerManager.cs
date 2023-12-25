@@ -7,18 +7,17 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Sprites;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Medicraft.Systems
 {
     public class PlayerManager
     {
         public Player Player { private set; get; }
-
         public PlayerStats BasePlayerStats { private set; get; }
-
         public Dictionary<string, int> Inventory { private set; get; }
-
         public int Coin { set; get; }
+        public bool IsPlayerDead { private set; get; }
 
         private static PlayerManager instance;
         private PlayerManager()
@@ -31,6 +30,8 @@ namespace Medicraft.Systems
             };
 
             Coin = 0;
+
+            IsPlayerDead = false;
         }
 
         public void Initialize(AnimatedSprite playerSprite, PlayerStats basePlayerStats)
@@ -63,7 +64,7 @@ namespace Medicraft.Systems
             }
         }
 
-        public void Update(GameTime gameTime, float playerFrontDepth, float playerBehideDepth)
+        public void Update(GameTime gameTime)
         {
             // Key Controller
             GameGlobals.Instance.keyboardPreviose = GameGlobals.Instance.keyboardCurrent;
@@ -82,34 +83,71 @@ namespace Medicraft.Systems
                 JsonFileManager.SaveGame();
             }
 
-            if (keyboardCur.IsKeyDown(Keys.B) && !GameGlobals.Instance.SwitchDetectBox)
+            // Check if CurrentScreen is TestScreen
+            if (ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.TestScreen)
             {
-                // Toggle the IsShowDetectBox flag
-                GameGlobals.Instance.IsShowDetectBox = !GameGlobals.Instance.IsShowDetectBox;
+                if (keyboardCur.IsKeyDown(Keys.B) && !GameGlobals.Instance.SwitchDetectBox)
+                {
+                    // Toggle the IsShowDetectBox flag
+                    GameGlobals.Instance.IsShowDetectBox = !GameGlobals.Instance.IsShowDetectBox;
 
-                // Update the boolean variable to indicate that the "B" button has been pressed
-                GameGlobals.Instance.SwitchDetectBox = true;
+                    // Update the boolean variable to indicate that the "B" button has been pressed
+                    GameGlobals.Instance.SwitchDetectBox = true;
+                }
+                else if (keyboardCur.IsKeyUp(Keys.B))
+                {
+                    // Update the boolean variable to indicate that the "B" button is not currently pressed
+                    GameGlobals.Instance.SwitchDetectBox = false;
+                }
+
+                if (keyboardCur.IsKeyDown(Keys.V) && !GameGlobals.Instance.SwitchShowPath)
+                {
+                    GameGlobals.Instance.IsShowPath = !GameGlobals.Instance.IsShowPath;
+
+                    GameGlobals.Instance.SwitchShowPath = true;
+                }
+                else if (keyboardCur.IsKeyUp(Keys.V))
+                {
+                    GameGlobals.Instance.SwitchShowPath = false;
+                }
             }
-            else if (keyboardCur.IsKeyUp(Keys.B))
+
+            var frontDepth = 0.2f;
+            var behideDepth = 0.4f;
+
+            Player.Update(gameTime, keyboardCur, keyboardPrev, mouseCur, mousePrev
+                , frontDepth, behideDepth);
+
+            // Check Player HP
+            if (Player.HP <= 0)
             {
-                // Update the boolean variable to indicate that the "B" button is not currently pressed
-                GameGlobals.Instance.SwitchDetectBox = false;
+                RespawnPlayer();
             }
+        }
 
-            if (keyboardCur.IsKeyDown(Keys.V) && !GameGlobals.Instance.SwitchShowPath)
+        private void RespawnPlayer()
+        {
+            IsPlayerDead = true;
+
+            if (IsPlayerDead)
             {
-                GameGlobals.Instance.IsShowPath = !GameGlobals.Instance.IsShowPath;
+                Player.HP = Player.GetStats().HP; // for testing
+                Player.Position = new Vector2((float)BasePlayerStats.Position[0]
+                    , (float)BasePlayerStats.Position[1]);
 
-                GameGlobals.Instance.SwitchShowPath = true;
-            }
-            else if (keyboardCur.IsKeyUp(Keys.V))
-            {
-                GameGlobals.Instance.SwitchShowPath = false;
-            }
+                // Adjust HUD and camera positions
+                GameGlobals.Instance.HUDPosition = Player.Position - new Vector2(720, 450);
+                GameGlobals.Instance.InitialCameraPos = Player.Position;
+                GameGlobals.Instance.AddingCameraPos = Vector2.Zero;
 
-            Player.Update(gameTime, keyboardCur, keyboardPrev
-                , mouseCur, mousePrev
-                , playerFrontDepth, playerBehideDepth);
+                var entities = EntityManager.Instance.Entities;
+                foreach (var entity in entities.Where(e => !e.IsDestroyed))
+                {
+                    entity.AggroTime = 0f;
+                }
+
+                IsPlayerDead = false;
+            }
         }
 
         public static PlayerManager Instance

@@ -47,9 +47,12 @@ namespace Medicraft.Systems
             var frontDepth = 0.2f;
             var behideDepth = 0.4f;
 
-            PlayerManager.Instance.Update(gameTime, frontDepth, behideDepth);
+            // Update Player
+            PlayerManager.Instance.Update(gameTime);
+
             var playerDepth = PlayerManager.Instance.Player.GetDepth();
 
+            // Update Mob & NPC
             foreach (var entity in entities.Where(e => !e.IsDestroyed))
             {
                 playerDepth -= 0.00001f;

@@ -8,7 +8,7 @@ namespace Medicraft.Systems
 {
     public class HudSystem
     {
-        private readonly BitmapFont _font1, _font2;
+        private readonly BitmapFont[] _fonts;
 
         private Vector2 _hudPosition;
 
@@ -19,17 +19,17 @@ namespace Medicraft.Systems
 
         private float _displayInsufficientTime;
 
-        public HudSystem(BitmapFont font1, BitmapFont font2, Texture2D[] texture)
+        public HudSystem(BitmapFont[] fonts, Texture2D[] textures)
         {
-            _font1 = font1;
-            _font2 = font2;
-            _heartTexture = texture[0];
-            _herb1Texture = texture[1];
-            _herb2Texture = texture[2];
-            _drugTexture = texture[3];
-            _coinTexture = texture[4];
-            _pressFTexture = texture[5];
-            _insufficient = texture[6];
+            _fonts = fonts;
+
+            _heartTexture = textures[0];
+            _herb1Texture = textures[1];
+            _herb2Texture = textures[2];
+            _drugTexture = textures[3];
+            _coinTexture = textures[4];
+            _pressFTexture = textures[5];
+            _insufficient = textures[6];
 
             _nextFeed = false;
             _displayInsufficientTime = 3f;
@@ -97,41 +97,41 @@ namespace Medicraft.Systems
             // Draw HUD Bar
             spriteBatch.FillRectangle(-720 + addingX, 0 + addingY, 2640
                 , 25, Color.Black * 0.4f);
-            spriteBatch.DrawString(_font1, $" Mobs: {EntityManager.Instance.entities.Count}"
+            spriteBatch.DrawString(_fonts[0], $" Mobs: {EntityManager.Instance.entities.Count}"
                 , Vector2.Zero + _hudPosition, Color.White);
-            spriteBatch.DrawString(_font1, $"Time Spawn: {(int)EntityManager.Instance.spawnTime}"
+            spriteBatch.DrawString(_fonts[0], $"Time Spawn: {(int)EntityManager.Instance.spawnTime}"
                 , new Vector2(100f, 0f) + _hudPosition, Color.White);
-            spriteBatch.DrawString(_font1, $"X: {(int)PlayerManager.Instance.Player.Position.X}"
+            spriteBatch.DrawString(_fonts[0], $"X: {(int)PlayerManager.Instance.Player.Position.X}"
                 , new Vector2(240f, 0f) + _hudPosition, Color.White);
-            spriteBatch.DrawString(_font1, $"Y: {(int)PlayerManager.Instance.Player.Position.Y}"
+            spriteBatch.DrawString(_fonts[0], $"Y: {(int)PlayerManager.Instance.Player.Position.Y}"
                 , new Vector2(320f, 0f) + _hudPosition, Color.White);
 
             var textString1 = "Player HP: " + PlayerManager.Instance.Player.HP;
-            Vector2 textSize1 = _font1.MeasureString(textString1);
+            Vector2 textSize1 = _fonts[0].MeasureString(textString1);
             var position = new Vector2((GameGlobals.Instance.GameScreen.X - textSize1.X) / 2, 0);
             //position.X += (string.X - font.MeasureString(string).X) / 2;
             spriteBatch.Draw(_heartTexture, new Vector2(position.X - 32f, 0f) + _hudPosition, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(_font1, textString1, new Vector2(position.X, 0f) + _hudPosition, Color.White);
+            spriteBatch.DrawString(_fonts[0], textString1, new Vector2(position.X, 0f) + _hudPosition, Color.White);
 
             spriteBatch.Draw(_herb1Texture, new Vector2(position.X + 400f, 0f) + _hudPosition, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(_font1, $" {PlayerManager.Instance.Inventory["herb_1"]}"
+            spriteBatch.DrawString(_fonts[0], $" {PlayerManager.Instance.Inventory["herb_1"]}"
                 , new Vector2(position.X + 400f + 32f, 0f) + _hudPosition, Color.White);
 
             spriteBatch.Draw(_herb2Texture, new Vector2(position.X + 480f, 0f) + _hudPosition, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(_font1, $" {PlayerManager.Instance.Inventory["herb_2"]}"
+            spriteBatch.DrawString(_fonts[0], $" {PlayerManager.Instance.Inventory["herb_2"]}"
                 , new Vector2(position.X + 480f + 32f, 0f) + _hudPosition, Color.White);
 
             spriteBatch.Draw(_drugTexture, new Vector2(position.X + 560f, 0f) + _hudPosition, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(_font1, $" {PlayerManager.Instance.Inventory["drug"]}"
+            spriteBatch.DrawString(_fonts[0], $" {PlayerManager.Instance.Inventory["drug"]}"
                 , new Vector2(position.X + 560f + 32f, 0f) + _hudPosition, Color.White);
 
             spriteBatch.Draw(_coinTexture, new Vector2(position.X + 640f, 0f) + _hudPosition, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(_font1, $" {PlayerManager.Instance.Coin}"
+            spriteBatch.DrawString(_fonts[0], $" {PlayerManager.Instance.Coin}"
                 , new Vector2(position.X + 640f + 32f, 0f) + _hudPosition, Color.White);
         }
 
@@ -164,7 +164,7 @@ namespace Medicraft.Systems
                 var posX = entity.Sprite.TextureRegion.Width / 2.5f;
                 var posY = entity.Sprite.TextureRegion.Height;
 
-                spriteBatch.DrawString(_font1, $"{entity.HP}", entityPos - new Vector2(posX, posY + 10)
+                spriteBatch.DrawString(_fonts[0], $"{entity.HP}", entityPos - new Vector2(posX, posY + 10)
                     , Color.DarkRed, 0f, Vector2.Zero, 1.5f, SpriteEffects.None, 0f);
             }
         }
@@ -178,10 +178,7 @@ namespace Medicraft.Systems
                 {
                     n = 6;
                 }
-                else
-                {
-                    n = GameGlobals.Instance.ItemsFeed.Count;
-                }
+                else n = GameGlobals.Instance.ItemsFeed.Count;
 
                 for (int i = 0; i < n; i++)
                 {
@@ -203,15 +200,15 @@ namespace Medicraft.Systems
                             break;
                     }
 
-                    float addingX = GameGlobals.Instance.HUDPosition.X;
-                    float addingY = GameGlobals.Instance.HUDPosition.Y;
+                    var addingX = GameGlobals.Instance.HUDPosition.X;
+                    var addingY = GameGlobals.Instance.HUDPosition.Y;
 
                     spriteBatch.FillRectangle(355f + addingX, 498f + (i * 40) + addingY, 110, 26, Color.Black * 0.4f);
 
                     spriteBatch.Draw(texture, new Vector2(360f, 500f + (i * 40)) + _hudPosition, null
                         , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
 
-                    spriteBatch.DrawString(_font1, $"{Name} x 1", new Vector2(360f + 32f, 500f + (i * 40))
+                    spriteBatch.DrawString(_fonts[0], $"{Name} x 1", new Vector2(360f + 32f, 500f + (i * 40))
                         + _hudPosition, Color.White);
                 }
 
@@ -221,10 +218,7 @@ namespace Medicraft.Systems
                     {
                         GameGlobals.Instance.ItemsFeed.RemoveRange(0, 6);
                     }
-                    else
-                    {
-                        GameGlobals.Instance.ItemsFeed.RemoveRange(0, GameGlobals.Instance.ItemsFeed.Count);
-                    }
+                    else GameGlobals.Instance.ItemsFeed.RemoveRange(0, GameGlobals.Instance.ItemsFeed.Count);
                 }
             }
         }

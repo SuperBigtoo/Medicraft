@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.ViewportAdapters;
 
 namespace Medicraft.Systems
@@ -9,47 +10,27 @@ namespace Medicraft.Systems
     public class ScreenManager
     {
         private SpriteBatch spriteBatch;
-        private Screen currentScreen;
+        private Screen screen;
         private static ScreenManager instance;
 
-        public ContentManager Content
-        {
-            private set; get;
-        }
-
-        public GraphicsDevice GraphicsDevice
-        {
-            private set; get;
-        }
-
-        public GameWindow Window
-        {
-            private set; get;
-        }
-
-        public Camera Camera
-        {
-            private set; get;
-        }
-
-        public ScalingViewportAdapter ScalingViewportAdapter
-        {
-            private set; get;
-        }
-
+        public Game Game { private set; get; }
+        public ContentManager Content { private set; get; }
+        public GraphicsDevice GraphicsDevice { private set; get; }
+        public GameWindow Window { private set; get; }
+        public Camera Camera { private set; get; }
+        public GameScreen CurrentScreen { private set; get; }
         public enum GameScreen
         {
             TestScreen,
             SplashScreen,
-            PlayScreen,
-            MainMenu
+            MainMenuScreen,
+            PlayScreen
         }
 
         public ScreenManager()
         {
-            //currentScreen = new TestScreen(); // TBC
-
-            currentScreen = new SplashScreen();
+            screen = new SplashScreen();
+            CurrentScreen = GameScreen.SplashScreen;
         }
 
         public void LoadScreen(GameScreen gameScreen)
@@ -59,44 +40,52 @@ namespace Medicraft.Systems
             switch (gameScreen)
             {
                 case GameScreen.TestScreen:
-                    currentScreen = new TestScreen();
-                    currentScreen.LoadContent();
+                    screen = new TestScreen();
+                    CurrentScreen = GameScreen.TestScreen;
+                    screen.LoadContent();
                     break;
 
                 case GameScreen.SplashScreen:
-                    currentScreen = new SplashScreen();
-                    currentScreen.LoadContent();
+                    screen = new SplashScreen();
+                    CurrentScreen = GameScreen.SplashScreen;
+                    screen.LoadContent();
                     break;
             }
         }
 
-        public void LoadContent(ContentManager content, GraphicsDevice graphicsDevice, GameWindow window)
+        public void LoadContent(Game game, ContentManager content)
         {  
+            Game = game;
             Content = new ContentManager(content.ServiceProvider, "Content");
-            GraphicsDevice = graphicsDevice;
-            spriteBatch = new SpriteBatch(graphicsDevice);
-            Camera = new Camera(graphicsDevice.Viewport);
-            Window = window;
+            GraphicsDevice = game.GraphicsDevice;
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            Camera = new Camera(GraphicsDevice.Viewport);
+            Window = game.Window;
 
-            ScalingViewportAdapter = new ScalingViewportAdapter(GraphicsDevice
-                , (int)GameGlobals.Instance.GameScreen.X, (int)GameGlobals.Instance.GameScreen.Y);
-
-            currentScreen.LoadContent();
+            screen.LoadContent();
         }
 
         public void UnloadContent()
         {
-            currentScreen?.UnloadContent();
+            screen?.UnloadContent();
         }
 
         public void Dispose()
         {
-            currentScreen?.Dispose();
+            screen?.Dispose();
         }
 
         public void Update(GameTime gameTime)
         {
-            currentScreen.Update(gameTime);
+            GameGlobals.Instance.IsGameActive = Game.IsActive;
+
+            if (GameGlobals.Instance.IsGameActive)
+            {
+                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                    Game.Exit();
+            }
+
+            screen.Update(gameTime);
         }
 
         public void Draw()
@@ -112,7 +101,7 @@ namespace Medicraft.Systems
                 , GraphicsDevice.Viewport.Height)
             );
 
-            currentScreen.Draw(spriteBatch);
+            screen.Draw(spriteBatch);
 
             spriteBatch.End();
         }

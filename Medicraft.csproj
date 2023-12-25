@@ -37,11 +37,12 @@
     <PackageReference Include="MonoGame.Extended.Tweening" Version="3.8.0" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
-    <PackageReference Include="OpenRpg.Combat" Version="0.31.235" />
-    <PackageReference Include="OpenRpg.Core" Version="0.31.235" />
-    <PackageReference Include="OpenRpg.Data" Version="0.31.235" />
-    <PackageReference Include="OpenRpg.Items" Version="0.31.235" />
-    <PackageReference Include="OpenRpg.Quests" Version="0.31.235" />
+    <PackageReference Include="Myra" Version="1.5.4" />
+    <PackageReference Include="OpenRpg.Combat" Version="0.33.239" />
+    <PackageReference Include="OpenRpg.Core" Version="0.33.239" />
+    <PackageReference Include="OpenRpg.Data" Version="0.33.239" />
+    <PackageReference Include="OpenRpg.Items" Version="0.33.239" />
+    <PackageReference Include="OpenRpg.Quests" Version="0.33.239" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Content\animation\MCSpriteSheet.sf">
@@ -69,6 +70,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Content\tiledmaps\demo\Demo.tmx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\tiledmaps\demo\homemc0.tsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\tiledmaps\demo\Kazuya.tsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\tiledmaps\demo\rpg_maker_vx_rtp_tileset_by_telles0808.tsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Content\tiledmaps\test1\level02.tmx">

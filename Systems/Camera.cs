@@ -56,8 +56,8 @@ namespace Medicraft.Systems
 
         public Matrix GetTransform(int screenWidth, int screenHeight)
         {
-            float scaleX = (float)screenWidth / viewportWidth;
-            float scaleY = (float)screenHeight / viewportHeight;
+            float scaleX = screenWidth / viewportWidth;
+            float scaleY = screenHeight / viewportHeight;
             float scale = MathHelper.Min(scaleX, scaleY);
 
             // Calculate the letterbox bars (if any)

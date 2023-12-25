@@ -17,24 +17,26 @@ namespace Medicraft.Screens
     public class TestScreen : Screen
     {
         private HudSystem _hudSystem;
-
         private TilemapOrthogonalRender _tileMapRender;
-
         private List<EntityStats> _slimeStatsList;
-
         private List<ItemStats> _itemStatsList;
-
         private BitmapFont _fontMinecraft, _fontSensation;
-
         private TmxMap _tileMap;
 
-        public TestScreen()
-        {   
-        }
+        public TestScreen() { }
 
         public override void LoadContent()
         {
             base.LoadContent();
+
+            // Load bitmap font
+            _fontSensation = Content.Load<BitmapFont>("fonts/Sensation/Sensation");
+            _fontMinecraft = Content.Load<BitmapFont>("fonts/Mincraft_Ten/Mincraft_Ten");
+            var _fonts = new BitmapFont[]
+            {
+                _fontSensation,
+                _fontMinecraft
+            };
 
             // Initialize Player's Data !! Gonna be move to Load GameSave later !!
             var basePlayerStats = Content.Load<PlayerStats>("data/models/player_stats");
@@ -44,17 +46,17 @@ namespace Medicraft.Screens
 
             // Load Tile Map
             //_mapManager = new TiledMapBackgroundManager(Content, GraphicsDevice, Window, "tiledmaps/test1/level02");
-            var _tileSet = Content.Load<Texture2D>("tiledmaps/demo/rpg_maker_vx_rtp_tileset_by_telles0808");
+            var _tileSets = new Texture2D[]     // The maximum number of TileSet is 5
+            {
+                Content.Load<Texture2D>("tiledmaps/demo/rpg_maker_vx_rtp_tileset_by_telles0808"),
+                Content.Load<Texture2D>("tiledmaps/demo/homemc0")
+            };
             _tileMap = new TmxMap("Content/tiledmaps/demo/Demo.tmx");
-            _tileMapRender = new TilemapOrthogonalRender(_tileMap, _tileSet);
+            _tileMapRender = new TilemapOrthogonalRender(_tileMap, _tileSets);
 
-            // Load Data Game from JSON file
+            // Load GameData from JSON file, such as Mobs and Items Data 
             _slimeStatsList = Content.Load<List<EntityStats>>("data/models/slime");
             _itemStatsList = Content.Load<List<ItemStats>>("data/models/items_demo");
-
-            // Load bitmap font
-            _fontMinecraft = Content.Load<BitmapFont>("fonts/Mincraft_Ten/Mincraft_Ten");
-            _fontSensation = Content.Load<BitmapFont>("fonts/Sensation/Sensation");
 
             // Adding Slime to MobSpawner
             var _slimeAnimation = Content.Load<SpriteSheet>("animation/mobs/slime/slimes_spritesheet.sf", new JsonContentLoader());
@@ -72,7 +74,7 @@ namespace Medicraft.Screens
             ItemManager.Instance.Initialize(_itemSpawner);
 
             // Adding HUD
-            var textureList = new Texture2D[]
+            var _textures = new Texture2D[]
             {
                 Content.Load<Texture2D>("items/heart"),
                 Content.Load<Texture2D>("items/herb_1"),
@@ -82,7 +84,7 @@ namespace Medicraft.Screens
                 Content.Load<Texture2D>("ui/PressF"),
                 Content.Load<Texture2D>("ui/insufficient"),
             };
-            _hudSystem = new HudSystem(_fontSensation, _fontMinecraft, textureList);
+            _hudSystem = new HudSystem(_fonts, _textures);
         }
 
         public override void UnloadContent()
@@ -102,6 +104,8 @@ namespace Medicraft.Screens
                 EntityManager.Instance.Update(gameTime);
 
                 ItemManager.Instance.Update(gameTime);
+
+                _tileMapRender.Update(gameTime);
 
                 _hudSystem.Update(gameTime);
             }
@@ -128,8 +132,6 @@ namespace Medicraft.Screens
             }
 
             _hudSystem.Draw(spriteBatch);
-
-
         }
     }
 }
