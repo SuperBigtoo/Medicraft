@@ -3,30 +3,45 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using Medicraft.Systems.Spawners;
-using Medicraft.Items;
+using Medicraft.GameObjects;
+using OpenRpg.Items;
 
 namespace Medicraft.Systems
 {
+    public interface IObjectManager
+    {
+        T AddGameObject<T>(T gameObject) where T : GameObject;
+    }
+
     public interface IItemManager
     {
         T AddItem<T>(T item) where T : Item;
     }
 
-    public class ItemManager : IItemManager
+    public class ObjectManager : IObjectManager, IItemManager
     {
-        private static ItemManager instance;
+        private static ObjectManager instance;
 
         private ItemSpawner itemSpawner;
 
         public float spawnTime = 0f;
 
+        public readonly List<GameObject> gameObjects;
         public readonly List<Item> items;
 
+        public IEnumerable<GameObject> GameObjects => gameObjects;
         public IEnumerable<Item> Items => items;
 
-        private ItemManager()
+        private ObjectManager()
         {
-            items = new List<Item>();
+            gameObjects = new List<GameObject>();
+            items = new List<Item>();          
+        }
+
+        public T AddGameObject<T>(T gameObject) where T : GameObject
+        {
+            gameObjects.Add(gameObject);
+            return gameObject;
         }
 
         public T AddItem<T>(T item) where T : Item
@@ -37,6 +52,7 @@ namespace Medicraft.Systems
 
         public void Initialize(ItemSpawner itemSpawner)
         {
+            gameObjects.Clear();
             items.Clear();
             this.itemSpawner = itemSpawner;
             this.itemSpawner.Initialize();
@@ -50,6 +66,12 @@ namespace Medicraft.Systems
             {
                 layerDepth -= 0.00001f;
                 item.Update(gameTime, layerDepth);
+            }
+
+            foreach (var gameObject in gameObjects.Where(e => !e.IsDestroyed))
+            {
+                layerDepth -= 0.00001f;
+                gameObject.Update(gameTime, layerDepth);
             }
 
             // ItemSpawner
@@ -67,15 +89,20 @@ namespace Medicraft.Systems
             {
                 item.Draw(spriteBatch);
             }
+
+            foreach (var gameObject in gameObjects.Where(e => !e.IsDestroyed))
+            {
+                gameObject.Draw(spriteBatch);
+            }
         }
 
-        public static ItemManager Instance
+        public static ObjectManager Instance
         {
             get
             {
                 if (instance == null)
                 {
-                    instance = new ItemManager();
+                    instance = new ObjectManager();
                 }
                 return instance;
             }

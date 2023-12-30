@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Medicraft.Data.Models
+﻿namespace Medicraft.Data.Models
 {
-    public class ItemStats
+    public class ObjectStats
     {
         public int Id { get; set; }
         public string Name { get; set; }

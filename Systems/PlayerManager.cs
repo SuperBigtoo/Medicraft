@@ -1,7 +1,7 @@
 ﻿using Medicraft.Data;
 using Medicraft.Data.Models;
 using Medicraft.Entities;
-using Medicraft.Items;
+using Medicraft.GameObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;

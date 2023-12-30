@@ -58,7 +58,7 @@ namespace Medicraft.Systems.Spawners
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             spawnTime -= deltaSeconds;
 
-            foreach (var entity in EntityManager.Instance.entities.Where(e => e.IsDestroyed))
+            foreach (var entity in EntityManager.Instance.Entities.Where(e => e.IsDestroyed))
             {
                 //System.Diagnostics.Debug.WriteLine($"Add Mob ID: {entity.Id} to entitiesDestroyed");
                 entitiesDestroyed.Add(entity);

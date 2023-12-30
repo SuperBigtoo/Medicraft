@@ -10,7 +10,7 @@ using Medicraft.Entities;
 using TiledSharp;
 using System.Collections.Generic;
 using Medicraft.Systems.Spawners;
-using Medicraft.Items;
+using Medicraft.GameObjects;
 
 namespace Medicraft.Screens
 {
@@ -19,7 +19,7 @@ namespace Medicraft.Screens
         private HudSystem _hudSystem;
         private TilemapOrthogonalRender _tileMapRender;
         private List<EntityStats> _slimeStatsList;
-        private List<ItemStats> _itemStatsList;
+        private List<ObjectStats> _itemStatsList;
         private BitmapFont _fontMinecraft, _fontSensation;
         private TmxMap _tileMap;
 
@@ -49,14 +49,15 @@ namespace Medicraft.Screens
             var _tileSets = new Texture2D[]     // The maximum number of TileSet is 5
             {
                 Content.Load<Texture2D>("tiledmaps/demo/rpg_maker_vx_rtp_tileset_by_telles0808"),
-                Content.Load<Texture2D>("tiledmaps/demo/homemc0")
+                Content.Load<Texture2D>("tiledmaps/demo/homemc0"),
+                Content.Load<Texture2D>("tiledmaps/demo/TS1")
             };
             _tileMap = new TmxMap("Content/tiledmaps/demo/Demo.tmx");
             _tileMapRender = new TilemapOrthogonalRender(_tileMap, _tileSets);
 
             // Load GameData from JSON file, such as Mobs and Items Data 
             _slimeStatsList = Content.Load<List<EntityStats>>("data/models/slime");
-            _itemStatsList = Content.Load<List<ItemStats>>("data/models/items_demo");
+            _itemStatsList = Content.Load<List<ObjectStats>>("data/models/items_demo");
 
             // Adding Slime to MobSpawner
             var _slimeAnimation = Content.Load<SpriteSheet>("animation/mobs/slime/slimes_spritesheet.sf", new JsonContentLoader());
@@ -68,10 +69,10 @@ namespace Medicraft.Screens
             // Adding Items to ItemSpawner
             var _itemAnimation = Content.Load<SpriteSheet>("items/items_demo.sf", new JsonContentLoader());
             var _itemSpawner = new ItemSpawner(10f);
-            _itemSpawner.AddItem(new Herb1(new AnimatedSprite(_itemAnimation), _itemStatsList[0], Vector2.One));
-            _itemSpawner.AddItem(new Herb1(new AnimatedSprite(_itemAnimation), _itemStatsList[1], Vector2.One));
-            _itemSpawner.AddItem(new Herb1(new AnimatedSprite(_itemAnimation), _itemStatsList[2], Vector2.One));
-            ItemManager.Instance.Initialize(_itemSpawner);
+            _itemSpawner.AddItem(new Item(new AnimatedSprite(_itemAnimation), _itemStatsList[0], Vector2.One));
+            _itemSpawner.AddItem(new Item(new AnimatedSprite(_itemAnimation), _itemStatsList[1], Vector2.One));
+            _itemSpawner.AddItem(new Item(new AnimatedSprite(_itemAnimation), _itemStatsList[2], Vector2.One));
+            ObjectManager.Instance.Initialize(_itemSpawner);
 
             // Adding HUD
             var _textures = new Texture2D[]
@@ -103,7 +104,7 @@ namespace Medicraft.Screens
             {
                 EntityManager.Instance.Update(gameTime);
 
-                ItemManager.Instance.Update(gameTime);
+                ObjectManager.Instance.Update(gameTime);
 
                 _tileMapRender.Update(gameTime);
 
@@ -124,7 +125,7 @@ namespace Medicraft.Screens
 
             EntityManager.Instance.Draw(spriteBatch);
 
-            ItemManager.Instance.Draw(spriteBatch);
+            ObjectManager.Instance.Draw(spriteBatch);
 
             if (!GameGlobals.Instance.IsShowPath)
             {

@@ -17,7 +17,11 @@ namespace Medicraft.Systems
         private readonly int[] _tilesetTileWide;
         private readonly List<int> _tileAnimationsId;
 
+        // For calcurlate the frame rate of tile animation
         private float _totalMilliseconds = 0f;
+
+        // Items point for ItemSpawner
+        public List<Vector2> ItemsPoint { private set; get; }
 
         // Maintain tile types by number representation
         private const int BLOCK = 0;
@@ -25,6 +29,8 @@ namespace Medicraft.Systems
         private const int START = 2;
         private const int END = 3;
         private const int BLANK = 4;
+
+        private const int BLOCK_ID = 7050;
 
         public TilemapOrthogonalRender(TmxMap tileMap, Texture2D[] tileSets)
         {
@@ -36,6 +42,8 @@ namespace Medicraft.Systems
             _tileHeight = new int[tileSets.Length];
             _tilesetTileWide = new int[tileSets.Length];
             _tileAnimationsId = new List<int>();
+
+            ItemsPoint = new List<Vector2>();
 
             Initialize();
         }
@@ -100,6 +108,11 @@ namespace Medicraft.Systems
                 GameGlobals.Instance.TableCraft.Add(
                     new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
+
+            foreach (var o in _tileMap.ObjectGroups["ItemsPoint"].Objects)
+            {
+                ItemsPoint.Add(new Vector2((float)o.X, (float)o.Y));
+            }
         }
 
         private void MappingArray()
@@ -119,7 +132,7 @@ namespace Medicraft.Systems
                     int gid = _tileMap.TileLayers[0].Tiles[j].Gid;
                     if (gid != 0)
                     {
-                        if (gid - 1 == 7050) GameGlobals.Instance.Map[y, x] = BLOCK;
+                        if (gid - 1 == BLOCK_ID) GameGlobals.Instance.Map[y, x] = BLOCK;
                     }
                     else GameGlobals.Instance.Map[y, x] = BLANK;
 

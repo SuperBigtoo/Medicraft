@@ -1,4 +1,4 @@
-﻿using Medicraft.Items;
+﻿using Medicraft.GameObjects;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +16,9 @@ namespace Medicraft.Systems.Spawners
         public float spawnTime;
         public bool IsSpawn;
 
-        public ItemSpawner(float timeSpawn)
+        public ItemSpawner(float spawnTime)
         {
-            this.spawnTime = timeSpawn;
+            this.spawnTime = spawnTime;
             IsSpawn = false;
             itemsInitial = new List<Item>();
             itemsDestroyed = new List<Item>();
@@ -30,7 +30,7 @@ namespace Medicraft.Systems.Spawners
             foreach (var item in itemsInitial)
             {
                 Item clonedItem = item.Clone() as Item;
-                ItemManager.Instance.AddItem(clonedItem);
+                ObjectManager.Instance.AddItem(clonedItem);
             }
         }
 
@@ -40,9 +40,8 @@ namespace Medicraft.Systems.Spawners
             {
                 foreach (var item in itemsSpawn)
                 {
-                    ItemManager.Instance.AddItem(item);
+                    ObjectManager.Instance.AddItem(item);
                 }
-
                 IsSpawn = false;
                 itemsSpawn.Clear();
             }
@@ -59,7 +58,7 @@ namespace Medicraft.Systems.Spawners
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             spawnTime -= deltaSeconds;
 
-            foreach (var item in ItemManager.Instance.items.Where(e => e.IsDestroyed))
+            foreach (var item in ObjectManager.Instance.Items.Where(e => e.IsDestroyed))
             {
                 itemsDestroyed.Add(item);
             }
@@ -79,7 +78,6 @@ namespace Medicraft.Systems.Spawners
                             }
                         }
                     }
-
                     itemsDestroyed.Clear();
                 }
 

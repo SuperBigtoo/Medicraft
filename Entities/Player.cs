@@ -1,5 +1,5 @@
 ﻿using Medicraft.Data.Models;
-using Medicraft.Items;
+using Medicraft.GameObjects;
 using Medicraft.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -219,28 +219,25 @@ namespace Medicraft.Entities
 
         private void CheckAttackDetection(int ATK, float PercentATK)
         {
-            if (EntityManager.Instance.entities.Count != 0) 
+            foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed))
             {
-                foreach (var entity in EntityManager.Instance.entities.Where(e => !e.IsDestroyed))
+                if (BoundingDetection.Intersects(entity.BoundingHitBox))
                 {
-                    if (BoundingDetection.Intersects(entity.BoundingHitBox))
+                    if (!entity.IsDying)
                     {
-                        if (!entity.IsDying)
+                        entity.HP -= TotalDamage(ATK, PercentATK, entity.DEF_Percent);
+
+                        Vector2 knockBackDirection = entity.Position - Position;
+                        knockBackDirection.Normalize();
+
+                        entity.Velocity = knockBackDirection * _knockbackForce;
+                        entity.IsKnockback = true;
+                        entity.StunTime = 0.2f;
+
+                        if (entity.HP <= 0)
                         {
-                            entity.HP -= TotalDamage(ATK, PercentATK, entity.DEF_Percent);
-
-                            Vector2 knockBackDirection = entity.Position - Position;
-                            knockBackDirection.Normalize();
-
-                            entity.Velocity = knockBackDirection * _knockbackForce;
-                            entity.IsKnockback = true;
-                            entity.StunTime = 0.2f;
-
-                            if (entity.HP <= 0)
-                            {
-                                entity.DyingTime = 1.3f;
-                                entity.IsDying = true;
-                            }
+                            entity.DyingTime = 1.3f;
+                            entity.IsDying = true;
                         }
                     }
                 }
@@ -272,16 +269,12 @@ namespace Medicraft.Entities
             GameGlobals.Instance.IsDetectedItem = false;
 
             // Check Item Dectection
-            if (ItemManager.Instance.items.Count != 0)
+            foreach (var item in ObjectManager.Instance.Items)
             {
-                var items = ItemManager.Instance.items;
-                foreach (var item in items)
+                if (BoundingCollection.Intersects(item.BoundingCollection))
                 {
-                    if (BoundingCollection.Intersects(item.BoundingCollection))
-                    {
-                        GameGlobals.Instance.IsDetectedItem = true;
-                        break;
-                    }
+                    GameGlobals.Instance.IsDetectedItem = true;
+                    break;
                 }
             }
 
@@ -309,16 +302,13 @@ namespace Medicraft.Entities
 
         private void CheckItemDetection()
         {
-            if (ItemManager.Instance.items.Count != 0)
+            foreach (var item in ObjectManager.Instance.Items)
             {
-                foreach (var item in ItemManager.Instance.items)
+                if (BoundingCollection.Intersects(item.BoundingCollection))
                 {
-                    if (BoundingCollection.Intersects(item.BoundingCollection))
+                    if (!item.IsCollected)
                     {
-                        if (!item.IsCollected)
-                        {
-                            item.IsCollected = true;
-                        }
+                        item.IsCollected = true;
                     }
                 }
             }

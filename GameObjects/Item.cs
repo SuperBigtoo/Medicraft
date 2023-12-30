@@ -4,34 +4,24 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
-using System.Linq;
 
-namespace Medicraft.Items
+namespace Medicraft.GameObjects
 {
-    public class Herb1 : Item
+    public class Item : GameObject
     {
-        public Herb1(AnimatedSprite sprite, ItemStats itemStats)
+        public Item(AnimatedSprite sprite, ObjectStats objectStats, Vector2 scale)
         {
-            ItemStats = itemStats;
+            // Check ID Object with da Item List to get Item's Data
+            //....
+
+            ObjectStats = objectStats;
             Sprite = sprite;
 
-            Id = itemStats.Id;
-            Name = itemStats.Name;
-            Description = itemStats.Description;
+            Id = objectStats.Id;
+            Name = objectStats.Name;
+            Description = objectStats.Description;
 
-            Sprite.Play(Name);
-        }
-
-        public Herb1(AnimatedSprite sprite, ItemStats itemStats, Vector2 scale)
-        {
-            ItemStats = itemStats;
-            Sprite = sprite;
-
-            Id = itemStats.Id;
-            Name = itemStats.Name;
-            Description = itemStats.Description;
-
-            var position = new Vector2((float)itemStats.Position[0], (float)itemStats.Position[1]);
+            var position = new Vector2((float)objectStats.Position[0], (float)objectStats.Position[1]);
             Transform = new Transform2
             {
                 Scale = scale,
@@ -45,20 +35,20 @@ namespace Medicraft.Items
             Sprite.Play(Name);
         }
 
-        private Herb1(Herb1 herb1)
+        private Item(Item item)
         {
-            ItemStats = herb1.ItemStats;
-            Sprite = herb1.Sprite;
+            ObjectStats = item.ObjectStats;
+            Sprite = item.Sprite;
 
-            Id = herb1.Id;
-            Name = herb1.Name;
-            Description = herb1.Description;
+            Id = item.Id;
+            Name = item.Name;
+            Description = item.Description;
 
             Transform = new Transform2
             {
-                Scale = herb1.Transform.Scale,
-                Rotation = herb1.Transform.Rotation,
-                Position = herb1.Transform.Position
+                Scale = item.Transform.Scale,
+                Rotation = item.Transform.Rotation,
+                Position = item.Transform.Position
             };
 
             BoundingCollection = new CircleF(Position, 10);
@@ -69,27 +59,28 @@ namespace Medicraft.Items
 
         public override void Update(GameTime gameTime, float layerDepth)
         {
+            Sprite.Depth = layerDepth;
+
             if (IsCollected)
             {
                 HudSystem.AddFeed(Name);
 
                 if (PlayerManager.Instance.Inventory.ContainsKey(Name))
                 {
-                    PlayerManager.Instance.Inventory[Name] += 1;
+                    PlayerManager.Instance.Inventory[Name] += 1;    // Adding item to Inventory... BUT the logic on how to check da item stack we'll see there...
                 }
-
                 Destroy();
             }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Sprite, Transform);
+            base.Draw(spriteBatch);
         }
 
         public override object Clone()
         {
-            return new Herb1(this);
+            return new Item(this);
         }
     }
 }
