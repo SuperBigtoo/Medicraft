@@ -42,16 +42,11 @@ namespace Medicraft.Systems.PathFinding
         //    { ROAD, ROAD, ROAD, ROAD, ROAD }
         //};
 
-        int[,] map;
-
-        //////////////////////////////
-        /// PATH FINDING VARIABLES ///
-        //////////////////////////////
-        
+        readonly int[,] map;       
         const int NOT_FOUND = -1;
 
         // Define movement cost multiplier based on Numbered tile type
-        float[] tileCosts = new float[]
+        readonly float[] tileCosts = new float[]
         {
             10000f,     // Wall
             0.5f,       // Road
@@ -60,8 +55,8 @@ namespace Medicraft.Systems.PathFinding
             10000f      // Blank
         };
 
-        float hvCost = 10f;     // Cost to move horizontally, vertically on standard terrain
-        float diagCost = 14f;   // Cost to move diagonally on standard terrain
+        readonly float hvCost = 10f;     // Cost to move horizontally, vertically on standard terrain
+        readonly float diagCost = 14f;   // Cost to move diagonally on standard terrain
 
         // Maintain a map that track all of the tile (Node) information
         Node[,] tileMap;
@@ -77,8 +72,8 @@ namespace Medicraft.Systems.PathFinding
         private List<Node> path = new List<Node>();
 
         // Maintain two lists, one of Nodes to check and one of potential Nodes
-        List<Node> open = new List<Node>();
-        List<Node> closed = new List<Node>();
+        readonly List<Node> open = new List<Node>();
+        readonly List<Node> closed = new List<Node>();
 
         public AStar(int posX, int posY)
         {
@@ -120,7 +115,7 @@ namespace Medicraft.Systems.PathFinding
                 }
             }
 
-            if (start == null) start = end;
+            start ??= end;
 
             // Setup necessary pathing data, adjacent Nodes(Tiles) and the H cost from each Node to the Target
             for (int row = 0; row < NUM_ROWS; row++)

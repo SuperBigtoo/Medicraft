@@ -11,15 +11,15 @@ namespace Medicraft.GameObjects
     {
         public Item(AnimatedSprite sprite, ObjectStats objectStats, Vector2 scale)
         {
-            // Check ID Object with da Item List to get Item's Data
-            //....
-
-            ObjectStats = objectStats;
             Sprite = sprite;
 
             Id = objectStats.Id;
             Name = objectStats.Name;
             Description = objectStats.Description;
+
+            IsCollected = false;
+            IsDestroyed = false;
+            IsVisible = true;
 
             var position = new Vector2((float)objectStats.Position[0], (float)objectStats.Position[1]);
             Transform = new Transform2
@@ -37,12 +37,15 @@ namespace Medicraft.GameObjects
 
         private Item(Item item)
         {
-            ObjectStats = item.ObjectStats;
             Sprite = item.Sprite;
 
             Id = item.Id;
             Name = item.Name;
             Description = item.Description;
+
+            IsCollected = false;
+            IsDestroyed = false;
+            IsVisible = true;
 
             Transform = new Transform2
             {
@@ -59,6 +62,7 @@ namespace Medicraft.GameObjects
 
         public override void Update(GameTime gameTime, float layerDepth)
         {
+            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             Sprite.Depth = layerDepth;
 
             if (IsCollected)
@@ -71,6 +75,9 @@ namespace Medicraft.GameObjects
                 }
                 Destroy();
             }
+
+            Sprite.Play(Name);
+            Sprite.Update(deltaSeconds);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

@@ -11,6 +11,7 @@ using TiledSharp;
 using System.Collections.Generic;
 using Medicraft.Systems.Spawners;
 using Medicraft.GameObjects;
+using Medicraft.Systems.TilemapRenderer;
 
 namespace Medicraft.Screens
 {
@@ -64,15 +65,16 @@ namespace Medicraft.Screens
             var _slimeScale = new Vector2(3.0f, 2.5f);
             var _mobSpawner = new MobSpawner(10f);
             _mobSpawner.AddEntity(new Slime(new AnimatedSprite(_slimeAnimation), _slimeStatsList[0], _slimeScale));
+            //_mobSpawner.AddEntity(new SlimeCopy(new AnimatedSprite(_slimeAnimation), _slimeStatsList[1], _slimeScale));
             EntityManager.Instance.Initialize(_mobSpawner);
 
-            // Adding Items to ItemSpawner
+            // Adding Items to ObjectSpawner
             var _itemAnimation = Content.Load<SpriteSheet>("items/items_demo.sf", new JsonContentLoader());
-            var _itemSpawner = new ItemSpawner(10f);
-            _itemSpawner.AddItem(new Item(new AnimatedSprite(_itemAnimation), _itemStatsList[0], Vector2.One));
-            _itemSpawner.AddItem(new Item(new AnimatedSprite(_itemAnimation), _itemStatsList[1], Vector2.One));
-            _itemSpawner.AddItem(new Item(new AnimatedSprite(_itemAnimation), _itemStatsList[2], Vector2.One));
-            ObjectManager.Instance.Initialize(_itemSpawner);
+            var _objectSpawner = new ObjectSpawner(10f);
+            _objectSpawner.AddGameObject(new Item(new AnimatedSprite(_itemAnimation), _itemStatsList[0], Vector2.One));
+            _objectSpawner.AddGameObject(new Item(new AnimatedSprite(_itemAnimation), _itemStatsList[1], Vector2.One));
+            _objectSpawner.AddGameObject(new Item(new AnimatedSprite(_itemAnimation), _itemStatsList[2], Vector2.One));
+            ObjectManager.Instance.Initialize(_objectSpawner);
 
             // Adding HUD
             var _textures = new Texture2D[]
@@ -119,7 +121,7 @@ namespace Medicraft.Screens
             //spriteBatch.DrawString(_fontMinecraft, $"Name: {_slimeStatsList[0].Name}", new Vector2(50, 50), Color.White);
             //spriteBatch.DrawString(_fontMinecraft, $"HP: {_slimeStatsList[0].HP}", new Vector2(50, 80), Color.White);
             //spriteBatch.DrawString(_fontMinecraft, $"ATK: {_slimeStatsList[0].ATK}", new Vector2(50, 110), Color.White);
-            //spriteBatch.DrawString(_fontMinecraft, $"Player: {PlayerManager.Instance.Player.Position.X} {PlayerManager.Instance.Player.Position.Y}", new Vector2(50, 140), Color.White);
+            spriteBatch.DrawString(_fontMinecraft, $"Player: {PlayerManager.Instance.Player.Position.X} {PlayerManager.Instance.Player.Position.Y}", new Vector2(50, 140), Color.White);
             //spriteBatch.DrawString(_fontMinecraft, $"CameraPosition: {GameGlobals.Instance.InitialCameraPos}", new Vector2(50, 170), Color.White);
             //spriteBatch.DrawString(_fontMinecraft, $"ROWS: {GameGlobals.Instance.NUM_ROWS}", new Vector2(50, 200), Color.White);
 

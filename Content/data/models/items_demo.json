@@ -7,14 +7,14 @@
   },
   {
     "Id": 1,
-    "Name": "herb_1",
+    "Name": "herb_2",
     "Description": "Use for crafting drug",
     "Position": [ 751, 1133 ]
   },
   {
     "Id": 2,
-    "Name": "herb_1",
-    "Description": "Use for crafting drug",
+    "Name": "drug",
+    "Description": "drug drug drug for demo",
     "Position": [ 750, 1262 ]
   },
   {

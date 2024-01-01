@@ -17,7 +17,7 @@ namespace Medicraft.Entities
 
         private Vector2 _initHudPos, _initCamPos;
 
-        private float _normalHitSpeed, _burstSkillSpeed, _knockbackForce;
+        private readonly float _normalHitSpeed, _burstSkillSpeed, _knockbackForce;
 
         public Player(AnimatedSprite sprite, PlayerStats playerStats)
         {
@@ -68,7 +68,7 @@ namespace Medicraft.Entities
 
         // Update Player
         public override void Update(GameTime gameTime, KeyboardState keyboardCur, KeyboardState keyboardPrev
-            , MouseState mouseCur, MouseState mousePrev, float depthFrontTile, float depthBehideTile)
+            , MouseState mouseCur, MouseState mousePrev, float topDepth, float middleDepth, float bottomDepth)
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -76,7 +76,7 @@ namespace Medicraft.Entities
             MovementControl(deltaSeconds, keyboardCur);
 
             // Update layer depth
-            UpdateLayerDepth(depthFrontTile, depthBehideTile);
+            UpdateLayerDepth(topDepth, middleDepth, bottomDepth);
 
             // Combat Control
             CombatControl(deltaSeconds, keyboardCur, keyboardPrev, mouseCur, mousePrev);
@@ -227,7 +227,7 @@ namespace Medicraft.Entities
                     {
                         entity.HP -= TotalDamage(ATK, PercentATK, entity.DEF_Percent);
 
-                        Vector2 knockBackDirection = entity.Position - Position;
+                        var knockBackDirection = (entity.Position - new Vector2(0, 50)) - Position;
                         knockBackDirection.Normalize();
 
                         entity.Velocity = knockBackDirection * _knockbackForce;
@@ -269,9 +269,9 @@ namespace Medicraft.Entities
             GameGlobals.Instance.IsDetectedItem = false;
 
             // Check Item Dectection
-            foreach (var item in ObjectManager.Instance.Items)
+            foreach (var gameObject in ObjectManager.Instance.GameObjects)
             {
-                if (BoundingCollection.Intersects(item.BoundingCollection))
+                if (BoundingCollection.Intersects(gameObject.BoundingCollection))
                 {
                     GameGlobals.Instance.IsDetectedItem = true;
                     break;
@@ -302,13 +302,13 @@ namespace Medicraft.Entities
 
         private void CheckItemDetection()
         {
-            foreach (var item in ObjectManager.Instance.Items)
+            foreach (var gameObject in ObjectManager.Instance.GameObjects)
             {
-                if (BoundingCollection.Intersects(item.BoundingCollection))
+                if (BoundingCollection.Intersects(gameObject.BoundingCollection))
                 {
-                    if (!item.IsCollected)
+                    if (!gameObject.IsCollected)
                     {
-                        item.IsCollected = true;
+                        gameObject.IsCollected = true;
                     }
                 }
             }
@@ -346,28 +346,38 @@ namespace Medicraft.Entities
             }
         }
 
-        private void UpdateLayerDepth(float depthFrontTile, float depthBehideTile)
+        private void UpdateLayerDepth(float topDepth, float middleDepth, float bottomDepth)
         {
             // Detect for LayerDepth
-            Sprite.Depth = depthFrontTile; // Default depth
+            Sprite.Depth = topDepth; // Default depth
 
-            var ObjectOnLayer1 = GameGlobals.Instance.ObjectOnLayer1;
-            foreach (var obj in ObjectOnLayer1)
+            var TopLayerObject = GameGlobals.Instance.TopLayerObject;
+            foreach (var obj in TopLayerObject)
             {
                 if (obj.Intersects(BoundingDetectCollisions))
                 {
-                    Sprite.Depth = depthBehideTile;
+                    Sprite.Depth = middleDepth;
                     break; // Exit the loop as soon as an intersection is found
                 }
             }
 
-            var ObjectOnLayer2 = GameGlobals.Instance.ObjectOnLayer2;
-            foreach (var obj in ObjectOnLayer2)
+            var MiddleLayerObject = GameGlobals.Instance.MiddleLayerObject;
+            foreach (var obj in MiddleLayerObject)
             {
                 if (obj.Intersects(BoundingDetectCollisions))
                 {
-                    Sprite.Depth = depthBehideTile + 0.2f;
-                    break; // Exit the loop as soon as an intersection is found
+                    Sprite.Depth = bottomDepth;
+                    break;
+                }
+            }
+
+            var BottomLayerObject = GameGlobals.Instance.BottomLayerObject;
+            foreach (var obj in BottomLayerObject)
+            {
+                if (obj.Intersects(BoundingDetectCollisions))
+                {
+                    Sprite.Depth = bottomDepth + 0.2f;
+                    break;
                 }
             }
         }

@@ -13,29 +13,21 @@ namespace Medicraft.Systems
         T AddGameObject<T>(T gameObject) where T : GameObject;
     }
 
-    public interface IItemManager
-    {
-        T AddItem<T>(T item) where T : Item;
-    }
-
-    public class ObjectManager : IObjectManager, IItemManager
+    public class ObjectManager : IObjectManager
     {
         private static ObjectManager instance;
 
-        private ItemSpawner itemSpawner;
+        private ObjectSpawner objectSpawner;
 
         public float spawnTime = 0f;
 
         public readonly List<GameObject> gameObjects;
-        public readonly List<Item> items;
 
         public IEnumerable<GameObject> GameObjects => gameObjects;
-        public IEnumerable<Item> Items => items;
 
         private ObjectManager()
         {
-            gameObjects = new List<GameObject>();
-            items = new List<Item>();          
+            gameObjects = new List<GameObject>();         
         }
 
         public T AddGameObject<T>(T gameObject) where T : GameObject
@@ -44,29 +36,16 @@ namespace Medicraft.Systems
             return gameObject;
         }
 
-        public T AddItem<T>(T item) where T : Item
-        {
-            items.Add(item);
-            return item;
-        }
-
-        public void Initialize(ItemSpawner itemSpawner)
+        public void Initialize(ObjectSpawner objectSpawner)
         {
             gameObjects.Clear();
-            items.Clear();
-            this.itemSpawner = itemSpawner;
-            this.itemSpawner.Initialize();
+            this.objectSpawner = objectSpawner;
+            this.objectSpawner.Initialize();
         }
 
         public void Update(GameTime gameTime)
         {
             var layerDepth = 0.8f;
-
-            foreach (var item in items.Where(e => !e.IsDestroyed))
-            {
-                layerDepth -= 0.00001f;
-                item.Update(gameTime, layerDepth);
-            }
 
             foreach (var gameObject in gameObjects.Where(e => !e.IsDestroyed))
             {
@@ -74,22 +53,17 @@ namespace Medicraft.Systems
                 gameObject.Update(gameTime, layerDepth);
             }
 
-            // ItemSpawner
-            itemSpawner.Update(gameTime);
-            spawnTime = itemSpawner.spawnTime;
+            // Object Spawner
+            objectSpawner.Update(gameTime);
+            spawnTime = objectSpawner.spawnTime;
 
-            items.RemoveAll(e => e.IsDestroyed);
+            gameObjects.RemoveAll(e => e.IsDestroyed);
 
-            itemSpawner.Spawn();
+            objectSpawner.Spawn();
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {           
-            foreach (var item in items.Where(e => !e.IsDestroyed))
-            {
-                item.Draw(spriteBatch);
-            }
-
             foreach (var gameObject in gameObjects.Where(e => !e.IsDestroyed))
             {
                 gameObject.Draw(spriteBatch);

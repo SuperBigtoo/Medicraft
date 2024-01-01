@@ -96,5 +96,5 @@ namespace Medicraft.Data
     public class EntityStatsReader : JsonContentTypeReader<List<EntityStats>> { }
 
     // Reader Items
-    public class ItemStatsReader : JsonContentTypeReader<List<ObjectStats>> { }
+    public class ObjectStatsReader : JsonContentTypeReader<List<ObjectStats>> { }
 }

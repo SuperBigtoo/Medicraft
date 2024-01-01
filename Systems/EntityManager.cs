@@ -44,8 +44,9 @@ namespace Medicraft.Systems
 
         public void Update(GameTime gameTime)
         {
-            var frontDepth = 0.2f;
-            var behideDepth = 0.4f;
+            var topDepth = GameGlobals.Instance.TopEntityDepth;
+            var middleDepth = GameGlobals.Instance.MiddleEntityDepth;
+            var bottomDepth = GameGlobals.Instance.BottomEntityDepth;
 
             // Update Player
             PlayerManager.Instance.Update(gameTime);
@@ -55,13 +56,14 @@ namespace Medicraft.Systems
             // Update Mob & NPC
             foreach (var entity in entities.Where(e => !e.IsDestroyed))
             {
-                playerDepth -= 0.00001f;
-                frontDepth -= 0.00001f;
-                behideDepth -= 0.00001f;
-                entity.Update(gameTime, playerDepth, frontDepth, behideDepth);
+                playerDepth -= 0.000001f;
+                topDepth -= 0.000001f;
+                middleDepth -= 0.000001f;
+                bottomDepth -= 0.000001f;
+                entity.Update(gameTime, playerDepth, topDepth, middleDepth, bottomDepth);
             }
 
-            // MobSpawner
+            // Mob Spawner
             mobSpawner.Update(gameTime);
             spawnTime = mobSpawner.spawnTime;
 

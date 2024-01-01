@@ -6,7 +6,7 @@ using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using MonoGame.Extended.ViewportAdapters;
 
-namespace Medicraft.Systems
+namespace Medicraft.Systems.TilemapRenderer
 {
     public class TiledmapBGExtended
     {
@@ -25,7 +25,7 @@ namespace Medicraft.Systems
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
             _tiledMapLayer = _tiledMap.GetLayer<TiledMapLayer>("Tiles2");
 
-            var viewportadapter  = new BoxingViewportAdapter(Window, GraphicsDevice
+            var viewportadapter = new BoxingViewportAdapter(Window, GraphicsDevice
                 , (int)GameGlobals.Instance.GameScreen.X, (int)GameGlobals.Instance.GameScreen.Y);
             _orthographicCamera = new OrthographicCamera(viewportadapter);
         }
@@ -57,7 +57,7 @@ namespace Medicraft.Systems
             //EntityManager.Instance.Update(gameTime);
 
             // Camera
-            _orthographicCamera.LookAt((GameGlobals.Instance.InitialCameraPos + GameGlobals.Instance.AddingCameraPos)
+            _orthographicCamera.LookAt(GameGlobals.Instance.InitialCameraPos + GameGlobals.Instance.AddingCameraPos
                 + new Vector2(0, _tiledMap.HeightInPixels + _tiledMap.TileHeight) * 0.5f);
             _tiledMapRenderer.Update(gameTime);
         }
@@ -67,7 +67,7 @@ namespace Medicraft.Systems
             var viewMatrix = _orthographicCamera.GetViewMatrix();
             var projectionMatrix = Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.Viewport.Width
                 , GraphicsDevice.Viewport.Height, 0, 0f, -1f);
-            _tiledMapRenderer.Draw(ref viewMatrix, ref projectionMatrix, depth:0.1f);
+            _tiledMapRenderer.Draw(ref viewMatrix, ref projectionMatrix, depth: 0.1f);
 
             //foreach (TiledMapTileLayer layer in _tiledMap.Layers.Cast<TiledMapTileLayer>())
             //{
@@ -81,7 +81,7 @@ namespace Medicraft.Systems
 
             //        spriteBatch.End();
             //        spriteBatch.Begin();
-                    
+
             //    }               
             //}
         }

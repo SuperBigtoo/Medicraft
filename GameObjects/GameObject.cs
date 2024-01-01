@@ -13,7 +13,7 @@ namespace Medicraft.GameObjects
         public int Id;
         public string Name;
         public string Description;
-        public ObjectStats ObjectStats;
+
         public AnimatedSprite Sprite;
         public Transform2 Transform;
         public CircleF BoundingCollection;
@@ -29,52 +29,46 @@ namespace Medicraft.GameObjects
         }
         public bool IsCollected { get; set; }
         public bool IsDestroyed { get; set; }
+        public bool IsVisible { get; set; }
 
-        public GameObject() { }
-
-        public GameObject(AnimatedSprite sprite, ObjectStats objectStats, Vector2 scale)
+        protected GameObject()
         {
-            ObjectStats = objectStats;
-            Sprite = sprite;
+            Id = 0;
+            Name = string.Empty;
+            Description = string.Empty;
 
-            Id = objectStats.Id;
-            Name = objectStats.Name;
-            Description = objectStats.Description;
+            IsCollected = false;
+            IsDestroyed = false;
+            IsVisible = true;
 
-            var position = new Vector2((float)objectStats.Position[0], (float)objectStats.Position[1]);
             Transform = new Transform2
             {
-                Scale = scale,
+                Scale = Vector2.One,
                 Rotation = 0f,
-                Position = position
+                Position = Vector2.Zero
             };
 
             BoundingCollection = new CircleF(Position, 10);
-
-            Sprite.Depth = 0.8f;
-            Sprite.Play(Name);
         }
 
-        private GameObject(GameObject objectStats)
+        private GameObject(GameObject gameObject)
         {
-            ObjectStats = objectStats.ObjectStats;
-            Sprite = objectStats.Sprite;
+            Id = gameObject.Id;
+            Name = gameObject.Name;
+            Description = gameObject.Description;
 
-            Id = objectStats.Id;
-            Name = objectStats.Name;
-            Description = objectStats.Description;
+            IsCollected = false;
+            IsDestroyed = false;
+            IsVisible = true;
 
             Transform = new Transform2
             {
-                Scale = objectStats.Transform.Scale,
-                Rotation = objectStats.Transform.Rotation,
-                Position = objectStats.Transform.Position
+                Scale = gameObject.Transform.Scale,
+                Rotation = gameObject.Transform.Rotation,
+                Position = gameObject.Transform.Position
             };
 
             BoundingCollection = new CircleF(Position, 10);
-
-            Sprite.Depth = 0.8f;
-            Sprite.Play(Name);
         }
 
         public virtual void Update(GameTime gameTime, float layerDepth) { }

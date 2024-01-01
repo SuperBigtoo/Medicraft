@@ -112,11 +112,12 @@ namespace Medicraft.Systems
                 }
             }
 
-            var frontDepth = 0.2f;
-            var behideDepth = 0.4f;
+            var topDepth = GameGlobals.Instance.TopEntityDepth;
+            var middleDepth = GameGlobals.Instance.MiddleEntityDepth;
+            var bottomDepth = GameGlobals.Instance.BottomEntityDepth;
 
             Player.Update(gameTime, keyboardCur, keyboardPrev, mouseCur, mousePrev
-                , frontDepth, behideDepth);
+                , topDepth, middleDepth, bottomDepth);
 
             // Check Player HP
             if (Player.HP <= 0)

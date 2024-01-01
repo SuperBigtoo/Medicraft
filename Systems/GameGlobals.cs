@@ -26,9 +26,17 @@ namespace Medicraft.Systems
         public List<GameSave> GameSave {private set; get;}
         public List<string> ItemsFeed { private set; get; }
         public List<Rectangle> CollistionObject { private set; get; }  // "Collision"
-        public List<Rectangle> ObjectOnLayer1 { private set; get; }  // "ObjectOnLayer"
-        public List<Rectangle> ObjectOnLayer2 { private set; get; }
+        public List<Rectangle> TopLayerObject { private set; get; }  // "ObjectOnLayer"
+        public List<Rectangle> MiddleLayerObject { private set; get; }
+        public List<Rectangle> BottomLayerObject { private set; get; }
         public List<Rectangle> TableCraft { private set; get; }
+        public float TopEntityDepth { private set; get; }
+        public float MiddleEntityDepth { private set; get; }
+        public float BottomEntityDepth { private set; get; }
+        public float TopObjectDepth { private set; get; }
+        public float MiddleObjectDepth { private set; get; }
+        public float BottomObjectDepth { private set; get; }
+        public float BackgroundDepth { private set; get; }
         public int TILE_SIZE { set; get; }
         public int NUM_ROWS { set; get; }
         public int NUM_COLUMNS { set; get; }
@@ -61,9 +69,19 @@ namespace Medicraft.Systems
             GameSave = new List<GameSave>();
             ItemsFeed = new List<string>();
             CollistionObject = new List<Rectangle>();
-            ObjectOnLayer1 = new List<Rectangle>();
-            ObjectOnLayer2 = new List<Rectangle>();
+            TopLayerObject = new List<Rectangle>();
+            MiddleLayerObject = new List<Rectangle>();
+            BottomLayerObject = new List<Rectangle>();
             TableCraft = new List<Rectangle>();
+
+            TopEntityDepth = 0.2f;
+            MiddleEntityDepth = 0.4f;
+            BottomEntityDepth = 0.6f;
+
+            TopObjectDepth = 0.3f;
+            MiddleObjectDepth = 0.5f;
+            BottomObjectDepth = 0.7f;
+            BackgroundDepth = 0.9f;
 
             test_int = 0;
         }

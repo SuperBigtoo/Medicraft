@@ -7,10 +7,10 @@ namespace Medicraft.Systems.Spawners
 {
     public class MobSpawner : IEntityManager
     {
-        public readonly List<Entity> entitiesInitial;
+        public readonly List<Entity> initialEntities;
 
-        private readonly List<Entity> entitiesDestroyed;
-        private readonly List<Entity> entitiesSpawn;
+        private readonly List<Entity> destroyedEntities;
+        private readonly List<Entity> spawningEntities;
 
         public float spawnTime;
         public bool IsSpawn;
@@ -19,14 +19,14 @@ namespace Medicraft.Systems.Spawners
         {
             this.spawnTime = spawnTime;
             IsSpawn = false;
-            entitiesInitial = new List<Entity>();
-            entitiesDestroyed = new List<Entity>();
-            entitiesSpawn = new List<Entity>();
+            initialEntities = new List<Entity>();
+            destroyedEntities = new List<Entity>();
+            spawningEntities = new List<Entity>();
         }
 
         public void Initialize()
         {
-            foreach (var entity in entitiesInitial)
+            foreach (var entity in initialEntities)
             {
                 Entity clonedEntity = entity.Clone() as Entity;
                 EntityManager.Instance.AddEntity(clonedEntity);
@@ -37,19 +37,19 @@ namespace Medicraft.Systems.Spawners
         {
             if (IsSpawn)
             {
-                foreach (var entity in entitiesSpawn)
+                foreach (var entity in spawningEntities)
                 {
                     EntityManager.Instance.AddEntity(entity);
                 }
 
                 IsSpawn = false;
-                entitiesSpawn.Clear();
+                spawningEntities.Clear();
             }
         }
 
         public T AddEntity<T>(T entity) where T : Entity
         {
-            entitiesInitial.Add(entity);
+            initialEntities.Add(entity);
             return entity;
         }
 
@@ -61,27 +61,27 @@ namespace Medicraft.Systems.Spawners
             foreach (var entity in EntityManager.Instance.Entities.Where(e => e.IsDestroyed))
             {
                 //System.Diagnostics.Debug.WriteLine($"Add Mob ID: {entity.Id} to entitiesDestroyed");
-                entitiesDestroyed.Add(entity);
+                destroyedEntities.Add(entity);
             }
 
             if (spawnTime <= 0)
             {
                 //System.Diagnostics.Debug.WriteLine($"Destroyed Mob: {entitiesDestroyed.Count}");
-                if (entitiesDestroyed.Count != 0)
+                if (destroyedEntities.Count != 0)
                 {
-                    foreach (var entityDestroyed in entitiesDestroyed)
+                    foreach (var destroyedEntity in destroyedEntities)
                     {
-                        foreach (var entityAdding in entitiesInitial)
+                        foreach (var initialEntity in initialEntities)
                         {
-                            if (entityDestroyed.Id == entityAdding.Id)
+                            if (destroyedEntity.Id == initialEntity.Id)
                             {
-                                Entity clonedEntity = entityAdding.Clone() as Entity;
-                                entitiesSpawn.Add(clonedEntity);
+                                Entity clonedEntity = initialEntity.Clone() as Entity;
+                                spawningEntities.Add(clonedEntity);
                             }
                         }
                     }
 
-                    entitiesDestroyed.Clear();
+                    destroyedEntities.Clear();
                 }
 
                 IsSpawn = true;

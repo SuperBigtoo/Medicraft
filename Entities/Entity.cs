@@ -130,8 +130,8 @@ namespace Medicraft.Entities
         }
 
         public virtual void Update(GameTime gameTime, KeyboardState keyboardCurrentState, KeyboardState keyboardPrevioseState
-            , MouseState mouseCurrentState, MouseState mousePrevioseState, float depthFrontTile, float depthBehideTile) { }
-        public virtual void Update(GameTime gameTime, float playerDepth, float depthFrontTile, float depthBehideTile) { }
+            , MouseState mouseCurrentState, MouseState mousePrevioseState, float topDepth, float middleDepth, float bottomDepth) { }
+        public virtual void Update(GameTime gameTime, float playerDepth, float topDepth, float middleDepth, float bottomDepth) { }
         public virtual void Draw(SpriteBatch spriteBatch) { }
         public virtual void Destroy()
         {
@@ -303,40 +303,50 @@ namespace Medicraft.Entities
             }
         }
 
-        protected virtual void UpdateLayerDepth(float playerDepth, float depthFrontTile, float depthBehideTile)
+        protected virtual void UpdateLayerDepth(float playerDepth, float topDepth, float middleDepth, float bottomDepth)
         {
             // Detect for LayerDepth
-            Sprite.Depth = depthFrontTile; // Default depth
+            Sprite.Depth = topDepth; // Default depth
             if (BoundingHitBox.Intersects(PlayerManager.Instance.Player.BoundingDetection))
             {
-                if (Transform.Position.Y >= (PlayerManager.Instance.Player.Position.Y + 40f))
+                if (Transform.Position.Y >= (PlayerManager.Instance.Player.Position.Y + 60f))
                 {
-                    Sprite.Depth = playerDepth - 0.1f; // In front Player
+                    Sprite.Depth = playerDepth - 0.00001f; // In front Player
                 }
                 else
                 {
-                    Sprite.Depth = playerDepth + 0.1f; // Behide Player
+                    Sprite.Depth = playerDepth + 0.00001f; // Behide Player
                 }
             }
             else
             {
-                var ObjectOnLayer1 = GameGlobals.Instance.ObjectOnLayer1;
-                foreach (var obj in ObjectOnLayer1)
+                var TopLayerObject = GameGlobals.Instance.TopLayerObject;
+                foreach (var obj in TopLayerObject)
                 {
                     if (obj.Intersects(BoundingDetectCollisions))
                     {
-                        Sprite.Depth = depthBehideTile;
+                        Sprite.Depth = middleDepth;
                         break; // Exit the loop as soon as an intersection is found
                     }
                 }
 
-                var ObjectOnLayer2 = GameGlobals.Instance.ObjectOnLayer2;
-                foreach (var obj in ObjectOnLayer2)
+                var MiddleLayerObject = GameGlobals.Instance.MiddleLayerObject;
+                foreach (var obj in MiddleLayerObject)
                 {
                     if (obj.Intersects(BoundingDetectCollisions))
                     {
-                        Sprite.Depth = depthBehideTile + 0.2f;
-                        break; // Exit the loop as soon as an intersection is found
+                        Sprite.Depth = bottomDepth;
+                        break;
+                    }
+                }
+
+                var BottomLayerObject = GameGlobals.Instance.BottomLayerObject;
+                foreach (var obj in BottomLayerObject)
+                {
+                    if (obj.Intersects(BoundingDetectCollisions))
+                    {
+                        Sprite.Depth = bottomDepth + 0.2f;
+                        break;
                     }
                 }
             }

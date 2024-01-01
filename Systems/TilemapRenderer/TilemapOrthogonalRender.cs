@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TiledSharp;
 
-namespace Medicraft.Systems
+namespace Medicraft.Systems.TilemapRenderer
 {
     public class TilemapOrthogonalRender
     {
@@ -20,7 +20,7 @@ namespace Medicraft.Systems
         // For calcurlate the frame rate of tile animation
         private float _totalMilliseconds = 0f;
 
-        // Items point for ItemSpawner
+        // Items point vector for ItemSpawner
         public List<Vector2> ItemsPoint { private set; get; }
 
         // Maintain tile types by number representation
@@ -73,16 +73,14 @@ namespace Medicraft.Systems
                     }
                 }
             }
-            
-            //System.Diagnostics.Debug.WriteLine($"_tileAnimationsId Count: {_tileAnimationsId.Count}");
-            //System.Diagnostics.Debug.WriteLine($"{_tileAnimationsId[0]}, {_tileAnimationsId[1]}");
         }
 
         private void SetObjectGroups()
         {
             GameGlobals.Instance.CollistionObject.Clear();
-            GameGlobals.Instance.ObjectOnLayer1.Clear();
-            GameGlobals.Instance.ObjectOnLayer2.Clear();
+            GameGlobals.Instance.TopLayerObject.Clear();
+            GameGlobals.Instance.MiddleLayerObject.Clear();
+            GameGlobals.Instance.BottomLayerObject.Clear();
             GameGlobals.Instance.TableCraft.Clear();
 
             foreach (var o in _tileMap.ObjectGroups["Collision"].Objects)
@@ -91,15 +89,21 @@ namespace Medicraft.Systems
                     new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
 
-            foreach (var o in _tileMap.ObjectGroups["ObjectOnLayer1"].Objects)
+            foreach (var o in _tileMap.ObjectGroups["TopLayerObject"].Objects)
             {
-                GameGlobals.Instance.ObjectOnLayer1.Add(
+                GameGlobals.Instance.TopLayerObject.Add(
                     new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
 
-            foreach (var o in _tileMap.ObjectGroups["ObjectOnLayer2"].Objects)
+            foreach (var o in _tileMap.ObjectGroups["MiddleLayerObject"].Objects)
             {
-                GameGlobals.Instance.ObjectOnLayer2.Add(
+                GameGlobals.Instance.MiddleLayerObject.Add(
+                    new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+            }
+
+            foreach (var o in _tileMap.ObjectGroups["BottomLayerObject"].Objects)
+            {
+                GameGlobals.Instance.BottomLayerObject.Add(
                     new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
 
@@ -109,10 +113,10 @@ namespace Medicraft.Systems
                     new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
 
-            foreach (var o in _tileMap.ObjectGroups["ItemsPoint"].Objects)
-            {
-                ItemsPoint.Add(new Vector2((float)o.X, (float)o.Y));
-            }
+            //foreach (var o in _tileMap.ObjectGroups["ItemsPoint"].Objects)
+            //{
+            //    ItemsPoint.Add(new Vector2((float)o.X, (float)o.Y));
+            //}
         }
 
         private void MappingArray()
@@ -175,9 +179,10 @@ namespace Medicraft.Systems
         public void Draw(SpriteBatch spriteBatch)
         {
             // Tile Layer
-            var layerDepthBack = 0.9f;
-            var layerDepthFront_1 = 0.3f;
-            var layerDepthFront_2 = 0.5f;
+            var layerDepthBackground = GameGlobals.Instance.BackgroundDepth;
+            var topLayerDepth = GameGlobals.Instance.TopObjectDepth;
+            var middleLayerDepth = GameGlobals.Instance.MiddleObjectDepth;
+            var bottomLayerDepth = GameGlobals.Instance.BottomObjectDepth;
 
             for (int i = 0; i < _tileMap.TileLayers.Count; i++)
             {
@@ -189,88 +194,89 @@ namespace Medicraft.Systems
                         switch (_tileSets.Length)
                         {
                             case 1:
-                                DrawTile(spriteBatch, gid, 0, i, j, layerDepthFront_1, layerDepthFront_2, layerDepthBack);
+                                DrawTile(spriteBatch, gid, 0, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
                                 break;
 
                             case 2:
                                 if (gid >= _firstGid[1])
                                 {
-                                    DrawTile(spriteBatch, gid, 1, i, j, layerDepthFront_1, layerDepthFront_2, layerDepthBack);
+                                    DrawTile(spriteBatch, gid, 1, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
                                 }
                                 else
                                 {
-                                    DrawTile(spriteBatch, gid, 0, i, j, layerDepthFront_1, layerDepthFront_2, layerDepthBack);
+                                    DrawTile(spriteBatch, gid, 0, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
                                 }
                                 break;
 
                             case 3:
                                 if (gid >= _firstGid[2])
                                 {
-                                    DrawTile(spriteBatch, gid, 2, i, j, layerDepthFront_1, layerDepthFront_2, layerDepthBack);
+                                    DrawTile(spriteBatch, gid, 2, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
                                 }
                                 else if (gid >= _firstGid[1])
                                 {
-                                    DrawTile(spriteBatch, gid, 1, i, j, layerDepthFront_1, layerDepthFront_2, layerDepthBack);
+                                    DrawTile(spriteBatch, gid, 1, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
                                 }
                                 else
                                 {
-                                    DrawTile(spriteBatch, gid, 0, i, j, layerDepthFront_1, layerDepthFront_2, layerDepthBack);
+                                    DrawTile(spriteBatch, gid, 0, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
                                 }
                                 break;
 
                             case 4:
                                 if (gid >= _firstGid[3])
                                 {
-                                    DrawTile(spriteBatch, gid, 3, i, j, layerDepthFront_1, layerDepthFront_2, layerDepthBack);
+                                    DrawTile(spriteBatch, gid, 3, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
                                 }
                                 else if (gid >= _firstGid[2])
                                 {
-                                    DrawTile(spriteBatch, gid, 2, i, j, layerDepthFront_1, layerDepthFront_2, layerDepthBack);
+                                    DrawTile(spriteBatch, gid, 2, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
                                 }
                                 else if (gid >= _firstGid[1])
                                 {
-                                    DrawTile(spriteBatch, gid, 1, i, j, layerDepthFront_1, layerDepthFront_2, layerDepthBack);
+                                    DrawTile(spriteBatch, gid, 1, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
                                 }
                                 else
                                 {
-                                    DrawTile(spriteBatch, gid, 0, i, j, layerDepthFront_1, layerDepthFront_2, layerDepthBack);
+                                    DrawTile(spriteBatch, gid, 0, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
                                 }
                                 break;
 
                             case 5:
                                 if (gid >= _firstGid[4])
                                 {
-                                    DrawTile(spriteBatch, gid, 4, i, j, layerDepthFront_1, layerDepthFront_2, layerDepthBack);
+                                    DrawTile(spriteBatch, gid, 4, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
                                 }
                                 else if (gid >= _firstGid[3])
                                 {
-                                    DrawTile(spriteBatch, gid, 3, i, j, layerDepthFront_1, layerDepthFront_2, layerDepthBack);
+                                    DrawTile(spriteBatch, gid, 3, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
                                 }
                                 else if (gid >= _firstGid[2])
                                 {
-                                    DrawTile(spriteBatch, gid, 2, i, j, layerDepthFront_1, layerDepthFront_2, layerDepthBack);
+                                    DrawTile(spriteBatch, gid, 2, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
                                 }
                                 else if (gid >= _firstGid[1])
                                 {
-                                    DrawTile(spriteBatch, gid, 1, i, j, layerDepthFront_1, layerDepthFront_2, layerDepthBack);
+                                    DrawTile(spriteBatch, gid, 1, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
                                 }
                                 else
                                 {
-                                    DrawTile(spriteBatch, gid, 0, i, j, layerDepthFront_1, layerDepthFront_2, layerDepthBack);
+                                    DrawTile(spriteBatch, gid, 0, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
                                 }
                                 break;
                         }
-                        layerDepthFront_1 -= 0.000001f;
-                        layerDepthFront_2 -= 0.000001f;
-                        layerDepthBack -= 0.000001f;
+                        topLayerDepth -= 0.000001f;
+                        middleLayerDepth -= 0.000001f;
+                        bottomLayerDepth -= 0.000001f;
+                        layerDepthBackground -= 0.000001f;
                     }
                 }
             }
         }
 
         private void DrawTile(SpriteBatch spriteBatch, int gid, int index, int i, int j
-            , float layerDepthFront_1, float layerDepthFront_2, float layerDepthBack)
-        {;
+            , float topLayerDepth, float middleLayerDepth, float bottomLayerDepth, float layerDepthBackground)
+        {
             var tilesetRec = Rectangle.Empty;
 
             // Check if the tile is animated
@@ -278,7 +284,7 @@ namespace Medicraft.Systems
             {
                 int frameIndex = GetCurrentAnimationFrame(gid - 1);
                 int column = frameIndex % _tilesetTileWide[index];
-                int row = (int)Math.Floor((double)frameIndex / (double)_tilesetTileWide[index]);
+                int row = (int)Math.Floor(frameIndex / (double)_tilesetTileWide[index]);
 
                 tilesetRec = new Rectangle(_tileWidth[index] * column, _tileHeight[index] * row
                     , _tileWidth[index], _tileHeight[index]);
@@ -288,31 +294,36 @@ namespace Medicraft.Systems
                 // If not animated den do dis
                 int tileFrame = gid - _firstGid[index];
                 int column = tileFrame % _tilesetTileWide[index];
-                int row = (int)Math.Floor((double)tileFrame / (double)_tilesetTileWide[index]);
+                int row = (int)Math.Floor(tileFrame / (double)_tilesetTileWide[index]);
 
                 tilesetRec = new Rectangle(_tileWidth[index] * column, _tileHeight[index] * row
                     , _tileWidth[index], _tileHeight[index]);
             }
 
-            int x = (j % _tileMap.Width) * _tileMap.TileWidth;
+            int x = j % _tileMap.Width * _tileMap.TileWidth;
             int y = (int)Math.Floor((double)(j / _tileMap.Width)) * _tileMap.TileHeight;
 
             var tileRec = new Rectangle(x, y, _tileWidth[index], _tileHeight[index]);
 
-            if (_tileMap.TileLayers[i].Name.Equals("OnjectOnLayer1"))
+            if (_tileMap.TileLayers[i].Name.Equals("TopLayerObject"))
             {
                 spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
-                    , Vector2.Zero, SpriteEffects.None, layerDepthFront_1);
+                    , Vector2.Zero, SpriteEffects.None, topLayerDepth);
             }
-            else if (_tileMap.TileLayers[i].Name.Equals("ObjectOnLayer2"))
+            else if (_tileMap.TileLayers[i].Name.Equals("MiddleLayerObject"))
             {
                 spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
-                    , Vector2.Zero, SpriteEffects.None, layerDepthFront_2);
+                    , Vector2.Zero, SpriteEffects.None, middleLayerDepth);
+            }
+            else if (_tileMap.TileLayers[i].Name.Equals("BottomLayerObject"))
+            {
+                spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
+                    , Vector2.Zero, SpriteEffects.None, bottomLayerDepth);
             }
             else
             {
                 spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
-                    , Vector2.Zero, SpriteEffects.None, layerDepthBack);
+                    , Vector2.Zero, SpriteEffects.None, layerDepthBackground);
             }
         }
 

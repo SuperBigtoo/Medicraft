@@ -9,7 +9,7 @@ using System;
 
 namespace Medicraft.Entities
 {
-    public class Slime : Entity
+    public class SlimeCopy : Entity
     {
         private readonly EntityStats _entityStats;
         private enum SlimeColor
@@ -20,7 +20,7 @@ namespace Medicraft.Entities
             blue
         }
 
-        public Slime(AnimatedSprite sprite, EntityStats entityStats, Vector2 scale)
+        public SlimeCopy(AnimatedSprite sprite, EntityStats entityStats, Vector2 scale)
         {
             _entityStats = entityStats;
             Id = entityStats.Id;
@@ -58,7 +58,7 @@ namespace Medicraft.Entities
             Sprite.Play(SpriteName + "_walking");
         }
 
-        private Slime(Slime slime)
+        private SlimeCopy(SlimeCopy slime)
         {
             _entityStats = slime._entityStats;
             Id = _entityStats.Id;
@@ -94,7 +94,7 @@ namespace Medicraft.Entities
 
         public override object Clone()
         {
-            return new Slime(this);
+            return new SlimeCopy(this);
         }
 
         private void RandomSlimeColor()
@@ -153,14 +153,14 @@ namespace Medicraft.Entities
                 }
                 else
                 {
-                    HudSystem.AddFeed("herb_2");
+                    HudSystem.AddFeed("herb_1");
 
-                    if (PlayerManager.Instance.Inventory.ContainsKey("herb_2"))
+                    if (PlayerManager.Instance.Inventory.ContainsKey("herb_1"))
                     {
-                        PlayerManager.Instance.Inventory["herb_2"] += 1;
+                        PlayerManager.Instance.Inventory["herb_1"] += 1;
                     }
 
-                    PlayerManager.Instance.Coin += 10;
+                    PlayerManager.Instance.Coin += 5;
 
                     Destroy();
                 }

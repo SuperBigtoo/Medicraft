@@ -47,7 +47,7 @@
 #begin data/models/items_demo.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor
-/processorParam:ContentType=Medicraft.Data.ItemStatsReader, Medicraft
+/processorParam:ContentType=Medicraft.Data.ObjectStatsReader, Medicraft
 /build:data/models/items_demo.json
 
 #begin data/models/player_stats.json
