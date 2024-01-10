@@ -47,8 +47,14 @@
 #begin data/models/items_demo.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor
-/processorParam:ContentType=Medicraft.Data.ObjectStatsReader, Medicraft
+/processorParam:ContentType=Medicraft.Data.ObjectDataReader, Medicraft
 /build:data/models/items_demo.json
+
+#begin data/models/items.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.ItemDataReader, Medicraft
+/build:data/models/items.json
 
 #begin data/models/player_stats.json
 /importer:JsonContentImporter
@@ -95,6 +101,57 @@
 /importer:BitmapFontImporter
 /processor:BitmapFontProcessor
 /build:fonts/Sensation/Sensation.fnt
+
+#begin fonts/TA_16_Bit/TA_16_Bit_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:fonts/TA_16_Bit/TA_16_Bit_0.png
+
+#begin fonts/TA_16_Bit/TA_16_Bit.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:fonts/TA_16_Bit/TA_16_Bit.fnt
+
+#begin fonts/TA_8_Bit_Bold/TA_8_Bit_Bold_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:fonts/TA_8_Bit_Bold/TA_8_Bit_Bold_0.png
+
+#begin fonts/TA_8_Bit_Bold/TA_8_Bit_Bold.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:fonts/TA_8_Bit_Bold/TA_8_Bit_Bold.fnt
+
+#begin fonts/TA_8_Bit/TA_8_Bit_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:fonts/TA_8_Bit/TA_8_Bit_0.png
+
+#begin fonts/TA_8_Bit/TA_8_Bit.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:fonts/TA_8_Bit/TA_8_Bit.fnt
 
 #begin items/drug_1.png
 /importer:TextureImporter

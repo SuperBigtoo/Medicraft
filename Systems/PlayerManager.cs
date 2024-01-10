@@ -1,9 +1,7 @@
 ﻿using Medicraft.Data;
 using Medicraft.Data.Models;
 using Medicraft.Entities;
-using Medicraft.GameObjects;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Sprites;
 using System.Collections.Generic;
@@ -14,9 +12,9 @@ namespace Medicraft.Systems
     public class PlayerManager
     {
         public Player Player { private set; get; }
-        public PlayerStats BasePlayerStats { private set; get; }
+        public PlayerStats InitialPlayerStats { private set; get; }
         public Dictionary<string, int> Inventory { private set; get; }
-        public int Coin { set; get; }
+        public int GoldCoin { set; get; }
         public bool IsPlayerDead { private set; get; }
 
         private static PlayerManager instance;
@@ -24,19 +22,19 @@ namespace Medicraft.Systems
         {
             Inventory = new Dictionary<string, int>()
             {
-                {"herb_1", 0},
-                {"herb_2", 0},
-                {"drug", 0}
+                {"0", 0},
+                {"1", 0},
+                {"2", 0}
             };
 
-            Coin = 0;
+            GoldCoin = 0;
 
             IsPlayerDead = false;
         }
 
-        public void Initialize(AnimatedSprite playerSprite, PlayerStats basePlayerStats)
+        public void Initialize(AnimatedSprite playerSprite, PlayerStats initialPlayerStats)
         {
-            BasePlayerStats = basePlayerStats;
+            InitialPlayerStats = initialPlayerStats;
 
             if (GameGlobals.Instance.GameSave.Count != 0)
             {
@@ -44,23 +42,33 @@ namespace Medicraft.Systems
                 var gameSave = GameGlobals.Instance.GameSave[GameGlobals.Instance.GameSaveIdex];               
 
                 // Initialize camera position
-                GameGlobals.Instance.InitialCameraPos = new Vector2((float)gameSave.Camera_Position[0]
-                    , (float)gameSave.Camera_Position[1]);
+                GameGlobals.Instance.InitialCameraPos = new Vector2((float)gameSave.CameraPosition[0]
+                    , (float)gameSave.CameraPosition[1]);
 
                 // Initialize HUD position
-                GameGlobals.Instance.HUDPosition = new Vector2((float)gameSave.HUD_Position[0]
-                    , (float)gameSave.HUD_Position[1]);
+                GameGlobals.Instance.HUDPosition = new Vector2((float)gameSave.HUDPosition[0]
+                    , (float)gameSave.HUDPosition[1]);
 
-                var playerStats = gameSave.PlayerStats;
-                Player = new Player(playerSprite, playerStats);
+                // Initialize Player's Inventory
+                var inventoryData = gameSave.PlayerStats.InventoryData;
+                InventoryManager.Instance.InitializeInventory(inventoryData);
+
+                // Initial Player
+                var basePlayerStats = gameSave.PlayerStats;
+                Player = new Player(playerSprite, basePlayerStats);
             }
             else // In case New Game
             {
-                Player = new Player(playerSprite, basePlayerStats);
+                // Initial Player
+                Player = new Player(playerSprite, initialPlayerStats);
 
                 // Initialize camera position
-                GameGlobals.Instance.InitialCameraPos = new Vector2((float)basePlayerStats.Position[0]
-                    , (float)basePlayerStats.Position[1]);
+                GameGlobals.Instance.InitialCameraPos = new Vector2((float)initialPlayerStats.Position[0]
+                    , (float)initialPlayerStats.Position[1]);
+
+                // Initialize Player's Inventory
+                var inventoryData = initialPlayerStats.InventoryData;
+                InventoryManager.Instance.InitializeInventory(inventoryData);
             }
         }
 
@@ -133,8 +141,8 @@ namespace Medicraft.Systems
             if (IsPlayerDead)
             {
                 Player.HP = Player.GetStats().HP; // for testing
-                Player.Position = new Vector2((float)BasePlayerStats.Position[0]
-                    , (float)BasePlayerStats.Position[1]);
+                Player.Position = new Vector2((float)InitialPlayerStats.Position[0]
+                    , (float)InitialPlayerStats.Position[1]);
 
                 // Adjust HUD and camera positions
                 GameGlobals.Instance.HUDPosition = Player.Position - new Vector2(720, 450);
@@ -155,10 +163,7 @@ namespace Medicraft.Systems
         {
             get
             {
-                if (instance == null)
-                {
-                    instance = new PlayerManager();
-                }
+                instance ??= new PlayerManager();
                 return instance;
             }
         }

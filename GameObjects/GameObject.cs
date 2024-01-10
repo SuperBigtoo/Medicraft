@@ -1,6 +1,4 @@
-﻿using Medicraft.Data.Models;
-using Medicraft.Systems;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
@@ -11,6 +9,7 @@ namespace Medicraft.GameObjects
     public class GameObject : ICloneable
     {
         public int Id;
+        public int ReferId;
         public string Name;
         public string Description;
 
@@ -34,6 +33,7 @@ namespace Medicraft.GameObjects
         protected GameObject()
         {
             Id = 0;
+            ReferId = 0;
             Name = string.Empty;
             Description = string.Empty;
 
@@ -54,6 +54,7 @@ namespace Medicraft.GameObjects
         private GameObject(GameObject gameObject)
         {
             Id = gameObject.Id;
+            ReferId = gameObject.ReferId;
             Name = gameObject.Name;
             Description = gameObject.Description;
 

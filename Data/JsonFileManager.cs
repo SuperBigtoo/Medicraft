@@ -37,15 +37,17 @@ namespace Medicraft.Data
                 (double)camPos.Y
             };
 
+            var saveName = "Save_" + dateTimeString;
+
             if (GameGlobals.Instance.GameSave.Count != 0)
             {
                 GameGlobals.Instance.GameSave[GameGlobals.Instance.GameSaveIdex] = new GameSave()
                 {
-                    Name = "Save_" + dateTimeString,
-                    Created_Time = dateTimeString,
-                    Last_Updated = dateTimeString,
-                    Camera_Position = cameraPosition,
-                    HUD_Position = hudPosition,
+                    Name = saveName,
+                    CreatedTime = dateTimeString,
+                    LastUpdated = dateTimeString,
+                    CameraPosition = cameraPosition,
+                    HUDPosition = hudPosition,
                     PlayerStats = PlayerManager.Instance.Player.GetStats(),
                 };
             }
@@ -53,15 +55,15 @@ namespace Medicraft.Data
             {
                 GameGlobals.Instance.GameSave.Add(new GameSave()
                 {
-                    Name = "Save_" + dateTimeString,
-                    Created_Time = dateTimeString,
-                    Last_Updated = dateTimeString,
-                    Camera_Position = cameraPosition,
-                    HUD_Position = hudPosition,
+                    Name = saveName,
+                    CreatedTime = dateTimeString,
+                    LastUpdated = dateTimeString,
+                    CameraPosition = cameraPosition,
+                    HUDPosition = hudPosition,
                     PlayerStats = PlayerManager.Instance.Player.GetStats(),
                 });
             }
-            SaveFile(GameGlobals.Instance.GameSave, "data/stats.json");
+            SaveFile(GameGlobals.Instance.GameSave, GameGlobals.Instance.GameSavePath);
         }
 
         public static List<GameSave> LoadFlie(string PATH)
@@ -95,6 +97,9 @@ namespace Medicraft.Data
     public class PlayerStatsReader : JsonContentTypeReader<PlayerStats> { }
     public class EntityStatsReader : JsonContentTypeReader<List<EntityStats>> { }
 
-    // Reader Items
-    public class ObjectStatsReader : JsonContentTypeReader<List<ObjectStats>> { }
+    // Reader Object Data
+    public class ObjectDataReader : JsonContentTypeReader<List<ObjectData>> { }
+
+    // Reader Items Data
+    public class ItemDataReader : JsonContentTypeReader<List<ItemData>> { }
 }

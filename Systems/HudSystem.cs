@@ -1,7 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Medicraft.Data.Models;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Sprites;
 using System.Linq;
 
 namespace Medicraft.Systems
@@ -14,12 +16,14 @@ namespace Medicraft.Systems
 
         private Texture2D _heartTexture, _herb1Texture, _herb2Texture, _drugTexture
             , _coinTexture, _pressFTexture, _insufficient;
+        private AnimatedSprite _sprite;
+        private Transform2 _transform;
 
+        private float _deltaSeconds;
         private bool _nextFeed;
-
         private float _displayInsufficientTime;
 
-        public HudSystem(BitmapFont[] fonts, Texture2D[] textures)
+        public HudSystem(BitmapFont[] fonts, Texture2D[] textures, AnimatedSprite sprite)
         {
             _fonts = fonts;
 
@@ -31,6 +35,8 @@ namespace Medicraft.Systems
             _pressFTexture = textures[5];
             _insufficient = textures[6];
 
+            _sprite = sprite;
+
             _nextFeed = false;
             _displayInsufficientTime = 3f;
 
@@ -39,23 +45,23 @@ namespace Medicraft.Systems
 
         public void Update(GameTime gameTime)
         {
-            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            _deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (GameGlobals.Instance.ItemsFeed.Count != 0)
+            if (GameGlobals.Instance.CollectedItemFeed.Count != 0)
             {
-                GameGlobals.Instance.DisplayFeedTime -= deltaSeconds;
+                GameGlobals.Instance.DisplayFeedTime -= _deltaSeconds;
 
                 if (GameGlobals.Instance.DisplayFeedTime <= 0)
                 {
                     _nextFeed = true;
-                    GameGlobals.Instance.DisplayFeedTime = 6f;
+                    GameGlobals.Instance.DisplayFeedTime = GameGlobals.Instance.MaximumDisplayFeedTime;
                 }
                 else _nextFeed = false;
             }
 
             if (GameGlobals.Instance.ShowInsufficientSign)
             {
-                _displayInsufficientTime -= deltaSeconds;
+                _displayInsufficientTime -= _deltaSeconds;
 
                 if (_displayInsufficientTime <= 0)
                 {
@@ -116,22 +122,22 @@ namespace Medicraft.Systems
 
             spriteBatch.Draw(_herb1Texture, new Vector2(position.X + 400f, 0f) + _hudPosition, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(_fonts[0], $" {PlayerManager.Instance.Inventory["herb_1"]}"
+            spriteBatch.DrawString(_fonts[0], $" {InventoryManager.Instance.Inventory["0"]}"
                 , new Vector2(position.X + 400f + 32f, 0f) + _hudPosition, Color.White);
 
             spriteBatch.Draw(_herb2Texture, new Vector2(position.X + 480f, 0f) + _hudPosition, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(_fonts[0], $" {PlayerManager.Instance.Inventory["herb_2"]}"
+            spriteBatch.DrawString(_fonts[0], $" {InventoryManager.Instance.Inventory["1"]}"
                 , new Vector2(position.X + 480f + 32f, 0f) + _hudPosition, Color.White);
 
             spriteBatch.Draw(_drugTexture, new Vector2(position.X + 560f, 0f) + _hudPosition, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(_fonts[0], $" {PlayerManager.Instance.Inventory["drug"]}"
+            spriteBatch.DrawString(_fonts[0], $" {InventoryManager.Instance.Inventory["2"]}"
                 , new Vector2(position.X + 560f + 32f, 0f) + _hudPosition, Color.White);
 
             spriteBatch.Draw(_coinTexture, new Vector2(position.X + 640f, 0f) + _hudPosition, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(_fonts[0], $" {PlayerManager.Instance.Coin}"
+            spriteBatch.DrawString(_fonts[0], $" {InventoryManager.Instance.GoldCoin}"
                 , new Vector2(position.X + 640f + 32f, 0f) + _hudPosition, Color.White);
         }
 
@@ -171,54 +177,46 @@ namespace Medicraft.Systems
 
         private void DrawCollectedItem(SpriteBatch spriteBatch) 
         {
-            if (GameGlobals.Instance.ItemsFeed.Count != 0)
+            if (GameGlobals.Instance.CollectedItemFeed.Count != 0)
             {
                 int n;
-                if (GameGlobals.Instance.ItemsFeed.Count >= 6)
+                if (GameGlobals.Instance.CollectedItemFeed.Count >= GameGlobals.Instance.MaximumItemFeed)
                 {
-                    n = 6;
+                    n = GameGlobals.Instance.MaximumItemFeed;
                 }
-                else n = GameGlobals.Instance.ItemsFeed.Count;
+                else n = GameGlobals.Instance.CollectedItemFeed.Count;
 
                 for (int i = 0; i < n; i++)
                 {
-                    var Name = GameGlobals.Instance.ItemsFeed[i];
-                    Texture2D texture = null;
-
-                    switch (Name)
-                    {
-                        case "herb_1":
-                            texture = _herb1Texture;
-                            break;
-
-                        case "herb_2":
-                            texture = _herb2Texture;
-                            break;
-
-                        case "drug":
-                            texture = _drugTexture;
-                            break;
-                    }
-
+                    var referId = GameGlobals.Instance.CollectedItemFeed[i];
                     var addingX = GameGlobals.Instance.HUDPosition.X;
                     var addingY = GameGlobals.Instance.HUDPosition.Y;
 
-                    spriteBatch.FillRectangle(355f + addingX, 498f + (i * 40) + addingY, 110, 26, Color.Black * 0.4f);
+                    spriteBatch.FillRectangle(355f + addingX, 496f + (i * 40) + addingY, 120, 28, Color.Black * 0.4f);
 
-                    spriteBatch.Draw(texture, new Vector2(360f, 500f + (i * 40)) + _hudPosition, null
-                        , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
+                    _transform = new Transform2
+                    {
+                        Scale = new Vector2(0.75f, 0.75f),
+                        Rotation = 0f,
+                        Position = new Vector2(370f, 510f + (i * 40)) + _hudPosition
+                    };
 
-                    spriteBatch.DrawString(_fonts[0], $"{Name} x 1", new Vector2(360f + 32f, 500f + (i * 40))
-                        + _hudPosition, Color.White);
+                    _sprite.Play(referId.ToString());
+                    _sprite.Update(_deltaSeconds);
+
+                    spriteBatch.Draw(_sprite, _transform);
+
+                    spriteBatch.DrawString(_fonts[2], $"{GameGlobals.Instance.ItemDatas[referId].Name} x 1"
+                        , new Vector2(360f + 32f, 495f + (i * 40)) + _hudPosition, Color.White);
                 }
 
                 if (_nextFeed)
                 {
-                    if (GameGlobals.Instance.ItemsFeed.Count >= 6)
+                    if (GameGlobals.Instance.CollectedItemFeed.Count >= GameGlobals.Instance.MaximumItemFeed)
                     {
-                        GameGlobals.Instance.ItemsFeed.RemoveRange(0, 6);
+                        GameGlobals.Instance.CollectedItemFeed.RemoveRange(0, GameGlobals.Instance.MaximumItemFeed);
                     }
-                    else GameGlobals.Instance.ItemsFeed.RemoveRange(0, GameGlobals.Instance.ItemsFeed.Count);
+                    else GameGlobals.Instance.CollectedItemFeed.RemoveRange(0, GameGlobals.Instance.CollectedItemFeed.Count);
                 }
             }
         }
@@ -228,10 +226,10 @@ namespace Medicraft.Systems
             GameGlobals.Instance.ShowInsufficientSign = true;
         }
 
-        public static void AddFeed(string itemName)
+        public static void AddFeed(int ReferId)
         {
-            GameGlobals.Instance.ItemsFeed.Add(itemName);
-            GameGlobals.Instance.DisplayFeedTime = 6f;
+            GameGlobals.Instance.CollectedItemFeed.Add(ReferId);
+            GameGlobals.Instance.DisplayFeedTime = GameGlobals.Instance.MaximumDisplayFeedTime;
         }
     }
 }

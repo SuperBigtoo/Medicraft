@@ -1,8 +1,10 @@
 ﻿using Medicraft.Data;
+using Medicraft.Data.Models;
 using Medicraft.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace Medicraft
 {
@@ -35,7 +37,7 @@ namespace Medicraft
             _graphics.ApplyChanges();
 
             // Load GameSave
-            var gameSave = JsonFileManager.LoadFlie("data/stats.json");
+            var gameSave = JsonFileManager.LoadFlie(GameGlobals.Instance.GameSavePath);
             if (gameSave.Count != 0)
             {
                 foreach (var save in gameSave)

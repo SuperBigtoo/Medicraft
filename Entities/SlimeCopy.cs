@@ -153,14 +153,11 @@ namespace Medicraft.Entities
                 }
                 else
                 {
-                    HudSystem.AddFeed("herb_1");
+                    HudSystem.AddFeed(0);
 
-                    if (PlayerManager.Instance.Inventory.ContainsKey("herb_1"))
-                    {
-                        PlayerManager.Instance.Inventory["herb_1"] += 1;
-                    }
+                    InventoryManager.Instance.AddItem(0, 1);
 
-                    PlayerManager.Instance.Coin += 5;
+                    InventoryManager.Instance.GoldCoin += 5;
 
                     Destroy();
                 }

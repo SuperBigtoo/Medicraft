@@ -1,0 +1,1415 @@
+﻿[
+  {
+    "ItemId": 0,
+    "Name": "ดอกพิกุล",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 1,
+    "Name": "ดอกบุนนาค",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 2,
+    "Name": "ดอกสารภี",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 3,
+    "Name": "ดอกดีปลี",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 4,
+    "Name": "ดอกมะลิ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 5,
+    "Name": "ดอกจันทน์",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 6,
+    "Name": "ดอกกานพลู",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 7,
+    "Name": "ดอกบัวขม",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 8,
+    "Name": "ดอกบัวเผื่อน",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 9,
+    "Name": "ดอกกระดังงา",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 10,
+    "Name": "ดอกจำปา",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 11,
+    "Name": "ดอกบัวจงกลนี",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 12,
+    "Name": "ดอกคำไทย",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 13,
+    "Name": "ดอกคำฝอย",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 14,
+    "Name": "ดอกเก็กฮวย",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 15,
+    "Name": "เกสรบัวหลวง",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 16,
+    "Name": "ผิวมะกรูด",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 17,
+    "Name": "ผิวมะงั่ว",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 18,
+    "Name": "ผิวมะนาว",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 19,
+    "Name": "ผิวส้มตรังกานู",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 20,
+    "Name": "ผิวส้มจีน",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 21,
+    "Name": "ผิวส้มโอ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 22,
+    "Name": "ผิวส้มเขียวหวาน",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 23,
+    "Name": "ใบกัญชาเทศ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 24,
+    "Name": "ใบมะนาว",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 25,
+    "Name": "ใบพิมเสนต้น",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 26,
+    "Name": "ใบผักกระโฉม",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 27,
+    "Name": "ใบหมากผู้",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 28,
+    "Name": "ใบหมากเมีย",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 29,
+    "Name": "ใบสันพร้าหอม",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 30,
+    "Name": "ใบเทียน",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 31,
+    "Name": "ใบทับทิม",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 32,
+    "Name": "ส้มซ่า",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 33,
+    "Name": "มดยอบคั่ว",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 34,
+    "Name": "พริกไทยล่อน",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 35,
+    "Name": "พริกไทยดำ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 36,
+    "Name": "ยาดำสะตุ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 37,
+    "Name": "สารส้มสะตุ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 38,
+    "Name": "รงทอง",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 39,
+    "Name": "ช้าพลู",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 40,
+    "Name": "ผักแพวแดง",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 41,
+    "Name": "ขอบชะนางแดง",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 42,
+    "Name": "ขอบชะนางขาว",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 43,
+    "Name": "หัวกระชาย",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 44,
+    "Name": "หัวแห้วไทย",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 45,
+    "Name": "หัวดองดึง",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 46,
+    "Name": "หัวบุก",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 47,
+    "Name": "หัวกลอย",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 48,
+    "Name": "หัวกระดาดขาว",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 49,
+    "Name": "หัวกระดาดแดง",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 50,
+    "Name": "หัวแห้วหมู",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 51,
+    "Name": "หัวหอม",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 52,
+    "Name": "หัวเปราะหอม",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 53,
+    "Name": "หัวกระเทียม",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 54,
+    "Name": "หัวกระเทียมคั่ว",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 55,
+    "Name": "กระจับ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 56,
+    "Name": "ชุดเครื่องแก่น",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 57,
+    "Name": "กฤษณา",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 58,
+    "Name": "กำยาน",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 59,
+    "Name": "กระลำพัก",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 60,
+    "Name": "ลำพันแดง",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 61,
+    "Name": "ลำพันหางหมู",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 62,
+    "Name": "ขอนดอก",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 63,
+    "Name": "เนื้อไม้กฤษณา",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 64,
+    "Name": "เนื้อลูกสมอพิเภก",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 65,
+    "Name": "เนื้อลูกสมอไทย",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 66,
+    "Name": "เนื้อลูกสมอเทศ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 67,
+    "Name": "เนื้อลูกมะขามป้อม",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 68,
+    "Name": "เปลือกส้มจีน",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 69,
+    "Name": "เปลือกมะรุม",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 70,
+    "Name": "เปลือกชะลูด",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 71,
+    "Name": "เปลือกอบเชย",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 72,
+    "Name": "เปลือกอบเชยเทศ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 73,
+    "Name": "เปลือกอบเชยญวน",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 74,
+    "Name": "เปลือกสมุลแว้ง",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 75,
+    "Name": "เปลือกสีเสียดไทย",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 76,
+    "Name": "เปลือกเพกา",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 77,
+    "Name": "เปลือกต้นทองหลาง",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 78,
+    "Name": "เปลือกต้นกุ่มบก",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 79,
+    "Name": "เปลือกต้นกุ่มน้ำ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 80,
+    "Name": "หญ้าตีนนก",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 81,
+    "Name": "ชุดเครื่องเหง้า",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 82,
+    "Name": "รากชะเอมเทศ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 83,
+    "Name": "รากชะเอมไทย",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 84,
+    "Name": "รากเจตมูลเพลิงแดง",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 85,
+    "Name": "รากแฝกหอม",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 86,
+    "Name": "รากช้าพลู",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 87,
+    "Name": "รากย่านาง",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 88,
+    "Name": "รากคนทา",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 89,
+    "Name": "รากมะเดื่อชุมพร",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 90,
+    "Name": "รากชิงชี่",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 91,
+    "Name": "รากไม้เท้ายายม่อม",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 92,
+    "Name": "รากปลาไหลเผือก",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 93,
+    "Name": "รากเหมือดคน",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 94,
+    "Name": "รากมะปรางหวาน",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 95,
+    "Name": "รากมะนาว",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 96,
+    "Name": "รากตองแตก",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 97,
+    "Name": "รากจิงจ้อ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 98,
+    "Name": "ชุดเครื่องเถา",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 99,
+    "Name": "ลำต้นข่าต้น",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 100,
+    "Name": "ลูกผักชีลา",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 101,
+    "Name": "ลูกจันทน์",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 102,
+    "Name": "ลูกกระวาน",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 103,
+    "Name": "ลูกราชดัด",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 104,
+    "Name": "ลูกเร่ว",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 105,
+    "Name": "ลูกสารพัดพิษ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 106,
+    "Name": "ลูกกระดอม",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 107,
+    "Name": "ลูกพิลังกาสา",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 108,
+    "Name": "ชุดเครื่องโกฐ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 109,
+    "Name": "ชุดเครื่องเทียน",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 110,
+    "Name": "พิมเสน",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 111,
+    "Name": "การบูร",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 112,
+    "Name": "มหาหิงคุ์",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 113,
+    "Name": "เกลือสินเธาว์",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 114,
+    "Name": "ชันย้อย",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 115,
+    "Name": "ครั่ง",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 116,
+    "Name": "สีเสียดเทศ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 117,
+    "Name": "รากกล้วยตีบ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 118,
+    "Name": "สะระแหน่",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 119,
+    "Name": "เกล็ดสะระแหน่",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 120,
+    "Name": "น้ำดีวัว",
+    "Category": "Material",
+    "Description": "น้ำดีจากถุงน้ำดีของวัวสามารถใช้ในการปรุงยาได้",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 121,
+    "Name": "ฝักส้มป่อย",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 122,
+    "Name": "ตะไคร้บ้าน",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 123,
+    "Name": "กะเพรา",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 124,
+    "Name": "เนระพูสี",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 125,
+    "Name": "พิษนาศน์",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 126,
+    "Name": "มหาสดำ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 127,
+    "Name": "ว่านชักมดลูก",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 128,
+    "Name": "ว่านกีบแรด",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 129,
+    "Name": "ว่านร่อนทอง",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 130,
+    "Name": "บ๊วย",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 131,
+    "Name": "มะนาวดองแห้ง",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 132,
+    "Name": "น้ำตาลกรวด",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 133,
+    "Name": "ผลมะแว้งเครือ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 134,
+    "Name": "หล่อฮั่งก๊วย",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 135,
+    "Name": "เหงือกปลาหมอ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 136,
+    "Name": "หัศคุณเทศ",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 137,
+    "Name": "กำลังวัวเถลิง",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 138,
+    "Name": "ผักเสี้ยนผี",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 139,
+    "Name": "โด่ไม่รู้ล้ม",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 140,
+    "Name": "ผลมะตูมอ่อน",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 141,
+    "Name": "ทองพันชั่ง",
+    "Category": "Material",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 142,
+    "Name": "น้ำประสานทองสะตุ",
+    "Category": "Material",
+    "Description": "เป็นน้ำจากเกลือรูปแบบหนึ่งที่พบได้ในธรรมชาติสามารถใช้ในการปรุงยา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 143,
+    "Name": "แครรอท",
+    "Category": "Material",
+    "Description": "",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 144,
+    "Name": "มันฝรั่ง",
+    "Category": "Material",
+    "Description": "",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 145,
+    "Name": "กระหล่ำปลี",
+    "Category": "Material",
+    "Description": "",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 146,
+    "Name": "มะเขือเทศ",
+    "Category": "Material",
+    "Description": "",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 147,
+    "Name": "เห็ด",
+    "Category": "Material",
+    "Description": "",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 148,
+    "Name": "ข้าวสาลี",
+    "Category": "Material",
+    "Description": "",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 149,
+    "Name": "หัวหอม",
+    "Category": "Material",
+    "Description": "",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 150,
+    "Name": "เนื้อสัตว์",
+    "Category": "Material",
+    "Description": "",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 151,
+    "Name": "ท่อนไม้",
+    "Category": "Material",
+    "Description": "ท่อนไม้หนา ที่พึ่งตัดสดๆ ยังไม่ได้แปรรูป",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 152,
+    "Name": "หนังธรรมดา",
+    "Category": "Material",
+    "Description": "หนังที่เบาและอ่อนนุ่ม ดูแลรักษาง่ายแต่ก็ชำรุดง่ายด้วยเหมือนกัน",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 153,
+    "Name": "ผ้าธรรมดา",
+    "Category": "Material",
+    "Description": "เนื้อผ้านุ่มแต่ไม่แข็งแรงมาก แต่ก็ดีกว่าไม่มีอะไรเลย",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 154,
+    "Name": "แร่เหล็ก",
+    "Category": "Material",
+    "Description": "แร่เหล็กจากธรรมชาตินั้นเอง สามารถสร้างวัตถุที่มีค่ามากขึ้นได้หากนำไปใช้ในการประดิษฐ์",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 155,
+    "Name": "แร่ทองแดง",
+    "Category": "Material",
+    "Description": "แร่ทองแดงจากธรรมชาตินั้นเอง สามารถสร้างวัตถุที่มีค่ามากขึ้นได้หากนำไปใช้ในการประดิษฐ์",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 156,
+    "Name": "แร่ทอง",
+    "Category": "Material",
+    "Description": "แร่ทองจากธรรมชาตินั้นเอง สามารถสร้างวัตถุที่มีค่ามากขึ้นได้หากนำไปใช้ในการประดิษฐ์",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  }
+]

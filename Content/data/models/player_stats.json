@@ -1,14 +1,18 @@
 ﻿{
-  "Id": 0,
-  "Name": "PlayerOne",
+  "CharId": 0,
+  "Name": "Noah",
   "Level": 1,
   "EXP": 0,
   "ATK": 10,
   "HP": 100,
   "DEF_Percent": 0.25,
-  "Crit_Percent": 0.1,
+  "Crit_Percent": 0.25,
   "CritDMG_Percent": 0.5,
   "Speed": 300,
   "Evasion": 0.1,
-  "Position": [ 1042, 878 ]
+  "Position": [ 1042, 878 ],
+  "InventoryData": {
+    "GoldCoin": 10,
+    "Inventory": [ 1, 1, 0 ]
+  }
 }

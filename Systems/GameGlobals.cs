@@ -21,10 +21,15 @@ namespace Medicraft.Systems
         public bool IsDetectedItem { set; get; }
         public bool ShowInsufficientSign { set; get; } 
         public bool IsShowPath { set; get; }
-        public float DisplayFeedTime { set; get; }
         public int GameSaveIdex { private set; get; }
-        public List<GameSave> GameSave {private set; get;}
-        public List<string> ItemsFeed { private set; get; }
+        public string GameSavePath { private set; get; }
+        public List<GameSave> GameSave { private set; get;}
+        public int MaximunInventorySlot { private set; get; }
+        public List<ItemData> ItemDatas { set; get; }
+        public List<int> CollectedItemFeed { private set; get; }
+        public int MaximumItemFeed { private set; get; }
+        public float DisplayFeedTime { set; get; }
+        public float MaximumDisplayFeedTime { private set; get; }
         public List<Rectangle> CollistionObject { private set; get; }  // "Collision"
         public List<Rectangle> TopLayerObject { private set; get; }  // "ObjectOnLayer"
         public List<Rectangle> MiddleLayerObject { private set; get; }
@@ -52,8 +57,7 @@ namespace Medicraft.Systems
             GameScreenCenter = new Vector2(1440/2, 900/2);
             HUDPosition = Vector2.Zero;
             InitialCameraPos = Vector2.Zero;
-            AddingCameraPos = Vector2.Zero;
-            GameSaveIdex = 0; // to be initial
+            AddingCameraPos = Vector2.Zero; 
 
             SwitchDetectBox = false;
             IsShowDetectBox = false;
@@ -64,10 +68,18 @@ namespace Medicraft.Systems
             IsDetectedItem = false;
             ShowInsufficientSign = false;
 
-            DisplayFeedTime = 6f;
-
             GameSave = new List<GameSave>();
-            ItemsFeed = new List<string>();
+            GameSaveIdex = 0; // to be initial
+            GameSavePath = "save/gamesaves.json";
+
+            MaximunInventorySlot = 64;
+            ItemDatas = new List<ItemData>();
+
+            CollectedItemFeed = new List<int>();
+            MaximumItemFeed = 6;
+            DisplayFeedTime = 0;
+            MaximumDisplayFeedTime = 6f;
+
             CollistionObject = new List<Rectangle>();
             TopLayerObject = new List<Rectangle>();
             MiddleLayerObject = new List<Rectangle>();

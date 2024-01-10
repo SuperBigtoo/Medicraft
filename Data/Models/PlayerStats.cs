@@ -2,7 +2,7 @@
 {
     public class PlayerStats
     {
-        public int Id { get; set; }
+        public int CharId { get; set; }
         public string Name { get; set; }
         public int Level { get; set; }
         public int EXP { get; set; }
@@ -14,5 +14,6 @@
         public int Speed { get; set; }
         public double Evasion { get; set; }
         public double[] Position { get; set; }
+        public InventoryData InventoryData { get; set; }
     }
 }

@@ -9,19 +9,21 @@ namespace Medicraft.GameObjects
 {
     public class Item : GameObject
     {
-        public Item(AnimatedSprite sprite, ObjectStats objectStats, Vector2 scale)
+        public Item(AnimatedSprite sprite, ObjectData objectData, Vector2 scale)
         {
             Sprite = sprite;
 
-            Id = objectStats.Id;
-            Name = objectStats.Name;
-            Description = objectStats.Description;
+            Id = objectData.Id;
+            ReferId = objectData.ReferId;
+
+            Name = GameGlobals.Instance.ItemDatas[objectData.ReferId].Name;
+            Description = GameGlobals.Instance.ItemDatas[objectData.ReferId].Description;
 
             IsCollected = false;
             IsDestroyed = false;
             IsVisible = true;
 
-            var position = new Vector2((float)objectStats.Position[0], (float)objectStats.Position[1]);
+            var position = new Vector2((float)objectData.Position[0], (float)objectData.Position[1]);
             Transform = new Transform2
             {
                 Scale = scale,
@@ -32,7 +34,7 @@ namespace Medicraft.GameObjects
             BoundingCollection = new CircleF(Position, 10);
 
             Sprite.Depth = 0.8f;
-            Sprite.Play(Name);
+            Sprite.Play(ReferId.ToString());
         }
 
         private Item(Item item)
@@ -40,6 +42,7 @@ namespace Medicraft.GameObjects
             Sprite = item.Sprite;
 
             Id = item.Id;
+            ReferId= item.ReferId;
             Name = item.Name;
             Description = item.Description;
 
@@ -57,7 +60,7 @@ namespace Medicraft.GameObjects
             BoundingCollection = new CircleF(Position, 10);
 
             Sprite.Depth = 0.8f;
-            Sprite.Play(Name);
+            Sprite.Play(ReferId.ToString());
         }
 
         public override void Update(GameTime gameTime, float layerDepth)
@@ -67,16 +70,15 @@ namespace Medicraft.GameObjects
 
             if (IsCollected)
             {
-                HudSystem.AddFeed(Name);
+                HudSystem.AddFeed(ReferId);
 
-                if (PlayerManager.Instance.Inventory.ContainsKey(Name))
-                {
-                    PlayerManager.Instance.Inventory[Name] += 1;    // Adding item to Inventory... BUT the logic on how to check da item stack we'll see there...
-                }
+                // Adding item to Inventory... BUT the logic on how to check da item stack we'll see there...
+                InventoryManager.Instance.AddItem(ReferId, 1);
+
                 Destroy();
             }
 
-            Sprite.Play(Name);
+            Sprite.Play(ReferId.ToString());
             Sprite.Update(deltaSeconds);
         }
 

@@ -48,7 +48,7 @@ namespace Medicraft.Entities
                 BoundingDetectCollisions.X = (int)((int)value.X - Sprite.TextureRegion.Width / BoundingCollisionX);
                 BoundingDetectCollisions.Y = (int)((int)value.Y + Sprite.TextureRegion.Height / BoundingCollisionY);
                 
-                if (Name.Equals("PlayerOne")) 
+                if (Name.Equals("Noah")) 
                 {
                     BoundingHitBox.Center = value + new Vector2(0f, 32f);
                     BoundingDetection.Center = value + new Vector2(0f, 32f);

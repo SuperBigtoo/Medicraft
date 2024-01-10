@@ -1,5 +1,4 @@
 ﻿using Medicraft.Data.Models;
-using Medicraft.GameObjects;
 using Medicraft.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,28 +12,18 @@ namespace Medicraft.Entities
 {
     public class Player : Entity
     {
-        private readonly PlayerStats _playerStats;
+        private readonly PlayerStats _basePlayerStats;
 
         private Vector2 _initHudPos, _initCamPos;
 
         private readonly float _normalHitSpeed, _burstSkillSpeed, _knockbackForce;
 
-        public Player(AnimatedSprite sprite, PlayerStats playerStats)
+        public Player(AnimatedSprite sprite, PlayerStats basePlayerStats)
         {
-            _playerStats = playerStats;
+            _basePlayerStats = basePlayerStats;
             
             // Initial stats
-            Id = playerStats.Id;
-            Name = playerStats.Name;
-            Level = playerStats.Level;
-            EXP = playerStats.EXP;
-            ATK = playerStats.ATK;
-            HP = playerStats.HP;
-            DEF_Percent = (float)playerStats.DEF_Percent;
-            Crit_Percent = (float)playerStats.Crit_Percent;
-            CritDMG_Percent = (float)playerStats.CritDMG_Percent;
-            Speed = playerStats.Speed;
-            Evasion = (float)playerStats.Evasion;
+            InitializeStats();
 
             Sprite = sprite;
 
@@ -42,7 +31,7 @@ namespace Medicraft.Entities
             _burstSkillSpeed = 0.70f;   // Stat
             _knockbackForce = 50f;      // Stat
 
-            var position = new Vector2((float)playerStats.Position[0], (float)playerStats.Position[1]);
+            var position = new Vector2((float)basePlayerStats.Position[0], (float)basePlayerStats.Position[1]);
             Transform = new Transform2
             {
                 Scale = Vector2.One,
@@ -64,6 +53,21 @@ namespace Medicraft.Entities
 
             Sprite.Depth = 0.3f;
             Sprite.Play("idle");
+        }
+
+        private void InitializeStats()
+        {
+            Id = _basePlayerStats.CharId;
+            Name = _basePlayerStats.Name;
+            Level = _basePlayerStats.Level;
+            EXP = _basePlayerStats.EXP;
+            ATK = _basePlayerStats.ATK;
+            HP = _basePlayerStats.HP;
+            DEF_Percent = (float)_basePlayerStats.DEF_Percent;
+            Crit_Percent = (float)_basePlayerStats.Crit_Percent;
+            CritDMG_Percent = (float)_basePlayerStats.CritDMG_Percent;
+            Speed = _basePlayerStats.Speed;
+            Evasion = (float)_basePlayerStats.Evasion;
         }
 
         // Update Player
@@ -269,7 +273,8 @@ namespace Medicraft.Entities
             GameGlobals.Instance.IsDetectedItem = false;
 
             // Check Item Dectection
-            foreach (var gameObject in ObjectManager.Instance.GameObjects)
+            var GameObject = ObjectManager.Instance.GameObjects;
+            foreach (var gameObject in GameObject)
             {
                 if (BoundingCollection.Intersects(gameObject.BoundingCollection))
                 {
@@ -306,7 +311,8 @@ namespace Medicraft.Entities
             {
                 if (BoundingCollection.Intersects(gameObject.BoundingCollection))
                 {
-                    if (!gameObject.IsCollected)
+                    if (!gameObject.IsCollected
+                        && InventoryManager.Instance.Inventory.Count < InventoryManager.Instance.MaximunSlot)
                     {
                         gameObject.IsCollected = true;
                     }
@@ -314,6 +320,7 @@ namespace Medicraft.Entities
             }
         }
 
+        // Crafting TBD
         private void CheckTableCraftDetection()
         {
             if (GameGlobals.Instance.TableCraft.Count != 0)
@@ -323,23 +330,22 @@ namespace Medicraft.Entities
                 {
                     if (BoundingDetectCollisions.Intersects(obj))
                     {
-                        if (PlayerManager.Instance.Inventory["herb_1"] >= 1
-                            && PlayerManager.Instance.Inventory["herb_2"] >= 1)
+                        if (PlayerManager.Instance.Inventory["0"] >= 1
+                            && PlayerManager.Instance.Inventory["1"] >= 1)
                         {
-                            HudSystem.AddFeed("drug");
+                            HudSystem.AddFeed(2);
 
-                            if (PlayerManager.Instance.Inventory.ContainsKey("drug"))
+                            if (PlayerManager.Instance.Inventory.ContainsKey("2"))
                             {
-                                PlayerManager.Instance.Inventory["drug"] += 1;
-                                PlayerManager.Instance.Inventory["herb_1"] -= 1;
-                                PlayerManager.Instance.Inventory["herb_2"] -= 1;
+                                PlayerManager.Instance.Inventory["2"] += 1;
+                                PlayerManager.Instance.Inventory["0"] -= 1;
+                                PlayerManager.Instance.Inventory["1"] -= 1;
                             }
                         }
                         else
                         {
                             HudSystem.ShowInsufficientSign();
                         }
-
                         break;
                     }
                 }
@@ -384,7 +390,7 @@ namespace Medicraft.Entities
 
         public PlayerStats GetStats()
         {
-            return _playerStats;
+            return _basePlayerStats;
         }
 
         public float GetDepth()
