@@ -12,7 +12,7 @@ namespace Medicraft.Systems
     public class PlayerManager
     {
         public Player Player { private set; get; }
-        public PlayerStats InitialPlayerStats { private set; get; }
+        public PlayerData InitialPlayerStats { private set; get; }
         public Dictionary<string, int> Inventory { private set; get; }
         public int GoldCoin { set; get; }
         public bool IsPlayerDead { private set; get; }
@@ -32,7 +32,7 @@ namespace Medicraft.Systems
             IsPlayerDead = false;
         }
 
-        public void Initialize(AnimatedSprite playerSprite, PlayerStats initialPlayerStats)
+        public void Initialize(AnimatedSprite playerSprite, PlayerData initialPlayerStats)
         {
             InitialPlayerStats = initialPlayerStats;
 
@@ -50,11 +50,11 @@ namespace Medicraft.Systems
                     , (float)gameSave.HUDPosition[1]);
 
                 // Initialize Player's Inventory
-                var inventoryData = gameSave.PlayerStats.InventoryData;
+                var inventoryData = gameSave.PlayerData.InventoryData;
                 InventoryManager.Instance.InitializeInventory(inventoryData);
 
                 // Initial Player
-                var basePlayerStats = gameSave.PlayerStats;
+                var basePlayerStats = gameSave.PlayerData;
                 Player = new Player(playerSprite, basePlayerStats);
             }
             else // In case New Game

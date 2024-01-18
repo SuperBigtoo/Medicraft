@@ -12,16 +12,19 @@ namespace Medicraft.Entities
 {
     public class Player : Entity
     {
-        private readonly PlayerStats _basePlayerStats;
+        private PlayerData _basePlayerStats;
 
         private Vector2 _initHudPos, _initCamPos;
 
         private readonly float _normalHitSpeed, _burstSkillSpeed, _knockbackForce;
 
-        public Player(AnimatedSprite sprite, PlayerStats basePlayerStats)
+        public Player(AnimatedSprite sprite, PlayerData basePlayerStats)
         {
             _basePlayerStats = basePlayerStats;
-            
+
+            Id = basePlayerStats.CharId;
+            Name = basePlayerStats.Name;
+
             // Initial stats
             InitializeStats();
 
@@ -51,14 +54,12 @@ namespace Medicraft.Entities
 
             BoundingCollection = new CircleF(Position + new Vector2(0f, 64f), 30f);
 
-            Sprite.Depth = 0.3f;
+            Sprite.Depth = 0.1f;
             Sprite.Play("idle");
         }
 
         private void InitializeStats()
         {
-            Id = _basePlayerStats.CharId;
-            Name = _basePlayerStats.Name;
             Level = _basePlayerStats.Level;
             EXP = _basePlayerStats.EXP;
             ATK = _basePlayerStats.ATK;
@@ -284,15 +285,15 @@ namespace Medicraft.Entities
             }
 
             // Check Table Craft
-            var TableCraft = GameGlobals.Instance.TableCraft;
-            foreach (var obj in TableCraft)
-            {
-                if (BoundingDetectCollisions.Intersects(obj))
-                {
-                    GameGlobals.Instance.IsDetectedItem = true;
-                    break;
-                }
-            }
+            //var TableCraft = GameGlobals.Instance.TableCraft;
+            //foreach (var obj in TableCraft)
+            //{
+            //    if (BoundingDetectCollisions.Intersects(obj))
+            //    {
+            //        GameGlobals.Instance.IsDetectedItem = true;
+            //        break;
+            //    }
+            //}
 
             // Check Interaction
             if (keyboardCur.IsKeyUp(Keys.F) && keyboardPrev.IsKeyDown(Keys.F))
@@ -300,7 +301,7 @@ namespace Medicraft.Entities
                 if (GameGlobals.Instance.IsDetectedItem)
                 {
                     CheckItemDetection();
-                    CheckTableCraftDetection();
+                    //CheckTableCraftDetection();
                 }
             }
         }
@@ -388,7 +389,7 @@ namespace Medicraft.Entities
             }
         }
 
-        public PlayerStats GetStats()
+        public PlayerData GetStats()
         {
             return _basePlayerStats;
         }

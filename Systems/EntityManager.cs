@@ -86,10 +86,7 @@ namespace Medicraft.Systems
         {
             get 
             {
-                if (instance == null)
-                {
-                    instance = new EntityManager();
-                }
+                instance ??= new EntityManager();
                 return instance;
             } 
         }

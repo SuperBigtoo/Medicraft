@@ -41,32 +41,34 @@ namespace Medicraft.Data
 
             if (GameGlobals.Instance.GameSave.Count != 0)
             {
-                GameGlobals.Instance.GameSave[GameGlobals.Instance.GameSaveIdex] = new GameSave()
+                GameGlobals.Instance.GameSave[GameGlobals.Instance.GameSaveIdex] = new GameSaveData()
                 {
+                    Id = GameGlobals.Instance.GameSaveIdex,
                     Name = saveName,
                     CreatedTime = dateTimeString,
                     LastUpdated = dateTimeString,
                     CameraPosition = cameraPosition,
                     HUDPosition = hudPosition,
-                    PlayerStats = PlayerManager.Instance.Player.GetStats(),
+                    PlayerData = PlayerManager.Instance.Player.GetStats(),
                 };
             }
             else
             {
-                GameGlobals.Instance.GameSave.Add(new GameSave()
+                GameGlobals.Instance.GameSave.Add(new GameSaveData()
                 {
+                    Id = 0,
                     Name = saveName,
                     CreatedTime = dateTimeString,
                     LastUpdated = dateTimeString,
                     CameraPosition = cameraPosition,
                     HUDPosition = hudPosition,
-                    PlayerStats = PlayerManager.Instance.Player.GetStats(),
+                    PlayerData = PlayerManager.Instance.Player.GetStats(),
                 });
             }
             SaveFile(GameGlobals.Instance.GameSave, GameGlobals.Instance.GameSavePath);
         }
 
-        public static List<GameSave> LoadFlie(string PATH)
+        public static List<GameSaveData> LoadFlie(string PATH)
         {
             var fileContents = "";
             try
@@ -76,26 +78,26 @@ namespace Medicraft.Data
             catch (IOException)
             {
                 {
-                    var gameSave = new List<GameSave>();
+                    var gameSave = new List<GameSaveData>();
                     SaveFile(gameSave, PATH);
                     fileContents = File.ReadAllText(PATH);
                 }
             } 
 
-            return JsonSerializer.Deserialize<List<GameSave>>(fileContents);
+            return JsonSerializer.Deserialize<List<GameSaveData>>(fileContents);
         }
 
-        private static void SaveFile(List<GameSave> gameSave, string PATH)
+        private static void SaveFile(List<GameSaveData> gameSave, string PATH)
         {
-            string serializedText = JsonSerializer.Serialize<List<GameSave>>(gameSave);
+            string serializedText = JsonSerializer.Serialize<List<GameSaveData>>(gameSave);
             (new FileInfo(PATH)).Directory.Create();
             File.WriteAllText(PATH, serializedText);
         }
     }
 
     // Reader Entity Stats
-    public class PlayerStatsReader : JsonContentTypeReader<PlayerStats> { }
-    public class EntityStatsReader : JsonContentTypeReader<List<EntityStats>> { }
+    public class PlayerDataReader : JsonContentTypeReader<PlayerData> { }
+    public class EntityDataReader : JsonContentTypeReader<List<EntityData>> { }
 
     // Reader Object Data
     public class ObjectDataReader : JsonContentTypeReader<List<ObjectData>> { }

@@ -107,11 +107,11 @@ namespace Medicraft.Systems.TilemapRenderer
                     new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
 
-            foreach (var o in _tileMap.ObjectGroups["TableCraft"].Objects)
-            {
-                GameGlobals.Instance.TableCraft.Add(
-                    new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
-            }
+            //foreach (var o in _tileMap.ObjectGroups["TableCraft"].Objects)
+            //{
+            //    GameGlobals.Instance.TableCraft.Add(
+            //        new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+            //}
 
             //foreach (var o in _tileMap.ObjectGroups["ItemsPoint"].Objects)
             //{

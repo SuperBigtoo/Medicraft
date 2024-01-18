@@ -33,7 +33,7 @@ namespace Medicraft.GameObjects
 
             BoundingCollection = new CircleF(Position, 10);
 
-            Sprite.Depth = 0.8f;
+            Sprite.Depth = 0.1f;
             Sprite.Play(ReferId.ToString());
         }
 
@@ -59,7 +59,7 @@ namespace Medicraft.GameObjects
 
             BoundingCollection = new CircleF(Position, 10);
 
-            Sprite.Depth = 0.8f;
+            Sprite.Depth = 0.1f;
             Sprite.Play(ReferId.ToString());
         }
 

@@ -20,7 +20,7 @@ namespace Medicraft.Screens
     {
         private HudSystem _hudSystem;
         private TilemapOrthogonalRender _tileMapRender;
-        private List<EntityStats> _slimeStatsList;
+        private List<EntityData> _slimeStatsList;
         private List<ObjectData> _itemDataList;
         private BitmapFont _fontMinecraft, _fontSensation, _fontTA8Bit, _fontTA8BitBold, _fontTA16Bit;
         private TmxMap _tileMap;
@@ -47,24 +47,33 @@ namespace Medicraft.Screens
             };
 
             // Initialize Player's Data !! Gonna be move to Load GameSave later !!
-            var initialPlayerStats = Content.Load<PlayerStats>("data/models/player_stats");
+            var initialPlayerStats = Content.Load<PlayerData>("data/models/player_stats");
             var playerAnimation = Content.Load<SpriteSheet>("animation/mc/mc_spritesheet.sf", new JsonContentLoader());
             var playerSprite = new AnimatedSprite(playerAnimation);
             PlayerManager.Instance.Initialize(playerSprite, initialPlayerStats);
 
             // Load Tile Map
             //_mapManager = new TiledMapBackgroundManager(Content, GraphicsDevice, Window, "tiledmaps/test1/level02");
-            var _tileSets = new Texture2D[]     // The maximum number of TileSet is 5
+            var _tileSetsDemo = new Texture2D[]     // The maximum number of TileSet is 5
             {
                 Content.Load<Texture2D>("tiledmaps/demo/rpg_maker_vx_rtp_tileset_by_telles0808"),
                 Content.Load<Texture2D>("tiledmaps/demo/homemc0"),
                 Content.Load<Texture2D>("tiledmaps/demo/TS1")
             };
             _tileMap = new TmxMap("Content/tiledmaps/demo/Demo.tmx");
-            _tileMapRender = new TilemapOrthogonalRender(_tileMap, _tileSets);
+            _tileMapRender = new TilemapOrthogonalRender(_tileMap, _tileSetsDemo);
+
+            //var _tileSetsTestMap1 = new Texture2D[]     // The maximum number of TileSet is 5
+            //{
+            //    Content.Load<Texture2D>("tiledmaps/chapter_1/rpg_maker_vx_rtp_tileset_by_telles0808"),
+            //    Content.Load<Texture2D>("tiledmaps/chapter_1/TS1"),
+            //    Content.Load<Texture2D>("tiledmaps/chapter_1/TS1-2")
+            //};
+            //_tileMap = new TmxMap("Content/tiledmaps/chapter_1/dun1.tmx");
+            //_tileMapRender = new TilemapOrthogonalRender(_tileMap, _tileSetsTestMap1);
 
             // Load GameData from JSON file, such as Mobs and Items Data 
-            _slimeStatsList = Content.Load<List<EntityStats>>("data/models/slime");
+            _slimeStatsList = Content.Load<List<EntityData>>("data/models/slime");
             _itemDataList = Content.Load<List<ObjectData>>("data/models/items_demo");
 
             // Adding Slime to MobSpawner
@@ -129,9 +138,9 @@ namespace Medicraft.Screens
             //spriteBatch.DrawString(_fontMinecraft, $"HP: {_slimeStatsList[0].HP}", new Vector2(50, 80), Color.White);
             //spriteBatch.DrawString(_fontMinecraft, $"ATK: {_slimeStatsList[0].ATK}", new Vector2(50, 110), Color.White);
             //spriteBatch.DrawString(_fontTA8Bit, $"ตำแหน่ง Player: {(int)PlayerManager.Instance.Player.Position.X} {(int)PlayerManager.Instance.Player.Position.Y}", new Vector2(50, -100), Color.White);
-            spriteBatch.DrawString(_fontTA8BitBold, $"จำนวนไอเทม: {GameGlobals.Instance.ItemDatas.Count} ", new Vector2(50, -70), Color.White);
-            spriteBatch.DrawString(_fontTA16Bit, $"ItemId: {GameGlobals.Instance.ItemDatas[0].ItemId} | Name: {GameGlobals.Instance.ItemDatas[0].Name} | Stackable: {GameGlobals.Instance.ItemDatas[0].Stackable}", new Vector2(50, -40), Color.White);
-            spriteBatch.DrawString(_fontTA8BitBold, $"Inventory Test: {InventoryManager.Instance.Inventory.Count} {InventoryManager.Instance.GoldCoin}", new Vector2(50, 170), Color.White);
+            //spriteBatch.DrawString(_fontTA8BitBold, $"จำนวนไอเทม: {GameGlobals.Instance.ItemDatas.Count} ", new Vector2(50, -70), Color.White);
+            //spriteBatch.DrawString(_fontTA16Bit, $"ItemId: {GameGlobals.Instance.ItemDatas[0].ItemId} | Name: {GameGlobals.Instance.ItemDatas[0].Name} | Stackable: {GameGlobals.Instance.ItemDatas[0].Stackable}", new Vector2(50, -40), Color.White);
+            //spriteBatch.DrawString(_fontTA8BitBold, $"Inventory Test: {InventoryManager.Instance.Inventory.Count} {InventoryManager.Instance.GoldCoin}", new Vector2(50, 170), Color.White);
             //spriteBatch.DrawString(_fontMinecraft, $"ROWS: {GameGlobals.Instance.NUM_ROWS}", new Vector2(50, 200), Color.White);
 
             EntityManager.Instance.Draw(spriteBatch);

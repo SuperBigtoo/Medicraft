@@ -11,7 +11,7 @@ namespace Medicraft.Entities
 {
     public class Slime : Entity
     {
-        private readonly EntityStats _entityStats;
+        private readonly EntityData _entityStats;
         private enum SlimeColor
         {
             yellow,
@@ -20,7 +20,7 @@ namespace Medicraft.Entities
             blue
         }
 
-        public Slime(AnimatedSprite sprite, EntityStats entityStats, Vector2 scale)
+        public Slime(AnimatedSprite sprite, EntityData entityStats, Vector2 scale)
         {
             _entityStats = entityStats;
             Id = entityStats.Id;
@@ -54,7 +54,7 @@ namespace Medicraft.Entities
 
             RandomSlimeColor();
 
-            Sprite.Depth = 0.3f;
+            Sprite.Depth = 0.1f;
             Sprite.Play(SpriteName + "_walking");
         }
 
@@ -88,7 +88,7 @@ namespace Medicraft.Entities
 
             RandomSlimeColor();
 
-            Sprite.Depth = 0.3f;
+            Sprite.Depth = 0.1f;
             Sprite.Play(SpriteName + "_walking");
         }
 

@@ -23,7 +23,7 @@ namespace Medicraft.Systems
         public bool IsShowPath { set; get; }
         public int GameSaveIdex { private set; get; }
         public string GameSavePath { private set; get; }
-        public List<GameSave> GameSave { private set; get;}
+        public List<GameSaveData> GameSave { private set; get;}
         public int MaximunInventorySlot { private set; get; }
         public List<ItemData> ItemDatas { set; get; }
         public List<int> CollectedItemFeed { private set; get; }
@@ -68,7 +68,7 @@ namespace Medicraft.Systems
             IsDetectedItem = false;
             ShowInsufficientSign = false;
 
-            GameSave = new List<GameSave>();
+            GameSave = new List<GameSaveData>();
             GameSaveIdex = 0; // to be initial
             GameSavePath = "save/gamesaves.json";
 

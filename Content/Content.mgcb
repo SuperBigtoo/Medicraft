@@ -59,13 +59,13 @@
 #begin data/models/player_stats.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor
-/processorParam:ContentType=Medicraft.Data.PlayerStatsReader, Medicraft
+/processorParam:ContentType=Medicraft.Data.PlayerDataReader, Medicraft
 /build:data/models/player_stats.json
 
 #begin data/models/slime.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor
-/processorParam:ContentType=Medicraft.Data.EntityStatsReader, Medicraft
+/processorParam:ContentType=Medicraft.Data.EntityDataReader, Medicraft
 /build:data/models/slime.json
 
 #begin fonts/Mincraft_Ten/Mincraft_Ten_0.png
@@ -227,6 +227,51 @@
 
 #begin items/items_demo.sf
 /copy:items/items_demo.sf
+
+#begin tiledmaps/chapter_1/dun1.tmx
+/copy:tiledmaps/chapter_1/dun1.tmx
+
+#begin tiledmaps/chapter_1/Map1.tmx
+/copy:tiledmaps/chapter_1/Map1.tmx
+
+#begin tiledmaps/chapter_1/mon1.tmx
+/copy:tiledmaps/chapter_1/mon1.tmx
+
+#begin tiledmaps/chapter_1/rpg_maker_vx_rtp_tileset_by_telles0808.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:tiledmaps/chapter_1/rpg_maker_vx_rtp_tileset_by_telles0808.png
+
+#begin tiledmaps/chapter_1/TS1-2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:tiledmaps/chapter_1/TS1-2.png
+
+#begin tiledmaps/chapter_1/TS1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:tiledmaps/chapter_1/TS1.png
 
 #begin tiledmaps/demo/Demo.tmx
 /copy:tiledmaps/demo/Demo.tmx

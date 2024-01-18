@@ -44,7 +44,7 @@ namespace Medicraft.Systems
 
         public void Update(GameTime gameTime)
         {
-            var layerDepth = 0.8f;
+            var layerDepth = 0.85f;
 
             foreach (var gameObject in gameObjects.Where(e => !e.IsDestroyed))
             {
@@ -73,10 +73,7 @@ namespace Medicraft.Systems
         {
             get
             {
-                if (instance == null)
-                {
-                    instance = new ObjectManager();
-                }
+                instance ??= new ObjectManager();
                 return instance;
             }
         }
