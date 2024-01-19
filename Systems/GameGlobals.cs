@@ -25,6 +25,7 @@ namespace Medicraft.Systems
         public string GameSavePath { private set; get; }
         public List<GameSaveData> GameSave { private set; get;}
         public int MaximunInventorySlot { private set; get; }
+        public int BlankInventorySlot { private set; get; }
         public List<ItemData> ItemDatas { set; get; }
         public List<int> CollectedItemFeed { private set; get; }
         public int MaximumItemFeed { private set; get; }
@@ -73,6 +74,7 @@ namespace Medicraft.Systems
             GameSavePath = "save/gamesaves.json";
 
             MaximunInventorySlot = 64;
+            BlankInventorySlot = 99;
             ItemDatas = new List<ItemData>();
 
             CollectedItemFeed = new List<int>();

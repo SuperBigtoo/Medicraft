@@ -37,6 +37,21 @@ namespace Medicraft.Data
                 (double)camPos.Y
             };
 
+            // Set Current InventoryData
+            var inventoryItems = new List<InventoryItemData>();
+            foreach (var item in InventoryManager.Instance.Inventory.Values)
+            {
+                inventoryItems.Add(item);
+            }
+
+            var inventoryData = new InventoryData() {
+                GoldCoin = InventoryManager.Instance.GoldCoin,
+                Inventory = inventoryItems
+            };
+
+            PlayerManager.Instance.Player.GetStats().InventoryData = inventoryData;
+
+            // Set save name
             var saveName = "Save_" + dateTimeString;
 
             if (GameGlobals.Instance.GameSave.Count != 0)
@@ -65,6 +80,7 @@ namespace Medicraft.Data
                     PlayerData = PlayerManager.Instance.Player.GetStats(),
                 });
             }
+
             SaveFile(GameGlobals.Instance.GameSave, GameGlobals.Instance.GameSavePath);
         }
 

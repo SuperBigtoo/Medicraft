@@ -14,6 +14,9 @@
         public int Speed { get; set; }
         public double Evasion { get; set; }
         public double[] Position { get; set; }
+        public AbilityData Abilities { get; set; }
         public InventoryData InventoryData { get; set; }
+        public MedicineProgressionData MedicineProgressionData { get; set; }
+        public ChapterProgressionData ChapterProgressionData { get; set; }
     }
 }

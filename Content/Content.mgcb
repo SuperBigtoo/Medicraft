@@ -56,11 +56,11 @@
 /processorParam:ContentType=Medicraft.Data.ItemDataReader, Medicraft
 /build:data/models/items.json
 
-#begin data/models/player_stats.json
+#begin data/models/playerdata.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor
 /processorParam:ContentType=Medicraft.Data.PlayerDataReader, Medicraft
-/build:data/models/player_stats.json
+/build:data/models/playerdata.json
 
 #begin data/models/slime.json
 /importer:JsonContentImporter

@@ -122,17 +122,17 @@ namespace Medicraft.Systems
 
             spriteBatch.Draw(_herb1Texture, new Vector2(position.X + 400f, 0f) + _hudPosition, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(_fonts[0], $" {InventoryManager.Instance.Inventory["0"]}"
+            spriteBatch.DrawString(_fonts[0], $" {InventoryManager.Instance.Inventory["0"].Count}"
                 , new Vector2(position.X + 400f + 32f, 0f) + _hudPosition, Color.White);
 
             spriteBatch.Draw(_herb2Texture, new Vector2(position.X + 480f, 0f) + _hudPosition, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(_fonts[0], $" {InventoryManager.Instance.Inventory["1"]}"
+            spriteBatch.DrawString(_fonts[0], $" {InventoryManager.Instance.Inventory["1"].Count}"
                 , new Vector2(position.X + 480f + 32f, 0f) + _hudPosition, Color.White);
 
             spriteBatch.Draw(_drugTexture, new Vector2(position.X + 560f, 0f) + _hudPosition, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(_fonts[0], $" {InventoryManager.Instance.Inventory["2"]}"
+            spriteBatch.DrawString(_fonts[0], $" {InventoryManager.Instance.Inventory["2"].Count}"
                 , new Vector2(position.X + 560f + 32f, 0f) + _hudPosition, Color.White);
 
             spriteBatch.Draw(_coinTexture, new Vector2(position.X + 640f, 0f) + _hudPosition, null
@@ -206,7 +206,7 @@ namespace Medicraft.Systems
 
                     spriteBatch.Draw(_sprite, _transform);
 
-                    spriteBatch.DrawString(_fonts[2], $"{GameGlobals.Instance.ItemDatas[referId].Name} x 1"
+                    spriteBatch.DrawString(_fonts[2], $"{GameGlobals.Instance.ItemDatas[referId].Name} x 1" // Gotta chagne the number
                         , new Vector2(360f + 32f, 495f + (i * 40)) + _hudPosition, Color.White);
                 }
 

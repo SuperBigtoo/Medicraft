@@ -47,7 +47,7 @@ namespace Medicraft.Screens
             };
 
             // Initialize Player's Data !! Gonna be move to Load GameSave later !!
-            var initialPlayerStats = Content.Load<PlayerData>("data/models/player_stats");
+            var initialPlayerStats = Content.Load<PlayerData>("data/models/playerdata");
             var playerAnimation = Content.Load<SpriteSheet>("animation/mc/mc_spritesheet.sf", new JsonContentLoader());
             var playerSprite = new AnimatedSprite(playerAnimation);
             PlayerManager.Instance.Initialize(playerSprite, initialPlayerStats);

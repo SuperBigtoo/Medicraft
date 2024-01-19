@@ -8,14 +8,14 @@ namespace Medicraft.Systems
     {
         public readonly int MaximunSlot;
         public int GoldCoin { set; get; }
-        public Dictionary<string, int> Inventory { private set; get; }     
+        public Dictionary<string, InventoryItemData> Inventory { private set; get; }     
 
         private static InventoryManager instance;
 
         private InventoryManager()
         {
             MaximunSlot = GameGlobals.Instance.MaximunInventorySlot;
-            Inventory = new Dictionary<string, int>();
+            Inventory = new Dictionary<string, InventoryItemData>();
             GoldCoin = 0;
         }
 
@@ -25,10 +25,11 @@ namespace Medicraft.Systems
             GoldCoin = inventoryData.GoldCoin;
 
             // Setting Item in Inventory
-            for (int i = 0; i < inventoryData.Inventory.Length; i++)
+            for (int i = 0; i < inventoryData.Inventory.Count; i++)
             {
                 //if (inventoryData.Inventory.ElementAt(i) != 0)
-                    Inventory.Add(i.ToString(), inventoryData.Inventory.ElementAt(i));
+                    Inventory.Add(inventoryData.Inventory.ElementAt(i).ItemId.ToString()
+                        , inventoryData.Inventory.ElementAt(i));
             }
         }
 
@@ -38,11 +39,15 @@ namespace Medicraft.Systems
             if (Inventory.ContainsKey(referId.ToString())
                 && GameGlobals.Instance.ItemDatas[referId].Stackable)
             {
-                Inventory[referId.ToString()] += amount;
+                Inventory[referId.ToString()].Count += amount;
             }
             else
             {
-                Inventory.Add(referId.ToString(), amount);
+                Inventory.Add(referId.ToString(), new InventoryItemData() {
+                    ItemId = referId,
+                    Count = amount,
+                    Slot = GameGlobals.Instance.BlankInventorySlot
+                });
             }
         }
 
