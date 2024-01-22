@@ -12,12 +12,14 @@ namespace Medicraft.Systems.Spawners
         private readonly List<Entity> destroyedEntities;
         private readonly List<Entity> spawningEntities;
 
+        public float initialSpawnTime;
         public float spawnTime;
         public bool IsSpawn;
 
-        public MobSpawner(float spawnTime) 
+        public MobSpawner(float initialSpawnTime) 
         {
-            this.spawnTime = spawnTime;
+            this.initialSpawnTime = initialSpawnTime;
+            spawnTime = initialSpawnTime;
             IsSpawn = false;
             initialEntities = new List<Entity>();
             destroyedEntities = new List<Entity>();
@@ -85,7 +87,7 @@ namespace Medicraft.Systems.Spawners
                 }
 
                 IsSpawn = true;
-                spawnTime = 10f;
+                spawnTime = initialSpawnTime;
             }
         }
     }

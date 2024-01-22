@@ -13,6 +13,7 @@ namespace Medicraft.GameObjects
         {
             Sprite = sprite;
 
+            Type = GameObjectType.Item;
             Id = objectData.Id;
             ReferId = objectData.ReferId;
 
@@ -41,8 +42,10 @@ namespace Medicraft.GameObjects
         {
             Sprite = item.Sprite;
 
+            Type = item.Type;
             Id = item.Id;
             ReferId= item.ReferId;
+
             Name = item.Name;
             Description = item.Description;
 
@@ -70,8 +73,6 @@ namespace Medicraft.GameObjects
 
             if (IsCollected)
             {
-                HudSystem.AddFeed(ReferId);
-
                 // Adding item to Inventory... BUT the logic on how to check da item stack we'll see there...
                 InventoryManager.Instance.AddItem(ReferId, 1);
 

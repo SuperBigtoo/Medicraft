@@ -26,6 +26,17 @@ namespace Medicraft.GameObjects
                 BoundingCollection.Center = value;
             }
         }
+
+        public enum GameObjectType
+        {
+            Item,
+            QuestItem,
+            CraftingTable,
+            SaveTable,
+            WarpPoint
+        }
+
+        public GameObjectType Type { get; protected set; }
         public bool IsCollected { get; set; }
         public bool IsDestroyed { get; set; }
         public bool IsVisible { get; set; }

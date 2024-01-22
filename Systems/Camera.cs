@@ -11,10 +11,10 @@ namespace Medicraft.Systems
         private float zoom;
         private readonly float viewportWidth;
         private readonly float viewportHeight;
-        private const float MinZoom = 1.0f;
-        private const float MaxZoom = 1.0f;
-        private float targetZoom = 1.0f;
-        private float zoomSpeed = 0.25f;
+        //private const float MinZoom = 1.0f;
+        //private const float MaxZoom = 1.0f;
+        //private float targetZoom = 1.0f;
+        //private float zoomSpeed = 0.25f;
 
         public Camera(Viewport viewport)
         {

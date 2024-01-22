@@ -75,15 +75,15 @@ namespace Medicraft.Systems.PathFinding
         readonly List<Node> open = new List<Node>();
         readonly List<Node> closed = new List<Node>();
 
-        public AStar(int posX, int posY)
+        public AStar(int startPosX, int startPosY, int endPosX, int endPosY)
         {
             TILE_SIZE = GameGlobals.Instance.TILE_SIZE;
             NUM_ROWS = GameGlobals.Instance.NUM_ROWS;
             NUM_COLUMNS = GameGlobals.Instance.NUM_COLUMNS;
             map = (int[,])GameGlobals.Instance.Map.Clone();
 
-            SetStart(posX, posY);
-            SetEnd(PlayerManager.Instance.Player.Position.X, PlayerManager.Instance.Player.Position.Y);
+            SetStart(startPosX, startPosY);
+            SetEnd(endPosX, endPosY);
             Initialize();
             path = FindPath(tileMap, start, end);
         }
@@ -137,20 +137,12 @@ namespace Medicraft.Systems.PathFinding
             int posX = (int)(mobPos.X / TILE_SIZE);
             int posY = (int)(mobPos.Y / TILE_SIZE);
 
-            //if (map[posY, posX] == BLOCK)
-            //{
-            //    map[prevStart[0], prevStart[1]] = START;
-            //}
-            //else
-            //{
-            //    map[posY, posX] = START;
-            //}
             map[posY, posX] = START;
         }
 
         public void SetEnd(float x, float y)
         {
-            var playerPos = new Vector2(x, y + 75f);
+            var playerPos = new Vector2(x, y);
             int posX = (int)(playerPos.X / TILE_SIZE);
             int posY = (int)(playerPos.Y / TILE_SIZE);
 

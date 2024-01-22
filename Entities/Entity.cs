@@ -1,11 +1,14 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Sprites;
 using Microsoft.Xna.Framework.Input;
 using System;
 using Medicraft.Systems;
 using Medicraft.Systems.PathFinding;
+using System.Collections.Generic;
+using MonoGame.Extended.Entities;
 
 namespace Medicraft.Entities
 {
@@ -26,7 +29,7 @@ namespace Medicraft.Entities
         public string SpriteName;
         public AnimatedSprite Sprite;
         public Transform2 Transform;
-        public Vector2 Velocity;
+        public Vector2 Velocity, DamageNumVelocity;
         public Rectangle BoundingDetectCollisions; // For dectect collisions
         public double BoundingCollisionX, BoundingCollisionY;
         public CircleF BoundingHitBox;
@@ -36,8 +39,7 @@ namespace Medicraft.Entities
         protected int currentNodeIndex = 0; // Index of the current node in the path
         protected AStar PathFinding;
         protected Vector2 InitPos;
-        protected string CurrentAnimation;
-        public float AggroTime;
+        protected string CurrentAnimation;      
 
         public Vector2 Position
         {
@@ -62,15 +64,36 @@ namespace Medicraft.Entities
             }
         }
 
+        public enum EntityType
+        {
+            Hostile,
+            Friendly,
+            Playable
+        }
+        
+        public EntityType Type { get; protected set; }
+
+        // Time Conditions
+        public float AggroTime { get; set; }
         public float AttackingTime { get; set; }
-        public float StunTime { get; set; }
+        public float AttackedTime { get; set; }
+        public float KnockbackedTime { get; set; }
         public float DyingTime { get; set; }
+
+        public Color DamageNumColor { get; set; }
+        public float DamageNumScale { get; set; }
+        public float AlphaColor { get; set; }
+        public float ScaleFont { get; set; }
+
+        public bool IsKnockbackable { get; set; }
         public bool IsKnockback { get; set; }
         public bool IsDying { get; set; }
         public bool IsDestroyed { get; set; }
         public bool IsMoving { get; set; }
         public bool IsAttacking { get; set; }
+        public bool IsAttacked { get; set; }
         public bool IsDetectCollistionObject { get; set; }
+        public List<int> DamageNumbers { get; protected set; }
 
         protected Entity()
         {
@@ -91,16 +114,31 @@ namespace Medicraft.Entities
                 Rotation = 0f,
                 Position = Vector2.Zero
             };
+
             Velocity = Vector2.Zero;
+            DamageNumVelocity = Vector2.Zero;
+
+            AggroTime = 0f;
             AttackingTime = 0f;
-            StunTime = 0f;
+            AttackedTime = 0f;
+            KnockbackedTime = 0f;
             DyingTime = 0f;
+
+            DamageNumColor = Color.White;
+            DamageNumScale = 2f;
+            AlphaColor = 1f;
+            ScaleFont = 1f;
+
+            IsKnockbackable = true;
             IsKnockback = false;
             IsDying = false;
             IsDestroyed = false;
             IsMoving = false;
             IsAttacking = false;
+            IsAttacked = false;
             IsDetectCollistionObject = false;
+
+            DamageNumbers = new List<int>();
         }
 
         private Entity(Entity entity)
@@ -118,15 +156,25 @@ namespace Medicraft.Entities
             Evasion = entity.Evasion;
             Transform = entity.Transform;
             Velocity = entity.Velocity;
+            DamageNumVelocity = entity.DamageNumVelocity;
+            AggroTime = entity.AggroTime;
             AttackingTime = entity.AttackingTime;
-            StunTime = entity.StunTime;
+            AttackedTime = entity.AttackedTime;
+            KnockbackedTime = entity.KnockbackedTime;
             DyingTime = entity.DyingTime;
+            DamageNumColor = entity.DamageNumColor;
+            DamageNumScale = entity.DamageNumScale;
+            AlphaColor = entity.AlphaColor;
+            ScaleFont = entity.ScaleFont;
+            IsKnockbackable = entity.IsKnockbackable;
             IsKnockback = entity.IsKnockback;
             IsDying = entity.IsDying;
             IsDestroyed = entity.IsDestroyed;
             IsMoving = entity.IsMoving;
             IsAttacking = entity.IsAttacking;
+            IsAttacked = entity.IsAttacked;
             IsDetectCollistionObject = entity.IsDetectCollistionObject;
+            DamageNumbers = entity.DamageNumbers;
         }
 
         public virtual void Update(GameTime gameTime, KeyboardState keyboardCurrentState, KeyboardState keyboardPrevioseState
@@ -138,6 +186,8 @@ namespace Medicraft.Entities
             IsDestroyed = true;
         }
 
+        public virtual void SetDamageNumDirection() { }
+
         // Knowing this that MovementControl, CombatControl and orther methods below this is for Mobs only
 
         protected void MovementControl(float deltaSeconds)
@@ -147,101 +197,82 @@ namespace Medicraft.Entities
 
             if (!IsAttacking) CurrentAnimation = SpriteName + "_walking";  // Idle
 
-            // Aggro
+            // Setup Aggro time if detected player hit box
             if (BoundingDetection.Intersects(PlayerManager.Instance.Player.BoundingHitBox))
             {
                 AggroTime = 5f;
             }
 
-            if (AggroTime > 0)
+            // Checking for movement
+            if (!IsKnockback && !IsAttacking || !IsAttacked && !IsAttacking)
             {
-                if (!IsKnockback && !IsAttacking)
+                if (PathFinding.GetPath().Count != 0)
                 {
-                    if (PathFinding.GetPath().Count != 0)
+                    if (currentNodeIndex < PathFinding.GetPath().Count - 1)
                     {
-                        if (currentNodeIndex < PathFinding.GetPath().Count - 1)
+                        // Calculate direction to the next node
+                        var direction = new Vector2(PathFinding.GetPath()[currentNodeIndex + 1].col
+                            - PathFinding.GetPath()[currentNodeIndex].col, PathFinding.GetPath()[currentNodeIndex + 1].row
+                            - PathFinding.GetPath()[currentNodeIndex].row);
+                        direction.Normalize();
+
+                        // Move the character towards the next node
+                        Position += direction * walkSpeed;
+
+                        // Check Animation
+                        if (Position.Y >= (PlayerManager.Instance.Player.Position.Y + 50f))
                         {
-                            // Calculate direction to the next node
-                            var direction = new Vector2(PathFinding.GetPath()[currentNodeIndex + 1].col
-                                - PathFinding.GetPath()[currentNodeIndex].col, PathFinding.GetPath()[currentNodeIndex + 1].row
-                                - PathFinding.GetPath()[currentNodeIndex].row);
-                            direction.Normalize();
-
-                            // Move the character towards the next node
-                            Position += direction * walkSpeed;
-
-                            // Check Animation
-                            if (Position.Y >= (PlayerManager.Instance.Player.Position.Y + 50f))
-                            {
-                                CurrentAnimation = SpriteName + "_walking";     // Up
-                            }
-                            if (Position.Y < (PlayerManager.Instance.Player.Position.Y - 30f))
-                            {
-                                CurrentAnimation = SpriteName + "_walking";     // Down
-                            }
-                            if (Position.X > (PlayerManager.Instance.Player.Position.X + 50f))
-                            {
-                                CurrentAnimation = SpriteName + "_walking";     // Left
-                            }
-                            if (Position.X < (PlayerManager.Instance.Player.Position.X - 50f))
-                            {
-                                CurrentAnimation = SpriteName + "_walking";     // Right
-                            }
-
-                            // Check if the character has reached the next node
-                            if (Vector2.Distance(Position, new Vector2((PathFinding.GetPath()[currentNodeIndex + 1].col * 64) + 32
-                                , (PathFinding.GetPath()[currentNodeIndex + 1].row * 64) + 32)) < 1f)
-                            {
-                                currentNodeIndex++;
-                            }
-
-                            //System.Diagnostics.Debug.WriteLine($"Pos Mob: {Position.X} {Position.Y}");
-                            //System.Diagnostics.Debug.WriteLine($"Pos Node: {(_pathFinding.GetPath()[currentNodeIndex + 1].col * 64) + 32} {(_pathFinding.GetPath()[currentNodeIndex + 1].row * 64) + 32}");
+                            CurrentAnimation = SpriteName + "_walking";     // Up
                         }
-                        else if (PathFinding.GetPath().Count <= 4)
+                        if (Position.Y < (PlayerManager.Instance.Player.Position.Y - 30f))
                         {
-                            if (Position.Y >= (PlayerManager.Instance.Player.Position.Y + 50f))
-                            {
-                                CurrentAnimation = SpriteName + "_walking";     // Up
-                                Position -= new Vector2(0, walkSpeed);
-                            }
-
-                            if (Position.Y < (PlayerManager.Instance.Player.Position.Y - 30f))
-                            {
-                                CurrentAnimation = SpriteName + "_walking";     // Down
-                                Position += new Vector2(0, walkSpeed);
-                            }
-
-                            if (Position.X > (PlayerManager.Instance.Player.Position.X + 50f))
-                            {
-                                CurrentAnimation = SpriteName + "_walking";     // Left
-                                Position -= new Vector2(walkSpeed, 0);
-                            }
-
-                            if (Position.X < (PlayerManager.Instance.Player.Position.X - 50f))
-                            {
-                                CurrentAnimation = SpriteName + "_walking";     // Right
-                                Position += new Vector2(walkSpeed, 0);
-                            }
+                            CurrentAnimation = SpriteName + "_walking";     // Down
                         }
+                        if (Position.X > (PlayerManager.Instance.Player.Position.X + 50f))
+                        {
+                            CurrentAnimation = SpriteName + "_walking";     // Left
+                        }
+                        if (Position.X < (PlayerManager.Instance.Player.Position.X - 50f))
+                        {
+                            CurrentAnimation = SpriteName + "_walking";     // Right
+                        }
+
+                        // Check if the character has reached the next node
+                        if (Vector2.Distance(Position, new Vector2((PathFinding.GetPath()[currentNodeIndex + 1].col * 64) + 32
+                            , (PathFinding.GetPath()[currentNodeIndex + 1].row * 64) + 32)) < 1f)
+                        {
+                            currentNodeIndex++;
+                        }
+
+                        //System.Diagnostics.Debug.WriteLine($"Pos Mob: {Position.X} {Position.Y}");
+                        //System.Diagnostics.Debug.WriteLine($"Pos Node: {(_pathFinding.GetPath()[currentNodeIndex + 1].col * 64) + 32} {(_pathFinding.GetPath()[currentNodeIndex + 1].row * 64) + 32}");
                     }
-                }
-                AggroTime -= deltaSeconds;
-            }
+                    //else if (PathFinding.GetPath().Count <= 1)
+                    //{
+                    //    if (Position.Y >= (PlayerManager.Instance.Player.Position.Y + 50f))
+                    //    {
+                    //        CurrentAnimation = SpriteName + "_walking";     // Up
+                    //        Position -= new Vector2(0, walkSpeed);
+                    //    }
 
-            // Knockback
-            if (IsKnockback)
-            {
-                Position += Velocity * StunTime;
+                    //    if (Position.Y < (PlayerManager.Instance.Player.Position.Y - 30f))
+                    //    {
+                    //        CurrentAnimation = SpriteName + "_walking";     // Down
+                    //        Position += new Vector2(0, walkSpeed);
+                    //    }
 
-                if (StunTime > 0)
-                {
-                    StunTime -= deltaSeconds;
-                }
-                else
-                {
-                    IsKnockback = false;
-                    Velocity = Vector2.Zero;
+                    //    if (Position.X > (PlayerManager.Instance.Player.Position.X + 50f))
+                    //    {
+                    //        CurrentAnimation = SpriteName + "_walking";     // Left
+                    //        Position -= new Vector2(walkSpeed, 0);
+                    //    }
+
+                    //    if (Position.X < (PlayerManager.Instance.Player.Position.X - 50f))
+                    //    {
+                    //        CurrentAnimation = SpriteName + "_walking";     // Right
+                    //        Position += new Vector2(walkSpeed, 0);
+                    //    }
+                    //}
                 }
             }
 
@@ -257,6 +288,49 @@ namespace Medicraft.Entities
                 else
                 {
                     IsDetectCollistionObject = false;
+                }
+            }
+        }
+
+        protected void UpdateTimeConditions(float deltaSeconds)
+        {
+            // Decreasing Aggro time
+            if (AggroTime > 0)
+            {
+                AggroTime -= deltaSeconds;
+            }
+
+            // Knockback
+            if (IsKnockback)
+            {
+                if (IsKnockbackable) Position += Velocity * KnockbackedTime;
+
+                if (KnockbackedTime > 0)
+                {
+                    KnockbackedTime -= deltaSeconds;
+                }
+                else
+                {
+                    IsKnockback = false;                  
+                    Velocity = Vector2.Zero;
+                }
+            }
+
+            // Attacked
+            if (IsAttacked)
+            {
+                if (AttackedTime < 1)
+                {
+                    AttackedTime += deltaSeconds;
+                    AlphaColor -= deltaSeconds * 0.5f;
+                    ScaleFont -= deltaSeconds * 0.4f;
+                }
+                else
+                {
+                    IsAttacked = false;
+                    AlphaColor = 1f;
+                    ScaleFont = 1f;
+                    DamageNumVelocity = Vector2.Zero;
                 }
             }
         }
@@ -299,6 +373,14 @@ namespace Medicraft.Entities
                     totalDamage -= (int)(totalDamage * PlayerManager.Instance.Player.DEF_Percent);
 
                     PlayerManager.Instance.Player.HP -= totalDamage;
+
+                    PlayerManager.Instance.Player.SetDamageNumDirection();
+
+                    PlayerManager.Instance.Player.AddDamageNumbers(totalDamage, true);
+                    PlayerManager.Instance.Player.IsAttacked = true;
+                    PlayerManager.Instance.Player.AttackedTime = 0f;
+                    PlayerManager.Instance.Player.AlphaColor = 1f;
+                    PlayerManager.Instance.Player.ScaleFont = 1f;
                 }
             }
         }
@@ -349,6 +431,35 @@ namespace Medicraft.Entities
                         break;
                     }
                 }
+            }
+        }
+
+        public virtual void AddDamageNumbers(int damageNumbers, bool isCriticalAttack)
+        {
+            DamageNumbers.Add(damageNumbers);
+
+            if (isCriticalAttack)
+            {
+                DamageNumColor = Color.Red;
+                DamageNumScale = 2.25f;
+            }
+            else
+            {
+                DamageNumColor = Color.White;
+                DamageNumScale = 2f;
+            }
+        }
+
+        public virtual void DrawDamageNumbers(SpriteBatch spriteBatch)
+        {
+            if (DamageNumbers.Count != 0)
+            {
+                var n = DamageNumbers.Count - 1;
+
+                var font = GameGlobals.Instance.FontTA16Bit;
+
+                spriteBatch.DrawString(font, $"{DamageNumbers[n]}", (Position - DamageNumVelocity) - (DamageNumVelocity * AttackedTime)
+                    , DamageNumColor * AlphaColor, 0f, Vector2.Zero, DamageNumScale * ScaleFont, SpriteEffects.None, 0f);
             }
         }
 

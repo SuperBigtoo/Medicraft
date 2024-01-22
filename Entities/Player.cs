@@ -12,14 +12,18 @@ namespace Medicraft.Entities
 {
     public class Player : Entity
     {
-        private PlayerData _basePlayerStats;
+        private readonly PlayerData _basePlayerStats;
 
         private Vector2 _initHudPos, _initCamPos;
 
         private readonly float _normalHitSpeed, _burstSkillSpeed, _knockbackForce;
 
+        private bool _isCriticalAttack;
+
         public Player(AnimatedSprite sprite, PlayerData basePlayerStats)
         {
+            Type = EntityType.Playable;
+
             _basePlayerStats = basePlayerStats;
 
             Id = basePlayerStats.CharId;
@@ -86,8 +90,11 @@ namespace Medicraft.Entities
             // Combat Control
             CombatControl(deltaSeconds, keyboardCur, keyboardPrev, mouseCur, mousePrev);
 
-            // Collect Item
+            // Check interaction with GameObject
             CheckInteraction(keyboardCur, keyboardPrev);
+
+            // Update time conditions
+            UpdateTimeConditions(deltaSeconds);
 
             Sprite.Play(CurrentAnimation);
             Sprite.Update(deltaSeconds);
@@ -203,6 +210,8 @@ namespace Medicraft.Entities
                 CheckAttackDetection(ATK, 1f);
             }
 
+            // Normal Skill
+
             // Burst Skill
             if (keyboardCur.IsKeyDown(Keys.Q) && !IsAttacking)
             {
@@ -213,6 +222,8 @@ namespace Medicraft.Entities
 
                 CheckAttackDetection(ATK, 1f);
             }
+
+            // Passive Skill
 
             // Check attack timing
             if (AttackingTime > 0)
@@ -228,23 +239,35 @@ namespace Medicraft.Entities
             {
                 if (BoundingDetection.Intersects(entity.BoundingHitBox))
                 {
-                    if (!entity.IsDying)
+                    if (entity.Type == EntityType.Hostile)
                     {
-                        entity.HP -= TotalDamage(ATK, PercentATK, entity.DEF_Percent);
-
-                        var knockBackDirection = (entity.Position - new Vector2(0, 50)) - Position;
-                        knockBackDirection.Normalize();
-
-                        entity.Velocity = knockBackDirection * _knockbackForce;
-                        entity.IsKnockback = true;
-                        entity.StunTime = 0.2f;
-
-                        if (entity.HP <= 0)
+                        if (!entity.IsDying)
                         {
-                            entity.DyingTime = 1.3f;
-                            entity.IsDying = true;
+                            var totalDamage = TotalDamage(ATK, PercentATK, entity.DEF_Percent);
+                            entity.HP -= totalDamage;
+
+                            var knockBackDirection = (entity.Position - new Vector2(0, 50)) - Position;
+                            knockBackDirection.Normalize();
+                            entity.Velocity = knockBackDirection * _knockbackForce;
+
+                            entity.SetDamageNumDirection();
+
+                            //System.Diagnostics.Debug.WriteLine($"knockbackForce: {entity.Sprite.TextureRegion.Height * 2}");
+                            entity.AddDamageNumbers(totalDamage, _isCriticalAttack);
+                            entity.IsKnockback = true;
+                            entity.IsAttacked = true;
+                            entity.KnockbackedTime = 0.2f;
+                            entity.AttackedTime = 0f;
+                            entity.AlphaColor = 1f;
+                            entity.ScaleFont = 1f;
+
+                            if (entity.HP <= 0)
+                            {
+                                entity.DyingTime = 1.3f;
+                                entity.IsDying = true;
+                            }
                         }
-                    }
+                    } 
                 }
             }
         }
@@ -261,6 +284,11 @@ namespace Medicraft.Entities
             if (critChance <= Crit_Percent * 100)
             {
                 totalDamage += (int)(totalDamage * CritDMG_Percent);
+                _isCriticalAttack = true;
+            }
+            else
+            {
+                _isCriticalAttack = false;
             }
 
             // Calculate DEF
@@ -271,7 +299,7 @@ namespace Medicraft.Entities
 
         private void CheckInteraction(KeyboardState keyboardCur, KeyboardState keyboardPrev)
         {
-            GameGlobals.Instance.IsDetectedItem = false;
+            GameGlobals.Instance.IsDetectedGameObject = false;
 
             // Check Item Dectection
             var GameObject = ObjectManager.Instance.GameObjects;
@@ -279,7 +307,7 @@ namespace Medicraft.Entities
             {
                 if (BoundingCollection.Intersects(gameObject.BoundingCollection))
                 {
-                    GameGlobals.Instance.IsDetectedItem = true;
+                    GameGlobals.Instance.IsDetectedGameObject = true;
                     break;
                 }
             }
@@ -298,25 +326,45 @@ namespace Medicraft.Entities
             // Check Interaction
             if (keyboardCur.IsKeyUp(Keys.F) && keyboardPrev.IsKeyDown(Keys.F))
             {
-                if (GameGlobals.Instance.IsDetectedItem)
+                if (GameGlobals.Instance.IsDetectedGameObject)
                 {
-                    CheckItemDetection();
+                    CheckGameObject();
                     //CheckTableCraftDetection();
                 }
             }
         }
 
-        private void CheckItemDetection()
+        private void CheckGameObject()
         {
             foreach (var gameObject in ObjectManager.Instance.GameObjects)
             {
                 if (BoundingCollection.Intersects(gameObject.BoundingCollection))
-                {
-                    if (!gameObject.IsCollected
-                        && InventoryManager.Instance.Inventory.Count < InventoryManager.Instance.MaximunSlot)
+                {                   
+                    switch (gameObject.Type)
                     {
-                        gameObject.IsCollected = true;
+                        case GameObjects.GameObject.GameObjectType.Item:
+                            if (!gameObject.IsCollected
+                                && InventoryManager.Instance.Inventory.Count < InventoryManager.Instance.MaximunSlot)
+                            {
+                                gameObject.IsCollected = true;
+                            }
+                            break;
+
+                        case GameObjects.GameObject.GameObjectType.QuestItem:
+                            if (!gameObject.IsCollected) gameObject.IsCollected = true;
+                            break;
+
+                        case GameObjects.GameObject.GameObjectType.CraftingTable:
+                            break;
+
+                        case GameObjects.GameObject.GameObjectType.SaveTable:
+                            break;
+
+                        case GameObjects.GameObject.GameObjectType.WarpPoint:
+                            break;
                     }
+
+                    break;
                 }
             }
         }
@@ -334,7 +382,7 @@ namespace Medicraft.Entities
                         if (PlayerManager.Instance.Inventory["0"] >= 1
                             && PlayerManager.Instance.Inventory["1"] >= 1)
                         {
-                            HudSystem.AddFeed(2);
+                            HudSystem.AddFeed(2, 1);
 
                             if (PlayerManager.Instance.Inventory.ContainsKey("2"))
                             {
@@ -387,6 +435,17 @@ namespace Medicraft.Entities
                     break;
                 }
             }
+        }
+
+        public override void SetDamageNumDirection()
+        {
+            float randomFloat = (float)(new Random().NextDouble() * 0.5f) - 0.25f;
+            var NumDirection = Position
+                - new Vector2(Position.X + (Sprite.TextureRegion.Width / 2) * randomFloat
+                , Position.Y - (Sprite.TextureRegion.Height));
+            NumDirection.Normalize();
+
+            DamageNumVelocity = NumDirection * (Sprite.TextureRegion.Height / 2);
         }
 
         public PlayerData GetStats()

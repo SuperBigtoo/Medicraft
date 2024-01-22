@@ -13,12 +13,14 @@ namespace Medicraft.Systems.Spawners
         private readonly List<GameObject> destroyedObjects;
         private readonly List<GameObject> spawningObjects;
 
+        public float initialSpawnTime;
         public float spawnTime;
         public bool IsSpawn;
 
-        public ObjectSpawner(float spawnTime)
+        public ObjectSpawner(float initialSpawnTime)
         {
-            this.spawnTime = spawnTime;
+            this.initialSpawnTime = initialSpawnTime;
+            spawnTime = initialSpawnTime;
             IsSpawn = false;
             initialObjects = new List<GameObject>();
             destroyedObjects = new List<GameObject>();
@@ -82,7 +84,7 @@ namespace Medicraft.Systems.Spawners
                 }
 
                 IsSpawn = true;
-                spawnTime = 10f;
+                spawnTime = initialSpawnTime;
             }
         }
     }

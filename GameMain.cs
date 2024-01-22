@@ -11,8 +11,6 @@ namespace Medicraft
     public class GameMain : Game
     {
         private readonly GraphicsDeviceManager _graphics;
-        //private Camera Camera;
-
         private readonly EntityManager _entityManager;
         private readonly GameGlobals _singleton;
 

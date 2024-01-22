@@ -12,9 +12,8 @@ namespace Medicraft.Systems
     public class PlayerManager
     {
         public Player Player { private set; get; }
-        public PlayerData InitialPlayerStats { private set; get; }
+        public PlayerData InitialPlayerData { private set; get; }
         public Dictionary<string, int> Inventory { private set; get; }
-        public int GoldCoin { set; get; }
         public bool IsPlayerDead { private set; get; }
 
         private static PlayerManager instance;
@@ -27,14 +26,12 @@ namespace Medicraft.Systems
                 {"2", 0}
             };
 
-            GoldCoin = 0;
-
             IsPlayerDead = false;
         }
 
-        public void Initialize(AnimatedSprite playerSprite, PlayerData initialPlayerStats)
+        public void Initialize(AnimatedSprite playerSprite, PlayerData initialPlayerData)
         {
-            InitialPlayerStats = initialPlayerStats;
+            InitialPlayerData = initialPlayerData;
 
             if (GameGlobals.Instance.GameSave.Count != 0)
             {
@@ -54,20 +51,20 @@ namespace Medicraft.Systems
                 InventoryManager.Instance.InitializeInventory(inventoryData);
 
                 // Initial Player
-                var basePlayerStats = gameSave.PlayerData;
-                Player = new Player(playerSprite, basePlayerStats);
+                var basePlayerData = gameSave.PlayerData;
+                Player = new Player(playerSprite, basePlayerData);
             }
             else // In case New Game
             {
                 // Initial Player
-                Player = new Player(playerSprite, initialPlayerStats);
+                Player = new Player(playerSprite, initialPlayerData);
 
                 // Initialize camera position
-                GameGlobals.Instance.InitialCameraPos = new Vector2((float)initialPlayerStats.Position[0]
-                    , (float)initialPlayerStats.Position[1]);
+                GameGlobals.Instance.InitialCameraPos = new Vector2((float)initialPlayerData.Position[0]
+                    , (float)initialPlayerData.Position[1]);
 
                 // Initialize Player's Inventory
-                var inventoryData = initialPlayerStats.InventoryData;
+                var inventoryData = initialPlayerData.InventoryData;
                 InventoryManager.Instance.InitializeInventory(inventoryData);
             }
         }
@@ -141,8 +138,8 @@ namespace Medicraft.Systems
             if (IsPlayerDead)
             {
                 Player.HP = Player.GetStats().HP; // for testing
-                Player.Position = new Vector2((float)InitialPlayerStats.Position[0]
-                    , (float)InitialPlayerStats.Position[1]);
+                Player.Position = new Vector2((float)InitialPlayerData.Position[0]
+                    , (float)InitialPlayerData.Position[1]);
 
                 // Adjust HUD and camera positions
                 GameGlobals.Instance.HUDPosition = Player.Position - new Vector2(720, 450);

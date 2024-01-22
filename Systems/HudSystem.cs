@@ -100,6 +100,9 @@ namespace Medicraft.Systems
             // Draw HP mobs
             DrawHPMobs(spriteBatch);
 
+            // Draw Damage Numbers mobs & player
+            DrawDamageNumbers(spriteBatch);
+
             // Draw HUD Bar
             spriteBatch.FillRectangle(-720 + addingX, 0 + addingY, 2640
                 , 25, Color.Black * 0.4f);
@@ -120,20 +123,29 @@ namespace Medicraft.Systems
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
             spriteBatch.DrawString(_fonts[0], textString1, new Vector2(position.X, 0f) + _hudPosition, Color.White);
 
-            spriteBatch.Draw(_herb1Texture, new Vector2(position.X + 400f, 0f) + _hudPosition, null
+            if (InventoryManager.Instance.Inventory.TryGetValue("0", out InventoryItemData value_0))
+            {
+                spriteBatch.Draw(_herb1Texture, new Vector2(position.X + 400f, 0f) + _hudPosition, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(_fonts[0], $" {InventoryManager.Instance.Inventory["0"].Count}"
-                , new Vector2(position.X + 400f + 32f, 0f) + _hudPosition, Color.White);
+                spriteBatch.DrawString(_fonts[0], $" {value_0.Count}"
+                    , new Vector2(position.X + 400f + 32f, 0f) + _hudPosition, Color.White);
+            }
 
-            spriteBatch.Draw(_herb2Texture, new Vector2(position.X + 480f, 0f) + _hudPosition, null
+            if (InventoryManager.Instance.Inventory.TryGetValue("1", out InventoryItemData value_1))
+            {
+                spriteBatch.Draw(_herb2Texture, new Vector2(position.X + 480f, 0f) + _hudPosition, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(_fonts[0], $" {InventoryManager.Instance.Inventory["1"].Count}"
-                , new Vector2(position.X + 480f + 32f, 0f) + _hudPosition, Color.White);
+                spriteBatch.DrawString(_fonts[0], $" {value_1.Count}"
+                    , new Vector2(position.X + 480f + 32f, 0f) + _hudPosition, Color.White);
+            }
 
-            spriteBatch.Draw(_drugTexture, new Vector2(position.X + 560f, 0f) + _hudPosition, null
+            if (InventoryManager.Instance.Inventory.TryGetValue("2", out InventoryItemData value_2))
+            {
+                spriteBatch.Draw(_drugTexture, new Vector2(position.X + 560f, 0f) + _hudPosition, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(_fonts[0], $" {InventoryManager.Instance.Inventory["2"].Count}"
-                , new Vector2(position.X + 560f + 32f, 0f) + _hudPosition, Color.White);
+                spriteBatch.DrawString(_fonts[0], $" {value_2.Count}"
+                    , new Vector2(position.X + 560f + 32f, 0f) + _hudPosition, Color.White);
+            }
 
             spriteBatch.Draw(_coinTexture, new Vector2(position.X + 640f, 0f) + _hudPosition, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
@@ -143,7 +155,7 @@ namespace Medicraft.Systems
 
         private void DrawPressF(SpriteBatch spriteBatch)
         {
-            if (GameGlobals.Instance.IsDetectedItem)
+            if (GameGlobals.Instance.IsDetectedGameObject)
             {
                 spriteBatch.Draw(_pressFTexture, new Vector2(930f, 550f) + _hudPosition, null
                     , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
@@ -175,6 +187,18 @@ namespace Medicraft.Systems
             }
         }
 
+        private void DrawDamageNumbers(SpriteBatch spriteBatch)
+        {
+            var entities = EntityManager.Instance.Entities;
+
+            foreach (var entity in entities.Where(e => !e.IsDestroyed))
+            {
+                if (entity.IsAttacked) entity.DrawDamageNumbers(spriteBatch);
+            }
+
+            if (PlayerManager.Instance.Player.IsAttacked) PlayerManager.Instance.Player.DrawDamageNumbers(spriteBatch);
+        }
+
         private void DrawCollectedItem(SpriteBatch spriteBatch) 
         {
             if (GameGlobals.Instance.CollectedItemFeed.Count != 0)
@@ -188,7 +212,8 @@ namespace Medicraft.Systems
 
                 for (int i = 0; i < n; i++)
                 {
-                    var referId = GameGlobals.Instance.CollectedItemFeed[i];
+                    var referId = GameGlobals.Instance.CollectedItemFeed.ElementAt(i).ItemId;
+                    var amount = GameGlobals.Instance.CollectedItemFeed.ElementAt(i).Count;
                     var addingX = GameGlobals.Instance.HUDPosition.X;
                     var addingY = GameGlobals.Instance.HUDPosition.Y;
 
@@ -206,7 +231,7 @@ namespace Medicraft.Systems
 
                     spriteBatch.Draw(_sprite, _transform);
 
-                    spriteBatch.DrawString(_fonts[2], $"{GameGlobals.Instance.ItemDatas[referId].Name} x 1" // Gotta chagne the number
+                    spriteBatch.DrawString(_fonts[2], $"{GameGlobals.Instance.ItemDatas[referId].Name} x {amount}"
                         , new Vector2(360f + 32f, 495f + (i * 40)) + _hudPosition, Color.White);
                 }
 
@@ -226,9 +251,13 @@ namespace Medicraft.Systems
             GameGlobals.Instance.ShowInsufficientSign = true;
         }
 
-        public static void AddFeed(int ReferId)
+        public static void AddFeed(int referId, int amount)
         {
-            GameGlobals.Instance.CollectedItemFeed.Add(ReferId);
+            GameGlobals.Instance.CollectedItemFeed.Add(new InventoryItemData() {
+                ItemId = referId,
+                Count = amount
+            });
+
             GameGlobals.Instance.DisplayFeedTime = GameGlobals.Instance.MaximumDisplayFeedTime;
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Medicraft.Data.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.BitmapFonts;
 using System.Collections.Generic;
 
 namespace Medicraft.Systems
@@ -18,7 +19,7 @@ namespace Medicraft.Systems
         public bool SwitchDetectBox { set; get; }
         public bool IsShowDetectBox { set; get; }
         public bool SwitchShowPath { set; get; }
-        public bool IsDetectedItem { set; get; }
+        public bool IsDetectedGameObject { set; get; }
         public bool ShowInsufficientSign { set; get; } 
         public bool IsShowPath { set; get; }
         public int GameSaveIdex { private set; get; }
@@ -26,8 +27,9 @@ namespace Medicraft.Systems
         public List<GameSaveData> GameSave { private set; get;}
         public int MaximunInventorySlot { private set; get; }
         public int BlankInventorySlot { private set; get; }
+        public BitmapFont FontTA16Bit { set; get; }
         public List<ItemData> ItemDatas { set; get; }
-        public List<int> CollectedItemFeed { private set; get; }
+        public List<InventoryItemData> CollectedItemFeed { private set; get; }
         public int MaximumItemFeed { private set; get; }
         public float DisplayFeedTime { set; get; }
         public float MaximumDisplayFeedTime { private set; get; }
@@ -66,7 +68,7 @@ namespace Medicraft.Systems
             SwitchShowPath = false;
             IsShowPath = false;
 
-            IsDetectedItem = false;
+            IsDetectedGameObject = false;
             ShowInsufficientSign = false;
 
             GameSave = new List<GameSaveData>();
@@ -77,7 +79,7 @@ namespace Medicraft.Systems
             BlankInventorySlot = 99;
             ItemDatas = new List<ItemData>();
 
-            CollectedItemFeed = new List<int>();
+            CollectedItemFeed = new List<InventoryItemData>();
             MaximumItemFeed = 6;
             DisplayFeedTime = 0;
             MaximumDisplayFeedTime = 6f;

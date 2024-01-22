@@ -4,6 +4,7 @@ using Medicraft.Systems.PathFinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using MonoGame.Extended.Entities;
 using MonoGame.Extended.Sprites;
 using System;
 
@@ -22,7 +23,10 @@ namespace Medicraft.Entities
 
         public Slime(AnimatedSprite sprite, EntityData entityStats, Vector2 scale)
         {
+            Type = EntityType.Hostile;
+
             _entityStats = entityStats;
+
             Id = entityStats.Id;
             Name = entityStats.Name;
             ATK = entityStats.ATK;
@@ -30,8 +34,11 @@ namespace Medicraft.Entities
             DEF_Percent = (float)entityStats.DEF_Percent;
             Speed = entityStats.Speed;
             Evasion = (float)entityStats.Evasion;
+
             Sprite = sprite;
             AggroTime = 0f;
+
+            IsKnockbackable = true;
 
             var position = new Vector2((float)entityStats.Position[0], (float)entityStats.Position[1]);
             Transform = new Transform2
@@ -60,7 +67,10 @@ namespace Medicraft.Entities
 
         private Slime(Slime slime)
         {
+            Type = slime.Type;
+
             _entityStats = slime._entityStats;
+
             Id = _entityStats.Id;
             Name = _entityStats.Name;
             ATK = _entityStats.ATK;
@@ -68,8 +78,11 @@ namespace Medicraft.Entities
             DEF_Percent = (float)_entityStats.DEF_Percent;
             Speed = _entityStats.Speed;
             Evasion = (float)_entityStats.Evasion;
+
             Sprite = slime.Sprite;
             AggroTime = slime.AggroTime;
+
+            IsKnockbackable = slime.IsKnockbackable;
 
             Transform = new Transform2
             {
@@ -131,7 +144,17 @@ namespace Medicraft.Entities
 
             if (!IsDying)
             {
-                PathFinding = new AStar((int)Position.X, (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY));
+                // Setup Path Finding
+                if (AggroTime > 0)
+                {
+                    PathFinding = new AStar((int)Position.X, (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY)
+                        , (int)PlayerManager.Instance.Player.Position.X, (int)PlayerManager.Instance.Player.Position.Y + 75);
+                }
+                else
+                {
+                    PathFinding = new AStar((int)Position.X, (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY)
+                        , (int)_entityStats.Position[0], (int)_entityStats.Position[1]);
+                }
 
                 // Combat Control
                 CombatControl(deltaSeconds);
@@ -153,8 +176,6 @@ namespace Medicraft.Entities
                 }
                 else
                 {
-                    HudSystem.AddFeed(1);
-
                     InventoryManager.Instance.AddItem(1, 1);
 
                     InventoryManager.Instance.GoldCoin += 10;
@@ -162,6 +183,9 @@ namespace Medicraft.Entities
                     Destroy();
                 }
             }
+
+            // Update time conditions
+            UpdateTimeConditions(deltaSeconds);
 
             Sprite.Play(CurrentAnimation);
             Sprite.Update(deltaSeconds);
@@ -184,6 +208,17 @@ namespace Medicraft.Entities
                 pixelTexture.SetData(new Color[] { Color.White });
                 spriteBatch.Draw(pixelTexture, BoundingDetectCollisions, Color.Red);
             }
+        }
+
+        public override void SetDamageNumDirection()
+        {
+            float randomFloat = (float)(new Random().NextDouble() * 1.0f) - 0.75f;
+            var NumDirection = Position
+                - new Vector2(Position.X + Sprite.TextureRegion.Width * randomFloat
+                , Position.Y - (Sprite.TextureRegion.Height * 1.50f));
+            NumDirection.Normalize();
+
+            DamageNumVelocity = NumDirection * (Sprite.TextureRegion.Height * 2);
         }
     }
 }

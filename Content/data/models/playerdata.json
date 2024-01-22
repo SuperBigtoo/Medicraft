@@ -10,7 +10,7 @@
   "CritDMG_Percent": 0.5,
   "Speed": 300,
   "Evasion": 0.1,
-  "Position": [ 1042, 878 ],
+  "Position": [ 1167, 1557 ],
   "Abilities": {
     "NormalSkillLevel": 1,
     "BurstSkillLevel": 1,
@@ -27,11 +27,6 @@
       {
         "ItemId": 1,
         "Count": 2,
-        "Slot": 99
-      },
-      {
-        "ItemId": 2,
-        "Count": 1,
         "Slot": 99
       }
     ]
