@@ -8,7 +8,6 @@ using System;
 using Medicraft.Systems;
 using Medicraft.Systems.PathFinding;
 using System.Collections.Generic;
-using MonoGame.Extended.Entities;
 
 namespace Medicraft.Entities
 {
@@ -244,8 +243,7 @@ namespace Medicraft.Entities
                             currentNodeIndex++;
                         }
 
-                        //System.Diagnostics.Debug.WriteLine($"Pos Mob: {Position.X} {Position.Y}");
-                        //System.Diagnostics.Debug.WriteLine($"Pos Node: {(_pathFinding.GetPath()[currentNodeIndex + 1].col * 64) + 32} {(_pathFinding.GetPath()[currentNodeIndex + 1].row * 64) + 32}");
+                        //System.Diagnostics.Debug.WriteLine($"Pos Mob: {Position.X} {Position.Y}");          
                     }
                     //else if (PathFinding.GetPath().Count <= 1)
                     //{

@@ -183,6 +183,7 @@ namespace Medicraft.Entities
                 }
             }
 
+            // Update time conditions
             UpdateTimeConditions(deltaSeconds);
 
             Sprite.Play(CurrentAnimation);
@@ -206,6 +207,17 @@ namespace Medicraft.Entities
                 pixelTexture.SetData(new Color[] { Color.White });
                 spriteBatch.Draw(pixelTexture, BoundingDetectCollisions, Color.Red);
             }
+        }
+
+        public override void SetDamageNumDirection()
+        {
+            float randomFloat = (float)(new Random().NextDouble() * 1.0f) - 0.75f;
+            var NumDirection = Position
+                - new Vector2(Position.X + Sprite.TextureRegion.Width * randomFloat
+                , Position.Y - (Sprite.TextureRegion.Height * 1.50f));
+            NumDirection.Normalize();
+
+            DamageNumVelocity = NumDirection * (Sprite.TextureRegion.Height * 2);
         }
     }
 }

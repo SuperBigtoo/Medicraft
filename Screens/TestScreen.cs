@@ -54,6 +54,7 @@ namespace Medicraft.Screens
 
             // Load Tile Map
             //_mapManager = new TiledMapBackgroundManager(Content, GraphicsDevice, Window, "tiledmaps/test1/level02");
+
             var _tileSetsDemo = new Texture2D[]     // The maximum number of TileSet is 5
             {
                 Content.Load<Texture2D>("tiledmaps/demo/rpg_maker_vx_rtp_tileset_by_telles0808"),
