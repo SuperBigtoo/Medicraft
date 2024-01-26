@@ -51,7 +51,7 @@ namespace Medicraft.Entities
             BoundingCollisionY = 5;
             BoundingDetectCollisions = new Rectangle((int)((int)Position.X - Sprite.TextureRegion.Width / BoundingCollisionX)
                 , (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY)
-                , (int)(Sprite.TextureRegion.Width / 3), Sprite.TextureRegion.Height / 5);
+                , (int)(Sprite.TextureRegion.Width / 2), (int)(Sprite.TextureRegion.Height / 2));
 
             BoundingHitBox = new CircleF(Position, 20);
 
@@ -168,6 +168,9 @@ namespace Medicraft.Entities
             {
                 // Dying time before destroy
                 CurrentAnimation = SpriteName + "_dying";
+
+                // Check Object Collsion
+                CheckCollision();
 
                 if (DyingTime > 0)
                 {

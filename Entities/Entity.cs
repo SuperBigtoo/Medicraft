@@ -194,6 +194,9 @@ namespace Medicraft.Entities
             var walkSpeed = deltaSeconds * Speed;
             InitPos = Position;
 
+            // Check Object Collsion
+            CheckCollision();
+
             if (!IsAttacking) CurrentAnimation = SpriteName + "_walking";  // Idle
 
             // Setup Aggro time if detected player hit box
@@ -273,15 +276,19 @@ namespace Medicraft.Entities
                     //}
                 }
             }
+        }
 
-            // Detect Object Collsion
+        protected virtual void CheckCollision()
+        {
             var ObjectOnTile = GameGlobals.Instance.CollistionObject;
             foreach (var rect in ObjectOnTile)
             {
-                if (rect.Intersects(BoundingDetectCollisions))
+                if (BoundingDetectCollisions.Intersects(rect))
                 {
                     IsDetectCollistionObject = true;
                     Position = InitPos;
+                    Velocity = Vector2.Zero;
+                    break;
                 }
                 else
                 {

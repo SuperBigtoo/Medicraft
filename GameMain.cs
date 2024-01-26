@@ -40,7 +40,7 @@ namespace Medicraft
             {
                 foreach (var save in gameSave)
                 {
-                    _singleton.GameSave.Add(save);
+                    GameGlobals.Instance.GameSave.Add(save);
                 }
             }
 

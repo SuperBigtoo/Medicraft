@@ -1,11 +1,11 @@
-﻿using Medicraft.Data.Models;
+﻿using Medicraft.Data;
+using Medicraft.Data.Models;
 using Medicraft.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.ViewportAdapters;
 using System.Collections.Generic;
 
 namespace Medicraft.Systems
@@ -64,6 +64,8 @@ namespace Medicraft.Systems
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Camera = new Camera(GraphicsDevice.Viewport);
             Window = game.Window;
+
+            
 
             // Load Item Datas
             GameGlobals.Instance.ItemDatas = Content.Load<List<ItemData>>("data/models/items");

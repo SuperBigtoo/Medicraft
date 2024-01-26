@@ -172,25 +172,31 @@ namespace Medicraft.Entities
                     CurrentAnimation = "idle";
                 }
 
-                // Detect Object Collsion
-                var ObjectOnTile = GameGlobals.Instance.CollistionObject;
-                foreach (var rect in ObjectOnTile)
-                {
-                    if (rect.Intersects(BoundingDetectCollisions))
-                    {   
-                        IsDetectCollistionObject = true;
-                        Position = InitPos;
-                        GameGlobals.Instance.HUDPosition = _initHudPos;
-                        GameGlobals.Instance.AddingCameraPos = _initCamPos;
-                    }
-                    else
-                    {
-                        IsDetectCollistionObject = false;
-                    }
-                }
+                // Check Object Collsion
+                CheckCollision();
 
                 // Update Camera Position
                 ScreenManager.Instance.Camera.Update(deltaSeconds);
+            }
+        }
+
+        protected override void CheckCollision()
+        {
+            var ObjectOnTile = GameGlobals.Instance.CollistionObject;
+            foreach (var rect in ObjectOnTile)
+            {
+                if (BoundingDetectCollisions.Intersects(rect))
+                {
+                    IsDetectCollistionObject = true;
+                    Position = InitPos;
+                    GameGlobals.Instance.HUDPosition = _initHudPos;
+                    GameGlobals.Instance.AddingCameraPos = _initCamPos;
+                    break;
+                }
+                else
+                {
+                    IsDetectCollistionObject = false;
+                }
             }
         }
 
