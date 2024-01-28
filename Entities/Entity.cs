@@ -92,7 +92,7 @@ namespace Medicraft.Entities
         public bool IsAttacking { get; set; }
         public bool IsAttacked { get; set; }
         public bool IsDetectCollistionObject { get; set; }
-        public List<int> DamageNumbers { get; protected set; }
+        public List<string> DamageNumbers { get; protected set; }
 
         protected Entity()
         {
@@ -137,7 +137,7 @@ namespace Medicraft.Entities
             IsAttacked = false;
             IsDetectCollistionObject = false;
 
-            DamageNumbers = new List<int>();
+            DamageNumbers = new List<string>();
         }
 
         private Entity(Entity entity)
@@ -374,20 +374,53 @@ namespace Medicraft.Entities
             {
                 if (PlayerManager.Instance.Player.HP > 0)
                 {
-                    int totalDamage = ATK;
-                    totalDamage -= (int)(totalDamage * PlayerManager.Instance.Player.DEF_Percent);
+                    int totalDamage = TotalDamage(ATK, PlayerManager.Instance.Player.DEF_Percent
+                        , PlayerManager.Instance.Player.Evasion);
 
-                    PlayerManager.Instance.Player.HP -= totalDamage;
+                    var isAttackMissed = false;
+
+                    if (totalDamage == 0)
+                    {
+                        isAttackMissed = true;
+                    }
+                    else
+                    {
+                        PlayerManager.Instance.Player.HP -= totalDamage;
+                    }                 
 
                     PlayerManager.Instance.Player.SetDamageNumDirection();
 
-                    PlayerManager.Instance.Player.AddDamageNumbers(totalDamage, true);
+                    PlayerManager.Instance.Player.AddDamageNumbers(totalDamage.ToString(), true, isAttackMissed);
                     PlayerManager.Instance.Player.IsAttacked = true;
                     PlayerManager.Instance.Player.AttackedTime = 0f;
                     PlayerManager.Instance.Player.AlphaColor = 1f;
                     PlayerManager.Instance.Player.ScaleFont = 1f;
                 }
             }
+        }
+
+        protected virtual int TotalDamage(int ATK, float DefPercent, float EvasionPercent)
+        {
+            var random = new Random();
+
+            // Default total damage
+            int totalDamage = ATK;
+
+            // Check evasion
+            int evaChance = random.Next(1, 101);
+            if (evaChance <= EvasionPercent * 100)
+            {
+                // if Attack Missed
+                totalDamage = 0;
+            }
+            else
+            {
+                // if Attacked
+                // Calculate DEF
+                totalDamage -= (int)(totalDamage * DefPercent);
+            }
+
+            return totalDamage;
         }
 
         protected virtual void UpdateLayerDepth(float playerDepth, float topDepth, float middleDepth, float bottomDepth)
@@ -405,53 +438,60 @@ namespace Medicraft.Entities
                     Sprite.Depth = playerDepth + 0.00001f; // Behide Player
                 }
             }
-            else
+
+            var TopLayerObject = GameGlobals.Instance.TopLayerObject;
+            foreach (var obj in TopLayerObject)
             {
-                var TopLayerObject = GameGlobals.Instance.TopLayerObject;
-                foreach (var obj in TopLayerObject)
+                if (obj.Intersects(BoundingDetectCollisions))
                 {
-                    if (obj.Intersects(BoundingDetectCollisions))
-                    {
-                        Sprite.Depth = middleDepth;
-                        break; // Exit the loop as soon as an intersection is found
-                    }
+                    Sprite.Depth = middleDepth;
+                    break; // Exit the loop as soon as an intersection is found
                 }
+            }
 
-                var MiddleLayerObject = GameGlobals.Instance.MiddleLayerObject;
-                foreach (var obj in MiddleLayerObject)
+            var MiddleLayerObject = GameGlobals.Instance.MiddleLayerObject;
+            foreach (var obj in MiddleLayerObject)
+            {
+                if (obj.Intersects(BoundingDetectCollisions))
                 {
-                    if (obj.Intersects(BoundingDetectCollisions))
-                    {
-                        Sprite.Depth = bottomDepth;
-                        break;
-                    }
+                    Sprite.Depth = bottomDepth;
+                    break;
                 }
+            }
 
-                var BottomLayerObject = GameGlobals.Instance.BottomLayerObject;
-                foreach (var obj in BottomLayerObject)
+            var BottomLayerObject = GameGlobals.Instance.BottomLayerObject;
+            foreach (var obj in BottomLayerObject)
+            {
+                if (obj.Intersects(BoundingDetectCollisions))
                 {
-                    if (obj.Intersects(BoundingDetectCollisions))
-                    {
-                        Sprite.Depth = bottomDepth + 0.2f;
-                        break;
-                    }
+                    Sprite.Depth = bottomDepth + 0.2f;
+                    break;
                 }
             }
         }
 
-        public virtual void AddDamageNumbers(int damageNumbers, bool isCriticalAttack)
+        public virtual void AddDamageNumbers(string damageNumbers, bool isCriticalAttack, bool isAttackMissed)
         {
-            DamageNumbers.Add(damageNumbers);
-
-            if (isCriticalAttack)
+            if (isAttackMissed)
             {
-                DamageNumColor = Color.Red;
-                DamageNumScale = 2.25f;
+                DamageNumbers.Add("Miss");
+                DamageNumColor = Color.Yellow;
+                DamageNumScale = 2.15f;
             }
             else
             {
-                DamageNumColor = Color.White;
-                DamageNumScale = 2f;
+                DamageNumbers.Add(damageNumbers);
+
+                if (isCriticalAttack)
+                {
+                    DamageNumColor = Color.Red;
+                    DamageNumScale = 2.25f;
+                }
+                else
+                {
+                    DamageNumColor = Color.White;
+                    DamageNumScale = 2f;
+                }
             }
         }
 

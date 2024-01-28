@@ -9,12 +9,19 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
-
   </PropertyGroup>
   <PropertyGroup>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="GeonBit.UI\**" />
+    <Compile Remove="TiledSharp\**" />
+    <EmbeddedResource Remove="GeonBit.UI\**" />
+    <EmbeddedResource Remove="TiledSharp\**" />
+    <None Remove="GeonBit.UI\**" />
+    <None Remove="TiledSharp\**" />
+  </ItemGroup>
   <ItemGroup>
     <None Remove="Content\Content.mgcb" />
     <None Remove="Icon.ico" />
@@ -55,6 +62,10 @@
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
     <PackageReference Include="Myra" Version="1.5.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="GeonBit.UI\GeonBit.UI.csproj" />
+    <ProjectReference Include="TiledSharp\TiledSharp.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Content\animation\MCSpriteSheet.sf">

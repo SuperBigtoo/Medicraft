@@ -1,10 +1,5 @@
-﻿using Medicraft.Data;
-using Medicraft.Data.Models;
-using Medicraft.Systems;
+﻿using Medicraft.Systems;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
 
 namespace Medicraft
 {
@@ -33,16 +28,6 @@ namespace Medicraft
             //    , (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2) - (_graphics.PreferredBackBufferHeight / 2));
             //_graphics.ToggleFullScreen();
             _graphics.ApplyChanges();
-
-            // Load GameSave
-            var gameSave = JsonFileManager.LoadFlie(GameGlobals.Instance.GameSavePath);
-            if (gameSave.Count != 0)
-            {
-                foreach (var save in gameSave)
-                {
-                    GameGlobals.Instance.GameSave.Add(save);
-                }
-            }
 
             base.Initialize();
         }

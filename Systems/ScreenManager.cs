@@ -65,7 +65,15 @@ namespace Medicraft.Systems
             Camera = new Camera(GraphicsDevice.Viewport);
             Window = game.Window;
 
-            
+            // Load GameSave
+            var gameSave = JsonFileManager.LoadFlie(GameGlobals.Instance.GameSavePath);
+            if (gameSave.Count != 0)
+            {
+                foreach (var save in gameSave)
+                {
+                    GameGlobals.Instance.GameSave.Add(save);
+                }
+            }
 
             // Load Item Datas
             GameGlobals.Instance.ItemDatas = Content.Load<List<ItemData>>("data/models/items");

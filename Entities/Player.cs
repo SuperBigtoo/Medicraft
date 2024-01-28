@@ -18,7 +18,7 @@ namespace Medicraft.Entities
 
         private readonly float _normalHitSpeed, _burstSkillSpeed, _knockbackForce;
 
-        private bool _isCriticalAttack;
+        private bool _isCriticalAttack, _isAttackMissed;
 
         public Player(AnimatedSprite sprite, PlayerData basePlayerStats)
         {
@@ -39,6 +39,7 @@ namespace Medicraft.Entities
             _knockbackForce = 50f;      // Stat
 
             var position = new Vector2((float)basePlayerStats.Position[0], (float)basePlayerStats.Position[1]);
+            
             Transform = new Transform2
             {
                 Scale = Vector2.One,
@@ -50,7 +51,7 @@ namespace Medicraft.Entities
             BoundingCollisionY = 2.60;
             BoundingDetectCollisions = new Rectangle((int)((int)Position.X - sprite.TextureRegion.Width / BoundingCollisionX)
                 , (int)((int)Position.Y + sprite.TextureRegion.Height / BoundingCollisionY)
-                , (int)(sprite.TextureRegion.Width / 8), sprite.TextureRegion.Height / 8);
+                , sprite.TextureRegion.Width / 8, sprite.TextureRegion.Height / 8);
 
             BoundingHitBox = new CircleF(Position + new Vector2(0f, 32f), 40f);
 
@@ -205,8 +206,9 @@ namespace Medicraft.Entities
             , MouseState mouseCur, MouseState mousePrev)
         {
             // Normal Hit
-            if (mouseCur.LeftButton == ButtonState.Pressed
-                && mousePrev.LeftButton == ButtonState.Released && !IsAttacking)
+            if (!IsAttacking && mouseCur.LeftButton == ButtonState.Pressed
+                && mousePrev.LeftButton == ButtonState.Released
+                || !IsAttacking && keyboardCur.IsKeyDown(Keys.Space))
             {
                 CurrentAnimation = "attacking_normal_hit";
 
@@ -239,7 +241,7 @@ namespace Medicraft.Entities
             else IsAttacking = false;
         }
 
-        private void CheckAttackDetection(int ATK, float PercentATK)
+        private void CheckAttackDetection(int Atk, float HitPercent)
         {
             foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed))
             {
@@ -249,20 +251,24 @@ namespace Medicraft.Entities
                     {
                         if (!entity.IsDying)
                         {
-                            var totalDamage = TotalDamage(ATK, PercentATK, entity.DEF_Percent);
-                            entity.HP -= totalDamage;
+                            var totalDamage = TotalDamage(Atk, HitPercent, entity.DEF_Percent, entity.Evasion);
+                            
+                            if (!_isAttackMissed) entity.HP -= totalDamage;
 
                             var knockBackDirection = (entity.Position - new Vector2(0, 50)) - Position;
                             knockBackDirection.Normalize();
                             entity.Velocity = knockBackDirection * _knockbackForce;
 
                             entity.SetDamageNumDirection();
+                            entity.AddDamageNumbers(totalDamage.ToString(), _isCriticalAttack, _isAttackMissed);
 
-                            //System.Diagnostics.Debug.WriteLine($"knockbackForce: {entity.Sprite.TextureRegion.Height * 2}");
-                            entity.AddDamageNumbers(totalDamage, _isCriticalAttack);
-                            entity.IsKnockback = true;
-                            entity.IsAttacked = true;
-                            entity.KnockbackedTime = 0.2f;
+                            if (!_isAttackMissed)
+                            {
+                                entity.IsKnockback = true;
+                                entity.KnockbackedTime = 0.2f;
+                            }
+                         
+                            entity.IsAttacked = true;                          
                             entity.AttackedTime = 0f;
                             entity.AlphaColor = 1f;
                             entity.ScaleFont = 1f;
@@ -278,27 +284,41 @@ namespace Medicraft.Entities
             }
         }
 
-        private int TotalDamage(int ATK, float PercentATK, float PercentDEF)
+        private int TotalDamage(int ATK, float HitPercent, float DefPercent, float EvasionPercent)
         {
-            // Default case
-            int totalDamage = (int)(ATK * PercentATK);
-
-            // Check crit chance
             var random = new Random();
-            int critChance = random.Next(1, 101);
 
-            if (critChance <= Crit_Percent * 100)
+            // Default total damage
+            int totalDamage = (int)(ATK * HitPercent);
+
+            // Check evasion
+            int evaChance = random.Next(1, 101);
+            if (evaChance <= EvasionPercent * 100)
             {
-                totalDamage += (int)(totalDamage * CritDMG_Percent);
-                _isCriticalAttack = true;
+                // if Attack Missed
+                totalDamage = 0;
+                _isAttackMissed = true;
             }
             else
             {
-                _isCriticalAttack = false;
-            }
+                // if Attacked
+                _isAttackMissed = false;
 
-            // Calculate DEF
-            totalDamage -= (int)(totalDamage * PercentDEF);
+                // Check crit chance           
+                int critChance = random.Next(1, 101);
+                if (critChance <= Crit_Percent * 100)
+                {
+                    totalDamage += (int)(totalDamage * CritDMG_Percent);
+                    _isCriticalAttack = true;
+                }
+                else
+                {
+                    _isCriticalAttack = false;
+                }
+
+                // Calculate DEF
+                totalDamage -= (int)(totalDamage * DefPercent);
+            }                     
 
             return totalDamage;
         }
@@ -378,33 +398,33 @@ namespace Medicraft.Entities
         // Crafting TBD
         private void CheckTableCraftDetection()
         {
-            if (GameGlobals.Instance.TableCraft.Count != 0)
-            {
-                var TableCraft = GameGlobals.Instance.TableCraft;
-                foreach (var obj in TableCraft)
-                {
-                    if (BoundingDetectCollisions.Intersects(obj))
-                    {
-                        if (PlayerManager.Instance.Inventory["0"] >= 1
-                            && PlayerManager.Instance.Inventory["1"] >= 1)
-                        {
-                            HudSystem.AddFeed(2, 1);
+            //if (GameGlobals.Instance.TableCraft.Count != 0)
+            //{
+            //    var TableCraft = GameGlobals.Instance.TableCraft;
+            //    foreach (var obj in TableCraft)
+            //    {
+            //        if (BoundingDetectCollisions.Intersects(obj))
+            //        {
+            //            if (PlayerManager.Instance.Inventory["0"] >= 1
+            //                && PlayerManager.Instance.Inventory["1"] >= 1)
+            //            {
+            //                HudSystem.AddFeed(2, 1);
 
-                            if (PlayerManager.Instance.Inventory.ContainsKey("2"))
-                            {
-                                PlayerManager.Instance.Inventory["2"] += 1;
-                                PlayerManager.Instance.Inventory["0"] -= 1;
-                                PlayerManager.Instance.Inventory["1"] -= 1;
-                            }
-                        }
-                        else
-                        {
-                            HudSystem.ShowInsufficientSign();
-                        }
-                        break;
-                    }
-                }
-            }
+            //                if (PlayerManager.Instance.Inventory.ContainsKey("2"))
+            //                {
+            //                    PlayerManager.Instance.Inventory["2"] += 1;
+            //                    PlayerManager.Instance.Inventory["0"] -= 1;
+            //                    PlayerManager.Instance.Inventory["1"] -= 1;
+            //                }
+            //            }
+            //            else
+            //            {
+            //                HudSystem.ShowInsufficientSign();
+            //            }
+            //            break;
+            //        }
+            //    }
+            //}
         }
 
         private void UpdateLayerDepth(float topDepth, float middleDepth, float bottomDepth)

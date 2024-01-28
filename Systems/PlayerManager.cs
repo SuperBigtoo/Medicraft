@@ -13,19 +13,11 @@ namespace Medicraft.Systems
     {
         public Player Player { private set; get; }
         public PlayerData InitialPlayerData { private set; get; }
-        public Dictionary<string, int> Inventory { private set; get; }
         public bool IsPlayerDead { private set; get; }
 
         private static PlayerManager instance;
         private PlayerManager()
-        {
-            Inventory = new Dictionary<string, int>()
-            {
-                {"0", 0},
-                {"1", 0},
-                {"2", 0}
-            };
-
+        {           
             IsPlayerDead = false;
         }
 
