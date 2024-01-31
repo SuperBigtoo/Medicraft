@@ -116,17 +116,24 @@ namespace Medicraft.Systems
             Player.Update(gameTime, keyboardCur, keyboardPrev, mouseCur, mousePrev
                 , topDepth, middleDepth, bottomDepth);
 
-            // Check Player HP
-            if (Player.HP <= 0)
+            // Check Player HP for Deadq
+            if (Player.HP <= 0 && !IsPlayerDead)
             {
-                RespawnPlayer();
+                IsPlayerDead = true;
+            }
+
+            if (IsPlayerDead)
+            {
+                if (GameGlobals.Instance.mouseCurrent.LeftButton == ButtonState.Pressed
+                    && GameGlobals.Instance.mousePreviose.LeftButton == ButtonState.Released)
+                {
+                    RespawnPlayer();
+                }
             }
         }
 
         private void RespawnPlayer()
-        {
-            IsPlayerDead = true;
-
+        {           
             if (IsPlayerDead)
             {
                 Player.HP = Player.GetStats().HP; // for testing
@@ -145,6 +152,7 @@ namespace Medicraft.Systems
                 }
 
                 IsPlayerDead = false;
+                Player.IsDying = false;
             }
         }
 

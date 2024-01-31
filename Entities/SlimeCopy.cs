@@ -51,12 +51,13 @@ namespace Medicraft.Entities
             BoundingCollisionY = 5;
             BoundingDetectCollisions = new Rectangle((int)((int)Position.X - Sprite.TextureRegion.Width / BoundingCollisionX)
                 , (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY)
-                , (int)(Sprite.TextureRegion.Width / 3), Sprite.TextureRegion.Height / 5);
+                , Sprite.TextureRegion.Width / 2, Sprite.TextureRegion.Height / 2);
 
-            BoundingHitBox = new CircleF(Position, 20);
+            BoundingHitBox = new CircleF(Position, 20);         // Circle for Entity to hit
 
-            // For Aggro
-            BoundingDetection = new CircleF(Position, 150);
+            BoundingDetectEntity = new CircleF(Position, 30);   // Circle for check attacking
+
+            BoundingAggro = new CircleF(Position, 150);         // Circle for check aggro player 
 
             RandomSlimeColor();
 
@@ -96,7 +97,7 @@ namespace Medicraft.Entities
 
             BoundingHitBox = slime.BoundingHitBox;
 
-            BoundingDetection = slime.BoundingDetection;
+            BoundingDetectEntity = slime.BoundingDetectEntity;
 
             RandomSlimeColor();
 

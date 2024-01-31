@@ -14,29 +14,51 @@ namespace Medicraft.Entities
     {
         private readonly PlayerData _basePlayerStats;
 
-        private Vector2 _initHudPos, _initCamPos;
+        private float _knockbackForce;
+        private readonly float _normalHitSpeed, _normalSkillSpeed, _burstSkillSpeed, _dyingSpeed;
 
-        private readonly float _normalHitSpeed, _burstSkillSpeed, _knockbackForce;
+        private float _percentNormalHit, _percentNormalSkill, _percentBurstSkill, _percentPassiveSkill;
+        private float _normalSkillCooldownTime, _burstSkillCooldownTime, _passiveSkillCooldownTime;
+        private const float _cooldownNormal = 16f, _cooldownBurst = 20f, _cooldownPassive = 60f;
 
         private bool _isCriticalAttack, _isAttackMissed;
+        private bool _isNormalSkillCooldown, _isBurstSkillCooldown, _isPassiveSkillCooldown;
+
+        private Vector2 _initHudPos, _initCamPos;
 
         public Player(AnimatedSprite sprite, PlayerData basePlayerStats)
         {
-            Type = EntityType.Playable;
-
             _basePlayerStats = basePlayerStats;
 
+            Type = EntityType.Playable;           
             Id = basePlayerStats.CharId;
             Name = basePlayerStats.Name;
+            Sprite = sprite;
+
+            IsKnockbackable = true;
 
             // Initial stats
             InitializeStats();
 
-            Sprite = sprite;
+            _knockbackForce = 50f;
 
-            _normalHitSpeed = 0.40f;    // Stat
-            _burstSkillSpeed = 0.70f;   // Stat
-            _knockbackForce = 50f;      // Stat
+            _normalHitSpeed = 0.4f;
+            _normalSkillSpeed = 0.9f;
+            _burstSkillSpeed = 0.7f;
+            _dyingSpeed = 10f;
+            
+            _percentNormalHit = 0.5f;
+            _percentNormalSkill = 0.5f;
+            _percentBurstSkill = 1.75f;
+            _percentPassiveSkill = 0.3f;
+
+            _normalSkillCooldownTime = _cooldownNormal;
+            _burstSkillCooldownTime = _cooldownBurst;
+            _passiveSkillCooldownTime = _cooldownPassive;
+
+            _isNormalSkillCooldown = false;
+            _isBurstSkillCooldown = false;
+            _isPassiveSkillCooldown = false;
 
             var position = new Vector2((float)basePlayerStats.Position[0], (float)basePlayerStats.Position[1]);
             
@@ -49,15 +71,16 @@ namespace Medicraft.Entities
 
             BoundingCollisionX = 20;
             BoundingCollisionY = 2.60;
+
             BoundingDetectCollisions = new Rectangle((int)((int)Position.X - sprite.TextureRegion.Width / BoundingCollisionX)
                 , (int)((int)Position.Y + sprite.TextureRegion.Height / BoundingCollisionY)
-                , sprite.TextureRegion.Width / 8, sprite.TextureRegion.Height / 8);
+                , sprite.TextureRegion.Width / 8, sprite.TextureRegion.Height / 8);     // Rec for check Collision
 
-            BoundingHitBox = new CircleF(Position + new Vector2(0f, 32f), 40f);
+            BoundingHitBox = new CircleF(Position + new Vector2(0f, 32f), 40f);         // Circle for Entity to hit
 
-            BoundingDetection = new CircleF(Position + new Vector2(0f, 32f), 80f);
+            BoundingDetectEntity = new CircleF(Position + new Vector2(0f, 32f), 80f);   // Circle for check attacking
 
-            BoundingCollection = new CircleF(Position + new Vector2(0f, 64f), 30f);
+            BoundingCollection = new CircleF(Position + new Vector2(0f, 64f), 30f);     // Circle for check interaction with GameObjects
 
             Sprite.Depth = 0.1f;
             Sprite.Play("idle");
@@ -82,22 +105,33 @@ namespace Medicraft.Entities
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            // Movement Control
-            MovementControl(deltaSeconds, keyboardCur);
+            if (!PlayerManager.Instance.IsPlayerDead)
+            {
+                // Movement Control
+                MovementControl(deltaSeconds, keyboardCur);
 
-            // Update layer depth
-            UpdateLayerDepth(topDepth, middleDepth, bottomDepth);
+                // Update layer depth
+                UpdateLayerDepth(topDepth, middleDepth, bottomDepth);
 
-            // Combat Control
-            CombatControl(deltaSeconds, keyboardCur, keyboardPrev, mouseCur, mousePrev);
+                // Combat Control
+                CombatControl(deltaSeconds, keyboardCur, keyboardPrev, mouseCur, mousePrev);
 
-            // Check interaction with GameObject
-            CheckInteraction(keyboardCur, keyboardPrev);
+                // Check interaction with GameObject
+                CheckInteraction(keyboardCur, keyboardPrev);
+            }
+            else
+            {
+                if (!IsDying)
+                {
+                    IsDying = true;
+                    CurrentAnimation = "dying";
+                    Sprite.Play(CurrentAnimation);
+                }             
+            }
 
             // Update time conditions
             UpdateTimeConditions(deltaSeconds);
-
-            Sprite.Play(CurrentAnimation);
+  
             Sprite.Update(deltaSeconds);
         }
 
@@ -106,7 +140,7 @@ namespace Medicraft.Entities
         {
             spriteBatch.Draw(Sprite, Transform);
 
-            // Test Draw BoundingRec for Collision
+            // Test Draw BoundingRec for Collision Check
             if (GameGlobals.Instance.IsShowDetectBox)
             {
                 var pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
@@ -165,12 +199,14 @@ namespace Medicraft.Entities
                     Position += Velocity * walkSpeed;
                     GameGlobals.Instance.HUDPosition += Velocity * walkSpeed;
                     GameGlobals.Instance.AddingCameraPos += Velocity * walkSpeed;
+                    Sprite.Play(CurrentAnimation);
                 }
                 else IsMoving = false;
 
                 if (!IsMoving)
                 {
                     CurrentAnimation = "idle";
+                    Sprite.Play(CurrentAnimation);
                 }
 
                 // Check Object Collsion
@@ -194,10 +230,7 @@ namespace Medicraft.Entities
                     GameGlobals.Instance.AddingCameraPos = _initCamPos;
                     break;
                 }
-                else
-                {
-                    IsDetectCollistionObject = false;
-                }
+                else IsDetectCollistionObject = false;
             }
         }
 
@@ -206,52 +239,72 @@ namespace Medicraft.Entities
             , MouseState mouseCur, MouseState mousePrev)
         {
             // Normal Hit
-            if (!IsAttacking && mouseCur.LeftButton == ButtonState.Pressed
-                && mousePrev.LeftButton == ButtonState.Released
+            if (!IsAttacking && mouseCur.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released
                 || !IsAttacking && keyboardCur.IsKeyDown(Keys.Space))
             {
                 CurrentAnimation = "attacking_normal_hit";
+                Sprite.Play(CurrentAnimation);
 
                 IsAttacking = true;
-                AttackingTime = _normalHitSpeed;
+                ActionTime = _normalHitSpeed;
 
-                CheckAttackDetection(ATK, 1f);
+                CheckAttackDetection(ATK, _percentNormalHit, false);
             }
 
             // Normal Skill
-
-            // Burst Skill
-            if (keyboardCur.IsKeyDown(Keys.Q) && !IsAttacking)
+            if (keyboardCur.IsKeyDown(Keys.E) && !IsAttacking && !_isNormalSkillCooldown)
             {
-                CurrentAnimation = "attacking_burst_skill";
+                CurrentAnimation = "attacking_normal_skill";
+                Sprite.Play(CurrentAnimation);
 
                 IsAttacking = true;
-                AttackingTime = _burstSkillSpeed;
+                _isNormalSkillCooldown = true;
+                ActionTime = _normalSkillSpeed;
 
-                CheckAttackDetection(ATK, 1f);
+                // Do normal skill & effect of Sets Item
+            }
+
+            // Burst Skill
+            if (keyboardCur.IsKeyDown(Keys.Q) && !IsAttacking && !_isBurstSkillCooldown)
+            {
+                CurrentAnimation = "attacking_burst_skill";
+                Sprite.Play(CurrentAnimation);
+
+                IsAttacking = true;
+                _isBurstSkillCooldown = true;
+                ActionTime = _burstSkillSpeed;
+
+                // Do burst skill & effect of Sets Item
+                BoundingDetectEntity.Radius = 130f;
+                CheckAttackDetection(ATK, _percentBurstSkill, true);
+                BoundingDetectEntity.Radius = 80f;
             }
 
             // Passive Skill
-
-            // Check attack timing
-            if (AttackingTime > 0)
+            if (keyboardCur.IsKeyDown(Keys.G) && !IsAttacking && !_isPassiveSkillCooldown)
             {
-                AttackingTime -= deltaSeconds;
+                CurrentAnimation = "dying";
+                Sprite.Play(CurrentAnimation);
+
+                IsAttacking = true;
+                _isPassiveSkillCooldown = true;
+                ActionTime = _dyingSpeed;
+
+                // Do passive skill
             }
-            else IsAttacking = false;
         }
 
-        private void CheckAttackDetection(int Atk, float HitPercent)
+        private void CheckAttackDetection(int Atk, float HitPercent, bool IsUndodgeable)
         {
             foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed))
             {
-                if (BoundingDetection.Intersects(entity.BoundingHitBox))
+                if (BoundingDetectEntity.Intersects(entity.BoundingHitBox))
                 {
                     if (entity.Type == EntityType.Hostile)
                     {
                         if (!entity.IsDying)
                         {
-                            var totalDamage = TotalDamage(Atk, HitPercent, entity.DEF_Percent, entity.Evasion);
+                            var totalDamage = TotalDamage(Atk, HitPercent, entity.DEF_Percent, entity.Evasion, IsUndodgeable);
                             
                             if (!_isAttackMissed) entity.HP -= totalDamage;
 
@@ -284,7 +337,7 @@ namespace Medicraft.Entities
             }
         }
 
-        private int TotalDamage(int ATK, float HitPercent, float DefPercent, float EvasionPercent)
+        private int TotalDamage(int ATK, float HitPercent, float DefPercent, float EvasionPercent, bool IsUndodgeable)
         {
             var random = new Random();
 
@@ -293,7 +346,7 @@ namespace Medicraft.Entities
 
             // Check evasion
             int evaChance = random.Next(1, 101);
-            if (evaChance <= EvasionPercent * 100)
+            if (evaChance <= EvasionPercent * 100 && !IsUndodgeable)
             {
                 // if Attack Missed
                 totalDamage = 0;
@@ -461,6 +514,57 @@ namespace Medicraft.Entities
                     break;
                 }
             }
+        }
+
+        protected override void UpdateTimeConditions(float deltaSeconds)
+        {
+            // Check attack timing
+            if (ActionTime > 0)
+            {
+                ActionTime -= deltaSeconds;
+            }
+            else IsAttacking = false;
+
+            if (_isNormalSkillCooldown)
+            {
+                if (_normalSkillCooldownTime > 0)
+                {
+                    _normalSkillCooldownTime -= deltaSeconds;
+                }
+                else
+                {
+                    _normalSkillCooldownTime = _cooldownNormal;
+                    _isNormalSkillCooldown = false;
+                }
+            }
+
+            if (_isBurstSkillCooldown)
+            {
+                if (_burstSkillCooldownTime > 0)
+                {
+                    _burstSkillCooldownTime -= deltaSeconds;
+                }
+                else
+                {
+                    _burstSkillCooldownTime = _cooldownBurst;
+                    _isBurstSkillCooldown = false;
+                }
+            }
+
+            if (_isPassiveSkillCooldown)
+            {
+                if (_passiveSkillCooldownTime > 0)
+                {
+                    _passiveSkillCooldownTime -= deltaSeconds;
+                }
+                else
+                {
+                    _passiveSkillCooldownTime = _cooldownPassive;
+                    _isPassiveSkillCooldown = false;
+                }
+            }
+
+            base.UpdateTimeConditions(deltaSeconds);
         }
 
         public override void SetDamageNumDirection()

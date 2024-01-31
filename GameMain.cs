@@ -6,13 +6,11 @@ namespace Medicraft
     public class GameMain : Game
     {
         private readonly GraphicsDeviceManager _graphics;
-        private readonly EntityManager _entityManager;
         private readonly GameGlobals _singleton;
 
         public GameMain()
         {
             _singleton = GameGlobals.Instance;
-            _entityManager = EntityManager.Instance;
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
