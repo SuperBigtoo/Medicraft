@@ -193,10 +193,10 @@ namespace Medicraft.Systems
 
             foreach (var entity in entities.Where(e => !e.IsDestroyed))
             {
-                if (entity.IsAttacked) entity.DrawDamageNumbers(spriteBatch);
+                if (entity.IsAttacked) entity.DrawCombatNumbers(spriteBatch, entity.CombatNumCase);
             }
 
-            if (PlayerManager.Instance.Player.IsAttacked) PlayerManager.Instance.Player.DrawDamageNumbers(spriteBatch);
+            if (PlayerManager.Instance.Player.IsAttacked) PlayerManager.Instance.Player.DrawCombatNumbers(spriteBatch, PlayerManager.Instance.Player.CombatNumCase);
         }
 
         private void DrawCollectedItem(SpriteBatch spriteBatch) 

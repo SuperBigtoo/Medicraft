@@ -86,8 +86,10 @@ namespace Medicraft.Entities
         protected float AttackCooldownTime { get; set; }
         protected bool IsAttackCooldown { get; set; }
 
-        public Color DamageNumColor { get; set; }
-        public float DamageNumScale { get; set; }
+        // Damage && Buff Numbers
+        public int CombatNumCase { get; set; }
+        public Color CombatNumColor { get; set; }
+        public float CombatNumScale { get; set; }
         public float AlphaColor { get; set; }
         public float ScaleFont { get; set; }
 
@@ -99,7 +101,7 @@ namespace Medicraft.Entities
         public bool IsAttacking { get; set; }
         public bool IsAttacked { get; set; }
         public bool IsDetectCollistionObject { get; set; }
-        public List<string> DamageNumbers { get; protected set; }
+        public List<string> CombatLogs { get; protected set; }
 
         protected Entity()
         {
@@ -135,8 +137,8 @@ namespace Medicraft.Entities
             AttackCooldownTime = CooldownAttack;
             IsAttackCooldown = false;
 
-            DamageNumColor = Color.White;
-            DamageNumScale = 2f;
+            CombatNumColor = Color.White;
+            CombatNumScale = 2f;
             AlphaColor = 1f;
             ScaleFont = 1f;
 
@@ -149,7 +151,7 @@ namespace Medicraft.Entities
             IsAttacked = false;
             IsDetectCollistionObject = false;
 
-            DamageNumbers = new List<string>();
+            CombatLogs = new List<string>();
         }
 
         private Entity(Entity entity)
@@ -177,8 +179,8 @@ namespace Medicraft.Entities
             CooldownAttack = entity.CooldownAttack;
             AttackCooldownTime = CooldownAttack;
             IsAttackCooldown = entity.IsAttackCooldown;
-            DamageNumColor = entity.DamageNumColor;
-            DamageNumScale = entity.DamageNumScale;
+            CombatNumColor = entity.CombatNumColor;
+            CombatNumScale = entity.CombatNumScale;
             AlphaColor = entity.AlphaColor;
             ScaleFont = entity.ScaleFont;
             IsKnockbackable = entity.IsKnockbackable;
@@ -189,7 +191,7 @@ namespace Medicraft.Entities
             IsAttacking = entity.IsAttacking;
             IsAttacked = entity.IsAttacked;
             IsDetectCollistionObject = entity.IsDetectCollistionObject;
-            DamageNumbers = entity.DamageNumbers;
+            CombatLogs = entity.CombatLogs;
         }
 
         public virtual void Update(GameTime gameTime, KeyboardState keyboardCurrentState, KeyboardState keyboardPrevioseState
@@ -201,7 +203,7 @@ namespace Medicraft.Entities
             IsDestroyed = true;
         }
 
-        public virtual void SetDamageNumDirection() { }
+        public virtual void SetCombatNumDirection() { }
 
         // Knowing this that MovementControl, CombatControl and some methods below this is for Mobs only
 
@@ -420,16 +422,13 @@ namespace Medicraft.Entities
                     int totalDamage = TotalDamage(ATK, PlayerManager.Instance.Player.DEF_Percent
                         , PlayerManager.Instance.Player.Evasion);
 
-                    var isAttackMissed = false;
-
-                    if (totalDamage == 0)
+                    if (CombatNumCase != 3)
                     {
-                        isAttackMissed = true;
+                        PlayerManager.Instance.Player.HP -= totalDamage;
                     }
-                    else PlayerManager.Instance.Player.HP -= totalDamage;
 
-                    PlayerManager.Instance.Player.SetDamageNumDirection();
-                    PlayerManager.Instance.Player.AddDamageNumbers(totalDamage.ToString(), true, isAttackMissed);
+                    PlayerManager.Instance.Player.SetCombatNumDirection();
+                    PlayerManager.Instance.Player.AddCombatLogNumbers(totalDamage.ToString(), CombatNumCase);
 
                     PlayerManager.Instance.Player.IsAttacked = true;
                     PlayerManager.Instance.Player.AttackedTime = 0f;
@@ -452,10 +451,12 @@ namespace Medicraft.Entities
             {
                 // if Attack Missed
                 totalDamage = 0;
+                CombatNumCase = 3;
             }
             else
             {
                 // if Attacked
+                CombatNumCase = 1;
                 // Calculate DEF
                 totalDamage -= (int)(totalDamage * DefPercent);
             }
@@ -510,41 +511,63 @@ namespace Medicraft.Entities
             }
         }
 
-        public virtual void AddDamageNumbers(string damageNumbers, bool isCriticalAttack, bool isAttackMissed)
+        public virtual void AddCombatLogNumbers(string combatNumbers, int combatCase)
         {
-            if (isAttackMissed)
+            switch (combatCase)
             {
-                DamageNumbers.Add("Miss");
-                DamageNumColor = Color.Yellow;
-                DamageNumScale = 2.15f;
-            }
-            else
-            {
-                DamageNumbers.Add(damageNumbers);
+                case 0: // Damage Numbers Default
+                    CombatLogs.Add(combatNumbers);
+                    CombatNumColor = Color.White;
+                    CombatNumScale = 2f;
+                    break;
 
-                if (isCriticalAttack)
-                {
-                    DamageNumColor = Color.Red;
-                    DamageNumScale = 2.25f;
-                }
-                else
-                {
-                    DamageNumColor = Color.White;
-                    DamageNumScale = 2f;
-                }
+                case 1: // Damage Numbers Critical | Player Damage Taken
+                    CombatLogs.Add(combatNumbers);
+                    CombatNumColor = Color.Red;
+                    CombatNumScale = 2.25f;
+                    break;
+
+                case 2: // Buff & Healing Numbers
+                    break;
+
+                case 3: // Missed
+                    CombatLogs.Add("Miss");
+                    CombatNumColor = Color.Yellow;
+                    CombatNumScale = 2.15f;
+                    break;
             }
         }
 
-        public virtual void DrawDamageNumbers(SpriteBatch spriteBatch)
+        public virtual void DrawCombatNumbers(SpriteBatch spriteBatch, int combatCase)
         {
-            if (DamageNumbers.Count != 0)
+            if (CombatLogs.Count != 0)
             {
-                var n = DamageNumbers.Count - 1;
+                var n = CombatLogs.Count - 1;
 
                 var font = GameGlobals.Instance.FontTA16Bit;
 
-                spriteBatch.DrawString(font, $"{DamageNumbers[n]}", (Position - DamageNumVelocity / 1.5f) - (DamageNumVelocity * AttackedTime)
-                    , DamageNumColor * AlphaColor, 0f, Vector2.Zero, DamageNumScale * ScaleFont, SpriteEffects.None, 0f);
+                switch (combatCase)
+                {
+                    case 0: // Damage Numbers
+                        spriteBatch.DrawString(font, $"{CombatLogs[n]}", (Position - DamageNumVelocity / 1.5f) - (DamageNumVelocity * AttackedTime)
+                            , CombatNumColor * AlphaColor, 0f, Vector2.Zero, CombatNumScale * ScaleFont, SpriteEffects.None, 0f);
+                        break;
+
+                    case 1: // Damage NUmbers Critical | Player Damage Taken
+                        spriteBatch.DrawString(font, $"{CombatLogs[n]}", (Position - DamageNumVelocity / 1.5f) - (DamageNumVelocity * AttackedTime)
+                            , CombatNumColor * AlphaColor, 0f, Vector2.Zero, CombatNumScale * ScaleFont, SpriteEffects.None, 0f);
+                        break;
+
+                    case 2: // Buff & Healing Numbers
+                        spriteBatch.DrawString(font, $"{CombatLogs[n]}", (Position - DamageNumVelocity / 1.5f) - (DamageNumVelocity * AttackedTime)
+                            , CombatNumColor * AlphaColor, 0f, Vector2.Zero, CombatNumScale * ScaleFont, SpriteEffects.None, 0f);
+                        break;
+
+                    case 3: // Missed
+                        spriteBatch.DrawString(font, $"{CombatLogs[n]}", (Position - DamageNumVelocity / 1.5f) - (DamageNumVelocity * AttackedTime)
+                            , CombatNumColor * AlphaColor, 0f, Vector2.Zero, CombatNumScale * ScaleFont, SpriteEffects.None, 0f);
+                        break;
+                }
             }
         }
 

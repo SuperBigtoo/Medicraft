@@ -210,7 +210,7 @@ namespace Medicraft.Entities
             }
         }
 
-        public override void SetDamageNumDirection()
+        public override void SetCombatNumDirection()
         {
             float randomFloat = (float)(new Random().NextDouble() * 1.0f) - 0.75f;
             var NumDirection = Position

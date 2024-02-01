@@ -291,7 +291,7 @@
     "ItemId": 32,
     "Name": "ส้มซ่า",
     "Category": "Material",
-    "Description": "ผลส้มซ่าที่ขนาดพอๆ กับผลมะนาว สามารถใช้ในการปรุงยา",
+    "Description": "ผลส้มซ่าที่ขนาดพอๆกับผลมะนาว สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
     "Stackable": true
@@ -489,7 +489,7 @@
     "ItemId": 54,
     "Name": "หัวกระเทียมคั่ว",
     "Category": "Material",
-    "Description": "หัวกระเทียมที่ผ่านการคั่วแล้วสามารถใช้ในการปรุงยา",
+    "Description": "หัวกระเทียมที่ผ่านการคั่วแล้ว สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
     "Stackable": true

@@ -312,8 +312,8 @@ namespace Medicraft.Entities
                             knockBackDirection.Normalize();
                             entity.Velocity = knockBackDirection * _knockbackForce;
 
-                            entity.SetDamageNumDirection();
-                            entity.AddDamageNumbers(totalDamage.ToString(), _isCriticalAttack, _isAttackMissed);
+                            entity.SetCombatNumDirection();
+                            entity.AddCombatLogNumbers(totalDamage.ToString(), CombatNumCase);
 
                             if (!_isAttackMissed)
                             {
@@ -350,6 +350,7 @@ namespace Medicraft.Entities
             {
                 // if Attack Missed
                 totalDamage = 0;
+                CombatNumCase = 3;
                 _isAttackMissed = true;
             }
             else
@@ -362,10 +363,12 @@ namespace Medicraft.Entities
                 if (critChance <= Crit_Percent * 100)
                 {
                     totalDamage += (int)(totalDamage * CritDMG_Percent);
+                    CombatNumCase = 1;
                     _isCriticalAttack = true;
                 }
                 else
                 {
+                    CombatNumCase = 0;
                     _isCriticalAttack = false;
                 }
 
@@ -567,7 +570,7 @@ namespace Medicraft.Entities
             base.UpdateTimeConditions(deltaSeconds);
         }
 
-        public override void SetDamageNumDirection()
+        public override void SetCombatNumDirection()
         {
             float randomFloat = (float)(new Random().NextDouble() * 0.5f) - 0.25f;
             var NumDirection = Position
