@@ -72,7 +72,7 @@ namespace Medicraft.Entities
         {
             _entityStats = slime._entityStats;
 
-            Type = slime.Type;           
+            Type = slime.Type;        
             Id = _entityStats.Id;
             Name = _entityStats.Name;
             ATK = _entityStats.ATK;

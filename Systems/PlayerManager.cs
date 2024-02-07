@@ -108,13 +108,9 @@ namespace Medicraft.Systems
                     GameGlobals.Instance.SwitchShowPath = false;
                 }
             }
+           
 
-            var topDepth = GameGlobals.Instance.TopEntityDepth;
-            var middleDepth = GameGlobals.Instance.MiddleEntityDepth;
-            var bottomDepth = GameGlobals.Instance.BottomEntityDepth;
-
-            Player.Update(gameTime, keyboardCur, keyboardPrev, mouseCur, mousePrev
-                , topDepth, middleDepth, bottomDepth);
+            Player.Update(gameTime, keyboardCur, keyboardPrev, mouseCur, mousePrev);
 
             // Check Player HP for Deadq
             if (Player.HP <= 0 && !IsPlayerDead)

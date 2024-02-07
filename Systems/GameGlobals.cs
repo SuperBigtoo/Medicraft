@@ -28,8 +28,11 @@ namespace Medicraft.Systems
         public int MaximunInventorySlot { private set; get; }
         public int BlankInventorySlot { private set; get; }
         public BitmapFont FontTA16Bit { set; get; }
-        public List<ItemData> ItemDatas { set; get; }
-        public List<InventoryItemData> CollectedItemFeed { private set; get; }
+        public List<ItemData> ItemsData { set; get; }       // All items data
+        // All equipments stats data
+        // All item's effect data
+        // All character data
+        public List<InventoryItemData> CollectedItemFeed { private set; get; }      // Feed collected item
         public int MaximumItemFeed { private set; get; }
         public float DisplayFeedTime { set; get; }
         public float MaximumDisplayFeedTime { private set; get; }
@@ -77,7 +80,7 @@ namespace Medicraft.Systems
 
             MaximunInventorySlot = 64;
             BlankInventorySlot = 99;
-            ItemDatas = new List<ItemData>();
+            ItemsData = new List<ItemData>();
 
             CollectedItemFeed = new List<InventoryItemData>();
             MaximumItemFeed = 6;

@@ -19,7 +19,7 @@ namespace Medicraft.Entities
 
         private float _percentNormalHit, _percentNormalSkill, _percentBurstSkill, _percentPassiveSkill;
         private float _normalSkillCooldownTime, _burstSkillCooldownTime, _passiveSkillCooldownTime;
-        private const float _cooldownNormal = 16f, _cooldownBurst = 20f, _cooldownPassive = 60f;
+        private const float _baseCooldownNormal = 16f, _baseCooldownBurst = 20f, _caseCooldownPassive = 60f;
 
         private bool _isCriticalAttack, _isAttackMissed;
         private bool _isNormalSkillCooldown, _isBurstSkillCooldown, _isPassiveSkillCooldown;
@@ -52,9 +52,9 @@ namespace Medicraft.Entities
             _percentBurstSkill = 1.75f;
             _percentPassiveSkill = 0.3f;
 
-            _normalSkillCooldownTime = _cooldownNormal;
-            _burstSkillCooldownTime = _cooldownBurst;
-            _passiveSkillCooldownTime = _cooldownPassive;
+            _normalSkillCooldownTime = _baseCooldownNormal;
+            _burstSkillCooldownTime = _baseCooldownBurst;
+            _passiveSkillCooldownTime = _caseCooldownPassive;
 
             _isNormalSkillCooldown = false;
             _isBurstSkillCooldown = false;
@@ -101,7 +101,7 @@ namespace Medicraft.Entities
 
         // Update Player
         public override void Update(GameTime gameTime, KeyboardState keyboardCur, KeyboardState keyboardPrev
-            , MouseState mouseCur, MouseState mousePrev, float topDepth, float middleDepth, float bottomDepth)
+            , MouseState mouseCur, MouseState mousePrev)
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -111,6 +111,9 @@ namespace Medicraft.Entities
                 MovementControl(deltaSeconds, keyboardCur);
 
                 // Update layer depth
+                var topDepth = GameGlobals.Instance.TopEntityDepth;
+                var middleDepth = GameGlobals.Instance.MiddleEntityDepth;
+                var bottomDepth = GameGlobals.Instance.BottomEntityDepth;
                 UpdateLayerDepth(topDepth, middleDepth, bottomDepth);
 
                 // Combat Control
@@ -306,16 +309,16 @@ namespace Medicraft.Entities
                         {
                             var totalDamage = TotalDamage(Atk, HitPercent, entity.DEF_Percent, entity.Evasion, IsUndodgeable);
                             
-                            if (!_isAttackMissed) entity.HP -= totalDamage;
+                            if (CombatNumCase != 3) entity.HP -= totalDamage;
 
                             var knockBackDirection = (entity.Position - new Vector2(0, 50)) - Position;
                             knockBackDirection.Normalize();
                             entity.Velocity = knockBackDirection * _knockbackForce;
 
                             entity.SetCombatNumDirection();
-                            entity.AddCombatLogNumbers(totalDamage.ToString(), CombatNumCase);
+                            entity.AddCombatLogNumbers(Name, totalDamage.ToString(), CombatNumCase);
 
-                            if (!_isAttackMissed)
+                            if (CombatNumCase != 3)
                             {
                                 entity.IsKnockback = true;
                                 entity.KnockbackedTime = 0.2f;
@@ -536,7 +539,7 @@ namespace Medicraft.Entities
                 }
                 else
                 {
-                    _normalSkillCooldownTime = _cooldownNormal;
+                    _normalSkillCooldownTime = _baseCooldownNormal;
                     _isNormalSkillCooldown = false;
                 }
             }
@@ -549,7 +552,7 @@ namespace Medicraft.Entities
                 }
                 else
                 {
-                    _burstSkillCooldownTime = _cooldownBurst;
+                    _burstSkillCooldownTime = _baseCooldownBurst;
                     _isBurstSkillCooldown = false;
                 }
             }
@@ -562,7 +565,7 @@ namespace Medicraft.Entities
                 }
                 else
                 {
-                    _passiveSkillCooldownTime = _cooldownPassive;
+                    _passiveSkillCooldownTime = _caseCooldownPassive;
                     _isPassiveSkillCooldown = false;
                 }
             }

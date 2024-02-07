@@ -82,7 +82,7 @@ namespace Medicraft.Screens
             var _slimeScale = new Vector2(3.0f, 2.5f);
             var _mobSpawner = new MobSpawner(10f);
             _mobSpawner.AddEntity(new Slime(new AnimatedSprite(_slimeAnimation), _slimeStatsList[0], _slimeScale));
-            //_mobSpawner.AddEntity(new SlimeCopy(new AnimatedSprite(_slimeAnimation), _slimeStatsList[1], _slimeScale));
+            _mobSpawner.AddEntity(new SlimeCopy(new AnimatedSprite(_slimeAnimation), _slimeStatsList[1], _slimeScale));
             EntityManager.Instance.Initialize(_mobSpawner);
 
             // Adding Items to ObjectSpawner

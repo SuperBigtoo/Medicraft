@@ -37,7 +37,7 @@ namespace Medicraft.Systems
         {          
             // Gotta Check Item id if it already has in inventory and stackable or mot
             if (Inventory.ContainsKey(referId.ToString())
-                && GameGlobals.Instance.ItemDatas[referId].Stackable)
+                && GameGlobals.Instance.ItemsData[referId].Stackable)
             {
                 HudSystem.AddFeed(referId, amount);
 

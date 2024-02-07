@@ -17,8 +17,8 @@ namespace Medicraft.GameObjects
             Id = objectData.Id;
             ReferId = objectData.ReferId;
 
-            Name = GameGlobals.Instance.ItemDatas[objectData.ReferId].Name;
-            Description = GameGlobals.Instance.ItemDatas[objectData.ReferId].Description;
+            Name = GameGlobals.Instance.ItemsData[objectData.ReferId].Name;
+            Description = GameGlobals.Instance.ItemsData[objectData.ReferId].Description;
 
             IsCollected = false;
             IsDestroyed = false;

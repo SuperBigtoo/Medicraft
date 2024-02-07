@@ -22,10 +22,9 @@ namespace Medicraft.Entities
 
         public SlimeCopy(AnimatedSprite sprite, EntityData entityStats, Vector2 scale)
         {
-            Type = EntityType.Hostile;
-
             _entityStats = entityStats;
 
+            Type = EntityType.Hostile;         
             Id = entityStats.Id;
             Name = entityStats.Name;
             ATK = entityStats.ATK;
@@ -33,11 +32,14 @@ namespace Medicraft.Entities
             DEF_Percent = (float)entityStats.DEF_Percent;
             Speed = entityStats.Speed;
             Evasion = (float)entityStats.Evasion;
-
             Sprite = sprite;
-            AggroTime = 0f;
 
-            IsKnockbackable = false;
+            AggroTime = 0f;
+            AttackSpeed = 0.4f;
+            CooldownAttack = 0.7f;
+            AttackCooldownTime = CooldownAttack;
+
+            IsKnockbackable = true;
 
             var position = new Vector2((float)entityStats.Position[0], (float)entityStats.Position[1]);
             Transform = new Transform2
@@ -49,6 +51,7 @@ namespace Medicraft.Entities
 
             BoundingCollisionX = 5.5;
             BoundingCollisionY = 5;
+
             BoundingDetectCollisions = new Rectangle((int)((int)Position.X - Sprite.TextureRegion.Width / BoundingCollisionX)
                 , (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY)
                 , Sprite.TextureRegion.Width / 2, Sprite.TextureRegion.Height / 2);
@@ -67,10 +70,9 @@ namespace Medicraft.Entities
 
         private SlimeCopy(SlimeCopy slime)
         {
-            Type = slime.Type;
-
             _entityStats = slime._entityStats;
 
+            Type = slime.Type;
             Id = _entityStats.Id;
             Name = _entityStats.Name;
             ATK = _entityStats.ATK;
@@ -78,9 +80,12 @@ namespace Medicraft.Entities
             DEF_Percent = (float)_entityStats.DEF_Percent;
             Speed = _entityStats.Speed;
             Evasion = (float)_entityStats.Evasion;
-
             Sprite = slime.Sprite;
+
             AggroTime = slime.AggroTime;
+            AttackSpeed = slime.AttackSpeed;
+            CooldownAttack = slime.CooldownAttack;
+            AttackCooldownTime = CooldownAttack;
 
             IsKnockbackable = slime.IsKnockbackable;
 
@@ -96,6 +101,8 @@ namespace Medicraft.Entities
             BoundingDetectCollisions = slime.BoundingDetectCollisions;
 
             BoundingHitBox = slime.BoundingHitBox;
+
+            BoundingAggro = slime.BoundingAggro;
 
             BoundingDetectEntity = slime.BoundingDetectEntity;
 
@@ -169,6 +176,10 @@ namespace Medicraft.Entities
             {
                 // Dying time before destroy
                 CurrentAnimation = SpriteName + "_dying";
+                Sprite.Play(CurrentAnimation);
+
+                // Check Object Collsion
+                CheckCollision();
 
                 if (DyingTime > 0)
                 {
@@ -187,7 +198,6 @@ namespace Medicraft.Entities
             // Update time conditions
             UpdateTimeConditions(deltaSeconds);
 
-            Sprite.Play(CurrentAnimation);
             Sprite.Update(deltaSeconds);
         }
 
