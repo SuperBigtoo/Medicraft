@@ -462,7 +462,7 @@
     "ItemId": 51,
     "Name": "หัวหอม",
     "Category": "Material",
-    "Description": "พืชผลที่สามารถใช้ในการทำอาหารและปรุงยา",
+    "Description": "หัวหอมใหญ่ที่มีรสเผ็ดซ่าฉุนแต่ก็หวาน สามารถใช้ในการทำอาหารและปรุงยา",
     "Usable": false,
     "Effect": 0,
     "Stackable": true
@@ -1281,7 +1281,7 @@
     "ItemId": 142,
     "Name": "แครรอท",
     "Category": "Material",
-    "Description": "",
+    "Description": "แครรอทกรอบๆหวานๆสีแดงสด เป็นผักที่กินกับเมนูไหนก็อร่อย",
     "Usable": false,
     "Effect": 0,
     "Stackable": true
@@ -1290,7 +1290,7 @@
     "ItemId": 143,
     "Name": "มันฝรั่ง",
     "Category": "Material",
-    "Description": "",
+    "Description": " พืชทนแล้งที่งอกงามได้ดีแม้ว่าจะปลูกในพื้นที่แห้งแล้ง ถ้าพวกเขาไม่มีขนมปังก็ให้กินมันฝรั่งแทนซิ!",
     "Usable": false,
     "Effect": 0,
     "Stackable": true
@@ -1299,7 +1299,7 @@
     "ItemId": 144,
     "Name": "กระหล่ำปลี",
     "Category": "Material",
-    "Description": "",
+    "Description": "ผักที่มีสารอาหารสูงและมีประโยชน์ต่อร่างกาย อย่าทิ้งมันไว้ละ",
     "Usable": false,
     "Effect": 0,
     "Stackable": true
@@ -1308,7 +1308,7 @@
     "ItemId": 145,
     "Name": "มะเขือเทศ",
     "Category": "Material",
-    "Description": "",
+    "Description": "มะเขือเทศแดงฉ่ำๆที่เต็มไปด้วยรสชาติ จะกินสดหรือทำให้สุกก็อร่อยเหมือนกัน",
     "Usable": false,
     "Effect": 0,
     "Stackable": true
@@ -1317,7 +1317,7 @@
     "ItemId": 146,
     "Name": "เห็ด",
     "Category": "Material",
-    "Description": "",
+    "Description": "เห็ดที่มีกลิ่นดินๆ และรสชาติแบบธรรมชาติ ระวังอย่าสับสนกับเห็ดพิษด้วยหละ",
     "Usable": false,
     "Effect": 0,
     "Stackable": true
@@ -1326,7 +1326,7 @@
     "ItemId": 147,
     "Name": "ข้าวสาลี",
     "Category": "Material",
-    "Description": "",
+    "Description": "เมล็ดพืชอันล้ำค่าที่เติบโตด้วยแสงแดดและสายลม สามารถบดและใช้ทำอาหารได้หลายประเภท",
     "Usable": false,
     "Effect": 0,
     "Stackable": true
@@ -1335,7 +1335,7 @@
     "ItemId": 148,
     "Name": "เนื้อสัตว์",
     "Category": "Material",
-    "Description": "",
+    "Description": "เนื้อสัตว์สดๆจากสัตว์ที่เพิ่งจับได้สดๆ เป็นแหล่งโปรตีนชั้นดีเมื่อทำให้สุกก่อน",
     "Usable": false,
     "Effect": 0,
     "Stackable": true
@@ -1393,5 +1393,545 @@
     "Usable": false,
     "Effect": 0,
     "Stackable": true
+  },
+  {
+    "ItemId": 155,
+    "Name": "แซลมอน",
+    "Category": "Material",
+    "Description": "เนื้อปลาแซลมอน สุดยอดอาหารทะเลที่มีกลิ่นหอมของท้องทะเล",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 156,
+    "Name": "ข้าว",
+    "Category": "Material",
+    "Description": "เมล็ดธัญพืชหลักที่เหมาะกับอาหารทุกประเภท การกินข้าวเป็นวิธีที่ดีที่สุดที่จะทำให้คุณอิ่มท้อง",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 157,
+    "Name": "วาซาบิ",
+    "Category": "Material",
+    "Description": "เครื่องเทศรสชาติจัดจ้านที่ขาดไม่ได้ในเมนูปลา และยังช่วยป้องกันไม่ให้อาหารเสียอีกด้วย",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 158,
+    "Name": "ปาปริก้า",
+    "Category": "Material",
+    "Description": "พริกที่จะกระตุ้นความอยากอาหาร และสามารถใช้มันเป็นเครื่องเทศได้ด้วย",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 159,
+    "Name": "พริก",
+    "Category": "Material",
+    "Description": "เป็นสิ่งที่ขาดไม่ได้เลย เมื่อต้องการจะเพิ่มรสชาติเผ็ดร้อนให้กับอาหาร",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 160,
+    "Name": "ซอสพริก",
+    "Category": "Material",
+    "Description": "ซอสรสเผ็ดหวานที่กินกับอะไรก็อร่อย",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 161,
+    "Name": "ซอสมะเขือเทศ",
+    "Category": "Material",
+    "Description": "ซอสรสหวานเปรี้ยวเล็กน้อยที่เข้ากันกับทุกจาน",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 162,
+    "Name": "เกลือ",
+    "Category": "Material",
+    "Description": "เครื่องปรุงรสที่จำเป็นสำหรับการปรุงแต่งอาหาร จะทำอาหารให้เสร็จสมบูรณ์ได้เช่นไรถ้าไม่ใส่เกลือ",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 163,
+    "Name": "สาหร่าย",
+    "Category": "Material",
+    "Description": "สาหร่ายทอดกรอบๆในน้ำมัน จะใช้เป็นเครื่องเคียงหรือวัตถุดิบก็ได้",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 164,
+    "Name": "เมล็ดกาแฟ",
+    "Category": "Material",
+    "Description": "ปลุกให้ตื่นได้ด้วยรสขม! เหมาะสำหรับผู้ที่มีอาการเหนื่อยล้าเรื้อรัง",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Category": "Thai traditional medicine",
+    "Description": "บรรเทาอาการไข้ ร้อนในกระหายน้ำ แก้พิษหัด พิษอีสุกอีใส (บรรเทาอาการไข้จากหัดและอีสุกอีใส)",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 201,
+    "Name": "ยาจันทน์ลีลา",
+    "Category": "Thai traditional medicine",
+    "Description": "บรรเทาอาการไข้ตัวร้อน ไข้เปลี่ยนฤดู",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 202,
+    "Name": "ยาประสะจันทร์แดง",
+    "Category": "Thai traditional medicine",
+    "Description": "บรรเทาอาการไข้ตัวร้อน (ไข้พิษ) แก้ร้อนในกระหายน้ำ",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 203,
+    "Name": "ยาประสะเปราะใหญ่",
+    "Category": "Thai traditional medicine",
+    "Description": "ถอนพิษไข้ตานซางสำหรับเด็ก",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 204,
+    "Name": "ยาห้าราก",
+    "Category": "Thai traditional medicine",
+    "Description": "บรรเทาอาการไข้",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 205,
+    "Name": "ยาหอมทิพโอสถ",
+    "Category": "Thai traditional medicine",
+    "Description": "แก้ลมวิงเวียน",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 206,
+    "Name": "ยาหอมเทพจิตร",
+    "Category": "Thai traditional medicine",
+    "Description": "แก้ลมกองละเอียด ได้แก่ อาการหน้ามืด ตาลาย สวิงสวาย (อาการที่รู้สึกใจหวิววิงเวียน คลื่นไส้ ตาพร่าจะเป็นลม) ใจสั่น และบำรุงดวงจิตให้ชุ่มชื่น",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 207,
+    "Name": "ยาหอมนวโกฐ",
+    "Category": "Thai traditional medicine",
+    "Description": "แก้วิงเวียน คลื่นเหียน อาเจียน (ลมจุกแน่นในอก) ในผู้สูงอายุแก้ลมปลายไข้ (หลังฟื้นไข้แล้วยังมีอาการ เช่น คลื่นเหียน วิงเวียน เบื่ออาหาร ท้องอืด และอ่อนเพลีย)",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 208,
+    "Name": "ยาหอมแก้ลมวิงเวียน",
+    "Category": "Thai traditional medicine",
+    "Description": "แก้ลมวิงเวียน อ่อนเพลีย นอนไม่หลับ",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 209,
+    "Name": "ยาหอมอินทจักร์",
+    "Category": "Thai traditional medicine",
+    "Description": "แก้ลมบาททะจิต คลื่นเหียนอาเจียน ลมจุกเสียด",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 210,
+    "Name": "ยาธาตุบรรจบ",
+    "Category": "Thai traditional medicine",
+    "Description": "บรรเทาอาการท้องอืด ท้องเฟ้อ",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 211,
+    "Name": "ยาธรณีสันฑะฆาต",
+    "Category": "Thai traditional medicine",
+    "Description": "แก้เถาดาน ท้องผูก",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 212,
+    "Name": "ยาเหลืองปิดสมุทร",
+    "Category": "Thai traditional medicine",
+    "Description": "บรรเทาอาการท้องเสียชนิดที่ไม่เกิดจากการติดเชื้อ เช่น อุจจาระไม่เป็นมูกหรือมีเลือดปน ท้องเสียชนิดที่ไม่มีไข้ เป็นต้น",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 213,
+    "Name": "ยาริดสีดวงมหากาฬ",
+    "Category": "Thai traditional medicine",
+    "Description": "บรรเทาอาการริดสีดวงทวารหนัก",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 214,
+    "Name": "ยาธาตุอบเชย",
+    "Category": "Thai traditional medicine",
+    "Description": "ขับลม บรรเทาอาการท้องอืด ท้องเฟ้อ",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 215,
+    "Name": "ยาประสะไพล",
+    "Category": "Thai traditional medicine",
+    "Description": "บรรเทาอาการปวดประจำเดือน ระดูมาไม่สม่ำเสมอหรือมาน้อยกว่าปกติ ขับน้ำคาวปลาในหญิงหลังคลอดบุตร",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 216,
+    "Name": "ยาไฟประลัยกัลป์",
+    "Category": "Thai traditional medicine",
+    "Description": "กระตุ้นน้ำนม กระจายเลือดลมในหญิงหลังคลอด",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 217,
+    "Name": "ยาไฟห้ากอง",
+    "Category": "Thai traditional medicine",
+    "Description": "ขับน้ำคาวปลาในเรือนไฟ ช่วยให้มดลูกเข้าอู่",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 218,
+    "Name": "ยาเลือดงาม",
+    "Category": "Thai traditional medicine",
+    "Description": "บรรเทาอาการปวดประจำเดือน ช่วยให้ประจำเดือนมาเป็นปกติ แก้มุตกิด",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 219,
+    "Name": "ยาสตรีหลังคลอด",
+    "Category": "Thai traditional medicine",
+    "Description": "ขับน้ำคาวปลา บำรุงเลือด ช่วยให้มดลูกเข้าอู่เร็วในหญิงหลังคลอด",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 220,
+    "Name": "ยาแก้ไอผสมกานพลู",
+    "Category": "Thai traditional medicine",
+    "Description": "บรรเทาอาการไอ ขับเสมหะ",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 221,
+    "Name": "ยาแก้ไอผสมมะนาวดอง",
+    "Category": "Thai traditional medicine",
+    "Description": "บรรเทาอาการไอ อาการหวัด ขับเสมหะ",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 222,
+    "Name": "ยาแก้ไอผสมมะขามป้อม",
+    "Category": "Thai traditional medicine",
+    "Description": "บรรเทาอาการไอ ขับเสมหะ",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 223,
+    "Name": "ยาปราบชมพูทวีป",
+    "Category": "Thai traditional medicine",
+    "Description": "บรรเทาอาการหวัดในระยะแรก และอาการที่เกิดจากการแพ้อากาศ",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 224,
+    "Name": "ยาอำมฤควาที",
+    "Category": "Thai traditional medicine",
+    "Description": "บรรเทาอาการไอ ขับเสมหะ",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 225,
+    "Name": "ยากษัยเส้น",
+    "Category": "Thai traditional medicine",
+    "Description": "บรรเทาอาการปวดหลัง ปวดเอว ปวดเมื่อยตามร่างกาย",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 226,
+    "Name": "ยาแก้ลมอัมพฤกษ์",
+    "Category": "Thai traditional medicine",
+    "Description": "บรรเทาอาการปวดตามเส้นเอ็น กล้ามเนื้อ มือ เท้า ตึงหรือชา",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 227,
+    "Name": "ยาผสมโคคลาน",
+    "Category": "Thai traditional medicine",
+    "Description": "บรรเทาอาการปวดเมื่อยตามร่างกาย",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 228,
+    "Name": "ยาผสมเถาวัลย์เปรียง",
+    "Category": "Thai traditional medicine",
+    "Description": "บรรเทาอาการปวดเมื่อยตามร่างกาย",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 229,
+    "Name": "ยาสหัศธารา",
+    "Category": "Thai traditional medicine",
+    "Description": "ขับลมในเส้น แก้โรคลมกองหยาบ",
+    "Usable": false,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 300,
+    "Name": "สาบเสือ",
+    "Category": "",
+    "Description": "มีสรรพคุณช่วยถอนพิษแก้อักเสบและห้ามเลิอด ใช้ในการรักษาแผลสดได้เป็นอย่างดี",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 301,
+    "Name": "แอปเปิ้ล",
+    "Category": "",
+    "Description": "ลูกแอปเปิ้ลแดงสุก ถึงแม้จะกินกับอะไรก็อร่อย แต่กินเปล่าๆก็อร่อยเหมือนกัน",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 302,
+    "Name": "ซุปเห็ด",
+    "Category": "",
+    "Description": "ทำจากเห็ดที่มีประโยชน์ต่อร่างกายและยังมีรสชาติอร่อยอีกด้วย อาหารที่ดีสุขภาพจานนี้จะทำให้คุณอิ่มท้อง",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 303,
+    "Name": "ผัดกระหล่ำปลี",
+    "Category": "",
+    "Description": "เมนูผัดที่มีกลิ่นหอมของเนื้อสัตว์และกระหล่ำปลี",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 304,
+    "Name": "เนื้อโรล",
+    "Category": "",
+    "Description": "เมนูผักกรอบและเนื้อสัตว์ที่เข้ากันอย่างลงตัว เหมาะกับการกินมือเดียว",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 305,
+    "Name": "สตูว์เนื้อ",
+    "Category": "",
+    "Description": "สตูว์เนื้อรสชาติเข้มข้นจากแครรอทและมันฝรั่ง จะทำให้ร่างกายที่เหนื่อยล้าผ่อนคลายและอบอุ่นขึ้น",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 306,
+    "Name": "นม",
+    "Category": "",
+    "Description": "น้ำนมดิบบริสุทธิ์รสชาติเข้มข้นและกลมกล่อม ดื่มเย็นๆช่วยคลายความเมื่อยล้าได้",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 307,
+    "Name": "ซุปมันฝรั่ง",
+    "Category": "",
+    "Description": "แม้ว่าส่วนผสมจะเรียบง่าย แต่ก็เป็นซุปเพื่อสุขภาพที่ทำจากมันฝรั่งต้มสุก",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 308,
+    "Name": "สเต็ก",
+    "Category": "",
+    "Description": "สเต็กโฮมเมดเนื้อชิ้นใหญ่ที่ปรุงรสด้วยเกลือและพริกไทยดำ",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 309,
+    "Name": "บาบีคิว",
+    "Category": "",
+    "Description": "บาร์บีคิวที่ทำจากผักและเนื้อล่าสดๆ ชิ้นใหญ่ เป็นหนึ่งในอาหารประจำเทศกาลที่ใช้วัตถุดิบหายากและอร่อย",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 310,
+    "Name": "ข้าวปั่นสาหร่าย",
+    "Category": "",
+    "Description": "ข้าวปั้นรสเค็มและน่าอร่อยที่สามารถเติมเต็มท้องที่หิวโหยได้อย่างง่ายดาย",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 311,
+    "Name": "ซูชิวาซาบิแซลมอน",
+    "Category": "",
+    "Description": "เมนูอาหารทะเลพร้อมปลาแซลมอนบนข้าวที่แทบจะละลายในปาก",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 312,
+    "Name": "เมี๊ยวลาเต้",
+    "Category": "",
+    "Description": "เป็นกาแฟแก้วที่สมบูรณ์แบบที่เต็มไปด้วยรสชาติของลาเต้อาร์ตสุดน่ารัก ถูกใจคนรักแมวแบบสุดๆ",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 313,
+    "Name": "ผัดกะเพราเนื้อ",
+    "Category": "",
+    "Description": "อาหารตามสั่งที่ใครๆ ก็อยากกินเป็นมื้อเช้า กลางวัน และเย็น",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": true
+  },
+  {
+    "ItemId": 400,
+    "Name": "ดาบนักผจญภัย",
+    "Category": "Equipment",
+    "Description": "ดาบที่นักผจญภัยต้องมี! ทำจากเหล็กทนทานแบบพิเศษ ที่ทำให้แหล่งคมได้ยาวนาน",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": false
+  },
+  {
+    "ItemId": 401,
+    "Name": "หมวกนักผจญภัย",
+    "Category": "Equipment",
+    "Description": "หมวกที่คุ้มค่าที่สุด! ยังป้องกันร่างกายจากการโดนตีหัวได้อย่างมีเสถียรภาพ",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": false
+  },
+  {
+    "ItemId": 402,
+    "Name": "ชุดเกราะของนักผจญภัย",
+    "Category": "Equipment",
+    "Description": "ชุดเกราะที่ทนทานและคลาสสิค คุ้มค่าไม่แพ้กับทักษะในการปกป้องจากการโจมตี",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": false
+  },
+  {
+    "ItemId": 403,
+    "Name": "ถุงมือนักผจญภัย",
+    "Category": "Equipment",
+    "Description": "ถุงมือที่ทำจากหนังธรรมดา บอกเลยว่านุ่มสบายและแข็งแกร่ง เหมาะสำหรับการใช้งานทุกรูปแบบ",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": false
+  },
+  {
+    "ItemId": 404,
+    "Name": "รองเท้าบูทนักผจญภัย",
+    "Category": "Equipment",
+    "Description": "รองเท้าที่ทำให้เดินสบายได้ทุกเส้นทาง ช่วยให้นักผจญภัยเดินได้โดยที่ไม่ต้องกังวลเรื่องพื้นผิวมากนัก",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": false
+  },
+  {
+    "ItemId": 405,
+    "Name": "แหวนนักผจญภัย",
+    "Category": "Equipment",
+    "Description": "แหวนที่สวยงามและมีประโยชน์ สามารถตรวจจับพลังเวทมนตร์ได้นิดหน่อย",
+    "Usable": true,
+    "Effect": 0,
+    "Stackable": false
   }
 ]

@@ -44,6 +44,12 @@
 #begin animation/mobs/slime/slimes_spritesheet.sf
 /copy:animation/mobs/slime/slimes_spritesheet.sf
 
+#begin data/models/characters.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.CharacterDataReader, Medicraft
+/build:data/models/characters.json
+
 #begin data/models/items_demo.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor

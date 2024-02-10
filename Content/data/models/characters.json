@@ -1,0 +1,26 @@
+[
+  {
+    "CharId": 0,
+    "Name": "Noah",
+    "Category": 0,
+    "ATK": 10,
+    "HP": 100,
+    "DEF_Percent": 0.25,
+    "Crit_Percent": 0.25,
+    "CritDMG_Percent": 0.5,
+    "Speed": 300,
+    "Evasion": 0.1
+  },
+  {
+    "CharId": 200,
+    "Name": "Slime",
+    "Category": 2,
+    "ATK": 5,
+    "HP": 100,
+    "DEF_Percent": 0.1,
+    "Crit_Percent": 0.05,
+    "CritDMG_Percent": 0.25,
+    "Speed": 50,
+    "Evasion": 0.05
+  }
+]

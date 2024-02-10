@@ -19,8 +19,10 @@ namespace Medicraft.Entities
         public string Name;
         public int Level;
         public int EXP;
+
+        // Character Stats
         public int ATK;
-        public int HP;
+        public int HP, MaximumHP;
         public float DEF_Percent;
         public float Crit_Percent;
         public float CritDMG_Percent;
@@ -30,7 +32,7 @@ namespace Medicraft.Entities
         public string SpriteName;
         public AnimatedSprite Sprite;
         public Transform2 Transform;
-        public Vector2 Velocity, DamageNumVelocity;
+        public Vector2 Velocity, CombatNumVelocity;
         public Rectangle BoundingDetectCollisions; // For dectect collisions
         public double BoundingCollisionX, BoundingCollisionY;
         public CircleF BoundingHitBox;
@@ -92,8 +94,6 @@ namespace Medicraft.Entities
         public int CombatNumCase { get; set; }
         public Color CombatNumColor { get; set; }
         public float CombatNumScale { get; set; }
-        public float AlphaColor { get; set; }
-        public float ScaleFont { get; set; }
 
         public bool IsKnockbackable { get; set; }
         public bool IsKnockback { get; set; }
@@ -111,13 +111,7 @@ namespace Medicraft.Entities
             Name = string.Empty;
             Level = 0;
             EXP = 0;
-            ATK = 0;
-            HP = 0;
-            DEF_Percent = 0;
-            Crit_Percent = 0;
-            CritDMG_Percent = 0;
-            Speed = 0;
-            Evasion = 0;
+  
             Transform = new Transform2
             {
                 Scale = Vector2.One,
@@ -126,7 +120,7 @@ namespace Medicraft.Entities
             };
 
             Velocity = Vector2.Zero;
-            DamageNumVelocity = Vector2.Zero;
+            CombatNumVelocity = Vector2.Zero;
 
             AggroTime = 0f;
             ActionTime = 0f;
@@ -141,8 +135,6 @@ namespace Medicraft.Entities
 
             CombatNumColor = Color.White;
             CombatNumScale = 2f;
-            AlphaColor = 1f;
-            ScaleFont = 1f;
 
             IsKnockbackable = true;
             IsKnockback = false;
@@ -162,16 +154,9 @@ namespace Medicraft.Entities
             Name = entity.Name;
             Level = entity.Level;
             EXP = entity.EXP;
-            ATK = entity.ATK;
-            HP = entity.HP;
-            DEF_Percent = entity.DEF_Percent;
-            Crit_Percent = entity.Crit_Percent;
-            CritDMG_Percent = entity.CritDMG_Percent;
-            Speed = entity.Speed;
-            Evasion = entity.Evasion;
             Transform = entity.Transform;
             Velocity = entity.Velocity;
-            DamageNumVelocity = entity.DamageNumVelocity;
+            CombatNumVelocity = entity.CombatNumVelocity;
             AggroTime = entity.AggroTime;
             ActionTime = entity.ActionTime;
             AttackedTime = entity.AttackedTime;
@@ -183,8 +168,6 @@ namespace Medicraft.Entities
             IsAttackCooldown = entity.IsAttackCooldown;
             CombatNumColor = entity.CombatNumColor;
             CombatNumScale = entity.CombatNumScale;
-            AlphaColor = entity.AlphaColor;
-            ScaleFont = entity.ScaleFont;
             IsKnockbackable = entity.IsKnockbackable;
             IsKnockback = entity.IsKnockback;
             IsDying = entity.IsDying;
@@ -205,31 +188,65 @@ namespace Medicraft.Entities
             IsDestroyed = true;
         }
 
-        public virtual void SetCombatNumDirection() { }
+        public virtual Vector2 SetCombatNumDirection()
+        {
+            return CombatNumVelocity;
+        }
+
+        protected virtual void SetEntityType(int category)
+        {
+            switch (category)
+            {
+                case 0:
+                    Type = EntityType.Playable;
+                    break;
+
+                case 1:
+                    Type = EntityType.Friendly;
+                    break;
+
+                case 2:
+                    Type = EntityType.Hostile;
+                    break;
+            }
+        }
+
+        protected virtual void SetCharacterStats(CharacterData charData, int level)
+        {
+            ATK = charData.ATK + ((level - 1) * 2);
+            MaximumHP = charData.HP + ((level - 1) * 5);
+            HP = MaximumHP;
+            DEF_Percent = (float)charData.DEF_Percent;
+            Crit_Percent = (float)charData.Crit_Percent;
+            CritDMG_Percent = (float)charData.CritDMG_Percent;
+            Speed = charData.Speed;
+            Evasion = (float)charData.Evasion;
+        }
 
         // Knowing this that MovementControl, CombatControl and some methods below this is for Mobs only
         protected void MovementControl(float deltaSeconds)
         {
-            var walkSpeed = deltaSeconds * Speed;
-            InitPos = Position;
-
-            // Check Object Collsion
-            CheckCollision();
-
-            if (!IsAttacking)
-            {
-                CurrentAnimation = SpriteName + "_walking";  // Idle
-                Sprite.Play(CurrentAnimation);
-            }
-
-            // Setup Aggro time if detected player hit box
-            if (BoundingAggro.Intersects(PlayerManager.Instance.Player.BoundingHitBox))
-            {
-                AggroTime = 5f;
-            }
-
             if (!PlayerManager.Instance.IsPlayerDead)
             {
+                var walkSpeed = deltaSeconds * Speed;
+                InitPos = Position;
+
+                // Check Object Collsion
+                CheckCollision();
+
+                // Play Sprite: Idle 
+                if (!IsAttacking)
+                {
+                    CurrentAnimation = SpriteName + "_walking";  // Idle
+                    Sprite.Play(CurrentAnimation);
+                }
+
+                // Setup Aggro time if detected player hit box
+                if (BoundingAggro.Intersects(PlayerManager.Instance.Player.BoundingHitBox))
+                {
+                    AggroTime = 5f;
+                }
+
                 // Checking for movement
                 if (!IsKnockback && !IsAttacking || !IsAttacked && !IsAttacking)
                 {
@@ -303,7 +320,7 @@ namespace Medicraft.Entities
                         //}
                     }
                 }
-            } 
+            }          
         }
 
         protected virtual void CheckCollision()
@@ -357,18 +374,16 @@ namespace Medicraft.Entities
                     foreach (var log in CombatLogs.Where(e => e.ElapsedTime < 1))
                     {
                         log.ElapsedTime += deltaSeconds;
+                        log.AlphaColor -= deltaSeconds * 0.5f;
+                        log.ScaleFont -= deltaSeconds * 0.4f;
                     }
 
                     AttackedTime += deltaSeconds;
-                    AlphaColor -= deltaSeconds * 0.5f;
-                    ScaleFont -= deltaSeconds * 0.4f;
                 }
                 else
                 {
                     IsAttacked = false;
-                    AlphaColor = 1f;
-                    ScaleFont = 1f;
-                    DamageNumVelocity = Vector2.Zero;
+                    CombatNumVelocity = Vector2.Zero;
                 }
             }
         }
@@ -433,13 +448,11 @@ namespace Medicraft.Entities
                         PlayerManager.Instance.Player.HP -= totalDamage;
                     }
 
-                    PlayerManager.Instance.Player.SetCombatNumDirection();
-                    PlayerManager.Instance.Player.AddCombatLogNumbers(Name, totalDamage.ToString(), CombatNumCase);
+                    var combatNumVelocity = PlayerManager.Instance.Player.SetCombatNumDirection();
+                    PlayerManager.Instance.Player.AddCombatLogNumbers(Name, totalDamage.ToString(), CombatNumCase, combatNumVelocity);
 
                     PlayerManager.Instance.Player.IsAttacked = true;
                     PlayerManager.Instance.Player.AttackedTime = 0f;
-                    PlayerManager.Instance.Player.AlphaColor = 1f;
-                    PlayerManager.Instance.Player.ScaleFont = 1f;
                 }
             }
         }
@@ -517,7 +530,8 @@ namespace Medicraft.Entities
             }
         }
 
-        public virtual void AddCombatLogNumbers(string ActorName, string combatNumbers, int combatCase)
+        public virtual void AddCombatLogNumbers(string ActorName, string combatNumbers, int combatCase
+            , Vector2 combatNumVelocity)
         {
             switch (combatCase)
             {
@@ -526,7 +540,10 @@ namespace Medicraft.Entities
                         Actor = ActorName,
                         Action = CombatNumberData.ActionType.Attack,
                         Value = combatNumbers,
-                        ElapsedTime = 0
+                        ElapsedTime = 0,
+                        Velocity = combatNumVelocity,
+                        AlphaColor = 1f,
+                        ScaleFont = 1f
                     });
                     CombatNumColor = Color.White;
                     CombatNumScale = 2f;
@@ -538,7 +555,10 @@ namespace Medicraft.Entities
                         Actor = ActorName,
                         Action = CombatNumberData.ActionType.Attack,
                         Value = combatNumbers,
-                        ElapsedTime = 0
+                        ElapsedTime = 0,
+                        Velocity = combatNumVelocity,
+                        AlphaColor = 1f,
+                        ScaleFont = 1f
                     });
                     CombatNumColor = Color.Red;
                     CombatNumScale = 2.25f;
@@ -553,7 +573,10 @@ namespace Medicraft.Entities
                         Actor = ActorName,
                         Action = CombatNumberData.ActionType.Attack,
                         Value = "Miss",
-                        ElapsedTime = 0
+                        ElapsedTime = 0,
+                        Velocity = combatNumVelocity,
+                        AlphaColor = 1f,
+                        ScaleFont = 1f
                     });
                     CombatNumColor = Color.Yellow;
                     CombatNumScale = 2.15f;
@@ -572,23 +595,23 @@ namespace Medicraft.Entities
                     switch (combatCase)
                     {
                         case 0: // Damage Numbers
-                            spriteBatch.DrawString(font, $"{log.Value}", (Position - DamageNumVelocity / 1.5f) - (DamageNumVelocity * log.ElapsedTime)
-                                , CombatNumColor * AlphaColor, 0f, Vector2.Zero, CombatNumScale * ScaleFont, SpriteEffects.None, 0f);
+                            spriteBatch.DrawString(font, $"{log.Value}", (Position - log.Velocity / 1.5f) - (log.Velocity * log.ElapsedTime)
+                                , CombatNumColor * log.AlphaColor, 0f, Vector2.Zero, CombatNumScale * log.ScaleFont, SpriteEffects.None, 0f);
                             break;
 
                         case 1: // Damage NUmbers Critical | Player Damage Taken
-                            spriteBatch.DrawString(font, $"{log.Value}", (Position - DamageNumVelocity / 1.5f) - (DamageNumVelocity * log.ElapsedTime)
-                                , CombatNumColor * AlphaColor, 0f, Vector2.Zero, CombatNumScale * ScaleFont, SpriteEffects.None, 0f);
+                            spriteBatch.DrawString(font, $"{log.Value}", (Position - log.Velocity / 1.5f) - (log.Velocity * log.ElapsedTime)
+                                , CombatNumColor * log.AlphaColor, 0f, Vector2.Zero, CombatNumScale * log.ScaleFont, SpriteEffects.None, 0f);
                             break;
 
                         case 2: // Buff & Healing Numbers
-                            spriteBatch.DrawString(font, $"{log.Value}", (Position - DamageNumVelocity / 1.5f) - (DamageNumVelocity * log.ElapsedTime)
-                                , CombatNumColor * AlphaColor, 0f, Vector2.Zero, CombatNumScale * ScaleFont, SpriteEffects.None, 0f);
+                            spriteBatch.DrawString(font, $"{log.Value}", (Position - log.Velocity / 1.5f) - (log.Velocity * log.ElapsedTime)
+                                , CombatNumColor * log.AlphaColor, 0f, Vector2.Zero, CombatNumScale * log.ScaleFont, SpriteEffects.None, 0f);
                             break;
 
                         case 3: // Missed
-                            spriteBatch.DrawString(font, $"{log.Value}", (Position - DamageNumVelocity / 1.5f) - (DamageNumVelocity * log.ElapsedTime)
-                                , CombatNumColor * AlphaColor, 0f, Vector2.Zero, CombatNumScale * ScaleFont, SpriteEffects.None, 0f);
+                            spriteBatch.DrawString(font, $"{log.Value}", (Position - log.Velocity / 1.5f) - (log.Velocity * log.ElapsedTime)
+                                , CombatNumColor * log.AlphaColor, 0f, Vector2.Zero, CombatNumScale * log.ScaleFont, SpriteEffects.None, 0f);
                             break;
                     }
                 }              

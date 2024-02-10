@@ -4,7 +4,6 @@ using Medicraft.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Sprites;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Medicraft.Systems
@@ -132,7 +131,7 @@ namespace Medicraft.Systems
         {           
             if (IsPlayerDead)
             {
-                Player.HP = Player.GetStats().HP; // for testing
+                Player.HP = Player.MaximumHP;
                 Player.Position = new Vector2((float)InitialPlayerData.Position[0]
                     , (float)InitialPlayerData.Position[1]);
 

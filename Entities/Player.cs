@@ -12,7 +12,7 @@ namespace Medicraft.Entities
 {
     public class Player : Entity
     {
-        private readonly PlayerData _basePlayerStats;
+        private readonly PlayerData _playerData;
 
         private float _knockbackForce;
         private readonly float _normalHitSpeed, _normalSkillSpeed, _burstSkillSpeed, _dyingSpeed;
@@ -26,19 +26,15 @@ namespace Medicraft.Entities
 
         private Vector2 _initHudPos, _initCamPos;
 
-        public Player(AnimatedSprite sprite, PlayerData basePlayerStats)
+        public Player(AnimatedSprite sprite, PlayerData playerData)
         {
-            _basePlayerStats = basePlayerStats;
-
-            Type = EntityType.Playable;           
-            Id = basePlayerStats.CharId;
-            Name = basePlayerStats.Name;
             Sprite = sprite;
+            _playerData = playerData;
 
-            IsKnockbackable = true;
-
-            // Initial stats
-            InitializeStats();
+            // Initialize Character Data
+            InitializeCharacterData();
+                 
+            IsKnockbackable = true;            
 
             _knockbackForce = 50f;
 
@@ -60,7 +56,7 @@ namespace Medicraft.Entities
             _isBurstSkillCooldown = false;
             _isPassiveSkillCooldown = false;
 
-            var position = new Vector2((float)basePlayerStats.Position[0], (float)basePlayerStats.Position[1]);
+            var position = new Vector2((float)playerData.Position[0], (float)playerData.Position[1]);
             
             Transform = new Transform2
             {
@@ -86,17 +82,19 @@ namespace Medicraft.Entities
             Sprite.Play("idle");
         }
 
-        private void InitializeStats()
+        private void InitializeCharacterData()
         {
-            Level = _basePlayerStats.Level;
-            EXP = _basePlayerStats.EXP;
-            ATK = _basePlayerStats.ATK;
-            HP = _basePlayerStats.HP;
-            DEF_Percent = (float)_basePlayerStats.DEF_Percent;
-            Crit_Percent = (float)_basePlayerStats.Crit_Percent;
-            CritDMG_Percent = (float)_basePlayerStats.CritDMG_Percent;
-            Speed = _basePlayerStats.Speed;
-            Evasion = (float)_basePlayerStats.Evasion;
+            var charData = GameGlobals.Instance.CharacterDatas[0];
+
+            SetEntityType(charData.Category);
+            Id = charData.CharId;
+            Name = charData.Name;
+            Level = _playerData.Level;
+            EXP = _playerData.EXP;
+
+            SetCharacterStats(charData, Level);
+
+            // gonna calculate character stats with the equipment's stats too
         }
 
         // Update Player
@@ -315,8 +313,8 @@ namespace Medicraft.Entities
                             knockBackDirection.Normalize();
                             entity.Velocity = knockBackDirection * _knockbackForce;
 
-                            entity.SetCombatNumDirection();
-                            entity.AddCombatLogNumbers(Name, totalDamage.ToString(), CombatNumCase);
+                            var combatNumVelocity = entity.SetCombatNumDirection();
+                            entity.AddCombatLogNumbers(Name, totalDamage.ToString(), CombatNumCase, combatNumVelocity);
 
                             if (CombatNumCase != 3)
                             {
@@ -326,8 +324,6 @@ namespace Medicraft.Entities
                          
                             entity.IsAttacked = true;                          
                             entity.AttackedTime = 0f;
-                            entity.AlphaColor = 1f;
-                            entity.ScaleFont = 1f;
 
                             if (entity.HP <= 0)
                             {
@@ -573,7 +569,7 @@ namespace Medicraft.Entities
             base.UpdateTimeConditions(deltaSeconds);
         }
 
-        public override void SetCombatNumDirection()
+        public override Vector2 SetCombatNumDirection()
         {
             float randomFloat = (float)(new Random().NextDouble() * 0.5f) - 0.25f;
             var NumDirection = Position
@@ -581,12 +577,14 @@ namespace Medicraft.Entities
                 , Position.Y - (Sprite.TextureRegion.Height));
             NumDirection.Normalize();
 
-            DamageNumVelocity = NumDirection * (Sprite.TextureRegion.Height / 2);
+            CombatNumVelocity = NumDirection * (Sprite.TextureRegion.Height / 2);
+
+            return CombatNumVelocity;
         }
 
-        public PlayerData GetStats()
+        public PlayerData GetPlayerData()
         {
-            return _basePlayerStats;
+            return _playerData;
         }
 
         public float GetDepth()

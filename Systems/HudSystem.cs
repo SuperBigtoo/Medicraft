@@ -231,7 +231,7 @@ namespace Medicraft.Systems
 
                     spriteBatch.Draw(_sprite, _transform);
 
-                    spriteBatch.DrawString(_fonts[2], $"{GameGlobals.Instance.ItemsData[referId].Name} x {amount}"
+                    spriteBatch.DrawString(_fonts[2], $"{GameGlobals.Instance.ItemsDatas[referId].Name} x {amount}"
                         , new Vector2(360f + 32f, 495f + (i * 40)) + _hudPosition, Color.White);
                 }
 

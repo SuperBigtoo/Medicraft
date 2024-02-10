@@ -19,8 +19,8 @@ namespace Medicraft.Data
             string dateTimeString = dateTime.ToString().Replace(' ', '_');
 
             // Get Player Position
-            PlayerManager.Instance.Player.GetStats().Position[0] = PlayerManager.Instance.Player.Position.X;
-            PlayerManager.Instance.Player.GetStats().Position[1] = PlayerManager.Instance.Player.Position.Y;
+            PlayerManager.Instance.Player.GetPlayerData().Position[0] = PlayerManager.Instance.Player.Position.X;
+            PlayerManager.Instance.Player.GetPlayerData().Position[1] = PlayerManager.Instance.Player.Position.Y;
 
             // Get HUD Position
             double[] hudPosition =
@@ -43,17 +43,14 @@ namespace Medicraft.Data
             {
                 inventoryItems.Add(item);
             }
-
             var inventoryData = new InventoryData() {
                 GoldCoin = InventoryManager.Instance.GoldCoin,
                 Inventory = inventoryItems
             };
-
-            PlayerManager.Instance.Player.GetStats().InventoryData = inventoryData;
+            PlayerManager.Instance.Player.GetPlayerData().InventoryData = inventoryData;
 
             // Set save name
             var saveName = "Save_" + dateTimeString;
-
             if (GameGlobals.Instance.GameSave.Count != 0)
             {
                 GameGlobals.Instance.GameSave[GameGlobals.Instance.GameSaveIdex] = new GameSaveData()
@@ -64,7 +61,7 @@ namespace Medicraft.Data
                     LastUpdated = dateTimeString,
                     CameraPosition = cameraPosition,
                     HUDPosition = hudPosition,
-                    PlayerData = PlayerManager.Instance.Player.GetStats(),
+                    PlayerData = PlayerManager.Instance.Player.GetPlayerData(),
                 };
             }
             else
@@ -77,7 +74,7 @@ namespace Medicraft.Data
                     LastUpdated = dateTimeString,
                     CameraPosition = cameraPosition,
                     HUDPosition = hudPosition,
-                    PlayerData = PlayerManager.Instance.Player.GetStats(),
+                    PlayerData = PlayerManager.Instance.Player.GetPlayerData(),
                 });
             }
 
@@ -86,7 +83,7 @@ namespace Medicraft.Data
 
         public static List<GameSaveData> LoadFlie(string PATH)
         {
-            var fileContents = "";
+            string fileContents;
             try
             {
                 fileContents = File.ReadAllText(PATH);
@@ -111,7 +108,7 @@ namespace Medicraft.Data
         }
     }
 
-    // Reader Entity Stats
+    // Reader Entity Data
     public class PlayerDataReader : JsonContentTypeReader<PlayerData> { }
     public class EntityDataReader : JsonContentTypeReader<List<EntityData>> { }
 
@@ -120,4 +117,7 @@ namespace Medicraft.Data
 
     // Reader Items Data
     public class ItemDataReader : JsonContentTypeReader<List<ItemData>> { }
+    
+    // Reader Characters Data
+    public class CharacterDataReader : JsonContentTypeReader<List<CharacterData>> { }
 }

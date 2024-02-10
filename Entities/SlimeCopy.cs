@@ -11,7 +11,7 @@ namespace Medicraft.Entities
 {
     public class SlimeCopy : Entity
     {
-        private readonly EntityData _entityStats;
+        private readonly EntityData _entityData;
         private enum SlimeColor
         {
             yellow,
@@ -20,18 +20,18 @@ namespace Medicraft.Entities
             blue
         }
 
-        public SlimeCopy(AnimatedSprite sprite, EntityData entityStats, Vector2 scale)
+        public SlimeCopy(AnimatedSprite sprite, EntityData entityData, Vector2 scale)
         {
-            _entityStats = entityStats;
+            _entityData = entityData;
 
             Type = EntityType.Hostile;         
-            Id = entityStats.Id;
-            Name = entityStats.Name;
-            ATK = entityStats.ATK;
-            HP = entityStats.HP;
-            DEF_Percent = (float)entityStats.DEF_Percent;
-            Speed = entityStats.Speed;
-            Evasion = (float)entityStats.Evasion;
+            Id = entityData.Id;
+            Name = entityData.Name;
+            ATK = entityData.ATK;
+            HP = entityData.HP;
+            DEF_Percent = (float)entityData.DEF_Percent;
+            Speed = entityData.Speed;
+            Evasion = (float)entityData.Evasion;
             Sprite = sprite;
 
             AggroTime = 0f;
@@ -41,7 +41,7 @@ namespace Medicraft.Entities
 
             IsKnockbackable = true;
 
-            var position = new Vector2((float)entityStats.Position[0], (float)entityStats.Position[1]);
+            var position = new Vector2((float)entityData.Position[0], (float)entityData.Position[1]);
             Transform = new Transform2
             {
                 Scale = scale,
@@ -70,16 +70,16 @@ namespace Medicraft.Entities
 
         private SlimeCopy(SlimeCopy slime)
         {
-            _entityStats = slime._entityStats;
+            _entityData = slime._entityData;
 
             Type = slime.Type;
-            Id = _entityStats.Id;
-            Name = _entityStats.Name;
-            ATK = _entityStats.ATK;
-            HP = _entityStats.HP;
-            DEF_Percent = (float)_entityStats.DEF_Percent;
-            Speed = _entityStats.Speed;
-            Evasion = (float)_entityStats.Evasion;
+            Id = _entityData.Id;
+            Name = _entityData.Name;
+            ATK = _entityData.ATK;
+            HP = _entityData.HP;
+            DEF_Percent = (float)_entityData.DEF_Percent;
+            Speed = _entityData.Speed;
+            Evasion = (float)_entityData.Evasion;
             Sprite = slime.Sprite;
 
             AggroTime = slime.AggroTime;
@@ -160,7 +160,7 @@ namespace Medicraft.Entities
                 else
                 {
                     PathFinding = new AStar((int)Position.X, (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY)
-                        , (int)_entityStats.Position[0], (int)_entityStats.Position[1]);
+                        , (int)_entityData.Position[0], (int)_entityData.Position[1]);
                 }
 
                 // Combat Control
@@ -198,6 +198,12 @@ namespace Medicraft.Entities
             // Update time conditions
             UpdateTimeConditions(deltaSeconds);
 
+            if (PlayerManager.Instance.IsPlayerDead)
+            {
+                CurrentAnimation = SpriteName + "_walking";  // Idle
+                Sprite.Play(CurrentAnimation);
+            }
+
             Sprite.Update(deltaSeconds);
         }
 
@@ -220,7 +226,7 @@ namespace Medicraft.Entities
             }
         }
 
-        public override void SetCombatNumDirection()
+        public override Vector2 SetCombatNumDirection()
         {
             float randomFloat = (float)(new Random().NextDouble() * 1.0f) - 0.75f;
             var NumDirection = Position
@@ -228,7 +234,9 @@ namespace Medicraft.Entities
                 , Position.Y - (Sprite.TextureRegion.Height * 1.50f));
             NumDirection.Normalize();
 
-            DamageNumVelocity = NumDirection * (Sprite.TextureRegion.Height * 2);
+            CombatNumVelocity = NumDirection * (Sprite.TextureRegion.Height * 2);
+
+            return CombatNumVelocity;
         }
     }
 }

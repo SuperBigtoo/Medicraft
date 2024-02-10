@@ -1,4 +1,6 @@
-﻿namespace Medicraft.Data.Models
+﻿using Microsoft.Xna.Framework;
+
+namespace Medicraft.Data.Models
 {
     public class CombatNumberData
     {
@@ -14,5 +16,8 @@
         public ActionType Action { get; set;}
         public string Value { get; set; }
         public float ElapsedTime { get; set; }
+        public Vector2 Velocity { get; set; }
+        public float AlphaColor { get; set; }
+        public float ScaleFont { get; set; }
     }
 }

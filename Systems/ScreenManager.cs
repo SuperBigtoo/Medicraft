@@ -76,7 +76,10 @@ namespace Medicraft.Systems
             }
 
             // Load Item Datas
-            GameGlobals.Instance.ItemsData = Content.Load<List<ItemData>>("data/models/items");
+            GameGlobals.Instance.ItemsDatas = Content.Load<List<ItemData>>("data/models/items");
+
+            // Load Character Datas
+            GameGlobals.Instance.CharacterDatas = Content.Load<List<CharacterData>>("data/models/characters");
 
             // Load Font Bitmap
             GameGlobals.Instance.FontTA16Bit = Content.Load<BitmapFont>("fonts/TA_16_Bit/TA_16_Bit");
