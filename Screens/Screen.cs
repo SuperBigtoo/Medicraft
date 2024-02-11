@@ -2,14 +2,27 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Medicraft.Systems;
+using Medicraft.Systems.TilemapRenderer;
 
 namespace Medicraft.Screens
 {
-    public class Screen
+    public interface IScreen
+    {
+        void LoadContent();
+        void UnloadContent();
+        void Dispose();
+        void Update(GameTime gameTime);
+        void Draw(SpriteBatch spriteBatch);
+    }
+
+    public abstract class Screen : IScreen
     {
         protected ContentManager Content;
         protected GraphicsDevice GraphicsDevice;
         protected GameWindow Window;
+
+        protected HudSystem HudSystem;
+        protected TilemapOrthogonalRender TileMapRender;
 
         public virtual void LoadContent()
         {
@@ -20,13 +33,16 @@ namespace Medicraft.Screens
 
         public virtual void UnloadContent()
         {
-            Content.Unload();
+            Content?.Unload();
         }
 
-        public virtual void Dispose() { }
+        public virtual void Dispose()
+        {
+            Content?.Dispose();
+        }
 
-        public virtual void Update(GameTime gameTime) { }
+        public abstract void Update(GameTime gameTime);
 
-        public virtual void Draw(SpriteBatch spriteBatch) { }
+        public abstract void Draw(SpriteBatch spriteBatch);
     }
 }

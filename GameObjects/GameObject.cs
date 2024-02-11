@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Medicraft.Data.Models;
+using Medicraft.Systems;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
@@ -8,10 +10,22 @@ namespace Medicraft.GameObjects
 {
     public class GameObject : ICloneable
     {
-        public int Id;
-        public int ReferId;
-        public string Name;
-        public string Description;
+        public enum GameObjectType
+        {
+            Item,
+            QuestItem,
+            CraftingTable,
+            SavingTable,
+            WarpPoint
+        }
+        public GameObjectType Type { get; protected set; }
+
+        public ObjectData ObjectData { get; protected set; }
+
+        public int Id { get; protected set; }
+        public int ReferId { get; protected set; }
+        public string Name { get; protected set; }
+        public string Description { get; protected set; }
 
         public AnimatedSprite Sprite;
         public Transform2 Transform;
@@ -26,17 +40,7 @@ namespace Medicraft.GameObjects
                 BoundingCollection.Center = value;
             }
         }
-
-        public enum GameObjectType
-        {
-            Item,
-            QuestItem,
-            CraftingTable,
-            SaveTable,
-            WarpPoint
-        }
-
-        public GameObjectType Type { get; protected set; }
+        
         public bool IsCollected { get; set; }
         public bool IsDestroyed { get; set; }
         public bool IsVisible { get; set; }
@@ -98,6 +102,41 @@ namespace Medicraft.GameObjects
         public virtual object Clone()
         {
             return new GameObject(this);
+        }
+
+        protected virtual void InitializeObjectData()
+        {
+            SetGameObjectType(ObjectData.Category);
+            Id = ObjectData.Id;
+            ReferId = ObjectData.ReferId;
+            Name = GameGlobals.Instance.ItemsDatas[ObjectData.ReferId].Name;
+            Description = GameGlobals.Instance.ItemsDatas[ObjectData.ReferId].Description;
+        }
+
+        protected virtual void SetGameObjectType(int category)
+        {
+            switch (category)
+            {
+                case 0:
+                    Type = GameObjectType.Item;
+                    break;
+
+                case 1:
+                    Type = GameObjectType.QuestItem;
+                    break;
+
+                case 2:
+                    Type = GameObjectType.CraftingTable;
+                    break;
+
+                case 3:
+                    Type = GameObjectType.SavingTable;
+                    break;
+
+                case 4:
+                    Type = GameObjectType.WarpPoint;
+                    break;
+            }
         }
     }
 }

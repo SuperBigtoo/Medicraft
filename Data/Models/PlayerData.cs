@@ -2,6 +2,7 @@
 {
     public class PlayerData
     {
+        public int CharId { get; set; }
         public int Level { get; set; }
         public int EXP { get; set; }
         public double[] Position { get; set; }

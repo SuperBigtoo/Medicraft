@@ -1,0 +1,16 @@
+[
+  {
+    "Id": 0,
+    "CharId": 200,
+    "Level": 1,
+    "Name": "Slime",
+    "Position": [ 1096, 566 ]
+  },
+  {
+    "Id": 1,
+    "CharId": 200,
+    "Level": 1,
+    "Name": "Slime",
+    "Position": [ 1276, 566 ]
+  }
+]

@@ -28,8 +28,7 @@ namespace Medicraft.Systems
             for (int i = 0; i < inventoryData.Inventory.Count; i++)
             {
                 //if (inventoryData.Inventory.ElementAt(i) != 0)
-                    Inventory.Add(inventoryData.Inventory.ElementAt(i).ItemId.ToString()
-                        , inventoryData.Inventory.ElementAt(i));
+                Inventory.Add(inventoryData.Inventory.ElementAt(i).ItemId.ToString(), inventoryData.Inventory.ElementAt(i));
             }
         }
 

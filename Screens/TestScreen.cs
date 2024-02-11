@@ -18,8 +18,6 @@ namespace Medicraft.Screens
 {
     public class TestScreen : Screen
     {
-        private HudSystem _hudSystem;
-        private TilemapOrthogonalRender _tileMapRender;
         private List<EntityData> _slimeStatsList;
         private List<ObjectData> _itemDataList;
         private BitmapFont _fontMinecraft, _fontSensation, _fontTA8Bit, _fontTA8BitBold, _fontTA16Bit;
@@ -62,7 +60,7 @@ namespace Medicraft.Screens
                 Content.Load<Texture2D>("tiledmaps/demo/TS1")
             };
             _tileMap = new TmxMap("Content/tiledmaps/demo/Demo.tmx");
-            _tileMapRender = new TilemapOrthogonalRender(_tileMap, _tileSetsDemo);
+            TileMapRender = new TilemapOrthogonalRender(_tileMap, _tileSetsDemo);
 
             //var _tileSetsTestMap1 = new Texture2D[]     // The maximum number of TileSet is 5
             //{
@@ -74,8 +72,8 @@ namespace Medicraft.Screens
             //_tileMapRender = new TilemapOrthogonalRender(_tileMap, _tileSetsTestMap1);
 
             // Load GameData from JSON file, such as Mobs and Items Data 
-            _slimeStatsList = Content.Load<List<EntityData>>("data/models/slime");
-            _itemDataList = Content.Load<List<ObjectData>>("data/models/items_demo");
+            _slimeStatsList = Content.Load<List<EntityData>>("data/TestScreen/entites_demo");
+            _itemDataList = Content.Load<List<ObjectData>>("data/TestScreen/objects_demo");
 
             // Adding Slime to MobSpawner
             var _slimeAnimation = Content.Load<SpriteSheet>("animation/mobs/slime/slimes_spritesheet.sf", new JsonContentLoader());
@@ -104,7 +102,7 @@ namespace Medicraft.Screens
                 Content.Load<Texture2D>("ui/PressF"),
                 Content.Load<Texture2D>("ui/insufficient"),
             };
-            _hudSystem = new HudSystem(_fonts, _textures, new AnimatedSprite(_itemAnimation));
+            HudSystem = new HudSystem(_fonts, _textures, new AnimatedSprite(_itemAnimation));
         }
 
         public override void UnloadContent()
@@ -125,12 +123,10 @@ namespace Medicraft.Screens
 
                 ObjectManager.Instance.Update(gameTime);
 
-                _tileMapRender.Update(gameTime);
+                TileMapRender?.Update(gameTime);
 
-                _hudSystem.Update(gameTime);
+                HudSystem?.Update(gameTime);
             }
-       
-            base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -142,7 +138,7 @@ namespace Medicraft.Screens
             //spriteBatch.DrawString(_fontTA8BitBold, $"จำนวนไอเทม: {GameGlobals.Instance.ItemDatas.Count} ", new Vector2(50, -70), Color.White);
             //spriteBatch.DrawString(_fontTA16Bit, $"ItemId: {GameGlobals.Instance.ItemDatas[0].ItemId} | Name: {GameGlobals.Instance.ItemDatas[0].Name} | Stackable: {GameGlobals.Instance.ItemDatas[0].Stackable}", new Vector2(50, -40), Color.White);
             //spriteBatch.DrawString(_fontTA8BitBold, $"Inventory Test: {InventoryManager.Instance.Inventory.Count} {InventoryManager.Instance.GoldCoin}", new Vector2(50, 170), Color.White);
-            //spriteBatch.DrawString(_fontMinecraft, $"ROWS: {GameGlobals.Instance.NUM_ROWS}", new Vector2(50, 200), Color.White);
+            //spriteBatch.DrawString(_fontMinecraft, $"ROWS: {GameGlobals.Instance.NUM_ROWS}", new Vector2(50, 200), Color.White);            
 
             EntityManager.Instance.Draw(spriteBatch);
 
@@ -150,10 +146,10 @@ namespace Medicraft.Screens
 
             if (!GameGlobals.Instance.IsShowPath)
             {
-                _tileMapRender.Draw(spriteBatch);
+                TileMapRender?.Draw(spriteBatch);
             }
 
-            _hudSystem.Draw(spriteBatch);
+            HudSystem?.Draw(spriteBatch);
         }
     }
 }

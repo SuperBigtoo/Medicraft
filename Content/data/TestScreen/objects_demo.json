@@ -2,6 +2,7 @@
   {
     "Id": 0,
     "ReferId": 0,
+    "Category": 0,
     "Name": "herb_1",
     "Description": "test herb 1",
     "Position": [ 753, 1005 ]
@@ -9,6 +10,7 @@
   {
     "Id": 1,
     "ReferId": 1,
+    "Category": 0,
     "Name": "herb_2",
     "Description": "test herb 2",
     "Position": [ 751, 1133 ]
@@ -16,6 +18,7 @@
   {
     "Id": 2,
     "ReferId": 2,
+    "Category": 0,
     "Name": "drug",
     "Description": "drug drug drug for demo",
     "Position": [ 750, 1262 ]

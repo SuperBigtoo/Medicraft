@@ -22,17 +22,13 @@ namespace Medicraft.Entities
 
         public Slime(AnimatedSprite sprite, EntityData entityData, Vector2 scale)
         {
+            Sprite = sprite;
             _entityData = entityData;
 
-            Type = EntityType.Hostile;           
+            // Initialize Character Data
             Id = entityData.Id;
-            Name = entityData.Name;
-            ATK = entityData.ATK;
-            HP = entityData.HP;
-            DEF_Percent = (float)entityData.DEF_Percent;
-            Speed = entityData.Speed;
-            Evasion = (float)entityData.Evasion;
-            Sprite = sprite;
+            Level = entityData.Level;
+            InitializeCharacterData(entityData.CharId, Level);
 
             AggroTime = 0f;
             AttackSpeed = 0.4f;
@@ -70,17 +66,18 @@ namespace Medicraft.Entities
 
         private Slime(Slime slime)
         {
+            Sprite = slime.Sprite;
             _entityData = slime._entityData;
 
             Type = slime.Type;        
-            Id = _entityData.Id;
-            Name = _entityData.Name;
-            ATK = _entityData.ATK;
-            HP = _entityData.HP;
-            DEF_Percent = (float)_entityData.DEF_Percent;
-            Speed = _entityData.Speed;
-            Evasion = (float)_entityData.Evasion;
-            Sprite = slime.Sprite;
+            Id = slime.Id;
+            Name = slime.Name;
+            ATK = slime.ATK;
+            MaximumHP = slime.MaximumHP;
+            HP = slime.MaximumHP;
+            DEF_Percent = slime.DEF_Percent;
+            Speed = slime.Speed;
+            Evasion = slime.Evasion;
 
             AggroTime = slime.AggroTime;
             AttackSpeed = slime.AttackSpeed;

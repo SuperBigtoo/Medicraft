@@ -66,23 +66,40 @@ namespace Medicraft.Systems.Spawners
                 destroyedEntities.Add(entity);
             }
 
+            //if (spawnTime <= 0)
+            //{
+            //    //System.Diagnostics.Debug.WriteLine($"Destroyed Mob: {entitiesDestroyed.Count}");
+            //    if (destroyedEntities.Count != 0)
+            //    {
+            //        foreach (var destroyedEntity in destroyedEntities)
+            //        {
+            //            foreach (var initialEntity in initialEntities)
+            //            {
+            //                if (destroyedEntity.Id == initialEntity.Id)
+            //                {
+            //                    Entity clonedEntity = initialEntity.Clone() as Entity;
+            //                    spawningEntities.Add(clonedEntity);
+            //                }
+            //            }
+            //        }
+
+            //        destroyedEntities.Clear();
+            //    }
+
+            //    IsSpawn = true;
+            //    spawnTime = initialSpawnTime;
+            //}
+
             if (spawnTime <= 0)
             {
-                //System.Diagnostics.Debug.WriteLine($"Destroyed Mob: {entitiesDestroyed.Count}");
                 if (destroyedEntities.Count != 0)
                 {
-                    foreach (var destroyedEntity in destroyedEntities)
-                    {
-                        foreach (var initialEntity in initialEntities)
-                        {
-                            if (destroyedEntity.Id == initialEntity.Id)
-                            {
-                                Entity clonedEntity = initialEntity.Clone() as Entity;
-                                spawningEntities.Add(clonedEntity);
-                            }
-                        }
-                    }
+                    var clonedEntities = destroyedEntities.Join(initialEntities,
+                            destroyedEntity => destroyedEntity.Id,
+                            initialEntity => initialEntity.Id,
+                            (destroyedEntity, initialEntity) => initialEntity.Clone() as Entity).ToList();
 
+                    spawningEntities.AddRange(clonedEntities);
                     destroyedEntities.Clear();
                 }
 

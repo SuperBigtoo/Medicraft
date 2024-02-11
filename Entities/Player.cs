@@ -32,7 +32,10 @@ namespace Medicraft.Entities
             _playerData = playerData;
 
             // Initialize Character Data
-            InitializeCharacterData();
+            Id = 999;
+            Level = _playerData.Level;
+            EXP = _playerData.EXP;
+            InitializeCharacterData(playerData.CharId, Level);
                  
             IsKnockbackable = true;            
 
@@ -82,17 +85,9 @@ namespace Medicraft.Entities
             Sprite.Play("idle");
         }
 
-        private void InitializeCharacterData()
-        {
-            var charData = GameGlobals.Instance.CharacterDatas[0];
-
-            SetEntityType(charData.Category);
-            Id = charData.CharId;
-            Name = charData.Name;
-            Level = _playerData.Level;
-            EXP = _playerData.EXP;
-
-            SetCharacterStats(charData, Level);
+        protected override void InitializeCharacterData(int charId, int level)
+        {           
+            base.InitializeCharacterData(charId, level);
 
             // gonna calculate character stats with the equipment's stats too
         }
@@ -438,7 +433,7 @@ namespace Medicraft.Entities
                         case GameObjects.GameObject.GameObjectType.CraftingTable:
                             break;
 
-                        case GameObjects.GameObject.GameObjectType.SaveTable:
+                        case GameObjects.GameObject.GameObjectType.SavingTable:
                             break;
 
                         case GameObjects.GameObject.GameObjectType.WarpPoint:

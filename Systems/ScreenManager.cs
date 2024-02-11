@@ -14,6 +14,7 @@ namespace Medicraft.Systems
     {
         private SpriteBatch spriteBatch;
         private Screen screen;
+
         private static ScreenManager instance;
 
         public Game Game { private set; get; }
@@ -132,10 +133,7 @@ namespace Medicraft.Systems
         {
             get
             {
-                if (instance == null)
-                {
-                    instance = new ScreenManager();
-                }
+                instance ??= new ScreenManager();
                 return instance;
             }
         }

@@ -3,12 +3,9 @@
     public class EntityData
     {
         public int Id { get; set; }
+        public int CharId { get; set; }
+        public int Level { get; set; }
         public string Name { get; set; }
-        public int ATK { get; set; }
-        public int HP { get; set; }
-        public double DEF_Percent { get; set; }
-        public int Speed { get; set; }
-        public double Evasion { get; set; }
         public double[] Position { get; set; }
     }
 }

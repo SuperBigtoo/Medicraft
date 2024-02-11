@@ -69,17 +69,12 @@ namespace Medicraft.Systems.Spawners
             {
                 if (destroyedObjects.Count != 0)
                 {
-                    foreach (var destroyedObj in destroyedObjects)
-                    {
-                        foreach (var initialObj in initialObjects)
-                        {
-                            if (destroyedObj.Id == initialObj.Id)
-                            {
-                                GameObject clonedObject = initialObj.Clone() as GameObject;
-                                spawningObjects.Add(clonedObject);
-                            }
-                        }
-                    }
+                    var clonedEntities = destroyedObjects.Join(initialObjects,
+                            destroyedEntity => destroyedEntity.Id,
+                            initialEntity => initialEntity.Id,
+                            (destroyedEntity, initialEntity) => initialEntity.Clone() as GameObject).ToList();
+
+                    spawningObjects.AddRange(clonedEntities);
                     destroyedObjects.Clear();
                 }
 

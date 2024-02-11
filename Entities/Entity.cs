@@ -15,19 +15,21 @@ namespace Medicraft.Entities
 {
     public class Entity : ICloneable
     {
-        public int Id;
-        public string Name;
-        public int Level;
-        public int EXP;
+        public int Id { get; protected set; }
+        public int CharId { get; protected set; }
+        public string Name { get; protected set; }
+        public int Level { get; set; }
+        public int EXP { get; set; }
 
         // Character Stats
-        public int ATK;
-        public int HP, MaximumHP;
-        public float DEF_Percent;
-        public float Crit_Percent;
-        public float CritDMG_Percent;
-        public int Speed;
-        public float Evasion;
+        public int ATK { get; set; }
+        public int HP { get; set; }
+        public int MaximumHP { get; set; }
+        public float DEF_Percent { get; set; }
+        public float Crit_Percent { get; set; }
+        public float CritDMG_Percent { get; set; }
+        public int Speed { get; set; }
+        public float Evasion { get; set; }
 
         public string SpriteName;
         public AnimatedSprite Sprite;
@@ -71,9 +73,9 @@ namespace Medicraft.Entities
 
         public enum EntityType
         {
-            Hostile,
+            Playable,
             Friendly,
-            Playable
+            Hostile,
         }
         
         public EntityType Type { get; protected set; }
@@ -191,6 +193,18 @@ namespace Medicraft.Entities
         public virtual Vector2 SetCombatNumDirection()
         {
             return CombatNumVelocity;
+        }
+
+        protected virtual void InitializeCharacterData(int charId, int level)
+        {
+            var charData = GameGlobals.Instance.CharacterDatas.Where(c => c.CharId.Equals(charId));
+
+            CharId = charData.ElementAt(0).CharId;
+            Name = charData.ElementAt(0).Name;
+
+            SetEntityType(charData.ElementAt(0).Category);
+
+            SetCharacterStats(charData.ElementAt(0), level);
         }
 
         protected virtual void SetEntityType(int category)

@@ -50,12 +50,6 @@
 /processorParam:ContentType=Medicraft.Data.CharacterDataReader, Medicraft
 /build:data/models/characters.json
 
-#begin data/models/items_demo.json
-/importer:JsonContentImporter
-/processor:JsonContentProcessor
-/processorParam:ContentType=Medicraft.Data.ObjectDataReader, Medicraft
-/build:data/models/items_demo.json
-
 #begin data/models/items.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor
@@ -68,11 +62,17 @@
 /processorParam:ContentType=Medicraft.Data.PlayerDataReader, Medicraft
 /build:data/models/playerdata.json
 
-#begin data/models/slime.json
+#begin data/TestScreen/entites_demo.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor
 /processorParam:ContentType=Medicraft.Data.EntityDataReader, Medicraft
-/build:data/models/slime.json
+/build:data/TestScreen/entites_demo.json
+
+#begin data/TestScreen/objects_demo.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.ObjectDataReader, Medicraft
+/build:data/TestScreen/objects_demo.json
 
 #begin fonts/Mincraft_Ten/Mincraft_Ten_0.png
 /importer:TextureImporter

@@ -12,13 +12,9 @@ namespace Medicraft.GameObjects
         public Item(AnimatedSprite sprite, ObjectData objectData, Vector2 scale)
         {
             Sprite = sprite;
-
-            Type = GameObjectType.Item;
-            Id = objectData.Id;
-            ReferId = objectData.ReferId;
-
-            Name = GameGlobals.Instance.ItemsDatas[objectData.ReferId].Name;
-            Description = GameGlobals.Instance.ItemsDatas[objectData.ReferId].Description;
+            ObjectData = objectData;
+          
+            InitializeObjectData();
 
             IsCollected = false;
             IsDestroyed = false;

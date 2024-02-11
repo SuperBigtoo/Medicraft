@@ -87,8 +87,6 @@ namespace Medicraft.Screens
             {
                 ScreenManager.Instance.LoadScreen(ScreenManager.GameScreen.TestScreen);
             }
-
-            base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
