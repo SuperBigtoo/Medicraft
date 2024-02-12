@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using Medicraft.Data.Models;
 using Medicraft.Systems;
@@ -19,8 +20,8 @@ namespace Medicraft.Data
             string dateTimeString = dateTime.ToString().Replace(' ', '_');
 
             // Get Player Position
-            PlayerManager.Instance.Player.GetPlayerData().Position[0] = PlayerManager.Instance.Player.Position.X;
-            PlayerManager.Instance.Player.GetPlayerData().Position[1] = PlayerManager.Instance.Player.Position.Y;
+            PlayerManager.Instance.Player.PlayerData.Position[0] = PlayerManager.Instance.Player.Position.X;
+            PlayerManager.Instance.Player.PlayerData.Position[1] = PlayerManager.Instance.Player.Position.Y;
 
             // Get HUD Position
             double[] hudPosition =
@@ -47,7 +48,7 @@ namespace Medicraft.Data
                 GoldCoin = InventoryManager.Instance.GoldCoin,
                 Inventory = inventoryItems
             };
-            PlayerManager.Instance.Player.GetPlayerData().InventoryData = inventoryData;
+            PlayerManager.Instance.Player.PlayerData.InventoryData = inventoryData;
 
             // Set save name
             var saveName = "Save_" + dateTimeString;
@@ -55,13 +56,13 @@ namespace Medicraft.Data
             {
                 GameGlobals.Instance.GameSave[GameGlobals.Instance.GameSaveIdex] = new GameSaveData()
                 {
-                    Id = GameGlobals.Instance.GameSaveIdex,
-                    Name = saveName,
-                    CreatedTime = dateTimeString,
+                    Id = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.GameSaveIdex).Id,
+                    Name = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.GameSaveIdex).Name,
+                    CreatedTime = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.GameSaveIdex).CreatedTime,
                     LastUpdated = dateTimeString,
                     CameraPosition = cameraPosition,
                     HUDPosition = hudPosition,
-                    PlayerData = PlayerManager.Instance.Player.GetPlayerData(),
+                    PlayerData = PlayerManager.Instance.Player.PlayerData
                 };
             }
             else
@@ -74,7 +75,7 @@ namespace Medicraft.Data
                     LastUpdated = dateTimeString,
                     CameraPosition = cameraPosition,
                     HUDPosition = hudPosition,
-                    PlayerData = PlayerManager.Instance.Player.GetPlayerData(),
+                    PlayerData = PlayerManager.Instance.Player.PlayerData
                 });
             }
 

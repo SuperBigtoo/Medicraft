@@ -11,7 +11,7 @@ namespace Medicraft.Entities
 {
     public class Slime : Entity
     {
-        private readonly EntityData _entityData;
+        public EntityData EntityData { get; private set; }
         private enum SlimeColor
         {
             yellow,
@@ -23,7 +23,7 @@ namespace Medicraft.Entities
         public Slime(AnimatedSprite sprite, EntityData entityData, Vector2 scale)
         {
             Sprite = sprite;
-            _entityData = entityData;
+            EntityData = entityData;
 
             // Initialize Character Data
             Id = entityData.Id;
@@ -67,7 +67,7 @@ namespace Medicraft.Entities
         private Slime(Slime slime)
         {
             Sprite = slime.Sprite;
-            _entityData = slime._entityData;
+            EntityData = slime.EntityData;
 
             Type = slime.Type;        
             Id = slime.Id;
@@ -157,7 +157,7 @@ namespace Medicraft.Entities
                 else
                 {
                     PathFinding = new AStar((int)Position.X, (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY)
-                        , (int)_entityData.Position[0], (int)_entityData.Position[1]);
+                        , (int)EntityData.Position[0], (int)EntityData.Position[1]);
                 }
 
                 // Combat Control

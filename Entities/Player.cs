@@ -12,52 +12,64 @@ namespace Medicraft.Entities
 {
     public class Player : Entity
     {
-        private readonly PlayerData _playerData;
+        public PlayerData PlayerData { get; private set; }
 
-        private float _knockbackForce;
+        private float _knockbackForce, _percentNormalHit, _percentPassiveSkill;
         private readonly float _normalHitSpeed, _normalSkillSpeed, _burstSkillSpeed, _dyingSpeed;
 
-        private float _percentNormalHit, _percentNormalSkill, _percentBurstSkill, _percentPassiveSkill;
-        private float _normalSkillCooldownTime, _burstSkillCooldownTime, _passiveSkillCooldownTime;
         private const float _baseCooldownNormal = 16f, _baseCooldownBurst = 20f, _caseCooldownPassive = 60f;
+        private bool _isNormalSkillCooldown, _isBurstSkillCooldown, _isPassiveSkillCooldown;
+        public float NormalSkillCooldownTime { get; private set; }
+        public float BurstSkillCooldownTime { get; private set; }
+        public float PassiveSkillCooldownTime { get; private set; }
+
+        private bool _isNormalSkillActivated, _isPassiveSkillActivated;
+        public float ActivatedTimeNormalSkill {  get; private set; }
+        public float ActivatedTimePassiveSkill { get; private set; }
 
         private bool _isCriticalAttack, _isAttackMissed;
-        private bool _isNormalSkillCooldown, _isBurstSkillCooldown, _isPassiveSkillCooldown;
+
+        // For keeping the default stat value when skill activated  
+        private int _tmpATK, _tmpMaxHP, _tmpSpeed;
+        private float _tmpDEF, _tmpCrit, _tmpCritDMG, _tmpEvasion;
 
         private Vector2 _initHudPos, _initCamPos;
 
         public Player(AnimatedSprite sprite, PlayerData playerData)
         {
             Sprite = sprite;
-            _playerData = playerData;
+            PlayerData = playerData;
 
             // Initialize Character Data
             Id = 999;
-            Level = _playerData.Level;
-            EXP = _playerData.EXP;
+            Level = PlayerData.Level;
+            EXP = PlayerData.EXP;
             InitializeCharacterData(playerData.CharId, Level);
                  
             IsKnockbackable = true;            
 
             _knockbackForce = 50f;
+            _percentNormalHit = 0.5f;
+            _percentPassiveSkill = 0.3f;
 
             _normalHitSpeed = 0.4f;
             _normalSkillSpeed = 0.9f;
             _burstSkillSpeed = 0.7f;
-            _dyingSpeed = 10f;
-            
-            _percentNormalHit = 0.5f;
-            _percentNormalSkill = 0.5f;
-            _percentBurstSkill = 1.75f;
-            _percentPassiveSkill = 0.3f;
-
-            _normalSkillCooldownTime = _baseCooldownNormal;
-            _burstSkillCooldownTime = _baseCooldownBurst;
-            _passiveSkillCooldownTime = _caseCooldownPassive;
+            _dyingSpeed = 10f;                     
 
             _isNormalSkillCooldown = false;
             _isBurstSkillCooldown = false;
             _isPassiveSkillCooldown = false;
+
+            NormalSkillCooldownTime = _baseCooldownNormal;
+            BurstSkillCooldownTime = _baseCooldownBurst;
+            PassiveSkillCooldownTime = _caseCooldownPassive;
+
+            _isNormalSkillActivated = false;
+            _isPassiveSkillActivated = false;
+
+            ActivatedTimeNormalSkill = 0;
+            ActivatedTimePassiveSkill = 0;
 
             var position = new Vector2((float)playerData.Position[0], (float)playerData.Position[1]);
             
@@ -258,6 +270,7 @@ namespace Medicraft.Entities
                 ActionTime = _normalSkillSpeed;
 
                 // Do normal skill & effect of Sets Item
+                NormalSkillControl(PlayerData.Abilities.NormalSkillLevel);
             }
 
             // Burst Skill
@@ -271,25 +284,164 @@ namespace Medicraft.Entities
                 ActionTime = _burstSkillSpeed;
 
                 // Do burst skill & effect of Sets Item
-                BoundingDetectEntity.Radius = 130f;
-                CheckAttackDetection(ATK, _percentBurstSkill, true);
-                BoundingDetectEntity.Radius = 80f;
+                BurstSkillControl(PlayerData.Abilities.BurstSkillLevel);
             }
 
             // Passive Skill
-            if (keyboardCur.IsKeyDown(Keys.G) && !IsAttacking && !_isPassiveSkillCooldown)
+            if (HP < (MaximumHP * 0.1) && !_isPassiveSkillCooldown)
             {
-                CurrentAnimation = "dying";
-                Sprite.Play(CurrentAnimation);
-
-                IsAttacking = true;
                 _isPassiveSkillCooldown = true;
-                ActionTime = _dyingSpeed;
 
                 // Do passive skill
+                PassiveSkillControl(PlayerData.Abilities.PassiveSkillLevel);
             }
         }
 
+        // Skills Control
+        /// <summary>
+        /// Increase Player character's stats such as ATK, Crit_Percent and CritDMG_Percent for a amount of time
+        /// </summary>
+        /// <param name="skillLevel">Normal Skill level base on PlayerData.Abilities.NormalSkillLevel</param>
+        private void NormalSkillControl(int skillLevel)
+        {
+            _tmpATK = ATK;
+            _tmpCrit = Crit_Percent;
+            _tmpCritDMG = CritDMG_Percent;
+
+            switch (skillLevel)
+            {
+                case 1:
+                    ATK += (int)(ATK * 0.5);
+                    Crit_Percent += 0.1f;
+                    CritDMG_Percent += 0.5f;
+                    ActivatedTimeNormalSkill = 8f;
+                    break;
+
+                case 2:
+                    break;
+
+                case 3:
+                    break;
+
+                case 4:
+                    break;
+
+                case 5:
+                    break;
+
+                case 6:
+                    break;
+
+                case 7:
+                    break;
+
+                case 8:
+                    break;
+
+                case 9:
+                    break;
+
+                case 10:
+                    break;
+            }
+
+            _isNormalSkillActivated = true;
+        }
+
+        /// <summary>
+        /// Deals large damage in a wide area surrounding the Player Character and knockback mobs
+        /// </summary>
+        /// <param name="skillLevel">Burst Skill level base on PlayerData.Abilities.BurstSkillLevel</param>
+        private void BurstSkillControl(int skillLevel)
+        {
+            switch (skillLevel)
+            {
+                case 1:
+                    BoundingDetectEntity.Radius = 140f;
+                    _knockbackForce = 60f;
+                    CheckAttackDetection(ATK, 1.75f, true);
+                    break;
+
+                case 2:
+                    break;
+
+                case 3:
+                    break;
+
+                case 4:
+                    break;
+
+                case 5:
+                    break;
+
+                case 6:
+                    break;
+
+                case 7:
+                    break;
+
+                case 8:
+                    break;
+
+                case 9:
+                    break;
+
+                case 10:
+                    break;
+            }
+
+            BoundingDetectEntity.Radius = 80f;
+            _knockbackForce = 50f;
+        }
+
+        /// <summary>
+        /// Instantly restore Player Character's HP when the HP is below 10% and increase DEF_Percent for a amount of time
+        /// </summary>
+        /// <param name="skillLevel">Passive Skill level base on PlayerData.Abilities.PassiveSkillLevel</param>
+        private void PassiveSkillControl(int skillLevel)
+        {
+            _tmpDEF = DEF_Percent;
+
+            switch (skillLevel)
+            {
+                case 1:
+                    HP += (int)(MaximumHP * 0.25);
+                    DEF_Percent += 0.25f;
+                    ActivatedTimePassiveSkill = 8f;
+                    break;
+
+                case 2:
+                    break;
+
+                case 3:
+                    break;
+
+                case 4:
+                    break;
+
+                case 5:
+                    break;
+
+                case 6:
+                    break;
+
+                case 7:
+                    break;
+
+                case 8:
+                    break;
+
+                case 9:
+                    break;
+
+                case 10:
+                    break;
+            }
+
+            _isPassiveSkillActivated = true;
+        }
+
+        // Check Attack
         private void CheckAttackDetection(int Atk, float HitPercent, bool IsUndodgeable)
         {
             foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed))
@@ -522,42 +674,77 @@ namespace Medicraft.Entities
             }
             else IsAttacking = false;
 
+            // Cooldown time Normal Skill
             if (_isNormalSkillCooldown)
             {
-                if (_normalSkillCooldownTime > 0)
+                if (NormalSkillCooldownTime > 0)
                 {
-                    _normalSkillCooldownTime -= deltaSeconds;
+                    NormalSkillCooldownTime -= deltaSeconds;
                 }
                 else
                 {
-                    _normalSkillCooldownTime = _baseCooldownNormal;
+                    NormalSkillCooldownTime = _baseCooldownNormal;
                     _isNormalSkillCooldown = false;
                 }
             }
 
-            if (_isBurstSkillCooldown)
+            // Activated time Normal Skill
+            if (_isNormalSkillActivated)
             {
-                if (_burstSkillCooldownTime > 0)
+                if (ActivatedTimeNormalSkill > 0)
                 {
-                    _burstSkillCooldownTime -= deltaSeconds;
+                    ActivatedTimeNormalSkill -= deltaSeconds;
                 }
                 else
                 {
-                    _burstSkillCooldownTime = _baseCooldownBurst;
+                    ATK = _tmpATK;
+                    Crit_Percent = _tmpCrit;
+                    CritDMG_Percent = _tmpCritDMG;
+                    ActivatedTimeNormalSkill = 0;
+                    _isNormalSkillActivated = false;                 
+                }
+            }
+
+            // Cooldown time Burst Skill
+            if (_isBurstSkillCooldown)
+            {
+                if (BurstSkillCooldownTime > 0)
+                {
+                    BurstSkillCooldownTime -= deltaSeconds;
+                }
+                else
+                {
+                    BurstSkillCooldownTime = _baseCooldownBurst;
                     _isBurstSkillCooldown = false;
                 }
             }
 
+            // Cooldown time Passive Skill
             if (_isPassiveSkillCooldown)
             {
-                if (_passiveSkillCooldownTime > 0)
+                if (PassiveSkillCooldownTime > 0)
                 {
-                    _passiveSkillCooldownTime -= deltaSeconds;
+                    PassiveSkillCooldownTime -= deltaSeconds;
                 }
                 else
                 {
-                    _passiveSkillCooldownTime = _caseCooldownPassive;
+                    PassiveSkillCooldownTime = _caseCooldownPassive;
                     _isPassiveSkillCooldown = false;
+                }
+            }
+
+            // Activated time Passive Skill
+            if (_isPassiveSkillActivated)
+            {
+                if (ActivatedTimePassiveSkill > 0)
+                {
+                    ActivatedTimePassiveSkill -= deltaSeconds;
+                }
+                else
+                {
+                    DEF_Percent = _tmpDEF;
+                    ActivatedTimePassiveSkill = 0;
+                    _isPassiveSkillActivated = false;
                 }
             }
 
@@ -575,11 +762,6 @@ namespace Medicraft.Entities
             CombatNumVelocity = NumDirection * (Sprite.TextureRegion.Height / 2);
 
             return CombatNumVelocity;
-        }
-
-        public PlayerData GetPlayerData()
-        {
-            return _playerData;
         }
 
         public float GetDepth()

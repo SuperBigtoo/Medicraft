@@ -12,7 +12,7 @@ namespace Medicraft.Systems
     {
         private readonly BitmapFont[] _fonts;
 
-        private Vector2 _hudPosition;
+        private Vector2 _hudTopLeftCorner;
 
         private Texture2D _heartTexture, _herb1Texture, _herb2Texture, _drugTexture
             , _coinTexture, _pressFTexture, _insufficient;
@@ -74,10 +74,7 @@ namespace Medicraft.Systems
         public void Draw(SpriteBatch spriteBatch)
         {
             var _graphicsDevice = ScreenManager.Instance.GraphicsDevice;
-            _hudPosition = GameGlobals.Instance.HUDPosition;
-
-            float addingX = GameGlobals.Instance.HUDPosition.X;
-            float addingY = GameGlobals.Instance.HUDPosition.Y;
+            _hudTopLeftCorner = GameGlobals.Instance.HUDPosition;
 
             spriteBatch.End();
             spriteBatch.Begin(
@@ -88,7 +85,13 @@ namespace Medicraft.Systems
                 , _graphicsDevice.Viewport.Height)
             );
 
-            // Draw Press F
+            // Draw HP mobs
+            DrawHPMobs(spriteBatch);
+
+            // Draw Damage Numbers mobs & player
+            DrawDamageNumbers(spriteBatch);
+
+            // Draw Press F Sign
             DrawPressF(spriteBatch);
 
             // Draw Insufficient Sign
@@ -97,67 +100,99 @@ namespace Medicraft.Systems
             // Draw Feed Items
             DrawCollectedItem(spriteBatch);
 
-            // Draw HP mobs
-            DrawHPMobs(spriteBatch);
-
-            // Draw Damage Numbers mobs & player
-            DrawDamageNumbers(spriteBatch);
+            // Draw Quest List
+            DrawQuestList(spriteBatch);
 
             // Draw HUD Bar
-            spriteBatch.FillRectangle(-720 + addingX, 0 + addingY, 2640
+            DrawHudBar(spriteBatch);
+
+            // dis one here for testing
+            var rect = new Rectangle((int)_hudTopLeftCorner.X + 50, (int)_hudTopLeftCorner.Y + 55, 200, 300);
+
+            spriteBatch.DrawString(_fonts[3], $"Player ATK: {PlayerManager.Instance.Player.ATK}"
+                , new Vector2(55f, 60f) + _hudTopLeftCorner, Color.White, clippingRectangle: rect);
+
+            spriteBatch.DrawString(_fonts[3], $"Player Crit: {PlayerManager.Instance.Player.Crit_Percent}"
+                , new Vector2(55f, 75f) + _hudTopLeftCorner, Color.White, clippingRectangle: rect);
+
+            spriteBatch.DrawString(_fonts[3], $"Player CritDMG: {PlayerManager.Instance.Player.CritDMG_Percent}"
+                , new Vector2(55f, 90f) + _hudTopLeftCorner, Color.White, clippingRectangle: rect);
+
+            spriteBatch.DrawString(_fonts[3], $"Player DEF: {PlayerManager.Instance.Player.DEF_Percent}"
+                , new Vector2(55f, 105f) + _hudTopLeftCorner, Color.White, clippingRectangle: rect);
+
+            spriteBatch.DrawString(_fonts[3], $"Cooldown Normal Skill: {PlayerManager.Instance.Player.NormalSkillCooldownTime}"
+                , new Vector2(55f, 135f) + _hudTopLeftCorner, Color.White);
+
+            spriteBatch.DrawString(_fonts[3], $"Cooldown Normal Skill: {PlayerManager.Instance.Player.BurstSkillCooldownTime}"
+                , new Vector2(55f, 150f) + _hudTopLeftCorner, Color.White);
+
+            spriteBatch.DrawString(_fonts[3], $"Cooldown Normal Skill: {PlayerManager.Instance.Player.PassiveSkillCooldownTime}"
+                , new Vector2(55f, 165f) + _hudTopLeftCorner, Color.White);
+
+            spriteBatch.DrawString(_fonts[3], $"Normal Skill Time: {PlayerManager.Instance.Player.ActivatedTimeNormalSkill}"
+                , new Vector2(55f, 200f) + _hudTopLeftCorner, Color.White);
+
+            spriteBatch.DrawString(_fonts[3], $"Passive Skill Time: {PlayerManager.Instance.Player.ActivatedTimePassiveSkill}"
+                , new Vector2(55f, 215f) + _hudTopLeftCorner, Color.White);
+        }
+
+        private void DrawHudBar(SpriteBatch spriteBatch)
+        {
+            spriteBatch.FillRectangle(-720 + _hudTopLeftCorner.X, 0 + _hudTopLeftCorner.Y, 2640
                 , 25, Color.Black * 0.4f);
             spriteBatch.DrawString(_fonts[0], $" Mobs: {EntityManager.Instance.entities.Count}"
-                , Vector2.Zero + _hudPosition, Color.White);
+                , Vector2.Zero + _hudTopLeftCorner, Color.White);
             spriteBatch.DrawString(_fonts[0], $"Time Spawn: {(int)EntityManager.Instance.spawnTime}"
-                , new Vector2(100f, 0f) + _hudPosition, Color.White);
+                , new Vector2(100f, 0f) + _hudTopLeftCorner, Color.White);
             spriteBatch.DrawString(_fonts[0], $"X: {(int)PlayerManager.Instance.Player.Position.X}"
-                , new Vector2(240f, 0f) + _hudPosition, Color.White);
+                , new Vector2(240f, 0f) + _hudTopLeftCorner, Color.White);
             spriteBatch.DrawString(_fonts[0], $"Y: {(int)PlayerManager.Instance.Player.Position.Y}"
-                , new Vector2(320f, 0f) + _hudPosition, Color.White);
+                , new Vector2(320f, 0f) + _hudTopLeftCorner, Color.White);
 
             var textString1 = "Player HP: " + PlayerManager.Instance.Player.HP;
             Vector2 textSize1 = _fonts[0].MeasureString(textString1);
             var position = new Vector2((GameGlobals.Instance.GameScreen.X - textSize1.X) / 2, 0);
             //position.X += (string.X - font.MeasureString(string).X) / 2;
-            spriteBatch.Draw(_heartTexture, new Vector2(position.X - 32f, 0f) + _hudPosition, null
+            spriteBatch.Draw(_heartTexture, new Vector2(position.X - 32f, 0f) + _hudTopLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(_fonts[0], textString1, new Vector2(position.X, 0f) + _hudPosition, Color.White);
+            spriteBatch.DrawString(_fonts[0], textString1, new Vector2(position.X, 0f) + _hudTopLeftCorner, Color.White);
 
             if (InventoryManager.Instance.Inventory.TryGetValue("0", out InventoryItemData value_0))
             {
-                spriteBatch.Draw(_herb1Texture, new Vector2(position.X + 400f, 0f) + _hudPosition, null
+                spriteBatch.Draw(_herb1Texture, new Vector2(position.X + 400f, 0f) + _hudTopLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
                 spriteBatch.DrawString(_fonts[0], $" {value_0.Count}"
-                    , new Vector2(position.X + 400f + 32f, 0f) + _hudPosition, Color.White);
+                    , new Vector2(position.X + 400f + 32f, 0f) + _hudTopLeftCorner, Color.White);
             }
 
             if (InventoryManager.Instance.Inventory.TryGetValue("1", out InventoryItemData value_1))
             {
-                spriteBatch.Draw(_herb2Texture, new Vector2(position.X + 480f, 0f) + _hudPosition, null
+                spriteBatch.Draw(_herb2Texture, new Vector2(position.X + 480f, 0f) + _hudTopLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
                 spriteBatch.DrawString(_fonts[0], $" {value_1.Count}"
-                    , new Vector2(position.X + 480f + 32f, 0f) + _hudPosition, Color.White);
+                    , new Vector2(position.X + 480f + 32f, 0f) + _hudTopLeftCorner, Color.White);
             }
 
             if (InventoryManager.Instance.Inventory.TryGetValue("2", out InventoryItemData value_2))
             {
-                spriteBatch.Draw(_drugTexture, new Vector2(position.X + 560f, 0f) + _hudPosition, null
+                spriteBatch.Draw(_drugTexture, new Vector2(position.X + 560f, 0f) + _hudTopLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
                 spriteBatch.DrawString(_fonts[0], $" {value_2.Count}"
-                    , new Vector2(position.X + 560f + 32f, 0f) + _hudPosition, Color.White);
+                    , new Vector2(position.X + 560f + 32f, 0f) + _hudTopLeftCorner, Color.White);
             }
 
-            spriteBatch.Draw(_coinTexture, new Vector2(position.X + 640f, 0f) + _hudPosition, null
+            spriteBatch.Draw(_coinTexture, new Vector2(position.X + 640f, 0f) + _hudTopLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
             spriteBatch.DrawString(_fonts[0], $" {InventoryManager.Instance.GoldCoin}"
-                , new Vector2(position.X + 640f + 32f, 0f) + _hudPosition, Color.White);
+                , new Vector2(position.X + 640f + 32f, 0f) + _hudTopLeftCorner, Color.White);
         }
 
         private void DrawPressF(SpriteBatch spriteBatch)
         {
             if (GameGlobals.Instance.IsDetectedGameObject)
             {
-                spriteBatch.Draw(_pressFTexture, new Vector2(930f, 550f) + _hudPosition, null
+                spriteBatch.Draw(_pressFTexture, new Vector2(930f, 550f) + _hudTopLeftCorner, null
                     , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
             }
         }
@@ -196,7 +231,8 @@ namespace Medicraft.Systems
                 if (entity.IsAttacked) entity.DrawCombatNumbers(spriteBatch, entity.CombatNumCase);
             }
 
-            if (PlayerManager.Instance.Player.IsAttacked) PlayerManager.Instance.Player.DrawCombatNumbers(spriteBatch, PlayerManager.Instance.Player.CombatNumCase);
+            if (PlayerManager.Instance.Player.IsAttacked) PlayerManager.Instance.Player.DrawCombatNumbers(spriteBatch
+                , PlayerManager.Instance.Player.CombatNumCase);
         }
 
         private void DrawCollectedItem(SpriteBatch spriteBatch) 
@@ -223,7 +259,7 @@ namespace Medicraft.Systems
                     {
                         Scale = new Vector2(0.75f, 0.75f),
                         Rotation = 0f,
-                        Position = new Vector2(370f, 510f + (i * 40)) + _hudPosition
+                        Position = new Vector2(370f, 510f + (i * 40)) + _hudTopLeftCorner
                     };
 
                     _sprite.Play(referId.ToString());
@@ -232,7 +268,7 @@ namespace Medicraft.Systems
                     spriteBatch.Draw(_sprite, _transform);
 
                     spriteBatch.DrawString(_fonts[2], $"{GameGlobals.Instance.ItemsDatas[referId].Name} x {amount}"
-                        , new Vector2(360f + 32f, 495f + (i * 40)) + _hudPosition, Color.White);
+                        , new Vector2(360f + 32f, 495f + (i * 40)) + _hudTopLeftCorner, Color.White);
                 }
 
                 if (_nextFeed)
@@ -244,6 +280,11 @@ namespace Medicraft.Systems
                     else GameGlobals.Instance.CollectedItemFeed.RemoveRange(0, GameGlobals.Instance.CollectedItemFeed.Count);
                 }
             }
+        }
+
+        private void DrawQuestList(SpriteBatch spriteBatch)
+        {
+            // TODO :
         }
 
         public static void ShowInsufficientSign()

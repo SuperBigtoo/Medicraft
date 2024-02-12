@@ -29,9 +29,9 @@ namespace Medicraft.Systems.Spawners
 
         public void Initialize()
         {
-            foreach (var o in initialObjects)
+            foreach (var obj in initialObjects)
             {
-                GameObject clonedObject = o.Clone() as GameObject;
+                GameObject clonedObject = obj.Clone() as GameObject;
                 ObjectManager.Instance.AddGameObject(clonedObject);
             }
         }
@@ -40,9 +40,9 @@ namespace Medicraft.Systems.Spawners
         {
             if (IsSpawn)
             {
-                foreach (var o in spawningObjects)
+                foreach (var obj in spawningObjects)
                 {
-                    ObjectManager.Instance.AddGameObject(o);
+                    ObjectManager.Instance.AddGameObject(obj);
                 }
                 IsSpawn = false;
                 spawningObjects.Clear();
@@ -60,9 +60,9 @@ namespace Medicraft.Systems.Spawners
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             spawnTime -= deltaSeconds;
 
-            foreach (var o in ObjectManager.Instance.GameObjects.Where(e => e.IsDestroyed))
+            foreach (var obj in ObjectManager.Instance.GameObjects.Where(e => e.IsDestroyed))
             {
-                destroyedObjects.Add(o);
+                destroyedObjects.Add(obj);
             }
 
             if (spawnTime <= 0)

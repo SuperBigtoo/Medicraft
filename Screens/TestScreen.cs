@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using Medicraft.Systems.Spawners;
 using Medicraft.GameObjects;
 using Medicraft.Systems.TilemapRenderer;
-using System.Linq;
 
 namespace Medicraft.Screens
 {
