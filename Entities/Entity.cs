@@ -240,101 +240,101 @@ namespace Medicraft.Entities
         // Knowing this that MovementControl, CombatControl and some methods below this is for Mobs only
         protected void MovementControl(float deltaSeconds)
         {
-            if (!PlayerManager.Instance.IsPlayerDead)
+            var walkSpeed = deltaSeconds * Speed;
+            InitPos = Position;
+
+            // Check Object Collsion
+            CheckCollision();
+
+            // Play Sprite: Idle 
+            if (!IsAttacking)
             {
-                var walkSpeed = deltaSeconds * Speed;
-                InitPos = Position;
+                CurrentAnimation = SpriteName + "_walking";  // Idle
+                Sprite.Play(CurrentAnimation);
+            }
 
-                // Check Object Collsion
-                CheckCollision();
-
-                // Play Sprite: Idle 
-                if (!IsAttacking)
-                {
-                    CurrentAnimation = SpriteName + "_walking";  // Idle
-                    Sprite.Play(CurrentAnimation);
-                }
-
+            if (Type == EntityType.Hostile)
+            {
                 // Setup Aggro time if detected player hit box
                 if (BoundingAggro.Intersects(PlayerManager.Instance.Player.BoundingHitBox))
                 {
                     AggroTime = 5f;
                 }
+            }           
 
-                // Checking for movement
-                if (!IsKnockback && !IsAttacking || !IsAttacked && !IsAttacking)
+            // Checking for movement
+            if (!IsKnockback && !IsAttacking || !IsAttacked && !IsAttacking)
+            {
+                if (PathFinding.GetPath().Count != 0)
                 {
-                    if (PathFinding.GetPath().Count != 0)
+                    if (currentNodeIndex < PathFinding.GetPath().Count - 1)
                     {
-                        if (currentNodeIndex < PathFinding.GetPath().Count - 1)
+                        // Calculate direction to the next node
+                        var direction = new Vector2(PathFinding.GetPath()[currentNodeIndex + 1].col
+                            - PathFinding.GetPath()[currentNodeIndex].col, PathFinding.GetPath()[currentNodeIndex + 1].row
+                            - PathFinding.GetPath()[currentNodeIndex].row);
+                        direction.Normalize();
+
+                        // Move the character towards the next node
+                        Position += direction * walkSpeed;
+
+                        // Check Animation
+                        if (Position.Y >= (PlayerManager.Instance.Player.Position.Y + 50f))
                         {
-                            // Calculate direction to the next node
-                            var direction = new Vector2(PathFinding.GetPath()[currentNodeIndex + 1].col
-                                - PathFinding.GetPath()[currentNodeIndex].col, PathFinding.GetPath()[currentNodeIndex + 1].row
-                                - PathFinding.GetPath()[currentNodeIndex].row);
-                            direction.Normalize();
-
-                            // Move the character towards the next node
-                            Position += direction * walkSpeed;
-
-                            // Check Animation
-                            if (Position.Y >= (PlayerManager.Instance.Player.Position.Y + 50f))
-                            {
-                                CurrentAnimation = SpriteName + "_walking";     // Up
-                            }
-                            if (Position.Y < (PlayerManager.Instance.Player.Position.Y - 30f))
-                            {
-                                CurrentAnimation = SpriteName + "_walking";     // Down
-                            }
-                            if (Position.X > (PlayerManager.Instance.Player.Position.X + 50f))
-                            {
-                                CurrentAnimation = SpriteName + "_walking";     // Left
-                            }
-                            if (Position.X < (PlayerManager.Instance.Player.Position.X - 50f))
-                            {
-                                CurrentAnimation = SpriteName + "_walking";     // Right
-                            }
-
-                            Sprite.Play(CurrentAnimation);
-
-                            // Check if the character has reached the next node
-                            if (Vector2.Distance(Position, new Vector2((PathFinding.GetPath()[currentNodeIndex + 1].col * 64) + 32
-                                , (PathFinding.GetPath()[currentNodeIndex + 1].row * 64) + 32)) < 1f)
-                            {
-                                currentNodeIndex++;
-                            }
-
-                            //System.Diagnostics.Debug.WriteLine($"Pos Mob: {Position.X} {Position.Y}");          
+                            CurrentAnimation = SpriteName + "_walking";     // Up
                         }
-                        //else if (PathFinding.GetPath().Count <= 1)
-                        //{
-                        //    if (Position.Y >= (PlayerManager.Instance.Player.Position.Y + 50f))
-                        //    {
-                        //        CurrentAnimation = SpriteName + "_walking";     // Up
-                        //        Position -= new Vector2(0, walkSpeed);
-                        //    }
+                        if (Position.Y < (PlayerManager.Instance.Player.Position.Y - 30f))
+                        {
+                            CurrentAnimation = SpriteName + "_walking";     // Down
+                        }
+                        if (Position.X > (PlayerManager.Instance.Player.Position.X + 50f))
+                        {
+                            CurrentAnimation = SpriteName + "_walking";     // Left
+                        }
+                        if (Position.X < (PlayerManager.Instance.Player.Position.X - 50f))
+                        {
+                            CurrentAnimation = SpriteName + "_walking";     // Right
+                        }
 
-                        //    if (Position.Y < (PlayerManager.Instance.Player.Position.Y - 30f))
-                        //    {
-                        //        CurrentAnimation = SpriteName + "_walking";     // Down
-                        //        Position += new Vector2(0, walkSpeed);
-                        //    }
+                        Sprite.Play(CurrentAnimation);
 
-                        //    if (Position.X > (PlayerManager.Instance.Player.Position.X + 50f))
-                        //    {
-                        //        CurrentAnimation = SpriteName + "_walking";     // Left
-                        //        Position -= new Vector2(walkSpeed, 0);
-                        //    }
+                        // Check if the character has reached the next node
+                        if (Vector2.Distance(Position, new Vector2((PathFinding.GetPath()[currentNodeIndex + 1].col * 64) + 32
+                            , (PathFinding.GetPath()[currentNodeIndex + 1].row * 64) + 32)) < 1f)
+                        {
+                            currentNodeIndex++;
+                        }
 
-                        //    if (Position.X < (PlayerManager.Instance.Player.Position.X - 50f))
-                        //    {
-                        //        CurrentAnimation = SpriteName + "_walking";     // Right
-                        //        Position += new Vector2(walkSpeed, 0);
-                        //    }
-                        //}
+                        //System.Diagnostics.Debug.WriteLine($"Pos Mob: {Position.X} {Position.Y}");          
                     }
+                    //else if (PathFinding.GetPath().Count <= 1)
+                    //{
+                    //    if (Position.Y >= (PlayerManager.Instance.Player.Position.Y + 50f))
+                    //    {
+                    //        CurrentAnimation = SpriteName + "_walking";     // Up
+                    //        Position -= new Vector2(0, walkSpeed);
+                    //    }
+
+                    //    if (Position.Y < (PlayerManager.Instance.Player.Position.Y - 30f))
+                    //    {
+                    //        CurrentAnimation = SpriteName + "_walking";     // Down
+                    //        Position += new Vector2(0, walkSpeed);
+                    //    }
+
+                    //    if (Position.X > (PlayerManager.Instance.Player.Position.X + 50f))
+                    //    {
+                    //        CurrentAnimation = SpriteName + "_walking";     // Left
+                    //        Position -= new Vector2(walkSpeed, 0);
+                    //    }
+
+                    //    if (Position.X < (PlayerManager.Instance.Player.Position.X - 50f))
+                    //    {
+                    //        CurrentAnimation = SpriteName + "_walking";     // Right
+                    //        Position += new Vector2(walkSpeed, 0);
+                    //    }
+                    //}
                 }
-            }          
+            }
         }
 
         protected virtual void CheckCollision()
@@ -404,44 +404,41 @@ namespace Medicraft.Entities
 
         protected void CombatControl(float deltaSeconds)
         {
-            if (!PlayerManager.Instance.IsPlayerDead)
+            // Do Attack
+            if (BoundingDetectEntity.Intersects(PlayerManager.Instance.Player.BoundingHitBox) && !IsAttacking)
             {
-                // Do Attack
-                if (BoundingDetectEntity.Intersects(PlayerManager.Instance.Player.BoundingHitBox) && !IsAttacking)
-                {
-                    CurrentAnimation = SpriteName + "_attacking";
-                    Sprite.Play(CurrentAnimation);
+                CurrentAnimation = SpriteName + "_attacking";
+                Sprite.Play(CurrentAnimation);
 
-                    IsAttacking = true;
-                    ActionTime = AttackSpeed;
-                    AttackCooldownTime = CooldownAttack;
+                IsAttacking = true;
+                ActionTime = AttackSpeed;
+                AttackCooldownTime = CooldownAttack;
+            }
+
+            if (IsAttacking)
+            {
+                // Check attack timing
+                if (ActionTime > 0)
+                {
+                    ActionTime -= deltaSeconds;
                 }
-
-                if (IsAttacking)
+                else
                 {
-                    // Check attack timing
-                    if (ActionTime > 0)
+                    if (!IsAttackCooldown)
                     {
-                        ActionTime -= deltaSeconds;
+                        CheckAttackDetection();
+                        IsAttackCooldown = true;
                     }
                     else
                     {
-                        if (!IsAttackCooldown)
+                        if (AttackCooldownTime > 0)
                         {
-                            CheckAttackDetection();
-                            IsAttackCooldown = true;
+                            AttackCooldownTime -= deltaSeconds;
                         }
                         else
                         {
-                            if (AttackCooldownTime > 0)
-                            {
-                                AttackCooldownTime -= deltaSeconds;
-                            }
-                            else
-                            {
-                                IsAttacking = false;
-                                IsAttackCooldown = false;
-                            }
+                            IsAttacking = false;
+                            IsAttackCooldown = false;
                         }
                     }
                 }

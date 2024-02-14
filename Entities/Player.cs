@@ -572,9 +572,13 @@ namespace Medicraft.Entities
                     {
                         case GameObjects.GameObject.GameObjectType.Item:
                             if (!gameObject.IsCollected
-                                && InventoryManager.Instance.Inventory.Count < InventoryManager.Instance.MaximunSlot)
+                                && InventoryManager.Instance.InventoryBag.Count < InventoryManager.Instance.MaximunSlot)
                             {
                                 gameObject.IsCollected = true;
+                            }
+                            else
+                            {
+                                HudSystem.ShowInsufficientSign();
                             }
                             break;
 

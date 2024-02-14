@@ -74,7 +74,7 @@ namespace Medicraft.Systems
             var mouseCur = GameGlobals.Instance.mouseCurrent;
             var mousePrev = GameGlobals.Instance.mousePreviose;
 
-            if (keyboardCur.IsKeyDown(Keys.M))
+            if (keyboardCur.IsKeyUp(Keys.M) && keyboardPrev.IsKeyDown(Keys.M))
             {
                 JsonFileManager.SaveGame();
             }

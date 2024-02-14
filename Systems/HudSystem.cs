@@ -16,12 +16,15 @@ namespace Medicraft.Systems
 
         private Texture2D _heartTexture, _herb1Texture, _herb2Texture, _drugTexture
             , _coinTexture, _pressFTexture, _insufficient;
+
         private AnimatedSprite _sprite;
-        private Transform2 _transform;
 
         private float _deltaSeconds;
+
         private bool _nextFeed;
-        private float _displayInsufficientTime;
+
+        private float _insufficientTime;
+        private readonly float _maxDisplayTime = 3f;
 
         public HudSystem(BitmapFont[] fonts, Texture2D[] textures, AnimatedSprite sprite)
         {
@@ -38,7 +41,7 @@ namespace Medicraft.Systems
             _sprite = sprite;
 
             _nextFeed = false;
-            _displayInsufficientTime = 3f;
+            _insufficientTime = _maxDisplayTime;
 
             GameGlobals.Instance.HUDPosition = PlayerManager.Instance.Player.Position - new Vector2(720, 450);
         }
@@ -61,12 +64,12 @@ namespace Medicraft.Systems
 
             if (GameGlobals.Instance.ShowInsufficientSign)
             {
-                _displayInsufficientTime -= _deltaSeconds;
+                _insufficientTime -= _deltaSeconds;
 
-                if (_displayInsufficientTime <= 0)
+                if (_insufficientTime <= 0)
                 {
                     GameGlobals.Instance.ShowInsufficientSign = false;
-                    _displayInsufficientTime = 3f;
+                    _insufficientTime = _maxDisplayTime;
                 }
             }
         }
@@ -88,8 +91,8 @@ namespace Medicraft.Systems
             // Draw HP mobs
             DrawHPMobs(spriteBatch);
 
-            // Draw Damage Numbers mobs & player
-            DrawDamageNumbers(spriteBatch);
+            // Draw combat numbers mobs & player
+            DrawCombatNumbers(spriteBatch);
 
             // Draw Press F Sign
             DrawPressF(spriteBatch);
@@ -141,12 +144,16 @@ namespace Medicraft.Systems
         {
             spriteBatch.FillRectangle(-720 + _hudTopLeftCorner.X, 0 + _hudTopLeftCorner.Y, 2640
                 , 25, Color.Black * 0.4f);
+
             spriteBatch.DrawString(_fonts[0], $" Mobs: {EntityManager.Instance.entities.Count}"
                 , Vector2.Zero + _hudTopLeftCorner, Color.White);
+
             spriteBatch.DrawString(_fonts[0], $"Time Spawn: {(int)EntityManager.Instance.spawnTime}"
                 , new Vector2(100f, 0f) + _hudTopLeftCorner, Color.White);
+
             spriteBatch.DrawString(_fonts[0], $"X: {(int)PlayerManager.Instance.Player.Position.X}"
                 , new Vector2(240f, 0f) + _hudTopLeftCorner, Color.White);
+
             spriteBatch.DrawString(_fonts[0], $"Y: {(int)PlayerManager.Instance.Player.Position.Y}"
                 , new Vector2(320f, 0f) + _hudTopLeftCorner, Color.White);
 
@@ -154,36 +161,42 @@ namespace Medicraft.Systems
             Vector2 textSize1 = _fonts[0].MeasureString(textString1);
             var position = new Vector2((GameGlobals.Instance.GameScreen.X - textSize1.X) / 2, 0);
             //position.X += (string.X - font.MeasureString(string).X) / 2;
+
             spriteBatch.Draw(_heartTexture, new Vector2(position.X - 32f, 0f) + _hudTopLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
+
             spriteBatch.DrawString(_fonts[0], textString1, new Vector2(position.X, 0f) + _hudTopLeftCorner, Color.White);
 
-            if (InventoryManager.Instance.Inventory.TryGetValue("0", out InventoryItemData value_0))
+            if (InventoryManager.Instance.InventoryBag.TryGetValue("0", out InventoryItemData value_0))
             {
                 spriteBatch.Draw(_herb1Texture, new Vector2(position.X + 400f, 0f) + _hudTopLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
+
                 spriteBatch.DrawString(_fonts[0], $" {value_0.Count}"
                     , new Vector2(position.X + 400f + 32f, 0f) + _hudTopLeftCorner, Color.White);
             }
 
-            if (InventoryManager.Instance.Inventory.TryGetValue("1", out InventoryItemData value_1))
+            if (InventoryManager.Instance.InventoryBag.TryGetValue("1", out InventoryItemData value_1))
             {
                 spriteBatch.Draw(_herb2Texture, new Vector2(position.X + 480f, 0f) + _hudTopLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
+
                 spriteBatch.DrawString(_fonts[0], $" {value_1.Count}"
                     , new Vector2(position.X + 480f + 32f, 0f) + _hudTopLeftCorner, Color.White);
             }
 
-            if (InventoryManager.Instance.Inventory.TryGetValue("2", out InventoryItemData value_2))
+            if (InventoryManager.Instance.InventoryBag.TryGetValue("2", out InventoryItemData value_2))
             {
                 spriteBatch.Draw(_drugTexture, new Vector2(position.X + 560f, 0f) + _hudTopLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
+
                 spriteBatch.DrawString(_fonts[0], $" {value_2.Count}"
                     , new Vector2(position.X + 560f + 32f, 0f) + _hudTopLeftCorner, Color.White);
             }
 
             spriteBatch.Draw(_coinTexture, new Vector2(position.X + 640f, 0f) + _hudTopLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
+
             spriteBatch.DrawString(_fonts[0], $" {InventoryManager.Instance.GoldCoin}"
                 , new Vector2(position.X + 640f + 32f, 0f) + _hudTopLeftCorner, Color.White);
         }
@@ -222,7 +235,7 @@ namespace Medicraft.Systems
             }
         }
 
-        private void DrawDamageNumbers(SpriteBatch spriteBatch)
+        private void DrawCombatNumbers(SpriteBatch spriteBatch)
         {
             var entities = EntityManager.Instance.Entities;
 
@@ -255,7 +268,7 @@ namespace Medicraft.Systems
 
                     spriteBatch.FillRectangle(355f + addingX, 496f + (i * 40) + addingY, 120, 28, Color.Black * 0.4f);
 
-                    _transform = new Transform2
+                    var _transform = new Transform2
                     {
                         Scale = new Vector2(0.75f, 0.75f),
                         Rotation = 0f,

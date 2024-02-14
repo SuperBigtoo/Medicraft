@@ -40,7 +40,7 @@ namespace Medicraft.Data
 
             // Set Current InventoryData
             var inventoryItems = new List<InventoryItemData>();
-            foreach (var item in InventoryManager.Instance.Inventory.Values)
+            foreach (var item in InventoryManager.Instance.InventoryBag.Values)
             {
                 inventoryItems.Add(item);
             }

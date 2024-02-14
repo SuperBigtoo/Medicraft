@@ -26,7 +26,7 @@ namespace Medicraft.Systems
         public string GameSavePath { private set; get; }
         public List<GameSaveData> GameSave { private set; get;}
         public int MaximunInventorySlot { private set; get; }
-        public int BlankInventorySlot { private set; get; }
+        public int DefaultSlot { private set; get; }
         public BitmapFont FontTA16Bit { set; get; }
         public List<ItemData> ItemsDatas { set; get; }       // All items data
         // All equipments stats data
@@ -79,7 +79,7 @@ namespace Medicraft.Systems
             GameSavePath = "save/gamesaves.json";
 
             MaximunInventorySlot = 64;
-            BlankInventorySlot = 99;
+            DefaultSlot = 999;
 
             ItemsDatas = new List<ItemData>();
             CharacterDatas = new List<CharacterData>();

@@ -160,11 +160,14 @@ namespace Medicraft.Entities
                         , (int)EntityData.Position[0], (int)EntityData.Position[1]);
                 }
 
-                // Combat Control
-                CombatControl(deltaSeconds);
+                if (!PlayerManager.Instance.IsPlayerDead)
+                {
+                    // Combat Control
+                    CombatControl(deltaSeconds);
 
-                // MovementControl
-                MovementControl(deltaSeconds);
+                    // MovementControl
+                    MovementControl(deltaSeconds);
+                }
 
                 // Update layer depth
                 UpdateLayerDepth(playerDepth, topDepth, middleDepth, bottomDepth);
