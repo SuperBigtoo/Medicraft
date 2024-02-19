@@ -71,25 +71,33 @@ namespace Medicraft.Entities
             }
         }
 
-        public enum EntityType
+        public enum EntityTypes
         {
             Playable,
             Friendly,
             Hostile,
         }
         
-        public EntityType Type { get; protected set; }
+        public EntityTypes EntityType { get; protected set; }
+
+        public enum PathFindingTypes
+        {
+            RoutePoint,
+            RandomPoint
+        }
+
+        public PathFindingTypes PathFindingType { get; protected set; }
 
         // Time Conditions
-        public float AggroTime { get; set; }
-        public float ActionTime { get; set; }
-        public float AttackedTime { get; set; }     // Also used in positioning DrawCombatNumbers
-        public float KnockbackedTime { get; set; }
-        public float DyingTime { get; set; }
+        public float AggroTimer { get; set; }
+        public float ActionTimer { get; set; }
+        public float AttackedTimer { get; set; }     // Also used in positioning DrawCombatNumbers
+        public float KnockbackedTimer { get; set; }
+        public float DyingTimer { get; set; }
 
         protected float AttackSpeed { get; set; }
         protected float CooldownAttack { get; set; }
-        protected float AttackCooldownTime { get; set; }
+        protected float CooldownAttackTimer { get; set; }
         protected bool IsAttackCooldown { get; set; }
 
         // Damage && Buff Numbers
@@ -124,15 +132,15 @@ namespace Medicraft.Entities
             Velocity = Vector2.Zero;
             CombatNumVelocity = Vector2.Zero;
 
-            AggroTime = 0f;
-            ActionTime = 0f;
-            AttackedTime = 0f;
-            KnockbackedTime = 0f;
-            DyingTime = 0f;
+            AggroTimer = 0f;
+            ActionTimer = 0f;
+            AttackedTimer = 0f;
+            KnockbackedTimer = 0f;
+            DyingTimer = 0f;
 
             AttackSpeed = 1f;
             CooldownAttack = 0.4f;
-            AttackCooldownTime = CooldownAttack;
+            CooldownAttackTimer = CooldownAttack;
             IsAttackCooldown = false;
 
             CombatNumColor = Color.White;
@@ -159,14 +167,14 @@ namespace Medicraft.Entities
             Transform = entity.Transform;
             Velocity = entity.Velocity;
             CombatNumVelocity = entity.CombatNumVelocity;
-            AggroTime = entity.AggroTime;
-            ActionTime = entity.ActionTime;
-            AttackedTime = entity.AttackedTime;
-            KnockbackedTime = entity.KnockbackedTime;
-            DyingTime = entity.DyingTime;
+            AggroTimer = entity.AggroTimer;
+            ActionTimer = entity.ActionTimer;
+            AttackedTimer = entity.AttackedTimer;
+            KnockbackedTimer = entity.KnockbackedTimer;
+            DyingTimer = entity.DyingTimer;
             AttackSpeed = entity.AttackSpeed;
             CooldownAttack = entity.CooldownAttack;
-            AttackCooldownTime = CooldownAttack;
+            CooldownAttackTimer = CooldownAttack;
             IsAttackCooldown = entity.IsAttackCooldown;
             CombatNumColor = entity.CombatNumColor;
             CombatNumScale = entity.CombatNumScale;
@@ -212,15 +220,15 @@ namespace Medicraft.Entities
             switch (category)
             {
                 case 0:
-                    Type = EntityType.Playable;
+                    EntityType = EntityTypes.Playable;
                     break;
 
                 case 1:
-                    Type = EntityType.Friendly;
+                    EntityType = EntityTypes.Friendly;
                     break;
 
                 case 2:
-                    Type = EntityType.Hostile;
+                    EntityType = EntityTypes.Hostile;
                     break;
             }
         }
@@ -253,12 +261,12 @@ namespace Medicraft.Entities
                 Sprite.Play(CurrentAnimation);
             }
 
-            if (Type == EntityType.Hostile)
+            if (EntityType == EntityTypes.Hostile)
             {
                 // Setup Aggro time if detected player hit box
                 if (BoundingAggro.Intersects(PlayerManager.Instance.Player.BoundingHitBox))
                 {
-                    AggroTime = 5f;
+                    AggroTimer = 5f;
                 }
             }           
 
@@ -305,7 +313,7 @@ namespace Medicraft.Entities
                             currentNodeIndex++;
                         }
 
-                        //System.Diagnostics.Debug.WriteLine($"Pos Mob: {Position.X} {Position.Y}");          
+                        //System.Diagnostics.Debug.WriteLine($"Pos Mob: {Position.X} {Position.Y}");       
                     }
                     //else if (PathFinding.GetPath().Count <= 1)
                     //{
@@ -359,19 +367,19 @@ namespace Medicraft.Entities
         protected virtual void UpdateTimeConditions(float deltaSeconds)
         {
             // Decreasing Aggro time
-            if (AggroTime > 0)
+            if (AggroTimer > 0)
             {
-                AggroTime -= deltaSeconds;
+                AggroTimer -= deltaSeconds;
             }
 
             // Knockback
             if (IsKnockback)
             {
-                if (IsKnockbackable) Position += Velocity * KnockbackedTime;
+                if (IsKnockbackable) Position += Velocity * KnockbackedTimer;
 
-                if (KnockbackedTime > 0)
+                if (KnockbackedTimer > 0)
                 {
-                    KnockbackedTime -= deltaSeconds;
+                    KnockbackedTimer -= deltaSeconds;
                 }
                 else
                 {
@@ -383,7 +391,7 @@ namespace Medicraft.Entities
             // Attacked
             if (IsAttacked)
             {
-                if (AttackedTime < 1)
+                if (AttackedTimer < 1)
                 {
                     foreach (var log in CombatLogs.Where(e => e.ElapsedTime < 1))
                     {
@@ -392,7 +400,7 @@ namespace Medicraft.Entities
                         log.ScaleFont -= deltaSeconds * 0.4f;
                     }
 
-                    AttackedTime += deltaSeconds;
+                    AttackedTimer += deltaSeconds;
                 }
                 else
                 {
@@ -411,16 +419,16 @@ namespace Medicraft.Entities
                 Sprite.Play(CurrentAnimation);
 
                 IsAttacking = true;
-                ActionTime = AttackSpeed;
-                AttackCooldownTime = CooldownAttack;
+                ActionTimer = AttackSpeed;
+                CooldownAttackTimer = CooldownAttack;
             }
 
             if (IsAttacking)
             {
                 // Check attack timing
-                if (ActionTime > 0)
+                if (ActionTimer > 0)
                 {
-                    ActionTime -= deltaSeconds;
+                    ActionTimer -= deltaSeconds;
                 }
                 else
                 {
@@ -431,9 +439,9 @@ namespace Medicraft.Entities
                     }
                     else
                     {
-                        if (AttackCooldownTime > 0)
+                        if (CooldownAttackTimer > 0)
                         {
-                            AttackCooldownTime -= deltaSeconds;
+                            CooldownAttackTimer -= deltaSeconds;
                         }
                         else
                         {
@@ -463,7 +471,7 @@ namespace Medicraft.Entities
                     PlayerManager.Instance.Player.AddCombatLogNumbers(Name, totalDamage.ToString(), CombatNumCase, combatNumVelocity);
 
                     PlayerManager.Instance.Player.IsAttacked = true;
-                    PlayerManager.Instance.Player.AttackedTime = 0f;
+                    PlayerManager.Instance.Player.AttackedTimer = 0f;
                 }
             }
         }

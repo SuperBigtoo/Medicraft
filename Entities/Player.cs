@@ -17,15 +17,15 @@ namespace Medicraft.Entities
         private float _knockbackForce, _percentNormalHit, _percentPassiveSkill;
         private readonly float _normalHitSpeed, _normalSkillSpeed, _burstSkillSpeed, _dyingSpeed;
 
-        private const float _baseCooldownNormal = 16f, _baseCooldownBurst = 20f, _caseCooldownPassive = 60f;
+        private const float _baseCooldownNormal = 16f, _baseCooldownBurst = 20f, _baseCooldownPassive = 60f;
         private bool _isNormalSkillCooldown, _isBurstSkillCooldown, _isPassiveSkillCooldown;
-        public float NormalSkillCooldownTime { get; private set; }
-        public float BurstSkillCooldownTime { get; private set; }
-        public float PassiveSkillCooldownTime { get; private set; }
+        public float NormalCooldownTimer { get; private set; }
+        public float BurstCooldownTimer { get; private set; }
+        public float PassiveCooldownTimer { get; private set; }
 
         private bool _isNormalSkillActivated, _isPassiveSkillActivated;
-        public float ActivatedTimeNormalSkill {  get; private set; }
-        public float ActivatedTimePassiveSkill { get; private set; }
+        public float NormalActivatedTimer {  get; private set; }
+        public float PassiveActivatedTimer { get; private set; }
 
         private bool _isCriticalAttack, _isAttackMissed;
 
@@ -61,15 +61,15 @@ namespace Medicraft.Entities
             _isBurstSkillCooldown = false;
             _isPassiveSkillCooldown = false;
 
-            NormalSkillCooldownTime = _baseCooldownNormal;
-            BurstSkillCooldownTime = _baseCooldownBurst;
-            PassiveSkillCooldownTime = _caseCooldownPassive;
+            NormalCooldownTimer = _baseCooldownNormal;
+            BurstCooldownTimer = _baseCooldownBurst;
+            PassiveCooldownTimer = _baseCooldownPassive;
 
             _isNormalSkillActivated = false;
             _isPassiveSkillActivated = false;
 
-            ActivatedTimeNormalSkill = 0;
-            ActivatedTimePassiveSkill = 0;
+            NormalActivatedTimer = 0;
+            PassiveActivatedTimer = 0;
 
             var position = new Vector2((float)playerData.Position[0], (float)playerData.Position[1]);
             
@@ -254,7 +254,7 @@ namespace Medicraft.Entities
                 Sprite.Play(CurrentAnimation);
 
                 IsAttacking = true;
-                ActionTime = _normalHitSpeed;
+                ActionTimer = _normalHitSpeed;
 
                 CheckAttackDetection(ATK, _percentNormalHit, false);
             }
@@ -267,7 +267,7 @@ namespace Medicraft.Entities
 
                 IsAttacking = true;
                 _isNormalSkillCooldown = true;
-                ActionTime = _normalSkillSpeed;
+                ActionTimer = _normalSkillSpeed;
 
                 // Do normal skill & effect of Sets Item
                 NormalSkillControl(PlayerData.Abilities.NormalSkillLevel);
@@ -281,7 +281,7 @@ namespace Medicraft.Entities
 
                 IsAttacking = true;
                 _isBurstSkillCooldown = true;
-                ActionTime = _burstSkillSpeed;
+                ActionTimer = _burstSkillSpeed;
 
                 // Do burst skill & effect of Sets Item
                 BurstSkillControl(PlayerData.Abilities.BurstSkillLevel);
@@ -314,7 +314,7 @@ namespace Medicraft.Entities
                     ATK += (int)(ATK * 0.5);
                     Crit_Percent += 0.1f;
                     CritDMG_Percent += 0.5f;
-                    ActivatedTimeNormalSkill = 8f;
+                    NormalActivatedTimer = 8f;
                     break;
 
                 case 2:
@@ -407,7 +407,7 @@ namespace Medicraft.Entities
                 case 1:
                     HP += (int)(MaximumHP * 0.25);
                     DEF_Percent += 0.25f;
-                    ActivatedTimePassiveSkill = 8f;
+                    PassiveActivatedTimer = 8f;
                     break;
 
                 case 2:
@@ -448,7 +448,7 @@ namespace Medicraft.Entities
             {
                 if (BoundingDetectEntity.Intersects(entity.BoundingHitBox))
                 {
-                    if (entity.Type == EntityType.Hostile)
+                    if (entity.EntityType == EntityTypes.Hostile)
                     {
                         if (!entity.IsDying)
                         {
@@ -466,15 +466,15 @@ namespace Medicraft.Entities
                             if (CombatNumCase != 3)
                             {
                                 entity.IsKnockback = true;
-                                entity.KnockbackedTime = 0.2f;
+                                entity.KnockbackedTimer = 0.2f;
                             }
                          
                             entity.IsAttacked = true;                          
-                            entity.AttackedTime = 0f;
+                            entity.AttackedTimer = 0f;
 
                             if (entity.HP <= 0)
                             {
-                                entity.DyingTime = 1.3f;
+                                entity.DyingTimer = 1.3f;
                                 entity.IsDying = true;
                             }
                         }
@@ -672,22 +672,22 @@ namespace Medicraft.Entities
         protected override void UpdateTimeConditions(float deltaSeconds)
         {
             // Check attack timing
-            if (ActionTime > 0)
+            if (ActionTimer > 0)
             {
-                ActionTime -= deltaSeconds;
+                ActionTimer -= deltaSeconds;
             }
             else IsAttacking = false;
 
             // Cooldown time Normal Skill
             if (_isNormalSkillCooldown)
             {
-                if (NormalSkillCooldownTime > 0)
+                if (NormalCooldownTimer > 0)
                 {
-                    NormalSkillCooldownTime -= deltaSeconds;
+                    NormalCooldownTimer -= deltaSeconds;
                 }
                 else
                 {
-                    NormalSkillCooldownTime = _baseCooldownNormal;
+                    NormalCooldownTimer = _baseCooldownNormal;
                     _isNormalSkillCooldown = false;
                 }
             }
@@ -695,16 +695,16 @@ namespace Medicraft.Entities
             // Activated time Normal Skill
             if (_isNormalSkillActivated)
             {
-                if (ActivatedTimeNormalSkill > 0)
+                if (NormalActivatedTimer > 0)
                 {
-                    ActivatedTimeNormalSkill -= deltaSeconds;
+                    NormalActivatedTimer -= deltaSeconds;
                 }
                 else
                 {
                     ATK = _tmpATK;
                     Crit_Percent = _tmpCrit;
                     CritDMG_Percent = _tmpCritDMG;
-                    ActivatedTimeNormalSkill = 0;
+                    NormalActivatedTimer = 0;
                     _isNormalSkillActivated = false;                 
                 }
             }
@@ -712,13 +712,13 @@ namespace Medicraft.Entities
             // Cooldown time Burst Skill
             if (_isBurstSkillCooldown)
             {
-                if (BurstSkillCooldownTime > 0)
+                if (BurstCooldownTimer > 0)
                 {
-                    BurstSkillCooldownTime -= deltaSeconds;
+                    BurstCooldownTimer -= deltaSeconds;
                 }
                 else
                 {
-                    BurstSkillCooldownTime = _baseCooldownBurst;
+                    BurstCooldownTimer = _baseCooldownBurst;
                     _isBurstSkillCooldown = false;
                 }
             }
@@ -726,13 +726,13 @@ namespace Medicraft.Entities
             // Cooldown time Passive Skill
             if (_isPassiveSkillCooldown)
             {
-                if (PassiveSkillCooldownTime > 0)
+                if (PassiveCooldownTimer > 0)
                 {
-                    PassiveSkillCooldownTime -= deltaSeconds;
+                    PassiveCooldownTimer -= deltaSeconds;
                 }
                 else
                 {
-                    PassiveSkillCooldownTime = _caseCooldownPassive;
+                    PassiveCooldownTimer = _baseCooldownPassive;
                     _isPassiveSkillCooldown = false;
                 }
             }
@@ -740,14 +740,14 @@ namespace Medicraft.Entities
             // Activated time Passive Skill
             if (_isPassiveSkillActivated)
             {
-                if (ActivatedTimePassiveSkill > 0)
+                if (PassiveActivatedTimer > 0)
                 {
-                    ActivatedTimePassiveSkill -= deltaSeconds;
+                    PassiveActivatedTimer -= deltaSeconds;
                 }
                 else
                 {
                     DEF_Percent = _tmpDEF;
-                    ActivatedTimePassiveSkill = 0;
+                    PassiveActivatedTimer = 0;
                     _isPassiveSkillActivated = false;
                 }
             }

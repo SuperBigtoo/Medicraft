@@ -30,10 +30,10 @@ namespace Medicraft.Entities
             Level = entityData.Level;
             InitializeCharacterData(entityData.CharId, Level);
 
-            AggroTime = 0f;
+            AggroTimer = 0f;
             AttackSpeed = 0.4f;
             CooldownAttack = 0.7f;
-            AttackCooldownTime = CooldownAttack;
+            CooldownAttackTimer = CooldownAttack;
 
             IsKnockbackable = true;
 
@@ -69,7 +69,7 @@ namespace Medicraft.Entities
             Sprite = slime.Sprite;
             EntityData = slime.EntityData;
 
-            Type = slime.Type;
+            EntityType = slime.EntityType;
             Id = slime.Id;
             Name = slime.Name;
             ATK = slime.ATK;
@@ -79,10 +79,10 @@ namespace Medicraft.Entities
             Speed = slime.Speed;
             Evasion = slime.Evasion;
 
-            AggroTime = slime.AggroTime;
+            AggroTimer = slime.AggroTimer;
             AttackSpeed = slime.AttackSpeed;
             CooldownAttack = slime.CooldownAttack;
-            AttackCooldownTime = CooldownAttack;
+            CooldownAttackTimer = CooldownAttack;
 
             IsKnockbackable = slime.IsKnockbackable;
 
@@ -149,15 +149,21 @@ namespace Medicraft.Entities
             if (!IsDying)
             {
                 // Setup Path Finding
-                if (AggroTime > 0)
+                if (AggroTimer > 0)
                 {
-                    PathFinding = new AStar((int)Position.X, (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY)
-                        , (int)PlayerManager.Instance.Player.Position.X, (int)PlayerManager.Instance.Player.Position.Y + 75);
+                    PathFinding = new AStar((int)Position.X,
+                        (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
+                        (int)PlayerManager.Instance.Player.Position.X,
+                        (int)PlayerManager.Instance.Player.Position.Y + 75
+                    );
                 }
                 else
                 {
-                    PathFinding = new AStar((int)Position.X, (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY)
-                        , (int)EntityData.Position[0], (int)EntityData.Position[1]);
+                    PathFinding = new AStar((int)Position.X,
+                        (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
+                        (int)EntityData.Position[0],
+                        (int)EntityData.Position[1]
+                    );
                 }
 
                 if (!PlayerManager.Instance.IsPlayerDead)
@@ -181,9 +187,9 @@ namespace Medicraft.Entities
                 // Check Object Collsion
                 CheckCollision();
 
-                if (DyingTime > 0)
+                if (DyingTimer > 0)
                 {
-                    DyingTime -= deltaSeconds;
+                    DyingTimer -= deltaSeconds;
                 }
                 else
                 {

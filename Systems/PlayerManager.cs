@@ -143,7 +143,7 @@ namespace Medicraft.Systems
                 var entities = EntityManager.Instance.Entities;
                 foreach (var entity in entities.Where(e => !e.IsDestroyed))
                 {
-                    entity.AggroTime = 0f;
+                    entity.AggroTimer = 0f;
                 }
 
                 IsPlayerDead = false;

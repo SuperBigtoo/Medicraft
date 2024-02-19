@@ -20,6 +20,11 @@ namespace Medicraft.Entities
             blue
         }
 
+        private float randomEndPointTimer = 10f;
+        private float randomEndPointTime = 10f;
+
+        private Vector2 randomEndPoint;
+
         public Slime(AnimatedSprite sprite, EntityData entityData, Vector2 scale)
         {
             Sprite = sprite;
@@ -30,10 +35,10 @@ namespace Medicraft.Entities
             Level = entityData.Level;
             InitializeCharacterData(entityData.CharId, Level);
 
-            AggroTime = 0f;
+            AggroTimer = 0f;
             AttackSpeed = 0.4f;
             CooldownAttack = 0.7f;
-            AttackCooldownTime = CooldownAttack;
+            CooldownAttackTimer = CooldownAttack;
 
             IsKnockbackable = true;
 
@@ -48,15 +53,24 @@ namespace Medicraft.Entities
             BoundingCollisionX = 5.5;
             BoundingCollisionY = 5;
 
-            BoundingDetectCollisions = new Rectangle((int)((int)Position.X - Sprite.TextureRegion.Width / BoundingCollisionX)
-                , (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY)
-                , Sprite.TextureRegion.Width / 2, Sprite.TextureRegion.Height / 2);     // Rec for check Collision
+            BoundingDetectCollisions = new Rectangle((int)((int)Position.X - Sprite.TextureRegion.Width / BoundingCollisionX),
+                (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
+                Sprite.TextureRegion.Width / 2,
+                Sprite.TextureRegion.Height / 2
+            );     // Rec for check Collision
 
             BoundingHitBox = new CircleF(Position, 20);         // Circle for Entity to hit
 
             BoundingDetectEntity = new CircleF(Position, 30);   // Circle for check attacking
 
             BoundingAggro = new CircleF(Position, 150);         // Circle for check aggro player        
+
+            PathFinding = new AStar(
+                (int)Position.X,
+                (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
+                (int)EntityData.Position[0],
+                (int)EntityData.Position[1]
+            );
 
             RandomSlimeColor();
 
@@ -69,7 +83,7 @@ namespace Medicraft.Entities
             Sprite = slime.Sprite;
             EntityData = slime.EntityData;
 
-            Type = slime.Type;        
+            EntityType = slime.EntityType;        
             Id = slime.Id;
             Name = slime.Name;
             ATK = slime.ATK;
@@ -79,10 +93,10 @@ namespace Medicraft.Entities
             Speed = slime.Speed;
             Evasion = slime.Evasion;
 
-            AggroTime = slime.AggroTime;
+            AggroTimer = slime.AggroTimer;
             AttackSpeed = slime.AttackSpeed;
             CooldownAttack = slime.CooldownAttack;
-            AttackCooldownTime = CooldownAttack;
+            CooldownAttackTimer = CooldownAttack;
 
             IsKnockbackable = slime.IsKnockbackable;
 
@@ -103,43 +117,18 @@ namespace Medicraft.Entities
 
             BoundingDetectEntity = slime.BoundingDetectEntity;
 
+            PathFinding = new AStar(
+                (int)Position.X,
+                (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
+                (int)EntityData.Position[0],
+                (int)EntityData.Position[1]
+            );
+
             RandomSlimeColor();
 
             Sprite.Depth = 0.1f;
             Sprite.Play(SpriteName + "_walking");
-        }
-
-        public override object Clone()
-        {
-            return new Slime(this);
-        }
-
-        private void RandomSlimeColor()
-        {
-            var random = new Random();
-            Array slimeColors = Enum.GetValues(typeof(SlimeColor));
-            int randomIndex = random.Next(slimeColors.Length);
-            SlimeColor randomColor = (SlimeColor)slimeColors.GetValue(randomIndex);
-
-            switch (randomColor)
-            {
-                case SlimeColor.yellow:
-                    SpriteName = "yellow";
-                    break;
-
-                case SlimeColor.red:
-                    SpriteName = "red";
-                    break;
-
-                case SlimeColor.green:
-                    SpriteName = "green";
-                    break;
-
-                case SlimeColor.blue:
-                    SpriteName = "blue";
-                    break;
-            }
-        }
+        }    
 
         // Update Slime
         public override void Update(GameTime gameTime, float playerDepth, float topDepth, float middleDepth, float bottomDepth)
@@ -148,16 +137,33 @@ namespace Medicraft.Entities
 
             if (!IsDying)
             {
-                // Setup Path Finding
-                if (AggroTime > 0)
+                randomEndPointTimer += deltaSeconds;
+
+                if (randomEndPointTimer >= randomEndPointTime)
                 {
-                    PathFinding = new AStar((int)Position.X, (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY)
-                        , (int)PlayerManager.Instance.Player.Position.X, (int)PlayerManager.Instance.Player.Position.Y + 75);
+                    RandomizeEndPoint();
+
+                    randomEndPointTimer = 0f;
+                }
+
+                // Setup Path Finding
+                if (AggroTimer > 0)
+                {
+                    PathFinding = new AStar(
+                        (int)Position.X,
+                        (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
+                        (int)PlayerManager.Instance.Player.Position.X,
+                        (int)PlayerManager.Instance.Player.Position.Y + 75
+                    );
                 }
                 else
                 {
-                    PathFinding = new AStar((int)Position.X, (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY)
-                        , (int)EntityData.Position[0], (int)EntityData.Position[1]);
+                    PathFinding = new AStar(
+                         (int)Position.X,
+                         (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
+                         (int)randomEndPoint.X,
+                         (int)randomEndPoint.Y
+                    );
                 }
 
                 if (!PlayerManager.Instance.IsPlayerDead)
@@ -181,9 +187,9 @@ namespace Medicraft.Entities
                 // Check Object Collsion
                 CheckCollision();
 
-                if (DyingTime > 0)
+                if (DyingTimer > 0)
                 {
-                    DyingTime -= deltaSeconds;
+                    DyingTimer -= deltaSeconds;
                 }
                 else
                 {
@@ -224,6 +230,55 @@ namespace Medicraft.Entities
                 pixelTexture.SetData(new Color[] { Color.White });
                 spriteBatch.Draw(pixelTexture, BoundingDetectCollisions, Color.Red);
             }
+        }      
+
+        private void RandomSlimeColor()
+        {
+            var random = new Random();
+            Array slimeColors = Enum.GetValues(typeof(SlimeColor));
+            int randomIndex = random.Next(slimeColors.Length);
+            SlimeColor randomColor = (SlimeColor)slimeColors.GetValue(randomIndex);
+
+            switch (randomColor)
+            {
+                case SlimeColor.yellow:
+                    SpriteName = "yellow";
+                    break;
+
+                case SlimeColor.red:
+                    SpriteName = "red";
+                    break;
+
+                case SlimeColor.green:
+                    SpriteName = "green";
+                    break;
+
+                case SlimeColor.blue:
+                    SpriteName = "blue";
+                    break;
+            }
+        }
+
+        private void RandomizeEndPoint()
+        {
+            var random = new Random();
+
+            // Define the patrol area from rectangle
+            var rectangleX = 929;
+            var rectangleY = 351;
+            var rectangleWidth = 481;
+            var rectangleHeight = 289;
+
+            // Generate random X and Y within the rectangle
+            var randomX = random.Next(rectangleX, rectangleX + rectangleWidth);
+            var randomY = random.Next(rectangleY, rectangleY + rectangleHeight);
+
+            randomEndPoint = new Vector2(randomX, randomY);
+        }
+
+        public override object Clone()
+        {
+            return new Slime(this);
         }
 
         public override Vector2 SetCombatNumDirection()

@@ -124,19 +124,19 @@ namespace Medicraft.Systems
             spriteBatch.DrawString(_fonts[3], $"Player DEF: {PlayerManager.Instance.Player.DEF_Percent}"
                 , new Vector2(55f, 105f) + _hudTopLeftCorner, Color.White, clippingRectangle: rect);
 
-            spriteBatch.DrawString(_fonts[3], $"Cooldown Normal Skill: {PlayerManager.Instance.Player.NormalSkillCooldownTime}"
+            spriteBatch.DrawString(_fonts[3], $"Cooldown Normal Skill: {PlayerManager.Instance.Player.NormalCooldownTimer}"
                 , new Vector2(55f, 135f) + _hudTopLeftCorner, Color.White);
 
-            spriteBatch.DrawString(_fonts[3], $"Cooldown Normal Skill: {PlayerManager.Instance.Player.BurstSkillCooldownTime}"
+            spriteBatch.DrawString(_fonts[3], $"Cooldown Normal Skill: {PlayerManager.Instance.Player.BurstCooldownTimer}"
                 , new Vector2(55f, 150f) + _hudTopLeftCorner, Color.White);
 
-            spriteBatch.DrawString(_fonts[3], $"Cooldown Normal Skill: {PlayerManager.Instance.Player.PassiveSkillCooldownTime}"
+            spriteBatch.DrawString(_fonts[3], $"Cooldown Normal Skill: {PlayerManager.Instance.Player.PassiveCooldownTimer}"
                 , new Vector2(55f, 165f) + _hudTopLeftCorner, Color.White);
 
-            spriteBatch.DrawString(_fonts[3], $"Normal Skill Time: {PlayerManager.Instance.Player.ActivatedTimeNormalSkill}"
+            spriteBatch.DrawString(_fonts[3], $"Normal Skill Time: {PlayerManager.Instance.Player.NormalActivatedTimer}"
                 , new Vector2(55f, 200f) + _hudTopLeftCorner, Color.White);
 
-            spriteBatch.DrawString(_fonts[3], $"Passive Skill Time: {PlayerManager.Instance.Player.ActivatedTimePassiveSkill}"
+            spriteBatch.DrawString(_fonts[3], $"Passive Skill Time: {PlayerManager.Instance.Player.PassiveActivatedTimer}"
                 , new Vector2(55f, 215f) + _hudTopLeftCorner, Color.White);
         }
 
