@@ -56,7 +56,7 @@ namespace Medicraft.Data
             {
                 GameGlobals.Instance.GameSave[GameGlobals.Instance.GameSaveIdex] = new GameSaveData()
                 {
-                    Id = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.GameSaveIdex).Id,
+                    SaveId = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.GameSaveIdex).SaveId,
                     Name = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.GameSaveIdex).Name,
                     CreatedTime = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.GameSaveIdex).CreatedTime,
                     LastUpdated = dateTimeString,
@@ -69,7 +69,7 @@ namespace Medicraft.Data
             {
                 GameGlobals.Instance.GameSave.Add(new GameSaveData()
                 {
-                    Id = 0,
+                    SaveId = 0,
                     Name = saveName,
                     CreatedTime = dateTimeString,
                     LastUpdated = dateTimeString,

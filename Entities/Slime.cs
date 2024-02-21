@@ -20,18 +20,13 @@ namespace Medicraft.Entities
             blue
         }
 
-        private float randomEndPointTimer = 10f;
-        private float randomEndPointTime = 10f;
-
-        private Vector2 randomEndPoint;
-
         public Slime(AnimatedSprite sprite, EntityData entityData, Vector2 scale)
         {
             Sprite = sprite;
             EntityData = entityData;
 
             // Initialize Character Data
-            Id = entityData.Id;
+            Id = entityData.Id;             // Mot to be confuse with CharId
             Level = entityData.Level;
             InitializeCharacterData(entityData.CharId, Level);
 
@@ -40,7 +35,11 @@ namespace Medicraft.Entities
             CooldownAttack = 0.7f;
             CooldownAttackTimer = CooldownAttack;
 
+            IsAggroResettable = true;
             IsKnockbackable = true;
+
+            SetPathFindingType(entityData.PathFindingType);
+            NextNodeTime = 10f;
 
             var position = new Vector2((float)entityData.Position[0], (float)entityData.Position[1]);
             Transform = new Transform2
@@ -98,7 +97,11 @@ namespace Medicraft.Entities
             CooldownAttack = slime.CooldownAttack;
             CooldownAttackTimer = CooldownAttack;
 
+            IsAggroResettable = slime.IsAggroResettable;
             IsKnockbackable = slime.IsKnockbackable;
+
+            PathFindingType = slime.PathFindingType;
+            NextNodeTime = slime.NextNodeTime;
 
             Transform = new Transform2
             {
@@ -136,35 +139,11 @@ namespace Medicraft.Entities
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (!IsDying)
-            {
-                randomEndPointTimer += deltaSeconds;
-
-                if (randomEndPointTimer >= randomEndPointTime)
-                {
-                    RandomizeEndPoint();
-
-                    randomEndPointTimer = 0f;
-                }
+            {                
+                NextPathFindingNode(deltaSeconds);
 
                 // Setup Path Finding
-                if (AggroTimer > 0)
-                {
-                    PathFinding = new AStar(
-                        (int)Position.X,
-                        (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
-                        (int)PlayerManager.Instance.Player.Position.X,
-                        (int)PlayerManager.Instance.Player.Position.Y + 75
-                    );
-                }
-                else
-                {
-                    PathFinding = new AStar(
-                         (int)Position.X,
-                         (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
-                         (int)randomEndPoint.X,
-                         (int)randomEndPoint.Y
-                    );
-                }
+                SetPathFindingNode((int)EntityData.Position[0], (int)EntityData.Position[1]);
 
                 if (!PlayerManager.Instance.IsPlayerDead)
                 {
@@ -202,7 +181,7 @@ namespace Medicraft.Entities
             }
 
             // Update time conditions
-            UpdateTimeConditions(deltaSeconds);
+            UpdateTimerConditions(deltaSeconds);
 
             if (PlayerManager.Instance.IsPlayerDead)
             {
@@ -257,23 +236,6 @@ namespace Medicraft.Entities
                     SpriteName = "blue";
                     break;
             }
-        }
-
-        private void RandomizeEndPoint()
-        {
-            var random = new Random();
-
-            // Define the patrol area from rectangle
-            var rectangleX = 929;
-            var rectangleY = 351;
-            var rectangleWidth = 481;
-            var rectangleHeight = 289;
-
-            // Generate random X and Y within the rectangle
-            var randomX = random.Next(rectangleX, rectangleX + rectangleWidth);
-            var randomY = random.Next(rectangleY, rectangleY + rectangleHeight);
-
-            randomEndPoint = new Vector2(randomX, randomY);
         }
 
         public override object Clone()

@@ -2,7 +2,7 @@
 {
     public class GameSaveData
     {
-        public int Id { get; set; }
+        public int SaveId { get; set; }
         public string Name { get; set; }
         public string CreatedTime { get; set; }
         public string LastUpdated { get; set; }

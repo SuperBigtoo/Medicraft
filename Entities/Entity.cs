@@ -41,11 +41,25 @@ namespace Medicraft.Entities
         public CircleF BoundingDetectEntity;
         public CircleF BoundingCollection;
         public CircleF BoundingAggro;
-
+        
         protected int currentNodeIndex = 0; // Index of the current node in the path
         protected AStar PathFinding;
         protected Vector2 InitPos;
-        protected string CurrentAnimation;      
+        protected string CurrentAnimation;
+
+        protected Vector2 targetNode;
+        protected float nextNodeTime;
+        protected float nextNodeTimer;
+
+        protected float NextNodeTime
+        {
+            get => nextNodeTime;
+            set
+            {
+                nextNodeTime = value;
+                nextNodeTimer = value;
+            }
+        }
 
         public Vector2 Position
         {
@@ -83,12 +97,13 @@ namespace Medicraft.Entities
         public enum PathFindingTypes
         {
             RoutePoint,
-            RandomPoint
+            RandomPoint,
+            StationaryPoint
         }
 
         public PathFindingTypes PathFindingType { get; protected set; }
 
-        // Time Conditions
+        // Timer Conditions
         public float AggroTimer { get; set; }
         public float ActionTimer { get; set; }
         public float AttackedTimer { get; set; }     // Also used in positioning DrawCombatNumbers
@@ -105,6 +120,9 @@ namespace Medicraft.Entities
         public Color CombatNumColor { get; set; }
         public float CombatNumScale { get; set; }
 
+        // Boolean
+        public bool IsAggroResettable { get; set; }
+        public bool IsAggro { get; set; }
         public bool IsKnockbackable { get; set; }
         public bool IsKnockback { get; set; }
         public bool IsDying { get; set; }
@@ -146,6 +164,8 @@ namespace Medicraft.Entities
             CombatNumColor = Color.White;
             CombatNumScale = 2f;
 
+            IsAggroResettable = true;
+            IsAggro = false;
             IsKnockbackable = true;
             IsKnockback = false;
             IsDying = false;
@@ -178,6 +198,8 @@ namespace Medicraft.Entities
             IsAttackCooldown = entity.IsAttackCooldown;
             CombatNumColor = entity.CombatNumColor;
             CombatNumScale = entity.CombatNumScale;
+            IsAggroResettable = entity.IsAggroResettable;
+            IsAggro = entity.IsAggro;
             IsKnockbackable = entity.IsKnockbackable;
             IsKnockback = entity.IsKnockback;
             IsDying = entity.IsDying;
@@ -233,10 +255,28 @@ namespace Medicraft.Entities
             }
         }
 
+        protected virtual void SetPathFindingType(int category)
+        {
+            switch (category)
+            {
+                case 0:
+                    PathFindingType = PathFindingTypes.RoutePoint;
+                    break;
+
+                case 1:
+                    PathFindingType = PathFindingTypes.RandomPoint;
+                    break;
+
+                case 2:
+                    PathFindingType = PathFindingTypes.StationaryPoint;
+                    break;
+            }
+        }
+
         protected virtual void SetCharacterStats(CharacterData charData, int level)
         {
             ATK = charData.ATK + ((level - 1) * 2);
-            MaximumHP = charData.HP + ((level - 1) * 5);
+            MaximumHP = charData.HP + ((level - 1) * 10);
             HP = MaximumHP;
             DEF_Percent = (float)charData.DEF_Percent;
             Crit_Percent = (float)charData.Crit_Percent;
@@ -255,7 +295,7 @@ namespace Medicraft.Entities
             CheckCollision();
 
             // Play Sprite: Idle 
-            if (!IsAttacking)
+            if (!IsAttacking || !IsMoving)
             {
                 CurrentAnimation = SpriteName + "_walking";  // Idle
                 Sprite.Play(CurrentAnimation);
@@ -267,6 +307,7 @@ namespace Medicraft.Entities
                 if (BoundingAggro.Intersects(PlayerManager.Instance.Player.BoundingHitBox))
                 {
                     AggroTimer = 5f;
+                    IsAggro = true;
                 }
             }           
 
@@ -285,6 +326,7 @@ namespace Medicraft.Entities
 
                         // Move the character towards the next node
                         Position += direction * walkSpeed;
+                        IsMoving = true;
 
                         // Check Animation
                         if (Position.Y >= (PlayerManager.Instance.Player.Position.Y + 50f))
@@ -312,8 +354,11 @@ namespace Medicraft.Entities
                         {
                             currentNodeIndex++;
                         }
-
                         //System.Diagnostics.Debug.WriteLine($"Pos Mob: {Position.X} {Position.Y}");       
+                    }
+                    else
+                    {
+                        IsMoving = false;
                     }
                     //else if (PathFinding.GetPath().Count <= 1)
                     //{
@@ -364,15 +409,94 @@ namespace Medicraft.Entities
             }
         }
 
-        protected virtual void UpdateTimeConditions(float deltaSeconds)
+        protected void NextPathFindingNode(float deltaSeconds)
         {
-            // Decreasing Aggro time
-            if (AggroTimer > 0)
-            {
-                AggroTimer -= deltaSeconds;
-            }
+            nextNodeTimer += deltaSeconds;
 
-            // Knockback
+            if (nextNodeTimer >= nextNodeTime)
+            {
+                switch (PathFindingType)
+                {
+                    case PathFindingTypes.RoutePoint:
+                        break;
+
+                    case PathFindingTypes.RandomPoint:
+                        var random = new Random();
+
+                        // Define the patrol area from rectangle
+                        var rectangleX = 929;
+                        var rectangleY = 351;
+                        var rectangleWidth = 481;
+                        var rectangleHeight = 289;
+
+                        // Generate random X and Y within the rectangle
+                        var randomX = random.Next(rectangleX, rectangleX + rectangleWidth);
+                        var randomY = random.Next(rectangleY, rectangleY + rectangleHeight);
+
+                        targetNode = new Vector2(randomX, randomY);
+                        break;
+
+                    case PathFindingTypes.StationaryPoint:
+                        break;
+                } 
+
+                nextNodeTimer = 0f;
+            }
+        }
+
+        protected virtual void SetPathFindingNode(int spawnPosX, int spawnPosY)
+        {
+            if (IsAggro)
+            {
+                PathFinding = new AStar(
+                    (int)Position.X,
+                    (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
+                    (int)PlayerManager.Instance.Player.Position.X,
+                    (int)PlayerManager.Instance.Player.Position.Y + 75
+                );
+            }
+            else
+            {
+                switch (PathFindingType)
+                {
+                    case PathFindingTypes.RoutePoint:
+
+                    case PathFindingTypes.RandomPoint:
+                        PathFinding = new AStar(
+                            (int)Position.X,
+                            (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
+                            (int)targetNode.X,
+                            (int)targetNode.Y
+                        );
+                        break;
+
+                    case PathFindingTypes.StationaryPoint:
+                        PathFinding = new AStar((int)Position.X,
+                            (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
+                            spawnPosX,
+                            spawnPosY
+                        );
+                        break;
+                }            
+            }
+        }
+
+        protected virtual void UpdateTimerConditions(float deltaSeconds)
+        {
+            // Decreasing AggroTimer
+            if (IsAggro && IsAggroResettable)
+            {
+                if (AggroTimer > 0)
+                {
+                    AggroTimer -= deltaSeconds;
+                }
+                else
+                {
+                    IsAggro = false;
+                }
+            }          
+
+            // Decreasing KnockbackTimer
             if (IsKnockback)
             {
                 if (IsKnockbackable) Position += Velocity * KnockbackedTimer;
@@ -388,7 +512,7 @@ namespace Medicraft.Entities
                 }
             }
 
-            // Attacked
+            // Decreasing AttackedTimer
             if (IsAttacked)
             {
                 if (AttackedTimer < 1)

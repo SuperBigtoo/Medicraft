@@ -52,7 +52,7 @@ namespace Medicraft.Entities
             _percentNormalHit = 0.5f;
             _percentPassiveSkill = 0.3f;
 
-            _normalHitSpeed = 0.4f;
+            _normalHitSpeed = 0.5f;
             _normalSkillSpeed = 0.9f;
             _burstSkillSpeed = 0.7f;
             _dyingSpeed = 10f;                     
@@ -138,7 +138,7 @@ namespace Medicraft.Entities
             }
 
             // Update time conditions
-            UpdateTimeConditions(deltaSeconds);
+            UpdateTimerConditions(deltaSeconds);
   
             Sprite.Update(deltaSeconds);
         }
@@ -669,7 +669,7 @@ namespace Medicraft.Entities
             }
         }
 
-        protected override void UpdateTimeConditions(float deltaSeconds)
+        protected override void UpdateTimerConditions(float deltaSeconds)
         {
             // Check attack timing
             if (ActionTimer > 0)
@@ -752,7 +752,7 @@ namespace Medicraft.Entities
                 }
             }
 
-            base.UpdateTimeConditions(deltaSeconds);
+            base.UpdateTimerConditions(deltaSeconds);
         }
 
         public override Vector2 SetCombatNumDirection()

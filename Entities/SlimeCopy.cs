@@ -35,7 +35,11 @@ namespace Medicraft.Entities
             CooldownAttack = 0.7f;
             CooldownAttackTimer = CooldownAttack;
 
+            IsAggroResettable = true;
             IsKnockbackable = true;
+
+            SetPathFindingType(entityData.PathFindingType);
+            NextNodeTime = 10f;
 
             var position = new Vector2((float)entityData.Position[0], (float)entityData.Position[1]);
             Transform = new Transform2
@@ -84,7 +88,11 @@ namespace Medicraft.Entities
             CooldownAttack = slime.CooldownAttack;
             CooldownAttackTimer = CooldownAttack;
 
+            IsAggroResettable = slime.IsAggroResettable;
             IsKnockbackable = slime.IsKnockbackable;
+
+            PathFindingType = slime.PathFindingType;
+            NextNodeTime = slime.NextNodeTime;
 
             Transform = new Transform2
             {
@@ -149,22 +157,7 @@ namespace Medicraft.Entities
             if (!IsDying)
             {
                 // Setup Path Finding
-                if (AggroTimer > 0)
-                {
-                    PathFinding = new AStar((int)Position.X,
-                        (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
-                        (int)PlayerManager.Instance.Player.Position.X,
-                        (int)PlayerManager.Instance.Player.Position.Y + 75
-                    );
-                }
-                else
-                {
-                    PathFinding = new AStar((int)Position.X,
-                        (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
-                        (int)EntityData.Position[0],
-                        (int)EntityData.Position[1]
-                    );
-                }
+                SetPathFindingNode((int)EntityData.Position[0], (int)EntityData.Position[1]);
 
                 if (!PlayerManager.Instance.IsPlayerDead)
                 {
@@ -202,7 +195,7 @@ namespace Medicraft.Entities
             }
 
             // Update time conditions
-            UpdateTimeConditions(deltaSeconds);
+            UpdateTimerConditions(deltaSeconds);
 
             if (PlayerManager.Instance.IsPlayerDead)
             {

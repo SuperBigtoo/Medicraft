@@ -4,6 +4,7 @@
     "CharId": 200,
     "Level": 1,
     "Name": "Slime",
+    "PathFindingType": 1,
     "Position": [ 1096, 566 ]
   },
   {
@@ -11,6 +12,7 @@
     "CharId": 200,
     "Level": 1,
     "Name": "Slime",
+    "PathFindingType": 2,
     "Position": [ 1276, 566 ]
   }
 ]
