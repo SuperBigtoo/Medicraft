@@ -26,7 +26,7 @@ namespace Medicraft.Screens
 
         public override void LoadContent()
         {
-            base.LoadContent();
+            base.LoadContent();         
 
             // Load bitmap font
             _fontSensation = Content.Load<BitmapFont>("fonts/Sensation/Sensation");
@@ -45,7 +45,7 @@ namespace Medicraft.Screens
 
             // Initialize Player's Data !! Gonna be move to Load GameSave later !!
             var initialPlayerStats = Content.Load<PlayerData>("data/models/playerdata");
-            var playerAnimation = Content.Load<SpriteSheet>("animation/mc/mc_spritesheet.sf", new JsonContentLoader());
+            var playerAnimation = Content.Load<SpriteSheet>("animation/mc/mc_animation.sf", new JsonContentLoader());
             var playerSprite = new AnimatedSprite(playerAnimation);
             PlayerManager.Instance.Initialize(playerSprite, initialPlayerStats);
 
@@ -75,7 +75,7 @@ namespace Medicraft.Screens
             _itemDataList = Content.Load<List<ObjectData>>("data/TestScreen/objects_demo");
 
             // Adding Slime to MobSpawner
-            var _slimeAnimation = Content.Load<SpriteSheet>("animation/mobs/slime/slimes_spritesheet.sf", new JsonContentLoader());
+            var _slimeAnimation = Content.Load<SpriteSheet>("animation/mobs/slime/slimes_animation.sf", new JsonContentLoader());
             var _slimeScale = new Vector2(3.0f, 2.5f);
             var _mobSpawner = new MobSpawner(10f);
             _mobSpawner.AddEntity(new Slime(new AnimatedSprite(_slimeAnimation), _slimeStatsList[0], _slimeScale));
