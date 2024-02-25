@@ -17,7 +17,11 @@ namespace Medicraft.Data.Models
         public string Value { get; set; }
         public float ElapsedTime { get; set; }
         public Vector2 Velocity { get; set; }
+        public Vector2 OffSet { get; set; }
+        public Color Color { get; set; }
         public float AlphaColor { get; set; }
         public float ScaleFont { get; set; }
+
+
     }
 }

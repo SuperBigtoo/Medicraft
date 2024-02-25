@@ -15,7 +15,7 @@ namespace Medicraft.Entities
         public PlayerData PlayerData { get; private set; }
 
         private float _knockbackForce, _percentNormalHit, _percentPassiveSkill;
-        private readonly float _normalHitSpeed, _normalSkillSpeed, _burstSkillSpeed, _dyingSpeed;
+        private readonly float _hitRateNormal, _hitRateNormalSkill, _hitRateBurstSkill;
 
         private const float _baseCooldownNormal = 16f, _baseCooldownBurst = 20f, _baseCooldownPassive = 60f;
         private bool _isNormalSkillCooldown, _isBurstSkillCooldown, _isPassiveSkillCooldown;
@@ -52,10 +52,9 @@ namespace Medicraft.Entities
             _percentNormalHit = 0.5f;
             _percentPassiveSkill = 0.3f;
 
-            _normalHitSpeed = 0.5f;
-            _normalSkillSpeed = 0.9f;
-            _burstSkillSpeed = 0.7f;
-            _dyingSpeed = 10f;                     
+            _hitRateNormal = 0.5f;
+            _hitRateNormalSkill = 0.9f;
+            _hitRateBurstSkill = 0.9f;                     
 
             _isNormalSkillCooldown = false;
             _isBurstSkillCooldown = false;
@@ -83,9 +82,10 @@ namespace Medicraft.Entities
             BoundingCollisionX = 20;
             BoundingCollisionY = 2.60;
 
-            BoundingDetectCollisions = new Rectangle((int)((int)Position.X - sprite.TextureRegion.Width / BoundingCollisionX)
-                , (int)((int)Position.Y + sprite.TextureRegion.Height / BoundingCollisionY)
-                , sprite.TextureRegion.Width / 8, sprite.TextureRegion.Height / 8);     // Rec for check Collision
+            BoundingDetectCollisions = new Rectangle((int)((int)Position.X - sprite.TextureRegion.Width / BoundingCollisionX),
+                (int)((int)Position.Y + sprite.TextureRegion.Height / BoundingCollisionY),
+                sprite.TextureRegion.Width / 8,
+                sprite.TextureRegion.Height / 8);     // Rec for check Collision
 
             BoundingHitBox = new CircleF(Position + new Vector2(0f, 32f), 40f);         // Circle for Entity to hit
 
@@ -146,6 +146,7 @@ namespace Medicraft.Entities
         // Draw Player
         public override void Draw(SpriteBatch spriteBatch)
         {
+
             spriteBatch.Draw(Sprite, Transform);
 
             // Test Draw BoundingRec for Collision Check
@@ -254,9 +255,9 @@ namespace Medicraft.Entities
                 Sprite.Play(CurrentAnimation);
 
                 IsAttacking = true;
-                ActionTimer = _normalHitSpeed;
+                ActionTimer = _hitRateNormal;
 
-                CheckAttackDetection(ATK, _percentNormalHit, false);
+                CheckAttackDetection(ATK, _percentNormalHit, false, 0f);
             }
 
             // Normal Skill
@@ -267,7 +268,7 @@ namespace Medicraft.Entities
 
                 IsAttacking = true;
                 _isNormalSkillCooldown = true;
-                ActionTimer = _normalSkillSpeed;
+                ActionTimer = _hitRateNormalSkill;
 
                 // Do normal skill & effect of Sets Item
                 NormalSkillControl(PlayerData.Abilities.NormalSkillLevel);
@@ -281,7 +282,7 @@ namespace Medicraft.Entities
 
                 IsAttacking = true;
                 _isBurstSkillCooldown = true;
-                ActionTimer = _burstSkillSpeed;
+                ActionTimer = _hitRateBurstSkill;
 
                 // Do burst skill & effect of Sets Item
                 BurstSkillControl(PlayerData.Abilities.BurstSkillLevel);
@@ -299,7 +300,7 @@ namespace Medicraft.Entities
 
         // Skills Control
         /// <summary>
-        /// Increase Player character's stats such as ATK, Crit_Percent and CritDMG_Percent for a amount of time
+        /// Increase Player character's stats such as ATK, Crit_Percent and CritDMG_Percent for an amount of time
         /// </summary>
         /// <param name="skillLevel">Normal Skill level base on PlayerData.Abilities.NormalSkillLevel</param>
         private void NormalSkillControl(int skillLevel)
@@ -349,7 +350,7 @@ namespace Medicraft.Entities
         }
 
         /// <summary>
-        /// Deals large damage in a wide area surrounding the Player Character and knockback mobs
+        /// Deals large damage in a wide area surrounding the Player Character knockback and stun mobs for an amount of time
         /// </summary>
         /// <param name="skillLevel">Burst Skill level base on PlayerData.Abilities.BurstSkillLevel</param>
         private void BurstSkillControl(int skillLevel)
@@ -359,7 +360,7 @@ namespace Medicraft.Entities
                 case 1:
                     BoundingDetectEntity.Radius = 140f;
                     _knockbackForce = 60f;
-                    CheckAttackDetection(ATK, 1.75f, true);
+                    CheckAttackDetection(ATK, 1.75f, true, 1.5f);
                     break;
 
                 case 2:
@@ -395,7 +396,7 @@ namespace Medicraft.Entities
         }
 
         /// <summary>
-        /// Instantly restore Player Character's HP when the HP is below 10% and increase DEF_Percent for a amount of time
+        /// Instantly restore Player Character's HP when the HP is below 10% and increase DEF_Percent for an amount of time
         /// </summary>
         /// <param name="skillLevel">Passive Skill level base on PlayerData.Abilities.PassiveSkillLevel</param>
         private void PassiveSkillControl(int skillLevel)
@@ -442,7 +443,7 @@ namespace Medicraft.Entities
         }
 
         // Check Attack
-        private void CheckAttackDetection(int Atk, float HitPercent, bool IsUndodgeable)
+        private void CheckAttackDetection(int Atk, float HitPercent, bool IsUndodgeable, float StunTime)
         {
             foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed))
             {
@@ -463,19 +464,24 @@ namespace Medicraft.Entities
                             var combatNumVelocity = entity.SetCombatNumDirection();
                             entity.AddCombatLogNumbers(Name, totalDamage.ToString(), CombatNumCase, combatNumVelocity);
 
+                            entity.IsAttacked = true;
+                            entity.AttackedTimer = 0f;
+
+                            if (entity.HP <= 0)
+                            {
+                                entity.IsDying = true;
+                            }
+
                             if (CombatNumCase != 3)
                             {
                                 entity.IsKnockback = true;
                                 entity.KnockbackedTimer = 0.2f;
                             }
-                         
-                            entity.IsAttacked = true;                          
-                            entity.AttackedTimer = 0f;
 
-                            if (entity.HP <= 0)
+                            if (StunTime > 0f && entity.IsStunable)
                             {
-                                entity.DyingTimer = 1.3f;
-                                entity.IsDying = true;
+                                entity.IsStunning = true;
+                                entity.StunningTimer = StunTime;
                             }
                         }
                     } 
@@ -757,13 +763,12 @@ namespace Medicraft.Entities
 
         public override Vector2 SetCombatNumDirection()
         {
-            float randomFloat = (float)(new Random().NextDouble() * 0.5f) - 0.25f;
-            var NumDirection = Position
-                - new Vector2(Position.X + (Sprite.TextureRegion.Width / 2) * randomFloat
-                , Position.Y - (Sprite.TextureRegion.Height));
-            NumDirection.Normalize();
+            Vector2 offset = new Vector2(Position.X, Position.Y - Sprite.TextureRegion.Height * 1.5f);
 
-            CombatNumVelocity = NumDirection * (Sprite.TextureRegion.Height / 2);
+            Vector2 numDirection = Position - offset;
+            numDirection.Normalize();
+
+            CombatNumVelocity = numDirection * Sprite.TextureRegion.Height / 2;
 
             return CombatNumVelocity;
         }

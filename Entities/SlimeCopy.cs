@@ -30,10 +30,10 @@ namespace Medicraft.Entities
             Level = entityData.Level;
             InitializeCharacterData(entityData.CharId, Level);
 
-            AggroTimer = 0f;
             AttackSpeed = 0.4f;
             CooldownAttack = 0.7f;
             CooldownAttackTimer = CooldownAttack;
+            DyingTime = 1.3f;
 
             IsAggroResettable = true;
             IsKnockbackable = true;
@@ -50,7 +50,7 @@ namespace Medicraft.Entities
             };
 
             BoundingCollisionX = 5.5;
-            BoundingCollisionY = 5;
+            BoundingCollisionY = 4;
 
             BoundingDetectCollisions = new Rectangle((int)((int)Position.X - Sprite.TextureRegion.Width / BoundingCollisionX)
                 , (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY)
@@ -83,10 +83,10 @@ namespace Medicraft.Entities
             Speed = slime.Speed;
             Evasion = slime.Evasion;
 
-            AggroTimer = slime.AggroTimer;
             AttackSpeed = slime.AttackSpeed;
             CooldownAttack = slime.CooldownAttack;
             CooldownAttackTimer = CooldownAttack;
+            DyingTime = slime.DyingTime;
 
             IsAggroResettable = slime.IsAggroResettable;
             IsKnockbackable = slime.IsKnockbackable;
@@ -180,9 +180,9 @@ namespace Medicraft.Entities
                 // Check Object Collsion
                 CheckCollision();
 
-                if (DyingTimer > 0)
+                if (DyingTimer < DyingTime)
                 {
-                    DyingTimer -= deltaSeconds;
+                    DyingTimer += deltaSeconds;
                 }
                 else
                 {

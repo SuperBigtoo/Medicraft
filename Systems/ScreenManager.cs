@@ -12,10 +12,10 @@ namespace Medicraft.Systems
 {
     public class ScreenManager
     {
-        private SpriteBatch spriteBatch;
-        private Screen screen;
-
         private static ScreenManager instance;
+
+        private SpriteBatch _spriteBatch;
+        private Screen _curScreen;  
 
         public Game Game { private set; get; }
         public ContentManager Content { private set; get; }
@@ -33,39 +33,23 @@ namespace Medicraft.Systems
 
         public ScreenManager()
         {
-            screen = new SplashScreen();
+            _curScreen = new SplashScreen();
             CurrentScreen = GameScreen.SplashScreen;
         }
 
-        public void LoadScreen(GameScreen gameScreen)
+        public void Initialize(Game game)
         {
-            UnloadContent();
+            Game = game;
+            Content = game.Content;
+            GraphicsDevice = game.GraphicsDevice;
+            Window = game.Window;
+            Camera = new Camera(GraphicsDevice.Viewport);
 
-            switch (gameScreen)
-            {
-                case GameScreen.TestScreen:
-                    screen = new TestScreen();
-                    CurrentScreen = GameScreen.TestScreen;
-                    screen.LoadContent();
-                    break;
-
-                case GameScreen.SplashScreen:
-                    screen = new SplashScreen();
-                    CurrentScreen = GameScreen.SplashScreen;
-                    screen.LoadContent();
-                    break;
-            }
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
-        public void LoadContent(Game game, ContentManager content)
-        {  
-            Game = game;
-            Content = new ContentManager(content.ServiceProvider, "Content");
-            GraphicsDevice = game.GraphicsDevice;
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            Camera = new Camera(GraphicsDevice.Viewport);
-            Window = game.Window;
-
+        public void LoadContent()
+        {
             // Load GameSave
             var gameSave = JsonFileManager.LoadFlie(GameGlobals.Instance.GameSavePath);
             if (gameSave.Count != 0)
@@ -85,17 +69,37 @@ namespace Medicraft.Systems
             // Load Font Bitmap
             GameGlobals.Instance.FontTA16Bit = Content.Load<BitmapFont>("fonts/TA_16_Bit/TA_16_Bit");
 
-            screen.LoadContent();
+            _curScreen.LoadContent();
         }
 
         public void UnloadContent()
         {
-            screen?.UnloadContent();
+            _curScreen?.UnloadContent();
         }
 
         public void Dispose()
         {
-            screen?.Dispose();
+            _curScreen?.Dispose();
+        }
+
+        public void LoadScreen(GameScreen gameScreen)
+        {
+            UnloadContent();
+
+            switch (gameScreen)
+            {
+                case GameScreen.TestScreen:
+                    _curScreen = new TestScreen();
+                    CurrentScreen = GameScreen.TestScreen;
+                    _curScreen.LoadContent();
+                    break;
+
+                case GameScreen.SplashScreen:
+                    _curScreen = new SplashScreen();
+                    CurrentScreen = GameScreen.SplashScreen;
+                    _curScreen.LoadContent();
+                    break;
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -108,14 +112,14 @@ namespace Medicraft.Systems
                     Game.Exit();
             }
 
-            screen.Update(gameTime);
+            _curScreen.Update(gameTime);
         }
 
         public void Draw()
         {
             GraphicsDevice.Clear(Color.Black);
 
-            spriteBatch.Begin
+            _spriteBatch.Begin
             (
                 SpriteSortMode.BackToFront,
                 samplerState: SamplerState.PointClamp,
@@ -124,9 +128,9 @@ namespace Medicraft.Systems
                 , GraphicsDevice.Viewport.Height)
             );
 
-            screen.Draw(spriteBatch);
+            _curScreen.Draw(_spriteBatch);
 
-            spriteBatch.End();
+            _spriteBatch.End();
         }
 
         public static ScreenManager Instance

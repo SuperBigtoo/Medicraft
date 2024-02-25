@@ -30,15 +30,15 @@ namespace Medicraft.Entities
             Level = entityData.Level;
             InitializeCharacterData(entityData.CharId, Level);
 
-            AggroTimer = 0f;
             AttackSpeed = 0.4f;
             CooldownAttack = 0.7f;
             CooldownAttackTimer = CooldownAttack;
+            DyingTime = 1.3f;
 
             IsAggroResettable = true;
             IsKnockbackable = true;
 
-            SetPathFindingType(entityData.PathFindingType);
+            SetPathFindingType(2);
             NextNodeTime = 10f;
 
             var position = new Vector2((float)entityData.Position[0], (float)entityData.Position[1]);
@@ -49,13 +49,13 @@ namespace Medicraft.Entities
                 Position = position
             };
 
-            BoundingCollisionX = 5.5;
-            BoundingCollisionY = 5;
+            BoundingCollisionX = 4;
+            BoundingCollisionY = 12;
 
             BoundingDetectCollisions = new Rectangle((int)((int)Position.X - Sprite.TextureRegion.Width / BoundingCollisionX),
                 (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
-                Sprite.TextureRegion.Width / 2,
-                Sprite.TextureRegion.Height / 2
+                (int)(Sprite.TextureRegion.Width / 2.5f),
+                Sprite.TextureRegion.Height / 6
             );     // Rec for check Collision
 
             BoundingHitBox = new CircleF(Position, 20);         // Circle for Entity to hit
@@ -65,8 +65,8 @@ namespace Medicraft.Entities
             BoundingAggro = new CircleF(Position, 150);         // Circle for check aggro player        
 
             PathFinding = new AStar(
-                (int)Position.X,
-                (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
+                BoundingDetectCollisions.Center.X,
+                BoundingDetectCollisions.Center.Y,
                 (int)EntityData.Position[0],
                 (int)EntityData.Position[1]
             );
@@ -92,10 +92,10 @@ namespace Medicraft.Entities
             Speed = slime.Speed;
             Evasion = slime.Evasion;
 
-            AggroTimer = slime.AggroTimer;
             AttackSpeed = slime.AttackSpeed;
             CooldownAttack = slime.CooldownAttack;
             CooldownAttackTimer = CooldownAttack;
+            DyingTime = slime.DyingTime;
 
             IsAggroResettable = slime.IsAggroResettable;
             IsKnockbackable = slime.IsKnockbackable;
@@ -121,8 +121,8 @@ namespace Medicraft.Entities
             BoundingDetectEntity = slime.BoundingDetectEntity;
 
             PathFinding = new AStar(
-                (int)Position.X,
-                (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
+                BoundingDetectCollisions.Center.X,
+                BoundingDetectCollisions.Center.Y,
                 (int)EntityData.Position[0],
                 (int)EntityData.Position[1]
             );
@@ -166,9 +166,9 @@ namespace Medicraft.Entities
                 // Check Object Collsion
                 CheckCollision();
 
-                if (DyingTimer > 0)
+                if (DyingTimer < DyingTime)
                 {
-                    DyingTimer -= deltaSeconds;
+                    DyingTimer += deltaSeconds;
                 }
                 else
                 {
@@ -245,13 +245,12 @@ namespace Medicraft.Entities
 
         public override Vector2 SetCombatNumDirection()
         {
-            float randomFloat = (float)(new Random().NextDouble() * 1.0f) - 0.75f;
-            var NumDirection = Position
-                - new Vector2(Position.X + Sprite.TextureRegion.Width * randomFloat
-                , Position.Y - (Sprite.TextureRegion.Height * 1.50f));
-            NumDirection.Normalize();
+            Vector2 offset = new Vector2(Position.X, Position.Y - Sprite.TextureRegion.Height * 1.5f);
 
-            CombatNumVelocity = NumDirection * (Sprite.TextureRegion.Height * 2);
+            Vector2 numDirection = Position - offset;
+            numDirection.Normalize();
+
+            CombatNumVelocity = numDirection * Sprite.TextureRegion.Height;
 
             return CombatNumVelocity;
         }

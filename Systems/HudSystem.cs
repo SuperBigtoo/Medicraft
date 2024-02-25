@@ -227,10 +227,10 @@ namespace Medicraft.Systems
             foreach (var entity in entities.Where(e => !e.IsDestroyed))
             {
                 var entityPos = entity.Position;
-                var posX = entity.Sprite.TextureRegion.Width / 2.5f;
-                var posY = entity.Sprite.TextureRegion.Height;
+                var posX = entity.Sprite.TextureRegion.Width / 5f;
+                var posY = entity.Sprite.TextureRegion.Height / 2f;
 
-                spriteBatch.DrawString(_fonts[0], $"{entity.HP}", entityPos - new Vector2(posX, posY + 10)
+                spriteBatch.DrawString(_fonts[0], $"{entity.HP}", entityPos - new Vector2(posX, posY)
                     , Color.DarkRed, 0f, Vector2.Zero, 1.5f, SpriteEffects.None, 0f);
             }
         }

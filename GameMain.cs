@@ -1,5 +1,6 @@
 ﻿using Medicraft.Systems;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
 namespace Medicraft
 {
@@ -27,13 +28,17 @@ namespace Medicraft
             //_graphics.ToggleFullScreen();
             _graphics.ApplyChanges();
 
+            Content = new ContentManager(Content.ServiceProvider, "Content");
+
+            ScreenManager.Instance.Initialize(this);
+
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             // TODO: use this.Content to load your game content here
-            ScreenManager.Instance.LoadContent(this, Content);
+            ScreenManager.Instance.LoadContent();
         }
 
         protected override void UnloadContent()

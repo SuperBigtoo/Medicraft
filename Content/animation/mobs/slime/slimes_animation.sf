@@ -1,8 +1,8 @@
 {
   "textureAtlas": {
     "texture": "slimes_spritesheet.png",
-    "regionWidth": 32,
-    "regionHeight": 32
+    "regionWidth": 96,
+    "regionHeight": 80
   },
   "cycles": {
     "yellow_attacking": {

@@ -104,10 +104,13 @@ namespace Medicraft.Entities
         public PathFindingTypes PathFindingType { get; protected set; }
 
         // Timer Conditions
+        public float AggroTime { get; protected set; }
         public float AggroTimer { get; set; }
         public float ActionTimer { get; set; }
         public float AttackedTimer { get; set; }     // Also used in positioning DrawCombatNumbers
+        public float StunningTimer { get; set; }
         public float KnockbackedTimer { get; set; }
+        public float DyingTime { get; protected set; }
         public float DyingTimer { get; set; }
 
         protected float AttackSpeed { get; set; }
@@ -117,13 +120,14 @@ namespace Medicraft.Entities
 
         // Damage && Buff Numbers
         public int CombatNumCase { get; set; }
-        public Color CombatNumColor { get; set; }
         public float CombatNumScale { get; set; }
 
         // Boolean
-        public bool IsAggroResettable { get; set; }
+        public bool IsAggroResettable { get; protected set; }
         public bool IsAggro { get; set; }
-        public bool IsKnockbackable { get; set; }
+        public bool IsStunable { get; protected set; }
+        public bool IsStunning { get; set; }
+        public bool IsKnockbackable { get; protected set; }
         public bool IsKnockback { get; set; }
         public bool IsDying { get; set; }
         public bool IsDestroyed { get; set; }
@@ -153,6 +157,7 @@ namespace Medicraft.Entities
             AggroTimer = 0f;
             ActionTimer = 0f;
             AttackedTimer = 0f;
+            StunningTimer = 0f;
             KnockbackedTimer = 0f;
             DyingTimer = 0f;
 
@@ -161,9 +166,10 @@ namespace Medicraft.Entities
             CooldownAttackTimer = CooldownAttack;
             IsAttackCooldown = false;
 
-            CombatNumColor = Color.White;
             CombatNumScale = 2f;
 
+            IsStunable = true;
+            IsStunning = false;
             IsAggroResettable = true;
             IsAggro = false;
             IsKnockbackable = true;
@@ -175,7 +181,7 @@ namespace Medicraft.Entities
             IsAttacked = false;
             IsDetectCollistionObject = false;
 
-            CombatLogs = new List<CombatNumberData>();
+            CombatLogs = [];
         }
 
         private Entity(Entity entity)
@@ -184,20 +190,33 @@ namespace Medicraft.Entities
             Name = entity.Name;
             Level = entity.Level;
             EXP = entity.EXP;
-            Transform = entity.Transform;
-            Velocity = entity.Velocity;
-            CombatNumVelocity = entity.CombatNumVelocity;
+
+            Transform = new Transform2
+            {
+                Scale = Vector2.One,
+                Rotation = 0f,
+                Position = Vector2.Zero
+            };
+
+            Velocity = Vector2.Zero;
+            CombatNumVelocity = Vector2.Zero;
+
             AggroTimer = entity.AggroTimer;
             ActionTimer = entity.ActionTimer;
             AttackedTimer = entity.AttackedTimer;
+            StunningTimer = entity.StunningTimer;
             KnockbackedTimer = entity.KnockbackedTimer;
             DyingTimer = entity.DyingTimer;
+
             AttackSpeed = entity.AttackSpeed;
             CooldownAttack = entity.CooldownAttack;
             CooldownAttackTimer = CooldownAttack;
             IsAttackCooldown = entity.IsAttackCooldown;
-            CombatNumColor = entity.CombatNumColor;
+
             CombatNumScale = entity.CombatNumScale;
+
+            IsStunable = entity.IsStunable;
+            IsStunning = entity.IsStunning;
             IsAggroResettable = entity.IsAggroResettable;
             IsAggro = entity.IsAggro;
             IsKnockbackable = entity.IsKnockbackable;
@@ -208,7 +227,8 @@ namespace Medicraft.Entities
             IsAttacking = entity.IsAttacking;
             IsAttacked = entity.IsAttacked;
             IsDetectCollistionObject = entity.IsDetectCollistionObject;
-            CombatLogs = entity.CombatLogs;
+
+            CombatLogs = [];
         }
 
         public virtual void Update(GameTime gameTime, KeyboardState keyboardCurrentState, KeyboardState keyboardPrevioseState
@@ -303,16 +323,16 @@ namespace Medicraft.Entities
 
             if (EntityType == EntityTypes.Hostile)
             {
-                // Setup Aggro time if detected player hit box
+                // Setup Aggrotimer if detected player hit box
                 if (BoundingAggro.Intersects(PlayerManager.Instance.Player.BoundingHitBox))
                 {
                     AggroTimer = 5f;
                     IsAggro = true;
                 }
-            }           
+            }
 
             // Checking for movement
-            if (!IsKnockback && !IsAttacking || !IsAttacked && !IsAttacking)
+            if (!IsStunning && (!IsKnockback && !IsAttacking || !IsAttacked && !IsAttacking))
             {
                 if (PathFinding.GetPath().Count != 0)
                 {
@@ -449,8 +469,8 @@ namespace Medicraft.Entities
             if (IsAggro)
             {
                 PathFinding = new AStar(
-                    (int)Position.X,
-                    (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
+                    BoundingDetectCollisions.Center.X,
+                    BoundingDetectCollisions.Center.Y,
                     (int)PlayerManager.Instance.Player.Position.X,
                     (int)PlayerManager.Instance.Player.Position.Y + 75
                 );
@@ -463,16 +483,17 @@ namespace Medicraft.Entities
 
                     case PathFindingTypes.RandomPoint:
                         PathFinding = new AStar(
-                            (int)Position.X,
-                            (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
+                            BoundingDetectCollisions.Center.X,
+                            BoundingDetectCollisions.Center.Y,
                             (int)targetNode.X,
                             (int)targetNode.Y
                         );
                         break;
 
                     case PathFindingTypes.StationaryPoint:
-                        PathFinding = new AStar((int)Position.X,
-                            (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
+                        PathFinding = new AStar(
+                            BoundingDetectCollisions.Center.X,
+                            BoundingDetectCollisions.Center.Y,
                             spawnPosX,
                             spawnPosY
                         );
@@ -512,16 +533,41 @@ namespace Medicraft.Entities
                 }
             }
 
+            // Decreasing StunningTimer
+            if (IsStunning)
+            {
+                if (StunningTimer > 0)
+                {
+                    StunningTimer -= deltaSeconds;
+                }
+                else
+                {
+                    IsStunning = false;
+                }
+            }
+
             // Decreasing AttackedTimer
             if (IsAttacked)
             {
                 if (AttackedTimer < 1)
                 {
-                    foreach (var log in CombatLogs.Where(e => e.ElapsedTime < 1))
+                    foreach (var log in CombatLogs.Where(e => e.ElapsedTime < 1f))
                     {
                         log.ElapsedTime += deltaSeconds;
-                        log.AlphaColor -= deltaSeconds * 0.5f;
-                        log.ScaleFont -= deltaSeconds * 0.4f;
+                        log.AlphaColor -= deltaSeconds * 0.4f;
+
+                        if (log.ElapsedTime < 0.2f)
+                        {                          
+                            log.ScaleFont += deltaSeconds * 5f;
+                        }
+                        else if (log.ElapsedTime > 0.95f)
+                        {
+                            log.AlphaColor -= deltaSeconds * 5f;
+                            log.ScaleFont -= deltaSeconds * 5f;
+
+                            log.AlphaColor = log.AlphaColor > 0? log.AlphaColor : 0;
+                            log.ScaleFont = log.ScaleFont > 0? log.ScaleFont: 0;
+                        }
                     }
 
                     AttackedTimer += deltaSeconds;
@@ -537,7 +583,7 @@ namespace Medicraft.Entities
         protected void CombatControl(float deltaSeconds)
         {
             // Do Attack
-            if (BoundingDetectEntity.Intersects(PlayerManager.Instance.Player.BoundingHitBox) && !IsAttacking)
+            if (BoundingDetectEntity.Intersects(PlayerManager.Instance.Player.BoundingHitBox) && !IsAttacking && !IsStunning)
             {
                 CurrentAnimation = SpriteName + "_attacking";
                 Sprite.Play(CurrentAnimation);
@@ -673,8 +719,7 @@ namespace Medicraft.Entities
             }
         }
 
-        public virtual void AddCombatLogNumbers(string ActorName, string combatNumbers, int combatCase
-            , Vector2 combatNumVelocity)
+        public virtual void AddCombatLogNumbers(string ActorName, string combatNumbers, int combatCase, Vector2 combatNumVelocity)
         {
             switch (combatCase)
             {
@@ -685,11 +730,12 @@ namespace Medicraft.Entities
                         Value = combatNumbers,
                         ElapsedTime = 0,
                         Velocity = combatNumVelocity,
+                        OffSet = Vector2.Zero,
+                        Color = Color.White,
                         AlphaColor = 1f,
-                        ScaleFont = 1f
+                        ScaleFont = 0f
                     });
-                    CombatNumColor = Color.White;
-                    CombatNumScale = 2f;
+                    CombatNumScale = 2.1f;
                     break;
 
                 case 1: // Damage Numbers Critical | Player Damage Taken
@@ -700,11 +746,12 @@ namespace Medicraft.Entities
                         Value = combatNumbers,
                         ElapsedTime = 0,
                         Velocity = combatNumVelocity,
+                        OffSet = Vector2.Zero,
+                        Color = Color.Red,
                         AlphaColor = 1f,
-                        ScaleFont = 1f
+                        ScaleFont = 0f
                     });
-                    CombatNumColor = Color.Red;
-                    CombatNumScale = 2.25f;
+                    CombatNumScale = 2.5f;
                     break;
 
                 case 2: // Buff & Healing Numbers
@@ -718,11 +765,12 @@ namespace Medicraft.Entities
                         Value = "Miss",
                         ElapsedTime = 0,
                         Velocity = combatNumVelocity,
+                        OffSet = Vector2.Zero,
+                        Color = Color.Yellow,
                         AlphaColor = 1f,
-                        ScaleFont = 1f
+                        ScaleFont = 0f
                     });
-                    CombatNumColor = Color.Yellow;
-                    CombatNumScale = 2.15f;
+                    CombatNumScale = 1.75f;
                     break;
             }
         }
@@ -731,32 +779,34 @@ namespace Medicraft.Entities
         {
             if (CombatLogs.Count != 0)
             {
-                var font = GameGlobals.Instance.FontTA16Bit;
+                var font = GameGlobals.Instance.FontTA16Bit;               
 
-                foreach (var log in CombatLogs.Where(e => e.ElapsedTime < 1))
+                foreach (var log in CombatLogs.Where(e => e.ElapsedTime < 1f))
                 {
-                    switch (combatCase)
+                    var offSet = log.OffSet;
+
+                    if (log.ElapsedTime < 0.2f)
                     {
-                        case 0: // Damage Numbers
-                            spriteBatch.DrawString(font, $"{log.Value}", (Position - log.Velocity / 1.5f) - (log.Velocity * log.ElapsedTime)
-                                , CombatNumColor * log.AlphaColor, 0f, Vector2.Zero, CombatNumScale * log.ScaleFont, SpriteEffects.None, 0f);
-                            break;
-
-                        case 1: // Damage NUmbers Critical | Player Damage Taken
-                            spriteBatch.DrawString(font, $"{log.Value}", (Position - log.Velocity / 1.5f) - (log.Velocity * log.ElapsedTime)
-                                , CombatNumColor * log.AlphaColor, 0f, Vector2.Zero, CombatNumScale * log.ScaleFont, SpriteEffects.None, 0f);
-                            break;
-
-                        case 2: // Buff & Healing Numbers
-                            spriteBatch.DrawString(font, $"{log.Value}", (Position - log.Velocity / 1.5f) - (log.Velocity * log.ElapsedTime)
-                                , CombatNumColor * log.AlphaColor, 0f, Vector2.Zero, CombatNumScale * log.ScaleFont, SpriteEffects.None, 0f);
-                            break;
-
-                        case 3: // Missed
-                            spriteBatch.DrawString(font, $"{log.Value}", (Position - log.Velocity / 1.5f) - (log.Velocity * log.ElapsedTime)
-                                , CombatNumColor * log.AlphaColor, 0f, Vector2.Zero, CombatNumScale * log.ScaleFont, SpriteEffects.None, 0f);
-                            break;
+                        offSet = log.OffSet = log.Velocity * 1.5f * log.ElapsedTime;
                     }
+                    else if (log.ElapsedTime >= 0.2f && log.ElapsedTime <= 0.95f)
+                    {
+                        offSet = log.OffSet = log.Velocity * 0.5f * log.ElapsedTime;
+                    }
+                    else if (log.ElapsedTime > 0.95f)
+                    {
+                        offSet = log.OffSet = log.Velocity * 0.5f * log.ElapsedTime;
+                    }
+
+                    Vector2 drawStringPosition = new Vector2(Position.X, Position.Y
+                        - (log.Velocity.Y))
+                        - offSet;
+
+                    var textSize = font.MeasureString(log.Value);
+                    drawStringPosition.X -= textSize.Width / 1.25f;
+
+                    spriteBatch.DrawString(font, $"{log.Value}", drawStringPosition, log.Color * log.AlphaColor,
+                        0f, Vector2.Zero, CombatNumScale * log.ScaleFont, SpriteEffects.None, 0f);
                 }              
             }
         }
