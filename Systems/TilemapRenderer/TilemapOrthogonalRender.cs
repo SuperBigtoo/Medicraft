@@ -81,7 +81,7 @@ namespace Medicraft.Systems.TilemapRenderer
             GameGlobals.Instance.TopLayerObject.Clear();
             GameGlobals.Instance.MiddleLayerObject.Clear();
             GameGlobals.Instance.BottomLayerObject.Clear();
-            GameGlobals.Instance.TableCraft.Clear();
+            GameGlobals.Instance.TableCraftArea.Clear();
 
             foreach (var o in _tileMap.ObjectGroups["Collision"].Objects)
             {

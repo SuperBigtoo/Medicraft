@@ -10,7 +10,7 @@ using MonoGame.Extended.Serialization;
 
 namespace Medicraft.Data
 {
-    internal class JsonFileManager
+    public class JsonFileManager
     {
         //Load & Save Game Basically
         public static void SaveGame()
@@ -109,16 +109,19 @@ namespace Medicraft.Data
         }
     }
 
-    // Reader Entity Data
+    // Reader Entity Data such as playerdata.json and entites_demo.json
     public class PlayerDataReader : JsonContentTypeReader<PlayerData> { }
     public class EntityDataReader : JsonContentTypeReader<List<EntityData>> { }
 
-    // Reader Object Data
+    // Reader Object Data such as object_demo.json
     public class ObjectDataReader : JsonContentTypeReader<List<ObjectData>> { }
 
-    // Reader Items Data
+    // Reader Items Data: items.json
     public class ItemDataReader : JsonContentTypeReader<List<ItemData>> { }
     
-    // Reader Characters Data
+    // Reader Characters Data: characters.json
     public class CharacterDataReader : JsonContentTypeReader<List<CharacterData>> { }
+
+    // Reader Crafting Recipes Data: craftingrecipes.json
+    public class CraftingRecipeDataReader : JsonContentTypeReader<List<CraftingRecipeData>> { }
 }

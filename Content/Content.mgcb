@@ -68,6 +68,12 @@
 /processorParam:ContentType=Medicraft.Data.CharacterDataReader, Medicraft
 /build:data/models/characters.json
 
+#begin data/models/craftingrecipes.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.CraftingRecipeDataReader, Medicraft
+/build:data/models/craftingrecipes.json
+
 #begin data/models/items.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor

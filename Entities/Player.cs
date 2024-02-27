@@ -577,28 +577,34 @@ namespace Medicraft.Entities
                     switch (gameObject.Type)
                     {
                         case GameObjects.GameObject.GameObjectType.Item:
-                            if (!gameObject.IsCollected
-                                && InventoryManager.Instance.InventoryBag.Count < InventoryManager.Instance.MaximunSlot)
+
+                            // Collecting Item into Player's Inventory
+                            var IsItemFound = InventoryManager.Instance.InventoryBag.TryGetValue(
+                                gameObject.Name, out InventoryItemData itemInBag);
+
+                            if (!gameObject.IsCollected && 
+                                (!IsItemFound && InventoryManager.Instance.InventoryBag.Count < InventoryManager.Instance.MaximunSlot
+                                || IsItemFound && itemInBag.Count < 9999))
                             {
                                 gameObject.IsCollected = true;
                             }
-                            else
-                            {
-                                HudSystem.ShowInsufficientSign();
-                            }
+                            else HudSystem.ShowInsufficientSign();
                             break;
 
                         case GameObjects.GameObject.GameObjectType.QuestItem:
-                            if (!gameObject.IsCollected) gameObject.IsCollected = true;
+                            
                             break;
 
                         case GameObjects.GameObject.GameObjectType.CraftingTable:
+
                             break;
 
                         case GameObjects.GameObject.GameObjectType.SavingTable:
+
                             break;
 
                         case GameObjects.GameObject.GameObjectType.WarpPoint:
+
                             break;
                     }
 

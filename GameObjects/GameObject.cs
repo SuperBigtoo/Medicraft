@@ -107,6 +107,7 @@ namespace Medicraft.GameObjects
         protected virtual void InitializeObjectData()
         {
             SetGameObjectType(ObjectData.Category);
+
             Id = ObjectData.Id;
             ReferId = ObjectData.ReferId;
             Name = GameGlobals.Instance.ItemsDatas[ObjectData.ReferId].Name;

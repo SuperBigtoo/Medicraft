@@ -1757,7 +1757,7 @@
   {
     "ItemId": 300,
     "Name": "สาบเสือ",
-    "Category": "",
+    "Category": "Consumable item",
     "Description": "มีสรรพคุณช่วยถอนพิษแก้อักเสบและห้ามเลิอด ใช้ในการรักษาแผลสดได้เป็นอย่างดี",
     "Usable": true,
     "Effect": 0,
@@ -1766,7 +1766,7 @@
   {
     "ItemId": 301,
     "Name": "แอปเปิ้ล",
-    "Category": "",
+    "Category": "Consumable item",
     "Description": "ลูกแอปเปิ้ลแดงสุก ถึงแม้จะกินกับอะไรก็อร่อย แต่กินเปล่าๆก็อร่อยเหมือนกัน",
     "Usable": true,
     "Effect": 0,
@@ -1775,7 +1775,7 @@
   {
     "ItemId": 302,
     "Name": "ซุปเห็ด",
-    "Category": "",
+    "Category": "Consumable item",
     "Description": "ทำจากเห็ดที่มีประโยชน์ต่อร่างกายและยังมีรสชาติอร่อยอีกด้วย อาหารที่ดีสุขภาพจานนี้จะทำให้คุณอิ่มท้อง",
     "Usable": true,
     "Effect": 0,
@@ -1784,7 +1784,7 @@
   {
     "ItemId": 303,
     "Name": "ผัดกระหล่ำปลี",
-    "Category": "",
+    "Category": "Consumable item",
     "Description": "เมนูผัดที่มีกลิ่นหอมของเนื้อสัตว์และกระหล่ำปลี",
     "Usable": true,
     "Effect": 0,
@@ -1793,7 +1793,7 @@
   {
     "ItemId": 304,
     "Name": "เนื้อโรล",
-    "Category": "",
+    "Category": "Consumable item",
     "Description": "เมนูผักกรอบและเนื้อสัตว์ที่เข้ากันอย่างลงตัว เหมาะกับการกินมือเดียว",
     "Usable": true,
     "Effect": 0,
@@ -1802,7 +1802,7 @@
   {
     "ItemId": 305,
     "Name": "สตูว์เนื้อ",
-    "Category": "",
+    "Category": "Consumable item",
     "Description": "สตูว์เนื้อรสชาติเข้มข้นจากแครรอทและมันฝรั่ง จะทำให้ร่างกายที่เหนื่อยล้าผ่อนคลายและอบอุ่นขึ้น",
     "Usable": true,
     "Effect": 0,
@@ -1811,7 +1811,7 @@
   {
     "ItemId": 306,
     "Name": "นม",
-    "Category": "",
+    "Category": "Consumable item",
     "Description": "น้ำนมดิบบริสุทธิ์รสชาติเข้มข้นและกลมกล่อม ดื่มเย็นๆช่วยคลายความเมื่อยล้าได้",
     "Usable": true,
     "Effect": 0,
@@ -1820,7 +1820,7 @@
   {
     "ItemId": 307,
     "Name": "ซุปมันฝรั่ง",
-    "Category": "",
+    "Category": "Consumable item",
     "Description": "แม้ว่าส่วนผสมจะเรียบง่าย แต่ก็เป็นซุปเพื่อสุขภาพที่ทำจากมันฝรั่งต้มสุก",
     "Usable": true,
     "Effect": 0,
@@ -1829,7 +1829,7 @@
   {
     "ItemId": 308,
     "Name": "สเต็ก",
-    "Category": "",
+    "Category": "Consumable item",
     "Description": "สเต็กโฮมเมดเนื้อชิ้นใหญ่ที่ปรุงรสด้วยเกลือและพริกไทยดำ",
     "Usable": true,
     "Effect": 0,
@@ -1838,7 +1838,7 @@
   {
     "ItemId": 309,
     "Name": "บาบีคิว",
-    "Category": "",
+    "Category": "Consumable item",
     "Description": "บาร์บีคิวที่ทำจากผักและเนื้อล่าสดๆ ชิ้นใหญ่ เป็นหนึ่งในอาหารประจำเทศกาลที่ใช้วัตถุดิบหายากและอร่อย",
     "Usable": true,
     "Effect": 0,
@@ -1847,7 +1847,7 @@
   {
     "ItemId": 310,
     "Name": "ข้าวปั่นสาหร่าย",
-    "Category": "",
+    "Category": "Consumable item",
     "Description": "ข้าวปั้นรสเค็มและน่าอร่อยที่สามารถเติมเต็มท้องที่หิวโหยได้อย่างง่ายดาย",
     "Usable": true,
     "Effect": 0,
@@ -1856,7 +1856,7 @@
   {
     "ItemId": 311,
     "Name": "ซูชิวาซาบิแซลมอน",
-    "Category": "",
+    "Category": "Consumable item",
     "Description": "เมนูอาหารทะเลพร้อมปลาแซลมอนบนข้าวที่แทบจะละลายในปาก",
     "Usable": true,
     "Effect": 0,
@@ -1865,7 +1865,7 @@
   {
     "ItemId": 312,
     "Name": "เมี๊ยวลาเต้",
-    "Category": "",
+    "Category": "Consumable item",
     "Description": "เป็นกาแฟแก้วที่สมบูรณ์แบบที่เต็มไปด้วยรสชาติของลาเต้อาร์ตสุดน่ารัก ถูกใจคนรักแมวแบบสุดๆ",
     "Usable": true,
     "Effect": 0,
@@ -1874,7 +1874,7 @@
   {
     "ItemId": 313,
     "Name": "ผัดกะเพราเนื้อ",
-    "Category": "",
+    "Category": "Consumable item",
     "Description": "อาหารตามสั่งที่ใครๆ ก็อยากกินเป็นมื้อเช้า กลางวัน และเย็น",
     "Usable": true,
     "Effect": 0,

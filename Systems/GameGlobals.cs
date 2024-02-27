@@ -26,21 +26,23 @@ namespace Medicraft.Systems
         public string GameSavePath { private set; get; }
         public List<GameSaveData> GameSave { private set; get;}
         public int MaximunInventorySlot { private set; get; }
+        public int MaximunItemCount { private set; get; }
         public int DefaultSlot { private set; get; }
         public BitmapFont FontTA16Bit { set; get; }
         public List<ItemData> ItemsDatas { set; get; }       // All items data
         // All equipments stats data
         // All item's effect data
-        public List<CharacterData> CharacterDatas { set; get; }
+        public List<CraftingRecipeData> CraftingRecipeDatas { set; get; }       // All Crafting Recipe data
+        public List<CharacterData> CharacterDatas { set; get; }                 // All Character data
         public List<InventoryItemData> CollectedItemFeed { private set; get; }      // Feed collected item
         public int MaximumItemFeed { private set; get; }
         public float DisplayFeedTime { set; get; }
         public float MaximumDisplayFeedTime { private set; get; }
-        public List<Rectangle> CollistionObject { private set; get; }  // "Collision"
-        public List<Rectangle> TopLayerObject { private set; get; }  // "ObjectOnLayer"
+        public List<Rectangle> CollistionObject { private set; get; }       // "Collision"
+        public List<Rectangle> TopLayerObject { private set; get; }         // "ObjectOnLayer"
         public List<Rectangle> MiddleLayerObject { private set; get; }
         public List<Rectangle> BottomLayerObject { private set; get; }
-        public List<Rectangle> TableCraft { private set; get; }
+        public List<Rectangle> TableCraftArea { private set; get; }
         public float TopEntityDepth { private set; get; }
         public float MiddleEntityDepth { private set; get; }
         public float BottomEntityDepth { private set; get; }
@@ -74,26 +76,28 @@ namespace Medicraft.Systems
             IsDetectedGameObject = false;
             ShowInsufficientSign = false;
 
-            GameSave = new List<GameSaveData>();
+            GameSave = [];
             GameSaveIdex = 0; // to be initial
             GameSavePath = "save/gamesaves.json";
 
             MaximunInventorySlot = 64;
+            MaximunItemCount = 9999;
             DefaultSlot = 999;
 
-            ItemsDatas = new List<ItemData>();
-            CharacterDatas = new List<CharacterData>();
+            ItemsDatas = [];
+            CharacterDatas = [];
+            CraftingRecipeDatas = [];
 
-            CollectedItemFeed = new List<InventoryItemData>();
+            CollectedItemFeed = [];
             MaximumItemFeed = 6;
             DisplayFeedTime = 0;
             MaximumDisplayFeedTime = 6f;
 
-            CollistionObject = new List<Rectangle>();
-            TopLayerObject = new List<Rectangle>();
-            MiddleLayerObject = new List<Rectangle>();
-            BottomLayerObject = new List<Rectangle>();
-            TableCraft = new List<Rectangle>();
+            CollistionObject = [];
+            TopLayerObject = [];
+            MiddleLayerObject = [];
+            BottomLayerObject = [];
+            TableCraftArea = [];
 
             TopEntityDepth = 0.2f;
             MiddleEntityDepth = 0.4f;

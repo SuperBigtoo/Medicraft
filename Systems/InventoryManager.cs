@@ -36,23 +36,23 @@ namespace Medicraft.Systems
             }
         }
 
-        public void AddItem(int referId, int amount)
+        public void AddItem(int itemId, int quantity)
         {          
             // Gotta Check Item id if it already has in inventory and stackable or mot
-            if (InventoryBag.ContainsKey(referId.ToString())
-                && GameGlobals.Instance.ItemsDatas[referId].Stackable)
+            if (InventoryBag.ContainsKey(itemId.ToString())
+                && GameGlobals.Instance.ItemsDatas[itemId].Stackable)
             {
-                HudSystem.AddFeed(referId, amount);
+                HudSystem.AddFeed(itemId, quantity);
 
-                InventoryBag[referId.ToString()].Count += amount;
+                InventoryBag[itemId.ToString()].Count += quantity;
             }
             else
             {
-                HudSystem.AddFeed(referId, amount);
+                HudSystem.AddFeed(itemId, quantity);
 
-                InventoryBag.Add(referId.ToString(), new InventoryItemData() {
-                    ItemId = referId,
-                    Count = amount,
+                InventoryBag.Add(itemId.ToString(), new InventoryItemData() {
+                    ItemId = itemId,
+                    Count = quantity,
                     Slot = GameGlobals.Instance.DefaultSlot
                 });
             }
