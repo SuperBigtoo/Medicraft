@@ -10,6 +10,7 @@ using Medicraft.Systems.PathFinding;
 using System.Collections.Generic;
 using Medicraft.Data.Models;
 using System.Linq;
+using Medicraft.Systems.Managers;
 
 namespace Medicraft.Entities
 {

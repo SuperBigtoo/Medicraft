@@ -5,7 +5,7 @@ using System.Linq;
 using Medicraft.Systems.Spawners;
 using Medicraft.GameObjects;
 
-namespace Medicraft.Systems
+namespace Medicraft.Systems.Managers
 {
     public interface IObjectManager
     {
@@ -26,7 +26,7 @@ namespace Medicraft.Systems
 
         private ObjectManager()
         {
-            gameObjects = new List<GameObject>();         
+            gameObjects = new List<GameObject>();
         }
 
         public T AddGameObject<T>(T gameObject) where T : GameObject
@@ -62,7 +62,7 @@ namespace Medicraft.Systems
         }
 
         public void Draw(SpriteBatch spriteBatch)
-        {           
+        {
             foreach (var gameObject in gameObjects.Where(e => !e.IsDestroyed))
             {
                 gameObject.Draw(spriteBatch);

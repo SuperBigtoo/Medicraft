@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Sprites;
 using System.Linq;
 
-namespace Medicraft.Systems
+namespace Medicraft.Systems.Managers
 {
     public class PlayerManager
     {
@@ -16,7 +16,7 @@ namespace Medicraft.Systems
 
         private static PlayerManager instance;
         private PlayerManager()
-        {           
+        {
             IsPlayerDead = false;
         }
 
@@ -27,7 +27,7 @@ namespace Medicraft.Systems
             if (GameGlobals.Instance.GameSave.Count != 0)
             {
                 // Load save game according to selected index. 
-                var gameSave = GameGlobals.Instance.GameSave[GameGlobals.Instance.GameSaveIdex];               
+                var gameSave = GameGlobals.Instance.GameSave[GameGlobals.Instance.GameSaveIdex];
 
                 // Initialize camera position
                 GameGlobals.Instance.InitialCameraPos = new Vector2((float)gameSave.CameraPosition[0]
@@ -107,7 +107,7 @@ namespace Medicraft.Systems
                     GameGlobals.Instance.SwitchShowPath = false;
                 }
             }
-           
+
 
             Player.Update(gameTime, keyboardCur, keyboardPrev, mouseCur, mousePrev);
 
@@ -128,7 +128,7 @@ namespace Medicraft.Systems
         }
 
         private void RespawnPlayer()
-        {           
+        {
             if (IsPlayerDead)
             {
                 Player.HP = Player.MaximumHP;

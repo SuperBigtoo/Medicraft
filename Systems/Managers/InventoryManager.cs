@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Medicraft.Systems
+namespace Medicraft.Systems.Managers
 {
     public class InventoryManager
     {
         public readonly int MaximunSlot;
         public int GoldCoin { set; get; }
-        public Dictionary<string, InventoryItemData> InventoryBag { private set; get; }     
+        public Dictionary<string, InventoryItemData> InventoryBag { private set; get; }
 
         private static InventoryManager instance;
 
@@ -37,7 +37,7 @@ namespace Medicraft.Systems
         }
 
         public void AddItem(int itemId, int quantity)
-        {          
+        {
             // Gotta Check Item id if it already has in inventory and stackable or mot
             if (InventoryBag.ContainsKey(itemId.ToString())
                 && GameGlobals.Instance.ItemsDatas[itemId].Stackable)
@@ -50,7 +50,8 @@ namespace Medicraft.Systems
             {
                 HudSystem.AddFeed(itemId, quantity);
 
-                InventoryBag.Add(itemId.ToString(), new InventoryItemData() {
+                InventoryBag.Add(itemId.ToString(), new InventoryItemData()
+                {
                     ItemId = itemId,
                     Count = quantity,
                     Slot = GameGlobals.Instance.DefaultSlot

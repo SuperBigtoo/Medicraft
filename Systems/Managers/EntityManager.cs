@@ -5,7 +5,7 @@ using System.Linq;
 using Medicraft.Entities;
 using Medicraft.Systems.Spawners;
 
-namespace Medicraft.Systems
+namespace Medicraft.Systems.Managers
 {
     public interface IEntityManager
     {
@@ -73,7 +73,7 @@ namespace Medicraft.Systems
         }
 
         public void Draw(SpriteBatch spriteBatch)
-        {      
+        {
             foreach (var entity in entities.Where(e => !e.IsDestroyed))
             {
                 entity.Draw(spriteBatch);
@@ -84,11 +84,11 @@ namespace Medicraft.Systems
 
         public static EntityManager Instance
         {
-            get 
+            get
             {
                 instance ??= new EntityManager();
                 return instance;
-            } 
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Medicraft.Systems;
 using Medicraft.Systems.TilemapRenderer;
+using Medicraft.Systems.Managers;
 
 namespace Medicraft.Screens
 {

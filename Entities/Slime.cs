@@ -1,5 +1,6 @@
 ﻿using Medicraft.Data.Models;
 using Medicraft.Systems;
+using Medicraft.Systems.Managers;
 using Medicraft.Systems.PathFinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

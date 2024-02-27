@@ -55,7 +55,7 @@ namespace Medicraft.Systems
         public int NUM_COLUMNS { set; get; }
         public int[,] Map { set; get; }
 
-        public int test_int { set; get; }
+        public int TestInt { set; get; }
 
         private static GameGlobals instance;
 
@@ -108,7 +108,7 @@ namespace Medicraft.Systems
             BottomObjectDepth = 0.7f;
             BackgroundDepth = 0.9f;
 
-            test_int = 0;
+            TestInt = 0;
         }
 
         public static GameGlobals Instance

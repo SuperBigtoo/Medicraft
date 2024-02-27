@@ -8,14 +8,14 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
 using System.Collections.Generic;
 
-namespace Medicraft.Systems
+namespace Medicraft.Systems.Managers
 {
     public class ScreenManager
     {
         private static ScreenManager instance;
 
         private SpriteBatch _spriteBatch;
-        private Screen _curScreen;  
+        private Screen _curScreen;
 
         public Game Game { private set; get; }
         public ContentManager Content { private set; get; }
