@@ -31,6 +31,8 @@ namespace Medicraft
 
             Content = new ContentManager(Content.ServiceProvider, "Content");
 
+            GameGlobals.Instance.Initialize(Content);
+
             ScreenManager.Instance.Initialize(this);
 
             base.Initialize();
@@ -39,6 +41,8 @@ namespace Medicraft
         protected override void LoadContent()
         {
             // TODO: use this.Content to load your game content here
+            GameGlobals.Instance.LoadContent();
+
             ScreenManager.Instance.LoadContent();
         }
 

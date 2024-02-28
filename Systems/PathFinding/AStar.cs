@@ -161,9 +161,9 @@ namespace Medicraft.Systems.PathFinding
 
         public void Update()
         {
-            GameGlobals.Instance.keyboardPreviose = GameGlobals.Instance.keyboardCurrent;
-            GameGlobals.Instance.keyboardCurrent = Keyboard.GetState();
-            var keyboardCur = GameGlobals.Instance.keyboardCurrent;
+            GameGlobals.Instance.PrevKeyboard = GameGlobals.Instance.CurKeyboard;
+            GameGlobals.Instance.CurKeyboard = Keyboard.GetState();
+            var keyboardCur = GameGlobals.Instance.CurKeyboard;
 
             // Find or clear the path when space is pressed
             if (keyboardCur.IsKeyDown(Keys.V) && !IsFindPath)

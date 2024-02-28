@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
 using System;
+using System.Linq;
 
 namespace Medicraft.GameObjects
 {
@@ -110,8 +111,25 @@ namespace Medicraft.GameObjects
 
             Id = ObjectData.Id;
             ReferId = ObjectData.ReferId;
-            Name = GameGlobals.Instance.ItemsDatas[ObjectData.ReferId].Name;
-            Description = GameGlobals.Instance.ItemsDatas[ObjectData.ReferId].Description;
+
+            switch (Type)
+            {
+                case GameObjectType.Item:
+
+                case GameObjectType.QuestItem:
+                    var itemData = GameGlobals.Instance.ItemsDatas.Where(i => i.ItemId.Equals(ReferId));
+
+                    Name = itemData.ElementAt(0).Name;
+                    Description = itemData.ElementAt(0).Description;
+                    break;
+
+                case GameObjectType.CraftingTable:                  
+
+                case GameObjectType.SavingTable:                  
+
+                case GameObjectType.WarpPoint:
+                    break;
+            }          
         }
 
         protected virtual void SetGameObjectType(int category)

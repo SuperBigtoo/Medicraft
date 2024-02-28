@@ -16,7 +16,7 @@
     "Name": "Slime",
     "Category": 2,
     "ATK": 5,
-    "HP": 100,
+    "HP": 50,
     "DEF_Percent": 0.1,
     "Crit_Percent": 0.05,
     "CritDMG_Percent": 0.25,

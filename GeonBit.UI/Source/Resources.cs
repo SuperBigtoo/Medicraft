@@ -328,7 +328,7 @@ namespace GeonBit.UI
                 {
                     PanelData[(int)skin] = LoadXmlTextureData(_root + "textures/panel_" + skinName + "_md");
                 }
-                catch (ContentLoadException ex)
+                catch (ContentLoadException)
                 {
                     // for backwards compatability from when it was called 'Golden'.
                     if (skin == PanelSkin.Alternative)
@@ -337,7 +337,7 @@ namespace GeonBit.UI
                     }
                     else
                     {
-                        throw ex;
+                        throw;
                     }
                 }
             }

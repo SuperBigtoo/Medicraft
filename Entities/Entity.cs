@@ -32,27 +32,29 @@ namespace Medicraft.Entities
         public int Speed { get; set; }
         public float Evasion { get; set; }
 
-        public string SpriteName;
-        public AnimatedSprite Sprite;
+        public AnimatedSprite Sprite { get; protected set; }
+        protected string SpriteCycle = "default";
+        protected string CurrentAnimation;
+
         public Transform2 Transform;
-        public Vector2 Velocity, CombatNumVelocity;
-        public Rectangle BoundingDetectCollisions; // For dectect collisions
+        public Vector2 Velocity, CombatNumVelocity;    
         public double BoundingCollisionX, BoundingCollisionY;
+        public Rectangle BoundingDetectCollisions;      // For dectect collisions
         public CircleF BoundingHitBox;
         public CircleF BoundingDetectEntity;
         public CircleF BoundingCollection;
         public CircleF BoundingAggro;
         
-        protected int currentNodeIndex = 0; // Index of the current node in the path
+        protected int currentNodeIndex = 0;     // Index of the current node in the path
+        protected int stoppingNodeIndex = 1;    // Distance index from the last node in the path for entity to stop moving
         protected AStar PathFinding;
-        protected Vector2 InitPos;
-        protected string CurrentAnimation;
+        protected Vector2 InitPos;      
 
         protected Vector2 targetNode;
         protected float nextNodeTime;
         protected float nextNodeTimer;
 
-        protected float NextNodeTime
+        protected float NodeCycleTime
         {
             get => nextNodeTime;
             set
@@ -91,6 +93,7 @@ namespace Medicraft.Entities
             Playable,
             Friendly,
             Hostile,
+            Boss
         }
         
         public EntityTypes EntityType { get; protected set; }
@@ -273,6 +276,10 @@ namespace Medicraft.Entities
                 case 2:
                     EntityType = EntityTypes.Hostile;
                     break;
+
+                case 3:
+                    EntityType = EntityTypes.Boss;
+                    break;
             }
         }
 
@@ -318,26 +325,16 @@ namespace Medicraft.Entities
             // Play Sprite: Idle 
             if (!IsAttacking || !IsMoving)
             {
-                CurrentAnimation = SpriteName + "_walking";  // Idle
+                CurrentAnimation = SpriteCycle + "_walking";  // Idle
                 Sprite.Play(CurrentAnimation);
             }
 
-            if (EntityType == EntityTypes.Hostile)
-            {
-                // Setup Aggrotimer if detected player hit box
-                if (BoundingAggro.Intersects(PlayerManager.Instance.Player.BoundingHitBox))
-                {
-                    AggroTimer = 5f;
-                    IsAggro = true;
-                }
-            }
-
-            // Checking for movement
+            // Check movement according to PathFinding
             if (!IsStunning && (!IsKnockback && !IsAttacking || !IsAttacked && !IsAttacking))
             {
                 if (PathFinding.GetPath().Count != 0)
                 {
-                    if (currentNodeIndex < PathFinding.GetPath().Count - 1)
+                    if (currentNodeIndex < PathFinding.GetPath().Count - stoppingNodeIndex)
                     {
                         // Calculate direction to the next node
                         var direction = new Vector2(PathFinding.GetPath()[currentNodeIndex + 1].col
@@ -352,19 +349,19 @@ namespace Medicraft.Entities
                         // Check Animation
                         if (Position.Y >= (PlayerManager.Instance.Player.Position.Y + 50f))
                         {
-                            CurrentAnimation = SpriteName + "_walking";     // Up
+                            CurrentAnimation = SpriteCycle + "_walking";     // Up
                         }
                         if (Position.Y < (PlayerManager.Instance.Player.Position.Y - 30f))
                         {
-                            CurrentAnimation = SpriteName + "_walking";     // Down
+                            CurrentAnimation = SpriteCycle + "_walking";     // Down
                         }
                         if (Position.X > (PlayerManager.Instance.Player.Position.X + 50f))
                         {
-                            CurrentAnimation = SpriteName + "_walking";     // Left
+                            CurrentAnimation = SpriteCycle + "_walking";     // Left
                         }
                         if (Position.X < (PlayerManager.Instance.Player.Position.X - 50f))
                         {
-                            CurrentAnimation = SpriteName + "_walking";     // Right
+                            CurrentAnimation = SpriteCycle + "_walking";     // Right
                         }
 
                         Sprite.Play(CurrentAnimation);
@@ -377,38 +374,10 @@ namespace Medicraft.Entities
                         }
                         //System.Diagnostics.Debug.WriteLine($"Pos Mob: {Position.X} {Position.Y}");       
                     }
-                    else
-                    {
-                        IsMoving = false;
-                    }
-                    //else if (PathFinding.GetPath().Count <= 1)
-                    //{
-                    //    if (Position.Y >= (PlayerManager.Instance.Player.Position.Y + 50f))
-                    //    {
-                    //        CurrentAnimation = SpriteName + "_walking";     // Up
-                    //        Position -= new Vector2(0, walkSpeed);
-                    //    }
-
-                    //    if (Position.Y < (PlayerManager.Instance.Player.Position.Y - 30f))
-                    //    {
-                    //        CurrentAnimation = SpriteName + "_walking";     // Down
-                    //        Position += new Vector2(0, walkSpeed);
-                    //    }
-
-                    //    if (Position.X > (PlayerManager.Instance.Player.Position.X + 50f))
-                    //    {
-                    //        CurrentAnimation = SpriteName + "_walking";     // Left
-                    //        Position -= new Vector2(walkSpeed, 0);
-                    //    }
-
-                    //    if (Position.X < (PlayerManager.Instance.Player.Position.X - 50f))
-                    //    {
-                    //        CurrentAnimation = SpriteName + "_walking";     // Right
-                    //        Position += new Vector2(walkSpeed, 0);
-                    //    }
-                    //}
+                    else IsMoving = false;
                 }
             }
+            else IsMoving = false;
         }
 
         protected virtual void CheckCollision()
@@ -430,7 +399,29 @@ namespace Medicraft.Entities
             }
         }
 
-        protected void NextPathFindingNode(float deltaSeconds)
+        protected virtual void CheckAggro()
+        {
+            switch (EntityType)
+            {
+                case EntityTypes.Hostile:
+
+                case EntityTypes.Boss:
+                    // Setup Aggrotimer if detected player hit box
+                    if (BoundingAggro.Intersects(PlayerManager.Instance.Player.BoundingHitBox))
+                    {
+                        AggroTimer = AggroTime;
+                        IsAggro = true;
+                    }
+                    break;
+
+                case EntityTypes.Friendly:
+
+                case EntityTypes.Playable:
+                    break;
+            }
+        }
+
+        protected void SetTargetNode(float deltaSeconds)
         {
             nextNodeTimer += deltaSeconds;
 
@@ -465,7 +456,7 @@ namespace Medicraft.Entities
             }
         }
 
-        protected virtual void SetPathFindingNode(int spawnPosX, int spawnPosY)
+        protected virtual void SetPathFindingNode(int returnPosX, int returnPosY)
         {
             if (IsAggro)
             {
@@ -495,8 +486,8 @@ namespace Medicraft.Entities
                         PathFinding = new AStar(
                             BoundingDetectCollisions.Center.X,
                             BoundingDetectCollisions.Center.Y,
-                            spawnPosX,
-                            spawnPosY
+                            returnPosX,
+                            returnPosY
                         );
                         break;
                 }            
@@ -581,12 +572,13 @@ namespace Medicraft.Entities
             }
         }
 
+        // Mostly this one for Hostile Mobs
         protected void CombatControl(float deltaSeconds)
         {
             // Do Attack
             if (BoundingDetectEntity.Intersects(PlayerManager.Instance.Player.BoundingHitBox) && !IsAttacking && !IsStunning)
             {
-                CurrentAnimation = SpriteName + "_attacking";
+                CurrentAnimation = SpriteCycle + "_attacking";
                 Sprite.Play(CurrentAnimation);
 
                 IsAttacking = true;

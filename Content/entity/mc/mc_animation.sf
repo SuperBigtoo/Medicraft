@@ -5,48 +5,48 @@
     "regionHeight": 173
   },
   "cycles": {
-    "dying": {
-      "frames": [0,1,2,3,4,5],
+    "default_dying": {
+      "frames": [ 0, 1, 2, 3, 4, 5 ],
       "isLooping": false,
       "frameDuration": 0.17
     },
-    "idle": {
-      "frames": [18,19,20,21],
+    "default_idle": {
+      "frames": [ 18, 19, 20, 21 ],
       "isLooping": false,
       "frameDuration": 0.15
     },
-    "walking_down": {
-      "frames": [9,10,11,12,13,14],
+    "default_walking_down": {
+      "frames": [ 9, 10, 11, 12, 13, 14 ],
       "isLooping": false,
       "frameDuration": 0.1
     },
-    "walking_left": {
-      "frames": [27,28,29,30,31,32],
+    "default_walking_left": {
+      "frames": [ 27, 28, 29, 30, 31, 32 ],
       "isLooping": false,
       "frameDuration": 0.1
     },
-    "walking_right": {
-      "frames": [36,37,38,39,40,41],
+    "default_walking_right": {
+      "frames": [ 36, 37, 38, 39, 40, 41 ],
       "isLooping": false,
       "frameDuration": 0.1
     },
-    "walking_up": {
-      "frames": [45,46,47,48,49,50],
+    "default_walking_up": {
+      "frames": [ 45, 46, 47, 48, 49, 50 ],
       "isLooping": false,
       "frameDuration": 0.1
     },
-    "attacking_normal_hit": {
-      "frames": [54,55,56,57,58],
+    "default_attacking_normal_hit": {
+      "frames": [ 54, 55, 56, 57, 58 ],
       "isLooping": false,
       "frameDuration": 0.11
     },
-    "attacking_normal_skill": {
-      "frames": [72,73,74,75],
+    "default_attacking_normal_skill": {
+      "frames": [ 72, 73, 74, 75 ],
       "isLooping": false,
       "frameDuration": 0.125
     },
-    "attacking_burst_skill": {
-      "frames": [63,64,65,66,67,68,69,70,71],
+    "default_attacking_burst_skill": {
+      "frames": [ 63, 64, 65, 66, 67, 68, 69, 70, 71 ],
       "isLooping": false,
       "frameDuration": 0.08
     }

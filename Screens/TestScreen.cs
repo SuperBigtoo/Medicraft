@@ -18,7 +18,7 @@ namespace Medicraft.Screens
 {
     public class TestScreen : Screen
     {
-        private List<EntityData> _slimeStatsList;
+        private List<EntityData> _entityDataList;
         private List<ObjectData> _itemDataList;
         private BitmapFont _fontMinecraft, _fontSensation, _fontTA8Bit, _fontTA8BitBold, _fontTA16Bit;
         private TmxMap _tileMap;
@@ -46,7 +46,7 @@ namespace Medicraft.Screens
 
             // Initialize Player's Data !! Gonna be move to Load GameSave later !!
             var initialPlayerStats = Content.Load<PlayerData>("data/models/playerdata");
-            var playerAnimation = Content.Load<SpriteSheet>("animation/mc/mc_animation.sf", new JsonContentLoader());
+            var playerAnimation = Content.Load<SpriteSheet>("entity/mc/mc_animation.sf", new JsonContentLoader());
             var playerSprite = new AnimatedSprite(playerAnimation);
             PlayerManager.Instance.Initialize(playerSprite, initialPlayerStats);
 
@@ -72,36 +72,37 @@ namespace Medicraft.Screens
             //_tileMapRender = new TilemapOrthogonalRender(_tileMap, _tileSetsTestMap1);
 
             // Load GameData from JSON file, such as Mobs and Items Data 
-            _slimeStatsList = Content.Load<List<EntityData>>("data/TestScreen/entites_demo");
+            _entityDataList = Content.Load<List<EntityData>>("data/TestScreen/entites_demo");
             _itemDataList = Content.Load<List<ObjectData>>("data/TestScreen/objects_demo");
 
             // Adding Slime to MobSpawner
-            var _slimeAnimation = Content.Load<SpriteSheet>("animation/mobs/slime/slimes_animation.sf", new JsonContentLoader());
+            var _slimeAnimation = Content.Load<SpriteSheet>("entity/mobs/monster/slime/slimes_animation.sf", new JsonContentLoader());
             var _mobSpawner = new MobSpawner(10f);
-            _mobSpawner.AddEntity(new Slime(new AnimatedSprite(_slimeAnimation), _slimeStatsList[0], Vector2.One));
+            _mobSpawner.AddEntity(new Slime(new AnimatedSprite(_slimeAnimation), _entityDataList[0], Vector2.One));
             //_mobSpawner.AddEntity(new SlimeCopy(new AnimatedSprite(_slimeAnimation), _slimeStatsList[1], _slimeScale));
             EntityManager.Instance.Initialize(_mobSpawner);
 
             // Adding Items to ObjectSpawner
-            var _itemAnimation = Content.Load<SpriteSheet>("items/items_demo.sf", new JsonContentLoader());
+            //var _itemAnimation = Content.Load<SpriteSheet>("item/items_demo.sf", new JsonContentLoader());
+            var _itemSprite = GameGlobals.Instance.ItemsPackSprites;
             var _objectSpawner = new ObjectSpawner(10f);
-            _objectSpawner.AddGameObject(new Item(new AnimatedSprite(_itemAnimation), _itemDataList[0], Vector2.One));
-            _objectSpawner.AddGameObject(new Item(new AnimatedSprite(_itemAnimation), _itemDataList[1], Vector2.One));
-            _objectSpawner.AddGameObject(new Item(new AnimatedSprite(_itemAnimation), _itemDataList[2], Vector2.One));
+            _objectSpawner.AddGameObject(new Item(new AnimatedSprite(_itemSprite), _itemDataList[0], Vector2.One));
+            _objectSpawner.AddGameObject(new Item(new AnimatedSprite(_itemSprite), _itemDataList[1], Vector2.One));
+            _objectSpawner.AddGameObject(new Item(new AnimatedSprite(_itemSprite), _itemDataList[2], Vector2.One));
             ObjectManager.Instance.Initialize(_objectSpawner);
 
             // Adding HUD
             var _textures = new Texture2D[]
             {
-                Content.Load<Texture2D>("items/heart"),
-                Content.Load<Texture2D>("items/herb_1"),
-                Content.Load<Texture2D>("items/herb_2"),
-                Content.Load<Texture2D>("items/drug_1"),
-                Content.Load<Texture2D>("items/gold_coin"),
-                Content.Load<Texture2D>("ui/PressF"),
-                Content.Load<Texture2D>("ui/insufficient"),
+                Content.Load<Texture2D>("item/heart"),
+                Content.Load<Texture2D>("item/herb_1"),
+                Content.Load<Texture2D>("item/herb_2"),
+                Content.Load<Texture2D>("item/drug_1"),
+                Content.Load<Texture2D>("item/gold_coin"),
+                Content.Load<Texture2D>("gui/PressF"),
+                Content.Load<Texture2D>("gui/insufficient"),
             };
-            HudSystem = new HudSystem(_fonts, _textures, new AnimatedSprite(_itemAnimation));
+            HudSystem = new HudSystem(_fonts, _textures, new AnimatedSprite(_itemSprite));
         }
 
         public override void UnloadContent()
@@ -137,7 +138,9 @@ namespace Medicraft.Screens
             //spriteBatch.DrawString(_fontTA8BitBold, $"จำนวนไอเทม: {GameGlobals.Instance.ItemDatas.Count} ", new Vector2(50, -70), Color.White);
             //spriteBatch.DrawString(_fontTA16Bit, $"ItemId: {GameGlobals.Instance.ItemDatas[0].ItemId} | Name: {GameGlobals.Instance.ItemDatas[0].Name} | Stackable: {GameGlobals.Instance.ItemDatas[0].Stackable}", new Vector2(50, -40), Color.White);
             //spriteBatch.DrawString(_fontTA8BitBold, $"Inventory Test: {InventoryManager.Instance.Inventory.Count} {InventoryManager.Instance.GoldCoin}", new Vector2(50, 170), Color.White);
-            //spriteBatch.DrawString(_fontMinecraft, $"ROWS: {GameGlobals.Instance.NUM_ROWS}", new Vector2(50, 200), Color.White);            
+            var recipe = GameGlobals.Instance.CraftingRecipeDatas[0];
+
+            spriteBatch.DrawString(_fontTA8BitBold, $"recipe id: {recipe.RecipeId}", new Vector2(500, 500), Color.White);            
 
             EntityManager.Instance.Draw(spriteBatch);
 
@@ -149,6 +152,8 @@ namespace Medicraft.Screens
             }
 
             HudSystem?.Draw(spriteBatch);
+
+            //spriteBatch.Draw(GameGlobals.Instance.TestIcon, new Vector2(500, 550), Color.White);
         }
     }
 }

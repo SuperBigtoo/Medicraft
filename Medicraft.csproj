@@ -68,16 +68,19 @@
     <ProjectReference Include="TiledSharp\TiledSharp.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="Content\animation\companions\violet\violet_animation.sf">
+    <None Update="Content\entity\companions\violet\violet_animation.sf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Content\animation\mc\mc_animation.sf">
+    <None Update="Content\entity\mc\mc_animation.sf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Content\animation\mobs\slime\slimes_animation.sf">
+    <None Update="Content\entity\mobs\monster\slime\slimes_animation.sf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Content\items\items_demo.sf">
+    <None Update="Content\item\itemspack_spritesheet.sf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\item\items_demo.sf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Content\tiledmaps\chapter_2\dun2.tmx">

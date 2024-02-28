@@ -63,16 +63,16 @@ namespace Medicraft.Systems.Managers
         public void Update(GameTime gameTime)
         {
             // Key Controller
-            GameGlobals.Instance.keyboardPreviose = GameGlobals.Instance.keyboardCurrent;
-            GameGlobals.Instance.keyboardCurrent = Keyboard.GetState();
-            var keyboardCur = GameGlobals.Instance.keyboardCurrent;
-            var keyboardPrev = GameGlobals.Instance.keyboardPreviose;
+            GameGlobals.Instance.PrevKeyboard = GameGlobals.Instance.CurKeyboard;
+            GameGlobals.Instance.CurKeyboard = Keyboard.GetState();
+            var keyboardCur = GameGlobals.Instance.CurKeyboard;
+            var keyboardPrev = GameGlobals.Instance.PrevKeyboard;
 
             // Mouse Controller
-            GameGlobals.Instance.mousePreviose = GameGlobals.Instance.mouseCurrent;
-            GameGlobals.Instance.mouseCurrent = Mouse.GetState();
-            var mouseCur = GameGlobals.Instance.mouseCurrent;
-            var mousePrev = GameGlobals.Instance.mousePreviose;
+            GameGlobals.Instance.PrevMouse = GameGlobals.Instance.CurMouse;
+            GameGlobals.Instance.CurMouse = Mouse.GetState();
+            var mouseCur = GameGlobals.Instance.CurMouse;
+            var mousePrev = GameGlobals.Instance.PrevMouse;
 
             if (keyboardCur.IsKeyUp(Keys.M) && keyboardPrev.IsKeyDown(Keys.M))
             {
@@ -119,8 +119,8 @@ namespace Medicraft.Systems.Managers
 
             if (IsPlayerDead)
             {
-                if (GameGlobals.Instance.mouseCurrent.LeftButton == ButtonState.Pressed
-                    && GameGlobals.Instance.mousePreviose.LeftButton == ButtonState.Released)
+                if (GameGlobals.Instance.CurMouse.LeftButton == ButtonState.Pressed
+                    && GameGlobals.Instance.PrevMouse.LeftButton == ButtonState.Released)
                 {
                     RespawnPlayer();
                 }

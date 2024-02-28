@@ -38,9 +38,10 @@ namespace Medicraft.Systems.Managers
 
         public void AddItem(int itemId, int quantity)
         {
+            var itemData = GameGlobals.Instance.ItemsDatas.Where(i => i.ItemId.Equals(itemId));
+
             // Gotta Check Item id if it already has in inventory and stackable or mot
-            if (InventoryBag.ContainsKey(itemId.ToString())
-                && GameGlobals.Instance.ItemsDatas[itemId].Stackable)
+            if (InventoryBag.ContainsKey(itemId.ToString()) && itemData.ElementAt(0).Stackable)
             {
                 HudSystem.AddFeed(itemId, quantity);
 

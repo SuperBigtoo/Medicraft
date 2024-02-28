@@ -36,11 +36,12 @@ namespace Medicraft.Entities
             CooldownAttackTimer = CooldownAttack;
             DyingTime = 1.3f;
 
+            AggroTime = entityData.AggroTime;
             IsAggroResettable = true;
             IsKnockbackable = true;
 
             SetPathFindingType(entityData.PathFindingType);
-            NextNodeTime = 10f;
+            NodeCycleTime = entityData.NodeCycleTime;
 
             var position = new Vector2((float)entityData.Position[0], (float)entityData.Position[1]);
             Transform = new Transform2
@@ -66,7 +67,7 @@ namespace Medicraft.Entities
             RandomSlimeColor();
 
             Sprite.Depth = 0.1f;
-            Sprite.Play(SpriteName + "_walking");
+            Sprite.Play(SpriteCycle + "_walking");
         }
 
         private SlimeCopy(SlimeCopy slime)
@@ -89,11 +90,12 @@ namespace Medicraft.Entities
             CooldownAttackTimer = CooldownAttack;
             DyingTime = slime.DyingTime;
 
+            AggroTime = slime.AggroTime;
             IsAggroResettable = slime.IsAggroResettable;
             IsKnockbackable = slime.IsKnockbackable;
 
             PathFindingType = slime.PathFindingType;
-            NextNodeTime = slime.NextNodeTime;
+            NodeCycleTime = slime.NodeCycleTime;
 
             Transform = new Transform2
             {
@@ -115,7 +117,7 @@ namespace Medicraft.Entities
             RandomSlimeColor();
 
             Sprite.Depth = 0.1f;
-            Sprite.Play(SpriteName + "_walking");
+            Sprite.Play(SpriteCycle + "_walking");
         }
 
         public override object Clone()
@@ -133,19 +135,19 @@ namespace Medicraft.Entities
             switch (randomColor)
             {
                 case SlimeColor.yellow:
-                    SpriteName = "yellow";
+                    SpriteCycle = "yellow";
                     break;
 
                 case SlimeColor.red:
-                    SpriteName = "red";
+                    SpriteCycle = "red";
                     break;
 
                 case SlimeColor.green:
-                    SpriteName = "green";
+                    SpriteCycle = "green";
                     break;
 
                 case SlimeColor.blue:
-                    SpriteName = "blue";
+                    SpriteCycle = "blue";
                     break;
             }
         }
@@ -167,6 +169,9 @@ namespace Medicraft.Entities
 
                     // MovementControl
                     MovementControl(deltaSeconds);
+
+                    // Check Aggro
+                    CheckAggro();
                 }
 
                 // Update layer depth
@@ -175,7 +180,7 @@ namespace Medicraft.Entities
             else
             {
                 // Dying time before destroy
-                CurrentAnimation = SpriteName + "_dying";
+                CurrentAnimation = SpriteCycle + "_dying";
                 Sprite.Play(CurrentAnimation);
 
                 // Check Object Collsion
@@ -200,7 +205,7 @@ namespace Medicraft.Entities
 
             if (PlayerManager.Instance.IsPlayerDead)
             {
-                CurrentAnimation = SpriteName + "_walking";  // Idle
+                CurrentAnimation = SpriteCycle + "_walking";  // Idle
                 Sprite.Play(CurrentAnimation);
             }
 

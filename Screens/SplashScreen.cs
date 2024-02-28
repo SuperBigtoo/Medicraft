@@ -36,8 +36,11 @@ namespace Medicraft.Screens
         public override void LoadContent()
         {
             base.LoadContent();
+
             font = Content.Load<BitmapFont>("fonts/Mincraft_Ten/Mincraft_Ten");
-            logo = Content.Load<Texture2D>("ui/logo_wakeup");
+            logo = GameGlobals.Instance.Content.Load<Texture2D>("gui/logo_wakeup");
+
+            GameGlobals.Instance.TestIcon = logo;
         }
 
         public override void UnloadContent()
@@ -45,12 +48,17 @@ namespace Medicraft.Screens
             base.UnloadContent();
         }
 
+        public override void Dispose()
+        {
+            base.Dispose();
+        }
+
         public override void Update(GameTime gameTime)
         {
             timer += (float)gameTime.ElapsedGameTime.Ticks / TimeSpan.TicksPerSecond;
 
-            GameGlobals.Instance.mousePreviose = GameGlobals.Instance.mouseCurrent;
-            GameGlobals.Instance.mouseCurrent = Mouse.GetState();
+            GameGlobals.Instance.PrevMouse = GameGlobals.Instance.CurMouse;
+            GameGlobals.Instance.CurMouse = Mouse.GetState();
 
             if (index == 3) timePerUpdate -= 0.01f;
             if (timer >= timePerUpdate)
@@ -83,8 +91,8 @@ namespace Medicraft.Screens
                 color.A = (byte)alpha;
             }
 
-            if (GameGlobals.Instance.mouseCurrent.LeftButton == ButtonState.Pressed
-                    && GameGlobals.Instance.mousePreviose.LeftButton == ButtonState.Released)
+            if (GameGlobals.Instance.CurMouse.LeftButton == ButtonState.Pressed
+                    && GameGlobals.Instance.PrevMouse.LeftButton == ButtonState.Released)
             {
                 ScreenManager.Instance.LoadScreen(ScreenManager.GameScreen.TestScreen);
             }

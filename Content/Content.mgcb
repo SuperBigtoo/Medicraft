@@ -14,65 +14,17 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin animation/companions/violet/violet_animation.sf
-/importer:SpriteFactoryContentImporter
-/processor:SpriteFactoryContentProcessor
-/processorParam:ContentType=MonoGame.Extended MonoGame.Extended.Animations.SpriteFactory.SpriteFactoryFileReader, MonoGame.Extended.Animations
-/build:animation/companions/violet/violet_animation.sf
-
-#begin animation/companions/violet/violet_spritesheet.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:animation/companions/violet/violet_spritesheet.png
-
-#begin animation/mc/mc_animation.sf
-/copy:animation/mc/mc_animation.sf
-
-#begin animation/mc/mc_spritesheet.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:animation/mc/mc_spritesheet.png
-
-#begin animation/mobs/slime/slimes_animation.sf
-/copy:animation/mobs/slime/slimes_animation.sf
-
-#begin animation/mobs/slime/slimes_spritesheet.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:animation/mobs/slime/slimes_spritesheet.png
-
 #begin data/models/characters.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor
 /processorParam:ContentType=Medicraft.Data.CharacterDataReader, Medicraft
 /build:data/models/characters.json
 
-#begin data/models/craftingrecipes.json
+#begin data/models/crafting_recipes.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor
 /processorParam:ContentType=Medicraft.Data.CraftingRecipeDataReader, Medicraft
-/build:data/models/craftingrecipes.json
+/build:data/models/crafting_recipes.json
 
 #begin data/models/items.json
 /importer:JsonContentImporter
@@ -97,6 +49,195 @@
 /processor:JsonContentProcessor
 /processorParam:ContentType=Medicraft.Data.ObjectDataReader, Medicraft
 /build:data/TestScreen/objects_demo.json
+
+#begin entity/companions/violet/violet_animation.sf
+/copy:entity/companions/violet/violet_animation.sf
+
+#begin entity/companions/violet/violet_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/companions/violet/violet_spritesheet.png
+
+#begin entity/mc/mc_animation.sf
+/copy:entity/mc/mc_animation.sf
+
+#begin entity/mc/mc_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mc/mc_spritesheet.png
+
+#begin entity/mobs/boss/beni_kenki/beni_kenki_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/boss/beni_kenki/beni_kenki_spritesheet.png
+
+#begin entity/mobs/boss/magmalord/magmalord_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/boss/magmalord/magmalord_spritesheet.png
+
+#begin entity/mobs/boss/minotaur/minotaur_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/boss/minotaur/minotaur_spritesheet.png
+
+#begin entity/mobs/boss/the_keeper/the_keeper_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/boss/the_keeper/the_keeper_spritesheet.png
+
+#begin entity/mobs/boss/warlock/warlock_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/boss/warlock/warlock_spritesheet.png
+
+#begin entity/mobs/boss/yeti/yeti_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/boss/yeti/yeti_spritesheet.png
+
+#begin entity/mobs/monster/goblin/goblin_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/monster/goblin/goblin_spritesheet.png
+
+#begin entity/mobs/monster/ice_golem/ice_golem_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/monster/ice_golem/ice_golem_spritesheet.png
+
+#begin entity/mobs/monster/mimic/mimic_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/monster/mimic/mimic_spritesheet.png
+
+#begin entity/mobs/monster/ogre/ogre_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/monster/ogre/ogre_spritesheet.png
+
+#begin entity/mobs/monster/reaper/reaper_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/monster/reaper/reaper_spritesheet.png
+
+#begin entity/mobs/monster/slime/slimes_animation.sf
+/copy:entity/mobs/monster/slime/slimes_animation.sf
+
+#begin entity/mobs/monster/slime/slimes_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/monster/slime/slimes_spritesheet.png
+
+#begin entity/mobs/monster/treant/treant_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/monster/treant/treant_spritesheet.png
 
 #begin fonts/Mincraft_Ten/Mincraft_Ten_0.png
 /importer:TextureImporter
@@ -183,7 +324,7 @@
 /processor:BitmapFontProcessor
 /build:fonts/TA_8_Bit/TA_8_Bit.fnt
 
-#begin items/drug_1.png
+#begin gui/insufficient.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -193,9 +334,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:items/drug_1.png
+/build:gui/insufficient.png
 
-#begin items/gold_coin.png
+#begin gui/logo_wakeup.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -205,9 +346,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:items/gold_coin.png
+/build:gui/logo_wakeup.png
 
-#begin items/heart.png
+#begin gui/PressF.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -217,9 +358,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:items/heart.png
+/build:gui/PressF.png
 
-#begin items/herb_1.png
+#begin item/drug_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -229,9 +370,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:items/herb_1.png
+/build:item/drug_1.png
 
-#begin items/herb_2.png
+#begin item/gold_coin.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -241,9 +382,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:items/herb_2.png
+/build:item/gold_coin.png
 
-#begin items/items_demo.png
+#begin item/heart.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -253,10 +394,61 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:items/items_demo.png
+/build:item/heart.png
 
-#begin items/items_demo.sf
-/copy:items/items_demo.sf
+#begin item/herb_1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:item/herb_1.png
+
+#begin item/herb_2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:item/herb_2.png
+
+#begin item/items_demo.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:item/items_demo.png
+
+#begin item/items_demo.sf
+/copy:item/items_demo.sf
+
+#begin item/itemspack_spritesheet.sf
+/copy:item/itemspack_spritesheet.sf
+
+#begin item/itemspack.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:item/itemspack.png
 
 #begin tiledmaps/chapter_1/dun1.tmx
 /copy:tiledmaps/chapter_1/dun1.tmx
@@ -443,40 +635,4 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:tiledmaps/textures/TS3.png
-
-#begin ui/insufficient.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:ui/insufficient.png
-
-#begin ui/logo_wakeup.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:ui/logo_wakeup.png
-
-#begin ui/PressF.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:ui/PressF.png
 

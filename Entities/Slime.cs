@@ -36,11 +36,12 @@ namespace Medicraft.Entities
             CooldownAttackTimer = CooldownAttack;
             DyingTime = 1.3f;
 
+            AggroTime = entityData.AggroTime;
             IsAggroResettable = true;
             IsKnockbackable = true;
 
-            SetPathFindingType(2);
-            NextNodeTime = 10f;
+            SetPathFindingType(entityData.PathFindingType);
+            NodeCycleTime = entityData.NodeCycleTime;
 
             var position = new Vector2((float)entityData.Position[0], (float)entityData.Position[1]);
             Transform = new Transform2
@@ -53,11 +54,13 @@ namespace Medicraft.Entities
             BoundingCollisionX = 4;
             BoundingCollisionY = 12;
 
-            BoundingDetectCollisions = new Rectangle((int)((int)Position.X - Sprite.TextureRegion.Width / BoundingCollisionX),
+            // Rec for check Collision
+            BoundingDetectCollisions = new Rectangle(
+                (int)((int)Position.X - Sprite.TextureRegion.Width / BoundingCollisionX),
                 (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
                 (int)(Sprite.TextureRegion.Width / 2.5f),
                 Sprite.TextureRegion.Height / 6
-            );     // Rec for check Collision
+            );     
 
             BoundingHitBox = new CircleF(Position, 20);         // Circle for Entity to hit
 
@@ -75,7 +78,7 @@ namespace Medicraft.Entities
             RandomSlimeColor();
 
             Sprite.Depth = 0.1f;
-            Sprite.Play(SpriteName + "_walking");
+            Sprite.Play(SpriteCycle + "_walking");
         }
 
         private Slime(Slime slime)
@@ -98,11 +101,12 @@ namespace Medicraft.Entities
             CooldownAttackTimer = CooldownAttack;
             DyingTime = slime.DyingTime;
 
+            AggroTime = slime.AggroTime;
             IsAggroResettable = slime.IsAggroResettable;
             IsKnockbackable = slime.IsKnockbackable;
 
             PathFindingType = slime.PathFindingType;
-            NextNodeTime = slime.NextNodeTime;
+            NodeCycleTime = slime.NodeCycleTime;
 
             Transform = new Transform2
             {
@@ -131,7 +135,7 @@ namespace Medicraft.Entities
             RandomSlimeColor();
 
             Sprite.Depth = 0.1f;
-            Sprite.Play(SpriteName + "_walking");
+            Sprite.Play(SpriteCycle + "_walking");
         }    
 
         // Update Slime
@@ -141,9 +145,9 @@ namespace Medicraft.Entities
 
             if (!IsDying)
             {                
-                NextPathFindingNode(deltaSeconds);
+                SetTargetNode(deltaSeconds);
 
-                // Setup Path Finding
+                // Setup PathFinding
                 SetPathFindingNode((int)EntityData.Position[0], (int)EntityData.Position[1]);
 
                 if (!PlayerManager.Instance.IsPlayerDead)
@@ -153,6 +157,9 @@ namespace Medicraft.Entities
 
                     // MovementControl
                     MovementControl(deltaSeconds);
+
+                    // Check Aggro Player
+                    CheckAggro();
                 }
                 
                 // Update layer depth
@@ -161,7 +168,7 @@ namespace Medicraft.Entities
             else
             {
                 // Dying time before destroy
-                CurrentAnimation = SpriteName + "_dying";
+                CurrentAnimation = SpriteCycle + "_dying";
                 Sprite.Play(CurrentAnimation);
 
                 // Check Object Collsion
@@ -186,7 +193,7 @@ namespace Medicraft.Entities
 
             if (PlayerManager.Instance.IsPlayerDead)
             {
-                CurrentAnimation = SpriteName + "_walking";  // Idle
+                CurrentAnimation = SpriteCycle + "_walking";  // Idle
                 Sprite.Play(CurrentAnimation);
             }
 
@@ -222,19 +229,19 @@ namespace Medicraft.Entities
             switch (randomColor)
             {
                 case SlimeColor.yellow:
-                    SpriteName = "yellow";
+                    SpriteCycle = "yellow";
                     break;
 
                 case SlimeColor.red:
-                    SpriteName = "red";
+                    SpriteCycle = "red";
                     break;
 
                 case SlimeColor.green:
-                    SpriteName = "green";
+                    SpriteCycle = "green";
                     break;
 
                 case SlimeColor.blue:
-                    SpriteName = "blue";
+                    SpriteCycle = "blue";
                     break;
             }
         }
@@ -246,7 +253,7 @@ namespace Medicraft.Entities
 
         public override Vector2 SetCombatNumDirection()
         {
-            Vector2 offset = new Vector2(Position.X, Position.Y - Sprite.TextureRegion.Height * 1.5f);
+            Vector2 offset = new(Position.X, Position.Y - Sprite.TextureRegion.Height * 1.5f);
 
             Vector2 numDirection = Position - offset;
             numDirection.Normalize();

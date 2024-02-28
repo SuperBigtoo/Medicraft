@@ -18,7 +18,7 @@ namespace Medicraft.Systems
         private Texture2D _heartTexture, _herb1Texture, _herb2Texture, _drugTexture
             , _coinTexture, _pressFTexture, _insufficient;
 
-        private AnimatedSprite _sprite;
+        private readonly AnimatedSprite _spriteItemPack;
 
         private float _deltaSeconds;
 
@@ -39,7 +39,7 @@ namespace Medicraft.Systems
             _pressFTexture = textures[5];
             _insufficient = textures[6];
 
-            _sprite = sprite;
+            _spriteItemPack = sprite;
 
             _nextFeed = false;
             _insufficientTime = _maxDisplayTime;
@@ -170,8 +170,17 @@ namespace Medicraft.Systems
 
             if (InventoryManager.Instance.InventoryBag.TryGetValue("0", out InventoryItemData value_0))
             {
-                spriteBatch.Draw(_herb1Texture, new Vector2(position.X + 400f, 0f) + _hudTopLeftCorner, null
-                , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
+                var _transform = new Transform2
+                {
+                    Scale = new Vector2(0.75f, 0.75f),
+                    Rotation = 0f,
+                    Position = new Vector2(position.X + 400f, 0f) + _hudTopLeftCorner
+                };
+
+                _spriteItemPack.Play("0");
+                _spriteItemPack.Update(_deltaSeconds);
+
+                spriteBatch.Draw(_spriteItemPack, _transform);
 
                 spriteBatch.DrawString(_fonts[0], $" {value_0.Count}"
                     , new Vector2(position.X + 400f + 32f, 0f) + _hudTopLeftCorner, Color.White);
@@ -179,17 +188,35 @@ namespace Medicraft.Systems
 
             if (InventoryManager.Instance.InventoryBag.TryGetValue("1", out InventoryItemData value_1))
             {
-                spriteBatch.Draw(_herb2Texture, new Vector2(position.X + 480f, 0f) + _hudTopLeftCorner, null
-                , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
+                var _transform = new Transform2
+                {
+                    Scale = new Vector2(0.75f, 0.75f),
+                    Rotation = 0f,
+                    Position = new Vector2(position.X + 480f, 0f) + _hudTopLeftCorner
+                };
+
+                _spriteItemPack.Play("1");
+                _spriteItemPack.Update(_deltaSeconds);
+
+                spriteBatch.Draw(_spriteItemPack, _transform);
 
                 spriteBatch.DrawString(_fonts[0], $" {value_1.Count}"
                     , new Vector2(position.X + 480f + 32f, 0f) + _hudTopLeftCorner, Color.White);
             }
 
-            if (InventoryManager.Instance.InventoryBag.TryGetValue("2", out InventoryItemData value_2))
+            if (InventoryManager.Instance.InventoryBag.TryGetValue("312", out InventoryItemData value_2))
             {
-                spriteBatch.Draw(_drugTexture, new Vector2(position.X + 560f, 0f) + _hudTopLeftCorner, null
-                , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
+                var _transform = new Transform2
+                {
+                    Scale = new Vector2(0.75f, 0.75f),
+                    Rotation = 0f,
+                    Position = new Vector2(position.X + 560f, 0f) + _hudTopLeftCorner
+                };
+
+                _spriteItemPack.Play("312");
+                _spriteItemPack.Update(_deltaSeconds);
+
+                spriteBatch.Draw(_spriteItemPack, _transform);
 
                 spriteBatch.DrawString(_fonts[0], $" {value_2.Count}"
                     , new Vector2(position.X + 560f + 32f, 0f) + _hudTopLeftCorner, Color.White);
@@ -264,10 +291,12 @@ namespace Medicraft.Systems
                 {
                     var referId = GameGlobals.Instance.CollectedItemFeed.ElementAt(i).ItemId;
                     var amount = GameGlobals.Instance.CollectedItemFeed.ElementAt(i).Count;
-                    var addingX = GameGlobals.Instance.HUDPosition.X;
-                    var addingY = GameGlobals.Instance.HUDPosition.Y;
+                    var offsetX = GameGlobals.Instance.HUDPosition.X;
+                    var offsetY = GameGlobals.Instance.HUDPosition.Y;
 
-                    spriteBatch.FillRectangle(355f + addingX, 496f + (i * 40) + addingY, 120, 28, Color.Black * 0.4f);
+                    var itemData = GameGlobals.Instance.ItemsDatas.Where(i => i.ItemId.Equals(referId));
+
+                    spriteBatch.FillRectangle(355f + offsetX, 496f + (i * 40) + offsetY, 120, 28, Color.Black * 0.4f);
 
                     var _transform = new Transform2
                     {
@@ -276,12 +305,12 @@ namespace Medicraft.Systems
                         Position = new Vector2(370f, 510f + (i * 40)) + _hudTopLeftCorner
                     };
 
-                    _sprite.Play(referId.ToString());
-                    _sprite.Update(_deltaSeconds);
+                    _spriteItemPack.Play(referId.ToString());
+                    _spriteItemPack.Update(_deltaSeconds);
 
-                    spriteBatch.Draw(_sprite, _transform);
+                    spriteBatch.Draw(_spriteItemPack, _transform);
 
-                    spriteBatch.DrawString(_fonts[2], $"{GameGlobals.Instance.ItemsDatas[referId].Name} x {amount}"
+                    spriteBatch.DrawString(_fonts[2], $"{itemData.ElementAt(0).Name} x {amount}"
                         , new Vector2(360f + 32f, 495f + (i * 40)) + _hudTopLeftCorner, Color.White);
                 }
 

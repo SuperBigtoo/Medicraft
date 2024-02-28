@@ -83,10 +83,12 @@ namespace Medicraft.Entities
             BoundingCollisionX = 20;
             BoundingCollisionY = 2.60;
 
-            BoundingDetectCollisions = new Rectangle((int)((int)Position.X - sprite.TextureRegion.Width / BoundingCollisionX),
+            // Rec for check Collision
+            BoundingDetectCollisions = new Rectangle(
+                (int)((int)Position.X - sprite.TextureRegion.Width / BoundingCollisionX),
                 (int)((int)Position.Y + sprite.TextureRegion.Height / BoundingCollisionY),
                 sprite.TextureRegion.Width / 8,
-                sprite.TextureRegion.Height / 8);     // Rec for check Collision
+                sprite.TextureRegion.Height / 8);
 
             BoundingHitBox = new CircleF(Position + new Vector2(0f, 32f), 40f);         // Circle for Entity to hit
 
@@ -95,7 +97,7 @@ namespace Medicraft.Entities
             BoundingCollection = new CircleF(Position + new Vector2(0f, 64f), 30f);     // Circle for check interaction with GameObjects
 
             Sprite.Depth = 0.1f;
-            Sprite.Play("idle");
+            Sprite.Play(SpriteCycle + "_idle");
         }
 
         protected override void InitializeCharacterData(int charId, int level)
@@ -133,7 +135,7 @@ namespace Medicraft.Entities
                 if (!IsDying)
                 {
                     IsDying = true;
-                    CurrentAnimation = "dying";
+                    CurrentAnimation = SpriteCycle + "_dying";
                     Sprite.Play(CurrentAnimation);
                 }             
             }
@@ -172,28 +174,28 @@ namespace Medicraft.Entities
             {
                 if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
                 {
-                    CurrentAnimation = "walking_up";
+                    CurrentAnimation = SpriteCycle + "_walking_up";
                     IsMoving = true;   
                     Velocity -= Vector2.UnitY;
                 }
 
                 if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
                 {
-                    CurrentAnimation = "walking_down";
+                    CurrentAnimation = SpriteCycle + "_walking_down";
                     IsMoving = true;
                     Velocity += Vector2.UnitY;
                 }
 
                 if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
                 {
-                    CurrentAnimation = "walking_left";
+                    CurrentAnimation = SpriteCycle + "_walking_left";
                     IsMoving = true;
                     Velocity -= Vector2.UnitX;
                 }
 
                 if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
                 {
-                    CurrentAnimation = "walking_right";
+                    CurrentAnimation = SpriteCycle + "_walking_right";
                     IsMoving = true;
                     Velocity += Vector2.UnitX;
 
@@ -215,7 +217,7 @@ namespace Medicraft.Entities
 
                 if (!IsMoving)
                 {
-                    CurrentAnimation = "idle";
+                    CurrentAnimation = SpriteCycle + "_idle";
                     Sprite.Play(CurrentAnimation);
                 }
 
@@ -252,7 +254,7 @@ namespace Medicraft.Entities
             if (!IsAttacking && mouseCur.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released
                 || !IsAttacking && keyboardCur.IsKeyDown(Keys.Space))
             {
-                CurrentAnimation = "attacking_normal_hit";
+                CurrentAnimation = SpriteCycle + "_attacking_normal_hit";
                 Sprite.Play(CurrentAnimation);
 
                 IsAttacking = true;
@@ -264,7 +266,7 @@ namespace Medicraft.Entities
             // Normal Skill
             if (keyboardCur.IsKeyDown(Keys.E) && !IsAttacking && !_isNormalSkillCooldown)
             {
-                CurrentAnimation = "attacking_normal_skill";
+                CurrentAnimation = SpriteCycle + "_attacking_normal_skill";
                 Sprite.Play(CurrentAnimation);
 
                 IsAttacking = true;
@@ -278,7 +280,7 @@ namespace Medicraft.Entities
             // Burst Skill
             if (keyboardCur.IsKeyDown(Keys.Q) && !IsAttacking && !_isBurstSkillCooldown)
             {
-                CurrentAnimation = "attacking_burst_skill";
+                CurrentAnimation = SpriteCycle + "_attacking_burst_skill";
                 Sprite.Play(CurrentAnimation);
 
                 IsAttacking = true;
@@ -770,7 +772,7 @@ namespace Medicraft.Entities
 
         public override Vector2 SetCombatNumDirection()
         {
-            Vector2 offset = new Vector2(Position.X, Position.Y - Sprite.TextureRegion.Height * 1.5f);
+            Vector2 offset = new(Position.X, Position.Y - Sprite.TextureRegion.Height * 1.5f);
 
             Vector2 numDirection = Position - offset;
             numDirection.Normalize();

@@ -48,7 +48,7 @@ namespace Medicraft.Systems.Managers
             var middleDepth = GameGlobals.Instance.MiddleEntityDepth;
             var bottomDepth = GameGlobals.Instance.BottomEntityDepth;
 
-            // Update Player
+            // Update Playable Character: Player and Companion
             PlayerManager.Instance.Update(gameTime);
 
             var playerDepth = PlayerManager.Instance.Player.GetDepth();

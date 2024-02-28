@@ -1,12 +1,7 @@
-﻿using Medicraft.Data;
-using Medicraft.Data.Models;
-using Medicraft.Screens;
+﻿using Medicraft.Screens;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.BitmapFonts;
-using System.Collections.Generic;
 
 namespace Medicraft.Systems.Managers
 {
@@ -18,7 +13,6 @@ namespace Medicraft.Systems.Managers
         private Screen _curScreen;
 
         public Game Game { private set; get; }
-        public ContentManager Content { private set; get; }
         public GraphicsDevice GraphicsDevice { private set; get; }
         public GameWindow Window { private set; get; }
         public Camera Camera { private set; get; }
@@ -40,7 +34,6 @@ namespace Medicraft.Systems.Managers
         public void Initialize(Game game)
         {
             Game = game;
-            Content = game.Content;
             GraphicsDevice = game.GraphicsDevice;
             Window = game.Window;
             Camera = new Camera(GraphicsDevice.Viewport);
@@ -49,26 +42,7 @@ namespace Medicraft.Systems.Managers
         }
 
         public void LoadContent()
-        {
-            // Load GameSave
-            var gameSave = JsonFileManager.LoadFlie(GameGlobals.Instance.GameSavePath);
-            if (gameSave.Count != 0)
-            {
-                foreach (var save in gameSave)
-                {
-                    GameGlobals.Instance.GameSave.Add(save);
-                }
-            }
-
-            // Load Item Datas
-            GameGlobals.Instance.ItemsDatas = Content.Load<List<ItemData>>("data/models/items");
-
-            // Load Character Datas
-            GameGlobals.Instance.CharacterDatas = Content.Load<List<CharacterData>>("data/models/characters");
-
-            // Load Font Bitmap
-            GameGlobals.Instance.FontTA16Bit = Content.Load<BitmapFont>("fonts/TA_16_Bit/TA_16_Bit");
-
+        {           
             _curScreen.LoadContent();
         }
 
@@ -84,7 +58,7 @@ namespace Medicraft.Systems.Managers
 
         public void LoadScreen(GameScreen gameScreen)
         {
-            UnloadContent();
+            _curScreen?.UnloadContent();
 
             switch (gameScreen)
             {
