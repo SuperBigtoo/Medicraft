@@ -227,7 +227,7 @@ namespace Medicraft.Entities
             {
                 var pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
                 pixelTexture.SetData(new Color[] { Color.White });
-                spriteBatch.Draw(pixelTexture, BoundingDetectCollisions, Color.Red);
+                spriteBatch.Draw(pixelTexture, (Rectangle)BoundingDetectCollisions, Color.Red);
             }
         }
 

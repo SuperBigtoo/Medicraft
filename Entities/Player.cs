@@ -149,7 +149,6 @@ namespace Medicraft.Entities
         // Draw Player
         public override void Draw(SpriteBatch spriteBatch)
         {
-
             spriteBatch.Draw(Sprite, Transform);
 
             // Test Draw BoundingRec for Collision Check
@@ -157,7 +156,7 @@ namespace Medicraft.Entities
             {
                 var pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
                 pixelTexture.SetData(new Color[] { Color.White });
-                spriteBatch.Draw(pixelTexture, BoundingDetectCollisions, Color.Red);
+                spriteBatch.Draw(pixelTexture, (Rectangle)BoundingDetectCollisions, Color.Red);
             }
         }
 

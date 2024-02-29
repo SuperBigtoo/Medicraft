@@ -69,8 +69,8 @@ namespace Medicraft.Entities
             BoundingAggro = new CircleF(Position, 150);         // Circle for check aggro player        
 
             PathFinding = new AStar(
-                BoundingDetectCollisions.Center.X,
-                BoundingDetectCollisions.Center.Y,
+                (int)BoundingDetectCollisions.Center.X,
+                (int)BoundingDetectCollisions.Center.Y,
                 (int)EntityData.Position[0],
                 (int)EntityData.Position[1]
             );
@@ -126,8 +126,8 @@ namespace Medicraft.Entities
             BoundingDetectEntity = slime.BoundingDetectEntity;
 
             PathFinding = new AStar(
-                BoundingDetectCollisions.Center.X,
-                BoundingDetectCollisions.Center.Y,
+                (int)BoundingDetectCollisions.Center.X,
+                (int)BoundingDetectCollisions.Center.Y,
                 (int)EntityData.Position[0],
                 (int)EntityData.Position[1]
             );
@@ -215,7 +215,7 @@ namespace Medicraft.Entities
             {
                 var pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
                 pixelTexture.SetData(new Color[] { Color.White });
-                spriteBatch.Draw(pixelTexture, BoundingDetectCollisions, Color.Red);
+                spriteBatch.Draw(pixelTexture, (Rectangle)BoundingDetectCollisions, Color.Red);
             }
         }      
 

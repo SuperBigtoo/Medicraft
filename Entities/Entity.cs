@@ -39,7 +39,7 @@ namespace Medicraft.Entities
         public Transform2 Transform;
         public Vector2 Velocity, CombatNumVelocity;    
         public double BoundingCollisionX, BoundingCollisionY;
-        public Rectangle BoundingDetectCollisions;      // For dectect collisions
+        public RectangleF BoundingDetectCollisions;      // For dectect collisions
         public CircleF BoundingHitBox;
         public CircleF BoundingDetectEntity;
         public CircleF BoundingCollection;
@@ -461,8 +461,8 @@ namespace Medicraft.Entities
             if (IsAggro)
             {
                 PathFinding = new AStar(
-                    BoundingDetectCollisions.Center.X,
-                    BoundingDetectCollisions.Center.Y,
+                    (int)BoundingDetectCollisions.Center.X,
+                    (int)BoundingDetectCollisions.Center.Y,
                     (int)PlayerManager.Instance.Player.Position.X,
                     (int)PlayerManager.Instance.Player.Position.Y + 75
                 );
@@ -475,8 +475,8 @@ namespace Medicraft.Entities
 
                     case PathFindingTypes.RandomPoint:
                         PathFinding = new AStar(
-                            BoundingDetectCollisions.Center.X,
-                            BoundingDetectCollisions.Center.Y,
+                            (int)BoundingDetectCollisions.Center.X,
+                            (int)BoundingDetectCollisions.Center.Y,
                             (int)targetNode.X,
                             (int)targetNode.Y
                         );
@@ -484,8 +484,8 @@ namespace Medicraft.Entities
 
                     case PathFindingTypes.StationaryPoint:
                         PathFinding = new AStar(
-                            BoundingDetectCollisions.Center.X,
-                            BoundingDetectCollisions.Center.Y,
+                            (int)BoundingDetectCollisions.Center.X,
+                            (int)BoundingDetectCollisions.Center.Y,
                             returnPosX,
                             returnPosY
                         );

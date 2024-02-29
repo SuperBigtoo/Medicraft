@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +21,6 @@ namespace Medicraft.Systems.TilemapRenderer
         // For calcurlate the frame rate of tile animation
         private float _totalMilliseconds = 0f;
 
-        // Items point vector for ItemSpawner
-        public List<Vector2> ItemsPoint { private set; get; }
-
         // Maintain tile types by number representation
         private const int BLOCK = 0;
         private const int ROAD = 1;
@@ -41,15 +39,9 @@ namespace Medicraft.Systems.TilemapRenderer
             _tileWidth = new int[tileSets.Length];
             _tileHeight = new int[tileSets.Length];
             _tilesetTileWide = new int[tileSets.Length];
-            _tileAnimationsId = new List<int>();
+            _tileAnimationsId = [];
 
-            ItemsPoint = new List<Vector2>();
-
-            Initialize();
-        }
-
-        private void Initialize()
-        {
+            // Initialize
             SetTileSetsInfo();
             SetObjectGroups();
             MappingArray();
@@ -81,42 +73,58 @@ namespace Medicraft.Systems.TilemapRenderer
             GameGlobals.Instance.TopLayerObject.Clear();
             GameGlobals.Instance.MiddleLayerObject.Clear();
             GameGlobals.Instance.BottomLayerObject.Clear();
-            GameGlobals.Instance.TableCraftArea.Clear();
+            GameGlobals.Instance.CraftingTableArea.Clear();
+            GameGlobals.Instance.SavingTableArea.Clear();
+            GameGlobals.Instance.WarpPointArea.Clear();
+            GameGlobals.Instance.MobPartrolArea.Clear();
 
-            foreach (var o in _tileMap.ObjectGroups["Collision"].Objects)
+            foreach (var o in _tileMap.ObjectGroups["Collision"]?.Objects)
             {
                 GameGlobals.Instance.CollistionObject.Add(
-                    new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+                    new RectangleF((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
 
-            foreach (var o in _tileMap.ObjectGroups["TopLayerObject"].Objects)
+            foreach (var o in _tileMap.ObjectGroups["TopLayerObject"]?.Objects)
             {
                 GameGlobals.Instance.TopLayerObject.Add(
-                    new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+                    new RectangleF((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
 
-            foreach (var o in _tileMap.ObjectGroups["MiddleLayerObject"].Objects)
+            foreach (var o in _tileMap.ObjectGroups["MiddleLayerObject"]?.Objects)
             {
                 GameGlobals.Instance.MiddleLayerObject.Add(
-                    new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+                    new RectangleF((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
 
-            foreach (var o in _tileMap.ObjectGroups["BottomLayerObject"].Objects)
+            foreach (var o in _tileMap.ObjectGroups["BottomLayerObject"]?.Objects)
             {
                 GameGlobals.Instance.BottomLayerObject.Add(
-                    new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+                    new RectangleF((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
 
-            //foreach (var o in _tileMap.ObjectGroups["TableCraft"].Objects)
-            //{
-            //    GameGlobals.Instance.TableCraft.Add(
-            //        new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
-            //}
+            foreach (var o in _tileMap.ObjectGroups["CraftingTableArea"]?.Objects)
+            {
+                GameGlobals.Instance.CraftingTableArea.Add(
+                    new RectangleF((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+            }
 
-            //foreach (var o in _tileMap.ObjectGroups["ItemsPoint"].Objects)
-            //{
-            //    ItemsPoint.Add(new Vector2((float)o.X, (float)o.Y));
-            //}
+            foreach (var o in _tileMap.ObjectGroups["SavingTableArea"]?.Objects)
+            {
+                GameGlobals.Instance.SavingTableArea.Add(
+                    new RectangleF((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+            }
+
+            foreach (var o in _tileMap.ObjectGroups["WarpPointArea"]?.Objects)
+            {
+                GameGlobals.Instance.WarpPointArea.Add(
+                    new RectangleF((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+            }
+
+            foreach (var o in _tileMap.ObjectGroups["MobPartrolArea"]?.Objects)
+            {
+                GameGlobals.Instance.MobPartrolArea.Add(
+                    new RectangleF((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+            }
         }
 
         private void MappingArray()

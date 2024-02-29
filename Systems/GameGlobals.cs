@@ -4,12 +4,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using System.Collections.Generic;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Medicraft.Systems
 {
@@ -60,12 +60,15 @@ namespace Medicraft.Systems
         public float DisplayFeedTime { set; get; }
         public float MaximumDisplayFeedTime { private set; get; }
 
-        // Tilemap & Layer Depth
-        public List<Rectangle> CollistionObject { private set; get; }       // "Collision"
-        public List<Rectangle> TopLayerObject { private set; get; }         // "ObjectOnLayer"
-        public List<Rectangle> MiddleLayerObject { private set; get; }
-        public List<Rectangle> BottomLayerObject { private set; get; }
-        public List<Rectangle> TableCraftArea { private set; get; }
+        // Tilemap, Objective Area & Layer Depth
+        public List<RectangleF> CollistionObject { private set; get; }       // "Collision"
+        public List<RectangleF> TopLayerObject { private set; get; }
+        public List<RectangleF> MiddleLayerObject { private set; get; }
+        public List<RectangleF> BottomLayerObject { private set; get; }
+        public List<RectangleF> CraftingTableArea { private set; get; }
+        public List<RectangleF> SavingTableArea { private set; get; }
+        public List<RectangleF> WarpPointArea { private set; get; }
+        public List<RectangleF> MobPartrolArea { private set; get; }
         public float TopEntityDepth { private set; get; }
         public float MiddleEntityDepth { private set; get; }
         public float BottomEntityDepth { private set; get; }
@@ -122,7 +125,10 @@ namespace Medicraft.Systems
             TopLayerObject = [];
             MiddleLayerObject = [];
             BottomLayerObject = [];
-            TableCraftArea = [];
+            CraftingTableArea = [];
+            SavingTableArea = [];
+            WarpPointArea = [];
+            MobPartrolArea = [];
 
             TopEntityDepth = 0.2f;
             MiddleEntityDepth = 0.4f;
