@@ -61,6 +61,8 @@ namespace Medicraft
         protected override void Update(GameTime gameTime)
         {
             // TODO: Add your update logic here
+            GameGlobals.Instance.Update(gameTime);
+
             ScreenManager.Instance.Update(gameTime);
 
             base.Update(gameTime);

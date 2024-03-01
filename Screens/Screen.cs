@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Medicraft.Systems;
 using Medicraft.Systems.TilemapRenderer;
+using static Medicraft.Systems.Managers.ScreenManager;
 
 namespace Medicraft.Screens
 {
@@ -19,8 +20,10 @@ namespace Medicraft.Screens
     {
         protected ContentManager Content;
 
-        protected HudSystem HudSystem;
+        protected HUDSystem HudSystem;
         protected TilemapOrthogonalRender TileMapRender;
+
+        protected GameScreen ScreenName;
 
         public virtual void LoadContent()
         {

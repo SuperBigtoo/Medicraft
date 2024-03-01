@@ -68,10 +68,25 @@
     <ProjectReference Include="TiledSharp\TiledSharp.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="Content\effect\boss_effect.sf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\effect\hit_effect.sf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\effect\hit_skill_effect.sf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\effect\states.sf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Content\entity\companions\violet\violet_animation.sf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Content\entity\mc\mc_animation.sf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\entity\mobs\friendly\cat\cat_animation.sf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Content\entity\mobs\monster\slime\slimes_animation.sf">

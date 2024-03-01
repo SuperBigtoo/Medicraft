@@ -1,0 +1,14 @@
+{
+  "textureAtlas": {
+    "texture": "boss_effect.png",
+    "regionWidth": 412,
+    "regionHeight": 460
+  },
+  "cycles": {
+    "boss_effect": {
+      "frames": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],
+      "isLooping": false,
+      "frameDuration": 0.06
+    }
+  }
+}

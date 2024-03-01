@@ -20,7 +20,7 @@ namespace Medicraft.Entities
         public int CharId { get; protected set; }
         public string Name { get; protected set; }
         public int Level { get; set; }
-        public int EXP { get; set; }
+        public int EXP { get; set; }    // meant for playable
 
         // Character Stats
         public int ATK { get; set; }
@@ -249,6 +249,8 @@ namespace Medicraft.Entities
             return CombatNumVelocity;
         }
 
+        protected virtual void SetupCharacterStats() { }
+
         protected virtual void InitializeCharacterData(int charId, int level)
         {
             var charData = GameGlobals.Instance.CharacterDatas.Where(c => c.CharId.Equals(charId));
@@ -304,7 +306,7 @@ namespace Medicraft.Entities
         protected virtual void SetCharacterStats(CharacterData charData, int level)
         {
             ATK = charData.ATK + ((level - 1) * 2);
-            MaximumHP = charData.HP + ((level - 1) * 10);
+            MaximumHP = (int)(charData.HP + ((level - 1) * (charData.HP * 0.1)));
             HP = MaximumHP;
             DEF_Percent = (float)charData.DEF_Percent;
             Crit_Percent = (float)charData.Crit_Percent;

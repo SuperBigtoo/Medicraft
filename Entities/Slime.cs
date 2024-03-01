@@ -211,7 +211,7 @@ namespace Medicraft.Entities
             spriteBatch.Draw(Sprite, Transform);
 
             // Test Draw BoundingRec for Collision
-            if (GameGlobals.Instance.IsShowDetectBox)
+            if (GameGlobals.Instance.IsDebugMode)
             {
                 var pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
                 pixelTexture.SetData(new Color[] { Color.White });

@@ -15,8 +15,13 @@ namespace Medicraft.Entities
     {
         public PlayerData PlayerData { get; private set; }
 
-        private float _knockbackForce, _percentNormalHit, _percentPassiveSkill;
+        public float MaximumMana { get; private set; }
+        public float Mana { get; private set; }
+
+        private float _knockbackForce, _percentNormalHit;
         private readonly float _hitRateNormal, _hitRateNormalSkill, _hitRateBurstSkill;
+
+        private float _normalSkillCost = 10f, _burstSkillCost = 20f;
 
         private const float _baseCooldownNormal = 16f, _baseCooldownBurst = 20f, _baseCooldownPassive = 60f;
         private bool _isNormalSkillCooldown, _isBurstSkillCooldown, _isPassiveSkillCooldown;
@@ -51,7 +56,6 @@ namespace Medicraft.Entities
 
             _knockbackForce = 50f;
             _percentNormalHit = 0.5f;
-            _percentPassiveSkill = 0.3f;
 
             _hitRateNormal = 0.5f;
             _hitRateNormalSkill = 0.9f;
@@ -104,6 +108,9 @@ namespace Medicraft.Entities
         {           
             base.InitializeCharacterData(charId, level);
 
+            MaximumMana = (float)(100f + ((level - 1) * (100f * 0.1)));
+            Mana = MaximumMana;
+
             // gonna calculate character stats with the equipment's stats too
         }
 
@@ -152,7 +159,7 @@ namespace Medicraft.Entities
             spriteBatch.Draw(Sprite, Transform);
 
             // Test Draw BoundingRec for Collision Check
-            if (GameGlobals.Instance.IsShowDetectBox)
+            if (GameGlobals.Instance.IsDebugMode)
             {
                 var pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
                 pixelTexture.SetData(new Color[] { Color.White });
@@ -263,7 +270,7 @@ namespace Medicraft.Entities
             }
 
             // Normal Skill
-            if (keyboardCur.IsKeyDown(Keys.E) && !IsAttacking && !_isNormalSkillCooldown)
+            if (keyboardCur.IsKeyDown(Keys.E) && !IsAttacking && !_isNormalSkillCooldown && Mana >= _normalSkillCost)
             {
                 CurrentAnimation = SpriteCycle + "_attacking_normal_skill";
                 Sprite.Play(CurrentAnimation);
@@ -277,7 +284,7 @@ namespace Medicraft.Entities
             }
 
             // Burst Skill
-            if (keyboardCur.IsKeyDown(Keys.Q) && !IsAttacking && !_isBurstSkillCooldown)
+            if (keyboardCur.IsKeyDown(Keys.Q) && !IsAttacking && !_isBurstSkillCooldown && Mana >= _burstSkillCost)
             {
                 CurrentAnimation = SpriteCycle + "_attacking_burst_skill";
                 Sprite.Play(CurrentAnimation);
@@ -310,6 +317,8 @@ namespace Medicraft.Entities
             _tmpATK = ATK;
             _tmpCrit = Crit_Percent;
             _tmpCritDMG = CritDMG_Percent;
+
+            var manaCost = _normalSkillCost;
 
             switch (skillLevel)
             {
@@ -349,6 +358,7 @@ namespace Medicraft.Entities
             }
 
             _isNormalSkillActivated = true;
+            Mana -= manaCost;
         }
 
         /// <summary>
@@ -357,6 +367,8 @@ namespace Medicraft.Entities
         /// <param name="skillLevel">Burst Skill level base on PlayerData.Abilities.BurstSkillLevel</param>
         private void BurstSkillControl(int skillLevel)
         {
+            var manaCost = _burstSkillCost;
+
             switch (skillLevel)
             {
                 case 1:
@@ -395,6 +407,7 @@ namespace Medicraft.Entities
 
             BoundingDetectEntity.Radius = 80f;
             _knockbackForce = 50f;
+            Mana -= manaCost;
         }
 
         /// <summary>
@@ -590,7 +603,7 @@ namespace Medicraft.Entities
                             {
                                 gameObject.IsCollected = true;
                             }
-                            else HudSystem.ShowInsufficientSign();
+                            else HUDSystem.ShowInsufficientSign();
                             break;
 
                         case GameObjects.GameObject.GameObjectType.QuestItem:
@@ -784,6 +797,16 @@ namespace Medicraft.Entities
         public float GetDepth()
         {
             return Sprite.Depth;
+        }
+
+        public float GetCurrentHealthPercentage()
+        {
+            return (float)HP / MaximumHP;
+        }
+
+        public float GetCurrentManaPercentage()
+        {
+            return Mana / MaximumMana;
         }
     }
 }

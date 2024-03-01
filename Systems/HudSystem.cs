@@ -1,4 +1,5 @@
-﻿using Medicraft.Data.Models;
+﻿using FontStashSharp;
+using Medicraft.Data.Models;
 using Medicraft.Systems.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,48 +10,31 @@ using System.Linq;
 
 namespace Medicraft.Systems
 {
-    public class HudSystem
+    public class HUDSystem
     {
-        private readonly BitmapFont[] _fonts;
-
         private Vector2 _hudTopLeftCorner;
-
-        private Texture2D _heartTexture, _herb1Texture, _herb2Texture, _drugTexture
-            , _coinTexture, _pressFTexture, _insufficient;
 
         private readonly AnimatedSprite _spriteItemPack;
 
-        private float _deltaSeconds;
+        private readonly float _insufficientTime = 3f;
 
-        private bool _nextFeed;
+        private float _deltaSeconds, _insufficientTimer;
 
-        private float _insufficientTime;
-        private readonly float _maxDisplayTime = 3f;
+        private bool _nextFeed;      
 
-        public HudSystem(BitmapFont[] fonts, Texture2D[] textures, AnimatedSprite sprite)
+        public HUDSystem()
         {
-            _fonts = fonts;
-
-            _heartTexture = textures[0];
-            _herb1Texture = textures[1];
-            _herb2Texture = textures[2];
-            _drugTexture = textures[3];
-            _coinTexture = textures[4];
-            _pressFTexture = textures[5];
-            _insufficient = textures[6];
-
-            _spriteItemPack = sprite;
+            _spriteItemPack = new AnimatedSprite(GameGlobals.Instance.ItemsPackSprites);
 
             _nextFeed = false;
-            _insufficientTime = _maxDisplayTime;
-
-            GameGlobals.Instance.HUDPosition = PlayerManager.Instance.Player.Position - new Vector2(720, 450);
+            _insufficientTimer = _insufficientTime;
         }
 
         public void Update(GameTime gameTime)
         {
             _deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+            // Check for the next feed to roll in
             if (GameGlobals.Instance.CollectedItemFeed.Count != 0)
             {
                 GameGlobals.Instance.DisplayFeedTime -= _deltaSeconds;
@@ -63,14 +47,15 @@ namespace Medicraft.Systems
                 else _nextFeed = false;
             }
 
+            // Check for a notification 
             if (GameGlobals.Instance.ShowInsufficientSign)
             {
-                _insufficientTime -= _deltaSeconds;
+                _insufficientTimer -= _deltaSeconds;
 
-                if (_insufficientTime <= 0)
+                if (_insufficientTimer <= 0)
                 {
                     GameGlobals.Instance.ShowInsufficientSign = false;
-                    _insufficientTime = _maxDisplayTime;
+                    _insufficientTimer = _insufficientTime;
                 }
             }
         }
@@ -83,20 +68,22 @@ namespace Medicraft.Systems
             spriteBatch.End();
             spriteBatch.Begin(
                 SpriteSortMode.Deferred,
-                samplerState: SamplerState.PointClamp,
+                samplerState: SamplerState.LinearClamp,
                 blendState: BlendState.AlphaBlend,
-                transformMatrix: ScreenManager.Instance.Camera.GetTransform(_graphicsDevice.Viewport.Width
-                , _graphicsDevice.Viewport.Height)
+                depthStencilState: DepthStencilState.None,
+                rasterizerState: RasterizerState.CullCounterClockwise,
+                transformMatrix: ScreenManager.Instance.Camera.GetTransform(
+                    _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height)
             );
-
+               
             // Draw HP mobs
-            DrawHPMobs(spriteBatch);
+            DrawHealthPointMobs(spriteBatch);
 
             // Draw combat numbers mobs & player
             DrawCombatNumbers(spriteBatch);
 
             // Draw Press F Sign
-            DrawPressF(spriteBatch);
+            DrawInteractionSigh(spriteBatch);
 
             // Draw Insufficient Sign
             DrawInsufficientSign(spriteBatch);
@@ -108,162 +95,311 @@ namespace Medicraft.Systems
             DrawQuestList(spriteBatch);
 
             // Draw HUD Bar
-            DrawHudBar(spriteBatch);
-
-            // dis one here for testing
-            var rect = new Rectangle((int)_hudTopLeftCorner.X + 50, (int)_hudTopLeftCorner.Y + 55, 200, 300);
-
-            spriteBatch.DrawString(_fonts[3], $"Player ATK: {PlayerManager.Instance.Player.ATK}"
-                , new Vector2(55f, 60f) + _hudTopLeftCorner, Color.White, clippingRectangle: rect);
-
-            spriteBatch.DrawString(_fonts[3], $"Player Crit: {PlayerManager.Instance.Player.Crit_Percent}"
-                , new Vector2(55f, 75f) + _hudTopLeftCorner, Color.White, clippingRectangle: rect);
-
-            spriteBatch.DrawString(_fonts[3], $"Player CritDMG: {PlayerManager.Instance.Player.CritDMG_Percent}"
-                , new Vector2(55f, 90f) + _hudTopLeftCorner, Color.White, clippingRectangle: rect);
-
-            spriteBatch.DrawString(_fonts[3], $"Player DEF: {PlayerManager.Instance.Player.DEF_Percent}"
-                , new Vector2(55f, 105f) + _hudTopLeftCorner, Color.White, clippingRectangle: rect);
-
-            spriteBatch.DrawString(_fonts[3], $"Cooldown Normal Skill: {PlayerManager.Instance.Player.NormalCooldownTimer}"
-                , new Vector2(55f, 135f) + _hudTopLeftCorner, Color.White);
-
-            spriteBatch.DrawString(_fonts[3], $"Cooldown Normal Skill: {PlayerManager.Instance.Player.BurstCooldownTimer}"
-                , new Vector2(55f, 150f) + _hudTopLeftCorner, Color.White);
-
-            spriteBatch.DrawString(_fonts[3], $"Cooldown Normal Skill: {PlayerManager.Instance.Player.PassiveCooldownTimer}"
-                , new Vector2(55f, 165f) + _hudTopLeftCorner, Color.White);
-
-            spriteBatch.DrawString(_fonts[3], $"Normal Skill Time: {PlayerManager.Instance.Player.NormalActivatedTimer}"
-                , new Vector2(55f, 200f) + _hudTopLeftCorner, Color.White);
-
-            spriteBatch.DrawString(_fonts[3], $"Passive Skill Time: {PlayerManager.Instance.Player.PassiveActivatedTimer}"
-                , new Vector2(55f, 215f) + _hudTopLeftCorner, Color.White);
+            DrawMainHUD(spriteBatch);
         }
 
-        private void DrawHudBar(SpriteBatch spriteBatch)
+        private void DrawMainHUD(SpriteBatch spriteBatch)
         {
-            spriteBatch.FillRectangle(-720 + _hudTopLeftCorner.X, 0 + _hudTopLeftCorner.Y, 2640
-                , 25, Color.Black * 0.4f);
+            DrawHealthBarGUI(spriteBatch);
 
-            spriteBatch.DrawString(_fonts[0], $" Mobs: {EntityManager.Instance.entities.Count}"
-                , Vector2.Zero + _hudTopLeftCorner, Color.White);
+            DrawCompanionHealthBarGUI(spriteBatch);
 
-            spriteBatch.DrawString(_fonts[0], $"Time Spawn: {(int)EntityManager.Instance.spawnTime}"
-                , new Vector2(100f, 0f) + _hudTopLeftCorner, Color.White);
+            DrawBossHealthBarGUI(spriteBatch);
 
-            spriteBatch.DrawString(_fonts[0], $"X: {(int)PlayerManager.Instance.Player.Position.X}"
-                , new Vector2(240f, 0f) + _hudTopLeftCorner, Color.White);
+            // DrawItemBar
 
-            spriteBatch.DrawString(_fonts[0], $"Y: {(int)PlayerManager.Instance.Player.Position.Y}"
-                , new Vector2(320f, 0f) + _hudTopLeftCorner, Color.White);
-
-            var textString1 = "Player HP: " + PlayerManager.Instance.Player.HP;
-            Vector2 textSize1 = _fonts[0].MeasureString(textString1);
-            var position = new Vector2((GameGlobals.Instance.GameScreen.X - textSize1.X) / 2, 0);
-            //position.X += (string.X - font.MeasureString(string).X) / 2;
-
-            spriteBatch.Draw(_heartTexture, new Vector2(position.X - 32f, 0f) + _hudTopLeftCorner, null
-                , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
-
-            spriteBatch.DrawString(_fonts[0], textString1, new Vector2(position.X, 0f) + _hudTopLeftCorner, Color.White);
-
-            if (InventoryManager.Instance.InventoryBag.TryGetValue("0", out InventoryItemData value_0))
+            if (GameGlobals.Instance.IsDebugMode)
             {
-                var _transform = new Transform2
-                {
-                    Scale = new Vector2(0.75f, 0.75f),
-                    Rotation = 0f,
-                    Position = new Vector2(position.X + 400f, 0f) + _hudTopLeftCorner
-                };
+                spriteBatch.FillRectangle(_hudTopLeftCorner.X, _hudTopLeftCorner.Y
+                , ScreenManager.Instance.GraphicsDevice.Viewport.Width, 26, Color.Black * 0.4f);
 
-                _spriteItemPack.Play("0");
-                _spriteItemPack.Update(_deltaSeconds);
+                var FontSensation = GameGlobals.Instance.FontSensation;
 
-                spriteBatch.Draw(_spriteItemPack, _transform);
+                spriteBatch.DrawString(FontSensation, $" Mobs: {EntityManager.Instance.entities.Count}"
+                    , Vector2.Zero + _hudTopLeftCorner, Color.White);
 
-                spriteBatch.DrawString(_fonts[0], $" {value_0.Count}"
-                    , new Vector2(position.X + 400f + 32f, 0f) + _hudTopLeftCorner, Color.White);
+                spriteBatch.DrawString(FontSensation, $"Time Spawn: {(int)EntityManager.Instance.spawnTime}"
+                    , new Vector2(100f, 0f) + _hudTopLeftCorner, Color.White);
+
+                spriteBatch.DrawString(FontSensation, $"X: {(int)PlayerManager.Instance.Player.Position.X}"
+                    , new Vector2(240f, 0f) + _hudTopLeftCorner, Color.White);
+
+                spriteBatch.DrawString(FontSensation, $"Y: {(int)PlayerManager.Instance.Player.Position.Y}"
+                    , new Vector2(320f, 0f) + _hudTopLeftCorner, Color.White);
+
+                spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.gold_coin)
+                    , new Vector2(400f, 0f) + _hudTopLeftCorner, null
+                    , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
+
+                spriteBatch.DrawString(FontSensation, $" {InventoryManager.Instance.GoldCoin}"
+                    , new Vector2(400f + 32f, 0f) + _hudTopLeftCorner, Color.White);
+
+                spriteBatch.DrawString(FontSensation, $"MouseX: {(int)GameGlobals.Instance.MousePosition.X}"
+                    , new Vector2(490f, 0f) + _hudTopLeftCorner, Color.White);
+
+                spriteBatch.DrawString(FontSensation, $"MouseY: {(int)GameGlobals.Instance.MousePosition.Y}"
+                    , new Vector2(610f, 0f) + _hudTopLeftCorner, Color.White);
+
+                spriteBatch.DrawString(FontSensation, $"Total PlayTime: {(int)GameGlobals.Instance.TotalPlayTime}"
+                    , new Vector2(690f, 0f) + _hudTopLeftCorner, Color.White);
+
+                var rect = new Rectangle((int)_hudTopLeftCorner.X + 50, (int)_hudTopLeftCorner.Y + 255, 300, 300);
+
+                var FontTA8BitBold = GameGlobals.Instance.FontTA8BitBold;
+
+                spriteBatch.DrawString(FontTA8BitBold, $"Player ATK: {PlayerManager.Instance.Player.ATK}"
+                    , new Vector2(55f, 260f) + _hudTopLeftCorner, Color.White, clippingRectangle: rect);
+
+                spriteBatch.DrawString(FontTA8BitBold, $"Player Crit: {PlayerManager.Instance.Player.Crit_Percent}"
+                    , new Vector2(55f, 275f) + _hudTopLeftCorner, Color.White, clippingRectangle: rect);
+
+                spriteBatch.DrawString(FontTA8BitBold, $"Player CritDMG: {PlayerManager.Instance.Player.CritDMG_Percent}"
+                    , new Vector2(55f, 290f) + _hudTopLeftCorner, Color.White, clippingRectangle: rect);
+
+                spriteBatch.DrawString(FontTA8BitBold, $"Player DEF: {PlayerManager.Instance.Player.DEF_Percent}"
+                    , new Vector2(55f, 305f) + _hudTopLeftCorner, Color.White, clippingRectangle: rect);
+
+                spriteBatch.DrawString(FontTA8BitBold, $"Cooldown Normal Skill: {PlayerManager.Instance.Player.NormalCooldownTimer}"
+                    , new Vector2(55f, 335f) + _hudTopLeftCorner, Color.White);
+
+                spriteBatch.DrawString(FontTA8BitBold, $"Cooldown Normal Skill: {PlayerManager.Instance.Player.BurstCooldownTimer}"
+                    , new Vector2(55f, 350f) + _hudTopLeftCorner, Color.White);
+
+                spriteBatch.DrawString(FontTA8BitBold, $"Cooldown Normal Skill: {PlayerManager.Instance.Player.PassiveCooldownTimer}"
+                    , new Vector2(55f, 365f) + _hudTopLeftCorner, Color.White);
+
+                spriteBatch.DrawString(FontTA8BitBold, $"Normal Skill Time: {PlayerManager.Instance.Player.NormalActivatedTimer}"
+                    , new Vector2(55f, 400f) + _hudTopLeftCorner, Color.White);
+
+                spriteBatch.DrawString(FontTA8BitBold, $"Passive Skill Time: {PlayerManager.Instance.Player.PassiveActivatedTimer}"
+                    , new Vector2(55f, 415f) + _hudTopLeftCorner, Color.White);
             }
 
-            if (InventoryManager.Instance.InventoryBag.TryGetValue("1", out InventoryItemData value_1))
-            {
-                var _transform = new Transform2
-                {
-                    Scale = new Vector2(0.75f, 0.75f),
-                    Rotation = 0f,
-                    Position = new Vector2(position.X + 480f, 0f) + _hudTopLeftCorner
-                };
+            //var textString1 = "Player HP: " + PlayerManager.Instance.Player.HP;
+            //Vector2 textSize1 = FontSensation.MeasureString(textString1);
+            //var position = new Vector2((GameGlobals.Instance.GameScreen.X - textSize1.X) / 2, 0);
 
-                _spriteItemPack.Play("1");
-                _spriteItemPack.Update(_deltaSeconds);
+            //spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.heart)
+            //    , new Vector2(position.X - 32f, 0f) + _hudTopLeftCorner, null
+            //    , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
 
-                spriteBatch.Draw(_spriteItemPack, _transform);
+            //spriteBatch.DrawString(FontSensation, textString1, new Vector2(position.X, 0f) + _hudTopLeftCorner, Color.White);
 
-                spriteBatch.DrawString(_fonts[0], $" {value_1.Count}"
-                    , new Vector2(position.X + 480f + 32f, 0f) + _hudTopLeftCorner, Color.White);
-            }
+            //if (InventoryManager.Instance.InventoryBag.TryGetValue("0", out InventoryItemData value_0))
+            //{
+            //    var _transform = new Transform2
+            //    {
+            //        Scale = new Vector2(0.75f, 0.75f),
+            //        Rotation = 0f,
+            //        Position = new Vector2(position.X + 400f, 0f) + _hudTopLeftCorner
+            //    };
 
-            if (InventoryManager.Instance.InventoryBag.TryGetValue("312", out InventoryItemData value_2))
-            {
-                var _transform = new Transform2
-                {
-                    Scale = new Vector2(0.75f, 0.75f),
-                    Rotation = 0f,
-                    Position = new Vector2(position.X + 560f, 0f) + _hudTopLeftCorner
-                };
+            //    _spriteItemPack.Play("0");
+            //    _spriteItemPack.Update(_deltaSeconds);
 
-                _spriteItemPack.Play("312");
-                _spriteItemPack.Update(_deltaSeconds);
+            //    spriteBatch.Draw(_spriteItemPack, _transform);
 
-                spriteBatch.Draw(_spriteItemPack, _transform);
+            //    spriteBatch.DrawString(FontSensation, $" {value_0.Count}"
+            //        , new Vector2(position.X + 400f + 32f, 0f) + _hudTopLeftCorner, Color.White);
+            //}
 
-                spriteBatch.DrawString(_fonts[0], $" {value_2.Count}"
-                    , new Vector2(position.X + 560f + 32f, 0f) + _hudTopLeftCorner, Color.White);
-            }
+            //if (InventoryManager.Instance.InventoryBag.TryGetValue("1", out InventoryItemData value_1))
+            //{
+            //    var _transform = new Transform2
+            //    {
+            //        Scale = new Vector2(0.75f, 0.75f),
+            //        Rotation = 0f,
+            //        Position = new Vector2(position.X + 480f, 0f) + _hudTopLeftCorner
+            //    };
 
-            spriteBatch.Draw(_coinTexture, new Vector2(position.X + 640f, 0f) + _hudTopLeftCorner, null
-                , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
+            //    _spriteItemPack.Play("1");
+            //    _spriteItemPack.Update(_deltaSeconds);
 
-            spriteBatch.DrawString(_fonts[0], $" {InventoryManager.Instance.GoldCoin}"
-                , new Vector2(position.X + 640f + 32f, 0f) + _hudTopLeftCorner, Color.White);
+            //    spriteBatch.Draw(_spriteItemPack, _transform);
+
+            //    spriteBatch.DrawString(FontSensation, $" {value_1.Count}"
+            //        , new Vector2(position.X + 480f + 32f, 0f) + _hudTopLeftCorner, Color.White);
+            //}
+
+            //if (InventoryManager.Instance.InventoryBag.TryGetValue("312", out InventoryItemData value_2))
+            //{
+            //    var _transform = new Transform2
+            //    {
+            //        Scale = new Vector2(0.75f, 0.75f),
+            //        Rotation = 0f,
+            //        Position = new Vector2(position.X + 560f, 0f) + _hudTopLeftCorner
+            //    };
+
+            //    _spriteItemPack.Play("312");
+            //    _spriteItemPack.Update(_deltaSeconds);
+
+            //    spriteBatch.Draw(_spriteItemPack, _transform);
+
+            //    spriteBatch.DrawString(FontSensation, $" {value_2.Count}"
+            //        , new Vector2(position.X + 560f + 32f, 0f) + _hudTopLeftCorner, Color.White);
+            //}
+
+            // New
+            // Draw Player's Health Bar
         }
 
-        private void DrawPressF(SpriteBatch spriteBatch)
+        private void DrawHealthBarGUI(SpriteBatch spriteBatch)
+        {
+            // Health Bar Alpha
+            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.health_bar_alpha)
+                , new Vector2(35f, 15f) + _hudTopLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+            // Player Profile
+            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.noah_profile)
+                , new Vector2(38f, 18f) + _hudTopLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+            // HP gauge
+            var curHealthPoint = PlayerManager.Instance.Player.GetCurrentHealthPercentage();
+            var hpGaugeTexture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.healthpoints_gauge);
+            var hpGaugeSourceRec = new Rectangle(0, 0, (int)(hpGaugeTexture.Width * curHealthPoint), hpGaugeTexture.Height);
+            var hpGaugeRec = new Rectangle((int)(166 + _hudTopLeftCorner.X), (int)(40 + _hudTopLeftCorner.Y)
+                , (int)(hpGaugeTexture.Width * curHealthPoint), hpGaugeTexture.Height);
+
+            spriteBatch.Draw(hpGaugeTexture, hpGaugeRec, hpGaugeSourceRec
+                , Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+
+            // Mana gauge
+            var curManaPoint = PlayerManager.Instance.Player.GetCurrentManaPercentage();
+            var manaGaugeTexture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.mana_gauge);
+            var manaGaugeSourceRec = new Rectangle(0, 0, (int)(manaGaugeTexture.Width * curManaPoint), manaGaugeTexture.Height);
+            var manaGaugeRec = new Rectangle((int)(167 + _hudTopLeftCorner.X), (int)(84 + _hudTopLeftCorner.Y)
+                , (int)(manaGaugeTexture.Width * curManaPoint), manaGaugeTexture.Height);
+
+            spriteBatch.Draw(manaGaugeTexture, manaGaugeRec, manaGaugeSourceRec
+                , Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+
+            // Health Bar GUI
+            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.health_bar)
+                , new Vector2(35f, 15f) + _hudTopLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+            // Text Health Point
+            var textHP = $"{PlayerManager.Instance.Player.HP}/{PlayerManager.Instance.Player.MaximumHP}";
+            var textSizeHP = GameGlobals.Instance.FontTA8BitBold.MeasureString(textHP);
+            var positionHP = new Vector2(
+                (166 + hpGaugeTexture.Width / 2) - (textSizeHP.Width / 2),
+                (40 + hpGaugeTexture.Height / 2) - (textSizeHP.Height / 2)) + _hudTopLeftCorner;
+
+            DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
+                , textHP, positionHP, Color.White, Color.Black, 2);
+
+            // Text Mana Point
+            var textMana = $"{PlayerManager.Instance.Player.Mana}/{PlayerManager.Instance.Player.MaximumMana}";
+            //var textSizeMana = GameGlobals.Instance.FontTA8Bit.MeasureString(textMana);
+            var positionMana = new Vector2(
+                (166 + hpGaugeTexture.Width / 2) - (textSizeHP.Width / 2), 80) + _hudTopLeftCorner;
+
+            DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8Bit
+                , textMana, positionMana, Color.White, Color.Black, 2);
+        }
+
+        private void DrawCompanionHealthBarGUI(SpriteBatch spriteBatch)
+        {
+            // Health Bar Companion Alpha
+            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.health_bar_companion_alpha)
+                , new Vector2(103f, 128f) + _hudTopLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+            // Companion Profile
+            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.companion_profile)
+                , new Vector2(105f, 130f) + _hudTopLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+            // HP gauge
+            //var curHealthPoint = PlayerManager.Instance.Player.GetCurrentHealthPercentage();
+            var hpGaugeTexture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.healthpoints_gauge_companion);
+            var hpGaugeSourceRec = new Rectangle(0, 0, (int)(hpGaugeTexture.Width * 1), hpGaugeTexture.Height);
+            var hpGaugeRec = new Rectangle((int)(178 + _hudTopLeftCorner.X), (int)(146 + _hudTopLeftCorner.Y)
+                , (int)(hpGaugeTexture.Width * 1), hpGaugeTexture.Height);
+
+            spriteBatch.Draw(hpGaugeTexture, hpGaugeRec, hpGaugeSourceRec
+                , Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+
+            // Health Bar Companion GUI
+            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.health_bar_companion)
+                , new Vector2(103f, 128f) + _hudTopLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+        }
+
+        private void DrawBossHealthBarGUI(SpriteBatch spriteBatch)
+        {
+            // Health Bar Boss Alpha
+            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.health_bar_boss_alpha)
+                , new Vector2(506f, 92f) + _hudTopLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+            // HP gauge
+            //var curHealthPoint = PlayerManager.Instance.Player.GetCurrentHealthPercentage();
+            var hpGaugeTexture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.boss_gauge);
+            var hpGaugeSourceRec = new Rectangle(0, 0, (int)(hpGaugeTexture.Width * 1), hpGaugeTexture.Height);
+            var hpGaugeRec = new Rectangle((int)(541 + _hudTopLeftCorner.X), (int)(123 + _hudTopLeftCorner.Y)
+                , (int)(hpGaugeTexture.Width * 1), hpGaugeTexture.Height);
+
+            spriteBatch.Draw(hpGaugeTexture, hpGaugeRec, hpGaugeSourceRec
+                , Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+
+            // Health Bar Boss GUI
+            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.health_bar_boss)
+                , new Vector2(506f, 92f) + _hudTopLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+            // Text Name
+            var text = $"Boss Name is So Cool";
+            var textSize = GameGlobals.Instance.FontTA16Bit.MeasureString(text);
+            var position = new Vector2(GameGlobals.Instance.GameScreenCenter.X
+                - (textSize.Width / 2), 90)
+                + _hudTopLeftCorner;
+
+            DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA16Bit
+                , text, position, Color.DarkRed, Color.Black, 1);
+        }
+
+        private void DrawInteractionSigh(SpriteBatch spriteBatch)
         {
             if (GameGlobals.Instance.IsDetectedGameObject)
             {
-                spriteBatch.Draw(_pressFTexture, new Vector2(930f, 550f) + _hudTopLeftCorner, null
+                spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.press_f)
+                    , new Vector2(1055f, 560f) + _hudTopLeftCorner, null
                     , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
             }
         }
 
-        private void DrawInsufficientSign(SpriteBatch spriteBatch)
+        private static void DrawInsufficientSign(SpriteBatch spriteBatch)
         {
             if (GameGlobals.Instance.ShowInsufficientSign)
             {
-                spriteBatch.Draw(_insufficient, PlayerManager.Instance.Player.Position
+                spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.insufficient)
+                    , PlayerManager.Instance.Player.Position
                     + new Vector2(25, -((PlayerManager.Instance.Player.Sprite.TextureRegion.Height / 2) + 25))
                     , null, Color.White, 0f, Vector2.Zero, 0.40f, SpriteEffects.None, 0f);
             }
         }
 
-        private void DrawHPMobs(SpriteBatch spriteBatch)
+        private static void DrawHealthPointMobs(SpriteBatch spriteBatch)
         {
             var entities = EntityManager.Instance.Entities;
+            var FontSensation = GameGlobals.Instance.FontSensation;
 
-            foreach (var entity in entities.Where(e => !e.IsDestroyed))
+            foreach (var entity in entities.Where(e => !e.IsDestroyed && e.EntityType == Entities.Entity.EntityTypes.Hostile))
             {
                 var entityPos = entity.Position;
-                var posX = entity.Sprite.TextureRegion.Width / 5f;
-                var posY = entity.Sprite.TextureRegion.Height / 2f;
+                var text = $"{entity.HP}";
+                var textSize = FontSensation.MeasureString(text);
+                var position = entityPos - new Vector2(textSize.Width / 2
+                    , (textSize.Height / 2) + (entity.Sprite.TextureRegion.Height / 2));
 
-                spriteBatch.DrawString(_fonts[0], $"{entity.HP}", entityPos - new Vector2(posX, posY)
-                    , Color.DarkRed, 0f, Vector2.Zero, 1.5f, SpriteEffects.None, 0f);
+                DrawTextWithStroke(spriteBatch, FontSensation, text, position, Color.DarkRed, Color.Black, 1);
             }
         }
 
-        private void DrawCombatNumbers(SpriteBatch spriteBatch)
+        private static void DrawCombatNumbers(SpriteBatch spriteBatch)
         {
             var entities = EntityManager.Instance.Entities;
 
@@ -291,18 +427,16 @@ namespace Medicraft.Systems
                 {
                     var referId = GameGlobals.Instance.CollectedItemFeed.ElementAt(i).ItemId;
                     var amount = GameGlobals.Instance.CollectedItemFeed.ElementAt(i).Count;
-                    var offsetX = GameGlobals.Instance.HUDPosition.X;
-                    var offsetY = GameGlobals.Instance.HUDPosition.Y;
+                    var offsetX = GameGlobals.Instance.FeedPoint.X;
+                    var offsetY = GameGlobals.Instance.FeedPoint.Y;
 
                     var itemData = GameGlobals.Instance.ItemsDatas.Where(i => i.ItemId.Equals(referId));
-
-                    spriteBatch.FillRectangle(355f + offsetX, 496f + (i * 40) + offsetY, 120, 28, Color.Black * 0.4f);
 
                     var _transform = new Transform2
                     {
                         Scale = new Vector2(0.75f, 0.75f),
                         Rotation = 0f,
-                        Position = new Vector2(370f, 510f + (i * 40)) + _hudTopLeftCorner
+                        Position = new Vector2(offsetX, offsetY + (i * 40)) + _hudTopLeftCorner
                     };
 
                     _spriteItemPack.Play(referId.ToString());
@@ -310,8 +444,13 @@ namespace Medicraft.Systems
 
                     spriteBatch.Draw(_spriteItemPack, _transform);
 
-                    spriteBatch.DrawString(_fonts[2], $"{itemData.ElementAt(0).Name} x {amount}"
-                        , new Vector2(360f + 32f, 495f + (i * 40)) + _hudTopLeftCorner, Color.White);
+                    var text = $"{itemData.ElementAt(0).Name} x {amount}";
+                    var position = new Vector2(
+                        offsetX + 22f,
+                        (offsetY - 15f) + (i * 40)) + _hudTopLeftCorner;
+
+                    DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8Bit
+                        , text, position, Color.White, Color.Black, 2);
                 }
 
                 if (_nextFeed)
@@ -330,12 +469,28 @@ namespace Medicraft.Systems
             // TODO :
         }
 
+        public static void DrawTextWithStroke(SpriteBatch spriteBatch, BitmapFont font, string text
+            , Vector2 position, Color textColor, Color strokeColor, int strokeWidth)
+        {
+            // Draw the text with a stroke
+            for (int x = -strokeWidth; x <= strokeWidth; x++)
+            {
+                for (int y = -strokeWidth; y <= strokeWidth; y++)
+                {
+                    spriteBatch.DrawString(font, text, position + new Vector2(x, y), strokeColor);
+                }
+            }
+
+            // Draw the original text on top
+            spriteBatch.DrawString(font, text, position, textColor);
+        }
+
         public static void ShowInsufficientSign()
         {
             GameGlobals.Instance.ShowInsufficientSign = true;
         }
 
-        public static void AddFeed(int referId, int amount)
+        public static void AddFeedItem(int referId, int amount)
         {
             GameGlobals.Instance.CollectedItemFeed.Add(new InventoryItemData() {
                 ItemId = referId,

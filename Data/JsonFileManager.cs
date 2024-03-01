@@ -24,21 +24,6 @@ namespace Medicraft.Data
             PlayerManager.Instance.Player.PlayerData.Position[0] = PlayerManager.Instance.Player.Position.X;
             PlayerManager.Instance.Player.PlayerData.Position[1] = PlayerManager.Instance.Player.Position.Y;
 
-            // Get HUD Position
-            double[] hudPosition =
-            {
-                (double)GameGlobals.Instance.HUDPosition.X,
-                (double)GameGlobals.Instance.HUDPosition.Y
-            };
-
-            // Get Camera Position
-            Vector2 camPos = GameGlobals.Instance.InitialCameraPos + GameGlobals.Instance.AddingCameraPos;
-            double[] cameraPosition =
-            {
-                (double)camPos.X,
-                (double)camPos.Y
-            };
-
             // Set Current InventoryData
             var inventoryItems = new List<InventoryItemData>();
             foreach (var item in InventoryManager.Instance.InventoryBag.Values)
@@ -53,6 +38,14 @@ namespace Medicraft.Data
 
             // Set save name
             var saveName = "Save_" + dateTimeString;
+
+            // Ser total playtime
+            var second = (int)GameGlobals.Instance.TotalPlayTime % 60;
+            var minute = (int)GameGlobals.Instance.TotalPlayTime / 60;
+            var hour = (int)GameGlobals.Instance.TotalPlayTime / 3600;
+
+            var playTime = new int[] { hour, minute, second};
+
             if (GameGlobals.Instance.GameSave.Count != 0)
             {
                 GameGlobals.Instance.GameSave[GameGlobals.Instance.GameSaveIdex] = new GameSaveData()
@@ -61,8 +54,7 @@ namespace Medicraft.Data
                     Name = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.GameSaveIdex).Name,
                     CreatedTime = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.GameSaveIdex).CreatedTime,
                     LastUpdated = dateTimeString,
-                    CameraPosition = cameraPosition,
-                    HUDPosition = hudPosition,
+                    TotalPlayTime = playTime,
                     PlayerData = PlayerManager.Instance.Player.PlayerData
                 };
             }
@@ -74,8 +66,7 @@ namespace Medicraft.Data
                     Name = saveName,
                     CreatedTime = dateTimeString,
                     LastUpdated = dateTimeString,
-                    CameraPosition = cameraPosition,
-                    HUDPosition = hudPosition,
+                    TotalPlayTime = playTime,
                     PlayerData = PlayerManager.Instance.Player.PlayerData
                 });
             }
@@ -125,4 +116,7 @@ namespace Medicraft.Data
 
     // Reader Crafting Recipes Data: craftingrecipes.json
     public class CraftingRecipeDataReader : JsonContentTypeReader<List<CraftingRecipeData>> { }
+
+    // Reader Map Position Datas: map_positions.json
+    public class MapPositionDataReader : JsonContentTypeReader<List<MapPositionData>> { }
 }

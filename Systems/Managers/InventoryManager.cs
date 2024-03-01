@@ -43,13 +43,13 @@ namespace Medicraft.Systems.Managers
             // Gotta Check Item id if it already has in inventory and stackable or mot
             if (InventoryBag.ContainsKey(itemId.ToString()) && itemData.ElementAt(0).Stackable)
             {
-                HudSystem.AddFeed(itemId, quantity);
+                HUDSystem.AddFeedItem(itemId, quantity);
 
                 InventoryBag[itemId.ToString()].Count += quantity;
             }
             else
             {
-                HudSystem.AddFeed(itemId, quantity);
+                HUDSystem.AddFeedItem(itemId, quantity);
 
                 InventoryBag.Add(itemId.ToString(), new InventoryItemData()
                 {

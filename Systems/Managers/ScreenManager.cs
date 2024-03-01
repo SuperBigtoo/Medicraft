@@ -25,6 +25,12 @@ namespace Medicraft.Systems.Managers
             PlayScreen
         }
 
+        public enum LoadMapAction
+        {
+            NewGame,
+            LoadGameSave
+        }
+
         public ScreenManager()
         {
             _curScreen = new SplashScreen();
@@ -98,8 +104,8 @@ namespace Medicraft.Systems.Managers
                 SpriteSortMode.BackToFront,
                 samplerState: SamplerState.PointClamp,
                 blendState: BlendState.AlphaBlend,
-                transformMatrix: Camera.GetTransform(GraphicsDevice.Viewport.Width
-                , GraphicsDevice.Viewport.Height)
+                transformMatrix: Camera.GetTransform(
+                    GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)
             );
 
             _curScreen.Draw(_spriteBatch);

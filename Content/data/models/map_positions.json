@@ -1,0 +1,20 @@
+[
+  {
+    "Name": "Test",
+    "Positions": [
+      {
+        "Name": "LastPosition",
+        "Value": [ 1167, 1557 ]
+      }
+    ]
+  },
+  {
+    "Name": "Chapter_1",
+    "Positions": [
+      {
+        "Name": "LastPosition",
+        "Value": [ 1167, 1557 ]
+      }
+    ]
+  }
+]
