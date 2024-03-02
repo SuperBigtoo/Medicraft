@@ -106,7 +106,8 @@ namespace Medicraft.Systems
 
             DrawBossHealthBarGUI(spriteBatch);
 
-            // DrawItemBar
+            DrawItemBar(spriteBatch);
+
 
             if (GameGlobals.Instance.IsDebugMode)
             {
@@ -174,73 +175,6 @@ namespace Medicraft.Systems
                 spriteBatch.DrawString(FontTA8BitBold, $"Passive Skill Time: {PlayerManager.Instance.Player.PassiveActivatedTimer}"
                     , new Vector2(55f, 415f) + _hudTopLeftCorner, Color.White);
             }
-
-            //var textString1 = "Player HP: " + PlayerManager.Instance.Player.HP;
-            //Vector2 textSize1 = FontSensation.MeasureString(textString1);
-            //var position = new Vector2((GameGlobals.Instance.GameScreen.X - textSize1.X) / 2, 0);
-
-            //spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.heart)
-            //    , new Vector2(position.X - 32f, 0f) + _hudTopLeftCorner, null
-            //    , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
-
-            //spriteBatch.DrawString(FontSensation, textString1, new Vector2(position.X, 0f) + _hudTopLeftCorner, Color.White);
-
-            //if (InventoryManager.Instance.InventoryBag.TryGetValue("0", out InventoryItemData value_0))
-            //{
-            //    var _transform = new Transform2
-            //    {
-            //        Scale = new Vector2(0.75f, 0.75f),
-            //        Rotation = 0f,
-            //        Position = new Vector2(position.X + 400f, 0f) + _hudTopLeftCorner
-            //    };
-
-            //    _spriteItemPack.Play("0");
-            //    _spriteItemPack.Update(_deltaSeconds);
-
-            //    spriteBatch.Draw(_spriteItemPack, _transform);
-
-            //    spriteBatch.DrawString(FontSensation, $" {value_0.Count}"
-            //        , new Vector2(position.X + 400f + 32f, 0f) + _hudTopLeftCorner, Color.White);
-            //}
-
-            //if (InventoryManager.Instance.InventoryBag.TryGetValue("1", out InventoryItemData value_1))
-            //{
-            //    var _transform = new Transform2
-            //    {
-            //        Scale = new Vector2(0.75f, 0.75f),
-            //        Rotation = 0f,
-            //        Position = new Vector2(position.X + 480f, 0f) + _hudTopLeftCorner
-            //    };
-
-            //    _spriteItemPack.Play("1");
-            //    _spriteItemPack.Update(_deltaSeconds);
-
-            //    spriteBatch.Draw(_spriteItemPack, _transform);
-
-            //    spriteBatch.DrawString(FontSensation, $" {value_1.Count}"
-            //        , new Vector2(position.X + 480f + 32f, 0f) + _hudTopLeftCorner, Color.White);
-            //}
-
-            //if (InventoryManager.Instance.InventoryBag.TryGetValue("312", out InventoryItemData value_2))
-            //{
-            //    var _transform = new Transform2
-            //    {
-            //        Scale = new Vector2(0.75f, 0.75f),
-            //        Rotation = 0f,
-            //        Position = new Vector2(position.X + 560f, 0f) + _hudTopLeftCorner
-            //    };
-
-            //    _spriteItemPack.Play("312");
-            //    _spriteItemPack.Update(_deltaSeconds);
-
-            //    spriteBatch.Draw(_spriteItemPack, _transform);
-
-            //    spriteBatch.DrawString(FontSensation, $" {value_2.Count}"
-            //        , new Vector2(position.X + 560f + 32f, 0f) + _hudTopLeftCorner, Color.White);
-            //}
-
-            // New
-            // Draw Player's Health Bar
         }
 
         private void DrawHealthBarGUI(SpriteBatch spriteBatch)
@@ -288,16 +222,16 @@ namespace Medicraft.Systems
                 (40 + hpGaugeTexture.Height / 2) - (textSizeHP.Height / 2)) + _hudTopLeftCorner;
 
             DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
-                , textHP, positionHP, Color.White, Color.Black, 2);
+                , textHP, positionHP, Color.White, 1f, Color.Black, 2);
 
             // Text Mana Point
-            var textMana = $"{PlayerManager.Instance.Player.Mana}/{PlayerManager.Instance.Player.MaximumMana}";
+            var textMana = $"{(int)PlayerManager.Instance.Player.Mana}/{(int)PlayerManager.Instance.Player.MaximumMana}";
             //var textSizeMana = GameGlobals.Instance.FontTA8Bit.MeasureString(textMana);
             var positionMana = new Vector2(
                 (166 + hpGaugeTexture.Width / 2) - (textSizeHP.Width / 2), 80) + _hudTopLeftCorner;
 
             DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8Bit
-                , textMana, positionMana, Color.White, Color.Black, 2);
+                , textMana, positionMana, Color.White, 1f, Color.Black, 2);
         }
 
         private void DrawCompanionHealthBarGUI(SpriteBatch spriteBatch)
@@ -358,7 +292,23 @@ namespace Medicraft.Systems
                 + _hudTopLeftCorner;
 
             DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA16Bit
-                , text, position, Color.DarkRed, Color.Black, 1);
+                , text, position, Color.DarkRed, 1f, Color.Black, 1);
+        }
+
+        private void DrawItemBar(SpriteBatch spriteBatch)
+        {
+            // Item Bar
+            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.item_bar)
+                , new Vector2(499f, 814f) + _hudTopLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+            // Item Slot
+            for (int i = 0; i < 8; i++ )
+            {
+                spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.item_slot)
+                , new Vector2(515f + (52 * i), 824f) + _hudTopLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            }
         }
 
         private void DrawInteractionSigh(SpriteBatch spriteBatch)
@@ -387,7 +337,8 @@ namespace Medicraft.Systems
             var entities = EntityManager.Instance.Entities;
             var FontSensation = GameGlobals.Instance.FontSensation;
 
-            foreach (var entity in entities.Where(e => !e.IsDestroyed && e.EntityType == Entities.Entity.EntityTypes.Hostile))
+            foreach (var entity in entities.Where(e => !e.IsDestroyed 
+                && e.EntityType == Entities.Entity.EntityTypes.Hostile && e.HP > 0))
             {
                 var entityPos = entity.Position;
                 var text = $"{entity.HP}";
@@ -395,7 +346,7 @@ namespace Medicraft.Systems
                 var position = entityPos - new Vector2(textSize.Width / 2
                     , (textSize.Height / 2) + (entity.Sprite.TextureRegion.Height / 2));
 
-                DrawTextWithStroke(spriteBatch, FontSensation, text, position, Color.DarkRed, Color.Black, 1);
+                DrawTextWithStroke(spriteBatch, FontSensation, text, position, Color.DarkRed, 1f, Color.Black, 1);
             }
         }
 
@@ -450,7 +401,7 @@ namespace Medicraft.Systems
                         (offsetY - 15f) + (i * 40)) + _hudTopLeftCorner;
 
                     DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8Bit
-                        , text, position, Color.White, Color.Black, 2);
+                        , text, position, Color.White, 1f, Color.Black, 2);
                 }
 
                 if (_nextFeed)
@@ -470,19 +421,19 @@ namespace Medicraft.Systems
         }
 
         public static void DrawTextWithStroke(SpriteBatch spriteBatch, BitmapFont font, string text
-            , Vector2 position, Color textColor, Color strokeColor, int strokeWidth)
+            , Vector2 position, Color textColor, float textScale, Color strokeColor, int strokeWidth)
         {
             // Draw the text with a stroke
             for (int x = -strokeWidth; x <= strokeWidth; x++)
             {
                 for (int y = -strokeWidth; y <= strokeWidth; y++)
                 {
-                    spriteBatch.DrawString(font, text, position + new Vector2(x, y), strokeColor);
+                    spriteBatch.DrawString(font, text, position + new Vector2(x, y), strokeColor, 0f, Vector2.Zero, textScale, SpriteEffects.None, 0f);
                 }
             }
 
             // Draw the original text on top
-            spriteBatch.DrawString(font, text, position, textColor);
+            spriteBatch.DrawString(font, text, position, textColor, 0f, Vector2.Zero, textScale, SpriteEffects.None, 0f);
         }
 
         public static void ShowInsufficientSign()

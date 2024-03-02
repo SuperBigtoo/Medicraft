@@ -18,7 +18,10 @@ namespace Medicraft.Screens
     public class TestScreen : Screen
     {
         private List<EntityData> _entityDataList;
+        private MobSpawner _mobSpawner;
+
         private List<ObjectData> _itemDataList;
+
         private TmxMap _tileMap;
 
         public TestScreen()
@@ -55,10 +58,13 @@ namespace Medicraft.Screens
             _itemDataList = Content.Load<List<ObjectData>>("data/TestScreen/objects_demo");
 
             // Adding Slime to MobSpawner
-            var _slimeAnimation = Content.Load<SpriteSheet>("entity/mobs/monster/slime/slimes_animation.sf", new JsonContentLoader());
-            var _mobSpawner = new MobSpawner(10f);
-            _mobSpawner.AddEntity(new Slime(new AnimatedSprite(_slimeAnimation), _entityDataList[0], Vector2.One));
-            //_mobSpawner.AddEntity(new SlimeCopy(new AnimatedSprite(_slimeAnimation), _slimeStatsList[1], _slimeScale));
+            Dictionary<int, SpriteSheet> SpriteSheets = new()
+            {
+                { 200,  Content.Load<SpriteSheet>("entity/mobs/monster/slime/slimes_animation.sf", new JsonContentLoader())}
+            };
+
+            _mobSpawner = new MobSpawner(10f);
+            _mobSpawner.SetupSpawner(_entityDataList, SpriteSheets);
             EntityManager.Instance.Initialize(_mobSpawner);
 
             // Adding Items to ObjectSpawner

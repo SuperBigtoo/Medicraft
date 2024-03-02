@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Medicraft.Data.Models;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using System;
@@ -75,7 +76,7 @@ namespace Medicraft.Systems.TilemapRenderer
             GameGlobals.Instance.BottomLayerObject.Clear();
             GameGlobals.Instance.CraftingTableArea.Clear();
             GameGlobals.Instance.SavingTableArea.Clear();
-            GameGlobals.Instance.WarpPointArea.Clear();
+            GameGlobals.Instance.EnteringZoneArea.Clear();
             GameGlobals.Instance.MobPartrolArea.Clear();
 
             foreach (var o in _tileMap.ObjectGroups["Collision"]?.Objects)
@@ -114,16 +115,19 @@ namespace Medicraft.Systems.TilemapRenderer
                     new RectangleF((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
 
-            foreach (var o in _tileMap.ObjectGroups["WarpPointArea"]?.Objects)
+            foreach (var o in _tileMap.ObjectGroups["EnteringZoneArea"]?.Objects)
             {
-                GameGlobals.Instance.WarpPointArea.Add(
+                GameGlobals.Instance.EnteringZoneArea.Add(
                     new RectangleF((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
 
             foreach (var o in _tileMap.ObjectGroups["MobPartrolArea"]?.Objects)
             {
-                GameGlobals.Instance.MobPartrolArea.Add(
-                    new RectangleF((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+                GameGlobals.Instance.MobPartrolArea.Add(new PartrolAreaData() 
+                {
+                    Name = o.Name,
+                    Bounds = new RectangleF((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height)
+                });
             }
         }
 

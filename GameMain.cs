@@ -33,7 +33,7 @@ namespace Medicraft
 
             GameGlobals.Instance.Initialize(Content);
 
-            ScreenManager.Instance.Initialize(this);
+            ScreenManager.Instance.Initialize(this, _graphics);
 
             base.Initialize();
         }

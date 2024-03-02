@@ -28,7 +28,7 @@ namespace Medicraft.GameObjects
                 Position = position
             };
 
-            BoundingCollection = new CircleF(Position, 10);
+            BoundingCollection = new CircleF(Position, 16);
 
             Sprite.Depth = 0.1f;
             Sprite.Play(ReferId.ToString());
@@ -56,7 +56,7 @@ namespace Medicraft.GameObjects
                 Position = item.Transform.Position
             };
 
-            BoundingCollection = new CircleF(Position, 10);
+            BoundingCollection = item.BoundingCollection;
 
             Sprite.Depth = 0.1f;
             Sprite.Play(ReferId.ToString());

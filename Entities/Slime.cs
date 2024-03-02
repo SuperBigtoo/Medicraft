@@ -31,7 +31,7 @@ namespace Medicraft.Entities
             Level = entityData.Level;
             InitializeCharacterData(entityData.CharId, Level);
 
-            AttackSpeed = 0.4f;
+            AttackSpeed = 0.25f;
             CooldownAttack = 0.7f;
             CooldownAttackTimer = CooldownAttack;
             DyingTime = 1.3f;
@@ -145,7 +145,7 @@ namespace Medicraft.Entities
 
             if (!IsDying)
             {                
-                SetTargetNode(deltaSeconds);
+                UpdateTargetNode(deltaSeconds, EntityData);
 
                 // Setup PathFinding
                 SetPathFindingNode((int)EntityData.Position[0], (int)EntityData.Position[1]);

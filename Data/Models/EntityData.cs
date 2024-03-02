@@ -8,6 +8,8 @@
         public string Name { get; set; }
         public int PathFindingType { get; set; }
         public int NodeCycleTime { get; set; }
+        public string PartrolArea { get; set; }
+        public double[][] RoutePoint { get; set; }
         public int AggroTime { get; set; }
         public double[] Position { get; set; }
     }

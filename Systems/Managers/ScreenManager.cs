@@ -14,6 +14,7 @@ namespace Medicraft.Systems.Managers
 
         public Game Game { private set; get; }
         public GraphicsDevice GraphicsDevice { private set; get; }
+        public GraphicsDeviceManager GraphicsDeviceManager { private set; get; }
         public GameWindow Window { private set; get; }
         public Camera Camera { private set; get; }
         public GameScreen CurrentScreen { private set; get; }
@@ -37,10 +38,11 @@ namespace Medicraft.Systems.Managers
             CurrentScreen = GameScreen.SplashScreen;
         }
 
-        public void Initialize(Game game)
+        public void Initialize(Game game, GraphicsDeviceManager graphicsDeviceManager)
         {
             Game = game;
             GraphicsDevice = game.GraphicsDevice;
+            GraphicsDeviceManager = graphicsDeviceManager;
             Window = game.Window;
             Camera = new Camera(GraphicsDevice.Viewport);
 

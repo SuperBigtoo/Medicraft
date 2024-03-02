@@ -17,6 +17,7 @@ namespace Medicraft.Entities
 
         public float MaximumMana { get; private set; }
         public float Mana { get; private set; }
+        public float ManaRegenRate { get; private set; }
 
         private float _knockbackForce, _percentNormalHit;
         private readonly float _hitRateNormal, _hitRateNormalSkill, _hitRateBurstSkill;
@@ -94,11 +95,11 @@ namespace Medicraft.Entities
                 sprite.TextureRegion.Width / 8,
                 sprite.TextureRegion.Height / 8);
 
-            BoundingHitBox = new CircleF(Position + new Vector2(0f, 32f), 40f);         // Circle for Entity to hit
+            BoundingHitBox = new CircleF(Position + new Vector2(0f, 32f), 42f);         // Circle for Entity to hit
 
             BoundingDetectEntity = new CircleF(Position + new Vector2(0f, 32f), 80f);   // Circle for check attacking
 
-            BoundingCollection = new CircleF(Position + new Vector2(0f, 64f), 30f);     // Circle for check interaction with GameObjects
+            BoundingCollection = new CircleF(Position + new Vector2(0f, 72f), 25f);     // Circle for check interaction with GameObjects
 
             Sprite.Depth = 0.1f;
             Sprite.Play(SpriteCycle + "_idle");
@@ -110,6 +111,7 @@ namespace Medicraft.Entities
 
             MaximumMana = (float)(100f + ((level - 1) * (100f * 0.1)));
             Mana = MaximumMana;
+            ManaRegenRate = 0.5f;
 
             // gonna calculate character stats with the equipment's stats too
         }
@@ -136,6 +138,9 @@ namespace Medicraft.Entities
 
                 // Check interaction with GameObject
                 CheckInteraction(keyboardCur, keyboardPrev);
+
+                // Mana regeneration
+                ManaRegeneration(deltaSeconds);
             }
             else
             {
@@ -462,7 +467,7 @@ namespace Medicraft.Entities
         {
             foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed))
             {
-                if (BoundingDetectEntity.Intersects(entity.BoundingHitBox))
+                if (entity.BoundingHitBox.Intersects(BoundingDetectEntity))
                 {
                     if (entity.EntityType == EntityTypes.Hostile)
                     {
@@ -658,6 +663,16 @@ namespace Medicraft.Entities
             //        }
             //    }
             //}
+        }
+
+        private void ManaRegeneration(float deltaSeconds)
+        {
+            var manaRegenAmount = ManaRegenRate * deltaSeconds;
+
+            Mana += manaRegenAmount;
+
+            // Ensure current mana doesn't exceed the maximum mana value
+            Mana = Math.Min(Mana, MaximumMana);
         }
 
         private void UpdateLayerDepth(float topDepth, float middleDepth, float bottomDepth)

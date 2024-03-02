@@ -19,6 +19,7 @@ namespace Medicraft.Data.Models
         public Vector2 Velocity { get; set; }
         public Vector2 OffSet { get; set; }
         public Color Color { get; set; }
+        public Color StrokeColor { get; set; }
         public float AlphaColor { get; set; }
         public float ScaleFont { get; set; }
 

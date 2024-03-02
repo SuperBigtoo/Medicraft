@@ -735,32 +735,32 @@
 /processorParam:TextureFormat=Color
 /build:item/itemspack.png
 
-#begin tiledmaps/chapter_1/dun1.tmx
-/copy:tiledmaps/chapter_1/dun1.tmx
+#begin tiledmaps/chapter_1/battlezone_1.tmx
+/copy:tiledmaps/chapter_1/battlezone_1.tmx
 
-#begin tiledmaps/chapter_1/Map1.tmx
-/copy:tiledmaps/chapter_1/Map1.tmx
+#begin tiledmaps/chapter_1/dungeon_1.tmx
+/copy:tiledmaps/chapter_1/dungeon_1.tmx
 
-#begin tiledmaps/chapter_1/mon1.tmx
-/copy:tiledmaps/chapter_1/mon1.tmx
+#begin tiledmaps/chapter_1/map_1.tmx
+/copy:tiledmaps/chapter_1/map_1.tmx
 
-#begin tiledmaps/chapter_2/dun2.tmx
-/copy:tiledmaps/chapter_2/dun2.tmx
+#begin tiledmaps/chapter_2/battlezone_2.tmx
+/copy:tiledmaps/chapter_2/battlezone_2.tmx
 
-#begin tiledmaps/chapter_2/Map2.tmx
-/copy:tiledmaps/chapter_2/Map2.tmx
+#begin tiledmaps/chapter_2/dungeon_2.tmx
+/copy:tiledmaps/chapter_2/dungeon_2.tmx
 
-#begin tiledmaps/chapter_2/mon2.tmx
-/copy:tiledmaps/chapter_2/mon2.tmx
+#begin tiledmaps/chapter_2/map_2.tmx
+/copy:tiledmaps/chapter_2/map_2.tmx
 
-#begin tiledmaps/chapter_3/dun3.tmx
-/copy:tiledmaps/chapter_3/dun3.tmx
+#begin tiledmaps/chapter_3/battlezone_3.tmx
+/copy:tiledmaps/chapter_3/battlezone_3.tmx
 
-#begin tiledmaps/chapter_3/Map3.tmx
-/copy:tiledmaps/chapter_3/Map3.tmx
+#begin tiledmaps/chapter_3/dungeon_3.tmx
+/copy:tiledmaps/chapter_3/dungeon_3.tmx
 
-#begin tiledmaps/chapter_3/mon3.tmx
-/copy:tiledmaps/chapter_3/mon3.tmx
+#begin tiledmaps/chapter_3/map_3.tmx
+/copy:tiledmaps/chapter_3/map_3.tmx
 
 #begin tiledmaps/demo/Demo.tmx
 /copy:tiledmaps/demo/Demo.tmx
@@ -816,11 +816,11 @@
 /processorParam:TextureFormat=Color
 /build:tiledmaps/demo/พี่คาซึยะ.png
 
-#begin tiledmaps/home/MCHome.tmx
-/copy:tiledmaps/home/MCHome.tmx
+#begin tiledmaps/home/noah_home.tmx
+/copy:tiledmaps/home/noah_home.tmx
 
-#begin tiledmaps/home/RoomMc.tmx
-/copy:tiledmaps/home/RoomMc.tmx
+#begin tiledmaps/home/noah_room.tmx
+/copy:tiledmaps/home/noah_room.tmx
 
 #begin tiledmaps/test1/rpg_maker_vx_rtp_tileset_by_telles0808.png
 /importer:TextureImporter

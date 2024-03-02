@@ -35,14 +35,6 @@ namespace Medicraft.Systems.Managers
                                                     + gameSave.TotalPlayTime[1] * 60
                                                     + gameSave.TotalPlayTime[2];
 
-                //// Initialize camera position
-                //GameGlobals.Instance.InitialCameraPos = new Vector2((float)gameSave.CameraPosition[0]
-                //    , (float)gameSave.CameraPosition[1]);
-
-                //// Initialize HUD position
-                //GameGlobals.Instance.HUDPosition = new Vector2((float)gameSave.HUDPosition[0]
-                //    , (float)gameSave.HUDPosition[1]);
-
                 // Initialize Player's Inventory
                 var inventoryData = gameSave.PlayerData.InventoryData;
                 InventoryManager.Instance.InitializeInventory(inventoryData);
@@ -120,6 +112,27 @@ namespace Medicraft.Systems.Managers
                 else if (keyboardCur.IsKeyUp(Keys.V))
                 {
                     GameGlobals.Instance.SwitchShowPath = false;
+                }
+
+                // Full Screen On/Off               
+                if ((keyboardCur.IsKeyUp(Keys.PageUp) && keyboardPrev.IsKeyDown(Keys.PageUp)) 
+                    && !GameGlobals.Instance.SwitchFullScreen)
+                {
+                    GameGlobals.Instance.SwitchFullScreen = !GameGlobals.Instance.SwitchFullScreen;
+
+                    ScreenManager.Instance.GraphicsDeviceManager.IsFullScreen = true;
+                    ScreenManager.Instance.GraphicsDeviceManager.ApplyChanges();
+                }
+                else if ((keyboardCur.IsKeyUp(Keys.PageUp) && keyboardPrev.IsKeyDown(Keys.PageUp))
+                    && GameGlobals.Instance.SwitchFullScreen)
+                {
+                    GameGlobals.Instance.SwitchFullScreen = !GameGlobals.Instance.SwitchFullScreen;
+
+                    ScreenManager.Instance.GraphicsDeviceManager.IsFullScreen = false;
+                    ScreenManager.Instance.GraphicsDeviceManager.ApplyChanges();
+
+                    ScreenManager.Instance.GraphicsDeviceManager.IsFullScreen = false;
+                    ScreenManager.Instance.GraphicsDeviceManager.ApplyChanges();
                 }
             }
 

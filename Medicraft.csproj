@@ -98,43 +98,43 @@
     <None Update="Content\item\items_demo.sf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Content\tiledmaps\chapter_2\dun2.tmx">
+    <None Update="Content\tiledmaps\chapter_2\dungeon_2.tmx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Content\tiledmaps\chapter_2\Map2.tmx">
+    <None Update="Content\tiledmaps\chapter_2\map_2.tmx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Content\tiledmaps\chapter_2\mon2.tmx">
+    <None Update="Content\tiledmaps\chapter_2\battlezone_2.tmx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Content\tiledmaps\chapter_3\dun3.tmx">
+    <None Update="Content\tiledmaps\chapter_3\dungeon_3.tmx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Content\tiledmaps\chapter_3\Map3.tmx">
+    <None Update="Content\tiledmaps\chapter_3\map_3.tmx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Content\tiledmaps\chapter_3\mon3.tmx">
+    <None Update="Content\tiledmaps\chapter_3\battlezone_3.tmx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
 	<None Update="Content\tiledmaps\demo\Demo.tmx">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
-	<None Update="Content\tiledmaps\home\MCHome.tmx">
+	<None Update="Content\tiledmaps\home\noah_home.tmx">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
-	<None Update="Content\tiledmaps\home\RoomMc.tmx">
+	<None Update="Content\tiledmaps\home\noah_room.tmx">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
 	<None Update="Content\tiledmaps\test1\tilemap.tmx">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
-    <None Update="Content\tiledmaps\chapter_1\dun1.tmx">
+    <None Update="Content\tiledmaps\chapter_1\dungeon_1.tmx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Content\tiledmaps\chapter_1\Map1.tmx">
+    <None Update="Content\tiledmaps\chapter_1\map_1.tmx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Content\tiledmaps\chapter_1\mon1.tmx">
+    <None Update="Content\tiledmaps\chapter_1\battlezone_1.tmx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

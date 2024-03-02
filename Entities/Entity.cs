@@ -51,6 +51,7 @@ namespace Medicraft.Entities
         protected Vector2 InitPos;      
 
         protected Vector2 targetNode;
+        protected int routeNodeIndex = 0;
         protected float nextNodeTime;
         protected float nextNodeTimer;
 
@@ -77,7 +78,7 @@ namespace Medicraft.Entities
                 {
                     BoundingHitBox.Center = value + new Vector2(0f, 32f);
                     BoundingDetectEntity.Center = value + new Vector2(0f, 32f);
-                    BoundingCollection.Center = value + new Vector2(0f, 64f);
+                    BoundingCollection.Center = value + new Vector2(0f, 72f);
                 }
                 else
                 {
@@ -325,14 +326,14 @@ namespace Medicraft.Entities
             CheckCollision();
 
             // Play Sprite: Idle 
-            if (!IsAttacking || !IsMoving)
+            if (!IsAttacking && !IsMoving)
             {
                 CurrentAnimation = SpriteCycle + "_walking";  // Idle
                 Sprite.Play(CurrentAnimation);
             }
 
             // Check movement according to PathFinding
-            if (!IsStunning && (!IsKnockback && !IsAttacking || !IsAttacked && !IsAttacking))
+            if (!IsStunning && ((!IsKnockback && !IsAttacking) || (!IsAttacked && !IsAttacking)))
             {
                 if (PathFinding.GetPath().Count != 0)
                 {
@@ -423,7 +424,7 @@ namespace Medicraft.Entities
             }
         }
 
-        protected void SetTargetNode(float deltaSeconds)
+        protected void UpdateTargetNode(float deltaSeconds, EntityData entityData)
         {
             nextNodeTimer += deltaSeconds;
 
@@ -432,16 +433,29 @@ namespace Medicraft.Entities
                 switch (PathFindingType)
                 {
                     case PathFindingTypes.RoutePoint:
+                        // Define the current route
+                        var rountNodePoint = entityData.RoutePoint.ElementAt(routeNodeIndex);
+                        var position = new Vector2((float)rountNodePoint[0], (float)rountNodePoint[1]);
+
+                        // Next route
+                        routeNodeIndex++;
+                        if (routeNodeIndex >= entityData.RoutePoint.Length)
+                        {
+                            routeNodeIndex = 0;
+                        }
+
+                        targetNode = position;
                         break;
 
                     case PathFindingTypes.RandomPoint:
                         var random = new Random();
 
                         // Define the patrol area from rectangle
-                        var rectangleX = 929;
-                        var rectangleY = 351;
-                        var rectangleWidth = 481;
-                        var rectangleHeight = 289;
+                        var recArea = GameGlobals.Instance.MobPartrolArea.Where(b => b.Name.Equals(entityData.PartrolArea));
+                        var rectangleX = (int)recArea.ElementAt(0).Bounds.X;
+                        var rectangleY = (int)recArea.ElementAt(0).Bounds.Y;
+                        var rectangleWidth = (int)recArea.ElementAt(0).Bounds.Width;
+                        var rectangleHeight = (int)recArea.ElementAt(0).Bounds.Height;
 
                         // Generate random X and Y within the rectangle
                         var randomX = random.Next(rectangleX, rectangleX + rectangleWidth);
@@ -451,6 +465,7 @@ namespace Medicraft.Entities
                         break;
 
                     case PathFindingTypes.StationaryPoint:
+                        // Its Stationary so we do nothing here
                         break;
                 } 
 
@@ -548,7 +563,7 @@ namespace Medicraft.Entities
                     foreach (var log in CombatLogs.Where(e => e.ElapsedTime < 1f))
                     {
                         log.ElapsedTime += deltaSeconds;
-                        log.AlphaColor -= deltaSeconds * 0.4f;
+                        log.AlphaColor -= deltaSeconds * 0.06f;
 
                         if (log.ElapsedTime < 0.2f)
                         {                          
@@ -590,7 +605,7 @@ namespace Medicraft.Entities
 
             if (IsAttacking)
             {
-                // Check attack timing
+                // Delay attacking
                 if (ActionTimer > 0)
                 {
                     ActionTimer -= deltaSeconds;
@@ -727,10 +742,11 @@ namespace Medicraft.Entities
                         Velocity = combatNumVelocity,
                         OffSet = Vector2.Zero,
                         Color = Color.White,
+                        StrokeColor = Color.Black,
                         AlphaColor = 1f,
                         ScaleFont = 0f
                     });
-                    CombatNumScale = 2.1f;
+                    CombatNumScale = 2f;
                     break;
 
                 case 1: // Damage Numbers Critical | Player Damage Taken
@@ -743,10 +759,11 @@ namespace Medicraft.Entities
                         Velocity = combatNumVelocity,
                         OffSet = Vector2.Zero,
                         Color = Color.Red,
+                        StrokeColor = Color.Black,
                         AlphaColor = 1f,
                         ScaleFont = 0f
                     });
-                    CombatNumScale = 2.5f;
+                    CombatNumScale = 2.2f;
                     break;
 
                 case 2: // Buff & Healing Numbers
@@ -762,10 +779,11 @@ namespace Medicraft.Entities
                         Velocity = combatNumVelocity,
                         OffSet = Vector2.Zero,
                         Color = Color.Yellow,
+                        StrokeColor = Color.Black,
                         AlphaColor = 1f,
                         ScaleFont = 0f
                     });
-                    CombatNumScale = 1.75f;
+                    CombatNumScale = 1.5f;
                     break;
             }
         }
@@ -792,16 +810,18 @@ namespace Medicraft.Entities
                     {
                         offSet = log.OffSet = log.Velocity * 0.5f * log.ElapsedTime;
                     }
+                   
+                    var text = $"{log.Value}";
+                    var textSize = font.MeasureString(text);
 
-                    Vector2 drawStringPosition = new Vector2(Position.X, Position.Y
-                        - (log.Velocity.Y))
-                        - offSet;
+                    Vector2 drawStringPosition = new Vector2(Position.X - (textSize.Width / 2f)
+                        , Position.Y - (log.Velocity.Y)) - offSet;
 
-                    var textSize = font.MeasureString(log.Value);
-                    drawStringPosition.X -= textSize.Width / 1.25f;
-
-                    spriteBatch.DrawString(font, $"{log.Value}", drawStringPosition, log.Color * log.AlphaColor,
-                        0f, Vector2.Zero, CombatNumScale * log.ScaleFont, SpriteEffects.None, 0f);
+                    HUDSystem.DrawTextWithStroke(spriteBatch, font, text, drawStringPosition
+                        , log.Color * log.AlphaColor
+                        , CombatNumScale * log.ScaleFont
+                        , log.StrokeColor *= log.AlphaColor
+                        , 1);
                 }              
             }
         }

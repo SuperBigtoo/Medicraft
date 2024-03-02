@@ -36,6 +36,8 @@ namespace Medicraft.Systems
         public bool SwitchShowPath { set; get; }
         public bool IsDetectedGameObject { set; get; }
         public bool ShowInsufficientSign { set; get; }
+        public bool IsFullScreen { set; get; }
+        public bool SwitchFullScreen { set; get; }
         public bool IsShowPath { set; get; }
         public bool IsTransitionFinished { set; get; }
         public float TotalPlayTime { set; get; }
@@ -81,8 +83,8 @@ namespace Medicraft.Systems
         public List<RectangleF> BottomLayerObject { private set; get; }
         public List<RectangleF> CraftingTableArea { private set; get; }
         public List<RectangleF> SavingTableArea { private set; get; }
-        public List<RectangleF> WarpPointArea { private set; get; }
-        public List<RectangleF> MobPartrolArea { private set; get; }
+        public List<RectangleF> EnteringZoneArea { private set; get; }
+        public List<PartrolAreaData> MobPartrolArea { private set; get; }
         public float TopEntityDepth { private set; get; }
         public float MiddleEntityDepth { private set; get; }
         public float BottomEntityDepth { private set; get; }
@@ -166,6 +168,9 @@ namespace Medicraft.Systems
             IsDetectedGameObject = false;
             ShowInsufficientSign = false;
 
+            SwitchFullScreen = false;
+            IsFullScreen = false;
+
             IsTransitionFinished = true;
 
             TotalPlayTime = 0;
@@ -195,7 +200,7 @@ namespace Medicraft.Systems
             BottomLayerObject = [];
             CraftingTableArea = [];
             SavingTableArea = [];
-            WarpPointArea = [];
+            EnteringZoneArea = [];
             MobPartrolArea = [];
 
             TopEntityDepth = 0.2f;
