@@ -1,4 +1,5 @@
-﻿using Medicraft.Data;
+﻿using GeonBit.UI;
+using Medicraft.Data;
 using Medicraft.Data.Models;
 using Medicraft.Systems.Managers;
 using Microsoft.Xna.Framework;
@@ -31,6 +32,9 @@ namespace Medicraft.Systems
         public Vector2 GameScreen { private set; get; }
         public Vector2 GameScreenCenter { private set; get; }
         public bool IsGameActive { set; get; }
+        public bool IsGamePause { set; get; }
+        public bool SwitchOpenInventory { set; get; }
+        public bool IsOpenInventory { set; get; }
         public bool SwitchDebugMode { set; get; }
         public bool IsDebugMode { set; get; }
         public bool SwitchShowPath { set; get; }
@@ -40,7 +44,9 @@ namespace Medicraft.Systems
         public bool SwitchFullScreen { set; get; }
         public bool IsShowPath { set; get; }
         public bool IsTransitionFinished { set; get; }
+        public bool IsEnteringBossFight { set; get; }
         public float TotalPlayTime { set; get; }
+        public int MaxLevel { set; get; }
 
         // GameSave
         public int GameSaveIdex { private set; get; }
@@ -48,9 +54,12 @@ namespace Medicraft.Systems
         public List<GameSaveData> GameSave { private set; get; }
 
         // Inventory
+        public BuiltinThemes BuiltinTheme { set; get; }
         public int MaximunInventorySlot { private set; get; }
         public int MaximunItemCount { private set; get; }
-        public int DefaultSlot { private set; get; }
+        public int DefaultInventorySlot { private set; get; }
+        public int MaxItemBarSlot { private set; get; }
+        public int SelectedItemBarSlot { set; get; }
 
         // Game Datas
         public PlayerData InitialPlayerData { private set; get; }
@@ -61,7 +70,8 @@ namespace Medicraft.Systems
         public BitmapFont FontTA8BitBold { private set; get; }
         public BitmapFont FontTA16Bit { private set; get; }
         public List<Texture2D> GuiTextures { private set; get; }
-        public List<MapPositionData> MapPositionDatas { private set; get; }         // All Point Loaction of Maps
+        public List<ExperienceCapacityData> ExperienceCapacityDatas { private set; get; }
+        public List<MapLocationPointData> MapLocationPointDatas { private set; get; }         // All Point Loaction of Maps
         public List<ItemData> ItemsDatas { private set; get; }       // All items data
         // All equipments stats data
         // All item's effect data
@@ -115,10 +125,24 @@ namespace Medicraft.Systems
             item_slot,
             gold_coin,
             heart,
-            select,
+            selected_slot,
             health_bar_alpha,
             health_bar_companion_alpha,
-            health_bar_boss_alpha
+            health_bar_boss_alpha,
+            quest_stamp,
+            level_gui,
+            exp_bar,
+            exp_bar_alpha,
+            exp_gauge,
+            burst_skill_gui,
+            burst_skill_gui_alpha,
+            burst_skill_pic,
+            normal_skill_gui,
+            normal_skill_gui_alpha,
+            normal_skill_pic,
+            passive_skill_gui,
+            passive_skill_gui_alpha,
+            passive_skill_pic
         }
 
         private readonly Dictionary<GuiTextureName, int> guiTextureIndices = new()
@@ -139,10 +163,24 @@ namespace Medicraft.Systems
             { GuiTextureName.item_slot, 13 },
             { GuiTextureName.gold_coin, 14 },
             { GuiTextureName.heart, 15 },
-            { GuiTextureName.select, 16 },
+            { GuiTextureName.selected_slot, 16 },
             { GuiTextureName.health_bar_alpha, 17 },
             { GuiTextureName.health_bar_companion_alpha, 18 },
             { GuiTextureName.health_bar_boss_alpha, 19 },
+            { GuiTextureName.quest_stamp, 20},
+            { GuiTextureName.level_gui, 21},
+            { GuiTextureName.exp_bar, 22},
+            { GuiTextureName.exp_bar_alpha, 23},
+            { GuiTextureName.exp_gauge, 24},
+            { GuiTextureName.burst_skill_gui, 25},
+            { GuiTextureName.burst_skill_gui_alpha, 26},
+            { GuiTextureName.burst_skill_pic, 27},
+            { GuiTextureName.normal_skill_gui, 28},
+            { GuiTextureName.normal_skill_gui_alpha, 29},
+            { GuiTextureName.normal_skill_pic, 30},
+            { GuiTextureName.passive_skill_gui, 31},
+            { GuiTextureName.passive_skill_gui_alpha, 32},
+            { GuiTextureName.passive_skill_pic, 33},
         };
 
         // For Testing
@@ -157,34 +195,40 @@ namespace Medicraft.Systems
             GameScreenCenter = new Vector2(1440/2, 900/2);
             HUDPosition = Vector2.Zero;
             InitialCameraPos = Vector2.Zero;
-            AddingCameraPos = Vector2.Zero; 
+            AddingCameraPos = Vector2.Zero;
 
+            IsGamePause = false;
+            SwitchOpenInventory = false;
+            IsOpenInventory = false;
             SwitchDebugMode = false;
             IsDebugMode = false;
-
             SwitchShowPath = false;
             IsShowPath = false;
-
             IsDetectedGameObject = false;
             ShowInsufficientSign = false;
-
             SwitchFullScreen = false;
             IsFullScreen = false;
-
             IsTransitionFinished = true;
+            IsEnteringBossFight = false;
 
+            MaxLevel = 30;
             TotalPlayTime = 0;
             GameSave = [];
             GameSaveIdex = 0; // to be initial
             GameSavePath = "save/gamesaves.json";
 
             FeedPoint = new(140f, 380f);
+
+            BuiltinTheme = BuiltinThemes.hd;
             MaximunInventorySlot = 64;
             MaximunItemCount = 9999;
-            DefaultSlot = 999;
+            DefaultInventorySlot = 999;
+            MaxItemBarSlot = 8;
+            SelectedItemBarSlot = 0;
 
             GuiTextures = [];
-            MapPositionDatas = [];
+            ExperienceCapacityDatas = [];
+            MapLocationPointDatas = [];
             ItemsDatas = [];
             CharacterDatas = [];
             CraftingRecipeDatas = [];
@@ -233,7 +277,10 @@ namespace Medicraft.Systems
             }
 
             // Load Map Position Data
-            MapPositionDatas = Content.Load<List<MapPositionData>>("data/models/map_positions");
+            MapLocationPointDatas = Content.Load<List<MapLocationPointData>>("data/models/map_locations_point");
+
+            // Load EXP Cap Data
+            ExperienceCapacityDatas = Content.Load<List<ExperienceCapacityData>>("data/models/exp_capacity");
 
             // Load Initialize Player Data
             InitialPlayerData = Content.Load<PlayerData>("data/models/playerdata");
@@ -275,11 +322,24 @@ namespace Medicraft.Systems
             GuiTextures.Add(Content.Load<Texture2D>("gui/item_slot"));                          // 13. item_slot
             GuiTextures.Add(Content.Load<Texture2D>("gui/gold_coin"));                          // 14. gold_coin
             GuiTextures.Add(Content.Load<Texture2D>("gui/heart"));                              // 15. heart
-            GuiTextures.Add(Content.Load<Texture2D>("gui/select"));                             // 16. select
+            GuiTextures.Add(Content.Load<Texture2D>("gui/selected_slot"));                      // 16. selected_slot
             GuiTextures.Add(Content.Load<Texture2D>("gui/health_bar_alpha"));                   // 17. health_bar_alpha
             GuiTextures.Add(Content.Load<Texture2D>("gui/health_bar_companion_alpha"));         // 18. health_bar_companion_alpha
             GuiTextures.Add(Content.Load<Texture2D>("gui/health_bar_boss_alpha"));              // 19. health_bar_boss_alpha
-
+            GuiTextures.Add(Content.Load<Texture2D>("gui/quest_stamp"));                        // 20. quest_stamp
+            GuiTextures.Add(Content.Load<Texture2D>("gui/level_gui"));                          // 21. level_gui
+            GuiTextures.Add(Content.Load<Texture2D>("gui/exp_bar"));                            // 22. exp_bar
+            GuiTextures.Add(Content.Load<Texture2D>("gui/exp_bar_alpha"));                      // 23. exp_bar_alpha
+            GuiTextures.Add(Content.Load<Texture2D>("gui/exp_gauge"));                          // 24. exp_gauge
+            GuiTextures.Add(Content.Load<Texture2D>("gui/burst_skill_gui"));                    // 25. burst_skill_gui
+            GuiTextures.Add(Content.Load<Texture2D>("gui/burst_skill_gui_alpha"));              // 26. burst_skill_gui_alpha
+            GuiTextures.Add(Content.Load<Texture2D>("gui/burst_skill_pic"));                    // 27. burst_skill_pic
+            GuiTextures.Add(Content.Load<Texture2D>("gui/normal_skill_gui"));                   // 28. normal_skill_gui
+            GuiTextures.Add(Content.Load<Texture2D>("gui/normal_skill_gui_alpha"));             // 29. normal_skill_gui_alpha
+            GuiTextures.Add(Content.Load<Texture2D>("gui/normal_skill_pic"));                   // 30. normal_skill_pic
+            GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_gui"));                  // 31. passive_skill_gui
+            GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_gui_alpha"));            // 32. passive_skill_gui_alpha
+            GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_pic"));                  // 33. passive_skill_pic
 
             // Test
             // Initialize Player Data

@@ -26,17 +26,23 @@
 /processorParam:ContentType=Medicraft.Data.CraftingRecipeDataReader, Medicraft
 /build:data/models/crafting_recipes.json
 
+#begin data/models/exp_capacity.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.ExperienceCapacityDataReader, Medicraft
+/build:data/models/exp_capacity.json
+
 #begin data/models/items.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor
 /processorParam:ContentType=Medicraft.Data.ItemDataReader, Medicraft
 /build:data/models/items.json
 
-#begin data/models/map_positions.json
+#begin data/models/map_locations_point.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor
-/processorParam:ContentType=Medicraft.Data.MapPositionDataReader, Medicraft
-/build:data/models/map_positions.json
+/processorParam:ContentType=Medicraft.Data.MapLocationPointDataReader, Medicraft
+/build:data/models/map_locations_point.json
 
 #begin data/models/playerdata.json
 /importer:JsonContentImporter
@@ -441,6 +447,42 @@
 /processorParam:TextureFormat=Color
 /build:gui/boss_gauge.png
 
+#begin gui/burst_skill_gui_alpha.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/burst_skill_gui_alpha.png
+
+#begin gui/burst_skill_gui.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/burst_skill_gui.png
+
+#begin gui/burst_skill_pic.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/burst_skill_pic.png
+
 #begin gui/companion_profile.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -452,6 +494,42 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:gui/companion_profile.png
+
+#begin gui/exp_bar_alpha.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/exp_bar_alpha.png
+
+#begin gui/exp_bar.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/exp_bar.png
+
+#begin gui/exp_gauge.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/exp_gauge.png
 
 #begin gui/gold_coin.png
 /importer:TextureImporter
@@ -609,6 +687,18 @@
 /processorParam:TextureFormat=Color
 /build:gui/item_slot.png
 
+#begin gui/level_gui.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/level_gui.png
+
 #begin gui/logo_wakeup.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -645,6 +735,78 @@
 /processorParam:TextureFormat=Color
 /build:gui/noah_profile.png
 
+#begin gui/normal_skill_gui_alpha.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/normal_skill_gui_alpha.png
+
+#begin gui/normal_skill_gui.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/normal_skill_gui.png
+
+#begin gui/normal_skill_pic.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/normal_skill_pic.png
+
+#begin gui/passive_skill_gui_alpha.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/passive_skill_gui_alpha.png
+
+#begin gui/passive_skill_gui.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/passive_skill_gui.png
+
+#begin gui/passive_skill_pic.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/passive_skill_pic.png
+
 #begin gui/press_f.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -657,7 +819,7 @@
 /processorParam:TextureFormat=Color
 /build:gui/press_f.png
 
-#begin gui/select.png
+#begin gui/quest_stamp.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -667,7 +829,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:gui/select.png
+/build:gui/quest_stamp.png
+
+#begin gui/selected_slot.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/selected_slot.png
 
 #begin item/drug_1.png
 /importer:TextureImporter

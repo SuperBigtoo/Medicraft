@@ -90,8 +90,8 @@ namespace Medicraft.Entities
             Id = slime.Id;
             Name = slime.Name;
             ATK = slime.ATK;
-            MaximumHP = slime.MaximumHP;
-            HP = slime.MaximumHP;
+            MaxHP = slime.MaxHP;
+            HP = slime.MaxHP;
             DEF_Percent = slime.DEF_Percent;
             Speed = slime.Speed;
             Evasion = slime.Evasion;
@@ -180,9 +180,12 @@ namespace Medicraft.Entities
                 }
                 else
                 {
+                    // Exp & Item Drop
                     InventoryManager.Instance.AddItem(1, 1);
 
-                    InventoryManager.Instance.GoldCoin += 10;
+                    InventoryManager.Instance.AddGoldCoin(10);
+
+                    PlayerManager.Instance.AddPlayerEXP(10);
 
                     Destroy();
                 }

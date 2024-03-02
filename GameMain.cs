@@ -1,4 +1,5 @@
-﻿using Medicraft.Systems;
+﻿using GeonBit.UI;
+using Medicraft.Systems;
 using Medicraft.Systems.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -34,6 +35,8 @@ namespace Medicraft
             GameGlobals.Instance.Initialize(Content);
 
             ScreenManager.Instance.Initialize(this, _graphics);
+
+            InventoryManager.Instance.InitializeThemeAndUI(GameGlobals.Instance.BuiltinTheme);
 
             base.Initialize();
         }

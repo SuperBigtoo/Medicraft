@@ -70,4 +70,10 @@ namespace Medicraft.Data.Models
         public ChapterData Chapter_5 { get; set; }
         public ChapterData Chapter_6 { get; set; }
     }
+
+    public class ExperienceCapacityData
+    {
+        public int Level { get; set; }
+        public int MaxCap { get; set; }
+    }
 }

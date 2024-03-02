@@ -92,27 +92,42 @@ namespace Medicraft.Systems.Managers
             {
                 if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                     Game.Exit();
-            }
 
-            _curScreen.Update(gameTime);
+                if (!GameGlobals.Instance.IsGamePause) _curScreen.Update(gameTime);
+
+                PlayerManager.Instance.UpdateGameController(gameTime);
+
+                InventoryManager.Instance.Update(gameTime);
+            }                     
         }
 
         public void Draw()
         {
             GraphicsDevice.Clear(Color.Black);
 
-            _spriteBatch.Begin
-            (
-                SpriteSortMode.BackToFront,
-                samplerState: SamplerState.PointClamp,
-                blendState: BlendState.AlphaBlend,
-                transformMatrix: Camera.GetTransform(
-                    GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)
-            );
+            if (GameGlobals.Instance.IsGameActive) 
+            {
+                if (!GameGlobals.Instance.IsGamePause)
+                {
+                    _spriteBatch.Begin
+                    (
+                        SpriteSortMode.BackToFront,
+                        samplerState: SamplerState.PointClamp,
+                        blendState: BlendState.AlphaBlend,
+                        transformMatrix: Camera.GetTransform(
+                            GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)
+                    );
 
-            _curScreen.Draw(_spriteBatch);
+                    _curScreen.Draw(_spriteBatch);
 
-            _spriteBatch.End();
+                    _spriteBatch.End();
+                }
+                
+                if (GameGlobals.Instance.IsOpenInventory)
+                {
+                    InventoryManager.Draw(_spriteBatch);
+                }
+            }        
         }
 
         public static ScreenManager Instance

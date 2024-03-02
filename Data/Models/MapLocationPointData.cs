@@ -2,7 +2,7 @@
 
 namespace Medicraft.Data.Models
 {
-    public class MapPositionData
+    public class MapLocationPointData
     {
         public string Name { get; set; }
         public List<PositionData> Positions { get; set; }

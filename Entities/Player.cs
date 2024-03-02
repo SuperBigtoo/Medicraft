@@ -15,22 +15,32 @@ namespace Medicraft.Entities
     {
         public PlayerData PlayerData { get; private set; }
 
-        public float MaximumMana { get; private set; }
+        public float MaxMana { get; private set; }
         public float Mana { get; private set; }
         public float ManaRegenRate { get; private set; }
 
         private float _knockbackForce, _percentNormalHit;
         private readonly float _hitRateNormal, _hitRateNormalSkill, _hitRateBurstSkill;
 
-        private float _normalSkillCost = 10f, _burstSkillCost = 20f;
+        private float _normalSkillCost = 10f
+            , _burstSkillCost = 20f;
 
-        private const float _baseCooldownNormal = 16f, _baseCooldownBurst = 20f, _baseCooldownPassive = 60f;
-        private bool _isNormalSkillCooldown, _isBurstSkillCooldown, _isPassiveSkillCooldown;
+        public const float _baseCooldownNormal = 16f
+            , _baseCooldownBurst = 20f
+            , _baseCooldownPassive = 60f;
+
+        public bool IsNormalSkillCooldown { get; private set; }
+        public bool IsBurstSkillCooldown { get; private set; }
+        public bool IsPassiveSkillCooldown { get; private set; }
+        public float NormalCooldownTime { get; private set; }
+        public float BurstCooldownTime { get; private set; }
+        public float PassiveCooldownTime { get; private set; }
         public float NormalCooldownTimer { get; private set; }
         public float BurstCooldownTimer { get; private set; }
         public float PassiveCooldownTimer { get; private set; }
 
-        private bool _isNormalSkillActivated, _isPassiveSkillActivated;
+        public bool IsNormalSkillActivated { get; private set; }
+        public bool IsPassiveSkillActivated { get; private set; }
         public float NormalActivatedTimer {  get; private set; }
         public float PassiveActivatedTimer { get; private set; }
 
@@ -50,7 +60,7 @@ namespace Medicraft.Entities
             // Initialize Character Data
             Id = 999;
             Level = PlayerData.Level;
-            EXP = PlayerData.EXP;
+            EXP = PlayerData.EXP;         
             InitializeCharacterData(playerData.CharId, Level);
                  
             IsKnockbackable = true;            
@@ -62,16 +72,20 @@ namespace Medicraft.Entities
             _hitRateNormalSkill = 0.9f;
             _hitRateBurstSkill = 0.9f;                     
 
-            _isNormalSkillCooldown = false;
-            _isBurstSkillCooldown = false;
-            _isPassiveSkillCooldown = false;
+            IsNormalSkillCooldown = false;
+            IsBurstSkillCooldown = false;
+            IsPassiveSkillCooldown = false;
 
-            NormalCooldownTimer = _baseCooldownNormal;
-            BurstCooldownTimer = _baseCooldownBurst;
-            PassiveCooldownTimer = _baseCooldownPassive;
+            NormalCooldownTime = _baseCooldownNormal;
+            BurstCooldownTime = _baseCooldownBurst;
+            PassiveCooldownTime = _baseCooldownPassive;
 
-            _isNormalSkillActivated = false;
-            _isPassiveSkillActivated = false;
+            NormalCooldownTimer = NormalCooldownTime;
+            BurstCooldownTimer = BurstCooldownTime;
+            PassiveCooldownTimer = PassiveCooldownTime;
+
+            IsNormalSkillActivated = false;
+            IsPassiveSkillActivated = false;
 
             NormalActivatedTimer = 0;
             PassiveActivatedTimer = 0;
@@ -109,8 +123,8 @@ namespace Medicraft.Entities
         {           
             base.InitializeCharacterData(charId, level);
 
-            MaximumMana = (float)(100f + ((level - 1) * (100f * 0.1)));
-            Mana = MaximumMana;
+            MaxMana = (float)(100f + ((level - 1) * (100f * 0.05)));
+            Mana = MaxMana;
             ManaRegenRate = 0.5f;
 
             // gonna calculate character stats with the equipment's stats too
@@ -275,13 +289,13 @@ namespace Medicraft.Entities
             }
 
             // Normal Skill
-            if (keyboardCur.IsKeyDown(Keys.E) && !IsAttacking && !_isNormalSkillCooldown && Mana >= _normalSkillCost)
+            if (keyboardCur.IsKeyDown(Keys.E) && !IsAttacking && !IsNormalSkillCooldown && Mana >= _normalSkillCost)
             {
                 CurrentAnimation = SpriteCycle + "_attacking_normal_skill";
                 Sprite.Play(CurrentAnimation);
 
                 IsAttacking = true;
-                _isNormalSkillCooldown = true;
+                IsNormalSkillCooldown = true;
                 ActionTimer = _hitRateNormalSkill;
 
                 // Do normal skill & effect of Sets Item
@@ -289,13 +303,13 @@ namespace Medicraft.Entities
             }
 
             // Burst Skill
-            if (keyboardCur.IsKeyDown(Keys.Q) && !IsAttacking && !_isBurstSkillCooldown && Mana >= _burstSkillCost)
+            if (keyboardCur.IsKeyDown(Keys.Q) && !IsAttacking && !IsBurstSkillCooldown && Mana >= _burstSkillCost)
             {
                 CurrentAnimation = SpriteCycle + "_attacking_burst_skill";
                 Sprite.Play(CurrentAnimation);
 
                 IsAttacking = true;
-                _isBurstSkillCooldown = true;
+                IsBurstSkillCooldown = true;
                 ActionTimer = _hitRateBurstSkill;
 
                 // Do burst skill & effect of Sets Item
@@ -303,9 +317,9 @@ namespace Medicraft.Entities
             }
 
             // Passive Skill
-            if (HP < (MaximumHP * 0.1) && !_isPassiveSkillCooldown)
+            if (HP < (MaxHP * 0.1) && !IsPassiveSkillCooldown)
             {
-                _isPassiveSkillCooldown = true;
+                IsPassiveSkillCooldown = true;
 
                 // Do passive skill
                 PassiveSkillControl(PlayerData.Abilities.PassiveSkillLevel);
@@ -362,7 +376,7 @@ namespace Medicraft.Entities
                     break;
             }
 
-            _isNormalSkillActivated = true;
+            IsNormalSkillActivated = true;
             Mana -= manaCost;
         }
 
@@ -426,7 +440,7 @@ namespace Medicraft.Entities
             switch (skillLevel)
             {
                 case 1:
-                    HP += (int)(MaximumHP * 0.25);
+                    HP += (int)(MaxHP * 0.25);
                     DEF_Percent += 0.25f;
                     PassiveActivatedTimer = 8f;
                     break;
@@ -459,7 +473,7 @@ namespace Medicraft.Entities
                     break;
             }
 
-            _isPassiveSkillActivated = true;
+            IsPassiveSkillActivated = true;
         }
 
         // Check Attack
@@ -672,7 +686,7 @@ namespace Medicraft.Entities
             Mana += manaRegenAmount;
 
             // Ensure current mana doesn't exceed the maximum mana value
-            Mana = Math.Min(Mana, MaximumMana);
+            Mana = Math.Min(Mana, MaxMana);
         }
 
         private void UpdateLayerDepth(float topDepth, float middleDepth, float bottomDepth)
@@ -721,7 +735,7 @@ namespace Medicraft.Entities
             else IsAttacking = false;
 
             // Cooldown time Normal Skill
-            if (_isNormalSkillCooldown)
+            if (IsNormalSkillCooldown)
             {
                 if (NormalCooldownTimer > 0)
                 {
@@ -729,13 +743,13 @@ namespace Medicraft.Entities
                 }
                 else
                 {
-                    NormalCooldownTimer = _baseCooldownNormal;
-                    _isNormalSkillCooldown = false;
+                    NormalCooldownTimer = NormalCooldownTime;
+                    IsNormalSkillCooldown = false;
                 }
             }
 
             // Activated time Normal Skill
-            if (_isNormalSkillActivated)
+            if (IsNormalSkillActivated)
             {
                 if (NormalActivatedTimer > 0)
                 {
@@ -747,12 +761,12 @@ namespace Medicraft.Entities
                     Crit_Percent = _tmpCrit;
                     CritDMG_Percent = _tmpCritDMG;
                     NormalActivatedTimer = 0;
-                    _isNormalSkillActivated = false;                 
+                    IsNormalSkillActivated = false;                 
                 }
             }
 
             // Cooldown time Burst Skill
-            if (_isBurstSkillCooldown)
+            if (IsBurstSkillCooldown)
             {
                 if (BurstCooldownTimer > 0)
                 {
@@ -760,13 +774,13 @@ namespace Medicraft.Entities
                 }
                 else
                 {
-                    BurstCooldownTimer = _baseCooldownBurst;
-                    _isBurstSkillCooldown = false;
+                    BurstCooldownTimer = BurstCooldownTime;
+                    IsBurstSkillCooldown = false;
                 }
             }
 
             // Cooldown time Passive Skill
-            if (_isPassiveSkillCooldown)
+            if (IsPassiveSkillCooldown)
             {
                 if (PassiveCooldownTimer > 0)
                 {
@@ -774,13 +788,13 @@ namespace Medicraft.Entities
                 }
                 else
                 {
-                    PassiveCooldownTimer = _baseCooldownPassive;
-                    _isPassiveSkillCooldown = false;
+                    PassiveCooldownTimer = PassiveCooldownTime;
+                    IsPassiveSkillCooldown = false;
                 }
             }
 
             // Activated time Passive Skill
-            if (_isPassiveSkillActivated)
+            if (IsPassiveSkillActivated)
             {
                 if (PassiveActivatedTimer > 0)
                 {
@@ -790,7 +804,7 @@ namespace Medicraft.Entities
                 {
                     DEF_Percent = _tmpDEF;
                     PassiveActivatedTimer = 0;
-                    _isPassiveSkillActivated = false;
+                    IsPassiveSkillActivated = false;
                 }
             }
 
@@ -816,12 +830,17 @@ namespace Medicraft.Entities
 
         public float GetCurrentHealthPercentage()
         {
-            return (float)HP / MaximumHP;
+            return (float)HP / MaxHP;
         }
 
         public float GetCurrentManaPercentage()
         {
-            return Mana / MaximumMana;
+            return Mana / MaxMana;
+        }
+
+        public float GetCurrentEXPPercentage()
+        {
+            return (float)EXP / EXPMaxCap;
         }
     }
 }

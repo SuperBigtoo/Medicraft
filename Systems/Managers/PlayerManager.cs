@@ -4,6 +4,7 @@ using Medicraft.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Sprites;
+using System;
 using System.Linq;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -62,26 +63,83 @@ namespace Medicraft.Systems.Managers
                 InventoryManager.Instance.InitializeInventory(inventoryData);
             }
 
+            // Other Stuff
+            SetPlayerEXPCap(Player.Level);
             GameGlobals.Instance.HUDPosition = Player.Position - GameGlobals.Instance.GameScreenCenter;
         }
 
-        public void Update(GameTime gameTime)
+        public void UpdateGameController(GameTime gameTime)
         {
-            // Key Controller
+            // Key Control
             GameGlobals.Instance.PrevKeyboard = GameGlobals.Instance.CurKeyboard;
             GameGlobals.Instance.CurKeyboard = Keyboard.GetState();
             var keyboardCur = GameGlobals.Instance.CurKeyboard;
             var keyboardPrev = GameGlobals.Instance.PrevKeyboard;
 
-            // Mouse Controller
+            // Mouse Control
             GameGlobals.Instance.PrevMouse = GameGlobals.Instance.CurMouse;
             GameGlobals.Instance.CurMouse = Mouse.GetState();
             var mouseCur = GameGlobals.Instance.CurMouse;
             var mousePrev = GameGlobals.Instance.PrevMouse;
 
+            // Save Game for Test
             if (keyboardCur.IsKeyUp(Keys.M) && keyboardPrev.IsKeyDown(Keys.M))
             {
                 JsonFileManager.SaveGame();
+            }
+
+            // Open Inventory
+            if (keyboardCur.IsKeyDown(Keys.I) && !GameGlobals.Instance.SwitchOpenInventory)
+            {
+                // Toggle the IsOpenInventory flag
+                GameGlobals.Instance.IsOpenInventory = !GameGlobals.Instance.IsOpenInventory;
+
+                // Pause PlayScreen
+                GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
+
+                GameGlobals.Instance.SwitchOpenInventory = true;
+            }
+            else if (keyboardCur.IsKeyUp(Keys.I))
+            {
+                GameGlobals.Instance.SwitchOpenInventory = false;
+            }
+
+            // Select Item Bar Slot
+            if (ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.TestScreen
+                || ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.PlayScreen)
+            {
+                if (keyboardCur.IsKeyDown(Keys.D1))
+                {
+                    GameGlobals.Instance.SelectedItemBarSlot = 0;
+                }
+                else if (keyboardCur.IsKeyDown(Keys.D2))
+                {
+                    GameGlobals.Instance.SelectedItemBarSlot = 1;
+                }
+                else if (keyboardCur.IsKeyDown(Keys.D3))
+                {
+                    GameGlobals.Instance.SelectedItemBarSlot = 2;
+                }
+                else if (keyboardCur.IsKeyDown(Keys.D4))
+                {
+                    GameGlobals.Instance.SelectedItemBarSlot = 3;
+                }
+                else if (keyboardCur.IsKeyDown(Keys.D5))
+                {
+                    GameGlobals.Instance.SelectedItemBarSlot = 4;
+                }
+                else if (keyboardCur.IsKeyDown(Keys.D6))
+                {
+                    GameGlobals.Instance.SelectedItemBarSlot = 5;
+                }
+                else if (keyboardCur.IsKeyDown(Keys.D7))
+                {
+                    GameGlobals.Instance.SelectedItemBarSlot = 6;
+                }
+                else if (keyboardCur.IsKeyDown(Keys.D8))
+                {
+                    GameGlobals.Instance.SelectedItemBarSlot = 7;
+                }
             }
 
             // Check if CurrentScreen is TestScreen
@@ -115,10 +173,11 @@ namespace Medicraft.Systems.Managers
                 }
 
                 // Full Screen On/Off               
-                if ((keyboardCur.IsKeyUp(Keys.PageUp) && keyboardPrev.IsKeyDown(Keys.PageUp)) 
+                if ((keyboardCur.IsKeyUp(Keys.PageUp) && keyboardPrev.IsKeyDown(Keys.PageUp))
                     && !GameGlobals.Instance.SwitchFullScreen)
                 {
                     GameGlobals.Instance.SwitchFullScreen = !GameGlobals.Instance.SwitchFullScreen;
+                    GameGlobals.Instance.IsFullScreen = true;
 
                     ScreenManager.Instance.GraphicsDeviceManager.IsFullScreen = true;
                     ScreenManager.Instance.GraphicsDeviceManager.ApplyChanges();
@@ -127,15 +186,27 @@ namespace Medicraft.Systems.Managers
                     && GameGlobals.Instance.SwitchFullScreen)
                 {
                     GameGlobals.Instance.SwitchFullScreen = !GameGlobals.Instance.SwitchFullScreen;
+                    GameGlobals.Instance.IsFullScreen = false;
 
                     ScreenManager.Instance.GraphicsDeviceManager.IsFullScreen = false;
                     ScreenManager.Instance.GraphicsDeviceManager.ApplyChanges();
 
+                    // do it again
                     ScreenManager.Instance.GraphicsDeviceManager.IsFullScreen = false;
                     ScreenManager.Instance.GraphicsDeviceManager.ApplyChanges();
                 }
             }
+        }
 
+        public void Update(GameTime gameTime)
+        {
+            // Key Control
+            var keyboardCur = GameGlobals.Instance.CurKeyboard;
+            var keyboardPrev = GameGlobals.Instance.PrevKeyboard;
+
+            // Mouse Control
+            var mouseCur = GameGlobals.Instance.CurMouse;
+            var mousePrev = GameGlobals.Instance.PrevMouse;
 
             Player.Update(gameTime, keyboardCur, keyboardPrev, mouseCur, mousePrev);
 
@@ -167,7 +238,7 @@ namespace Medicraft.Systems.Managers
             switch (gameScreen)
             {
                 case ScreenManager.GameScreen.TestScreen:
-                    var mapPositionData = GameGlobals.Instance.MapPositionDatas.Where(m => m.Name.Equals("Test"));
+                    var mapPositionData = GameGlobals.Instance.MapLocationPointDatas.Where(m => m.Name.Equals("Test"));
                     var positionData = mapPositionData.ElementAt(0).Positions.Where(p => p.Name.Equals("LastPosition"));
                     var position = new Vector2(
                         (float)positionData.ElementAt(0).Value[0],
@@ -187,7 +258,7 @@ namespace Medicraft.Systems.Managers
         {
             if (IsPlayerDead)
             {
-                Player.HP = Player.MaximumHP;
+                Player.HP = Player.MaxHP;
 
                 var respawnPos = new Vector2(
                     (float)GameGlobals.Instance.InitialPlayerData.Position[0],
@@ -208,6 +279,28 @@ namespace Medicraft.Systems.Managers
 
                 IsPlayerDead = false;
                 Player.IsDying = false;
+            }
+        }
+
+        public void SetPlayerEXPCap(int level)
+        {
+            var ExpCapData = GameGlobals.Instance.ExperienceCapacityDatas
+                .Where(expcap => expcap.Level.Equals(level)).ElementAt(0);
+
+            Player.EXPMaxCap = ExpCapData.MaxCap;
+        }
+
+        public void AddPlayerEXP(int exp)
+        {
+            Player.EXP += exp;
+
+            // Increase Level & Set ExpMaxCap
+            if (Player.EXP >= Player.EXPMaxCap)
+            {
+                Player.Level++;
+                Player.EXP -= Player.EXPMaxCap;
+
+                SetPlayerEXPCap(Player.Level);
             }
         }
 

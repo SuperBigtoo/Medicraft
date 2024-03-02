@@ -6,7 +6,6 @@ using System.Text.Json;
 using Medicraft.Data.Models;
 using Medicraft.Systems;
 using Medicraft.Systems.Managers;
-using Microsoft.Xna.Framework;
 using MonoGame.Extended.Serialization;
 
 namespace Medicraft.Data
@@ -118,5 +117,8 @@ namespace Medicraft.Data
     public class CraftingRecipeDataReader : JsonContentTypeReader<List<CraftingRecipeData>> { }
 
     // Reader Map Position Datas: map_positions.json
-    public class MapPositionDataReader : JsonContentTypeReader<List<MapPositionData>> { }
+    public class MapLocationPointDataReader : JsonContentTypeReader<List<MapLocationPointData>> { }
+
+    // Reader Experience Capacity Datas: exp_capacity.json
+    public class ExperienceCapacityDataReader : JsonContentTypeReader<List<ExperienceCapacityData>> { }
 }

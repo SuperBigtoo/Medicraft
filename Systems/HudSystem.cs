@@ -104,10 +104,15 @@ namespace Medicraft.Systems
 
             DrawCompanionHealthBarGUI(spriteBatch);
 
-            DrawBossHealthBarGUI(spriteBatch);
+            if (GameGlobals.Instance.IsEnteringBossFight) DrawBossHealthBarGUI(spriteBatch);
 
-            DrawItemBar(spriteBatch);
+            DrawItemBarGUI(spriteBatch);
 
+            DrawLevelGUI(spriteBatch);
+
+            DrawExpBarGUI(spriteBatch);
+
+            DrawSkillGUI(spriteBatch);
 
             if (GameGlobals.Instance.IsDebugMode)
             {
@@ -144,9 +149,16 @@ namespace Medicraft.Systems
                 spriteBatch.DrawString(FontSensation, $"Total PlayTime: {(int)GameGlobals.Instance.TotalPlayTime}"
                     , new Vector2(690f, 0f) + _hudTopLeftCorner, Color.White);
 
-                var rect = new Rectangle((int)_hudTopLeftCorner.X + 50, (int)_hudTopLeftCorner.Y + 255, 300, 300);
+                var rect = new Rectangle((int)_hudTopLeftCorner.X + 50, (int)_hudTopLeftCorner.Y + 220, 300, 500);
 
                 var FontTA8BitBold = GameGlobals.Instance.FontTA8BitBold;
+
+                spriteBatch.DrawString(FontTA8BitBold, $"Level: {PlayerManager.Instance.Player.Level}"
+                    , new Vector2(55f, 225f) + _hudTopLeftCorner, Color.White, clippingRectangle: rect);
+
+                spriteBatch.DrawString(FontTA8BitBold
+                    , $"EXP: {PlayerManager.Instance.Player.EXP} | EXPMaxCap: {PlayerManager.Instance.Player.EXPMaxCap}"
+                    , new Vector2(55f, 240f) + _hudTopLeftCorner, Color.White, clippingRectangle: rect);
 
                 spriteBatch.DrawString(FontTA8BitBold, $"Player ATK: {PlayerManager.Instance.Player.ATK}"
                     , new Vector2(55f, 260f) + _hudTopLeftCorner, Color.White, clippingRectangle: rect);
@@ -192,7 +204,8 @@ namespace Medicraft.Systems
             // HP gauge
             var curHealthPoint = PlayerManager.Instance.Player.GetCurrentHealthPercentage();
             var hpGaugeTexture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.healthpoints_gauge);
-            var hpGaugeSourceRec = new Rectangle(0, 0, (int)(hpGaugeTexture.Width * curHealthPoint), hpGaugeTexture.Height);
+            var hpGaugeSourceRec = new Rectangle(0, 0
+                , (int)(hpGaugeTexture.Width * curHealthPoint), hpGaugeTexture.Height);
             var hpGaugeRec = new Rectangle((int)(166 + _hudTopLeftCorner.X), (int)(40 + _hudTopLeftCorner.Y)
                 , (int)(hpGaugeTexture.Width * curHealthPoint), hpGaugeTexture.Height);
 
@@ -202,7 +215,8 @@ namespace Medicraft.Systems
             // Mana gauge
             var curManaPoint = PlayerManager.Instance.Player.GetCurrentManaPercentage();
             var manaGaugeTexture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.mana_gauge);
-            var manaGaugeSourceRec = new Rectangle(0, 0, (int)(manaGaugeTexture.Width * curManaPoint), manaGaugeTexture.Height);
+            var manaGaugeSourceRec = new Rectangle(0, 0
+                , (int)(manaGaugeTexture.Width * curManaPoint), manaGaugeTexture.Height);
             var manaGaugeRec = new Rectangle((int)(167 + _hudTopLeftCorner.X), (int)(84 + _hudTopLeftCorner.Y)
                 , (int)(manaGaugeTexture.Width * curManaPoint), manaGaugeTexture.Height);
 
@@ -215,20 +229,20 @@ namespace Medicraft.Systems
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             // Text Health Point
-            var textHP = $"{PlayerManager.Instance.Player.HP}/{PlayerManager.Instance.Player.MaximumHP}";
+            var textHP = $"{PlayerManager.Instance.Player.HP}/{PlayerManager.Instance.Player.MaxHP}";
             var textSizeHP = GameGlobals.Instance.FontTA8BitBold.MeasureString(textHP);
             var positionHP = new Vector2(
-                (166 + hpGaugeTexture.Width / 2) - (textSizeHP.Width / 2),
-                (40 + hpGaugeTexture.Height / 2) - (textSizeHP.Height / 2)) + _hudTopLeftCorner;
+                (166f + hpGaugeTexture.Width / 2) - (textSizeHP.Width / 2),
+                (40f + hpGaugeTexture.Height / 2) - (textSizeHP.Height / 2)) + _hudTopLeftCorner;
 
             DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
                 , textHP, positionHP, Color.White, 1f, Color.Black, 2);
 
             // Text Mana Point
-            var textMana = $"{(int)PlayerManager.Instance.Player.Mana}/{(int)PlayerManager.Instance.Player.MaximumMana}";
+            var textMana = $"{(int)PlayerManager.Instance.Player.Mana}/{(int)PlayerManager.Instance.Player.MaxMana}";
             //var textSizeMana = GameGlobals.Instance.FontTA8Bit.MeasureString(textMana);
             var positionMana = new Vector2(
-                (166 + hpGaugeTexture.Width / 2) - (textSizeHP.Width / 2), 80) + _hudTopLeftCorner;
+                (166f + hpGaugeTexture.Width / 2) - (textSizeHP.Width / 2), 80f) + _hudTopLeftCorner;
 
             DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8Bit
                 , textMana, positionMana, Color.White, 1f, Color.Black, 2);
@@ -249,7 +263,8 @@ namespace Medicraft.Systems
             // HP gauge
             //var curHealthPoint = PlayerManager.Instance.Player.GetCurrentHealthPercentage();
             var hpGaugeTexture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.healthpoints_gauge_companion);
-            var hpGaugeSourceRec = new Rectangle(0, 0, (int)(hpGaugeTexture.Width * 1), hpGaugeTexture.Height);
+            var hpGaugeSourceRec = new Rectangle(0, 0
+                , (int)(hpGaugeTexture.Width * 1), hpGaugeTexture.Height);
             var hpGaugeRec = new Rectangle((int)(178 + _hudTopLeftCorner.X), (int)(146 + _hudTopLeftCorner.Y)
                 , (int)(hpGaugeTexture.Width * 1), hpGaugeTexture.Height);
 
@@ -272,7 +287,8 @@ namespace Medicraft.Systems
             // HP gauge
             //var curHealthPoint = PlayerManager.Instance.Player.GetCurrentHealthPercentage();
             var hpGaugeTexture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.boss_gauge);
-            var hpGaugeSourceRec = new Rectangle(0, 0, (int)(hpGaugeTexture.Width * 1), hpGaugeTexture.Height);
+            var hpGaugeSourceRec = new Rectangle(0, 0
+                , (int)(hpGaugeTexture.Width * 1), hpGaugeTexture.Height);
             var hpGaugeRec = new Rectangle((int)(541 + _hudTopLeftCorner.X), (int)(123 + _hudTopLeftCorner.Y)
                 , (int)(hpGaugeTexture.Width * 1), hpGaugeTexture.Height);
 
@@ -295,7 +311,7 @@ namespace Medicraft.Systems
                 , text, position, Color.DarkRed, 1f, Color.Black, 1);
         }
 
-        private void DrawItemBar(SpriteBatch spriteBatch)
+        private void DrawItemBarGUI(SpriteBatch spriteBatch)
         {
             // Item Bar
             spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.item_bar)
@@ -306,9 +322,190 @@ namespace Medicraft.Systems
             for (int i = 0; i < 8; i++ )
             {
                 spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.item_slot)
-                , new Vector2(515f + (52 * i), 824f) + _hudTopLeftCorner, null
-                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    , new Vector2(515f + (52 * i), 824f) + _hudTopLeftCorner, null
+                    , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+                // Gonna Draw Item texture here
+
+                // Selected Slot
+                var selectedSlot = GameGlobals.Instance.SelectedItemBarSlot;
+                spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.selected_slot)
+                    , new Vector2(511f + (52 * selectedSlot), 820f) + _hudTopLeftCorner, null
+                    , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }
+        }
+
+        private void DrawLevelGUI(SpriteBatch spriteBatch)
+        {
+            // Level Gui
+            var LevelGuiTexture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.level_gui);
+
+            spriteBatch.Draw(LevelGuiTexture
+                , new Vector2(29f, 14f) + _hudTopLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+            // Text Level
+            var textLevel = $"{PlayerManager.Instance.Player.Level}";
+            var textSizeLevel = GameGlobals.Instance.FontTA8BitBold.MeasureString(textLevel);
+            var position = new Vector2(
+                (29f + LevelGuiTexture.Width / 2) - (textSizeLevel.Width / 2),
+                (14f + LevelGuiTexture.Height / 2) - (textSizeLevel.Height / 2)) + _hudTopLeftCorner;
+
+            DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
+                , textLevel, position, Color.White, 1f, Color.Black, 1);
+        }
+
+        private void DrawExpBarGUI(SpriteBatch spriteBatch)
+        {
+            var position = new Vector2(508f, 792f);
+
+            // Experience Alpha
+            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.exp_bar_alpha)
+                , position + _hudTopLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+            // Experience gauge
+            var curEXP = PlayerManager.Instance.Player.GetCurrentEXPPercentage();
+            var expGaugeTexture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.exp_gauge);
+            var expGaugeSourceRec = new Rectangle(0, 0
+                , (int)(expGaugeTexture.Width * curEXP), expGaugeTexture.Height);
+            var expGaugeRec = new Rectangle((int)(508f + _hudTopLeftCorner.X), (int)(792f + _hudTopLeftCorner.Y)
+                , (int)(expGaugeTexture.Width * curEXP), expGaugeTexture.Height);
+
+            spriteBatch.Draw(expGaugeTexture, expGaugeRec, expGaugeSourceRec
+                , Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+
+            // Experience Bar
+            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.exp_bar)
+                , position + _hudTopLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+            // Text Experience Point
+            var textLevel = $"{PlayerManager.Instance.Player.Level}";
+            var textSizeLevel = GameGlobals.Instance.FontTA8BitBold.MeasureString(textLevel);
+            var positionLevel = new Vector2(
+                (508f + expGaugeTexture.Width / 2) - (textSizeLevel.Width / 2),
+                (792f + expGaugeTexture.Height / 2) - (textSizeLevel.Height / 2)) + _hudTopLeftCorner;
+
+            DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
+                , textLevel, positionLevel, Color.White, 1f, new Color(48, 15, 61), 2);
+        }
+
+        private void DrawSkillGUI(SpriteBatch spriteBatch)
+        {
+            //  Burst Skill
+            var positionBurst = new Vector2(1282f, 726f);
+
+            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.burst_skill_pic)
+                , positionBurst + _hudTopLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+            if (PlayerManager.Instance.Player.IsBurstSkillCooldown)
+            {
+                // Burst Skill Cooldown
+                var cooldownPercentage = PlayerManager.Instance.Player.BurstCooldownTimer / PlayerManager.Instance.Player.BurstCooldownTime;
+                var cooldownTexture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.burst_skill_gui_alpha);
+                var cooldownSourceRec = new Rectangle(0, 0
+                    , cooldownTexture.Width, (int)(cooldownTexture.Height * cooldownPercentage));
+
+                var cooldownRec = new Rectangle((int)(positionBurst.X + _hudTopLeftCorner.X)
+                    , (int)(positionBurst.Y + _hudTopLeftCorner.Y)
+                    , cooldownTexture.Width
+                    , (int)(cooldownTexture.Height * cooldownPercentage));
+
+                spriteBatch.Draw(cooldownTexture, cooldownRec, cooldownSourceRec
+                    , Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+
+                // Text Burst Skill Cooldown
+                var text = $"{(int)PlayerManager.Instance.Player.BurstCooldownTimer}";
+                var textSize = GameGlobals.Instance.FontTA8BitBold.MeasureString(text);
+                var positionText = new Vector2(
+                    (positionBurst.X + cooldownTexture.Width / 2) - ((textSize.Width * 1.5f) / 2),
+                    (positionBurst.Y + cooldownTexture.Height / 2) - ((textSize.Height * 1.5f) / 2)) + _hudTopLeftCorner;
+
+                DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
+                    , text, positionText, Color.White, 1.5f, Color.Black, 2);
+            }
+
+            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.burst_skill_gui)
+                , positionBurst + _hudTopLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+            // Normal Skill
+            var positionNormal = new Vector2(1186f, 771f);
+
+            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.normal_skill_pic)
+                , positionNormal + _hudTopLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+            if (PlayerManager.Instance.Player.IsNormalSkillCooldown)
+            {
+                // Normal Skill Cooldown
+                var cooldownPercentage = PlayerManager.Instance.Player.NormalCooldownTimer / PlayerManager.Instance.Player.NormalCooldownTime;
+                var cooldownTexture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.normal_skill_gui_alpha);
+                var cooldownSourceRec = new Rectangle(0, 0
+                    , cooldownTexture.Width, (int)(cooldownTexture.Height * cooldownPercentage));
+
+                var cooldownRec = new Rectangle((int)(positionNormal.X + _hudTopLeftCorner.X)
+                    , (int)(positionNormal.Y + _hudTopLeftCorner.Y)
+                    , cooldownTexture.Width
+                    , (int)(cooldownTexture.Height * cooldownPercentage));
+
+                spriteBatch.Draw(cooldownTexture, cooldownRec, cooldownSourceRec
+                    , Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+
+                // Text Normal Skill Cooldown
+                var text = $"{(int)PlayerManager.Instance.Player.NormalCooldownTimer}";
+                var textSize = GameGlobals.Instance.FontTA8BitBold.MeasureString(text);
+                var positionText = new Vector2(
+                    (positionNormal.X + cooldownTexture.Width / 2) - ((textSize.Width * 1.25f) / 2),
+                    (positionNormal.Y + cooldownTexture.Height / 2) - ((textSize.Height * 1.25f) / 2)) + _hudTopLeftCorner;
+
+                DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
+                    , text, positionText, Color.White, 1.25f, Color.Black, 2);
+            }
+
+            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.normal_skill_gui)
+                , positionNormal + _hudTopLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+            // Passive Skill
+            var positionPassive = new Vector2(1324, 653f);
+
+            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.passive_skill_pic)
+                , positionPassive + _hudTopLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+            if (PlayerManager.Instance.Player.IsPassiveSkillCooldown)
+            {
+                // Passive Skill Cooldown
+                var cooldownPercentage = PlayerManager.Instance.Player.PassiveCooldownTimer / PlayerManager.Instance.Player.PassiveCooldownTime;
+                var cooldownTexture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.passive_skill_gui_alpha);
+                var cooldownSourceRec = new Rectangle(0, 0
+                    , cooldownTexture.Width, (int)(cooldownTexture.Height * cooldownPercentage));
+
+                var cooldownRec = new Rectangle((int)(positionPassive.X + _hudTopLeftCorner.X)
+                    , (int)(positionPassive.Y + _hudTopLeftCorner.Y)
+                    , cooldownTexture.Width
+                    , (int)(cooldownTexture.Height * cooldownPercentage));
+
+                spriteBatch.Draw(cooldownTexture, cooldownRec, cooldownSourceRec
+                    , Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+
+                // Text Passive Skill Cooldown
+                var text = $"{(int)PlayerManager.Instance.Player.PassiveCooldownTimer}";
+                var textSize = GameGlobals.Instance.FontTA8BitBold.MeasureString(text);
+                var positionText = new Vector2(
+                    (positionPassive.X + cooldownTexture.Width / 2) - (textSize.Width / 2),
+                    (positionPassive.Y + cooldownTexture.Height / 2) - (textSize.Height / 2)) + _hudTopLeftCorner;
+
+                DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
+                    , text, positionText, Color.White, 1f, Color.Black, 2);
+            }
+
+            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.passive_skill_gui)
+                , positionPassive + _hudTopLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
 
         private void DrawInteractionSigh(SpriteBatch spriteBatch)
@@ -359,8 +556,8 @@ namespace Medicraft.Systems
                 if (entity.IsAttacked) entity.DrawCombatNumbers(spriteBatch, entity.CombatNumCase);
             }
 
-            if (PlayerManager.Instance.Player.IsAttacked) PlayerManager.Instance.Player.DrawCombatNumbers(spriteBatch
-                , PlayerManager.Instance.Player.CombatNumCase);
+            if (PlayerManager.Instance.Player.IsAttacked) 
+                PlayerManager.Instance.Player.DrawCombatNumbers(spriteBatch, PlayerManager.Instance.Player.CombatNumCase);
         }
 
         private void DrawCollectedItem(SpriteBatch spriteBatch) 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
-using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Sprites;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -21,11 +20,12 @@ namespace Medicraft.Entities
         public string Name { get; protected set; }
         public int Level { get; set; }
         public int EXP { get; set; }    // meant for playable
+        public int EXPMaxCap { get; set; }     // meant for playable
 
         // Character Stats
         public int ATK { get; set; }
         public int HP { get; set; }
-        public int MaximumHP { get; set; }
+        public int MaxHP { get; set; }
         public float DEF_Percent { get; set; }
         public float Crit_Percent { get; set; }
         public float CritDMG_Percent { get; set; }
@@ -307,8 +307,8 @@ namespace Medicraft.Entities
         protected virtual void SetCharacterStats(CharacterData charData, int level)
         {
             ATK = charData.ATK + ((level - 1) * 2);
-            MaximumHP = (int)(charData.HP + ((level - 1) * (charData.HP * 0.1)));
-            HP = MaximumHP;
+            MaxHP = (int)(charData.HP + ((level - 1) * (charData.HP * 0.1)));
+            HP = MaxHP;
             DEF_Percent = (float)charData.DEF_Percent;
             Crit_Percent = (float)charData.Crit_Percent;
             CritDMG_Percent = (float)charData.CritDMG_Percent;

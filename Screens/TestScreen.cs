@@ -92,16 +92,13 @@ namespace Medicraft.Screens
 
         public override void Update(GameTime gameTime)
         {
-            if (GameGlobals.Instance.IsGameActive)
-            {
-                EntityManager.Instance.Update(gameTime);
+            EntityManager.Instance.Update(gameTime);
 
-                ObjectManager.Instance.Update(gameTime);
+            ObjectManager.Instance.Update(gameTime);
 
-                TileMapRender?.Update(gameTime);
+            TileMapRender?.Update(gameTime);
 
-                HudSystem?.Update(gameTime);
-            }
+            HudSystem?.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -116,8 +113,6 @@ namespace Medicraft.Screens
             }
 
             HudSystem?.Draw(spriteBatch);
-
-            //spriteBatch.Draw(GameGlobals.Instance.TestIcon, new Vector2(500, 550), Color.White);
         }
     }
 }
