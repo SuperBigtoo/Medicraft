@@ -1,4 +1,5 @@
 ﻿using Medicraft.Data.Models;
+using Medicraft.Systems;
 using Medicraft.Systems.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,6 +17,7 @@ namespace Medicraft.GameObjects
           
             InitializeObjectData();
 
+            IsRespawnable = true;
             IsCollected = false;
             IsDestroyed = false;
             IsVisible = true;
@@ -30,6 +32,8 @@ namespace Medicraft.GameObjects
 
             BoundingCollection = new CircleF(Position, 16);
 
+            ParticleEffect = DrawEffectSystem.SetItemParticleEffect(Position);
+
             Sprite.Depth = 0.1f;
             Sprite.Play(ReferId.ToString());
         }
@@ -37,6 +41,8 @@ namespace Medicraft.GameObjects
         private Item(Item item)
         {
             Sprite = item.Sprite;
+            ObjectData = item.ObjectData;
+            ParticleEffect = item.ParticleEffect;
 
             Type = item.Type;
             Id = item.Id;
@@ -45,6 +51,7 @@ namespace Medicraft.GameObjects
             Name = item.Name;
             Description = item.Description;
 
+            IsRespawnable = item.IsRespawnable;
             IsCollected = false;
             IsDestroyed = false;
             IsVisible = true;
@@ -66,6 +73,10 @@ namespace Medicraft.GameObjects
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             Sprite.Depth = layerDepth;
+
+            var playerDepth = PlayerManager.Instance.Player.GetDepth();
+
+            UpdateLayerDepth(layerDepth, playerDepth);
 
             if (IsCollected)
             {

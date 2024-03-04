@@ -9,6 +9,8 @@
 #endregion
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.BitmapFonts;
+using System;
 using System.Collections.Generic;
 
 namespace GeonBit.UI.Entities
@@ -356,7 +358,9 @@ namespace GeonBit.UI.Entities
                 int iTextIndex = 0;
                 Color currColor = Color.White;
                 Color currOutlineColor = Color.Black;
-                SpriteFont currFont = null;
+                //SpriteFont currFont = null;
+                BitmapFont currFont = null;
+                BitmapFont currBitmapFont = null;
                 Vector2 characterSize = GetCharacterActualSize();
                 Vector2 currPosition = new Vector2(_position.X - characterSize.X, _position.Y);
                 int currOutlineWidth = 0;
@@ -366,6 +370,7 @@ namespace GeonBit.UI.Entities
                 {
                     currColor = UserInterface.Active.DrawUtils.FixColorOpacity(FillColor);
                     currFont = _currFont;
+                    currBitmapFont = Resources.Instance.FontTA8BitBold;
                     currOutlineWidth = OutlineWidth;
                     currOutlineColor = UserInterface.Active.DrawUtils.FixColorOpacity(OutlineColor);
                     characterSize = GetCharacterActualSize();
@@ -393,7 +398,9 @@ namespace GeonBit.UI.Entities
                         // set font style
                         if (styleInstruction.FontStyle.HasValue)
                         {
-                            currFont = Resources.Instance.Fonts[(int)styleInstruction.FontStyle.Value];
+                            //currFont = Resources.Instance.Fonts[(int)styleInstruction.FontStyle.Value];
+                            currFont = Resources.Instance.FontTA8BitBold;
+                            currBitmapFont = Resources.Instance.FontTA8BitBold;
                         }
 
                         // set outline width
@@ -409,11 +416,23 @@ namespace GeonBit.UI.Entities
                         }
                     }
 
+                    //// adjust character position
+                    //if (currCharacter == '\n')
+                    //{
+                    //    currPosition.X = _position.X - characterSize.X;
+                    //    currPosition.Y += currFont.LineSpacing * _actualScale;
+                    //}
+                    //else
+                    //{
+                    //    iTextIndex++;
+                    //    currPosition.X += characterSize.X;
+                    //}
+
                     // adjust character position
                     if (currCharacter == '\n')
                     {
                         currPosition.X = _position.X - characterSize.X;
-                        currPosition.Y += currFont.LineSpacing * _actualScale;
+                        currPosition.Y += currBitmapFont.LetterSpacing * _actualScale;
                     }
                     else
                     {
@@ -431,11 +450,21 @@ namespace GeonBit.UI.Entities
                         PerCharacterManipulators.Invoke(this, currCharacter, iTextIndex, ref currColor, ref currOutlineColor, ref currOutlineWidth, ref offset, ref _actualScale);
                     }
 
-                    // draw outline
-                    DrawTextOutline(spriteBatch, currText, currOutlineWidth, currFont, _actualScale, currPosition + offset, currOutlineColor, _fontOrigin);
+                    // draw outline                 
+                    try
+                    {
+                        DrawTextOutline(spriteBatch, currText, currOutlineWidth, currFont, _actualScale, currPosition + offset, currOutlineColor, _fontOrigin);
 
-                    // fix color opacity and draw
-                    spriteBatch.DrawString(currFont, currText, currPosition + offset, currColor, 0, _fontOrigin, _actualScale, SpriteEffects.None, 0.5f);
+                        // fix color opacity and draw
+                        spriteBatch.DrawString(currFont, currText, currPosition + offset, currColor, 0, _fontOrigin, _actualScale, SpriteEffects.None, 0.5f);
+                    }
+                    catch (ArgumentException)
+                    {
+                        DrawTextOutline(spriteBatch, currText, currOutlineWidth, currBitmapFont, _actualScale, currPosition + offset, currOutlineColor, _fontOrigin);
+
+                        // fix color opacity and draw
+                        spriteBatch.DrawString(currBitmapFont, currText, currPosition + offset, currColor, 0, _fontOrigin, _actualScale, SpriteEffects.None, 0.5f);
+                    }
                 }
             }
             // if there are no style-changing instructions, just draw the paragraph as-is

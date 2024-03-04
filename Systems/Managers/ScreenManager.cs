@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 
 namespace Medicraft.Systems.Managers
 {
@@ -17,7 +18,7 @@ namespace Medicraft.Systems.Managers
         public GraphicsDeviceManager GraphicsDeviceManager { private set; get; }
         public GameWindow Window { private set; get; }
         public Camera Camera { private set; get; }
-        public GameScreen CurrentScreen { private set; get; }
+     
         public enum GameScreen
         {
             TestScreen,
@@ -25,12 +26,15 @@ namespace Medicraft.Systems.Managers
             MainMenuScreen,
             PlayScreen
         }
+        public GameScreen CurrentScreen { private set; get; }
 
+        public string CurrentMap { set; get; }
         public enum LoadMapAction
         {
             NewGame,
             LoadGameSave
         }
+        public LoadMapAction CurrentLoadMapAction { set; get; }
 
         public ScreenManager()
         {
@@ -89,15 +93,20 @@ namespace Medicraft.Systems.Managers
             GameGlobals.Instance.IsGameActive = Game.IsActive;
 
             if (GameGlobals.Instance.IsGameActive)
-            {
-                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                    Game.Exit();
+            {           
+                if (!GameGlobals.Instance.IsGamePause)
+                {
+                    _curScreen.Update(gameTime);
+                }
+                else
+                {
+                    if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                        Game.Exit();
 
-                if (!GameGlobals.Instance.IsGamePause) _curScreen.Update(gameTime);
+                    InventoryManager.Instance.Update(gameTime);
+                }
 
-                PlayerManager.Instance.UpdateGameController(gameTime);
-
-                InventoryManager.Instance.Update(gameTime);
+                PlayerManager.UpdateGameController(gameTime);
             }                     
         }
 
@@ -107,27 +116,54 @@ namespace Medicraft.Systems.Managers
 
             if (GameGlobals.Instance.IsGameActive) 
             {
-                if (!GameGlobals.Instance.IsGamePause)
+                _spriteBatch.Begin
+                (
+                    SpriteSortMode.BackToFront,
+                    samplerState: SamplerState.PointClamp,
+                    blendState: BlendState.AlphaBlend,
+                    transformMatrix: Camera.GetTransform(
+                        GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)
+                );
+
+                _curScreen.Draw(_spriteBatch);
+
+                _spriteBatch.End();
+
+                if (GameGlobals.Instance.IsOpenInventory)
                 {
-                    _spriteBatch.Begin
-                    (
-                        SpriteSortMode.BackToFront,
-                        samplerState: SamplerState.PointClamp,
+                    _spriteBatch.Begin(
+                        SpriteSortMode.Deferred,
+                        samplerState: SamplerState.LinearClamp,
                         blendState: BlendState.AlphaBlend,
+                        depthStencilState: DepthStencilState.None,
+                        rasterizerState: RasterizerState.CullCounterClockwise,
                         transformMatrix: Camera.GetTransform(
                             GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)
                     );
-
-                    _curScreen.Draw(_spriteBatch);
-
+                    // Draw Background
+                    DrawBackgound(_spriteBatch, Color.Black, 0.4f);
                     _spriteBatch.End();
-                }
-                
-                if (GameGlobals.Instance.IsOpenInventory)
-                {
+
+                    if (!GameGlobals.Instance.IsInventoryRefreshed)
+                    {
+                        InventoryManager.Instance.RefreshInvenrotyItem();
+                        GameGlobals.Instance.IsInventoryRefreshed = true;
+                    }
+
                     InventoryManager.Draw(_spriteBatch);
                 }
+                else GameGlobals.Instance.IsInventoryRefreshed = false;
             }        
+        }
+
+        public static void DrawBackgound(SpriteBatch spriteBatch, Color color, float transparency)
+        {
+            var topLeftCorner = GameGlobals.Instance.TopLeftCornerPosition;
+
+            spriteBatch.FillRectangle(topLeftCorner.X, topLeftCorner.Y
+                , Instance.GraphicsDevice.Viewport.Width
+                , Instance.GraphicsDevice.Viewport.Height
+                , color * transparency);
         }
 
         public static ScreenManager Instance

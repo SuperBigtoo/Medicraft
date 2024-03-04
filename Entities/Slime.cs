@@ -13,7 +13,7 @@ namespace Medicraft.Entities
     public class Slime : Entity
     {
         public EntityData EntityData { get; private set; }
-        private enum SlimeColor
+        public enum SlimeColor
         {
             yellow,
             red,
@@ -31,10 +31,12 @@ namespace Medicraft.Entities
             Level = entityData.Level;
             InitializeCharacterData(entityData.CharId, Level);
 
-            AttackSpeed = 0.25f;
-            CooldownAttack = 0.7f;
-            CooldownAttackTimer = CooldownAttack;
+            _attackSpeed = 0.25f;
+            _cooldownAttack = 0.7f;
+            _cooldownAttackTimer = _cooldownAttack;
             DyingTime = 1.3f;
+
+            IsRespawnable = true;
 
             AggroTime = entityData.AggroTime;
             IsAggroResettable = true;
@@ -68,7 +70,7 @@ namespace Medicraft.Entities
 
             BoundingAggro = new CircleF(Position, 150);         // Circle for check aggro player        
 
-            PathFinding = new AStar(
+            _pathFinding = new AStar(
                 (int)BoundingDetectCollisions.Center.X,
                 (int)BoundingDetectCollisions.Center.Y,
                 (int)EntityData.Position[0],
@@ -76,6 +78,9 @@ namespace Medicraft.Entities
             );
 
             RandomSlimeColor();
+
+            // Set Effect
+            NormalHitEffectAttacked = "hit_effect_1";
 
             Sprite.Depth = 0.1f;
             Sprite.Play(SpriteCycle + "_walking");
@@ -96,10 +101,12 @@ namespace Medicraft.Entities
             Speed = slime.Speed;
             Evasion = slime.Evasion;
 
-            AttackSpeed = slime.AttackSpeed;
-            CooldownAttack = slime.CooldownAttack;
-            CooldownAttackTimer = CooldownAttack;
+            _attackSpeed = slime._attackSpeed;
+            _cooldownAttack = slime._cooldownAttack;
+            _cooldownAttackTimer = _cooldownAttack;
             DyingTime = slime.DyingTime;
+
+            IsRespawnable = slime.IsRespawnable;
 
             AggroTime = slime.AggroTime;
             IsAggroResettable = slime.IsAggroResettable;
@@ -115,8 +122,9 @@ namespace Medicraft.Entities
                 Position = slime.Transform.Position,
             };
 
-            BoundingCollisionX = 5.5;
-            BoundingCollisionY = 5;
+            BoundingCollisionX = slime.BoundingCollisionX;
+            BoundingCollisionY = slime.BoundingCollisionY;
+
             BoundingDetectCollisions = slime.BoundingDetectCollisions;
 
             BoundingHitBox = slime.BoundingHitBox;
@@ -125,7 +133,7 @@ namespace Medicraft.Entities
 
             BoundingDetectEntity = slime.BoundingDetectEntity;
 
-            PathFinding = new AStar(
+            _pathFinding = new AStar(
                 (int)BoundingDetectCollisions.Center.X,
                 (int)BoundingDetectCollisions.Center.Y,
                 (int)EntityData.Position[0],
@@ -134,6 +142,9 @@ namespace Medicraft.Entities
 
             RandomSlimeColor();
 
+            NormalHitEffectAttacked = slime.NormalHitEffectAttacked;
+
+            Sprite.Color = Color.White;
             Sprite.Depth = 0.1f;
             Sprite.Play(SpriteCycle + "_walking");
         }    
@@ -177,6 +188,14 @@ namespace Medicraft.Entities
                 if (DyingTimer < DyingTime)
                 {
                     DyingTimer += deltaSeconds;
+
+                    var blinkSpeed = 15f; // Adjust the speed of the blinking effect
+                    var alphaMultiplier = MathF.Sin(DyingTimer * blinkSpeed);
+
+                    // Ensure alphaMultiplier is within the valid range [0, 1]
+                    alphaMultiplier = MathHelper.Clamp(alphaMultiplier, 0.25f, 2f);
+
+                    Sprite.Color = Color.White * Math.Min(alphaMultiplier, 1f);
                 }
                 else
                 {
@@ -191,14 +210,17 @@ namespace Medicraft.Entities
                 }
             }
 
-            // Update time conditions
-            UpdateTimerConditions(deltaSeconds);
-
             if (PlayerManager.Instance.IsPlayerDead)
             {
                 CurrentAnimation = SpriteCycle + "_walking";  // Idle
                 Sprite.Play(CurrentAnimation);
             }
+
+            // Update time conditions
+            UpdateTimerConditions(deltaSeconds);
+
+            // Ensure hp or mana doesn't exceed the maximum & minimum value
+            MinimumCapacity();           
 
             Sprite.Update(deltaSeconds);
         }
@@ -208,7 +230,7 @@ namespace Medicraft.Entities
         {
             if (GameGlobals.Instance.IsShowPath)
             {
-                PathFinding.Draw(spriteBatch);
+                _pathFinding.Draw(spriteBatch);
             }
 
             spriteBatch.Draw(Sprite, Transform);

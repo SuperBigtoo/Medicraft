@@ -3,16 +3,16 @@
     "Name": "Test",
     "Positions": [
       {
-        "Name": "LastPosition",
+        "Name": "Respawn",
         "Value": [ 1167, 1557 ]
       }
     ]
   },
   {
-    "Name": "Chapter_1",
+    "Name": "dungeon_1",
     "Positions": [
       {
-        "Name": "LastPosition",
+        "Name": "Respawn",
         "Value": [ 1167, 1557 ]
       }
     ]

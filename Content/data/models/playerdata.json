@@ -2,6 +2,7 @@
   "CharId": 0,
   "Level": 1,
   "EXP": 0,
+  "CurrentMap": "Test",
   "Position": [ 0, 0 ],
   "Abilities": {
     "NormalSkillLevel": 1,

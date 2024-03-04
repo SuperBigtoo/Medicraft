@@ -94,7 +94,7 @@ namespace Medicraft.Data
 
         private static void SaveFile(List<GameSaveData> gameSave, string PATH)
         {
-            string serializedText = JsonSerializer.Serialize<List<GameSaveData>>(gameSave);
+            string serializedText = JsonSerializer.Serialize(gameSave);
             (new FileInfo(PATH)).Directory.Create();
             File.WriteAllText(PATH, serializedText);
         }

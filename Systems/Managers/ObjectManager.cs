@@ -14,19 +14,19 @@ namespace Medicraft.Systems.Managers
 
     public class ObjectManager : IObjectManager
     {
-        private static ObjectManager instance;
-
-        private ObjectSpawner objectSpawner;
-
-        public float spawnTime = 0f;
+        public float SpawnTime = 0f;
 
         public readonly List<GameObject> gameObjects;
+
+        private ObjectSpawner _objectSpawner;
+
+        private static ObjectManager instance;
 
         public IEnumerable<GameObject> GameObjects => gameObjects;
 
         private ObjectManager()
         {
-            gameObjects = new List<GameObject>();
+            gameObjects = [];
         }
 
         public T AddGameObject<T>(T gameObject) where T : GameObject
@@ -38,8 +38,8 @@ namespace Medicraft.Systems.Managers
         public void Initialize(ObjectSpawner objectSpawner)
         {
             gameObjects.Clear();
-            this.objectSpawner = objectSpawner;
-            this.objectSpawner.Initialize();
+            _objectSpawner = objectSpawner;
+            _objectSpawner.Initialize();
         }
 
         public void Update(GameTime gameTime)
@@ -53,12 +53,12 @@ namespace Medicraft.Systems.Managers
             }
 
             // Object Spawner
-            objectSpawner.Update(gameTime);
-            spawnTime = objectSpawner.spawnTime;
+            _objectSpawner.Update(gameTime);
+            SpawnTime = _objectSpawner.SpawnTime;
 
             gameObjects.RemoveAll(e => e.IsDestroyed);
 
-            objectSpawner.Spawn();
+            _objectSpawner.Spawn();
         }
 
         public void Draw(SpriteBatch spriteBatch)

@@ -18,6 +18,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using System.IO;
+using MonoGame.Extended.BitmapFonts;
+using System.Reflection.Metadata;
 
 namespace GeonBit.UI
 {
@@ -268,6 +270,12 @@ namespace GeonBit.UI
         /// <summary>Default font types.</summary>
         public SpriteFont[] Fonts;
 
+        public BitmapFont FontSensation { get; set; }
+        public BitmapFont FontMinecraft { get; set; }
+        public BitmapFont FontTA8Bit { get; set; }
+        public BitmapFont FontTA8BitBold { get; set; }
+        public BitmapFont FontTA16Bit { get; set; }
+
         /// <summary>Effect for disabled entities (greyscale).</summary>
         public Effect DisabledEffect;
 
@@ -292,6 +300,13 @@ namespace GeonBit.UI
             // set resources root path and store content manager
             _root = "GeonBit.UI/themes/" + theme + "/";
             _content = content;
+
+            // Load Bitmap Font          
+            FontSensation = content.Load<BitmapFont>("Fonts/Sensation/Sensation");
+            FontMinecraft = content.Load<BitmapFont>("Fonts/Mincraft_Ten/Mincraft_Ten");
+            FontTA8Bit = content.Load<BitmapFont>("Fonts/TA_8_Bit/TA_8_Bit");
+            FontTA8BitBold = content.Load<BitmapFont>("Fonts/TA_8_Bit_Bold/TA_8_Bit_Bold");
+            FontTA16Bit = content.Load<BitmapFont>("Fonts/TA_16_Bit/TA_16_Bit");
 
             // set Texture2D fields
             HorizontalLineTexture = _content.Load<Texture2D>(_root + "textures/horizontal_line");
@@ -358,7 +373,7 @@ namespace GeonBit.UI
             foreach (FontStyle style in Enum.GetValues(typeof(FontStyle)))
             {
                 Fonts[(int)style] = content.Load<SpriteFont>(_root + "fonts/" + style.ToString());
-            }
+            }  
 
             // load buttons metadata
             ButtonData = new TextureData[Enum.GetValues(typeof(ButtonSkin)).Length];

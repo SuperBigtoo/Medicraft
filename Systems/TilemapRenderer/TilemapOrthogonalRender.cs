@@ -13,6 +13,8 @@ namespace Medicraft.Systems.TilemapRenderer
     {
         private readonly TmxMap _tileMap;
         private readonly Texture2D[] _tileSets;
+        private readonly int _tileSize;
+
         private readonly int[] _firstGid;
         private readonly int[] _tileWidth;
         private readonly int[] _tileHeight;
@@ -31,10 +33,11 @@ namespace Medicraft.Systems.TilemapRenderer
 
         private const int BLOCK_ID = 7050;
 
-        public TilemapOrthogonalRender(TmxMap tileMap, Texture2D[] tileSets)
+        public TilemapOrthogonalRender(TmxMap tileMap, Texture2D[] tileSets, int tileSize)
         {
             _tileMap = tileMap;
             _tileSets = tileSets;
+            _tileSize = tileSize;
 
             _firstGid = new int[tileSets.Length];
             _tileWidth = new int[tileSets.Length];
@@ -43,12 +46,12 @@ namespace Medicraft.Systems.TilemapRenderer
             _tileAnimationsId = [];
 
             // Initialize
-            SetTileSetsInfo();
-            SetObjectGroups();
+            InitializeTileSetsInfo();
+            InitializeObjectGroup();
             MappingArray();
         }
 
-        private void SetTileSetsInfo()
+        private void InitializeTileSetsInfo()
         {
             for (int i = 0; i < _tileSets.Length; i++)
             {
@@ -68,7 +71,7 @@ namespace Medicraft.Systems.TilemapRenderer
             }
         }
 
-        private void SetObjectGroups()
+        private void InitializeObjectGroup()
         {
             GameGlobals.Instance.CollistionObject.Clear();
             GameGlobals.Instance.TopLayerObject.Clear();
@@ -133,7 +136,7 @@ namespace Medicraft.Systems.TilemapRenderer
 
         private void MappingArray()
         {
-            GameGlobals.Instance.TILE_SIZE = 32;    // In this game we using tile size 32*32
+            GameGlobals.Instance.TILE_SIZE = _tileSize;             // In this game we using tile size 32*32
             GameGlobals.Instance.NUM_ROWS = _tileMap.Height;
             GameGlobals.Instance.NUM_COLUMNS = _tileMap.Width;
             GameGlobals.Instance.Map = new int[_tileMap.Height, _tileMap.Width];

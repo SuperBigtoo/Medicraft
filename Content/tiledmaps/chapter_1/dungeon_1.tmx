@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="96" height="96" tilewidth="32" tileheight="32" infinite="0" nextlayerid="16" nextobjectid="90">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="96" height="96" tilewidth="32" tileheight="32" infinite="0" nextlayerid="21" nextobjectid="90">
  <tileset firstgid="1" name="block" tilewidth="32" tileheight="32" tilecount="8064" columns="64">
   <image source="../textures/rpg_maker_vx_rtp_tileset_by_telles0808.png" width="2048" height="4032"/>
  </tileset>
@@ -1198,4 +1198,9 @@
   <object id="43" name="Block" x="1244" y="798" width="33" height="127"/>
   <object id="88" name="Block" x="1118" y="2430" width="98" height="98"/>
  </objectgroup>
+ <objectgroup id="16" name="Points"/>
+ <objectgroup id="17" name="CraftingTableArea"/>
+ <objectgroup id="18" name="SavingTableArea"/>
+ <objectgroup id="19" name="EnteringZoneArea"/>
+ <objectgroup id="20" name="MobPartrolArea"/>
 </map>

@@ -14,19 +14,19 @@ namespace Medicraft.Systems.Managers
 
     public class EntityManager : IEntityManager
     {
-        private static EntityManager instance;
-
-        private MobSpawner mobSpawner;
-
-        public float spawnTime = 0f;
+        public float SpawnTime = 0f;
 
         public readonly List<Entity> entities;
+
+        private MobSpawner _mobSpawner;
+
+        private static EntityManager instance;
 
         public IEnumerable<Entity> Entities => entities;
 
         private EntityManager()
         {
-            entities = new List<Entity>();
+            entities = [];
         }
 
         public T AddEntity<T>(T entity) where T : Entity
@@ -38,8 +38,8 @@ namespace Medicraft.Systems.Managers
         public void Initialize(MobSpawner mobSpawner)
         {
             entities.Clear();
-            this.mobSpawner = mobSpawner;
-            this.mobSpawner.Initialize();
+            _mobSpawner = mobSpawner;
+            _mobSpawner.Initialize();
         }
 
         public void Update(GameTime gameTime)
@@ -64,12 +64,12 @@ namespace Medicraft.Systems.Managers
             }
 
             // Mob Spawner
-            mobSpawner.Update(gameTime);
-            spawnTime = mobSpawner.spawnTime;
+            _mobSpawner.Update(gameTime);
+            SpawnTime = _mobSpawner.SpawnTimer;
 
             entities.RemoveAll(e => e.IsDestroyed);
 
-            mobSpawner.Spawn();
+            _mobSpawner.Spawn();
         }
 
         public void Draw(SpriteBatch spriteBatch)

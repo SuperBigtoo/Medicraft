@@ -26,7 +26,7 @@ namespace Medicraft.Systems
         public KeyboardState PrevKeyboard { set; get; }
         public KeyboardState CurKeyboard { set; get; }
         public Point2 MousePosition { private set; get; }
-        public Vector2 HUDPosition { set; get; }
+        public Vector2 TopLeftCornerPosition { set; get; }
         public Vector2 InitialCameraPos { set; get; }
         public Vector2 AddingCameraPos { set; get; }
         public Vector2 GameScreen { private set; get; }
@@ -35,6 +35,7 @@ namespace Medicraft.Systems
         public bool IsGamePause { set; get; }
         public bool SwitchOpenInventory { set; get; }
         public bool IsOpenInventory { set; get; }
+        public bool IsInventoryRefreshed { set; get; }
         public bool SwitchDebugMode { set; get; }
         public bool IsDebugMode { set; get; }
         public bool SwitchShowPath { set; get; }
@@ -47,6 +48,14 @@ namespace Medicraft.Systems
         public bool IsEnteringBossFight { set; get; }
         public float TotalPlayTime { set; get; }
         public int MaxLevel { set; get; }
+        
+        // Boss
+        public bool IsBoss_TestDead { set; get; }
+        public float SpawnTime_Boss_Test { get; private set; }
+        public float SpawnTimer_Boss_Test { get; set; }
+        public bool IsBoss_1_Dead { set; get; }
+        public float SpawnTime_Boss_1 { get; private set; }
+        public float SpawnTimer_Boss_1 { get; set; }
 
         // GameSave
         public int GameSaveIdex { private set; get; }
@@ -60,6 +69,7 @@ namespace Medicraft.Systems
         public int DefaultInventorySlot { private set; get; }
         public int MaxItemBarSlot { private set; get; }
         public int SelectedItemBarSlot { set; get; }
+        public int SelectedItemInventory { set; get; }
 
         // Game Datas
         public PlayerData InitialPlayerData { private set; get; }
@@ -78,6 +88,10 @@ namespace Medicraft.Systems
         public List<CraftingRecipeData> CraftingRecipeDatas { private set; get; }       // All Crafting Recipe data
         public List<CharacterData> CharacterDatas { private set; get; }                 // All Character data
         public SpriteSheet ItemsPackSprites { private set; get; }                   // All Item sprite
+        public SpriteSheet HitSpriteEffect { private set; get; }
+        public SpriteSheet HitSkillSpriteEffect { private set; get; }
+        public SpriteSheet BossSpriteEffect { private set; get; }
+        public SpriteSheet StatesSpriteEffect { private set; get; }
 
         // Collecting Item Feed
         public List<InventoryItemData> CollectedItemFeed { private set; get; }      // Feed collected item
@@ -193,13 +207,14 @@ namespace Medicraft.Systems
         {
             GameScreen = new Vector2(1440, 900);
             GameScreenCenter = new Vector2(1440/2, 900/2);
-            HUDPosition = Vector2.Zero;
+            TopLeftCornerPosition = Vector2.Zero;
             InitialCameraPos = Vector2.Zero;
             AddingCameraPos = Vector2.Zero;
 
             IsGamePause = false;
             SwitchOpenInventory = false;
             IsOpenInventory = false;
+            IsInventoryRefreshed = false;
             SwitchDebugMode = false;
             IsDebugMode = false;
             SwitchShowPath = false;
@@ -210,6 +225,14 @@ namespace Medicraft.Systems
             IsFullScreen = false;
             IsTransitionFinished = true;
             IsEnteringBossFight = false;
+
+            IsBoss_TestDead = false;
+            SpawnTime_Boss_Test = 60f;
+            SpawnTimer_Boss_Test = SpawnTime_Boss_Test;
+
+            IsBoss_1_Dead = false;
+            SpawnTime_Boss_1 = 60f;
+            SpawnTimer_Boss_1 = SpawnTime_Boss_1;
 
             MaxLevel = 30;
             TotalPlayTime = 0;
@@ -225,6 +248,7 @@ namespace Medicraft.Systems
             DefaultInventorySlot = 999;
             MaxItemBarSlot = 8;
             SelectedItemBarSlot = 0;
+            SelectedItemInventory = 0;
 
             GuiTextures = [];
             ExperienceCapacityDatas = [];
@@ -237,6 +261,8 @@ namespace Medicraft.Systems
             MaximumItemFeed = 6;
             DisplayFeedTime = 0;
             MaximumDisplayFeedTime = 6f;
+
+            TILE_SIZE = 32;
 
             CollistionObject = [];
             TopLayerObject = [];
@@ -256,7 +282,7 @@ namespace Medicraft.Systems
             BottomObjectDepth = 0.7f;
             BackgroundDepth = 0.9f;
 
-            TestInt = 0;
+            TestInt = CraftingTableArea.Count;
         }
 
         public void Initialize(ContentManager Content)
@@ -265,7 +291,9 @@ namespace Medicraft.Systems
         }
 
         public void LoadContent()
-        {         
+        {
+            //System.Diagnostics.Debug.WriteLine($"totalFrames : {(int)(_totalMilliseconds / totalDuration) % totalFrames}");
+
             // Load GameSave
             var gameSave = JsonFileManager.LoadFlie(GameGlobals.Instance.GameSavePath);
             if (gameSave.Count != 0)
@@ -297,6 +325,12 @@ namespace Medicraft.Systems
 
             // Load Character Datas
             CharacterDatas = Content.Load<List<CharacterData>>("data/models/characters");
+
+            // Load Effect Sprite Sheet
+            HitSpriteEffect = Content.Load<SpriteSheet>("effect/hit_effect.sf", new JsonContentLoader());
+            HitSkillSpriteEffect = Content.Load<SpriteSheet>("effect/hit_skill_effect.sf", new JsonContentLoader());
+            BossSpriteEffect = Content.Load<SpriteSheet>("effect/boss_effect.sf", new JsonContentLoader());
+            StatesSpriteEffect = Content.Load<SpriteSheet>("effect/states.sf", new JsonContentLoader());
 
             // Load Bitmap Font          
             FontSensation = Content.Load<BitmapFont>("fonts/Sensation/Sensation");

@@ -10,6 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
+/reference:..\..\.nuget\packages\monogame.extended.content.pipeline\3.9.0-alpha0107\tools\MonoGame.Extended.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -246,6 +247,91 @@
 
 #begin Fonts/Bitstream Vera Sans Mono Roman.ttf
 /copy:Fonts/Bitstream Vera Sans Mono Roman.ttf
+
+#begin Fonts/Mincraft_Ten/Mincraft_Ten_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Fonts/Mincraft_Ten/Mincraft_Ten_0.png
+
+#begin Fonts/Mincraft_Ten/Mincraft_Ten.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:Fonts/Mincraft_Ten/Mincraft_Ten.fnt
+
+#begin Fonts/Sensation/Sensation_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Fonts/Sensation/Sensation_0.png
+
+#begin Fonts/Sensation/Sensation.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:Fonts/Sensation/Sensation.fnt
+
+#begin Fonts/TA_16_Bit/TA_16_Bit_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Fonts/TA_16_Bit/TA_16_Bit_0.png
+
+#begin Fonts/TA_16_Bit/TA_16_Bit.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:Fonts/TA_16_Bit/TA_16_Bit.fnt
+
+#begin Fonts/TA_8_Bit_Bold/TA_8_Bit_Bold_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Fonts/TA_8_Bit_Bold/TA_8_Bit_Bold_0.png
+
+#begin Fonts/TA_8_Bit_Bold/TA_8_Bit_Bold.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:Fonts/TA_8_Bit_Bold/TA_8_Bit_Bold.fnt
+
+#begin Fonts/TA_8_Bit/TA_8_Bit_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Fonts/TA_8_Bit/TA_8_Bit_0.png
+
+#begin Fonts/TA_8_Bit/TA_8_Bit.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:Fonts/TA_8_Bit/TA_8_Bit.fnt
 
 #begin GeonBit.UI/Themes/editor/effects/disabled.fx
 /importer:EffectImporter

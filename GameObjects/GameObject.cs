@@ -1,8 +1,10 @@
 ﻿using Medicraft.Data.Models;
 using Medicraft.Systems;
+using Medicraft.Systems.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using MonoGame.Extended.Particles;
 using MonoGame.Extended.Sprites;
 using System;
 using System.Linq;
@@ -32,6 +34,8 @@ namespace Medicraft.GameObjects
         public Transform2 Transform;
         public CircleF BoundingCollection;
 
+        public ParticleEffect ParticleEffect;
+
         public Vector2 Position
         {
             get => Transform.Position;
@@ -42,6 +46,7 @@ namespace Medicraft.GameObjects
             }
         }
         
+        public bool IsRespawnable { get; protected set; }
         public bool IsCollected { get; set; }
         public bool IsDestroyed { get; set; }
         public bool IsVisible { get; set; }
@@ -53,6 +58,7 @@ namespace Medicraft.GameObjects
             Name = string.Empty;
             Description = string.Empty;
 
+            IsRespawnable = true;
             IsCollected = false;
             IsDestroyed = false;
             IsVisible = true;
@@ -64,7 +70,7 @@ namespace Medicraft.GameObjects
                 Position = Vector2.Zero
             };
 
-            BoundingCollection = new CircleF(Position, 10);
+            BoundingCollection = new CircleF(Position, 16);
         }
 
         private GameObject(GameObject gameObject)
@@ -74,6 +80,7 @@ namespace Medicraft.GameObjects
             Name = gameObject.Name;
             Description = gameObject.Description;
 
+            IsRespawnable = gameObject.IsRespawnable;
             IsCollected = false;
             IsDestroyed = false;
             IsVisible = true;
@@ -85,7 +92,7 @@ namespace Medicraft.GameObjects
                 Position = gameObject.Transform.Position
             };
 
-            BoundingCollection = new CircleF(Position, 10);
+            BoundingCollection = new CircleF(Position, 16);
         }
 
         public virtual void Update(GameTime gameTime, float layerDepth) { }
@@ -103,6 +110,23 @@ namespace Medicraft.GameObjects
         public virtual object Clone()
         {
             return new GameObject(this);
+        }
+
+        protected virtual void UpdateLayerDepth(float defaultDepth, float playerDepth)
+        {
+            // Detect for LayerDepth
+            Sprite.Depth = defaultDepth; // Default depth
+            if (BoundingCollection.Intersects(PlayerManager.Instance.Player.BoundingDetectEntity))
+            {
+                if (Transform.Position.Y >= PlayerManager.Instance.Player.BoundingDetectCollisions.Center.Y)
+                {
+                    Sprite.Depth = playerDepth - 0.00002f; // In front Player
+                }
+                else
+                {
+                    Sprite.Depth = playerDepth + 0.00002f; // Behide Player
+                }
+            }
         }
 
         protected virtual void InitializeObjectData()

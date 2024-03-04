@@ -1,12 +1,9 @@
 ﻿using Medicraft.Data;
-using Medicraft.Data.Models;
 using Medicraft.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Sprites;
-using System;
 using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Medicraft.Systems.Managers
 {
@@ -28,6 +25,8 @@ namespace Medicraft.Systems.Managers
 
             if (GameGlobals.Instance.GameSave.Count != 0)
             {
+                ScreenManager.Instance.CurrentLoadMapAction = ScreenManager.LoadMapAction.LoadGameSave;
+
                 // Load save game according to selected index. 
                 var gameSave = GameGlobals.Instance.GameSave[GameGlobals.Instance.GameSaveIdex];
 
@@ -42,15 +41,20 @@ namespace Medicraft.Systems.Managers
 
                 // Initial Player
                 var basePlayerData = gameSave.PlayerData;
+
+                ScreenManager.Instance.CurrentMap = basePlayerData.CurrentMap;
+
                 Player = new Player(playerSprite, basePlayerData);
 
                 // Adjust HUD and camera positions
-                GameGlobals.Instance.HUDPosition = Player.Position - GameGlobals.Instance.GameScreenCenter;
+                GameGlobals.Instance.TopLeftCornerPosition = Player.Position - GameGlobals.Instance.GameScreenCenter;
                 GameGlobals.Instance.InitialCameraPos = Player.Position;
                 GameGlobals.Instance.AddingCameraPos = Vector2.Zero;
             }
             else // In case New Game
             {
+                ScreenManager.Instance.CurrentLoadMapAction = ScreenManager.LoadMapAction.NewGame;
+
                 // Initial Player
                 Player = new Player(playerSprite, initialPlayerData);
 
@@ -65,10 +69,10 @@ namespace Medicraft.Systems.Managers
 
             // Other Stuff
             SetPlayerEXPCap(Player.Level);
-            GameGlobals.Instance.HUDPosition = Player.Position - GameGlobals.Instance.GameScreenCenter;
+            GameGlobals.Instance.TopLeftCornerPosition = Player.Position - GameGlobals.Instance.GameScreenCenter;
         }
 
-        public void UpdateGameController(GameTime gameTime)
+        public static void UpdateGameController(GameTime gameTime)
         {
             // Key Control
             GameGlobals.Instance.PrevKeyboard = GameGlobals.Instance.CurKeyboard;
@@ -91,7 +95,7 @@ namespace Medicraft.Systems.Managers
             // Open Inventory
             if (keyboardCur.IsKeyDown(Keys.I) && !GameGlobals.Instance.SwitchOpenInventory)
             {
-                // Toggle the IsOpenInventory flag
+                // Toggle the IsOpenInventory flag               
                 GameGlobals.Instance.IsOpenInventory = !GameGlobals.Instance.IsOpenInventory;
 
                 // Pause PlayScreen
@@ -231,25 +235,23 @@ namespace Medicraft.Systems.Managers
             
         }
 
-        public void SetupPlayer(ScreenManager.GameScreen gameScreen, ScreenManager.LoadMapAction loadAction)
+        public void SetupPlayerPosition(ScreenManager.LoadMapAction loadAction)
         {
             if (loadAction == ScreenManager.LoadMapAction.LoadGameSave) return;
 
-            switch (gameScreen)
-            {
-                case ScreenManager.GameScreen.TestScreen:
-                    var mapPositionData = GameGlobals.Instance.MapLocationPointDatas.Where(m => m.Name.Equals("Test"));
-                    var positionData = mapPositionData.ElementAt(0).Positions.Where(p => p.Name.Equals("LastPosition"));
-                    var position = new Vector2(
-                        (float)positionData.ElementAt(0).Value[0],
-                        (float)positionData.ElementAt(0).Value[1]);
+            var curMap = ScreenManager.Instance.CurrentMap;
+            Player.PlayerData.CurrentMap = curMap;
 
-                    Player.Position = position;
-                    break;
-            }
+            var mapPositionData = GameGlobals.Instance.MapLocationPointDatas.Where(m => m.Name.Equals(curMap));
+            var positionData = mapPositionData.ElementAt(0).Positions.Where(p => p.Name.Equals("Respawn"));
+            var position = new Vector2(
+                (float)positionData.ElementAt(0).Value[0],
+                (float)positionData.ElementAt(0).Value[1]);
+
+            Player.Position = position;
 
             // Adjust HUD and camera positions
-            GameGlobals.Instance.HUDPosition = Player.Position - GameGlobals.Instance.GameScreenCenter;
+            GameGlobals.Instance.TopLeftCornerPosition = Player.Position - GameGlobals.Instance.GameScreenCenter;
             GameGlobals.Instance.InitialCameraPos = Player.Position;
             GameGlobals.Instance.AddingCameraPos = Vector2.Zero;
         }
@@ -260,14 +262,17 @@ namespace Medicraft.Systems.Managers
             {
                 Player.HP = Player.MaxHP;
 
-                var respawnPos = new Vector2(
-                    (float)GameGlobals.Instance.InitialPlayerData.Position[0],
-                    (float)GameGlobals.Instance.InitialPlayerData.Position[1]);
+                var curMap = ScreenManager.Instance.CurrentMap;
+                var mapPositionData = GameGlobals.Instance.MapLocationPointDatas.Where(m => m.Name.Equals(curMap));
+                var positionData = mapPositionData.ElementAt(0).Positions.Where(p => p.Name.Equals("Respawn"));
+                var position = new Vector2(
+                    (float)positionData.ElementAt(0).Value[0],
+                    (float)positionData.ElementAt(0).Value[1]);
 
-                Player.Position = respawnPos;
+                Player.Position = position;
 
                 // Adjust HUD and camera positions
-                GameGlobals.Instance.HUDPosition = Player.Position - GameGlobals.Instance.GameScreenCenter;
+                GameGlobals.Instance.TopLeftCornerPosition = Player.Position - GameGlobals.Instance.GameScreenCenter;
                 GameGlobals.Instance.InitialCameraPos = Player.Position;
                 GameGlobals.Instance.AddingCameraPos = Vector2.Zero;
 

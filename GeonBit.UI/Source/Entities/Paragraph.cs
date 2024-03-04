@@ -16,7 +16,9 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using GeonBit.UI.DataTypes;
+using MonoGame.Extended.BitmapFonts;
 using System.Text;
+using System;
 
 namespace GeonBit.UI.Entities
 {
@@ -126,7 +128,7 @@ namespace GeonBit.UI.Entities
         /// <summary>
         /// Current font used.
         /// </summary>
-        protected SpriteFont _currFont;
+        protected BitmapFont _currFont;
         
         /// <summary>
         /// Calculated, final text scale.
@@ -356,6 +358,107 @@ namespace GeonBit.UI.Entities
             return ret.ToString();
         }
 
+        public string WrapText(BitmapFont font, string text, float maxLineWidth, float fontSize)
+        {
+            // invalid width (can happen during init steps - skip
+            if (maxLineWidth <= 0) { return text; }
+
+            // create string to return as result
+            StringBuilder ret = new StringBuilder(string.Empty);
+
+            // if text got line breaks, break into lines and process them seperately
+            if (text.Contains("\n"))
+            {
+                // break into lines
+                string[] lines = text.Split('\n');
+
+                // iterate lines and wrap them
+                foreach (string line in lines)
+                {
+                    ret.AppendLine(WrapText(font, line, maxLineWidth, fontSize));
+                }
+
+                // remove the last extra linebreak that was added in this process and return.
+                ret = ret.Remove(ret.Length - 1, 1);
+                return ret.ToString();
+            }
+
+            // if got here it means we are processing a single line. break it into words.
+            // note: we use a list so we can push words in the middle while iterating (to handle words too long).
+            List<string> words = new List<string>(text.Split(' '));
+
+            // iterate words
+            int currWidth = 0;
+            for (int i = 0; i < words.Count; ++i)
+            {
+                // is it last word?
+                bool lastWord = (i == words.Count - 1);
+
+                // get current word and its width
+                string word = words[i];
+                int wordWidth = (int)((font.MeasureString(word).Width) * fontSize);
+
+                // special case: word itself is longer than line width
+                if (BreakWordsIfMust && wordWidth >= maxLineWidth && word.Length >= 4)
+                {
+                    // find breaking position
+                    int breakPos = 0;
+                    int currWordWidth = (int)(SingleCharacterSize.X * fontSize);
+                    foreach (char c in word)
+                    {
+                        currWordWidth += (int)(font.MeasureString(c.ToString()).Width * fontSize);
+                        if (currWordWidth >= maxLineWidth)
+                        {
+                            break;
+                        }
+                        breakPos++;
+                    }
+                    breakPos -= 3;
+                    if (breakPos >= word.Length - 1) { breakPos -= 2; }
+                    if (breakPos <= 0) { breakPos = 1; }
+
+                    // break the word into two and add to the list of words after this position.
+                    // we will process them in next loop iterations.
+                    string firstHalf = word.Substring(0, breakPos);
+                    string secondHalf = word.Substring(breakPos, word.Length - breakPos);
+                    if (AddHyphenWhenBreakWord) { firstHalf += '-'; }
+                    words.Insert(i + 1, firstHalf);
+                    words.Insert(i + 2, secondHalf);
+
+                    // continue to skip current word (it will be added later, with its broken parts)
+                    continue;
+                }
+
+                // add to total width
+                currWidth += wordWidth;
+
+                // did overflow max width? add line break and reset current width.
+                if (currWidth >= maxLineWidth)
+                {
+                    ret.Append('\n');
+                    ret.Append(word);
+                    if (!lastWord) ret.Append(' ');
+                    currWidth = wordWidth;
+                }
+                // if didn't overflow just add the word as-is
+                else
+                {
+                    ret.Append(word);
+                    if (!lastWord) ret.Append(' ');
+                }
+            }
+
+            // special case - if last word was just the size of the line, it will add a useless trailing \n and create double line breaks.
+            // remove that extra line break.
+            if (ret.Length > 0 && ret[ret.Length - 1] == '\n')
+            {
+                ret = ret.Remove(ret.Length - 1, 1);
+            }
+
+            // return the final wrapped text
+            return ret.ToString();
+        }
+
         /// <summary>
         /// Return the processed text that is actually displayed on screen, after word-wrap etc.
         /// </summary>
@@ -412,22 +515,23 @@ namespace GeonBit.UI.Entities
         /// </summary>
         private void UpdateFontPropertiesIfNeeded()
         {
-            SpriteFont font = GetCurrFont();
-            if (font != _currFont)
-            {
-                // mark as dirty so we'll recalculate positions and line breaks
-                MarkAsDirty();
+            //SpriteFont font = GetCurrFont();
+            //if (font != _currFont)
+            //{
+            //    // mark as dirty so we'll recalculate positions and line breaks
+            //    MarkAsDirty();
 
-                // set font and get single character size
-                _currFont = font;
-                SingleCharacterSize = _currFont.MeasureString(" ");
+            //    // set font and get single character size
+            //    _currFont = font;
+            //    SingleCharacterSize = _currFont.MeasureString(" ");
 
-                // sanity test
-                if ((SingleCharacterSize.X * 2) != _currFont.MeasureString("!.").X)
-                {
-                    throw new Exceptions.InvalidValueException("Cannot use non-monospace fonts!");
-                }
-            }
+            //    // sanity test
+            //    if ((SingleCharacterSize.X * 2) != _currFont.MeasureString("!.").X)
+            //    {
+            //        throw new Exceptions.InvalidValueException("Cannot use non-monospace fonts!");
+            //    }
+            //}
+            _currFont = Resources.Instance.FontTA8BitBold;
         }
 
         /// <summary>
@@ -450,7 +554,16 @@ namespace GeonBit.UI.Entities
             string newProcessedText = Text;
             if (WrapWords)
             {
-                newProcessedText = WrapText(_currFont, newProcessedText, _destRect.Width, _actualScale);
+                try
+                {
+                    var wordWidth = _currFont.MeasureString("ภาษาไทย");
+                    newProcessedText = WrapText(_currFont, newProcessedText, _destRect.Width, _actualScale);
+                }
+                catch (System.ArgumentException)
+                {
+                    var fontTA8BitBold = Resources.Instance.FontTA8BitBold;
+                    newProcessedText = WrapText(fontTA8BitBold, newProcessedText, _destRect.Width, _actualScale);
+                }          
             }
 
             // if processed text changed
@@ -465,7 +578,17 @@ namespace GeonBit.UI.Entities
             // so we just update _size every frame and the text alignemtn (left, right, center..) fix itself by the destination rect.
             _fontOrigin = Vector2.Zero;
             _position = new Vector2(_destRect.X, _destRect.Y);
-            Vector2 size = _currFont.MeasureString(_processedText);
+            Vector2 size = Vector2.Zero;
+
+            try
+            {
+                size = _currFont.MeasureString(_processedText);
+            }
+            catch (ArgumentException)
+            {
+                var fontTA8BitBold = Resources.Instance.FontTA8BitBold;
+                size = fontTA8BitBold.MeasureString(_processedText);
+            }
 
             // set position and origin based on anchor.
             // note: no top-left here because thats the default set above.
@@ -599,8 +722,17 @@ namespace GeonBit.UI.Entities
             Color fillCol = UserInterface.Active.DrawUtils.FixColorOpacity(FillColor);
 
             // draw text itself
-            spriteBatch.DrawString(_currFont, _processedText, _position, fillCol,
-                Rotation, _fontOrigin, _actualScale, SpriteEffects.None, 0.5f);
+            try
+            {
+                spriteBatch.DrawString(_currFont, _processedText, _position, fillCol,
+                    Rotation, _fontOrigin, _actualScale, SpriteEffects.None, 0.5f);
+            }
+            catch (ArgumentException)
+            {
+                var fontTA8BitBold = Resources.Instance.FontTA8BitBold;
+                spriteBatch.DrawString(fontTA8BitBold, _processedText, _position, fillCol,
+                    Rotation, _fontOrigin, _actualScale, SpriteEffects.None, 0.5f);
+            }
 
             // call base draw function
             base.DrawEntity(spriteBatch, phase);
@@ -615,7 +747,16 @@ namespace GeonBit.UI.Entities
         {
             // get outline color
             Color outlineColor = UserInterface.Active.DrawUtils.FixColorOpacity(OutlineColor);
-            DrawTextOutline(spriteBatch, _processedText, outlineWidth, _currFont, _actualScale, _position, outlineColor, _fontOrigin);
+           
+            try
+            {
+                DrawTextOutline(spriteBatch, _processedText, outlineWidth, _currFont, _actualScale, _position, outlineColor, _fontOrigin);
+            }
+            catch (ArgumentException)
+            {
+                var fontTA8BitBold = Resources.Instance.FontTA8BitBold;
+                DrawTextOutline(spriteBatch, _processedText, outlineWidth, fontTA8BitBold, _actualScale, _position, outlineColor, _fontOrigin);
+            }
         }
 
         /// <summary>
@@ -630,6 +771,30 @@ namespace GeonBit.UI.Entities
         /// <param name="outlineColor">Outline color.</param>
         /// <param name="origin">Text origin.</param>
         protected void DrawTextOutline(SpriteBatch spriteBatch, string text, int outlineWidth, SpriteFont font, float scale, Vector2 position, Color outlineColor, Vector2 origin)
+        {
+            // for not-too-thick outline we render just two corners
+            if (outlineWidth <= MaxOutlineWidthToOptimize)
+            {
+                spriteBatch.DrawString(font, text, position + Vector2.One * outlineWidth, outlineColor,
+                    Rotation, origin, scale, SpriteEffects.None, 0.5f);
+                spriteBatch.DrawString(font, text, position - Vector2.One * outlineWidth, outlineColor,
+                    Rotation, origin, scale, SpriteEffects.None, 0.5f);
+            }
+            // for really thick outline we need to cover the other corners as well
+            else
+            {
+                spriteBatch.DrawString(font, text, position + Vector2.UnitX * outlineWidth, outlineColor,
+                    Rotation, origin, scale, SpriteEffects.None, 0.5f);
+                spriteBatch.DrawString(font, text, position - Vector2.UnitX * outlineWidth, outlineColor,
+                    Rotation, origin, scale, SpriteEffects.None, 0.5f);
+                spriteBatch.DrawString(font, text, position + Vector2.UnitY * outlineWidth, outlineColor,
+                    Rotation, origin, scale, SpriteEffects.None, 0.5f);
+                spriteBatch.DrawString(font, text, position - Vector2.UnitY * outlineWidth, outlineColor,
+                    Rotation, origin, scale, SpriteEffects.None, 0.5f);
+            }
+        }
+
+        protected void DrawTextOutline(SpriteBatch spriteBatch, string text, int outlineWidth, BitmapFont font, float scale, Vector2 position, Color outlineColor, Vector2 origin)
         {
             // for not-too-thick outline we render just two corners
             if (outlineWidth <= MaxOutlineWidthToOptimize)

@@ -4,6 +4,7 @@ using Medicraft.Data.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Sprites;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,9 +19,15 @@ namespace Medicraft.Systems.Managers
         // Inventory UI Variables
         // all the example panels (screens)
         readonly List<Panel> panels = [];
+
+        private Panel _mainPanel, _leftPanel, _rightPanel;
+
+        private Button _useButton, openButton, closeButton;
+
         // paragraph that shows the currently active entity
         public Paragraph TargetEntityShow { private set; get; }
 
+        private float _deltaSeconds = 0;
 
         private static InventoryManager instance;
 
@@ -61,7 +68,12 @@ namespace Medicraft.Systems.Managers
             {
                 OnClick = (Entity entity) =>
                 {
-                    //Exit();
+                    // Close Inventory
+                    // Toggle the IsOpenInventory flag
+                    GameGlobals.Instance.IsOpenInventory = !GameGlobals.Instance.IsOpenInventory;
+
+                    // Pause PlayScreen
+                    GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
                 }
             };
             UserInterface.Active.AddEntity(exitBtn);
@@ -105,88 +117,144 @@ namespace Medicraft.Systems.Managers
             };
 
             // สร้าง Panel หลัก
-            Panel mainPanel = new(new Vector2(1200, 650), PanelSkin.Simple, Anchor.Center);
-            UserInterface.Active.AddEntity(mainPanel);
+            _mainPanel = new(new Vector2(1200, 650), PanelSkin.Simple, Anchor.Center);
+            UserInterface.Active.AddEntity(_mainPanel);
 
             // สร้าง Panel สำหรับฝั่งซ้าย
-            Panel leftPanel = new(new Vector2(500, 600), PanelSkin.ListBackground, Anchor.TopLeft);
-            mainPanel.AddChild(leftPanel);
+            _leftPanel = new(new Vector2(500, 600), PanelSkin.ListBackground, Anchor.TopLeft);
+            _mainPanel.AddChild(_leftPanel);
 
             // สร้าง Panel สำหรับฝั่งขวา
-            Panel rightPanel = new(new Vector2(600, 600), PanelSkin.ListBackground, Anchor.TopRight);
-            mainPanel.AddChild(rightPanel);
-            rightPanel.AddChild(new Header("IVENTORY"));
-            rightPanel.AddChild(new HorizontalLine());
+            _rightPanel = new(new Vector2(600, 600), PanelSkin.ListBackground, Anchor.TopRight);
 
-            for (int i = 0; i < 48; ++i)
-            {
-                rightPanel.AddChild(new Icon((IconType)i, Anchor.AutoInline, 1, true));
-            }
-
-            foreach (Entity childEntity in rightPanel.Children)
-            {
-                if (childEntity is Icon icon)
-                {
-                    // สร้าง Label เพื่อแสดงชื่อของไอคอน
-                    Label iconLabel = new(icon.IconType.ToString(), Anchor.BottomCenter)
-                    {
-                        Size = new Vector2(100, -1) // กำหนดขนาดของ Label
-                    };
-
-                    icon.OnClick = (Entity entity) =>
-                    {
-                        // Remove all icons from the left panel
-                        leftPanel.ClearChildren();
-
-                        // Clone the clicked icon and add it to the left panel
-                        Icon clonedIcon = new(icon.IconType, Anchor.AutoInline, 1, true)
-                        {
-                            Size = new Vector2(450, 450) // ปรับขนาดของไอคอน
-                        };
-
-                        leftPanel.AddChild(clonedIcon);
-                        leftPanel.AddChild(iconLabel);
-                    };
-                }
-            }
+            _mainPanel.AddChild(_rightPanel);
+            _rightPanel.AddChild(new Header("IVENTORY"));
+            _rightPanel.AddChild(new HorizontalLine());        
 
             var offsetX = 140;
-            Button useBtn = new("Use"
-                , anchor: Anchor.BottomLeft
-                , size: new Vector2(200, -1)
-                , offset: new Vector2(offsetX, 0));
-
-            offsetX += 200;
-            useBtn.OnClick = (Entity entity) => { };
-            UserInterface.Active.AddEntity(useBtn);
-
-            Button openBtn = new("Open"
-                , anchor: Anchor.BottomLeft
-                , size: new Vector2(200, -1)
-                , offset: new Vector2(offsetX, 0));
-
-            offsetX += 200;
-            openBtn.OnClick = (Entity entity) => {
-                mainPanel.Visible = true; 
-            };
-            UserInterface.Active.AddEntity(openBtn);
-
-            Button closeButton = new("Close"
-                , anchor: Anchor.BottomLeft
-                , size: new Vector2(200, -1)
-                , offset: new Vector2(offsetX, 0))
+            _useButton = new("Use", anchor: Anchor.BottomLeft, size: new Vector2(200, -1), offset: new Vector2(offsetX, 50))
             {
-                OnClick = (Entity entity) => { mainPanel.Visible = false; }
+                Visible = false,
+                OnClick = (Entity entity) =>
+                {
+                    System.Diagnostics.Debug.WriteLine($"ItemId : {GameGlobals.Instance.SelectedItemInventory}");
+                }
+            };
+            UserInterface.Active.AddEntity(_useButton);
+
+            offsetX += 200;
+            openButton = new("Open", anchor: Anchor.BottomLeft, size: new Vector2(200, -1), offset: new Vector2(offsetX, 100))
+            {
+                OnClick = (Entity entity) =>
+                {
+                    _mainPanel.Visible = true;
+                }
+            };
+            UserInterface.Active.AddEntity(openButton);
+
+            offsetX += 200;
+            closeButton = new("Close", anchor: Anchor.BottomLeft, size: new Vector2(200, -1), offset: new Vector2(offsetX, 150))
+            {
+                OnClick = (Entity entity) => 
+                {
+                    _mainPanel.Visible = false;
+                }
             };
             UserInterface.Active.AddEntity(closeButton);
 
             // Disable Cursor
             UserInterface.Active.ShowCursor = false;
 
+            // Disable this so it won't clear out da spriteBatch
+            UserInterface.Active.UseRenderTarget = false;
+
             // once done init, clear events log
             eventsLog.ClearItems();
         }
 
+        public void RefreshInvenrotyItem()
+        {
+            if (_rightPanel.Children.OfType<Icon>().Any())
+            {
+                // Remove all Icon children
+                foreach (var item in _rightPanel.Children.OfType<Icon>().ToList())
+                {
+                    _rightPanel.RemoveChild(item);
+                }
+            }
+
+            // Set item
+            var itemsSpriteSheet = GameGlobals.Instance.ItemsPackSprites;
+            var itemSprite = new AnimatedSprite(itemsSpriteSheet);       
+
+            foreach (var item in InventoryBag.Values)
+            {
+                itemSprite.Play(item.ItemId.ToString());
+                itemSprite.Update(_deltaSeconds);
+
+                var texture = itemSprite.TextureRegion.Texture;
+                var bounds = itemSprite.TextureRegion.Bounds;
+
+                // Create a new texture with new bounds
+                Texture2D newTexture = new(ScreenManager.Instance.GraphicsDevice, bounds.Width, bounds.Height);
+
+                // Get the data from the original texture
+                Color[] data = new Color[bounds.Width * bounds.Height];
+                texture.GetData(0, bounds, data, 0, data.Length);
+
+                // Set the data to the new texture
+                newTexture.SetData(data);
+
+                _rightPanel.AddChild(new Icon(IconType.None, Anchor.AutoInline, 1, true)
+                {
+                    ItemId = item.ItemId,
+                    Texture = newTexture,
+                });
+            }
+
+            foreach (var icon in _rightPanel.Children.OfType<Icon>())
+            {
+                var itemData = GameGlobals.Instance.ItemsDatas.Where(i => i.ItemId.Equals(icon.ItemId)).ElementAt(0);
+
+                // สร้าง Label เพื่อแสดงชื่อของไอคอน
+                Label iconLabel = new(itemData.Name, Anchor.AutoCenter)
+                {
+                    Size = new Vector2(250, 10), // กำหนดขนาดของ Label
+                    Scale = 1.5f
+                };
+
+                icon.OnClick = (Entity entity) =>
+                {
+                    // Remove all icons from the left panel
+                    _leftPanel.ClearChildren();
+
+                    // Clone the clicked icon and add it to the left panel
+                    Icon clonedIcon = new(IconType.None, Anchor.AutoCenter, 1, true)
+                    {
+                        Size = new Vector2(350, 350),   // ปรับขนาดของไอคอน
+                        Texture = icon.Texture
+                    };
+
+                    // Description item
+                    Label description = new(itemData.Description, Anchor.AutoCenter)
+                    {
+                        Size = new Vector2(425, 425), // กำหนดขนาดของ Label
+                        Scale = 1f,
+                        WrapWords = true
+                    };
+
+                    _leftPanel.AddChild(clonedIcon);
+                    _leftPanel.AddChild(iconLabel);
+                    _leftPanel.AddChild(description);
+
+                    GameGlobals.Instance.SelectedItemInventory = icon.ItemId;
+
+                    _useButton.Visible = true;
+                };
+            }
+        }
+
+        // Inventory Data
         public void InitializeInventory(InventoryData inventoryData)
         {
             // Clear Inventory
@@ -206,21 +274,19 @@ namespace Medicraft.Systems.Managers
 
         public void Update(GameTime gameTime) 
         {
+            _deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             // update UI
             UserInterface.Active.Update(gameTime);
 
             // show currently active entity (for testing)
             TargetEntityShow.Text = "Target Entity: " + (UserInterface.Active.TargetEntity != null ? UserInterface.Active.TargetEntity.GetType().Name : "null");
-
         }
 
         public static void Draw(SpriteBatch spriteBatch)
         {
             // draw ui
-            UserInterface.Active.Draw(spriteBatch);        
-
-            // clear buffer
-            ScreenManager.Instance.GraphicsDevice.Clear(Color.CornflowerBlue);
+            UserInterface.Active.Draw(spriteBatch);
 
             // finalize ui rendering
             UserInterface.Active.DrawMainRenderTarget(spriteBatch);
@@ -248,6 +314,11 @@ namespace Medicraft.Systems.Managers
                     Slot = GameGlobals.Instance.DefaultInventorySlot
                 });
             }
+        }
+
+        public static bool CheckAddingItem()
+        {
+            return true;
         }
 
         public void AddGoldCoin(int goldCoin)

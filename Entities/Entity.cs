@@ -33,35 +33,44 @@ namespace Medicraft.Entities
         public float Evasion { get; set; }
 
         public AnimatedSprite Sprite { get; protected set; }
-        protected string SpriteCycle = "default";
-        protected string CurrentAnimation;
+        public string SpriteCycle { get; protected set; }
+        public string CurrentAnimation { get; protected set; }
+        
+        // Used Effect Name
+        public string NormalHitEffectActivated { get; protected set; }
+        public string NormalHitEffectAttacked { get; protected set; }
+        public string NormalSkillEffectActivated { get; protected set; }
+        public string NormalSkillEffectAttacked { get; protected set; }
+        public string BurstSkillEffectActivated { get; protected set; }
+        public string BurstSkillEffectAttacked { get; protected set; }
+        public string PassiveSkillEffectActivated { get; protected set; }
 
-        public Transform2 Transform;
-        public Vector2 Velocity, CombatNumVelocity;    
-        public double BoundingCollisionX, BoundingCollisionY;
+        public Transform2 Transform { get; protected set; }
+        public Vector2 Velocity, CombatNumVelocity;
+        public float BoundingCollisionX, BoundingCollisionY;
         public RectangleF BoundingDetectCollisions;      // For dectect collisions
         public CircleF BoundingHitBox;
         public CircleF BoundingDetectEntity;
         public CircleF BoundingCollection;
         public CircleF BoundingAggro;
-        
-        protected int currentNodeIndex = 0;     // Index of the current node in the path
-        protected int stoppingNodeIndex = 1;    // Distance index from the last node in the path for entity to stop moving
-        protected AStar PathFinding;
-        protected Vector2 InitPos;      
 
-        protected Vector2 targetNode;
-        protected int routeNodeIndex = 0;
-        protected float nextNodeTime;
-        protected float nextNodeTimer;
+        protected int _currentNodeIndex = 0;     // Index of the current node in the path
+        protected int _stoppingNodeIndex = 1;    // Distance index from the last node in the path for entity to stop moving
+        protected AStar _pathFinding;
+        protected Vector2 _initPos;
+
+        protected Vector2 _targetNode;
+        protected int _routeNodeIndex = 0;
+        protected float _nextNodeTime;
+        protected float _nextNodeTimer;
 
         protected float NodeCycleTime
         {
-            get => nextNodeTime;
+            get => _nextNodeTime;
             set
             {
-                nextNodeTime = value;
-                nextNodeTimer = value;
+                _nextNodeTime = value;
+                _nextNodeTimer = value;
             }
         }
 
@@ -73,8 +82,8 @@ namespace Medicraft.Entities
                 Transform.Position = value;
                 BoundingDetectCollisions.X = (int)((int)value.X - Sprite.TextureRegion.Width / BoundingCollisionX);
                 BoundingDetectCollisions.Y = (int)((int)value.Y + Sprite.TextureRegion.Height / BoundingCollisionY);
-                
-                if (Name.Equals("Noah")) 
+
+                if (Name.Equals("Noah"))
                 {
                     BoundingHitBox.Center = value + new Vector2(0f, 32f);
                     BoundingDetectEntity.Center = value + new Vector2(0f, 32f);
@@ -96,8 +105,7 @@ namespace Medicraft.Entities
             Hostile,
             Boss
         }
-        
-        public EntityTypes EntityType { get; protected set; }
+        public EntityTypes EntityType { get; protected set; }    
 
         public enum PathFindingTypes
         {
@@ -105,29 +113,29 @@ namespace Medicraft.Entities
             RandomPoint,
             StationaryPoint
         }
-
         public PathFindingTypes PathFindingType { get; protected set; }
 
         // Timer Conditions
         public float AggroTime { get; protected set; }
         public float AggroTimer { get; set; }
         public float ActionTimer { get; set; }
-        public float AttackedTimer { get; set; }     // Also used in positioning DrawCombatNumbers
+        public float AttackedTimer { get; set; }
+        public float CombatNumbersTimer { get; set; }
         public float StunningTimer { get; set; }
         public float KnockbackedTimer { get; set; }
         public float DyingTime { get; protected set; }
         public float DyingTimer { get; set; }
 
-        protected float AttackSpeed { get; set; }
-        protected float CooldownAttack { get; set; }
-        protected float CooldownAttackTimer { get; set; }
-        protected bool IsAttackCooldown { get; set; }
+        protected float _attackSpeed;
+        protected float _cooldownAttack;
+        protected float _cooldownAttackTimer;
+        protected bool _isAttackCooldown;
 
-        // Damage && Buff Numbers
+        // Combat Nunber
         public int CombatNumCase { get; set; }
-        public float CombatNumScale { get; set; }
 
         // Boolean
+        public bool IsRespawnable { get; protected set; }
         public bool IsAggroResettable { get; protected set; }
         public bool IsAggro { get; set; }
         public bool IsStunable { get; protected set; }
@@ -139,6 +147,8 @@ namespace Medicraft.Entities
         public bool IsMoving { get; set; }
         public bool IsAttacking { get; set; }
         public bool IsAttacked { get; set; }
+        public bool IsBuffed { get; set; }
+        public bool IsShowCombatNumbers { get; set; }
         public bool IsDetectCollistionObject { get; set; }
         public List<CombatNumberData> CombatLogs { get; protected set; }
 
@@ -148,7 +158,7 @@ namespace Medicraft.Entities
             Name = string.Empty;
             Level = 0;
             EXP = 0;
-  
+
             Transform = new Transform2
             {
                 Scale = Vector2.One,
@@ -158,6 +168,7 @@ namespace Medicraft.Entities
 
             Velocity = Vector2.Zero;
             CombatNumVelocity = Vector2.Zero;
+            SpriteCycle = "default";
 
             AggroTimer = 0f;
             ActionTimer = 0f;
@@ -165,14 +176,14 @@ namespace Medicraft.Entities
             StunningTimer = 0f;
             KnockbackedTimer = 0f;
             DyingTimer = 0f;
+            CombatNumbersTimer = 0f;
 
-            AttackSpeed = 1f;
-            CooldownAttack = 0.4f;
-            CooldownAttackTimer = CooldownAttack;
-            IsAttackCooldown = false;
+            _attackSpeed = 1f;
+            _cooldownAttack = 0.4f;
+            _cooldownAttackTimer = _cooldownAttack;
+            _isAttackCooldown = false;
 
-            CombatNumScale = 2f;
-
+            IsRespawnable = true;
             IsStunable = true;
             IsStunning = false;
             IsAggroResettable = true;
@@ -184,6 +195,8 @@ namespace Medicraft.Entities
             IsMoving = false;
             IsAttacking = false;
             IsAttacked = false;
+            IsBuffed = false;
+            IsShowCombatNumbers = false;
             IsDetectCollistionObject = false;
 
             CombatLogs = [];
@@ -205,33 +218,36 @@ namespace Medicraft.Entities
 
             Velocity = Vector2.Zero;
             CombatNumVelocity = Vector2.Zero;
+            SpriteCycle = entity.SpriteCycle;
 
-            AggroTimer = entity.AggroTimer;
-            ActionTimer = entity.ActionTimer;
-            AttackedTimer = entity.AttackedTimer;
-            StunningTimer = entity.StunningTimer;
-            KnockbackedTimer = entity.KnockbackedTimer;
-            DyingTimer = entity.DyingTimer;
+            AggroTimer = 0f;
+            ActionTimer = 0f;
+            AttackedTimer = 0f;
+            StunningTimer = 0f;
+            KnockbackedTimer = 0f;
+            DyingTimer = 0f;
+            CombatNumbersTimer = 0f;
 
-            AttackSpeed = entity.AttackSpeed;
-            CooldownAttack = entity.CooldownAttack;
-            CooldownAttackTimer = CooldownAttack;
-            IsAttackCooldown = entity.IsAttackCooldown;
+            _attackSpeed = entity._attackSpeed;
+            _cooldownAttack = entity._cooldownAttack;
+            _cooldownAttackTimer = _cooldownAttack;
+            _isAttackCooldown = entity._isAttackCooldown;
 
-            CombatNumScale = entity.CombatNumScale;
-
+            IsRespawnable = entity.IsRespawnable;
             IsStunable = entity.IsStunable;
-            IsStunning = entity.IsStunning;
+            IsStunning = false;
             IsAggroResettable = entity.IsAggroResettable;
-            IsAggro = entity.IsAggro;
+            IsAggro = false;
             IsKnockbackable = entity.IsKnockbackable;
-            IsKnockback = entity.IsKnockback;
-            IsDying = entity.IsDying;
-            IsDestroyed = entity.IsDestroyed;
-            IsMoving = entity.IsMoving;
-            IsAttacking = entity.IsAttacking;
-            IsAttacked = entity.IsAttacked;
-            IsDetectCollistionObject = entity.IsDetectCollistionObject;
+            IsKnockback = false;
+            IsDying = false;
+            IsDestroyed = false;
+            IsMoving = false;
+            IsAttacking = false;
+            IsAttacked = false;
+            IsBuffed = false;
+            IsShowCombatNumbers = false;
+            IsDetectCollistionObject = false;
 
             CombatLogs = [];
         }
@@ -239,6 +255,7 @@ namespace Medicraft.Entities
         public virtual void Update(GameTime gameTime, KeyboardState keyboardCurrentState, KeyboardState keyboardPrevioseState
             , MouseState mouseCurrentState, MouseState mousePrevioseState) { }
         public virtual void Update(GameTime gameTime, float playerDepth, float topDepth, float middleDepth, float bottomDepth) { }
+
         public virtual void Draw(SpriteBatch spriteBatch) { }
         public virtual void Destroy()
         {
@@ -316,11 +333,11 @@ namespace Medicraft.Entities
             Evasion = (float)charData.Evasion;
         }
 
-        // Knowing this that MovementControl, CombatControl and some methods below this is for Mobs only
+        // Knowing this MovementControl, CombatControl and some methods below this is for Mobs only
         protected void MovementControl(float deltaSeconds)
         {
             var walkSpeed = deltaSeconds * Speed;
-            InitPos = Position;
+            _initPos = Position;
 
             // Check Object Collsion
             CheckCollision();
@@ -335,14 +352,14 @@ namespace Medicraft.Entities
             // Check movement according to PathFinding
             if (!IsStunning && ((!IsKnockback && !IsAttacking) || (!IsAttacked && !IsAttacking)))
             {
-                if (PathFinding.GetPath().Count != 0)
+                if (_pathFinding.GetPath().Count != 0)
                 {
-                    if (currentNodeIndex < PathFinding.GetPath().Count - stoppingNodeIndex)
+                    if (_currentNodeIndex < _pathFinding.GetPath().Count - _stoppingNodeIndex)
                     {
                         // Calculate direction to the next node
-                        var direction = new Vector2(PathFinding.GetPath()[currentNodeIndex + 1].col
-                            - PathFinding.GetPath()[currentNodeIndex].col, PathFinding.GetPath()[currentNodeIndex + 1].row
-                            - PathFinding.GetPath()[currentNodeIndex].row);
+                        var direction = new Vector2(_pathFinding.GetPath()[_currentNodeIndex + 1].col
+                            - _pathFinding.GetPath()[_currentNodeIndex].col, _pathFinding.GetPath()[_currentNodeIndex + 1].row
+                            - _pathFinding.GetPath()[_currentNodeIndex].row);
                         direction.Normalize();
 
                         // Move the character towards the next node
@@ -370,10 +387,10 @@ namespace Medicraft.Entities
                         Sprite.Play(CurrentAnimation);
 
                         // Check if the character has reached the next node
-                        if (Vector2.Distance(Position, new Vector2((PathFinding.GetPath()[currentNodeIndex + 1].col * 64) + 32
-                            , (PathFinding.GetPath()[currentNodeIndex + 1].row * 64) + 32)) < 1f)
+                        if (Vector2.Distance(Position, new Vector2((_pathFinding.GetPath()[_currentNodeIndex + 1].col * 64) + 32
+                            , (_pathFinding.GetPath()[_currentNodeIndex + 1].row * 64) + 32)) < 1f)
                         {
-                            currentNodeIndex++;
+                            _currentNodeIndex++;
                         }
                         //System.Diagnostics.Debug.WriteLine($"Pos Mob: {Position.X} {Position.Y}");       
                     }
@@ -391,7 +408,7 @@ namespace Medicraft.Entities
                 if (BoundingDetectCollisions.Intersects(rect))
                 {
                     IsDetectCollistionObject = true;
-                    Position = InitPos;
+                    Position = _initPos;
                     Velocity = Vector2.Zero;
                     break;
                 }
@@ -426,25 +443,25 @@ namespace Medicraft.Entities
 
         protected void UpdateTargetNode(float deltaSeconds, EntityData entityData)
         {
-            nextNodeTimer += deltaSeconds;
+            _nextNodeTimer += deltaSeconds;
 
-            if (nextNodeTimer >= nextNodeTime)
+            if (_nextNodeTimer >= _nextNodeTime)
             {
                 switch (PathFindingType)
                 {
                     case PathFindingTypes.RoutePoint:
                         // Define the current route
-                        var rountNodePoint = entityData.RoutePoint.ElementAt(routeNodeIndex);
+                        var rountNodePoint = entityData.RoutePoint.ElementAt(_routeNodeIndex);
                         var position = new Vector2((float)rountNodePoint[0], (float)rountNodePoint[1]);
 
                         // Next route
-                        routeNodeIndex++;
-                        if (routeNodeIndex >= entityData.RoutePoint.Length)
+                        _routeNodeIndex++;
+                        if (_routeNodeIndex >= entityData.RoutePoint.Length)
                         {
-                            routeNodeIndex = 0;
+                            _routeNodeIndex = 0;
                         }
 
-                        targetNode = position;
+                        _targetNode = position;
                         break;
 
                     case PathFindingTypes.RandomPoint:
@@ -461,15 +478,15 @@ namespace Medicraft.Entities
                         var randomX = random.Next(rectangleX, rectangleX + rectangleWidth);
                         var randomY = random.Next(rectangleY, rectangleY + rectangleHeight);
 
-                        targetNode = new Vector2(randomX, randomY);
+                        _targetNode = new Vector2(randomX, randomY);
                         break;
 
                     case PathFindingTypes.StationaryPoint:
                         // Its Stationary so we do nothing here
                         break;
-                } 
+                }
 
-                nextNodeTimer = 0f;
+                _nextNodeTimer = 0f;
             }
         }
 
@@ -477,7 +494,7 @@ namespace Medicraft.Entities
         {
             if (IsAggro)
             {
-                PathFinding = new AStar(
+                _pathFinding = new AStar(
                     (int)BoundingDetectCollisions.Center.X,
                     (int)BoundingDetectCollisions.Center.Y,
                     (int)PlayerManager.Instance.Player.Position.X,
@@ -491,23 +508,23 @@ namespace Medicraft.Entities
                     case PathFindingTypes.RoutePoint:
 
                     case PathFindingTypes.RandomPoint:
-                        PathFinding = new AStar(
+                        _pathFinding = new AStar(
                             (int)BoundingDetectCollisions.Center.X,
                             (int)BoundingDetectCollisions.Center.Y,
-                            (int)targetNode.X,
-                            (int)targetNode.Y
+                            (int)_targetNode.X,
+                            (int)_targetNode.Y
                         );
                         break;
 
                     case PathFindingTypes.StationaryPoint:
-                        PathFinding = new AStar(
+                        _pathFinding = new AStar(
                             (int)BoundingDetectCollisions.Center.X,
                             (int)BoundingDetectCollisions.Center.Y,
                             returnPosX,
                             returnPosY
                         );
                         break;
-                }            
+                }
             }
         }
 
@@ -524,10 +541,10 @@ namespace Medicraft.Entities
                 {
                     IsAggro = false;
                 }
-            }          
+            }
 
             // Decreasing KnockbackTimer
-            if (IsKnockback)
+            if (IsKnockback && IsKnockbackable)
             {
                 if (IsKnockbackable) Position += Velocity * KnockbackedTimer;
 
@@ -537,13 +554,13 @@ namespace Medicraft.Entities
                 }
                 else
                 {
-                    IsKnockback = false;                  
+                    IsKnockback = false;
                     Velocity = Vector2.Zero;
                 }
             }
 
             // Decreasing StunningTimer
-            if (IsStunning)
+            if (IsStunning && IsStunable)
             {
                 if (StunningTimer > 0)
                 {
@@ -558,7 +575,20 @@ namespace Medicraft.Entities
             // Decreasing AttackedTimer
             if (IsAttacked)
             {
-                if (AttackedTimer < 1)
+                if (AttackedTimer <= 1f)
+                {
+                    AttackedTimer += deltaSeconds;
+                }
+                else
+                {
+                    IsAttacked = false;
+                    AttackedTimer = 0;
+                }
+            }
+
+            if (IsShowCombatNumbers)
+            {
+                if (CombatNumbersTimer < 1)
                 {
                     foreach (var log in CombatLogs.Where(e => e.ElapsedTime < 1f))
                     {
@@ -566,27 +596,30 @@ namespace Medicraft.Entities
                         log.AlphaColor -= deltaSeconds * 0.06f;
 
                         if (log.ElapsedTime < 0.2f)
-                        {                          
-                            log.ScaleFont += deltaSeconds * 5f;
+                        {
+                            log.Scaling += deltaSeconds * 5f;
                         }
                         else if (log.ElapsedTime > 0.95f)
                         {
                             log.AlphaColor -= deltaSeconds * 5f;
-                            log.ScaleFont -= deltaSeconds * 5f;
+                            log.Scaling -= deltaSeconds * 5f;
 
-                            log.AlphaColor = log.AlphaColor > 0? log.AlphaColor : 0;
-                            log.ScaleFont = log.ScaleFont > 0? log.ScaleFont: 0;
+                            log.AlphaColor = log.AlphaColor > 0 ? log.AlphaColor : 0;
+                            log.Scaling = log.Scaling > 0 ? log.Scaling : 0;
                         }
                     }
-
-                    AttackedTimer += deltaSeconds;
                 }
                 else
                 {
-                    IsAttacked = false;
+                    IsShowCombatNumbers = false;
                     CombatNumVelocity = Vector2.Zero;
                 }
             }
+        }
+
+        protected virtual void MinimumCapacity()
+        {
+            HP = Math.Max(0, Math.Min(HP, MaxHP));
         }
 
         // Mostly this one for Hostile Mobs
@@ -599,8 +632,8 @@ namespace Medicraft.Entities
                 Sprite.Play(CurrentAnimation);
 
                 IsAttacking = true;
-                ActionTimer = AttackSpeed;
-                CooldownAttackTimer = CooldownAttack;
+                ActionTimer = _attackSpeed;
+                _cooldownAttackTimer = _cooldownAttack;
             }
 
             if (IsAttacking)
@@ -612,21 +645,21 @@ namespace Medicraft.Entities
                 }
                 else
                 {
-                    if (!IsAttackCooldown)
+                    if (!_isAttackCooldown)
                     {
                         CheckAttackDetection();
-                        IsAttackCooldown = true;
+                        _isAttackCooldown = true;
                     }
                     else
                     {
-                        if (CooldownAttackTimer > 0)
+                        if (_cooldownAttackTimer > 0)
                         {
-                            CooldownAttackTimer -= deltaSeconds;
+                            _cooldownAttackTimer -= deltaSeconds;
                         }
                         else
                         {
                             IsAttacking = false;
-                            IsAttackCooldown = false;
+                            _isAttackCooldown = false;
                         }
                     }
                 }
@@ -635,23 +668,30 @@ namespace Medicraft.Entities
 
         protected virtual void CheckAttackDetection()
         {
+            // Chedk Attacking Detec tion for Player
             if (BoundingDetectEntity.Intersects(PlayerManager.Instance.Player.BoundingHitBox))
             {
                 if (PlayerManager.Instance.Player.HP > 0)
                 {
-                    int totalDamage = TotalDamage(ATK, PlayerManager.Instance.Player.DEF_Percent
+                    int totalDamage = TotalDamage(ATK
+                        , PlayerManager.Instance.Player.DEF_Percent
                         , PlayerManager.Instance.Player.Evasion);
 
+                    var combatNumVelocity = PlayerManager.Instance.Player.SetCombatNumDirection();
+                    PlayerManager.Instance.Player.AddCombatLogNumbers(Name
+                        , totalDamage.ToString()
+                        , CombatNumCase
+                        , combatNumVelocity
+                        , NormalHitEffectAttacked);
+
+                    // In case the Attack doesn't Missed
                     if (CombatNumCase != 3)
                     {
+                        // Player being hit by Mob
+                        PlayerManager.Instance.Player.IsAttacked = true;
+
                         PlayerManager.Instance.Player.HP -= totalDamage;
-                    }
-
-                    var combatNumVelocity = PlayerManager.Instance.Player.SetCombatNumDirection();
-                    PlayerManager.Instance.Player.AddCombatLogNumbers(Name, totalDamage.ToString(), CombatNumCase, combatNumVelocity);
-
-                    PlayerManager.Instance.Player.IsAttacked = true;
-                    PlayerManager.Instance.Player.AttackedTimer = 0f;
+                    }        
                 }
             }
         }
@@ -688,7 +728,7 @@ namespace Medicraft.Entities
             Sprite.Depth = topDepth; // Default depth
             if (BoundingHitBox.Intersects(PlayerManager.Instance.Player.BoundingDetectEntity))
             {
-                if (Transform.Position.Y >= (PlayerManager.Instance.Player.Position.Y + 60f))
+                if (Transform.Position.Y >= PlayerManager.Instance.Player.BoundingDetectCollisions.Center.Y)
                 {
                     Sprite.Depth = playerDepth - 0.00001f; // In front Player
                 }
@@ -729,70 +769,121 @@ namespace Medicraft.Entities
             }
         }
 
-        public virtual void AddCombatLogNumbers(string ActorName, string combatNumbers, int combatCase, Vector2 combatNumVelocity)
+        public virtual void AddCombatLogNumbers(string ActorName, string combatNumbers, int combatCase
+            , Vector2 combatNumVelocity, string attackedEffectName)
         {
+            IsShowCombatNumbers = true;
+            CombatNumbersTimer = 0f;
+
             switch (combatCase)
             {
                 case 0: // Damage Numbers Default
-                    CombatLogs.Add(new CombatNumberData {
-                        Actor = ActorName,
-                        Action = CombatNumberData.ActionType.Attack,
-                        Value = combatNumbers,
-                        ElapsedTime = 0,
-                        Velocity = combatNumVelocity,
-                        OffSet = Vector2.Zero,
-                        Color = Color.White,
-                        StrokeColor = Color.Black,
-                        AlphaColor = 1f,
-                        ScaleFont = 0f
-                    });
-                    CombatNumScale = 2f;
-                    break;
-
-                case 1: // Damage Numbers Critical | Player Damage Taken
                     CombatLogs.Add(new CombatNumberData
                     {
                         Actor = ActorName,
                         Action = CombatNumberData.ActionType.Attack,
                         Value = combatNumbers,
+                        EffectName = attackedEffectName,
+                        IsEffectPlayed = false,
+                        ElapsedTime = 0,
+                        Velocity = combatNumVelocity,
+                        OffSet = Vector2.Zero,
+                        Color = Color.White,
+                        StrokeColor = Color.Black,
+                        Size = 2f,
+                        StrokeSize = 1,
+                        AlphaColor = 1f,
+                        Scaling = 0f
+                    });                  
+                    break;
+
+                case 1: // Damage Numbers Critical | Player taken damage too
+                    CombatLogs.Add(new CombatNumberData
+                    {
+                        Actor = ActorName,
+                        Action = CombatNumberData.ActionType.CriticalAttack,
+                        Value = combatNumbers,
+                        EffectName = attackedEffectName,
+                        IsEffectPlayed = false,
                         ElapsedTime = 0,
                         Velocity = combatNumVelocity,
                         OffSet = Vector2.Zero,
                         Color = Color.Red,
                         StrokeColor = Color.Black,
-                        AlphaColor = 1f,
-                        ScaleFont = 0f
-                    });
-                    CombatNumScale = 2.2f;
+                        Size = 2.2f,
+                        StrokeSize = 1,
+                        AlphaColor = 1f,                   
+                        Scaling = 0f
+                    });                
                     break;
 
-                case 2: // Buff & Healing Numbers
+                case 2: // Healing Numbers
+                    CombatLogs.Add(new CombatNumberData
+                    {
+                        Actor = ActorName,
+                        Action = CombatNumberData.ActionType.Heal,
+                        Value = combatNumbers,
+                        EffectName = attackedEffectName,
+                        IsEffectPlayed = false,
+                        ElapsedTime = 0,
+                        Velocity = combatNumVelocity,
+                        OffSet = Vector2.Zero,
+                        Color = Color.LimeGreen,
+                        StrokeColor = Color.Black,
+                        Size = 2.1f,
+                        StrokeSize = 1,
+                        AlphaColor = 1f,                       
+                        Scaling = 0f
+                    });               
                     break;
 
                 case 3: // Missed
                     CombatLogs.Add(new CombatNumberData
                     {
                         Actor = ActorName,
-                        Action = CombatNumberData.ActionType.Attack,
+                        Action = CombatNumberData.ActionType.Missed,
                         Value = "Miss",
+                        EffectName = "hit_effect_22",
+                        IsEffectPlayed = false,
                         ElapsedTime = 0,
                         Velocity = combatNumVelocity,
                         OffSet = Vector2.Zero,
                         Color = Color.Yellow,
                         StrokeColor = Color.Black,
+                        Size = 1.5f,
+                        StrokeSize = 1,
                         AlphaColor = 1f,
-                        ScaleFont = 0f
-                    });
-                    CombatNumScale = 1.5f;
+                        Scaling = 0f
+                    });                  
+                    break;
+
+                case 4: // Buffing
+                    CombatLogs.Add(new CombatNumberData
+                    {
+                        Actor = ActorName,
+                        Action = CombatNumberData.ActionType.Buff,
+                        Value = combatNumbers,
+                        EffectName = attackedEffectName,
+                        IsEffectPlayed = false,
+                        ElapsedTime = 0,
+                        Velocity = combatNumVelocity,
+                        OffSet = Vector2.Zero,
+                        Color = Color.DodgerBlue,
+                        StrokeColor = Color.Black,
+                        Size = 1.7f,
+                        StrokeSize = 1,
+                        AlphaColor = 1f,
+                        Scaling = 0f
+                    });                 
                     break;
             }
         }
 
-        public virtual void DrawCombatNumbers(SpriteBatch spriteBatch, int combatCase)
+        public virtual void DrawCombatNumbers(SpriteBatch spriteBatch)
         {
             if (CombatLogs.Count != 0)
             {
-                var font = GameGlobals.Instance.FontTA16Bit;               
+                var font = GameGlobals.Instance.FontTA16Bit;
 
                 foreach (var log in CombatLogs.Where(e => e.ElapsedTime < 1f))
                 {
@@ -812,16 +903,42 @@ namespace Medicraft.Entities
                     }
                    
                     var text = $"{log.Value}";
-                    var textSize = font.MeasureString(text);
+                    var textSize = font.MeasureString(text);               
 
-                    Vector2 drawStringPosition = new Vector2(Position.X - (textSize.Width / 2f)
-                        , Position.Y - (log.Velocity.Y)) - offSet;
+                    switch (log.Action)
+                    {
+                        case CombatNumberData.ActionType.Attack:
+                            log.DrawStringPosition = new Vector2(Position.X - ((textSize.Width * 2f) / 2.2f)
+                                , Position.Y - (log.Velocity.Y)) - offSet;
+                            break;
 
-                    HUDSystem.DrawTextWithStroke(spriteBatch, font, text, drawStringPosition
+                        case CombatNumberData.ActionType.CriticalAttack:
+                            log.DrawStringPosition = new Vector2(Position.X - ((textSize.Width * 2.2f) / 2.2f)
+                                , Position.Y - (log.Velocity.Y)) - offSet;
+                            break;
+
+                        case CombatNumberData.ActionType.Heal:
+                            log.DrawStringPosition = new Vector2(Position.X - ((textSize.Width * 2.1f) / 2.2f)
+                                , Position.Y - (log.Velocity.Y)) - offSet;
+                            break;
+
+                        case CombatNumberData.ActionType.Missed:
+                            log.DrawStringPosition = new Vector2(Position.X - ((textSize.Width * 1.5f) / 2.2f)
+                                , Position.Y - (log.Velocity.Y)) - offSet;
+                            break;
+
+                        case CombatNumberData.ActionType.Buff:
+                            log.DrawStringPosition = new Vector2(Position.X - ((textSize.Width * 1.7f) / 2.2f)
+                                , Position.Y - (log.Velocity.Y)) - offSet;
+                            break;
+                    }
+
+                    HUDSystem.DrawTextWithStroke(spriteBatch, font, text
+                        , log.DrawStringPosition
                         , log.Color * log.AlphaColor
-                        , CombatNumScale * log.ScaleFont
+                        , log.Size * log.Scaling
                         , log.StrokeColor *= log.AlphaColor
-                        , 1);
+                        , log.StrokeSize);
                 }              
             }
         }

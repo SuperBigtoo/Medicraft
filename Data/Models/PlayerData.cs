@@ -7,6 +7,7 @@ namespace Medicraft.Data.Models
         public int CharId { get; set; }
         public int Level { get; set; }
         public int EXP { get; set; }
+        public string CurrentMap { get; set; }
         public double[] Position { get; set; }
         public AbilityData Abilities { get; set; }
         public InventoryData InventoryData { get; set; }

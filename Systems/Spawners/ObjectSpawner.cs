@@ -1,39 +1,65 @@
-﻿using Medicraft.GameObjects;
+﻿using Medicraft.Data.Models;
+using Medicraft.Entities;
+using Medicraft.GameObjects;
 using Medicraft.Systems.Managers;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Sprites;
 using System.Collections.Generic;
 using System.Linq;
 
 
 namespace Medicraft.Systems.Spawners
 {
-    public class ObjectSpawner : IObjectManager
+    public class ObjectSpawner(float initialSpawnTime) : IObjectManager
     {
-        public readonly List<GameObject> initialObjects;
+        public float InitialSpawnTime = initialSpawnTime;
+        public float SpawnTime = initialSpawnTime;
+        public bool IsSpawn = false;
 
-        private readonly List<GameObject> destroyedObjects;
-        private readonly List<GameObject> spawningObjects;
-
-        public float initialSpawnTime;
-        public float spawnTime;
-        public bool IsSpawn;
-
-        public ObjectSpawner(float initialSpawnTime)
-        {
-            this.initialSpawnTime = initialSpawnTime;
-            spawnTime = initialSpawnTime;
-            IsSpawn = false;
-            initialObjects = new List<GameObject>();
-            destroyedObjects = new List<GameObject>();
-            spawningObjects = new List<GameObject>();
-        }
+        private readonly List<GameObject> _initialObjects = [];
+        private readonly List<GameObject> _destroyedObjects = [];
+        private readonly List<GameObject> _spawningObjects = [];
 
         public void Initialize()
         {
-            foreach (var obj in initialObjects)
+            foreach (var obj in _initialObjects)
             {
                 GameObject clonedObject = obj.Clone() as GameObject;
                 ObjectManager.Instance.AddGameObject(clonedObject);
+            }
+        }
+
+        public T AddGameObject<T>(T gameObject) where T : GameObject
+        {
+            _initialObjects.Add(gameObject);
+            return gameObject;
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            SpawnTime -= deltaSeconds;
+
+            foreach (var obj in ObjectManager.Instance.GameObjects.Where(e => e.IsDestroyed))
+            {
+                _destroyedObjects.Add(obj);
+            }
+
+            if (SpawnTime <= 0)
+            {
+                if (_destroyedObjects.Count != 0)
+                {
+                    var clonedObjects = _destroyedObjects.Join(_initialObjects,
+                            destroyedObject => destroyedObject.Id,
+                            initialObject => initialObject.Id,
+                            (destroyedObject, initialObject) => initialObject.Clone() as GameObject).ToList();
+
+                    _spawningObjects.AddRange(clonedObjects);
+                    _destroyedObjects.Clear();
+                }
+
+                IsSpawn = true;
+                SpawnTime = InitialSpawnTime;
             }
         }
 
@@ -41,46 +67,42 @@ namespace Medicraft.Systems.Spawners
         {
             if (IsSpawn)
             {
-                foreach (var obj in spawningObjects)
+                foreach (var obj in _spawningObjects.Where(o => o.IsRespawnable))
                 {
                     ObjectManager.Instance.AddGameObject(obj);
                 }
+
                 IsSpawn = false;
-                spawningObjects.Clear();
+                _spawningObjects.Clear();
             }
         }
 
-        public T AddGameObject<T>(T gameObject) where T : GameObject
+        public void SetupSpawner(List<ObjectData> objectDatas)
         {
-            initialObjects.Add(gameObject);
-            return gameObject;
-        }
+            var spriteSheets = GameGlobals.Instance.ItemsPackSprites;
 
-        public void Update(GameTime gameTime)
-        {
-            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            spawnTime -= deltaSeconds;
-
-            foreach (var obj in ObjectManager.Instance.GameObjects.Where(e => e.IsDestroyed))
+            foreach (var gameObjectData in objectDatas)
             {
-                destroyedObjects.Add(obj);
-            }
+                var category = gameObjectData.Category;
 
-            if (spawnTime <= 0)
-            {
-                if (destroyedObjects.Count != 0)
+                switch (category)
                 {
-                    var clonedEntities = destroyedObjects.Join(initialObjects,
-                            destroyedEntity => destroyedEntity.Id,
-                            initialEntity => initialEntity.Id,
-                            (destroyedEntity, initialEntity) => initialEntity.Clone() as GameObject).ToList();
+                    case 0:
+                        AddGameObject(new Item(new AnimatedSprite(spriteSheets), gameObjectData, Vector2.One));
+                        break;
 
-                    spawningObjects.AddRange(clonedEntities);
-                    destroyedObjects.Clear();
+                    case 1:
+                        break;
+
+                    case 2:
+                        break;
+
+                    case 3:
+                        break;
+
+                    case 4:
+                        break;
                 }
-
-                IsSpawn = true;
-                spawnTime = initialSpawnTime;
             }
         }
     }

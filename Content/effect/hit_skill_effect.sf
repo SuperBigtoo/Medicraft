@@ -8,7 +8,7 @@
     "hit_skill_effect_1": {
       "frames": [0,1,2,3,4],
       "isLooping": false,
-      "frameDuration": 0.1
+      "frameDuration": 0.13
     },
     "hit_skill_effect_2": {
       "frames": [5,6,7,8,9],

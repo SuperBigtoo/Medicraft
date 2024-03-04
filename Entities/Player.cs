@@ -19,22 +19,17 @@ namespace Medicraft.Entities
         public float Mana { get; private set; }
         public float ManaRegenRate { get; private set; }
 
-        private float _knockbackForce, _percentNormalHit;
-        private readonly float _hitRateNormal, _hitRateNormalSkill, _hitRateBurstSkill;
-
-        private float _normalSkillCost = 10f
-            , _burstSkillCost = 20f;
-
-        public const float _baseCooldownNormal = 16f
-            , _baseCooldownBurst = 20f
-            , _baseCooldownPassive = 60f;
+        public const float NormalSkillCost = 10f, BurstSkillCost = 20f;
+        public const float BaseCooldownNormal = 16f, BaseCooldownBurst = 20f, BaseCooldownPassive = 60f;
 
         public bool IsNormalSkillCooldown { get; private set; }
         public bool IsBurstSkillCooldown { get; private set; }
         public bool IsPassiveSkillCooldown { get; private set; }
+
         public float NormalCooldownTime { get; private set; }
         public float BurstCooldownTime { get; private set; }
         public float PassiveCooldownTime { get; private set; }
+
         public float NormalCooldownTimer { get; private set; }
         public float BurstCooldownTimer { get; private set; }
         public float PassiveCooldownTimer { get; private set; }
@@ -44,11 +39,18 @@ namespace Medicraft.Entities
         public float NormalActivatedTimer {  get; private set; }
         public float PassiveActivatedTimer { get; private set; }
 
+        private float _knockbackForce, _percentNormalHit;
+
+        private readonly float _hitRateNormal, _hitRateNormalSkill, _hitRateBurstSkill;
+
         private bool _isCriticalAttack, _isAttackMissed;
 
         // For keeping the default stat value when skill activated  
         private int _tmpATK, _tmpMaxHP, _tmpSpeed;
         private float _tmpDEF, _tmpCrit, _tmpCritDMG, _tmpEvasion;
+
+        private bool _isBlinkingPlayed = false;
+        private float _blinkingTime = 1f, _blinkingTimer = 0f;
 
         private Vector2 _initHudPos, _initCamPos;
 
@@ -70,15 +72,15 @@ namespace Medicraft.Entities
 
             _hitRateNormal = 0.5f;
             _hitRateNormalSkill = 0.9f;
-            _hitRateBurstSkill = 0.9f;                     
+            _hitRateBurstSkill = 0.9f;
 
             IsNormalSkillCooldown = false;
             IsBurstSkillCooldown = false;
             IsPassiveSkillCooldown = false;
 
-            NormalCooldownTime = _baseCooldownNormal;
-            BurstCooldownTime = _baseCooldownBurst;
-            PassiveCooldownTime = _baseCooldownPassive;
+            NormalCooldownTime = BaseCooldownNormal;
+            BurstCooldownTime = BaseCooldownBurst;
+            PassiveCooldownTime = BaseCooldownPassive;
 
             NormalCooldownTimer = NormalCooldownTime;
             BurstCooldownTimer = BurstCooldownTime;
@@ -99,8 +101,8 @@ namespace Medicraft.Entities
                 Position = position
             };
 
-            BoundingCollisionX = 20;
-            BoundingCollisionY = 2.60;
+            BoundingCollisionX = 20f;
+            BoundingCollisionY = 2.60f;
 
             // Rec for check Collision
             BoundingDetectCollisions = new Rectangle(
@@ -114,6 +116,14 @@ namespace Medicraft.Entities
             BoundingDetectEntity = new CircleF(Position + new Vector2(0f, 32f), 80f);   // Circle for check attacking
 
             BoundingCollection = new CircleF(Position + new Vector2(0f, 72f), 25f);     // Circle for check interaction with GameObjects
+
+            NormalHitEffectAttacked = "hit_effect_1";
+
+            NormalSkillEffectActivated = "hit_skill_effect_3";
+
+            BurstSkillEffectAttacked = "hit_effect_3";
+
+            PassiveSkillEffectActivated = "hit_skill_effect_1";
 
             Sprite.Depth = 0.1f;
             Sprite.Play(SpriteCycle + "_idle");
@@ -155,6 +165,9 @@ namespace Medicraft.Entities
 
                 // Mana regeneration
                 ManaRegeneration(deltaSeconds);
+
+                // Blinking if attacked
+                HitBlinking(deltaSeconds);
             }
             else
             {
@@ -168,7 +181,10 @@ namespace Medicraft.Entities
 
             // Update time conditions
             UpdateTimerConditions(deltaSeconds);
-  
+
+            // Ensure hp or mana doesn't exceed the maximum & minimum value
+            MinimumCapacity();
+
             Sprite.Update(deltaSeconds);
         }
 
@@ -191,8 +207,8 @@ namespace Medicraft.Entities
         {
             var walkSpeed = deltaSeconds * Speed;
             Velocity = Vector2.Zero;
-            InitPos = Position;
-            _initHudPos = GameGlobals.Instance.HUDPosition;
+            _initPos = Position;
+            _initHudPos = GameGlobals.Instance.TopLeftCornerPosition;
             _initCamPos = GameGlobals.Instance.AddingCameraPos;                                             
 
             if (!IsAttacking)
@@ -234,7 +250,7 @@ namespace Medicraft.Entities
                 {
                     Velocity.Normalize();
                     Position += Velocity * walkSpeed;
-                    GameGlobals.Instance.HUDPosition += Velocity * walkSpeed;
+                    GameGlobals.Instance.TopLeftCornerPosition += Velocity * walkSpeed;
                     GameGlobals.Instance.AddingCameraPos += Velocity * walkSpeed;
                     Sprite.Play(CurrentAnimation);
                 }
@@ -262,8 +278,8 @@ namespace Medicraft.Entities
                 if (BoundingDetectCollisions.Intersects(rect))
                 {
                     IsDetectCollistionObject = true;
-                    Position = InitPos;
-                    GameGlobals.Instance.HUDPosition = _initHudPos;
+                    Position = _initPos;
+                    GameGlobals.Instance.TopLeftCornerPosition = _initHudPos;
                     GameGlobals.Instance.AddingCameraPos = _initCamPos;
                     break;
                 }
@@ -285,11 +301,11 @@ namespace Medicraft.Entities
                 IsAttacking = true;
                 ActionTimer = _hitRateNormal;
 
-                CheckAttackDetection(ATK, _percentNormalHit, false, 0f);
+                CheckAttackDetection(ATK, _percentNormalHit, false, 0f, NormalHitEffectAttacked);
             }
 
             // Normal Skill
-            if (keyboardCur.IsKeyDown(Keys.E) && !IsAttacking && !IsNormalSkillCooldown && Mana >= _normalSkillCost)
+            if (keyboardCur.IsKeyDown(Keys.E) && !IsAttacking && !IsNormalSkillCooldown && Mana >= NormalSkillCost)
             {
                 CurrentAnimation = SpriteCycle + "_attacking_normal_skill";
                 Sprite.Play(CurrentAnimation);
@@ -300,10 +316,14 @@ namespace Medicraft.Entities
 
                 // Do normal skill & effect of Sets Item
                 NormalSkillControl(PlayerData.Abilities.NormalSkillLevel);
+
+                CombatNumCase = 4;
+                var combatNumVelocity = SetCombatNumDirection();
+                AddCombatLogNumbers(Name, "POWER UP", CombatNumCase, combatNumVelocity, NormalSkillEffectActivated);
             }
 
             // Burst Skill
-            if (keyboardCur.IsKeyDown(Keys.Q) && !IsAttacking && !IsBurstSkillCooldown && Mana >= _burstSkillCost)
+            if (keyboardCur.IsKeyDown(Keys.Q) && !IsAttacking && !IsBurstSkillCooldown && Mana >= BurstSkillCost)
             {
                 CurrentAnimation = SpriteCycle + "_attacking_burst_skill";
                 Sprite.Play(CurrentAnimation);
@@ -322,7 +342,11 @@ namespace Medicraft.Entities
                 IsPassiveSkillCooldown = true;
 
                 // Do passive skill
-                PassiveSkillControl(PlayerData.Abilities.PassiveSkillLevel);
+                var combatNumbers = PassiveSkillControl(PlayerData.Abilities.PassiveSkillLevel);
+
+                CombatNumCase = 2;
+                var combatNumVelocity = SetCombatNumDirection();
+                AddCombatLogNumbers(Name, combatNumbers.ToString(), CombatNumCase, combatNumVelocity, PassiveSkillEffectActivated);
             }
         }
 
@@ -337,7 +361,7 @@ namespace Medicraft.Entities
             _tmpCrit = Crit_Percent;
             _tmpCritDMG = CritDMG_Percent;
 
-            var manaCost = _normalSkillCost;
+            var manaCost = NormalSkillCost;
 
             switch (skillLevel)
             {
@@ -386,14 +410,14 @@ namespace Medicraft.Entities
         /// <param name="skillLevel">Burst Skill level base on PlayerData.Abilities.BurstSkillLevel</param>
         private void BurstSkillControl(int skillLevel)
         {
-            var manaCost = _burstSkillCost;
+            var manaCost = BurstSkillCost;
 
             switch (skillLevel)
             {
                 case 1:
                     BoundingDetectEntity.Radius = 140f;
                     _knockbackForce = 60f;
-                    CheckAttackDetection(ATK, 1.75f, true, 1.5f);
+                    CheckAttackDetection(ATK, 1.75f, true, 1.5f, BurstSkillEffectAttacked);
                     break;
 
                 case 2:
@@ -433,14 +457,17 @@ namespace Medicraft.Entities
         /// Instantly restore Player Character's HP when the HP is below 10% and increase DEF_Percent for an amount of time
         /// </summary>
         /// <param name="skillLevel">Passive Skill level base on PlayerData.Abilities.PassiveSkillLevel</param>
-        private void PassiveSkillControl(int skillLevel)
+        private int PassiveSkillControl(int skillLevel)
         {
+            var healingValue = 0;
+
             _tmpDEF = DEF_Percent;
 
             switch (skillLevel)
             {
                 case 1:
-                    HP += (int)(MaxHP * 0.25);
+                    healingValue = (int)(MaxHP * 0.25);
+                    HP += healingValue;
                     DEF_Percent += 0.25f;
                     PassiveActivatedTimer = 8f;
                     break;
@@ -474,10 +501,12 @@ namespace Medicraft.Entities
             }
 
             IsPassiveSkillActivated = true;
+
+            return healingValue;
         }
 
         // Check Attack
-        private void CheckAttackDetection(int Atk, float HitPercent, bool IsUndodgeable, float StunTime)
+        private void CheckAttackDetection(int Atk, float HitPercent, bool IsUndodgeable, float StunTime, string effectAttacked)
         {
             foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed))
             {
@@ -487,35 +516,40 @@ namespace Medicraft.Entities
                     {
                         if (!entity.IsDying)
                         {
-                            var totalDamage = TotalDamage(Atk, HitPercent, entity.DEF_Percent, entity.Evasion, IsUndodgeable);
-                            
-                            if (CombatNumCase != 3) entity.HP -= totalDamage;
-
-                            var knockBackDirection = (entity.Position - new Vector2(0, 50)) - Position;
-                            knockBackDirection.Normalize();
-                            entity.Velocity = knockBackDirection * _knockbackForce;
+                            var totalDamage = TotalDamage(Atk, HitPercent, entity.DEF_Percent, entity.Evasion, IsUndodgeable);                                                 
 
                             var combatNumVelocity = entity.SetCombatNumDirection();
-                            entity.AddCombatLogNumbers(Name, totalDamage.ToString(), CombatNumCase, combatNumVelocity);
+                            entity.AddCombatLogNumbers(Name, totalDamage.ToString()
+                                , CombatNumCase, combatNumVelocity, effectAttacked);
 
-                            entity.IsAttacked = true;
-                            entity.AttackedTimer = 0f;
+                            // In case the Attack doesn't Missed
+                            if (CombatNumCase != 3)
+                            {
+                                // Mob being hit by Player
+                                entity.IsAttacked = true;
+
+                                entity.HP -= totalDamage;
+
+                                if (entity.IsKnockbackable)
+                                {
+                                    var knockBackDirection = (entity.Position - new Vector2(0, 50)) - Position;
+                                    knockBackDirection.Normalize();
+                                    entity.Velocity = knockBackDirection * _knockbackForce;
+
+                                    entity.IsKnockback = true;
+                                    entity.KnockbackedTimer = 0.2f;
+                                }
+
+                                if (StunTime > 0f && entity.IsStunable)
+                                {
+                                    entity.IsStunning = true;
+                                    entity.StunningTimer = StunTime;
+                                }
+                            }
 
                             if (entity.HP <= 0)
                             {
                                 entity.IsDying = true;
-                            }
-
-                            if (CombatNumCase != 3)
-                            {
-                                entity.IsKnockback = true;
-                                entity.KnockbackedTimer = 0.2f;
-                            }
-
-                            if (StunTime > 0f && entity.IsStunable)
-                            {
-                                entity.IsStunning = true;
-                                entity.StunningTimer = StunTime;
                             }
                         }
                     } 
@@ -684,9 +718,30 @@ namespace Medicraft.Entities
             var manaRegenAmount = ManaRegenRate * deltaSeconds;
 
             Mana += manaRegenAmount;
+        }
 
-            // Ensure current mana doesn't exceed the maximum mana value
-            Mana = Math.Min(Mana, MaxMana);
+        private void HitBlinking(float deltaSeconds)
+        {
+            if (IsAttacked && !_isBlinkingPlayed) _isBlinkingPlayed = true;
+
+            if (_isBlinkingPlayed && _blinkingTimer < _blinkingTime)
+            {
+                _blinkingTimer += deltaSeconds;
+
+                var blinkSpeed = 15f; // Adjust the speed of the blinking effect
+                var alphaMultiplier = MathF.Sin(_blinkingTimer * blinkSpeed);
+
+                // Ensure alphaMultiplier is within the valid range [0, 1]
+                alphaMultiplier = MathHelper.Clamp(alphaMultiplier, 0.25f, 2f);
+
+                Sprite.Color = new Color(255, 105, 105) * Math.Min(alphaMultiplier, 1f);
+            }
+            else
+            {
+                _isBlinkingPlayed = false;
+                _blinkingTimer = 0;
+                Sprite.Color = Color.White;
+            }
         }
 
         private void UpdateLayerDepth(float topDepth, float middleDepth, float bottomDepth)
@@ -723,6 +778,14 @@ namespace Medicraft.Entities
                     break;
                 }
             }
+        }
+
+        protected override void MinimumCapacity()
+        {
+            // Ensure current mana doesn't exceed the maximum mana value and minimum 0
+            Mana = Math.Max(0, Math.Min(Mana, MaxMana));
+
+            base.MinimumCapacity();
         }
 
         protected override void UpdateTimerConditions(float deltaSeconds)

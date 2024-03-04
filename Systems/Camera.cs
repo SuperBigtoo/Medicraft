@@ -4,24 +4,13 @@ using System;
 
 namespace Medicraft.Systems
 {
-    public class Camera
+    public class Camera(Viewport viewport)
     {
-        private Matrix transform;
-        private Vector2 position;
-        private float zoom;
-        private readonly float viewportWidth;
-        private readonly float viewportHeight;
-        //private const float MinZoom = 1.0f;
-        //private const float MaxZoom = 1.0f;
-        //private float targetZoom = 1.0f;
-        //private float zoomSpeed = 0.25f;
-
-        public Camera(Viewport viewport)
-        {
-            viewportWidth = viewport.Width;
-            viewportHeight = viewport.Height;
-            zoom = 1.0f;
-        }
+        private Matrix _transform;
+        private Vector2 _position;
+        private float _zoom = 1.0f;
+        private readonly float _viewportWidth = viewport.Width;
+        private readonly float _viewportHeight = viewport.Height;
 
         public void Update(float deltaSeconds)
         {
@@ -45,40 +34,40 @@ namespace Medicraft.Systems
 
         public void SetPosition(Vector2 targetPosition)
         {
-            position.X = targetPosition.X - viewportWidth / (2 * zoom);
-            position.Y = targetPosition.Y - viewportHeight / (2 * zoom);
+            _position.X = targetPosition.X - _viewportWidth / (2 * _zoom);
+            _position.Y = targetPosition.Y - _viewportHeight / (2 * _zoom);
         }
 
         public void SetZoom(float zoom, float zoomMin, float zoomMax)
         {
-            this.zoom = MathHelper.Clamp(zoom, zoomMin, zoomMax);
+            this._zoom = MathHelper.Clamp(zoom, zoomMin, zoomMax);
         }
 
         public Matrix GetTransform(int screenWidth, int screenHeight)
         {
-            float scaleX = screenWidth / viewportWidth;
-            float scaleY = screenHeight / viewportHeight;
+            float scaleX = screenWidth / _viewportWidth;
+            float scaleY = screenHeight / _viewportHeight;
             float scale = MathHelper.Min(scaleX, scaleY);
 
             // Calculate the letterbox bars (if any)
-            int barsWidth = screenWidth - (int)(viewportWidth * scale);
-            int barsHeight = screenHeight - (int)(viewportHeight * scale);
+            int barsWidth = screenWidth - (int)(_viewportWidth * scale);
+            int barsHeight = screenHeight - (int)(_viewportHeight * scale);
 
-            transform = Matrix.CreateTranslation(-position.X, -position.Y, 0)
-                * Matrix.CreateScale(zoom, zoom, 1)
+            _transform = Matrix.CreateTranslation(-_position.X, -_position.Y, 0)
+                * Matrix.CreateScale(_zoom, _zoom, 1)
                 * Matrix.CreateTranslation(barsWidth / 2, barsHeight / 2, 0);
 
-            return transform;
+            return _transform;
         }
 
         public float GetZoom()
         {
-            return zoom;
+            return _zoom;
         }
 
         public Vector2 GetPosition()
         {
-            return position;
+            return _position;
         }
     }
 }

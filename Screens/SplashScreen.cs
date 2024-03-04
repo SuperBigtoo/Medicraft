@@ -37,7 +37,7 @@ namespace Medicraft.Screens
         {
             base.LoadContent();
 
-            font = Content.Load<BitmapFont>("fonts/Mincraft_Ten/Mincraft_Ten");
+            font = _content.Load<BitmapFont>("fonts/Mincraft_Ten/Mincraft_Ten");
             logo = GameGlobals.Instance.Content.Load<Texture2D>("gui/logo_wakeup");
 
             GameGlobals.Instance.TestIcon = logo;

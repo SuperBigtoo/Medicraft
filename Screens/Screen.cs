@@ -18,26 +18,21 @@ namespace Medicraft.Screens
 
     public abstract class Screen : IScreen
     {
-        protected ContentManager Content;
-
-        protected HUDSystem HudSystem;
-        protected TilemapOrthogonalRender TileMapRender;
-
-        protected GameScreen ScreenName;
+        protected ContentManager _content;
 
         public virtual void LoadContent()
         {
-            Content = new ContentManager(GameGlobals.Instance.Content.ServiceProvider, "Content");
+            _content = new ContentManager(GameGlobals.Instance.Content.ServiceProvider, "Content");
         }
 
         public virtual void UnloadContent()
         {
-            Content?.Unload();
+            _content?.Unload();
         }
 
         public virtual void Dispose()
         {
-            Content?.Dispose();
+            _content?.Dispose();
         }
 
         public abstract void Update(GameTime gameTime);
