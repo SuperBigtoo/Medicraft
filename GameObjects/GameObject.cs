@@ -12,17 +12,7 @@ using System.Linq;
 namespace Medicraft.GameObjects
 {
     public class GameObject : ICloneable
-    {
-        public enum GameObjectType
-        {
-            Item,
-            QuestItem,
-            CraftingTable,
-            SavingTable,
-            WarpPoint
-        }
-        public GameObjectType Type { get; protected set; }
-
+    {       
         public ObjectData ObjectData { get; protected set; }
 
         public int Id { get; protected set; }
@@ -45,11 +35,24 @@ namespace Medicraft.GameObjects
                 BoundingCollection.Center = value;
             }
         }
-        
+
         public bool IsRespawnable { get; protected set; }
         public bool IsCollected { get; set; }
         public bool IsDestroyed { get; set; }
         public bool IsVisible { get; set; }
+
+        public enum GameObjectType
+        {
+            Item,
+            QuestItem,
+            CraftingTable,
+            SavingTable,
+            WarpPoint
+        }
+        public GameObjectType Type { get; protected set; }
+
+        // For ItemObject
+        public int QuantityDrop { get; protected set; }    
 
         protected GameObject()
         {
@@ -141,10 +144,10 @@ namespace Medicraft.GameObjects
                 case GameObjectType.Item:
 
                 case GameObjectType.QuestItem:
-                    var itemData = GameGlobals.Instance.ItemsDatas.Where(i => i.ItemId.Equals(ReferId));
+                    var itemData = GameGlobals.Instance.ItemsDatas.Where(i => i.ItemId.Equals(ReferId)).ElementAt(0);
 
-                    Name = itemData.ElementAt(0).Name;
-                    Description = itemData.ElementAt(0).Description;
+                    Name = itemData.Name;
+                    Description = itemData.Description;                  
                     break;
 
                 case GameObjectType.CraftingTable:                  

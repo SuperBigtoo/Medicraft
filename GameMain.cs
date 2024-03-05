@@ -36,8 +36,6 @@ namespace Medicraft
 
             ScreenManager.Instance.Initialize(this, _graphics);
 
-            InventoryManager.Instance.InitializeThemeAndUI(GameGlobals.Instance.BuiltinTheme);
-
             base.Initialize();
         }
 

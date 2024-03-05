@@ -8,5 +8,7 @@
         public string Name { get; set; }
         public string Description { get; set; }
         public double[] Position { get; set; }
+        public bool IsRespawnable { get; set; }
+        public bool IsVisible { get; set; }
     }
 }

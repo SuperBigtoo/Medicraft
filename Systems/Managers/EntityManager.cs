@@ -63,6 +63,9 @@ namespace Medicraft.Systems.Managers
                 entity.Update(gameTime, playerDepth, topDepth, middleDepth, bottomDepth);
             }
 
+            // Update Status Effect
+            StatusEffectManager.Instance.Update(gameTime);
+
             // Mob Spawner
             _mobSpawner.Update(gameTime);
             SpawnTime = _mobSpawner.SpawnTimer;

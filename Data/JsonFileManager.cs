@@ -121,4 +121,10 @@ namespace Medicraft.Data
 
     // Reader Experience Capacity Datas: exp_capacity.json
     public class ExperienceCapacityDataReader : JsonContentTypeReader<List<ExperienceCapacityData>> { }
+
+    // Reader Chapter Item Drop Datas: chapter_item.json
+    public class ChapterItemDataReader : JsonContentTypeReader<List<ChapterItemData>> { }
+
+    // Reader Item Effect Datas: item_effects.json
+    public class ItemEffectDataReader : JsonContentTypeReader<List<ItemEffectData>> { }
 }

@@ -17,10 +17,10 @@ namespace Medicraft.GameObjects
           
             InitializeObjectData();
 
-            IsRespawnable = true;
+            IsVisible = objectData.IsVisible;
+            IsRespawnable = objectData.IsRespawnable;
             IsCollected = false;
-            IsDestroyed = false;
-            IsVisible = true;
+            IsDestroyed = false;        
 
             var position = new Vector2((float)objectData.Position[0], (float)objectData.Position[1]);
             Transform = new Transform2
@@ -34,6 +34,8 @@ namespace Medicraft.GameObjects
 
             ParticleEffect = DrawEffectSystem.SetItemParticleEffect(Position);
 
+            QuantityDrop = GameGlobals.Instance.RandomItemQuantityDrop(ReferId);
+
             Sprite.Depth = 0.1f;
             Sprite.Play(ReferId.ToString());
         }
@@ -41,20 +43,18 @@ namespace Medicraft.GameObjects
         private Item(Item item)
         {
             Sprite = item.Sprite;
-            ObjectData = item.ObjectData;
-            ParticleEffect = item.ParticleEffect;
+            ObjectData = item.ObjectData;                 
 
             Type = item.Type;
             Id = item.Id;
             ReferId= item.ReferId;
-
             Name = item.Name;
             Description = item.Description;
 
+            IsVisible = item.IsVisible;
             IsRespawnable = item.IsRespawnable;
             IsCollected = false;
             IsDestroyed = false;
-            IsVisible = true;
 
             Transform = new Transform2
             {
@@ -64,6 +64,10 @@ namespace Medicraft.GameObjects
             };
 
             BoundingCollection = item.BoundingCollection;
+
+            ParticleEffect = item.ParticleEffect;
+
+            QuantityDrop = GameGlobals.Instance.RandomItemQuantityDrop(ReferId);
 
             Sprite.Depth = 0.1f;
             Sprite.Play(ReferId.ToString());
@@ -80,8 +84,7 @@ namespace Medicraft.GameObjects
 
             if (IsCollected)
             {
-                // Adding item to Inventory... BUT the logic on how to check da item stack we'll see there...
-                InventoryManager.Instance.AddItem(ReferId, 1);
+                InventoryManager.Instance.AddItem(ReferId, QuantityDrop);
 
                 Destroy();
             }

@@ -246,7 +246,7 @@ namespace Medicraft.Systems
             {
                 foreach (var log in combatLog.Where(l => l.ElapsedTime < 1f
                     && (l.Action == CombatNumberData.ActionType.Buff
-                        || l.Action == CombatNumberData.ActionType.Heal)))
+                        || l.Action == CombatNumberData.ActionType.Recovery)))
                 {
                     if (log.EffectName != null)
                     {

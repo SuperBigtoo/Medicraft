@@ -9,7 +9,7 @@ namespace Medicraft.Data.Models
         {
             Attack,
             CriticalAttack,
-            Heal,
+            Recovery,
             Missed,
             Buff,
             Debuff

@@ -26,11 +26,25 @@ namespace Medicraft.Entities
         public int ATK { get; set; }
         public int HP { get; set; }
         public int MaxHP { get; set; }
-        public float DEF_Percent { get; set; }
-        public float Crit_Percent { get; set; }
-        public float CritDMG_Percent { get; set; }
+        public float MaxMana { get; set; }
+        public float Mana { get; set; }
+        public float ManaRegenRate { get; set; }
+        public float DEF { get; set; }
+        public float Crit { get; set; }
+        public float CritDMG { get; set; }
         public int Speed { get; set; }
         public float Evasion { get; set; }
+
+        // Keeping the default stats values for Buffs and Debuffs 
+        public int BaseATK { get; protected set; }
+        public int BaseMaxHP { get; protected set; }
+        public int BaseSpeed { get; protected set; }
+        public float BaseMaxMana { get; protected set; }
+        public float BaseManaRegenRate { get; protected set; }
+        public float BaseDEF { get; protected set; }
+        public float BaseCrit { get; protected set; }
+        public float BaseCritDMG { get; protected set; }
+        public float BaseEvasion { get; protected set; }
 
         public AnimatedSprite Sprite { get; protected set; }
         public string SpriteCycle { get; protected set; }
@@ -87,7 +101,7 @@ namespace Medicraft.Entities
                 {
                     BoundingHitBox.Center = value + new Vector2(0f, 32f);
                     BoundingDetectEntity.Center = value + new Vector2(0f, 32f);
-                    BoundingCollection.Center = value + new Vector2(0f, 72f);
+                    BoundingCollection.Center = value + new Vector2(0f, 60f);
                 }
                 else
                 {
@@ -159,6 +173,16 @@ namespace Medicraft.Entities
             Level = 0;
             EXP = 0;
 
+            BaseATK = 0;
+            BaseMaxHP = 0;
+            BaseMaxMana = 0;
+            BaseManaRegenRate = 0;
+            BaseDEF = 0;
+            BaseCrit = 0;
+            BaseCritDMG = 0;
+            BaseEvasion = 0;
+            BaseSpeed = 0;
+
             Transform = new Transform2
             {
                 Scale = Vector2.One,
@@ -208,6 +232,16 @@ namespace Medicraft.Entities
             Name = entity.Name;
             Level = entity.Level;
             EXP = entity.EXP;
+
+            BaseATK = entity.BaseATK;
+            BaseMaxHP = entity.BaseMaxHP;
+            BaseMaxMana = entity.BaseMaxMana;
+            BaseManaRegenRate = entity.BaseManaRegenRate;
+            BaseDEF = entity.BaseDEF;
+            BaseCrit = entity.BaseCrit;
+            BaseCritDMG = entity.BaseCritDMG;
+            BaseEvasion = entity.BaseEvasion;
+            BaseSpeed = entity.BaseSpeed;
 
             Transform = new Transform2
             {
@@ -326,11 +360,21 @@ namespace Medicraft.Entities
             ATK = charData.ATK + ((level - 1) * 2);
             MaxHP = (int)(charData.HP + ((level - 1) * (charData.HP * 0.1)));
             HP = MaxHP;
-            DEF_Percent = (float)charData.DEF_Percent;
-            Crit_Percent = (float)charData.Crit_Percent;
-            CritDMG_Percent = (float)charData.CritDMG_Percent;
+            DEF = (float)charData.DEF_Percent;
+            Crit = (float)charData.Crit_Percent;
+            CritDMG = (float)charData.CritDMG_Percent;
             Speed = charData.Speed;
             Evasion = (float)charData.Evasion;
+
+            BaseATK = ATK;
+            BaseMaxHP = MaxHP;
+            BaseMaxMana = MaxMana;
+            BaseManaRegenRate = ManaRegenRate;
+            BaseDEF = DEF;
+            BaseCrit = Crit;
+            BaseCritDMG = CritDMG;
+            BaseEvasion = Evasion;
+            BaseSpeed = Speed;
         }
 
         // Knowing this MovementControl, CombatControl and some methods below this is for Mobs only
@@ -674,7 +718,7 @@ namespace Medicraft.Entities
                 if (PlayerManager.Instance.Player.HP > 0)
                 {
                     int totalDamage = TotalDamage(ATK
-                        , PlayerManager.Instance.Player.DEF_Percent
+                        , PlayerManager.Instance.Player.DEF
                         , PlayerManager.Instance.Player.Evasion);
 
                     var combatNumVelocity = PlayerManager.Instance.Player.SetCombatNumDirection();
@@ -770,7 +814,7 @@ namespace Medicraft.Entities
         }
 
         public virtual void AddCombatLogNumbers(string ActorName, string combatNumbers, int combatCase
-            , Vector2 combatNumVelocity, string attackedEffectName)
+            , Vector2 combatNumVelocity, string effectName)
         {
             IsShowCombatNumbers = true;
             CombatNumbersTimer = 0f;
@@ -783,7 +827,7 @@ namespace Medicraft.Entities
                         Actor = ActorName,
                         Action = CombatNumberData.ActionType.Attack,
                         Value = combatNumbers,
-                        EffectName = attackedEffectName,
+                        EffectName = effectName,
                         IsEffectPlayed = false,
                         ElapsedTime = 0,
                         Velocity = combatNumVelocity,
@@ -803,7 +847,7 @@ namespace Medicraft.Entities
                         Actor = ActorName,
                         Action = CombatNumberData.ActionType.CriticalAttack,
                         Value = combatNumbers,
-                        EffectName = attackedEffectName,
+                        EffectName = effectName,
                         IsEffectPlayed = false,
                         ElapsedTime = 0,
                         Velocity = combatNumVelocity,
@@ -821,9 +865,9 @@ namespace Medicraft.Entities
                     CombatLogs.Add(new CombatNumberData
                     {
                         Actor = ActorName,
-                        Action = CombatNumberData.ActionType.Heal,
+                        Action = CombatNumberData.ActionType.Recovery,
                         Value = combatNumbers,
-                        EffectName = attackedEffectName,
+                        EffectName = effectName,
                         IsEffectPlayed = false,
                         ElapsedTime = 0,
                         Velocity = combatNumVelocity,
@@ -863,7 +907,7 @@ namespace Medicraft.Entities
                         Actor = ActorName,
                         Action = CombatNumberData.ActionType.Buff,
                         Value = combatNumbers,
-                        EffectName = attackedEffectName,
+                        EffectName = effectName,
                         IsEffectPlayed = false,
                         ElapsedTime = 0,
                         Velocity = combatNumVelocity,
@@ -875,6 +919,26 @@ namespace Medicraft.Entities
                         AlphaColor = 1f,
                         Scaling = 0f
                     });                 
+                    break;
+
+                case 5: // Mana Restores Numbers
+                    CombatLogs.Add(new CombatNumberData
+                    {
+                        Actor = ActorName,
+                        Action = CombatNumberData.ActionType.Recovery,
+                        Value = combatNumbers,
+                        EffectName = effectName,
+                        IsEffectPlayed = false,
+                        ElapsedTime = 0,
+                        Velocity = combatNumVelocity,
+                        OffSet = Vector2.Zero,
+                        Color = Color.Aqua,
+                        StrokeColor = Color.Black,
+                        Size = 2.1f,
+                        StrokeSize = 1,
+                        AlphaColor = 1f,
+                        Scaling = 0f
+                    });
                     break;
             }
         }
@@ -917,7 +981,7 @@ namespace Medicraft.Entities
                                 , Position.Y - (log.Velocity.Y)) - offSet;
                             break;
 
-                        case CombatNumberData.ActionType.Heal:
+                        case CombatNumberData.ActionType.Recovery:
                             log.DrawStringPosition = new Vector2(Position.X - ((textSize.Width * 2.1f) / 2.2f)
                                 , Position.Y - (log.Velocity.Y)) - offSet;
                             break;

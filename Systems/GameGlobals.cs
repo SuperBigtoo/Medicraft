@@ -11,6 +11,7 @@ using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -69,7 +70,7 @@ namespace Medicraft.Systems
         public int DefaultInventorySlot { private set; get; }
         public int MaxItemBarSlot { private set; get; }
         public int SelectedItemBarSlot { set; get; }
-        public int SelectedItemInventory { set; get; }
+        public InventoryItemData SelectedItemInventory { set; get; }
 
         // Game Datas
         public PlayerData InitialPlayerData { private set; get; }
@@ -84,9 +85,10 @@ namespace Medicraft.Systems
         public List<MapLocationPointData> MapLocationPointDatas { private set; get; }         // All Point Loaction of Maps
         public List<ItemData> ItemsDatas { private set; get; }       // All items data
         // All equipments stats data
-        // All item's effect data
+        public List<ItemEffectData> ItemEffectDatas { private set; get; }
         public List<CraftingRecipeData> CraftingRecipeDatas { private set; get; }       // All Crafting Recipe data
         public List<CharacterData> CharacterDatas { private set; get; }                 // All Character data
+        public List<ChapterItemData> ChapterItemDatas { private set; get; }
         public SpriteSheet ItemsPackSprites { private set; get; }                   // All Item sprite
         public SpriteSheet HitSpriteEffect { private set; get; }
         public SpriteSheet HitSkillSpriteEffect { private set; get; }
@@ -248,7 +250,6 @@ namespace Medicraft.Systems
             DefaultInventorySlot = 999;
             MaxItemBarSlot = 8;
             SelectedItemBarSlot = 0;
-            SelectedItemInventory = 0;
 
             GuiTextures = [];
             ExperienceCapacityDatas = [];
@@ -307,6 +308,9 @@ namespace Medicraft.Systems
             // Load Map Position Data
             MapLocationPointDatas = Content.Load<List<MapLocationPointData>>("data/models/map_locations_point");
 
+            // Load Chapter Item Drop Data
+            ChapterItemDatas = Content.Load<List<ChapterItemData>>("data/models/chapter_item");
+
             // Load EXP Cap Data
             ExperienceCapacityDatas = Content.Load<List<ExperienceCapacityData>>("data/models/exp_capacity");
 
@@ -319,6 +323,7 @@ namespace Medicraft.Systems
 
             // Load Item Data
             ItemsDatas = Content.Load<List<ItemData>>("data/models/items");
+            ItemEffectDatas = Content.Load<List<ItemEffectData>>("data/models/item_effects");
 
             // Load Crafting Recipes Data
             CraftingRecipeDatas = Content.Load<List<CraftingRecipeData>>("data/models/crafting_recipes");
@@ -375,9 +380,12 @@ namespace Medicraft.Systems
             GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_gui_alpha"));            // 32. passive_skill_gui_alpha
             GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_pic"));                  // 33. passive_skill_pic
 
-            // Test
+            // Gonna do this one in LoadSave Screen
             // Initialize Player Data
             PlayerManager.Instance.Initialize();
+
+            // Initialize UI inventory
+            InventoryManager.Instance.InitializeThemeAndUI(GameGlobals.Instance.BuiltinTheme);
         }
 
         public void Update(GameTime gameTime)
@@ -399,6 +407,101 @@ namespace Medicraft.Systems
             }
 
             return null;
+        }
+
+        public int RandomItemDrop()
+        {
+            var currentMap = ScreenManager.Instance.CurrentMap;
+
+            ChapterItemData chapterItemData = null;
+
+            switch (currentMap)
+            {
+                case "Test":
+                    chapterItemData = ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("Test"));               
+                    break;
+
+                case "map_1":
+
+                case "battlezone_1":
+
+                case "dungeon_1":
+                    chapterItemData = ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("chapter_1"));
+                    break;
+
+                case "map_2":
+
+                case "battlezone_2":
+
+                case "dungeon_2":
+                    chapterItemData = ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("chapter_2"));
+                    break;
+
+                case "map_3":
+
+                case "battlezone_3":
+
+                case "dungeon_3":
+                    chapterItemData = ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("chapter_3"));
+                    break;
+
+                case "map_4":
+
+                case "battlezone_4":
+
+                case "dungeon_4":
+                    chapterItemData = ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("chapter_4"));
+                    break;
+
+                case "map_5":
+
+                case "battlezone_5":
+
+                case "dungeon_5":
+                    chapterItemData = ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("chapter_5"));
+                    break;
+
+                case "map_6":
+
+                case "battlezone_6":
+
+                case "dungeon_6":
+                    chapterItemData = ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("chapter_6"));
+                    break;
+            }
+
+            Random random = new();
+  
+            return chapterItemData.ItemDropId[random.Next(chapterItemData.ItemDropId.Length)];
+        }
+
+        public int RandomItemQuantityDrop(int itemId)
+        {
+            var itemData = ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(itemId));
+            int minValue = 1, maxValue = 1;
+
+            if (itemData != null && itemData.QuantityDropRange != null && itemData.QuantityDropRange.Length != 0)
+            {
+                var quantityDropRange = itemData.QuantityDropRange;
+                minValue = quantityDropRange[0] > 0 ? quantityDropRange[0] : 1;
+                maxValue = quantityDropRange[1] > 0 ? quantityDropRange[1] : 1;
+            }
+
+            Random random = new();
+
+            return random.Next(minValue, maxValue + 1);
+        }
+
+        public bool IsUsableItem(int itemId)
+        {
+            var itemData = ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(itemId));
+
+            if (!itemData.Usable)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public static GameGlobals Instance

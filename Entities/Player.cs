@@ -15,10 +15,6 @@ namespace Medicraft.Entities
     {
         public PlayerData PlayerData { get; private set; }
 
-        public float MaxMana { get; private set; }
-        public float Mana { get; private set; }
-        public float ManaRegenRate { get; private set; }
-
         public const float NormalSkillCost = 10f, BurstSkillCost = 20f;
         public const float BaseCooldownNormal = 16f, BaseCooldownBurst = 20f, BaseCooldownPassive = 60f;
 
@@ -34,10 +30,13 @@ namespace Medicraft.Entities
         public float BurstCooldownTimer { get; private set; }
         public float PassiveCooldownTimer { get; private set; }
 
-        public bool IsNormalSkillActivated { get; private set; }
-        public bool IsPassiveSkillActivated { get; private set; }
+        public bool IsNormalSkillActivate { get; private set; }
+        public bool IsPassiveSkillActivate { get; private set; }
         public float NormalActivatedTimer {  get; private set; }
-        public float PassiveActivatedTimer { get; private set; }
+        public float PassiveActivatedTimer { get; private set; }       
+
+        public int tempATK, tempHP, tempSpeed;
+        public float tempMana, tempDEF, tempCrit, tempCritDMG, tempEvasion;
 
         private float _knockbackForce, _percentNormalHit;
 
@@ -45,13 +44,9 @@ namespace Medicraft.Entities
 
         private bool _isCriticalAttack, _isAttackMissed;
 
-        // For keeping the default stat value when skill activated  
-        private int _tmpATK, _tmpMaxHP, _tmpSpeed;
-        private float _tmpDEF, _tmpCrit, _tmpCritDMG, _tmpEvasion;
-
         private bool _isBlinkingPlayed = false;
-        private float _blinkingTime = 1f, _blinkingTimer = 0f;
-
+        private readonly float _blinkingTime = 1f;
+        private float _blinkingTimer = 0f;
         private Vector2 _initHudPos, _initCamPos;
 
         public Player(AnimatedSprite sprite, PlayerData playerData)
@@ -86,8 +81,8 @@ namespace Medicraft.Entities
             BurstCooldownTimer = BurstCooldownTime;
             PassiveCooldownTimer = PassiveCooldownTime;
 
-            IsNormalSkillActivated = false;
-            IsPassiveSkillActivated = false;
+            IsNormalSkillActivate = false;
+            IsPassiveSkillActivate = false;
 
             NormalActivatedTimer = 0;
             PassiveActivatedTimer = 0;
@@ -115,7 +110,7 @@ namespace Medicraft.Entities
 
             BoundingDetectEntity = new CircleF(Position + new Vector2(0f, 32f), 80f);   // Circle for check attacking
 
-            BoundingCollection = new CircleF(Position + new Vector2(0f, 72f), 25f);     // Circle for check interaction with GameObjects
+            BoundingCollection = new CircleF(Position + new Vector2(0f, 60f), 25f);     // Circle for check interaction with GameObjects
 
             NormalHitEffectAttacked = "hit_effect_1";
 
@@ -136,6 +131,16 @@ namespace Medicraft.Entities
             MaxMana = (float)(100f + ((level - 1) * (100f * 0.05)));
             Mana = MaxMana;
             ManaRegenRate = 0.5f;
+
+            BaseATK = ATK;
+            BaseMaxHP = MaxHP;
+            BaseMaxMana = MaxMana;
+            BaseManaRegenRate = ManaRegenRate;
+            BaseDEF = DEF;
+            BaseCrit = Crit;
+            BaseCritDMG = CritDMG;
+            BaseEvasion = Evasion;
+            BaseSpeed = Speed;
 
             // gonna calculate character stats with the equipment's stats too
         }
@@ -357,18 +362,18 @@ namespace Medicraft.Entities
         /// <param name="skillLevel">Normal Skill level base on PlayerData.Abilities.NormalSkillLevel</param>
         private void NormalSkillControl(int skillLevel)
         {
-            _tmpATK = ATK;
-            _tmpCrit = Crit_Percent;
-            _tmpCritDMG = CritDMG_Percent;
-
             var manaCost = NormalSkillCost;
 
             switch (skillLevel)
             {
                 case 1:
-                    ATK += (int)(ATK * 0.5);
-                    Crit_Percent += 0.1f;
-                    CritDMG_Percent += 0.5f;
+                    tempATK = (int)(BaseATK * 0.5);
+                    tempCrit = 0.1f;
+                    tempCritDMG = 0.5f;
+
+                    ATK += tempATK;
+                    Crit += tempCrit;
+                    CritDMG += tempCritDMG;
                     NormalActivatedTimer = 8f;
                     break;
 
@@ -400,7 +405,7 @@ namespace Medicraft.Entities
                     break;
             }
 
-            IsNormalSkillActivated = true;
+            IsNormalSkillActivate = true;
             Mana -= manaCost;
         }
 
@@ -459,16 +464,16 @@ namespace Medicraft.Entities
         /// <param name="skillLevel">Passive Skill level base on PlayerData.Abilities.PassiveSkillLevel</param>
         private int PassiveSkillControl(int skillLevel)
         {
-            var healingValue = 0;
-
-            _tmpDEF = DEF_Percent;
+            var healingValue = 0;       
 
             switch (skillLevel)
             {
                 case 1:
-                    healingValue = (int)(MaxHP * 0.25);
+                    healingValue = (int)(BaseMaxHP * 0.25);
+                    tempDEF = 0.25f;
+
                     HP += healingValue;
-                    DEF_Percent += 0.25f;
+                    DEF += tempDEF;
                     PassiveActivatedTimer = 8f;
                     break;
 
@@ -500,7 +505,7 @@ namespace Medicraft.Entities
                     break;
             }
 
-            IsPassiveSkillActivated = true;
+            IsPassiveSkillActivate = true;
 
             return healingValue;
         }
@@ -516,7 +521,7 @@ namespace Medicraft.Entities
                     {
                         if (!entity.IsDying)
                         {
-                            var totalDamage = TotalDamage(Atk, HitPercent, entity.DEF_Percent, entity.Evasion, IsUndodgeable);                                                 
+                            var totalDamage = TotalDamage(Atk, HitPercent, entity.DEF, entity.Evasion, IsUndodgeable);                                                 
 
                             var combatNumVelocity = entity.SetCombatNumDirection();
                             entity.AddCombatLogNumbers(Name, totalDamage.ToString()
@@ -580,9 +585,9 @@ namespace Medicraft.Entities
 
                 // Check crit chance           
                 int critChance = random.Next(1, 101);
-                if (critChance <= Crit_Percent * 100)
+                if (critChance <= Crit * 100)
                 {
-                    totalDamage += (int)(totalDamage * CritDMG_Percent);
+                    totalDamage += (int)(totalDamage * CritDMG);
                     CombatNumCase = 1;
                     _isCriticalAttack = true;
                 }
@@ -646,13 +651,11 @@ namespace Medicraft.Entities
                     {
                         case GameObjects.GameObject.GameObjectType.Item:
 
-                            // Collecting Item into Player's Inventory
-                            var IsItemFound = InventoryManager.Instance.InventoryBag.TryGetValue(
-                                gameObject.Name, out InventoryItemData itemInBag);
+                            var itemId = gameObject.ReferId.ToString();
+                            var quantityDrop = gameObject.QuantityDrop;
 
-                            if (!gameObject.IsCollected && 
-                                (!IsItemFound && InventoryManager.Instance.InventoryBag.Count < InventoryManager.Instance.MaximunSlot
-                                || IsItemFound && itemInBag.Count < 9999))
+                            // Collecting Item into Player's Inventory                         
+                            if (!gameObject.IsCollected && !InventoryManager.Instance.IsInventoryFull(itemId, quantityDrop))
                             {
                                 gameObject.IsCollected = true;
                             }
@@ -812,7 +815,7 @@ namespace Medicraft.Entities
             }
 
             // Activated time Normal Skill
-            if (IsNormalSkillActivated)
+            if (IsNormalSkillActivate)
             {
                 if (NormalActivatedTimer > 0)
                 {
@@ -820,11 +823,11 @@ namespace Medicraft.Entities
                 }
                 else
                 {
-                    ATK = _tmpATK;
-                    Crit_Percent = _tmpCrit;
-                    CritDMG_Percent = _tmpCritDMG;
+                    ATK -= tempATK;
+                    Crit -= tempCrit;
+                    CritDMG -= tempCritDMG;
                     NormalActivatedTimer = 0;
-                    IsNormalSkillActivated = false;                 
+                    IsNormalSkillActivate = false;                 
                 }
             }
 
@@ -857,7 +860,7 @@ namespace Medicraft.Entities
             }
 
             // Activated time Passive Skill
-            if (IsPassiveSkillActivated)
+            if (IsPassiveSkillActivate)
             {
                 if (PassiveActivatedTimer > 0)
                 {
@@ -865,9 +868,9 @@ namespace Medicraft.Entities
                 }
                 else
                 {
-                    DEF_Percent = _tmpDEF;
+                    DEF -= tempDEF;
                     PassiveActivatedTimer = 0;
-                    IsPassiveSkillActivated = false;
+                    IsPassiveSkillActivate = false;
                 }
             }
 
@@ -884,6 +887,96 @@ namespace Medicraft.Entities
             CombatNumVelocity = numDirection * Sprite.TextureRegion.Height / 2;
 
             return CombatNumVelocity;
+        }
+
+        public bool RestoresHP(string actorName, int value, bool isCheckingCap)
+        {
+            if (isCheckingCap)
+            {
+                if (HP < MaxHP)
+                {
+                    value = (value + HP) > MaxHP ? MaxHP - HP : value;
+
+                    HP += value;
+
+                    CombatNumCase = 2;
+                    var combatNumVelocity = SetCombatNumDirection();
+                    AddCombatLogNumbers(actorName
+                        , value.ToString()
+                        , CombatNumCase
+                        , combatNumVelocity
+                        , PassiveSkillEffectActivated);
+
+                    return true;
+                }
+            }
+            else
+            {
+                if (HP < MaxHP)
+                {
+                    value = (value + HP) > MaxHP ? MaxHP - HP : value;
+
+                    HP += value;
+                }
+                else value = 0;
+
+                CombatNumCase = 2;
+                var combatNumVelocity = SetCombatNumDirection();
+                AddCombatLogNumbers(actorName
+                    , value.ToString()
+                    , CombatNumCase
+                    , combatNumVelocity
+                    , PassiveSkillEffectActivated);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool RestoresMana(string actorName, float value, bool isCheckingCap)
+        {
+            if (isCheckingCap)
+            {
+                if (Mana < MaxMana)
+                {
+                    value = value + Mana > MaxMana ? MaxMana - Mana : value;
+
+                    Mana += value;
+
+                    CombatNumCase = 5;
+                    var combatNumVelocity = SetCombatNumDirection();
+                    AddCombatLogNumbers(actorName
+                        , ((int)value).ToString()
+                        , CombatNumCase
+                        , combatNumVelocity
+                        , PassiveSkillEffectActivated);
+
+                    return true;
+                }
+            }
+            else
+            {
+                if (Mana < MaxMana)
+                {
+                    value = value + Mana > MaxMana ? MaxMana - Mana : value;
+
+                    Mana += value;
+                }
+                else value = 0;
+
+                CombatNumCase = 5;
+                var combatNumVelocity = SetCombatNumDirection();
+                AddCombatLogNumbers(actorName
+                    , ((int)value).ToString()
+                    , CombatNumCase
+                    , combatNumVelocity
+                    , PassiveSkillEffectActivated);
+
+                return true;
+            }
+
+            return false;
         }
 
         public float GetDepth()

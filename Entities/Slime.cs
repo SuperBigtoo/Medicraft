@@ -21,6 +21,10 @@ namespace Medicraft.Entities
             blue
         }
 
+        private const int _goidCoinDrop = 10, _expDrop = 10;
+
+        private readonly int _itemDropId, _quantityDrop;
+
         public Slime(AnimatedSprite sprite, EntityData entityData, Vector2 scale)
         {
             Sprite = sprite;
@@ -79,6 +83,9 @@ namespace Medicraft.Entities
 
             RandomSlimeColor();
 
+            _itemDropId = GameGlobals.Instance.RandomItemDrop();
+            _quantityDrop = GameGlobals.Instance.RandomItemQuantityDrop(_itemDropId);
+
             // Set Effect
             NormalHitEffectAttacked = "hit_effect_1";
 
@@ -97,7 +104,7 @@ namespace Medicraft.Entities
             ATK = slime.ATK;
             MaxHP = slime.MaxHP;
             HP = slime.MaxHP;
-            DEF_Percent = slime.DEF_Percent;
+            DEF = slime.DEF;
             Speed = slime.Speed;
             Evasion = slime.Evasion;
 
@@ -141,6 +148,9 @@ namespace Medicraft.Entities
             );
 
             RandomSlimeColor();
+
+            _itemDropId = GameGlobals.Instance.RandomItemDrop();
+            _quantityDrop = GameGlobals.Instance.RandomItemQuantityDrop(_itemDropId);
 
             NormalHitEffectAttacked = slime.NormalHitEffectAttacked;
 
@@ -200,11 +210,11 @@ namespace Medicraft.Entities
                 else
                 {
                     // Exp & Item Drop
-                    InventoryManager.Instance.AddItem(1, 1);
+                    InventoryManager.Instance.AddItem(_itemDropId, _quantityDrop);
 
-                    InventoryManager.Instance.AddGoldCoin(10);
+                    InventoryManager.Instance.AddGoldCoin(_goidCoinDrop);
 
-                    PlayerManager.Instance.AddPlayerEXP(10);
+                    PlayerManager.Instance.AddPlayerEXP(_expDrop);
 
                     Destroy();
                 }

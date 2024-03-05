@@ -57,11 +57,6 @@ namespace GeonBit.UI.Entities
             set { Texture = Resources.Instance._content.Load<Texture2D>(value); }
         }
 
-        /// <summary>
-        ///  Reference id of item.
-        /// </summary>
-        public int ItemId { get; set; }
-
         /// <summary>Default styling for images. Note: loaded from UI theme xml file.</summary>
         new public static StyleSheet DefaultStyle = new StyleSheet();
 

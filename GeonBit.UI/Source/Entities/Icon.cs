@@ -163,6 +163,15 @@ namespace GeonBit.UI.Entities
         IconType _icon;
 
         /// <summary>
+        ///  Reference id of item.
+        /// </summary>
+        public int ItemId { get; set; }
+        public int Count { get; set; }
+        public int Slot { get; set; }
+
+        //public InventoryItemData ItemInBag { get; set; }
+
+        /// <summary>
         /// Create a new icon.
         /// Note: if you want to use your own texture for the icon, simply set 'icon' to be IconType.None and replace 'Texture' with
         /// your own texture after it is created.

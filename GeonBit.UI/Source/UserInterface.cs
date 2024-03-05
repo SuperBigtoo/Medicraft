@@ -656,6 +656,7 @@ namespace GeonBit.UI
                 // if didn't create a new render target, clear it
                 else
                 {
+                    //spriteBatch.GraphicsDevice.SetRenderTarget(_renderTarget);
                     spriteBatch.GraphicsDevice.SetRenderTarget(_renderTarget);
                     spriteBatch.GraphicsDevice.Clear(Color.Transparent);
                 }
@@ -664,16 +665,16 @@ namespace GeonBit.UI
             // draw root panel
             Root.Draw(spriteBatch);
 
-            // draw cursor (unless using render targets and should draw cursor outside of it)
-            if (ShowCursor && (IncludeCursorInRenderTarget || !UseRenderTarget))
-            {
-                DrawCursor(spriteBatch);
-            }
-
             // reset render target
             if (UseRenderTarget)
             {
                 spriteBatch.GraphicsDevice.SetRenderTarget(null);
+            }
+
+            // draw cursor (unless using render targets and should draw cursor outside of it)
+            if (ShowCursor && (IncludeCursorInRenderTarget || !UseRenderTarget))
+            {
+                DrawCursor(spriteBatch);
             }
         }
 

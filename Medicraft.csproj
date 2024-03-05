@@ -10,10 +10,6 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup>
-	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-  </PropertyGroup>
   <ItemGroup>
     <Compile Remove="GeonBit.UI\**" />
     <Compile Remove="TiledSharp\**" />

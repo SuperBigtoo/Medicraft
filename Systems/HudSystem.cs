@@ -165,13 +165,13 @@ namespace Medicraft.Systems
                 spriteBatch.DrawString(FontTA8BitBold, $"Player ATK: {PlayerManager.Instance.Player.ATK}"
                     , new Vector2(55f, 260f) + _topLeftCorner, Color.White, clippingRectangle: rect);
 
-                spriteBatch.DrawString(FontTA8BitBold, $"Player Crit: {PlayerManager.Instance.Player.Crit_Percent}"
+                spriteBatch.DrawString(FontTA8BitBold, $"Player Crit: {PlayerManager.Instance.Player.Crit}"
                     , new Vector2(55f, 275f) + _topLeftCorner, Color.White, clippingRectangle: rect);
 
-                spriteBatch.DrawString(FontTA8BitBold, $"Player CritDMG: {PlayerManager.Instance.Player.CritDMG_Percent}"
+                spriteBatch.DrawString(FontTA8BitBold, $"Player CritDMG: {PlayerManager.Instance.Player.CritDMG}"
                     , new Vector2(55f, 290f) + _topLeftCorner, Color.White, clippingRectangle: rect);
 
-                spriteBatch.DrawString(FontTA8BitBold, $"Player DEF: {PlayerManager.Instance.Player.DEF_Percent}"
+                spriteBatch.DrawString(FontTA8BitBold, $"Player DEF: {PlayerManager.Instance.Player.DEF}"
                     , new Vector2(55f, 305f) + _topLeftCorner, Color.White, clippingRectangle: rect);
 
                 spriteBatch.DrawString(FontTA8BitBold, $"Cooldown Normal Skill: {PlayerManager.Instance.Player.NormalCooldownTimer}"

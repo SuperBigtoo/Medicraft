@@ -19,4 +19,10 @@
         public bool IsQuest_15_Clear { get; set; }
         public bool IsChapterClear { get; set; }
     }
+
+    public class ChapterItemData
+    {
+        public string Name { get; set; }
+        public int[] ItemDropId { get; set; }
+    }
 }

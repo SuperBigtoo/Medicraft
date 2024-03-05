@@ -3,208 +3,231 @@
     "ItemId": 0,
     "Name": "ดอกพิกุล",
     "Category": "Material",
-    "Description": "ดอกของต้นพิกุลที่สามารถใช้ในการปรุงยา",
+    "Description": "ดอกของต้นพิกุล สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 5]
   },
   {
     "ItemId": 1,
     "Name": "ดอกบุนนาค",
     "Category": "Material",
-    "Description": "ดอกของต้นบุนนาคที่สามารถใช้ในการปรุงยา",
+    "Description": "ดอกของต้นบุนนาค สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 5]
   },
   {
     "ItemId": 2,
     "Name": "ดอกสารภี",
     "Category": "Material",
-    "Description": "ดอกของต้นสารภีที่สามารถใช้ในการปรุงยา",
+    "Description": "ดอกของต้นสารภี สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 5]
   },
   {
     "ItemId": 3,
     "Name": "ดอกดีปลี",
     "Category": "Material",
-    "Description": "ดอกของต้นดีปลีที่สามารถใช้ในการปรุงยา",
+    "Description": "ดอกของต้นดีปลี สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [7, 15]
   },
   {
     "ItemId": 4,
     "Name": "ดอกมะลิ",
     "Category": "Material",
-    "Description": "ดอกของต้นมะลิที่สามารถใช้ในการปรุงยา",
+    "Description": "ดอกของต้นมะลิ สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [7, 14]
   },
   {
     "ItemId": 5,
     "Name": "ดอกจันทน์",
     "Category": "Material",
-    "Description": "รกหุ้มเมล็ดของต้นจันทร์เทศที่สามารถใช้ในการปรุงยา",
+    "Description": "รกหุ้มเมล็ดของต้นจันทร์เทศ สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 5]
   },
   {
     "ItemId": 6,
     "Name": "ดอกกานพลู",
     "Category": "Material",
-    "Description": "ดอกตูมของต้นกานพลูที่สามารถใช้ในการปรุงยา",
+    "Description": "ดอกตูมของต้นกานพลู สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 5]
   },
   {
     "ItemId": 7,
     "Name": "ดอกบัวขม",
     "Category": "Material",
-    "Description": "ดอกของต้นบัวขมที่สามารถใช้ในการปรุงยา",
+    "Description": "ดอกของต้นบัวขม สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 5]
   },
   {
     "ItemId": 8,
     "Name": "ดอกบัวเผื่อน",
     "Category": "Material",
-    "Description": "ดอกของต้นบัวเผื่อนที่สามารถใช้ในการปรุงยา",
+    "Description": "ดอกของต้นบัวเผื่อน สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 5]
   },
   {
     "ItemId": 9,
     "Name": "ดอกกระดังงา",
     "Category": "Material",
-    "Description": "ดอกแก่จัดของต้นกระดังงาไทยที่สามารถใช้ในการปรุงยา",
+    "Description": "ดอกแก่จัดของต้นกระดังงาไทย สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 10,
     "Name": "ดอกจำปา",
     "Category": "Material",
-    "Description": "ดอกของต้นจำปาที่สามารถใช้ในการปรุงยา",
+    "Description": "ดอกของต้นจำปา สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 11,
     "Name": "ดอกบัวจงกลนี",
     "Category": "Material",
-    "Description": "ดอกของบัวจงกลนีที่สามารถใช้ในการปรุงยา",
+    "Description": "ดอกของบัวจงกลนี สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 12,
     "Name": "ดอกคำไทย",
     "Category": "Material",
-    "Description": "ดอกของต้นคำไทยหรือคำเงาะที่สามารถใช้ในการปรุงยา",
+    "Description": "ดอกของต้นคำไทยหรือคำเงาะ สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 13,
     "Name": "ดอกคำฝอย",
     "Category": "Material",
-    "Description": "กลีบดอกและเกสรแห้งของต้นคำฝอยที่สามารถใช้ในการปรุงยา",
+    "Description": "กลีบดอกและเกสรแห้งของต้นคำฝอย สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 5]
   },
   {
     "ItemId": 14,
     "Name": "ดอกเก็กฮวย",
     "Category": "Material",
-    "Description": "ดอกของต้นเก็กฮวยที่สามารถใช้ในการปรุงยา",
+    "Description": "ดอกของต้นเก็กฮวย สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 2]
   },
   {
     "ItemId": 15,
     "Name": "เกสรบัวหลวง",
     "Category": "Material",
-    "Description": "เกสรตัวผู้แห้งของดอกบัวหลวงที่สามารถใช้ในการปรุงยา",
+    "Description": "เกสรตัวผู้แห้งของดอกบัวหลวง สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 16,
     "Name": "ผิวมะกรูด",
     "Category": "Material",
-    "Description": "ผิวชั้นนอกของลูกมะกรูดที่สามารถใช้ในการปรุงยา",
+    "Description": "ผิวชั้นนอกของลูกมะกรูด สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 6]
   },
   {
     "ItemId": 17,
     "Name": "ผิวมะงั่ว",
     "Category": "Material",
-    "Description": "ผิวชั้นนอกของลูกมะงั่วที่สามารถใช้ในการปรุงยา",
+    "Description": "ผิวชั้นนอกของลูกมะงั่ว สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 18,
     "Name": "ผิวมะนาว",
     "Category": "Material",
-    "Description": "ผิวชั้นนอกของลูกมะนาวที่สามารถใช้ในการปรุงยา",
+    "Description": "ผิวชั้นนอกของลูกมะนาว สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 19,
     "Name": "ผิวส้มตรังกานู",
     "Category": "Material",
-    "Description": "ผิวชั้นนอกของส้มตรังกานูที่สามารถใช้ในการปรุงยา",
+    "Description": "ผิวชั้นนอกของส้มตรังกานู สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 20,
     "Name": "ผิวส้มจีน",
     "Category": "Material",
-    "Description": "ผิวชั้นนอกของส้มจีนที่สามารถใช้ในการปรุงยา",
+    "Description": "ผิวชั้นนอกของส้มจีน สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 2]
   },
   {
     "ItemId": 21,
     "Name": "ผิวส้มโอ",
     "Category": "Material",
-    "Description": "ผิวชั้นนอกของส้มโอที่สามารถใช้ในการปรุงยา",
+    "Description": "ผิวชั้นนอกของส้มโอ สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 22,
     "Name": "ผิวส้มเขียวหวาน",
     "Category": "Material",
-    "Description": "ผิวชั้นนอกของส้มเขียวหวานที่สามารถใช้ในการปรุงยา",
+    "Description": "ผิวชั้นนอกของส้มเขียวหวาน สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 23,
@@ -213,79 +236,88 @@
     "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา แต่ไม่ใช่กัญชาอย่างที่คิดหรอก",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [6, 12]
   },
   {
     "ItemId": 24,
     "Name": "ใบมะนาว",
     "Category": "Material",
-    "Description": "ใบของต้นมะนาวที่สามารถใช้ในการปรุงยา",
+    "Description": "ใบของต้นมะนาว สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 25,
     "Name": "ใบพิมเสนต้น",
     "Category": "Material",
-    "Description": "ใบของต้นพิมเสนต้นที่สามารถใช้ในการปรุงยา",
+    "Description": "ใบของต้นพิมเสนต้น สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 26,
     "Name": "ใบผักกระโฉม",
     "Category": "Material",
-    "Description": "ใบของต้นผักกระโฉมที่สามารถใช้ในการปรุงยา",
+    "Description": "ใบของต้นผักกระโฉม สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 27,
     "Name": "ใบหมากผู้",
     "Category": "Material",
-    "Description": "ใบของต้นหมากผู้หมากเมียที่มีลักษณะใบแคบและยาวสามารถใช้ในการปรุงยา",
+    "Description": "ใบของต้นหมากผู้หมากเมีย มีลักษณะใบแคบและยาว สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 28,
     "Name": "ใบหมากเมีย",
     "Category": "Material",
-    "Description": "ใบของต้นหมากผู้หมากเมียที่มีลักษณะใบใหญ่สีเขียวที่สามารถใช้ในการปรุงยา",
+    "Description": "ใบของต้นหมากผู้หมากเมีย มีลักษณะใบใหญ่สีเขียว สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 29,
     "Name": "ใบสันพร้าหอม",
     "Category": "Material",
-    "Description": "ใบของต้นสันพร้าหอมที่สามารถใช้ในการปรุงยา",
+    "Description": "ใบของต้นสันพร้าหอม สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 30,
     "Name": "ใบเทียน",
     "Category": "Material",
-    "Description": "ใบของต้นเทียนที่สามารถใช้ในการปรุงยา",
+    "Description": "ใบของต้นเทียน สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 31,
     "Name": "ใบทับทิม",
     "Category": "Material",
-    "Description": "ใบของต้นทับทิมที่สามารถใช้ในการปรุงยา",
+    "Description": "ใบของต้นทับทิม สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 32,
@@ -294,7 +326,8 @@
     "Description": "ผลส้มซ่าที่ขนาดพอๆกับผลมะนาว สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [7, 14]
   },
   {
     "ItemId": 33,
@@ -303,7 +336,8 @@
     "Description": "ยางไม้หอมที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 34,
@@ -312,7 +346,8 @@
     "Description": "เครื่องเทศที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [10, 20]
   },
   {
     "ItemId": 35,
@@ -321,7 +356,8 @@
     "Description": "เครื่องเทศที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 6]
   },
   {
     "ItemId": 36,
@@ -330,7 +366,8 @@
     "Description": "เครื่องยาที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 37,
@@ -339,16 +376,18 @@
     "Description": "เครื่องยาที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [6, 12]
   },
   {
     "ItemId": 38,
     "Name": "รงทอง",
     "Category": "Material",
-    "Description": "เครื่องยาจากยางของต้นรงทองที่สามารถใช้ในการปรุงยา",
+    "Description": "เครื่องยาจากยางของต้นรงทอง สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 39,
@@ -357,7 +396,8 @@
     "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 40,
@@ -366,7 +406,8 @@
     "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 2]
   },
   {
     "ItemId": 41,
@@ -375,7 +416,8 @@
     "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 42,
@@ -384,25 +426,28 @@
     "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 43,
     "Name": "หัวกระชาย",
     "Category": "Material",
-    "Description": "หัวของต้นกระชายที่สามารถใช้ในการปรุงยา",
+    "Description": "หัวของต้นกระชาย สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [5, 10]
   },
   {
     "ItemId": 44,
     "Name": "หัวแห้วไทย",
     "Category": "Material",
-    "Description": "หัวของต้นแห้วไทยที่สามารถใช้ในการปรุงยา",
+    "Description": "หัวของต้นแห้วไทย สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 45,
@@ -411,52 +456,58 @@
     "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 1]
   },
   {
     "ItemId": 46,
     "Name": "หัวบุก",
     "Category": "Material",
-    "Description": "หัวของต้นบุกที่สามารถใช้ในการปรุงยา",
+    "Description": "หัวของต้นบุก สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 47,
     "Name": "หัวกลอย",
     "Category": "Material",
-    "Description": "หัวของต้นกลอยเป็นไม้เถาล้มลุกที่สามารถใช้ในการปรุงยา",
+    "Description": "หัวของต้นกลอยเป็นไม้เถาล้มลุก สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 1]
   },
   {
     "ItemId": 48,
     "Name": "หัวกระดาดขาว",
     "Category": "Material",
-    "Description": "หัวของต้นกระดาดขาวที่สามารถใช้ในการปรุงยา",
+    "Description": "หัวของต้นกระดาดขาว สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 1]
   },
   {
     "ItemId": 49,
     "Name": "หัวกระดาดแดง",
     "Category": "Material",
-    "Description": "หัวของต้นกระดาดแดงที่สามารถใช้ในการปรุงยา",
+    "Description": "หัวของต้นกระดาดแดง สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 1]
   },
   {
     "ItemId": 50,
     "Name": "หัวแห้วหมู",
     "Category": "Material",
-    "Description": "หัวของต้นแห้วหมูที่สามารถใช้ในการปรุงยา",
+    "Description": "หัวของต้นแห้วหมู สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 51,
@@ -465,16 +516,18 @@
     "Description": "หัวหอมใหญ่ที่มีรสเผ็ดซ่าฉุนแต่ก็หวาน สามารถใช้ในการทำอาหารและปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 52,
     "Name": "หัวเปราะหอม",
     "Category": "Material",
-    "Description": "หัวของต้นเปราะหอมที่สามารถใช้ในการปรุงยา",
+    "Description": "หัวของต้นเปราะหอม สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [4, 8]
   },
   {
     "ItemId": 53,
@@ -483,7 +536,8 @@
     "Description": "พืชผลที่สามารถใช้ในการทำอาหารและปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 6]
   },
   {
     "ItemId": 54,
@@ -492,7 +546,8 @@
     "Description": "หัวกระเทียมที่ผ่านการคั่วแล้ว สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 55,
@@ -501,16 +556,18 @@
     "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 56,
     "Name": "ชุดเครื่องแก่น",
     "Category": "Material",
-    "Description": "ชุดรวมแก่นหรือเนื้อไม้ชั้นในที่ถูกตัดแบ่งเป็นชิ้นแล้วสามารถใช้ในการปรุงยา|ประกอบไปด้วยแก่นฝาง แก่นแกแล แก่นขนุน แก่นจันทน์แดง-ขาว แก่นจันทน์เทศ แก่นสน และอื่นๆอีก",
+    "Description": "ชุดรวมแก่นหรือเนื้อไม้ชั้นในที่ถูกตัดแบ่งเป็นชิ้นแล้วสามารถใช้ในการปรุงยา ประกอบไปด้วยแก่นฝาง แก่นแกแล แก่นขนุน แก่นจันทน์แดง-ขาว แก่นจันทน์เทศ แก่นสน และอื่นๆอีก",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [4, 9]
   },
   {
     "ItemId": 57,
@@ -519,7 +576,8 @@
     "Description": "เนื้อไม้ของต้นกฤษณาที่มีราลง สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 58,
@@ -528,7 +586,8 @@
     "Description": "ยางหอมจากต้นกำยานที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 2]
   },
   {
     "ItemId": 59,
@@ -537,7 +596,8 @@
     "Description": "เครื่องยาที่ได้จากแก่นของต้นสลัดไดที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 60,
@@ -546,7 +606,8 @@
     "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 2]
   },
   {
     "ItemId": 61,
@@ -555,7 +616,8 @@
     "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 62,
@@ -564,421 +626,468 @@
     "Description": "เนื้อไม้ที่มีราของต้นพิกุลหรือต้นตะแบก สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 63,
     "Name": "ลูกสมอพิเภก",
     "Category": "Material",
-    "Description": "ผลของต้นสมอพิเภกที่สามารถใช้ในการปรุงยา",
+    "Description": "ผลของต้นสมอพิเภก สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 64,
     "Name": "ลูกสมอไทย",
     "Category": "Material",
-    "Description": "ผลของต้นสมอไทยที่สามารถใช้ในการปรุงยา",
+    "Description": "ผลของต้นสมอไทย สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [6, 13]
   },
   {
     "ItemId": 65,
     "Name": "ลูกสมอเทศ",
     "Category": "Material",
-    "Description": "ผลของต้นสมอเทศที่สามารถใช้ในการปรุงยา",
+    "Description": "ผลของต้นสมอเทศ สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [4, 8]
   },
   {
     "ItemId": 66,
     "Name": "ลูกมะขามป้อม",
     "Category": "Material",
-    "Description": "ผลของต้นมะขามป้อมที่สามารถใช้ในการปรุงยา",
+    "Description": "ผลของต้นมะขามป้อม สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [4, 8]
   },
   {
     "ItemId": 67,
     "Name": "เปลือกส้มจีน",
     "Category": "Material",
-    "Description": "เปลือกของผลส้มจีนที่สามารถใช้ในการปรุงยา",
+    "Description": "เปลือกของผลส้มจีน สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 2]
   },
   {
     "ItemId": 68,
     "Name": "เปลือกมะรุม",
     "Category": "Material",
-    "Description": "เปลือกไม้ชั้นนอกของต้นมะรุมที่สามารถใช้ในการปรุงยา",
+    "Description": "เปลือกไม้ชั้นนอกของต้นมะรุม สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 69,
     "Name": "เปลือกชะลูด",
     "Category": "Material",
-    "Description": "เปลือกไม้ของต้นชะลูดที่สามารถใช้ในการปรุงยา",
+    "Description": "เปลือกไม้ของต้นชะลูด สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 70,
     "Name": "เปลือกอบเชย",
     "Category": "Material",
-    "Description": "เปลือกไม้ชั้นในของต้นอบเชยที่สามารถใช้ในการปรุงยา",
+    "Description": "เปลือกไม้ชั้นในของต้นอบเชย สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 71,
     "Name": "เปลือกอบเชยเทศ",
     "Category": "Material",
-    "Description": "เปลือกไม้ชั้นในของต้นอบเชยเทศที่สามารถใช้ในการปรุงยา",
+    "Description": "เปลือกไม้ชั้นในของต้นอบเชยเทศ สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 72,
     "Name": "เปลือกอบเชยญวน",
     "Category": "Material",
-    "Description": "เปลือกไม้ชั้นในของต้นอบเชยญวนที่สามารถใช้ในการปรุงยา",
+    "Description": "เปลือกไม้ชั้นในของต้นอบเชยญวน สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 73,
     "Name": "เปลือกสมุลแว้ง",
     "Category": "Material",
-    "Description": "เปลือกไม้ของต้นสมุลแว้งที่สามารถใช้ในการปรุงยา",
+    "Description": "เปลือกไม้ของต้นสมุลแว้ง สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 74,
     "Name": "เปลือกสีเสียดไทย",
     "Category": "Material",
-    "Description": "เปลือกไม้ของต้นสีเสียดที่สามารถใช้ในการปรุงยา",
+    "Description": "เปลือกไม้ของต้นสีเสียด สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 75,
     "Name": "เปลือกเพกา",
     "Category": "Material",
-    "Description": "เปลือกไม้ของต้นเพกาที่สามารถใช้ในการปรุงยา",
+    "Description": "เปลือกไม้ของต้นเพกา สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 76,
     "Name": "เปลือกต้นทองหลาง",
     "Category": "Material",
-    "Description": "เปลือกไม้ของต้นทองหลางที่สามารถใช้ในการปรุงยา",
+    "Description": "เปลือกไม้ของต้นทองหลาง สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 77,
     "Name": "เปลือกต้นกุ่มบก",
     "Category": "Material",
-    "Description": "เปลือกไม้ของต้นกุ่มบกที่สามารถใช้ในการปรุงยา",
+    "Description": "เปลือกไม้ของต้นกุ่มบก สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 78,
     "Name": "เปลือกต้นกุ่มน้ำ",
     "Category": "Material",
-    "Description": "เปลือกไม้ของต้นกุ่มน้ำที่สามารถใช้ในการปรุงยา",
+    "Description": "เปลือกไม้ของต้นกุ่มน้ำ สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 79,
     "Name": "หญ้าตีนนก",
     "Category": "Material",
-    "Description": "ต้นหญ้าทั่วๆ ไปที่มีดอกเป็นแฉกๆ สามารถใช้ในการปรุงยา",
+    "Description": "ต้นหญ้าทั่วๆไปที่มีดอกเป็นแฉกๆ สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 80,
     "Name": "ชุดเครื่องเหง้า",
     "Category": "Material",
-    "Description": "ชุดรวมพืชสมุนไพรจำพวกที่ลงหัวหรือมีลำต้นใต้ดินที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยเหง้าขิง เหง้าไพล เหง้าว่านน้ำ เหง้าข่า เหง้าขมิ้นชัน เหง้าขมิ้นอ้อย เหง้ากระชาย และเหง้ากระทือ",
+    "Description": "ชุดรวมพืชสมุนไพรจำพวกที่ลงหัวหรือมีลำต้นใต้ดินที่สามารถใช้ในการปรุงยา ประกอบไปด้วยเหง้าขิง เหง้าไพล เหง้าว่านน้ำ เหง้าข่า เหง้าขมิ้นชัน เหง้าขมิ้นอ้อย เหง้ากระชาย และเหง้ากระทือ",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [6, 12]
   },
   {
     "ItemId": 81,
     "Name": "รากชะเอมเทศ",
     "Category": "Material",
-    "Description": "รากของต้นชะเอมเทศที่สามารถใช้ในการปรุงยา",
+    "Description": "รากของต้นชะเอมเทศ สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [7, 14]
   },
   {
     "ItemId": 82,
     "Name": "รากชะเอมไทย",
     "Category": "Material",
-    "Description": "รากของต้นชะเอมไทยที่สามารถใช้ในการปรุงยา",
+    "Description": "รากของต้นชะเอมไทย สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 83,
     "Name": "รากเจตมูลเพลิงแดง",
     "Category": "Material",
-    "Description": "รากของต้นเจตมูลเพลิงแดงที่สามารถใช้ในการปรุงยา",
+    "Description": "รากของต้นเจตมูลเพลิงแดง สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [6, 13]
   },
   {
     "ItemId": 84,
     "Name": "รากแฝกหอม",
     "Category": "Material",
-    "Description": "รากของต้นแฝกหอมที่สามารถใช้ในการปรุงยา",
+    "Description": "รากของต้นแฝกหอม สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 6]
   },
   {
     "ItemId": 85,
     "Name": "รากช้าพลู",
     "Category": "Material",
-    "Description": "รากของต้นช้าพลูที่สามารถใช้ในการปรุงยา",
+    "Description": "รากของต้นช้าพลู สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [4, 9]
   },
   {
     "ItemId": 86,
     "Name": "รากย่านาง",
     "Category": "Material",
-    "Description": "รากของต้นย่านางที่สามารถใช้ในการปรุงยา",
+    "Description": "รากของต้นย่านาง สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [5, 11]
   },
   {
     "ItemId": 87,
     "Name": "รากคนทา",
     "Category": "Material",
-    "Description": "รากของต้นคนทาที่สามารถใช้ในการปรุงยา",
+    "Description": "รากของต้นคนทา สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [5, 10]
   },
   {
     "ItemId": 88,
     "Name": "รากมะเดื่อชุมพร",
     "Category": "Material",
-    "Description": "รากของต้นมะเดื่อชุมพรที่สามารถใช้ในการปรุงยา",
+    "Description": "รากของต้นมะเดื่อชุมพร สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [5, 10]
   },
   {
     "ItemId": 89,
     "Name": "รากชิงชี่",
     "Category": "Material",
-    "Description": "รากของต้นชิงชี่ที่สามารถใช้ในการปรุงยา",
+    "Description": "รากของต้นชิงชี่ สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [5, 10]
   },
   {
     "ItemId": 90,
     "Name": "รากไม้เท้ายายม่อม",
     "Category": "Material",
-    "Description": "รากของต้นเท้ายายม่อมที่สามารถใช้ในการปรุงยา",
+    "Description": "รากของต้นเท้ายายม่อม สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [5, 10]
   },
   {
     "ItemId": 91,
     "Name": "รากปลาไหลเผือก",
     "Category": "Material",
-    "Description": "รากของต้นปลาไหลเผือกที่สามารถใช้ในการปรุงยา",
+    "Description": "รากของต้นปลาไหลเผือก สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 6]
   },
   {
     "ItemId": 92,
     "Name": "รากเหมือดคน",
     "Category": "Material",
-    "Description": "รากของต้นเหมือดคนที่สามารถใช้ในการปรุงยา",
+    "Description": "รากของต้นเหมือดคน สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 93,
     "Name": "รากมะปรางหวาน",
     "Category": "Material",
-    "Description": "รากของต้นมะปรางหวานที่สามารถใช้ในการปรุงยา",
+    "Description": "รากของต้นมะปรางหวาน สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 94,
     "Name": "รากมะนาว",
     "Category": "Material",
-    "Description": "รากของต้นมะนาวที่สามารถใช้ในการปรุงยา",
+    "Description": "รากของต้นมะนาว สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 95,
     "Name": "รากตองแตก",
     "Category": "Material",
-    "Description": "รากของต้นตองแตกที่สามารถใช้ในการปรุงยา",
+    "Description": "รากของต้นตองแตก สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [6, 12]
   },
   {
     "ItemId": 96,
     "Name": "รากจิงจ้อ",
     "Category": "Material",
-    "Description": "รากของต้นจิงจ้อที่สามารถใช้ในการปรุงยา",
+    "Description": "รากของต้นจิงจ้อ สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [4, 8]
   },
   {
     "ItemId": 97,
     "Name": "ชุดเครื่องเถา",
     "Category": "Material",
-    "Description": "ชุดรวมเนื้อไม้ของพืชสมุนไพรจำพวกเถาที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยเถาสะค้าน เถากำแพงเจ็ดชั้น เถาบอระเพ็ด เถามวกแดง เถามวกขาว และอื่นๆอีก",
+    "Description": "ชุดรวมเนื้อไม้ของพืชสมุนไพรจำพวกเถาที่สามารถใช้ในการปรุงยา ประกอบไปด้วยเถาสะค้าน เถากำแพงเจ็ดชั้น เถาบอระเพ็ด เถามวกแดง เถามวกขาว และอื่นๆอีก",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [5, 10]
   },
   {
     "ItemId": 98,
     "Name": "ลำต้นข่าต้น",
     "Category": "Material",
-    "Description": "ลำต้นเนื้อไม้ของต้นข่าต้นที่สามารถใช้ในการปรุงยา",
+    "Description": "ลำต้นเนื้อไม้ของต้นข่าต้น สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 99,
     "Name": "ลูกผักชีลา",
     "Category": "Material",
-    "Description": "ผลลูกเล็กๆของต้นผักชีลาที่สามารถใช้ในการปรุงยา",
+    "Description": "ผลลูกเล็กๆของต้นผักชีลา สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 100,
     "Name": "ลูกจันทน์",
     "Category": "Material",
-    "Description": "เมล็ดแห้งจากผลสุกของต้นจันทร์เทศที่สามารถใช้ในการปรุงยา",
+    "Description": "เมล็ดแห้งจากผลสุกของต้นจันทร์เทศ สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 101,
     "Name": "ลูกกระวาน",
     "Category": "Material",
-    "Description": "ผลแก่ของต้นกระวานไทยที่สามารถใช้ในการปรุงยา",
+    "Description": "ผลแก่ของต้นกระวานไทย สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 102,
     "Name": "ลูกราชดัด",
     "Category": "Material",
-    "Description": "ผลแก่ของต้นราชดัดที่สามารถใช้ในการปรุงยา",
+    "Description": "ผลแก่ของต้นราชดัด สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 103,
     "Name": "ลูกเร่ว",
     "Category": "Material",
-    "Description": "เมล็ดของผลเร่วที่สามารถใช้ในการปรุงยา",
+    "Description": "เมล็ดของผลเร่ว สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 104,
     "Name": "ลูกสารพัดพิษ",
     "Category": "Material",
-    "Description": "เมล็ดจากฝักของต้นสารพัดพิษที่สามารถใช้ในการปรุงยา",
+    "Description": "เมล็ดจากฝักของต้นสารพัดพิษ สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 105,
     "Name": "ลูกกระดอม",
     "Category": "Material",
-    "Description": "ผลอ่อนของต้นกระดอมที่สามารถใช้ในการปรุงยา",
+    "Description": "ผลอ่อนของต้นกระดอม สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 6]
   },
   {
     "ItemId": 106,
     "Name": "ลูกพิลังกาสา",
     "Category": "Material",
-    "Description": "ผลของต้นพิลังกาสาที่สามารถใช้ในการปรุงยา",
+    "Description": "ผลของต้นพิลังกาสา สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 107,
     "Name": "ชุดเครื่องโกฐ",
     "Category": "Material",
-    "Description": "ชุดรวมโกฐหรือรากไม้ของพืชสมุนไพรที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยโกฐสอ โกฐเขมา โกฐหัวบัว โกฐกักกรา โกฐน้ำเต้า และโกฐอื่นๆอีก",
+    "Description": "ชุดรวมโกฐหรือรากไม้ของพืชสมุนไพรที่สามารถใช้ในการปรุงยา ประกอบไปด้วยโกฐสอ โกฐเขมา โกฐหัวบัว โกฐกักกรา โกฐน้ำเต้า และโกฐอื่นๆอีก",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 108,
     "Name": "ชุดเครื่องเทียน",
     "Category": "Material",
-    "Description": "ชุดรวมเทียนหรือผลแก่แห้งของพืชสมุนไพรที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยเทียนดำ เทียนแดง เทียนขาว เทียนข้าวเปลือก เทียนสัตตบุษย์ เทียนเยาวพาณี และเทียนอื่นๆอีก",
+    "Description": "ชุดรวมเทียนหรือผลแก่แห้งของพืชสมุนไพรที่สามารถใช้ในการปรุงยา ประกอบไปด้วยเทียนดำ เทียนแดง เทียนขาว เทียนข้าวเปลือก เทียนสัตตบุษย์ เทียนเยาวพาณี และเทียนอื่นๆอีก",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 109,
@@ -987,7 +1096,8 @@
     "Description": "เครื่องยาที่ได้จากต้นพิมเสน สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 110,
@@ -996,7 +1106,8 @@
     "Description": "เครื่องยาที่ได้จากต้นการบูร สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 111,
@@ -1005,7 +1116,8 @@
     "Description": "เครื่องยาจากชันน้ำมันหรือยางที่ได้จากต้นมหาหิงคุ์ สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 112,
@@ -1014,7 +1126,8 @@
     "Description": "เครื่องยาที่ได้จากดินเค็มหรือดินโป่ง สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 6]
   },
   {
     "ItemId": 113,
@@ -1023,7 +1136,8 @@
     "Description": "ชันหรือยางไม้ที่แห้งกรังตามเปลือกไม้ของต้นตะเคียงทองหรือยางนา สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 114,
@@ -1032,7 +1146,8 @@
     "Description": "ชันหรือยางที่ได้จากการขับถ่ายของแมลงครั่ง สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 115,
@@ -1041,16 +1156,18 @@
     "Description": "เครื่องยาที่ได้จากการระเหยแห้งของน้ำสกัดใบและกิ่งของต้นสีเสียดเทศ สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 116,
     "Name": "รากกล้วยตีบ",
     "Category": "Material",
-    "Description": "รากของต้นกล้วยตีบที่สามารถใช้ในการปรุงยา",
+    "Description": "รากของต้นกล้วยตีบ สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 117,
@@ -1059,7 +1176,8 @@
     "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 118,
@@ -1068,7 +1186,8 @@
     "Description": "น้ำมันหอมระเหยที่ได้จากต้นสะระแหน่ หรือชื่อก็คือเมนทอลนั้นเอง สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 2]
   },
   {
     "ItemId": 119,
@@ -1077,7 +1196,8 @@
     "Description": "น้ำดีจากถุงน้ำดีของวัวสามารถใช้ในการปรุงยาได้",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 2]
   },
   {
     "ItemId": 120,
@@ -1086,7 +1206,8 @@
     "Description": "ส่วนใบแบบขนนกของต้นส้มป่อย สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 121,
@@ -1095,7 +1216,8 @@
     "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยาและทำอาหาร",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 122,
@@ -1104,7 +1226,8 @@
     "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยาและทำอาหาร",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 123,
@@ -1113,7 +1236,8 @@
     "Description": "ส่วนเหง้าของต้นเนระพูสี สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 124,
@@ -1122,7 +1246,8 @@
     "Description": "ส่วนเหง้าของต้นพิษนาศน์ สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 125,
@@ -1131,7 +1256,8 @@
     "Description": "ส่วนเหง้าหรือเนื้อไม้ของต้นมหาสดำ สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 126,
@@ -1140,7 +1266,8 @@
     "Description": "ส่วนเหง้าของต้นว่านชักมดลูก สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 127,
@@ -1149,7 +1276,8 @@
     "Description": "ส่วนเหง้าของต้นว่านกีบแรด สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 128,
@@ -1158,16 +1286,18 @@
     "Description": "ส่วนเหง้าของต้นว่านร่อนทอง สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 129,
     "Name": "บ๊วย",
     "Category": "Material",
-    "Description": "ผลของต้นบ๊วยที่สามารถใช้ในการปรุงยา",
+    "Description": "ผลของต้นบ๊วย สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 130,
@@ -1176,25 +1306,28 @@
     "Description": "มะนาวที่ผ่านการดองและตากแห้งแล้ว สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [2, 4]
   },
   {
     "ItemId": 131,
     "Name": "น้ำตาลกรวด",
     "Category": "Material",
-    "Description": "ผลึกก้อนน้ำตาลที่สามารถใช้ในการทำอาหารและปรุงยาก็ได้",
+    "Description": "ผลึกก้อนน้ำตาล สามารถใช้ในการทำอาหารและปรุงยาก็ได้",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1 ,2]
   },
   {
     "ItemId": 132,
     "Name": "ผลมะแว้งเครือ",
     "Category": "Material",
-    "Description": "ผลของต้นมะแว้งเครือที่สามารถใช้ในการปรุงยา",
+    "Description": "ผลของต้นมะแว้งเครือ สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 2]
   },
   {
     "ItemId": 133,
@@ -1203,7 +1336,8 @@
     "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 1]
   },
   {
     "ItemId": 134,
@@ -1212,7 +1346,8 @@
     "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 135,
@@ -1221,7 +1356,8 @@
     "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 6]
   },
   {
     "ItemId": 136,
@@ -1230,7 +1366,8 @@
     "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 2]
   },
   {
     "ItemId": 137,
@@ -1239,7 +1376,8 @@
     "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 138,
@@ -1248,16 +1386,18 @@
     "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 139,
     "Name": "ผลมะตูมอ่อน",
     "Category": "Material",
-    "Description": "ผลอ่อนของต้นมะตูมที่สามารถใช้ในการปรุงยา",
+    "Description": "ผลอ่อนของต้นมะตูม สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 140,
@@ -1266,7 +1406,8 @@
     "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [3, 5]
   },
   {
     "ItemId": 141,
@@ -1275,7 +1416,8 @@
     "Description": "น้ำจากเกลือรูปแบบหนึ่งที่พบได้ในธรรมชาติสามารถใช้ในการปรุงยา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 1]
   },
   {
     "ItemId": 142,
@@ -1284,7 +1426,8 @@
     "Description": "แครรอทกรอบๆหวานๆสีแดงสด เป็นผักที่กินกับเมนูไหนก็อร่อย",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 4]
   },
   {
     "ItemId": 143,
@@ -1293,7 +1436,8 @@
     "Description": " พืชทนแล้งที่งอกงามได้ดีแม้ว่าจะปลูกในพื้นที่แห้งแล้ง ถ้าพวกเขาไม่มีขนมปังก็ให้กินมันฝรั่งแทนซิ!",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 4]
   },
   {
     "ItemId": 144,
@@ -1302,7 +1446,8 @@
     "Description": "ผักที่มีสารอาหารสูงและมีประโยชน์ต่อร่างกาย อย่าทิ้งมันไว้ละ",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 4]
   },
   {
     "ItemId": 145,
@@ -1311,7 +1456,8 @@
     "Description": "มะเขือเทศแดงฉ่ำๆที่เต็มไปด้วยรสชาติ จะกินสดหรือทำให้สุกก็อร่อยเหมือนกัน",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 4]
   },
   {
     "ItemId": 146,
@@ -1320,7 +1466,8 @@
     "Description": "เห็ดที่มีกลิ่นดินๆ และรสชาติแบบธรรมชาติ ระวังอย่าสับสนกับเห็ดพิษด้วยหละ",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 4]
   },
   {
     "ItemId": 147,
@@ -1329,7 +1476,8 @@
     "Description": "เมล็ดพืชอันล้ำค่าที่เติบโตด้วยแสงแดดและสายลม สามารถบดและใช้ทำอาหารได้หลายประเภท",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 4]
   },
   {
     "ItemId": 148,
@@ -1338,7 +1486,8 @@
     "Description": "เนื้อสัตว์สดๆจากสัตว์ที่เพิ่งจับได้สดๆ เป็นแหล่งโปรตีนชั้นดีเมื่อทำให้สุกก่อน",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 4]
   },
   {
     "ItemId": 149,
@@ -1347,7 +1496,8 @@
     "Description": "ท่อนไม้หนา ที่พึ่งตัดสดๆ ยังไม่ได้แปรรูป",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 150,
@@ -1356,7 +1506,8 @@
     "Description": "หนังที่เบาและอ่อนนุ่ม ดูแลรักษาง่ายแต่ก็ชำรุดง่ายด้วยเหมือนกัน",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 151,
@@ -1365,7 +1516,8 @@
     "Description": "เนื้อผ้านุ่มแต่ไม่แข็งแรงมาก แต่ก็ดีกว่าไม่มีอะไรเลย",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 152,
@@ -1374,7 +1526,8 @@
     "Description": "แร่เหล็กจากธรรมชาตินั้นเอง สามารถสร้างวัตถุที่มีค่ามากขึ้นได้หากนำไปใช้ในการประดิษฐ์",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 153,
@@ -1383,7 +1536,8 @@
     "Description": "แร่ทองแดงจากธรรมชาตินั้นเอง สามารถสร้างวัตถุที่มีค่ามากขึ้นได้หากนำไปใช้ในการประดิษฐ์",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 154,
@@ -1392,7 +1546,8 @@
     "Description": "แร่ทองจากธรรมชาตินั้นเอง สามารถสร้างวัตถุที่มีค่ามากขึ้นได้หากนำไปใช้ในการประดิษฐ์",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 155,
@@ -1401,7 +1556,8 @@
     "Description": "เนื้อปลาแซลมอน สุดยอดอาหารทะเลที่มีกลิ่นหอมของท้องทะเล",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 2]
   },
   {
     "ItemId": 156,
@@ -1410,7 +1566,8 @@
     "Description": "เมล็ดธัญพืชหลักที่เหมาะกับอาหารทุกประเภท การกินข้าวเป็นวิธีที่ดีที่สุดที่จะทำให้คุณอิ่มท้อง",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 4]
   },
   {
     "ItemId": 157,
@@ -1419,7 +1576,8 @@
     "Description": "เครื่องเทศรสชาติจัดจ้านที่ขาดไม่ได้ในเมนูปลา และยังช่วยป้องกันไม่ให้อาหารเสียอีกด้วย",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 2]
   },
   {
     "ItemId": 158,
@@ -1428,7 +1586,8 @@
     "Description": "พริกที่จะกระตุ้นความอยากอาหาร และสามารถใช้มันเป็นเครื่องเทศได้ด้วย",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 4]
   },
   {
     "ItemId": 159,
@@ -1437,7 +1596,8 @@
     "Description": "เป็นสิ่งที่ขาดไม่ได้เลย เมื่อต้องการจะเพิ่มรสชาติเผ็ดร้อนให้กับอาหาร",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 2]
   },
   {
     "ItemId": 160,
@@ -1446,7 +1606,8 @@
     "Description": "ซอสรสเผ็ดหวานที่กินกับอะไรก็อร่อย",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 2]
   },
   {
     "ItemId": 161,
@@ -1455,7 +1616,8 @@
     "Description": "ซอสรสหวานเปรี้ยวเล็กน้อยที่เข้ากันกับทุกจาน",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 2]
   },
   {
     "ItemId": 162,
@@ -1464,7 +1626,8 @@
     "Description": "เครื่องปรุงรสที่จำเป็นสำหรับการปรุงแต่งอาหาร จะทำอาหารให้เสร็จสมบูรณ์ได้เช่นไรถ้าไม่ใส่เกลือ",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 4]
   },
   {
     "ItemId": 163,
@@ -1473,7 +1636,8 @@
     "Description": "สาหร่ายทอดกรอบๆในน้ำมัน จะใช้เป็นเครื่องเคียงหรือวัตถุดิบก็ได้",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 2]
   },
   {
     "ItemId": 164,
@@ -1482,7 +1646,8 @@
     "Description": "ปลุกให้ตื่นได้ด้วยรสขม! เหมาะสำหรับผู้ที่มีอาการเหนื่อยล้าเรื้อรัง",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": [1, 4]
   },
   {
     "ItemId": 200,
@@ -1491,7 +1656,8 @@
     "Description": "บรรเทาอาการไข้ ร้อนในกระหายน้ำ แก้พิษหัด พิษอีสุกอีใส (บรรเทาอาการไข้จากหัดและอีสุกอีใส)",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 201,
@@ -1500,7 +1666,8 @@
     "Description": "บรรเทาอาการไข้ตัวร้อน ไข้เปลี่ยนฤดู",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 202,
@@ -1509,7 +1676,8 @@
     "Description": "บรรเทาอาการไข้ตัวร้อน (ไข้พิษ) แก้ร้อนในกระหายน้ำ",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 203,
@@ -1518,7 +1686,8 @@
     "Description": "ถอนพิษไข้ตานซางสำหรับเด็ก",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 204,
@@ -1527,7 +1696,8 @@
     "Description": "บรรเทาอาการไข้",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 205,
@@ -1536,7 +1706,8 @@
     "Description": "แก้ลมวิงเวียน",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 206,
@@ -1545,7 +1716,8 @@
     "Description": "แก้ลมกองละเอียด ได้แก่ อาการหน้ามืด ตาลาย สวิงสวาย (อาการที่รู้สึกใจหวิววิงเวียน คลื่นไส้ ตาพร่าจะเป็นลม) ใจสั่น และบำรุงดวงจิตให้ชุ่มชื่น",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 207,
@@ -1554,7 +1726,8 @@
     "Description": "แก้วิงเวียน คลื่นเหียน อาเจียน (ลมจุกแน่นในอก) ในผู้สูงอายุแก้ลมปลายไข้ (หลังฟื้นไข้แล้วยังมีอาการ เช่น คลื่นเหียน วิงเวียน เบื่ออาหาร ท้องอืด และอ่อนเพลีย)",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 208,
@@ -1563,7 +1736,8 @@
     "Description": "แก้ลมวิงเวียน อ่อนเพลีย นอนไม่หลับ",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 209,
@@ -1572,7 +1746,8 @@
     "Description": "แก้ลมบาททะจิต คลื่นเหียนอาเจียน ลมจุกเสียด",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 210,
@@ -1581,7 +1756,8 @@
     "Description": "บรรเทาอาการท้องอืด ท้องเฟ้อ",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 211,
@@ -1590,7 +1766,8 @@
     "Description": "แก้เถาดาน ท้องผูก",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 212,
@@ -1599,7 +1776,8 @@
     "Description": "บรรเทาอาการท้องเสียชนิดที่ไม่เกิดจากการติดเชื้อ เช่น อุจจาระไม่เป็นมูกหรือมีเลือดปน ท้องเสียชนิดที่ไม่มีไข้ เป็นต้น",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 213,
@@ -1608,7 +1786,8 @@
     "Description": "บรรเทาอาการริดสีดวงทวารหนัก",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 214,
@@ -1617,7 +1796,8 @@
     "Description": "ขับลม บรรเทาอาการท้องอืด ท้องเฟ้อ",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 215,
@@ -1626,7 +1806,8 @@
     "Description": "บรรเทาอาการปวดประจำเดือน ระดูมาไม่สม่ำเสมอหรือมาน้อยกว่าปกติ ขับน้ำคาวปลาในหญิงหลังคลอดบุตร",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 216,
@@ -1635,7 +1816,8 @@
     "Description": "กระตุ้นน้ำนม กระจายเลือดลมในหญิงหลังคลอด",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 217,
@@ -1644,7 +1826,8 @@
     "Description": "ขับน้ำคาวปลาในเรือนไฟ ช่วยให้มดลูกเข้าอู่",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 218,
@@ -1653,7 +1836,8 @@
     "Description": "บรรเทาอาการปวดประจำเดือน ช่วยให้ประจำเดือนมาเป็นปกติ แก้มุตกิด",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 219,
@@ -1662,7 +1846,8 @@
     "Description": "ขับน้ำคาวปลา บำรุงเลือด ช่วยให้มดลูกเข้าอู่เร็วในหญิงหลังคลอด",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 220,
@@ -1671,7 +1856,8 @@
     "Description": "บรรเทาอาการไอ ขับเสมหะ",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 221,
@@ -1680,7 +1866,8 @@
     "Description": "บรรเทาอาการไอ อาการหวัด ขับเสมหะ",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 222,
@@ -1689,7 +1876,8 @@
     "Description": "บรรเทาอาการไอ ขับเสมหะ",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 223,
@@ -1698,7 +1886,8 @@
     "Description": "บรรเทาอาการหวัดในระยะแรก และอาการที่เกิดจากการแพ้อากาศ",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 224,
@@ -1707,7 +1896,8 @@
     "Description": "บรรเทาอาการไอ ขับเสมหะ",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 225,
@@ -1716,7 +1906,8 @@
     "Description": "บรรเทาอาการปวดหลัง ปวดเอว ปวดเมื่อยตามร่างกาย",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 226,
@@ -1725,7 +1916,8 @@
     "Description": "บรรเทาอาการปวดตามเส้นเอ็น กล้ามเนื้อ มือ เท้า ตึงหรือชา",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 227,
@@ -1734,7 +1926,8 @@
     "Description": "บรรเทาอาการปวดเมื่อยตามร่างกาย",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 228,
@@ -1743,7 +1936,8 @@
     "Description": "บรรเทาอาการปวดเมื่อยตามร่างกาย",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 229,
@@ -1752,7 +1946,8 @@
     "Description": "ขับลมในเส้น แก้โรคลมกองหยาบ",
     "Usable": false,
     "Effect": 0,
-    "Stackable": true
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 300,
@@ -1760,8 +1955,9 @@
     "Category": "Consumable item",
     "Description": "มีสรรพคุณช่วยถอนพิษแก้อักเสบและห้ามเลิอด ใช้ในการรักษาแผลสดได้เป็นอย่างดี",
     "Usable": true,
-    "Effect": 0,
-    "Stackable": true
+    "Effect": 1,
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 301,
@@ -1769,8 +1965,9 @@
     "Category": "Consumable item",
     "Description": "ลูกแอปเปิ้ลแดงสุก ถึงแม้จะกินกับอะไรก็อร่อย แต่กินเปล่าๆก็อร่อยเหมือนกัน",
     "Usable": true,
-    "Effect": 0,
-    "Stackable": true
+    "Effect": 2,
+    "Stackable": true,
+    "QuantityDropRange": [1, 3]
   },
   {
     "ItemId": 302,
@@ -1778,8 +1975,9 @@
     "Category": "Consumable item",
     "Description": "ทำจากเห็ดที่มีประโยชน์ต่อร่างกายและยังมีรสชาติอร่อยอีกด้วย อาหารที่ดีสุขภาพจานนี้จะทำให้คุณอิ่มท้อง",
     "Usable": true,
-    "Effect": 0,
-    "Stackable": true
+    "Effect": 3,
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 303,
@@ -1787,8 +1985,9 @@
     "Category": "Consumable item",
     "Description": "เมนูผัดที่มีกลิ่นหอมของเนื้อสัตว์และกระหล่ำปลี",
     "Usable": true,
-    "Effect": 0,
-    "Stackable": true
+    "Effect": 5,
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 304,
@@ -1796,8 +1995,9 @@
     "Category": "Consumable item",
     "Description": "เมนูผักกรอบและเนื้อสัตว์ที่เข้ากันอย่างลงตัว เหมาะกับการกินมือเดียว",
     "Usable": true,
-    "Effect": 0,
-    "Stackable": true
+    "Effect": 12,
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 305,
@@ -1805,8 +2005,9 @@
     "Category": "Consumable item",
     "Description": "สตูว์เนื้อรสชาติเข้มข้นจากแครรอทและมันฝรั่ง จะทำให้ร่างกายที่เหนื่อยล้าผ่อนคลายและอบอุ่นขึ้น",
     "Usable": true,
-    "Effect": 0,
-    "Stackable": true
+    "Effect": 11,
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 306,
@@ -1814,8 +2015,9 @@
     "Category": "Consumable item",
     "Description": "น้ำนมดิบบริสุทธิ์รสชาติเข้มข้นและกลมกล่อม ดื่มเย็นๆช่วยคลายความเมื่อยล้าได้",
     "Usable": true,
-    "Effect": 0,
-    "Stackable": true
+    "Effect": 8,
+    "Stackable": true,
+    "QuantityDropRange": [1, 2]
   },
   {
     "ItemId": 307,
@@ -1823,8 +2025,9 @@
     "Category": "Consumable item",
     "Description": "แม้ว่าส่วนผสมจะเรียบง่าย แต่ก็เป็นซุปเพื่อสุขภาพที่ทำจากมันฝรั่งต้มสุก",
     "Usable": true,
-    "Effect": 0,
-    "Stackable": true
+    "Effect": 4,
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 308,
@@ -1832,8 +2035,9 @@
     "Category": "Consumable item",
     "Description": "สเต็กโฮมเมดเนื้อชิ้นใหญ่ที่ปรุงรสด้วยเกลือและพริกไทยดำ",
     "Usable": true,
-    "Effect": 0,
-    "Stackable": true
+    "Effect": 7,
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 309,
@@ -1841,8 +2045,9 @@
     "Category": "Consumable item",
     "Description": "บาร์บีคิวที่ทำจากผักและเนื้อล่าสดๆ ชิ้นใหญ่ เป็นหนึ่งในอาหารประจำเทศกาลที่ใช้วัตถุดิบหายากและอร่อย",
     "Usable": true,
-    "Effect": 0,
-    "Stackable": true
+    "Effect": 14,
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 310,
@@ -1850,8 +2055,9 @@
     "Category": "Consumable item",
     "Description": "ข้าวปั้นรสเค็มและน่าอร่อยที่สามารถเติมเต็มท้องที่หิวโหยได้อย่างง่ายดาย",
     "Usable": true,
-    "Effect": 0,
-    "Stackable": true
+    "Effect": 9,
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 311,
@@ -1859,8 +2065,9 @@
     "Category": "Consumable item",
     "Description": "เมนูอาหารทะเลพร้อมปลาแซลมอนบนข้าวที่แทบจะละลายในปาก",
     "Usable": true,
-    "Effect": 0,
-    "Stackable": true
+    "Effect": 10,
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 312,
@@ -1868,8 +2075,9 @@
     "Category": "Consumable item",
     "Description": "เป็นกาแฟแก้วที่สมบูรณ์แบบที่เต็มไปด้วยรสชาติของลาเต้อาร์ตสุดน่ารัก ถูกใจคนรักแมวแบบสุดๆ",
     "Usable": true,
-    "Effect": 0,
-    "Stackable": true
+    "Effect": 6,
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 313,
@@ -1877,8 +2085,9 @@
     "Category": "Consumable item",
     "Description": "อาหารตามสั่งที่ใครๆ ก็อยากกินเป็นมื้อเช้า กลางวัน และเย็น",
     "Usable": true,
-    "Effect": 0,
-    "Stackable": true
+    "Effect": 13,
+    "Stackable": true,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 400,
@@ -1887,7 +2096,8 @@
     "Description": "ดาบที่นักผจญภัยต้องมี! ทำจากเหล็กทนทานแบบพิเศษ ที่ทำให้แหล่งคมได้ยาวนาน",
     "Usable": true,
     "Effect": 0,
-    "Stackable": false
+    "Stackable": false,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 401,
@@ -1896,7 +2106,8 @@
     "Description": "หมวกที่คุ้มค่าที่สุด! ยังป้องกันร่างกายจากการโดนตีหัวได้อย่างมีเสถียรภาพ",
     "Usable": true,
     "Effect": 0,
-    "Stackable": false
+    "Stackable": false,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 402,
@@ -1905,7 +2116,8 @@
     "Description": "ชุดเกราะที่ทนทานและคลาสสิค คุ้มค่าไม่แพ้กับทักษะในการปกป้องจากการโจมตี",
     "Usable": true,
     "Effect": 0,
-    "Stackable": false
+    "Stackable": false,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 403,
@@ -1914,7 +2126,8 @@
     "Description": "ถุงมือที่ทำจากหนังธรรมดา บอกเลยว่านุ่มสบายและแข็งแกร่ง เหมาะสำหรับการใช้งานทุกรูปแบบ",
     "Usable": true,
     "Effect": 0,
-    "Stackable": false
+    "Stackable": false,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 404,
@@ -1923,7 +2136,8 @@
     "Description": "รองเท้าที่ทำให้เดินสบายได้ทุกเส้นทาง ช่วยให้นักผจญภัยเดินได้โดยที่ไม่ต้องกังวลเรื่องพื้นผิวมากนัก",
     "Usable": true,
     "Effect": 0,
-    "Stackable": false
+    "Stackable": false,
+    "QuantityDropRange": []
   },
   {
     "ItemId": 405,
@@ -1932,6 +2146,7 @@
     "Description": "แหวนที่สวยงามและมีประโยชน์ สามารถตรวจจับพลังเวทมนตร์ได้นิดหน่อย",
     "Usable": true,
     "Effect": 0,
-    "Stackable": false
+    "Stackable": false,
+    "QuantityDropRange": []
   }
 ]

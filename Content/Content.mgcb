@@ -14,6 +14,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin data/models/chapter_item.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.ChapterItemDataReader, Medicraft
+/build:data/models/chapter_item.json
+
 #begin data/models/characters.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor
@@ -31,6 +37,12 @@
 /processor:JsonContentProcessor
 /processorParam:ContentType=Medicraft.Data.ExperienceCapacityDataReader, Medicraft
 /build:data/models/exp_capacity.json
+
+#begin data/models/item_effects.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.ItemEffectDataReader, Medicraft
+/build:data/models/item_effects.json
 
 #begin data/models/items.json
 /importer:JsonContentImporter

@@ -1,4 +1,5 @@
-﻿using Medicraft.Screens;
+﻿using GeonBit.UI.Entities;
+using Medicraft.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -116,6 +117,8 @@ namespace Medicraft.Systems.Managers
 
             if (GameGlobals.Instance.IsGameActive) 
             {
+                if (GameGlobals.Instance.IsOpenInventory) InventoryManager.Instance.DrawUI(_spriteBatch);
+
                 _spriteBatch.Begin
                 (
                     SpriteSortMode.BackToFront,
@@ -146,11 +149,12 @@ namespace Medicraft.Systems.Managers
 
                     if (!GameGlobals.Instance.IsInventoryRefreshed)
                     {
-                        InventoryManager.Instance.RefreshInvenrotyItem();
+                        InventoryManager.Instance.RefreshInvenrotyItemDisplay(false);
+
                         GameGlobals.Instance.IsInventoryRefreshed = true;
                     }
 
-                    InventoryManager.Draw(_spriteBatch);
+                    InventoryManager.Instance.DrawMainRenderTarget(_spriteBatch);
                 }
                 else GameGlobals.Instance.IsInventoryRefreshed = false;
             }        

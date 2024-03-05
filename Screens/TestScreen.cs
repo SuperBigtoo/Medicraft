@@ -39,6 +39,7 @@ namespace Medicraft.Screens
         {
             base.LoadContent();
 
+            // Set player position
             PlayerManager.Instance.SetupPlayerPosition(ScreenManager.Instance.CurrentLoadMapAction);
 
             var tileSetsDemo = new Texture2D[]  // The maximum number of TileSet is 5
