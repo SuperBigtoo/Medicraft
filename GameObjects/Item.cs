@@ -96,6 +96,19 @@ namespace Medicraft.GameObjects
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
+
+            var shadowTexture = GameGlobals.Instance.GetShadowTexture(GameGlobals.ShadowTextureName.shadow_1);
+
+            DrawShadow(spriteBatch, shadowTexture);
+        }
+
+        public override void DrawShadow(SpriteBatch spriteBatch, Texture2D shadowTexture)
+        {
+            var positionPlayer = new Vector2(Position.X - (shadowTexture.Width * 0.5f) / 2.2f
+                , Position.Y + (shadowTexture.Height * 0.5f) / 2f);
+
+            spriteBatch.Draw(shadowTexture, positionPlayer, null, Color.White
+                , 0f, Vector2.Zero, 0.5f, SpriteEffects.None, Sprite.Depth + 0.0000025f);
         }
 
         public override object Clone()

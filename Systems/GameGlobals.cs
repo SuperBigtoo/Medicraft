@@ -1,6 +1,7 @@
 ﻿using GeonBit.UI;
 using Medicraft.Data;
 using Medicraft.Data.Models;
+using Medicraft.GameObjects;
 using Medicraft.Systems.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -11,6 +12,7 @@ using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
+using MonoGame.Extended.Timers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,9 +36,8 @@ namespace Medicraft.Systems
         public Vector2 GameScreenCenter { private set; get; }
         public bool IsGameActive { set; get; }
         public bool IsGamePause { set; get; }
-        public bool SwitchOpenInventory { set; get; }
-        public bool IsOpenInventory { set; get; }
-        public bool IsInventoryRefreshed { set; get; }
+        public bool IsOpenGUI { set; get; }
+        public bool IsRefreshItemBar { set; get; }
         public bool SwitchDebugMode { set; get; }
         public bool IsDebugMode { set; get; }
         public bool SwitchShowPath { set; get; }
@@ -49,7 +50,8 @@ namespace Medicraft.Systems
         public bool IsEnteringBossFight { set; get; }
         public float TotalPlayTime { set; get; }
         public int MaxLevel { set; get; }
-        
+        public BuiltinThemes BuiltinTheme { set; get; }
+
         // Boss
         public bool IsBoss_TestDead { set; get; }
         public float SpawnTime_Boss_Test { get; private set; }
@@ -64,13 +66,18 @@ namespace Medicraft.Systems
         public List<GameSaveData> GameSave { private set; get; }
 
         // Inventory
-        public BuiltinThemes BuiltinTheme { set; get; }
         public int MaximunInventorySlot { private set; get; }
         public int MaximunItemCount { private set; get; }
         public int DefaultInventorySlot { private set; get; }
         public int MaxItemBarSlot { private set; get; }
-        public int SelectedItemBarSlot { set; get; }
-        public InventoryItemData SelectedItemInventory { set; get; }
+        public int CurrentSlotBarSelect { set; get; }
+        public bool SwitchOpenInventoryPanel { set; get; }
+        public bool IsOpenInventoryPanel { set; get; }
+
+        // Crafting
+        public bool SwitchOpenCraftingPanel { set; get; }
+        public bool IsOpenCraftingPanel { set; get; }
+        // CurrentCraftingItemSelect
 
         // Game Datas
         public PlayerData InitialPlayerData { private set; get; }
@@ -94,6 +101,7 @@ namespace Medicraft.Systems
         public SpriteSheet HitSkillSpriteEffect { private set; get; }
         public SpriteSheet BossSpriteEffect { private set; get; }
         public SpriteSheet StatesSpriteEffect { private set; get; }
+        public List<Texture2D> ShadowTextures { private set; get; }
 
         // Collecting Item Feed
         public List<InventoryItemData> CollectedItemFeed { private set; get; }      // Feed collected item
@@ -122,6 +130,31 @@ namespace Medicraft.Systems
         public int NUM_ROWS { set; get; }
         public int NUM_COLUMNS { set; get; }
         public int[,] Map { set; get; }
+
+        //public enum GUIPanel
+        //{
+        //    None,
+        //    MainMenu,
+        //    PauseMenu,
+        //    SaveGame,
+        //    Inventory,
+        //    CharacterInspect,
+        //    CraftingTable,
+        //    WrapMenu
+        //}
+        //public GUIPanel CurrentGUIPanel { get; set; }
+
+        public enum ShadowTextureName
+        {
+            shadow_1,
+            shadow_2
+        }
+
+        private readonly Dictionary<ShadowTextureName, int> shadowTextureIndices = new()
+        {
+            { ShadowTextureName.shadow_1, 0 },
+            { ShadowTextureName.shadow_2, 1 }
+        };
 
         public enum GuiTextureName
         {
@@ -203,6 +236,9 @@ namespace Medicraft.Systems
         public int TestInt { set; get; }
         public Texture2D TestIcon { set; get; }
 
+
+        private float _deltaSeconds;
+
         private static GameGlobals instance;
 
         private GameGlobals()
@@ -214,24 +250,29 @@ namespace Medicraft.Systems
             AddingCameraPos = Vector2.Zero;
 
             IsGamePause = false;
-            SwitchOpenInventory = false;
-            IsOpenInventory = false;
-            IsInventoryRefreshed = false;
+            IsOpenGUI = false;
+            IsRefreshItemBar = false;
+
+            SwitchOpenInventoryPanel = false;
+            IsOpenInventoryPanel = false;
+
             SwitchDebugMode = false;
             IsDebugMode = false;
+
             SwitchShowPath = false;
             IsShowPath = false;
+
             IsDetectedGameObject = false;
             ShowInsufficientSign = false;
             SwitchFullScreen = false;
+
             IsFullScreen = false;
             IsTransitionFinished = true;
-            IsEnteringBossFight = false;
 
+            IsEnteringBossFight = false;
             IsBoss_TestDead = false;
             SpawnTime_Boss_Test = 60f;
             SpawnTimer_Boss_Test = SpawnTime_Boss_Test;
-
             IsBoss_1_Dead = false;
             SpawnTime_Boss_1 = 60f;
             SpawnTimer_Boss_1 = SpawnTime_Boss_1;
@@ -242,15 +283,16 @@ namespace Medicraft.Systems
             GameSaveIdex = 0; // to be initial
             GameSavePath = "save/gamesaves.json";
 
-            FeedPoint = new(140f, 380f);
+            FeedPoint = new(180f, 380f);
 
             BuiltinTheme = BuiltinThemes.hd;
             MaximunInventorySlot = 64;
             MaximunItemCount = 9999;
             DefaultInventorySlot = 999;
             MaxItemBarSlot = 8;
-            SelectedItemBarSlot = 0;
+            CurrentSlotBarSelect = 0;
 
+            ShadowTextures = [];
             GuiTextures = [];
             ExperienceCapacityDatas = [];
             MapLocationPointDatas = [];
@@ -288,15 +330,15 @@ namespace Medicraft.Systems
 
         public void Initialize(ContentManager Content)
         {
-            this.Content = Content;
-        }
+            this.Content = Content;      
+        }  
 
         public void LoadContent()
         {
             //System.Diagnostics.Debug.WriteLine($"totalFrames : {(int)(_totalMilliseconds / totalDuration) % totalFrames}");
 
             // Load GameSave
-            var gameSave = JsonFileManager.LoadFlie(GameGlobals.Instance.GameSavePath);
+            var gameSave = JsonFileManager.LoadFlie(GameSavePath);
             if (gameSave.Count != 0)
             {
                 foreach (var save in gameSave)
@@ -344,6 +386,10 @@ namespace Medicraft.Systems
             FontTA8BitBold = Content.Load<BitmapFont>("fonts/TA_8_Bit_Bold/TA_8_Bit_Bold");
             FontTA16Bit = Content.Load<BitmapFont>("fonts/TA_16_Bit/TA_16_Bit");
 
+            // Load Shadow Effect
+            ShadowTextures.Add(Content.Load<Texture2D>("effect/shadow_1"));
+            ShadowTextures.Add(Content.Load<Texture2D>("effect/shadow_2"));
+
             // Load GUI Texture
             GuiTextures.Add(Content.Load<Texture2D>("gui/logo_wakeup"));                        // 0. logo_wakeup
             GuiTextures.Add(Content.Load<Texture2D>("gui/press_f"));                            // 1. press_f
@@ -383,20 +429,27 @@ namespace Medicraft.Systems
             // Gonna do this one in LoadSave Screen
             // Initialize Player Data
             PlayerManager.Instance.Initialize();
-
-            // Initialize UI inventory
-            InventoryManager.Instance.InitializeThemeAndUI(GameGlobals.Instance.BuiltinTheme);
         }
 
         public void Update(GameTime gameTime)
         {
-            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            _deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            TotalPlayTime += deltaSeconds;
+            TotalPlayTime += _deltaSeconds;
 
             var mouseState = Mouse.GetState();
 
-            MousePosition = new Point2(mouseState.X, mouseState.Y);           
+            MousePosition = new Point2(mouseState.X, mouseState.Y);
+        }
+
+        public Texture2D GetShadowTexture(ShadowTextureName shadowTextureName)
+        {
+            if (shadowTextureIndices.TryGetValue(shadowTextureName, out int index) && index < ShadowTextures.Count)
+            {
+                return ShadowTextures.ElementAt(index);
+            }
+
+            return null;
         }
 
         public Texture2D GetGuiTexture(GuiTextureName guiTextureName)
@@ -407,6 +460,31 @@ namespace Medicraft.Systems
             }
 
             return null;
+        }
+
+        public Texture2D GetItemTexture(int itemId)
+        {
+            // Set item
+            var itemsSpriteSheet = ItemsPackSprites;
+            var itemSprite = new AnimatedSprite(itemsSpriteSheet);
+
+            itemSprite.Play(itemId.ToString());
+            itemSprite.Update(_deltaSeconds);
+
+            var texture = itemSprite.TextureRegion.Texture;
+            var bounds = itemSprite.TextureRegion.Bounds;
+
+            // Create a new texture with new bounds
+            Texture2D newTexture = new(ScreenManager.Instance.GraphicsDevice, bounds.Width, bounds.Height);
+
+            // Get the data from the original texture
+            Color[] data = new Color[bounds.Width * bounds.Height];
+            texture.GetData(0, bounds, data, 0, data.Length);
+
+            // Set the data to the new texture
+            newTexture.SetData(data);
+
+            return newTexture;
         }
 
         public int RandomItemDrop()

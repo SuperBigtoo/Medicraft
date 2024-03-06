@@ -50,5 +50,12 @@ namespace Medicraft.Data.Models
 
             return itemData.Stackable;
         }
+
+        public int EquipmentType()
+        {
+            var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(ItemId));
+
+            return itemData.EquipmentType;
+        }
     }
 }

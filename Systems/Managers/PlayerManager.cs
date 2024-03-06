@@ -55,21 +55,25 @@ namespace Medicraft.Systems.Managers
             {
                 ScreenManager.Instance.CurrentLoadMapAction = ScreenManager.LoadMapAction.NewGame;
 
+                // Initialize Player's Inventory
+                var inventoryData = initialPlayerData.InventoryData;
+                InventoryManager.Instance.InitializeInventory(inventoryData);
+
                 // Initial Player
                 Player = new Player(playerSprite, initialPlayerData);
 
                 // Initialize camera position
                 GameGlobals.Instance.InitialCameraPos = new Vector2((float)initialPlayerData.Position[0]
                     , (float)initialPlayerData.Position[1]);
-
-                // Initialize Player's Inventory
-                var inventoryData = initialPlayerData.InventoryData;
-                InventoryManager.Instance.InitializeInventory(inventoryData);
             }
 
             // Other Stuff
-            SetPlayerEXPCap(Player.Level);
+            SetPlayerExpMaxCap(Player.Level);
             GameGlobals.Instance.TopLeftCornerPosition = Player.Position - GameGlobals.Instance.GameScreenCenter;
+
+            // Initialize display inventory item after init Player's inventory data
+            // GUIManager.Instance.RefreshItemBarDisplay();
+            GUIManager.Instance.InitInventoryItemDisplay();
         }
 
         public static void UpdateGameController(GameTime gameTime)
@@ -86,63 +90,118 @@ namespace Medicraft.Systems.Managers
             var mouseCur = GameGlobals.Instance.CurMouse;
             var mousePrev = GameGlobals.Instance.PrevMouse;
 
-            // Save Game for Test
-            if (keyboardCur.IsKeyUp(Keys.M) && keyboardPrev.IsKeyDown(Keys.M))
-            {
-                JsonFileManager.SaveGame();
-            }
-
-            // Open Inventory
-            if (keyboardCur.IsKeyDown(Keys.I) && !GameGlobals.Instance.SwitchOpenInventory)
-            {
-                // Toggle the IsOpenInventory flag               
-                GameGlobals.Instance.IsOpenInventory = !GameGlobals.Instance.IsOpenInventory;
-
-                // Pause PlayScreen
-                GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
-
-                GameGlobals.Instance.SwitchOpenInventory = true;
-            }
-            else if (keyboardCur.IsKeyUp(Keys.I))
-            {
-                GameGlobals.Instance.SwitchOpenInventory = false;
-            }
-
-            // Select Item Bar Slot
+            // Only receive input if on PlayScreen or TestScreen
             if (ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.TestScreen
                 || ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.PlayScreen)
             {
+                // Save Game for Test
+                if (keyboardCur.IsKeyUp(Keys.M) && keyboardPrev.IsKeyDown(Keys.M))
+                {
+                    JsonFileManager.SaveGame();
+                }
+
+                // Open Inventory
+                if (keyboardCur.IsKeyDown(Keys.I) && !GameGlobals.Instance.SwitchOpenInventoryPanel)
+                {
+                    GameGlobals.Instance.SwitchOpenInventoryPanel = true;
+
+                    // Pause PlayScreen
+                    GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
+                    GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
+
+                    // Toggle IsOpenInvenoryPanel & refresh inventory item display              
+                    GameGlobals.Instance.IsOpenInventoryPanel = false;
+                    if (GUIManager.Instance.CurrentGUI.Equals(GUIManager.InventoryPanel))
+                    {
+                        GUIManager.Instance.CurrentGUI = GUIManager.ItemBar;
+                        GameGlobals.Instance.IsRefreshItemBar = false;
+                    }
+                    else GUIManager.Instance.CurrentGUI = GUIManager.InventoryPanel;
+                }
+                else if (keyboardCur.IsKeyUp(Keys.I))
+                {
+                    GameGlobals.Instance.SwitchOpenInventoryPanel = false;
+                }
+
+                // Open Crafting Panel 
+                if (keyboardCur.IsKeyDown(Keys.O) && !GameGlobals.Instance.SwitchOpenCraftingPanel)
+                {
+                    GameGlobals.Instance.SwitchOpenCraftingPanel = true;
+
+                    // Pause PlayScreen
+                    GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
+                    GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
+
+                    // Toggle IsOpenCraftingPanel & refresh crafting item display       
+                    GameGlobals.Instance.IsOpenCraftingPanel = !GameGlobals.Instance.IsOpenCraftingPanel;
+                    if (GUIManager.Instance.CurrentGUI.Equals(GUIManager.CraftingTablePanel))
+                    {
+                        GUIManager.Instance.CurrentGUI = GUIManager.ItemBar;
+                        GameGlobals.Instance.IsRefreshItemBar = false;
+                    }
+                    else GUIManager.Instance.CurrentGUI = GUIManager.CraftingTablePanel;
+                }
+                else if (keyboardCur.IsKeyUp(Keys.O))
+                {
+                    GameGlobals.Instance.SwitchOpenCraftingPanel = false;
+                }
+
+                // Select Item Bar Slot
                 if (keyboardCur.IsKeyDown(Keys.D1))
                 {
-                    GameGlobals.Instance.SelectedItemBarSlot = 0;
+                    GameGlobals.Instance.CurrentSlotBarSelect = 0;
+                    var slotBarItem = InventoryManager.Instance.EquipmentAndBarItemSlot[InventoryManager.ItemBarSlot_1];
+
+                    if (slotBarItem != null) InventoryManager.Instance.UseItemInSlotBar(slotBarItem.ItemId);
                 }
                 else if (keyboardCur.IsKeyDown(Keys.D2))
                 {
-                    GameGlobals.Instance.SelectedItemBarSlot = 1;
+                    GameGlobals.Instance.CurrentSlotBarSelect = 1;
+                    var slotBarItem = InventoryManager.Instance.EquipmentAndBarItemSlot[InventoryManager.ItemBarSlot_2];
+
+                    if (slotBarItem != null) InventoryManager.Instance.UseItemInSlotBar(slotBarItem.ItemId);
                 }
                 else if (keyboardCur.IsKeyDown(Keys.D3))
                 {
-                    GameGlobals.Instance.SelectedItemBarSlot = 2;
+                    GameGlobals.Instance.CurrentSlotBarSelect = 2;
+                    var slotBarItem = InventoryManager.Instance.EquipmentAndBarItemSlot[InventoryManager.ItemBarSlot_3];
+
+                    if (slotBarItem != null) InventoryManager.Instance.UseItemInSlotBar(slotBarItem.ItemId);
                 }
                 else if (keyboardCur.IsKeyDown(Keys.D4))
                 {
-                    GameGlobals.Instance.SelectedItemBarSlot = 3;
+                    GameGlobals.Instance.CurrentSlotBarSelect = 3;
+                    var slotBarItem = InventoryManager.Instance.EquipmentAndBarItemSlot[InventoryManager.ItemBarSlot_4];
+
+                    if (slotBarItem != null) InventoryManager.Instance.UseItemInSlotBar(slotBarItem.ItemId);
                 }
                 else if (keyboardCur.IsKeyDown(Keys.D5))
                 {
-                    GameGlobals.Instance.SelectedItemBarSlot = 4;
+                    GameGlobals.Instance.CurrentSlotBarSelect = 4;
+                    var slotBarItem = InventoryManager.Instance.EquipmentAndBarItemSlot[InventoryManager.ItemBarSlot_5];
+
+                    if (slotBarItem != null) InventoryManager.Instance.UseItemInSlotBar(slotBarItem.ItemId);
                 }
                 else if (keyboardCur.IsKeyDown(Keys.D6))
                 {
-                    GameGlobals.Instance.SelectedItemBarSlot = 5;
+                    GameGlobals.Instance.CurrentSlotBarSelect = 5;
+                    var slotBarItem = InventoryManager.Instance.EquipmentAndBarItemSlot[InventoryManager.ItemBarSlot_6];
+
+                    if (slotBarItem != null) InventoryManager.Instance.UseItemInSlotBar(slotBarItem.ItemId);
                 }
                 else if (keyboardCur.IsKeyDown(Keys.D7))
                 {
-                    GameGlobals.Instance.SelectedItemBarSlot = 6;
+                    GameGlobals.Instance.CurrentSlotBarSelect = 6;
+                    var slotBarItem = InventoryManager.Instance.EquipmentAndBarItemSlot[InventoryManager.ItemBarSlot_7];
+
+                    if (slotBarItem != null) InventoryManager.Instance.UseItemInSlotBar(slotBarItem.ItemId);
                 }
                 else if (keyboardCur.IsKeyDown(Keys.D8))
                 {
-                    GameGlobals.Instance.SelectedItemBarSlot = 7;
+                    GameGlobals.Instance.CurrentSlotBarSelect = 7;
+                    var slotBarItem = InventoryManager.Instance.EquipmentAndBarItemSlot[InventoryManager.ItemBarSlot_8];
+
+                    if (slotBarItem != null) InventoryManager.Instance.UseItemInSlotBar(slotBarItem.ItemId);
                 }
             }
 
@@ -215,19 +274,12 @@ namespace Medicraft.Systems.Managers
             Player.Update(gameTime, keyboardCur, keyboardPrev, mouseCur, mousePrev);
 
             // Check Player HP for Deadq
-            if (Player.HP <= 0 && !IsPlayerDead)
-            {
-                IsPlayerDead = true;
-            }
+            if (Player.HP <= 0 && !IsPlayerDead) IsPlayerDead = true;
 
             if (IsPlayerDead)
-            {
                 if (GameGlobals.Instance.CurMouse.LeftButton == ButtonState.Pressed
                     && GameGlobals.Instance.PrevMouse.LeftButton == ButtonState.Released)
-                {
-                    RespawnPlayer();
-                }
-            }
+                        RespawnPlayer();
         }
 
         public void UpdateMapPositionData()
@@ -287,26 +339,37 @@ namespace Medicraft.Systems.Managers
             }
         }
 
-        public void SetPlayerEXPCap(int level)
+        public void SetPlayerExpMaxCap(int level)
         {
             var ExpCapData = GameGlobals.Instance.ExperienceCapacityDatas
-                .Where(expcap => expcap.Level.Equals(level)).ElementAt(0);
+                .FirstOrDefault(expcap => expcap.Level.Equals(level));
 
             Player.EXPMaxCap = ExpCapData.MaxCap;
         }
 
         public void AddPlayerEXP(int exp)
         {
-            Player.EXP += exp;
-
-            // Increase Level & Set ExpMaxCap
-            if (Player.EXP >= Player.EXPMaxCap)
+            if (Player.Level < GameGlobals.Instance.MaxLevel)
             {
-                Player.Level++;
-                Player.EXP -= Player.EXPMaxCap;
+                Player.EXP += exp;
 
-                SetPlayerEXPCap(Player.Level);
-            }
+                // Increase Level & Set ExpMaxCap
+                if (Player.EXP >= Player.EXPMaxCap)
+                {
+                    Player.Level++;
+
+                    if (Player.Level == GameGlobals.Instance.MaxLevel)
+                    {
+                        SetPlayerExpMaxCap(Player.Level);
+                        Player.EXP = Player.EXPMaxCap;
+                    }
+                    else
+                    {
+                        Player.EXP -= Player.EXPMaxCap;
+                        SetPlayerExpMaxCap(Player.Level);
+                    }
+                }
+            } 
         }
 
         public static PlayerManager Instance

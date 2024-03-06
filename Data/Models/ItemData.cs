@@ -11,6 +11,7 @@ namespace Medicraft.Data.Models
         public bool Usable { get; set; }
         public int Effect { get; set; }
         public bool Stackable { get; set; }
+        public int EquipmentType { get; set; }
         public int[] QuantityDropRange { get; set; }
     }
 

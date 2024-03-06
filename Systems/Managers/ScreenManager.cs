@@ -1,4 +1,5 @@
-﻿using GeonBit.UI.Entities;
+﻿using GeonBit.UI;
+using GeonBit.UI.Entities;
 using Medicraft.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -52,6 +53,9 @@ namespace Medicraft.Systems.Managers
             Camera = new Camera(GraphicsDevice.Viewport);
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // Initialize GUI Panels
+            GUIManager.Instance.InitializeThemeAndUI(GameGlobals.Instance.BuiltinTheme);
         }
 
         public void LoadContent()
@@ -76,14 +80,14 @@ namespace Medicraft.Systems.Managers
             switch (gameScreen)
             {
                 case GameScreen.TestScreen:
-                    _curScreen = new TestScreen();
                     CurrentScreen = GameScreen.TestScreen;
+                    _curScreen = new TestScreen();                  
                     _curScreen.LoadContent();
                     break;
 
                 case GameScreen.SplashScreen:
-                    _curScreen = new SplashScreen();
                     CurrentScreen = GameScreen.SplashScreen;
+                    _curScreen = new SplashScreen();                 
                     _curScreen.LoadContent();
                     break;
             }
@@ -94,17 +98,54 @@ namespace Medicraft.Systems.Managers
             GameGlobals.Instance.IsGameActive = Game.IsActive;
 
             if (GameGlobals.Instance.IsGameActive)
-            {           
+            {
+                // update UI
+                UserInterface.Active.Update(gameTime);                        
+
                 if (!GameGlobals.Instance.IsGamePause)
                 {
-                    _curScreen.Update(gameTime);
+                    _curScreen.Update(gameTime);                
                 }
                 else
                 {
                     if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                        Game.Exit();
+                         Game.Exit();
+                }
 
-                    InventoryManager.Instance.Update(gameTime);
+                // Current GUI Panel
+                switch (GUIManager.Instance.CurrentGUI)
+                {
+                    case GUIManager.ItemBar:
+                        // Item bar
+                        if (!GameGlobals.Instance.IsRefreshItemBar)
+                        {
+                            GUIManager.Instance.CurrentGUI = GUIManager.ItemBar;
+                            GUIManager.Instance.RefreshItemBarDisplay();
+                            GUIManager.Instance.UpdateAfterChangeGUI();
+
+                            GameGlobals.Instance.IsRefreshItemBar = true;
+                        }
+                        break;
+
+                    case GUIManager.InventoryPanel:
+                        // Inventory
+                        if (!GameGlobals.Instance.IsOpenInventoryPanel)
+                        {
+                            GUIManager.Instance.CurrentGUI = GUIManager.InventoryPanel;
+                            GUIManager.Instance.RefreshInvenrotyItemDisplay(false);
+                            GUIManager.Instance.UpdateAfterChangeGUI();
+
+                            GameGlobals.Instance.IsOpenInventoryPanel = true;
+                        }
+                        break;
+
+                    case GUIManager.CraftingTablePanel:
+                        // Crafting
+                        if (!GameGlobals.Instance.IsOpenCraftingPanel)
+                        {
+
+                        }
+                        break;
                 }
 
                 PlayerManager.UpdateGameController(gameTime);
@@ -117,7 +158,8 @@ namespace Medicraft.Systems.Managers
 
             if (GameGlobals.Instance.IsGameActive) 
             {
-                if (GameGlobals.Instance.IsOpenInventory) InventoryManager.Instance.DrawUI(_spriteBatch);
+                // Draw UI
+                UserInterface.Active.Draw(_spriteBatch);
 
                 _spriteBatch.Begin
                 (
@@ -128,11 +170,12 @@ namespace Medicraft.Systems.Managers
                         GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)
                 );
 
+                // Draw on Screen here
                 _curScreen.Draw(_spriteBatch);
-
                 _spriteBatch.End();
 
-                if (GameGlobals.Instance.IsOpenInventory)
+                // OpenGUI Panel such as Invenotory, Character Inspect and Crafting Panel
+                if (GameGlobals.Instance.IsOpenGUI)
                 {
                     _spriteBatch.Begin(
                         SpriteSortMode.Deferred,
@@ -144,19 +187,30 @@ namespace Medicraft.Systems.Managers
                             GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)
                     );
                     // Draw Background
-                    DrawBackgound(_spriteBatch, Color.Black, 0.4f);
-                    _spriteBatch.End();
-
-                    if (!GameGlobals.Instance.IsInventoryRefreshed)
-                    {
-                        InventoryManager.Instance.RefreshInvenrotyItemDisplay(false);
-
-                        GameGlobals.Instance.IsInventoryRefreshed = true;
-                    }
-
-                    InventoryManager.Instance.DrawMainRenderTarget(_spriteBatch);
+                    DrawBackgound(_spriteBatch, Color.Black, 0.6f);
+                    _spriteBatch.End();                
                 }
-                else GameGlobals.Instance.IsInventoryRefreshed = false;
+
+                // Draw render UI
+                if (CurrentScreen == GameScreen.TestScreen || CurrentScreen == GameScreen.PlayScreen)
+                    UserInterface.Active.DrawMainRenderTarget(_spriteBatch);
+
+                if (!GameGlobals.Instance.IsGamePause)
+                {
+                    _spriteBatch.Begin(
+                        SpriteSortMode.Deferred,
+                        samplerState: SamplerState.LinearClamp,
+                        blendState: BlendState.AlphaBlend,
+                        depthStencilState: DepthStencilState.None,
+                        rasterizerState: RasterizerState.CullCounterClockwise,
+                        transformMatrix: Camera.GetTransform(
+                            GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)
+                    );
+
+                    HUDSystem.DrawSelectedSlotItemBar(_spriteBatch);
+
+                    _spriteBatch.End();
+                }
             }        
         }
 

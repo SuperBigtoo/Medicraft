@@ -111,27 +111,33 @@ namespace Medicraft.Systems
                 foreach (var particleEmitter in item.ParticleEffect.Emitters)
                 {
                     particleEmitter.LayerDepth = item.Sprite.Depth - 0.00001f;
-                    particleEmitter.Parameters.Opacity = new Range<float>(0.15f, 0.6f); 
+                    particleEmitter.Parameters.Opacity = new Range<float>(0.15f, 0.6f);
                 }
 
                 item.ParticleEffect.Update(_deltaSeconds);
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch) 
+        public void Draw(SpriteBatch spriteBatch)
         {
             // All Entity that initialized in Entities from EntityManager
             DrawAttackedEffectToMob(spriteBatch);
 
             DrawBossSkillActivatedEffect(spriteBatch);
 
+            DrawMobStatusEffect(spriteBatch);
+
             DrawAttackedEffectToPlayer(spriteBatch);
 
             DrawPlayerSkillEffect(spriteBatch);
 
+            DrawPlayerStatusEffect(spriteBatch);
+
             DrawCompanionAttackedEffect(spriteBatch);
 
             DrawCompanionSkillActivatedEffect(spriteBatch);
+
+            DrawCompanionStatusEffect(spriteBatch);
 
             DrawItemParticle(spriteBatch);
         }
@@ -191,6 +197,75 @@ namespace Medicraft.Systems
             
         }
 
+        private void DrawMobStatusEffect(SpriteBatch spriteBatch)
+        {
+            var entities = EntityManager.Instance.Entities;
+
+            foreach (var entity in entities.Where(e => !e.IsDestroyed && !e.IsDying))
+            {
+                // Stun
+                if (entity.IsStunning)
+                {
+                    if (!entity.IsStunningEffectDraw)
+                    {
+                        entity.StatesSprite = new AnimatedSprite(_statesSpriteSheet)
+                        {
+                            Depth = entity.Sprite.Depth - 0.0000025f
+                        };
+
+                        entity.StatesSprite.Play("effect_stun");
+
+                        entity.IsStunningEffectDraw = true;
+                    }
+
+                    if (entity.StunningTimer > 0)
+                    {
+                        var _transform = new Transform2
+                        {
+                            Scale = new Vector2(1f, 1f),
+                            Rotation = 0f,
+                            Position = new Vector2(entity.Position.X + entity.Sprite.TextureRegion.Width / 5
+                                , entity.Position.Y - entity.Sprite.TextureRegion.Height / 5)
+                        };
+
+                        entity.StatesSprite.Update(_deltaSeconds);
+
+                        spriteBatch.Draw(entity.StatesSprite, _transform);
+                    }
+                }
+                else if (entity.IsAggro)
+                {
+                    if (!entity.IsAggroEffectDraw)
+                    {
+                        entity.StatesSprite = new AnimatedSprite(_statesSpriteSheet)
+                        {
+                            Depth = entity.Sprite.Depth - 0.0000025f
+                        };
+
+                        entity.StatesSprite.Play("effect_taunt&aggro");
+
+                        entity.IsAggroEffectDraw = true;
+                        entity.AggroDrawEffectTimer = 3f;
+                    }
+
+                    if (entity.AggroDrawEffectTimer > 0)
+                    {
+                        var _transform = new Transform2
+                        {
+                            Scale = new Vector2(1f, 1f),
+                            Rotation = 0f,
+                            Position = new Vector2(entity.Position.X + entity.Sprite.TextureRegion.Width / 5
+                            , entity.Position.Y - entity.Sprite.TextureRegion.Height / 5)
+                        };
+
+                        entity.StatesSprite.Update(_deltaSeconds);
+
+                        spriteBatch.Draw(entity.StatesSprite, _transform);
+                    }
+                }
+            }
+        }
+
         private void DrawAttackedEffectToPlayer(SpriteBatch spriteBatch)
         {
             var combatLog = PlayerManager.Instance.Player.CombatLogs;
@@ -240,6 +315,98 @@ namespace Medicraft.Systems
 
         private void DrawPlayerSkillEffect(SpriteBatch spriteBatch)
         {
+            // Stun
+            if (PlayerManager.Instance.Player.IsStunning)
+            {
+                if (!PlayerManager.Instance.Player.IsStunningEffectDraw)
+                {
+                    PlayerManager.Instance.Player.StatesSprite = new AnimatedSprite(_statesSpriteSheet)
+                    {
+                        Depth = PlayerManager.Instance.Player.Sprite.Depth - 0.0000025f
+                    };
+
+                    PlayerManager.Instance.Player.StatesSprite.Play("effect_stun");
+
+                    PlayerManager.Instance.Player.IsStunningEffectDraw = true;
+                }
+
+                if (PlayerManager.Instance.Player.StunningTimer > 0)
+                {
+                    var _transform = new Transform2
+                    {
+                        Scale = new Vector2(1.25f, 1.25f),
+                        Rotation = 0f,
+                        Position = PlayerManager.Instance.Player.Position
+                    };
+
+                    PlayerManager.Instance.Player.StatesSprite.Update(_deltaSeconds);
+
+                    spriteBatch.Draw(PlayerManager.Instance.Player.StatesSprite, _transform);
+                }
+            }
+
+            // Normal Skill
+            if (PlayerManager.Instance.Player.IsNormalSkillActivate)
+            {
+                if (PlayerManager.Instance.Player.NormalActivatedTimer
+                    > PlayerManager.Instance.Player.NormalActivatedTime - 0.5f)
+                {
+                    PlayerManager.Instance.Player.StatesSprite = new AnimatedSprite(_statesSpriteSheet)
+                    {
+                        Depth = PlayerManager.Instance.Player.Sprite.Depth - 0.0000025f
+                    };
+
+                    PlayerManager.Instance.Player.StatesSprite.Play("effect_buff&shock");
+                }
+
+                if (PlayerManager.Instance.Player.NormalActivatedTimer > 0)
+                {
+                    var _transform = new Transform2
+                    {
+                        Scale = new Vector2(1.5f, 1.5f),
+                        Rotation = 0f,
+                        Position = PlayerManager.Instance.Player.Position
+                    };
+
+                    PlayerManager.Instance.Player.StatesSprite.Update(_deltaSeconds);
+
+                    spriteBatch.Draw(PlayerManager.Instance.Player.StatesSprite, _transform);
+                }
+            }
+
+            // Passive Skill
+            if (PlayerManager.Instance.Player.IsPassiveSkillActivate)
+            {
+                if (PlayerManager.Instance.Player.PassiveActivatedTimer
+                    > PlayerManager.Instance.Player.PassiveActivatedTime - 0.5f)
+                {
+                    PlayerManager.Instance.Player.StatesSprite = new AnimatedSprite(_statesSpriteSheet)
+                    {
+                        Depth = PlayerManager.Instance.Player.Sprite.Depth - 0.0000025f
+                    };
+
+                    PlayerManager.Instance.Player.StatesSprite.Play("effect_low_hp");
+                }
+
+                if (PlayerManager.Instance.Player.PassiveActivatedTimer > 0)
+                {
+                    var _transform = new Transform2
+                    {
+                        Scale = new Vector2(1.5f, 1.5f),
+                        Rotation = 0f,
+                        Position = new Vector2(PlayerManager.Instance.Player.Position.X
+                            , PlayerManager.Instance.Player.Position.Y - 32f)
+                    };
+
+                    PlayerManager.Instance.Player.StatesSprite.Update(_deltaSeconds);
+
+                    spriteBatch.Draw(PlayerManager.Instance.Player.StatesSprite, _transform);
+                }
+            }
+        }
+
+        private void DrawPlayerStatusEffect(SpriteBatch spriteBatch)
+        {         
             var combatLog = PlayerManager.Instance.Player.CombatLogs;
 
             if (combatLog.Count != 0)
@@ -254,7 +421,7 @@ namespace Medicraft.Systems
                         {
                             log.AnimatedSprite = new AnimatedSprite(_hitSkillSpriteSheet)
                             {
-                                Depth = PlayerManager.Instance.Player.Sprite.Depth - 0.00001f
+                                Depth = PlayerManager.Instance.Player.Sprite.Depth - 0.000005f
                             };
 
                             log.AnimatedSprite.Play(log.EffectName);
@@ -270,7 +437,7 @@ namespace Medicraft.Systems
                             Position = new Vector2(position.X, position.Y + 40f)
                         };
 
-                         log.AnimatedSprite.Update(_deltaSeconds);
+                        log.AnimatedSprite.Update(_deltaSeconds);
 
                         var cycleEffect = _hitSkillSpriteSheet.Cycles.Where(c => c.Key.Equals(log.EffectName)).ElementAt(0);
                         var duration = cycleEffect.Value.FrameDuration * cycleEffect.Value.Frames.Capacity;
@@ -290,6 +457,11 @@ namespace Medicraft.Systems
         }
 
         private void DrawCompanionSkillActivatedEffect(SpriteBatch spriteBatch)
+        {
+
+        }
+
+        private void DrawCompanionStatusEffect(SpriteBatch spriteBatch)
         {
 
         }

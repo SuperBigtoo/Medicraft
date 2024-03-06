@@ -105,6 +105,8 @@ namespace Medicraft.GameObjects
             spriteBatch.Draw(Sprite, Transform);
         }
 
+        public virtual void DrawShadow(SpriteBatch spriteBatch, Texture2D shadowTexture) { }
+
         public virtual void Destroy()
         {
             IsDestroyed = true;

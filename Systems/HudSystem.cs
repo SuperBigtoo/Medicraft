@@ -24,7 +24,7 @@ namespace Medicraft.Systems
 
         public HUDSystem()
         {
-            _spriteItemPack = new AnimatedSprite(GameGlobals.Instance.ItemsPackSprites);
+            _spriteItemPack = new AnimatedSprite(GameGlobals.Instance.ItemsPackSprites);           
 
             _nextFeed = false;
             _insufficientTimer = _insufficientTime;
@@ -33,6 +33,8 @@ namespace Medicraft.Systems
         public void Update(GameTime gameTime)
         {
             _deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            _topLeftCorner = GameGlobals.Instance.TopLeftCornerPosition;
 
             // Check for the next feed to roll in
             if (GameGlobals.Instance.CollectedItemFeed.Count != 0)
@@ -62,8 +64,7 @@ namespace Medicraft.Systems
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            var _graphicsDevice = ScreenManager.Instance.GraphicsDevice;
-            _topLeftCorner = GameGlobals.Instance.TopLeftCornerPosition;
+            var _graphicsDevice = ScreenManager.Instance.GraphicsDevice; 
 
             spriteBatch.End();
             spriteBatch.Begin(
@@ -75,34 +76,37 @@ namespace Medicraft.Systems
                 transformMatrix: ScreenManager.Instance.Camera.GetTransform(
                     _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height)
             );
-               
-            // Draw HP mobs
-            DrawHealthPointMobs(spriteBatch);
 
-            // Draw combat numbers mobs & player
-            DrawCombatNumbers(spriteBatch);
+            if (!GameGlobals.Instance.IsGamePause)
+            {
+                // Draw HP mobs
+                DrawHealthPointMobs(spriteBatch);
 
-            // Draw Press F Sign
-            DrawInteractionSigh(spriteBatch);
+                // Draw combat numbers mobs & player
+                DrawCombatNumbers(spriteBatch);
 
-            // Draw Insufficient Sign
-            DrawInsufficientSign(spriteBatch);
+                // Draw Press F Sign
+                DrawInteractionSigh(spriteBatch);
 
-            // Draw Feed Items
-            DrawCollectedItem(spriteBatch);
+                // Draw Insufficient Sign
+                DrawInsufficientSign(spriteBatch);
 
-            // Draw Quest List
-            DrawQuestList(spriteBatch);
+                // Draw Feed Items
+                DrawCollectedItem(spriteBatch);
 
-            // Draw HUD Bar
-            DrawMainHUD(spriteBatch);
+                // Draw Quest List
+                DrawQuestList(spriteBatch);
+
+                // Draw HUD Bar
+                DrawMainHUD(spriteBatch);
+            }
         }
 
         private void DrawMainHUD(SpriteBatch spriteBatch)
         {
             DrawHealthBarGUI(spriteBatch);
 
-            DrawCompanionHealthBarGUI(spriteBatch);
+            // DrawCompanionHealthBarGUI(spriteBatch);
 
             if (GameGlobals.Instance.IsEnteringBossFight) DrawBossHealthBarGUI(spriteBatch);
 
@@ -325,16 +329,17 @@ namespace Medicraft.Systems
             {
                 spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.item_slot)
                     , new Vector2(515f + (52 * i), 824f) + _topLeftCorner, null
-                    , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-
-                // Gonna Draw Item texture here
-
-                // Selected Slot
-                var selectedSlot = GameGlobals.Instance.SelectedItemBarSlot;
-                spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.selected_slot)
-                    , new Vector2(511f + (52 * selectedSlot), 820f) + _topLeftCorner, null
-                    , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);          
             }
+        }
+
+        public static void DrawSelectedSlotItemBar(SpriteBatch spriteBatch)
+        {
+            // Selected Slot
+            var selectedSlot = GameGlobals.Instance.CurrentSlotBarSelect;
+            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.selected_slot)
+                , new Vector2(511f + (52 * selectedSlot), 820f) + GameGlobals.Instance.TopLeftCornerPosition, null
+                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
 
         private void DrawLevelGUI(SpriteBatch spriteBatch)
@@ -343,8 +348,8 @@ namespace Medicraft.Systems
             var LevelGuiTexture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.level_gui);
 
             spriteBatch.Draw(LevelGuiTexture
-                , new Vector2(29f, 14f) + _topLeftCorner, null
-                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                , new Vector2(25f, 10f) + _topLeftCorner, null
+                , Color.White, 0f, Vector2.Zero, 1.25f, SpriteEffects.None, 0f);
 
             // Text Level
             var textLevel = $"{PlayerManager.Instance.Player.Level}";

@@ -9,18 +9,9 @@ namespace Medicraft.Systems.Managers
 {
     public class StatusEffectManager
     {
-        private List<StatusEffect> statusEffects;
+        private readonly List<StatusEffect> statusEffects;
 
-        private List<StatusEffect> effectsToRemove;
-
-        public int TempATK { get; set; }
-        public int TempHP { get; set; }
-        public int TempSpeed { get; set; }
-        public float TempMana { get; set; }
-        public float TempDEF { get; set; }
-        public float TempCrit { get; set; }
-        public float TempCritDMG { get; set; }
-        public float TempEvasion { get; set; }
+        private readonly List<StatusEffect> effectsToRemove;
 
         private const float _activateTime = 3f;
 

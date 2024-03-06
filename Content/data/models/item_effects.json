@@ -137,15 +137,15 @@
   },
   {
     "ItemEffectId": 9,
-    "Name": "Increases_5%_ATK",
+    "Name": "Increases_20%_ATK",
     "Category": "Boosting",
-    "Description": "Increases 5% of Base ATK for 10s",
+    "Description": "Increases 20% of Base ATK for 10s",
     "Effects": [
       {
         "Target": "ATK",
         "ActivationType": "Instant",
         "EffectType": "Buff",
-        "Value": 0.05,
+        "Value": 0.2,
         "Time": 10,
         "Timer": 10,
         "IsActive": false
@@ -206,15 +206,15 @@
   },
   {
     "ItemEffectId": 12,
-    "Name": "Increases_10%_ATK_&_DEF",
+    "Name": "Increases_30%_ATK_&_DEF",
     "Category": "Boosting",
-    "Description": "Increases 10% of Base ATK and DEF for 10s",
+    "Description": "Increases 30% of Base ATK and DEF for 10s",
     "Effects": [
       {
         "Target": "ATK",
         "ActivationType": "Instant",
         "EffectType": "Buff",
-        "Value": 0.10,
+        "Value": 0.30,
         "Time": 10,
         "Timer": 10,
         "IsActive": false

@@ -50,6 +50,8 @@ namespace Medicraft.Entities
         public string SpriteCycle { get; protected set; }
         public string CurrentAnimation { get; protected set; }
         
+        public AnimatedSprite StatesSprite { get; set; }
+
         // Used Effect Name
         public string NormalHitEffectActivated { get; protected set; }
         public string NormalHitEffectAttacked { get; protected set; }
@@ -132,6 +134,7 @@ namespace Medicraft.Entities
         // Timer Conditions
         public float AggroTime { get; protected set; }
         public float AggroTimer { get; set; }
+        public float AggroDrawEffectTimer { get; set; }
         public float ActionTimer { get; set; }
         public float AttackedTimer { get; set; }
         public float CombatNumbersTimer { get; set; }
@@ -139,6 +142,8 @@ namespace Medicraft.Entities
         public float KnockbackedTimer { get; set; }
         public float DyingTime { get; protected set; }
         public float DyingTimer { get; set; }
+        public float BuffTimer { get; set; }
+        public float DebuffTimer { get; set; }
 
         protected float _attackSpeed;
         protected float _cooldownAttack;
@@ -152,8 +157,10 @@ namespace Medicraft.Entities
         public bool IsRespawnable { get; protected set; }
         public bool IsAggroResettable { get; protected set; }
         public bool IsAggro { get; set; }
+        public bool IsAggroEffectDraw { get; set; }
         public bool IsStunable { get; protected set; }
         public bool IsStunning { get; set; }
+        public bool IsStunningEffectDraw { get; set; }
         public bool IsKnockbackable { get; protected set; }
         public bool IsKnockback { get; set; }
         public bool IsDying { get; set; }
@@ -161,7 +168,8 @@ namespace Medicraft.Entities
         public bool IsMoving { get; set; }
         public bool IsAttacking { get; set; }
         public bool IsAttacked { get; set; }
-        public bool IsBuffed { get; set; }
+        public bool IsBuffOn { get; set; }
+        public bool IsDebuffOn { get; set; }
         public bool IsShowCombatNumbers { get; set; }
         public bool IsDetectCollistionObject { get; set; }
         public List<CombatNumberData> CombatLogs { get; protected set; }
@@ -194,6 +202,7 @@ namespace Medicraft.Entities
             CombatNumVelocity = Vector2.Zero;
             SpriteCycle = "default";
 
+            AggroDrawEffectTimer = 0f;
             AggroTimer = 0f;
             ActionTimer = 0f;
             AttackedTimer = 0f;
@@ -201,6 +210,8 @@ namespace Medicraft.Entities
             KnockbackedTimer = 0f;
             DyingTimer = 0f;
             CombatNumbersTimer = 0f;
+            BuffTimer = 0f;
+            DebuffTimer = 0f;
 
             _attackSpeed = 1f;
             _cooldownAttack = 0.4f;
@@ -210,8 +221,10 @@ namespace Medicraft.Entities
             IsRespawnable = true;
             IsStunable = true;
             IsStunning = false;
+            IsStunningEffectDraw = false;
             IsAggroResettable = true;
             IsAggro = false;
+            IsAggroEffectDraw = false;
             IsKnockbackable = true;
             IsKnockback = false;
             IsDying = false;
@@ -219,7 +232,8 @@ namespace Medicraft.Entities
             IsMoving = false;
             IsAttacking = false;
             IsAttacked = false;
-            IsBuffed = false;
+            IsBuffOn = false;
+            IsDebuffOn = false;
             IsShowCombatNumbers = false;
             IsDetectCollistionObject = false;
 
@@ -254,6 +268,7 @@ namespace Medicraft.Entities
             CombatNumVelocity = Vector2.Zero;
             SpriteCycle = entity.SpriteCycle;
 
+            AggroDrawEffectTimer = 0f;
             AggroTimer = 0f;
             ActionTimer = 0f;
             AttackedTimer = 0f;
@@ -261,6 +276,8 @@ namespace Medicraft.Entities
             KnockbackedTimer = 0f;
             DyingTimer = 0f;
             CombatNumbersTimer = 0f;
+            BuffTimer = 0f;
+            DebuffTimer = 0f;
 
             _attackSpeed = entity._attackSpeed;
             _cooldownAttack = entity._cooldownAttack;
@@ -270,8 +287,10 @@ namespace Medicraft.Entities
             IsRespawnable = entity.IsRespawnable;
             IsStunable = entity.IsStunable;
             IsStunning = false;
+            IsStunningEffectDraw = false;
             IsAggroResettable = entity.IsAggroResettable;
             IsAggro = false;
+            IsAggroEffectDraw = false;
             IsKnockbackable = entity.IsKnockbackable;
             IsKnockback = false;
             IsDying = false;
@@ -279,7 +298,8 @@ namespace Medicraft.Entities
             IsMoving = false;
             IsAttacking = false;
             IsAttacked = false;
-            IsBuffed = false;
+            IsBuffOn = false;
+            IsDebuffOn = false;
             IsShowCombatNumbers = false;
             IsDetectCollistionObject = false;
 
@@ -289,8 +309,8 @@ namespace Medicraft.Entities
         public virtual void Update(GameTime gameTime, KeyboardState keyboardCurrentState, KeyboardState keyboardPrevioseState
             , MouseState mouseCurrentState, MouseState mousePrevioseState) { }
         public virtual void Update(GameTime gameTime, float playerDepth, float topDepth, float middleDepth, float bottomDepth) { }
-
         public virtual void Draw(SpriteBatch spriteBatch) { }
+        public virtual void DrawShadow(SpriteBatch spriteBatch, Texture2D shadowTexture) { }
         public virtual void Destroy()
         {
             IsDestroyed = true;
@@ -575,16 +595,20 @@ namespace Medicraft.Entities
         protected virtual void UpdateTimerConditions(float deltaSeconds)
         {
             // Decreasing AggroTimer
-            if (IsAggro && IsAggroResettable)
+            if (IsAggro)
             {
-                if (AggroTimer > 0)
+                if (AggroTimer > 0f)
                 {
                     AggroTimer -= deltaSeconds;
                 }
-                else
+                else if (IsAggroResettable)
                 {
                     IsAggro = false;
+                    IsAggroEffectDraw = false;
                 }
+                else IsAggroEffectDraw = false;
+
+                if (AggroDrawEffectTimer > 0f) AggroDrawEffectTimer -= deltaSeconds;
             }
 
             // Decreasing KnockbackTimer
@@ -592,7 +616,7 @@ namespace Medicraft.Entities
             {
                 if (IsKnockbackable) Position += Velocity * KnockbackedTimer;
 
-                if (KnockbackedTimer > 0)
+                if (KnockbackedTimer > 0f)
                 {
                     KnockbackedTimer -= deltaSeconds;
                 }
@@ -606,13 +630,14 @@ namespace Medicraft.Entities
             // Decreasing StunningTimer
             if (IsStunning && IsStunable)
             {
-                if (StunningTimer > 0)
+                if (StunningTimer > 0f)
                 {
                     StunningTimer -= deltaSeconds;
                 }
                 else
                 {
                     IsStunning = false;
+                    IsStunningEffectDraw = false;
                 }
             }
 
@@ -626,13 +651,40 @@ namespace Medicraft.Entities
                 else
                 {
                     IsAttacked = false;
-                    AttackedTimer = 0;
+                    AttackedTimer = 0f;
                 }
             }
 
+            // Show Buff Timer
+            if (IsBuffOn)
+            {
+                if (BuffTimer > 0f)
+                {
+                    BuffTimer -= deltaSeconds;
+                }
+                else
+                {
+                    IsBuffOn = false;
+                }
+            }
+
+            // Show Debuff Timer
+            if (IsDebuffOn)
+            {
+                if (DebuffTimer > 0f)
+                {
+                    DebuffTimer -= deltaSeconds;
+                }
+                else
+                {
+                    IsDebuffOn = false;
+                }
+            }
+
+            // Show combat numbers timer
             if (IsShowCombatNumbers)
             {
-                if (CombatNumbersTimer < 1)
+                if (CombatNumbersTimer < 1f)
                 {
                     foreach (var log in CombatLogs.Where(e => e.ElapsedTime < 1f))
                     {
@@ -648,8 +700,8 @@ namespace Medicraft.Entities
                             log.AlphaColor -= deltaSeconds * 5f;
                             log.Scaling -= deltaSeconds * 5f;
 
-                            log.AlphaColor = log.AlphaColor > 0 ? log.AlphaColor : 0;
-                            log.Scaling = log.Scaling > 0 ? log.Scaling : 0;
+                            log.AlphaColor = log.AlphaColor > 0f ? log.AlphaColor : 0f;
+                            log.Scaling = log.Scaling > 0f ? log.Scaling : 0f;
                         }
                     }
                 }
@@ -870,7 +922,7 @@ namespace Medicraft.Entities
                         EffectName = effectName,
                         IsEffectPlayed = false,
                         ElapsedTime = 0,
-                        Velocity = combatNumVelocity,
+                        Velocity = combatNumVelocity + new Vector2(40, 0),
                         OffSet = Vector2.Zero,
                         Color = Color.LimeGreen,
                         StrokeColor = Color.Black,
@@ -930,7 +982,7 @@ namespace Medicraft.Entities
                         EffectName = effectName,
                         IsEffectPlayed = false,
                         ElapsedTime = 0,
-                        Velocity = combatNumVelocity,
+                        Velocity = combatNumVelocity + new Vector2(-60, 0),
                         OffSet = Vector2.Zero,
                         Color = Color.Aqua,
                         StrokeColor = Color.Black,

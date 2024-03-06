@@ -245,6 +245,10 @@ namespace Medicraft.Entities
 
             spriteBatch.Draw(Sprite, Transform);
 
+            var shadowTexture = GameGlobals.Instance.GetShadowTexture(GameGlobals.ShadowTextureName.shadow_1);
+
+            DrawShadow(spriteBatch, shadowTexture);
+
             // Test Draw BoundingRec for Collision
             if (GameGlobals.Instance.IsDebugMode)
             {
@@ -252,7 +256,16 @@ namespace Medicraft.Entities
                 pixelTexture.SetData(new Color[] { Color.White });
                 spriteBatch.Draw(pixelTexture, (Rectangle)BoundingDetectCollisions, Color.Red);
             }
-        }      
+        }
+
+        public override void DrawShadow(SpriteBatch spriteBatch, Texture2D shadowTexture)
+        {
+            var position = new Vector2(Position.X - (shadowTexture.Width * 1.2f) / 2f
+                    , BoundingDetectCollisions.Bottom - (Sprite.TextureRegion.Height * 1.2f) / 10);
+
+            spriteBatch.Draw(shadowTexture, position, null, Color.White
+                , 0f, Vector2.Zero, 1.2f, SpriteEffects.None, Sprite.Depth + 0.0000025f);
+        }
 
         private void RandomSlimeColor()
         {

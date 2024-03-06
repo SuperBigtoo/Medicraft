@@ -32,7 +32,9 @@ namespace Medicraft.Entities
 
         public bool IsNormalSkillActivate { get; private set; }
         public bool IsPassiveSkillActivate { get; private set; }
+        public float NormalActivatedTime { get; private set; }
         public float NormalActivatedTimer {  get; private set; }
+        public float PassiveActivatedTime { get; private set; }
         public float PassiveActivatedTimer { get; private set; }       
 
         public int tempATK, tempHP, tempSpeed;
@@ -198,6 +200,10 @@ namespace Medicraft.Entities
         {
             spriteBatch.Draw(Sprite, Transform);
 
+            var shadowTexture = GameGlobals.Instance.GetShadowTexture(GameGlobals.ShadowTextureName.shadow_1);
+
+            DrawShadow(spriteBatch, shadowTexture);
+
             // Test Draw BoundingRec for Collision Check
             if (GameGlobals.Instance.IsDebugMode)
             {
@@ -205,6 +211,15 @@ namespace Medicraft.Entities
                 pixelTexture.SetData(new Color[] { Color.White });
                 spriteBatch.Draw(pixelTexture, (Rectangle)BoundingDetectCollisions, Color.Red);
             }
+        }
+
+        public override void DrawShadow(SpriteBatch spriteBatch, Texture2D shadowTexture)
+        {
+            var positionPlayer = new Vector2(Position.X - (shadowTexture.Width * 1.2f) / 2.2f
+                , BoundingDetectCollisions.Bottom - (shadowTexture.Height * 1.2f) / 2f);
+
+            spriteBatch.Draw(shadowTexture, positionPlayer, null, Color.White
+                , 0f, Vector2.Zero, 1.2f, SpriteEffects.None, Sprite.Depth + 0.0000025f);
         }
 
         // Movement
@@ -370,11 +385,12 @@ namespace Medicraft.Entities
                     tempATK = (int)(BaseATK * 0.5);
                     tempCrit = 0.1f;
                     tempCritDMG = 0.5f;
+                    NormalActivatedTime = 8f;
 
                     ATK += tempATK;
                     Crit += tempCrit;
                     CritDMG += tempCritDMG;
-                    NormalActivatedTimer = 8f;
+                    NormalActivatedTimer = NormalActivatedTime;
                     break;
 
                 case 2:
@@ -471,10 +487,11 @@ namespace Medicraft.Entities
                 case 1:
                     healingValue = (int)(BaseMaxHP * 0.25);
                     tempDEF = 0.25f;
+                    PassiveActivatedTime = 8f;
 
                     HP += healingValue;
                     DEF += tempDEF;
-                    PassiveActivatedTimer = 8f;
+                    PassiveActivatedTimer = PassiveActivatedTime;
                     break;
 
                 case 2:
@@ -511,7 +528,7 @@ namespace Medicraft.Entities
         }
 
         // Check Attack
-        private void CheckAttackDetection(int Atk, float HitPercent, bool IsUndodgeable, float StunTime, string effectAttacked)
+        private void CheckAttackDetection(int atk, float percentHit, bool isUndodgeable, float stunTime, string effectAttacked)
         {
             foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed))
             {
@@ -521,7 +538,7 @@ namespace Medicraft.Entities
                     {
                         if (!entity.IsDying)
                         {
-                            var totalDamage = TotalDamage(Atk, HitPercent, entity.DEF, entity.Evasion, IsUndodgeable);                                                 
+                            var totalDamage = TotalDamage(atk, percentHit, entity.DEF, entity.Evasion, isUndodgeable);                                                 
 
                             var combatNumVelocity = entity.SetCombatNumDirection();
                             entity.AddCombatLogNumbers(Name, totalDamage.ToString()
@@ -545,10 +562,10 @@ namespace Medicraft.Entities
                                     entity.KnockbackedTimer = 0.2f;
                                 }
 
-                                if (StunTime > 0f && entity.IsStunable)
+                                if (stunTime > 0f && entity.IsStunable)
                                 {
                                     entity.IsStunning = true;
-                                    entity.StunningTimer = StunTime;
+                                    entity.StunningTimer = stunTime;
                                 }
                             }
 
@@ -619,24 +636,12 @@ namespace Medicraft.Entities
                 }
             }
 
-            // Check Table Craft
-            //var TableCraft = GameGlobals.Instance.TableCraft;
-            //foreach (var obj in TableCraft)
-            //{
-            //    if (BoundingDetectCollisions.Intersects(obj))
-            //    {
-            //        GameGlobals.Instance.IsDetectedItem = true;
-            //        break;
-            //    }
-            //}
-
             // Check Interaction
             if (keyboardCur.IsKeyUp(Keys.F) && keyboardPrev.IsKeyDown(Keys.F))
             {
                 if (GameGlobals.Instance.IsDetectedGameObject)
                 {
                     CheckGameObject();
-                    //CheckTableCraftDetection();
                 }
             }
         }
@@ -649,6 +654,8 @@ namespace Medicraft.Entities
                 {                   
                     switch (gameObject.Type)
                     {
+                        case GameObjects.GameObject.GameObjectType.QuestItem:
+
                         case GameObjects.GameObject.GameObjectType.Item:
 
                             var itemId = gameObject.ReferId.ToString();
@@ -662,12 +669,8 @@ namespace Medicraft.Entities
                             else HUDSystem.ShowInsufficientSign();
                             break;
 
-                        case GameObjects.GameObject.GameObjectType.QuestItem:
-                            
-                            break;
-
                         case GameObjects.GameObject.GameObjectType.CraftingTable:
-
+                            CheckTableCraftDetection();
                             break;
 
                         case GameObjects.GameObject.GameObjectType.SavingTable:
@@ -687,33 +690,18 @@ namespace Medicraft.Entities
         // Crafting TBD
         private void CheckTableCraftDetection()
         {
-            //if (GameGlobals.Instance.TableCraft.Count != 0)
-            //{
-            //    var TableCraft = GameGlobals.Instance.TableCraft;
-            //    foreach (var obj in TableCraft)
-            //    {
-            //        if (BoundingDetectCollisions.Intersects(obj))
-            //        {
-            //            if (PlayerManager.Instance.Inventory["0"] >= 1
-            //                && PlayerManager.Instance.Inventory["1"] >= 1)
-            //            {
-            //                HudSystem.AddFeed(2, 1);
-
-            //                if (PlayerManager.Instance.Inventory.ContainsKey("2"))
-            //                {
-            //                    PlayerManager.Instance.Inventory["2"] += 1;
-            //                    PlayerManager.Instance.Inventory["0"] -= 1;
-            //                    PlayerManager.Instance.Inventory["1"] -= 1;
-            //                }
-            //            }
-            //            else
-            //            {
-            //                HudSystem.ShowInsufficientSign();
-            //            }
-            //            break;
-            //        }
-            //    }
-            //}
+            if (GameGlobals.Instance.CraftingTableArea.Count != 0)
+            {
+                var TableCraft = GameGlobals.Instance.CraftingTableArea;
+                foreach (var obj in TableCraft)
+                {
+                    if (BoundingDetectCollisions.Intersects(obj))
+                    {
+                        
+                        break;
+                    }
+                }
+            }
         }
 
         private void ManaRegeneration(float deltaSeconds)

@@ -1953,7 +1953,7 @@
     "ItemId": 300,
     "Name": "สาบเสือ",
     "Category": "Consumable item",
-    "Description": "มีสรรพคุณช่วยถอนพิษแก้อักเสบและห้ามเลิอด ใช้ในการรักษาแผลสดได้เป็นอย่างดี",
+    "Description": "มีสรรพคุณช่วยถอนพิษแก้อักเสบและห้ามเลิอดใช้ในการรักษาแผลสดได้เป็นอย่างดี",
     "Usable": true,
     "Effect": 1,
     "Stackable": true,
@@ -1963,7 +1963,7 @@
     "ItemId": 301,
     "Name": "แอปเปิ้ล",
     "Category": "Consumable item",
-    "Description": "ลูกแอปเปิ้ลแดงสุก ถึงแม้จะกินกับอะไรก็อร่อย แต่กินเปล่าๆก็อร่อยเหมือนกัน",
+    "Description": "ลูกแอปเปิ้ลแดงสุกถึงแม้จะกินกับอะไรก็อร่อย แต่กินเปล่าๆก็อร่อยเหมือนกัน",
     "Usable": true,
     "Effect": 2,
     "Stackable": true,
@@ -1973,7 +1973,7 @@
     "ItemId": 302,
     "Name": "ซุปเห็ด",
     "Category": "Consumable item",
-    "Description": "ทำจากเห็ดที่มีประโยชน์ต่อร่างกายและยังมีรสชาติอร่อยอีกด้วย อาหารที่ดีสุขภาพจานนี้จะทำให้คุณอิ่มท้อง",
+    "Description": "ทำจากเห็ดที่มีประโยชน์ต่อร่างกายและยังมีรสชาติอร่อยอีกด้วยอาหารที่ดีสุขภาพจานนี้จะทำให้คุณอิ่มท้อง",
     "Usable": true,
     "Effect": 3,
     "Stackable": true,
@@ -1993,7 +1993,7 @@
     "ItemId": 304,
     "Name": "เนื้อโรล",
     "Category": "Consumable item",
-    "Description": "เมนูผักกรอบและเนื้อสัตว์ที่เข้ากันอย่างลงตัว เหมาะกับการกินมือเดียว",
+    "Description": "เมนูผักกรอบและเนื้อสัตว์ที่เข้ากันอย่างลงตัวเหมาะกับการกินมือเดียว",
     "Usable": true,
     "Effect": 12,
     "Stackable": true,
@@ -2003,7 +2003,7 @@
     "ItemId": 305,
     "Name": "สตูว์เนื้อ",
     "Category": "Consumable item",
-    "Description": "สตูว์เนื้อรสชาติเข้มข้นจากแครรอทและมันฝรั่ง จะทำให้ร่างกายที่เหนื่อยล้าผ่อนคลายและอบอุ่นขึ้น",
+    "Description": "สตูว์เนื้อรสชาติเข้มข้นจากแครรอทและมันฝรั่งจะทำให้ร่างกายที่เหนื่อยล้าผ่อนคลายและอบอุ่นขึ้น",
     "Usable": true,
     "Effect": 11,
     "Stackable": true,
@@ -2013,7 +2013,7 @@
     "ItemId": 306,
     "Name": "นม",
     "Category": "Consumable item",
-    "Description": "น้ำนมดิบบริสุทธิ์รสชาติเข้มข้นและกลมกล่อม ดื่มเย็นๆช่วยคลายความเมื่อยล้าได้",
+    "Description": "น้ำนมดิบบริสุทธิ์รสชาติเข้มข้นและกลมกล่อมดื่มเย็นๆช่วยคลายความเมื่อยล้าได้",
     "Usable": true,
     "Effect": 8,
     "Stackable": true,
@@ -2023,7 +2023,7 @@
     "ItemId": 307,
     "Name": "ซุปมันฝรั่ง",
     "Category": "Consumable item",
-    "Description": "แม้ว่าส่วนผสมจะเรียบง่าย แต่ก็เป็นซุปเพื่อสุขภาพที่ทำจากมันฝรั่งต้มสุก",
+    "Description": "แม้ว่าส่วนผสมจะเรียบง่ายแต่ก็เป็นซุปเพื่อสุขภาพที่ทำจากมันฝรั่งต้มสุก",
     "Usable": true,
     "Effect": 4,
     "Stackable": true,
@@ -2043,7 +2043,7 @@
     "ItemId": 309,
     "Name": "บาบีคิว",
     "Category": "Consumable item",
-    "Description": "บาร์บีคิวที่ทำจากผักและเนื้อล่าสดๆ ชิ้นใหญ่ เป็นหนึ่งในอาหารประจำเทศกาลที่ใช้วัตถุดิบหายากและอร่อย",
+    "Description": "บาร์บีคิวที่ทำจากผักและเนื้อล่าสดๆ ชิ้นใหญ่เป็นหนึ่งในอาหารประจำเทศกาลที่ใช้วัตถุดิบหายากและอร่อย",
     "Usable": true,
     "Effect": 14,
     "Stackable": true,
@@ -2083,7 +2083,7 @@
     "ItemId": 313,
     "Name": "ผัดกะเพราเนื้อ",
     "Category": "Consumable item",
-    "Description": "อาหารตามสั่งที่ใครๆ ก็อยากกินเป็นมื้อเช้า กลางวัน และเย็น",
+    "Description": "อาหารตามสั่งที่ใครๆก็อยากกินเป็นมื้อเช้า กลางวัน และเย็น",
     "Usable": true,
     "Effect": 13,
     "Stackable": true,
@@ -2093,10 +2093,11 @@
     "ItemId": 400,
     "Name": "ดาบนักผจญภัย",
     "Category": "Equipment",
-    "Description": "ดาบที่นักผจญภัยต้องมี! ทำจากเหล็กทนทานแบบพิเศษ ที่ทำให้แหล่งคมได้ยาวนาน",
+    "Description": "ดาบที่นักผจญภัยต้องมี! ทำจากเหล็กทนทานแบบพิเศษที่ทำให้แหล่งคมได้ยาวนาน",
     "Usable": true,
     "Effect": 0,
     "Stackable": false,
+    "EquipmentType": 0,
     "QuantityDropRange": []
   },
   {
@@ -2107,6 +2108,7 @@
     "Usable": true,
     "Effect": 0,
     "Stackable": false,
+    "EquipmentType": 1,
     "QuantityDropRange": []
   },
   {
@@ -2117,16 +2119,18 @@
     "Usable": true,
     "Effect": 0,
     "Stackable": false,
+    "EquipmentType": 2,
     "QuantityDropRange": []
   },
   {
     "ItemId": 403,
     "Name": "ถุงมือนักผจญภัย",
     "Category": "Equipment",
-    "Description": "ถุงมือที่ทำจากหนังธรรมดา บอกเลยว่านุ่มสบายและแข็งแกร่ง เหมาะสำหรับการใช้งานทุกรูปแบบ",
+    "Description": "ถุงมือที่ทำจากหนังธรรมดา บอกเลยว่านุ่มสบายและแข็งแกร่งเหมาะสำหรับการใช้งานทุกรูปแบบ",
     "Usable": true,
     "Effect": 0,
     "Stackable": false,
+    "EquipmentType": 3,
     "QuantityDropRange": []
   },
   {
@@ -2137,6 +2141,7 @@
     "Usable": true,
     "Effect": 0,
     "Stackable": false,
+    "EquipmentType": 4,
     "QuantityDropRange": []
   },
   {
@@ -2147,6 +2152,7 @@
     "Usable": true,
     "Effect": 0,
     "Stackable": false,
+    "EquipmentType": 5,
     "QuantityDropRange": []
   }
 ]
