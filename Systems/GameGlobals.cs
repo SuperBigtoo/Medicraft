@@ -37,7 +37,7 @@ namespace Medicraft.Systems
         public bool IsGameActive { set; get; }
         public bool IsGamePause { set; get; }
         public bool IsOpenGUI { set; get; }
-        public bool IsRefreshItemBar { set; get; }
+        public bool IsRefreshHotbar { set; get; }
         public bool SwitchDebugMode { set; get; }
         public bool IsDebugMode { set; get; }
         public bool SwitchShowPath { set; get; }
@@ -51,6 +51,16 @@ namespace Medicraft.Systems
         public float TotalPlayTime { set; get; }
         public int MaxLevel { set; get; }
         public BuiltinThemes BuiltinTheme { set; get; }
+
+        // Hotbar Slot Numbers
+        public bool SwitchSlot_1 { set; get; }
+        public bool SwitchSlot_2 { set; get; }
+        public bool SwitchSlot_3 { set; get; }
+        public bool SwitchSlot_4 { set; get; }
+        public bool SwitchSlot_5 { set; get; }
+        public bool SwitchSlot_6 { set; get; }
+        public bool SwitchSlot_7 { set; get; }
+        public bool SwitchSlot_8 { set; get; }
 
         // Boss
         public bool IsBoss_TestDead { set; get; }
@@ -251,7 +261,7 @@ namespace Medicraft.Systems
 
             IsGamePause = false;
             IsOpenGUI = false;
-            IsRefreshItemBar = false;
+            IsRefreshHotbar = false;
 
             SwitchOpenInventoryPanel = false;
             IsOpenInventoryPanel = false;
@@ -268,6 +278,16 @@ namespace Medicraft.Systems
 
             IsFullScreen = false;
             IsTransitionFinished = true;
+
+            // hotbar switch
+            SwitchSlot_1 = false;
+            SwitchSlot_2 = false;
+            SwitchSlot_3 = false;
+            SwitchSlot_4 = false;
+            SwitchSlot_5 = false;
+            SwitchSlot_6 = false;
+            SwitchSlot_7 = false;
+            SwitchSlot_8 = false;
 
             IsEnteringBossFight = false;
             IsBoss_TestDead = false;
@@ -580,6 +600,13 @@ namespace Medicraft.Systems
             }
 
             return true;
+        }
+
+        public string GetItemCategory(int itemId)
+        {
+            var itemData = ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(itemId));
+
+            return itemData != null ? itemData.Category : "";
         }
 
         public static GameGlobals Instance

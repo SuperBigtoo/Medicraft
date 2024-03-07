@@ -130,8 +130,6 @@ namespace Medicraft.Systems.Managers
                 case "HP":
                     var valueHP = (int)(statusEffect.TargetEntity.BaseMaxHP * statusEffect.Effect.Value);
 
-                    System.Diagnostics.Debug.WriteLine($"HP regen effect : {valueHP}");
-
                     if (statusEffect.TargetEntity.Name.Equals("Noah"))
                     {
                         PlayerManager.Instance.Player.RestoresHP(statusEffect.Effect.EffectType, valueHP, false);
@@ -142,8 +140,6 @@ namespace Medicraft.Systems.Managers
 
                 case "Mana":
                     var valueMana = statusEffect.TargetEntity.BaseMaxMana * (float)statusEffect.Effect.Value;
-
-                    System.Diagnostics.Debug.WriteLine($"Mana regen effect : {valueMana}");
 
                     if (statusEffect.TargetEntity.Name.Equals("Noah"))
                     {

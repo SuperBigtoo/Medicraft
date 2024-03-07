@@ -115,15 +115,15 @@ namespace Medicraft.Systems.Managers
                 // Current GUI Panel
                 switch (GUIManager.Instance.CurrentGUI)
                 {
-                    case GUIManager.ItemBar:
+                    case GUIManager.Hotbar:
                         // Item bar
-                        if (!GameGlobals.Instance.IsRefreshItemBar)
+                        if (!GameGlobals.Instance.IsRefreshHotbar)
                         {
-                            GUIManager.Instance.CurrentGUI = GUIManager.ItemBar;
-                            GUIManager.Instance.RefreshItemBarDisplay();
+                            GUIManager.Instance.CurrentGUI = GUIManager.Hotbar;
+                            GUIManager.Instance.RefreshHotbarDisplay();
                             GUIManager.Instance.UpdateAfterChangeGUI();
 
-                            GameGlobals.Instance.IsRefreshItemBar = true;
+                            GameGlobals.Instance.IsRefreshHotbar = true;
                         }
                         break;
 

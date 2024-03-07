@@ -14,21 +14,20 @@ namespace Medicraft.Systems.Managers
         public const int Boots = 4;
         public const int Ring = 5;
 
-        public const int ItemBarSlot_1 = 6;
-        public const int ItemBarSlot_2 = 7;
-        public const int ItemBarSlot_3 = 8;
-        public const int ItemBarSlot_4 = 9;
-        public const int ItemBarSlot_5 = 10;
-        public const int ItemBarSlot_6 = 11;
-        public const int ItemBarSlot_7 = 12;
-        public const int ItemBarSlot_8 = 13;
+        public const int HotbarSlot_1 = 6;
+        public const int HotbarSlot_2 = 7;
+        public const int HotbarSlot_3 = 8;
+        public const int HotbarSlot_4 = 9;
+        public const int HotbarSlot_5 = 10;
+        public const int HotbarSlot_6 = 11;
+        public const int HotbarSlot_7 = 12;
+        public const int HotbarSlot_8 = 13;
 
         public int MaximunSlot { private set; get; }
         public int MaximunCount { private set; get; }
         public int GoldCoin { private set; get; }
         public Dictionary<string, InventoryItemData> InventoryBag { private set; get; }
         public InventoryItemData SelectedInventoryItem { set; get; }
-        public InventoryItemData[] EquipmentAndBarItemSlot { private set; get; }
 
         private static InventoryManager instance;
 
@@ -37,7 +36,6 @@ namespace Medicraft.Systems.Managers
             MaximunSlot = GameGlobals.Instance.MaximunInventorySlot;
             MaximunCount = GameGlobals.Instance.MaximunItemCount;
             InventoryBag = [];
-            EquipmentAndBarItemSlot = new InventoryItemData[14];
             GoldCoin = 0;
         }
 
@@ -55,19 +53,6 @@ namespace Medicraft.Systems.Managers
             foreach (var item in inventoryData.Inventory)
             {
                 InventoryBag.Add(item.ItemId.ToString(), item);
-
-                if (item.Slot != GameGlobals.Instance.DefaultInventorySlot)
-                {
-                    InitInSlotItem(item);
-                }
-            }
-        }
-
-        public void InitInSlotItem(InventoryItemData item)
-        {
-            if (item.Slot >= 0 && item.Slot < EquipmentAndBarItemSlot.Length)
-            {
-                EquipmentAndBarItemSlot[item.Slot] = item;
             }
         }
 
@@ -128,14 +113,13 @@ namespace Medicraft.Systems.Managers
 
                         // refresh display item after selectedItem has been use
                         GUIManager.Instance.RefreshInvenrotyItemDisplay(true);
-
                         return true;
                     }
                     break;
 
                 case "Equipment":
                     
-                    SetEquipmentOrItemBarSlot(selectedItem, selectedItem.EquipmentType());
+                    SetEquipmentItem(selectedItem, selectedItem.EquipmentType());
 
                     // then set player stats from player
 
@@ -145,77 +129,81 @@ namespace Medicraft.Systems.Managers
             return false;
         }
 
-        public bool UseItemInSlotBar(int itemId)
+        public bool UseItemInHotbar(int itemId)
         {
             InventoryBag.TryGetValue(itemId.ToString(), out InventoryItemData item);
-            SelectedInventoryItem = item;
 
             // Check if item isUsable
             if (GameGlobals.Instance.IsUsableItem(itemId))
             {
                 UseItem(item);
-                GUIManager.Instance.RefreshItemBarDisplay();
+                GUIManager.Instance.RefreshHotbarDisplay();
                 return true;
             }
 
             return false;
         }
 
-        public void SetEquipmentOrItemBarSlot(InventoryItemData item, int selectedSlot)
+        public bool SetEquipmentItem(InventoryItemData newItem, int selectedSlot)
         {
-            if (item.GetCategory().Equals("Equipment"))
+            if (newItem.GetCategory().Equals("Equipment"))
             {
                 if (selectedSlot >= 0 && selectedSlot <= 5)
                 {
-                    if (EquipmentAndBarItemSlot[selectedSlot] != null)
-                    {
-                        EquipmentAndBarItemSlot[selectedSlot].Slot = GameGlobals.Instance.DefaultInventorySlot;
-                    }
+                    var itemInSlot = InventoryBag.Values.FirstOrDefault(i => i.Slot.Equals(selectedSlot));
 
-                    EquipmentAndBarItemSlot[selectedSlot] = item;
+                    if (itemInSlot != null) itemInSlot.Slot = GameGlobals.Instance.DefaultInventorySlot;
+
+                    newItem.Slot = selectedSlot;
+                    return true;
                 }
             }
-            else
-            {
-                if (selectedSlot >= 6 && selectedSlot <= 13)
-                {
-                    if (EquipmentAndBarItemSlot[selectedSlot] != null)
-                    {
-                        EquipmentAndBarItemSlot[selectedSlot].Slot = GameGlobals.Instance.DefaultInventorySlot;
-                    }
 
-                    EquipmentAndBarItemSlot[selectedSlot] = item;
-                }
-            }
+            return false;
         }
 
-        public int SetItemBarSlot(int selectedSlot)
+        public bool SetHotbarItem(InventoryItemData newItem, int selectedSlot)
+        {
+            if (selectedSlot >= 6 && selectedSlot <= 13)
+            {
+                var itemInSlot = InventoryBag.Values.FirstOrDefault(i => i.Slot.Equals(selectedSlot));
+
+                if (itemInSlot != null) itemInSlot.Slot = GameGlobals.Instance.DefaultInventorySlot;
+
+                newItem.Slot = selectedSlot;
+                return true;
+            }
+
+            return false;
+        }
+
+        public int GetIHotbarSlot(string selectedSlot)
         {
             switch (selectedSlot)
             {
-                case 1:
-                    return ItemBarSlot_1;
+                case "Slot 1":
+                    return HotbarSlot_1;
 
-                case 2:
-                    return ItemBarSlot_2;
+                case "Slot 2":
+                    return HotbarSlot_2;
 
-                case 3:
-                    return ItemBarSlot_3;
+                case "Slot 3":
+                    return HotbarSlot_3;
 
-                case 4:
-                    return ItemBarSlot_4;
+                case "Slot 4":
+                    return HotbarSlot_4;
 
-                case 5:
-                    return ItemBarSlot_5;
+                case "Slot 5":
+                    return HotbarSlot_5;
 
-                case 6:
-                    return ItemBarSlot_6;
+                case "Slot 6":
+                    return HotbarSlot_6;
 
-                case 7:
-                    return ItemBarSlot_7;
+                case "Slot 7":
+                    return HotbarSlot_7;
 
-                case 8:
-                    return ItemBarSlot_8;
+                case "Slot 8":
+                    return HotbarSlot_8;
 
                 default:
                     break;

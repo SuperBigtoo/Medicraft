@@ -1,15 +1,12 @@
 ﻿using GeonBit.UI;
 using GeonBit.UI.Entities;
+using GeonBit.UI.Utils.Forms;
 using Medicraft.Data.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Sprites;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Medicraft.Systems.Managers
 {
@@ -19,7 +16,7 @@ namespace Medicraft.Systems.Managers
 
         private float _deltaSeconds = 0;
 
-        public const int ItemBar = 0;
+        public const int Hotbar = 0;
         public const int InventoryPanel = 1;
         public const int CharacterInspectPanel = 2;
         public const int CraftingTablePanel = 3;
@@ -30,7 +27,7 @@ namespace Medicraft.Systems.Managers
 
         private GUIManager()
         {
-            CurrentGUI = ItemBar;
+            CurrentGUI = Hotbar;
         }
 
         public void Update(GameTime gameTime)
@@ -66,8 +63,8 @@ namespace Medicraft.Systems.Managers
             UserInterface.Active.ShowCursor = false;
 
             // init all ui panel
-            // ItemBar = 0
-            InitItemBarUI();
+            // Hotbar = 0
+            InitHotbarUI();
 
             // InventoryPanel = 1
             InitInventoryUI();
@@ -80,55 +77,91 @@ namespace Medicraft.Systems.Managers
         /// <summary>
         /// Item Bar and Slot Item
         /// </summary>
-        public void InitItemBarUI()
+        public void InitHotbarUI()
         {
-            var panel = new Panel(new Vector2(443, 86), PanelSkin.None, Anchor.BottomCenter);
+            var panel = new Panel(new Vector2(500, 87), PanelSkin.None, Anchor.BottomCenter)
+            { 
+                Identifier = "hotbarItem",
+                //AdjustHeightAutomatically = true,
+            };
             Panels.Add(panel);
             UserInterface.Active.AddEntity(panel);
         }
 
-        public void RefreshItemBarDisplay()
+        public void RefreshHotbarDisplay()
         {
-            var itemBarPanel = Panels.ElementAt(ItemBar);
+            var HotbarSlot = Panels.ElementAt(Hotbar);
             
-            if (itemBarPanel.Children.Count > 0) itemBarPanel.ClearChildren();
+            HotbarSlot.ClearChildren();
 
-            var minSlotNum = InventoryManager.ItemBarSlot_1;
-            var maxSlotNum = InventoryManager.ItemBarSlot_8;
+            var minSlotNum = InventoryManager.HotbarSlot_1;
+            var maxSlotNum = InventoryManager.HotbarSlot_8;
 
-            var itemInSlot = InventoryManager.Instance.EquipmentAndBarItemSlot?.Where(
-                i => i != null && i.Slot >= minSlotNum && i.Slot <= maxSlotNum);
-
-            var offSetX = 16;
+            var offSetX = 22f;
 
             // Set Item
-            foreach (var item in itemInSlot)
+            for (int i = minSlotNum; i <= maxSlotNum; i++)
             {
-                var iconItem = new Icon(IconType.None, Anchor.BottomLeft, 0.1f, offset: new Vector2(-10, 0))
+                var itemInSlot = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(item => item.Slot.Equals(i));
+
+                if (itemInSlot != null)
                 {
-                    ItemId = item.ItemId,
-                    Count = item.Count,
-                    Slot = item.Slot,
-                    Texture = GameGlobals.Instance.GetItemTexture(item.ItemId),
-                };
+                    var iconItem = new Icon(IconType.None, Anchor.BottomLeft, 0.80f, false, offset: new Vector2(offSetX, 3f))
+                    {
+                        ItemId = itemInSlot.ItemId,
+                        Count = itemInSlot.Count,
+                        Slot = itemInSlot.Slot,
+                        Size = new Vector2(42, 42),
+                        Texture = GameGlobals.Instance.GetItemTexture(itemInSlot.ItemId),
+                    };
 
-                iconItem.AddChild(new Label(iconItem.Count.ToString(), Anchor.BottomRight, offset: new Vector2(-17f, -33))
+                    iconItem.AddChild(new Label(iconItem.Count.ToString(), Anchor.BottomRight, offset: new Vector2(-25f, -33))
+                    {
+                        Size = new Vector2(5, 5), // กำหนดขนาดของ Label
+                        Scale = 1f,
+                        ClickThrough = true,
+                    });
+
+                    HotbarSlot.AddChild(iconItem);
+                }
+                else
                 {
-                    Size = new Vector2(5, 5), // กำหนดขนาดของ Label
-                    Scale = 1f,
-                    ClickThrough = true,
-                });
+                    var iconNull = new Icon(IconType.None, Anchor.BottomLeft, 0.80f, false, offset: new Vector2(offSetX, 3f))
+                    {
+                        Locked = true,
+                        Enabled = false,
+                        Size = new Vector2(42, 42),
+                    };
 
-                itemBarPanel.AddChild(iconItem);
+                    HotbarSlot.AddChild(iconNull);
+                }
 
-                offSetX += 5;
+                offSetX += 47f;
+
+                switch (i)
+                {
+                    case InventoryManager.HotbarSlot_1: offSetX += 5f;
+                        break;
+                    case InventoryManager.HotbarSlot_2: offSetX += 5.2f;
+                        break;
+                    case InventoryManager.HotbarSlot_3:
+                    case InventoryManager.HotbarSlot_4: offSetX += 5.2f;
+                        break;
+                    case InventoryManager.HotbarSlot_5: 
+                    case InventoryManager.HotbarSlot_6: offSetX += 5.4f;
+                        break;
+                    case InventoryManager.HotbarSlot_7: offSetX += 5.5f;
+                        break;
+                    case InventoryManager.HotbarSlot_8: offSetX += 5.6f;
+                        break;
+                }
             }
 
-            foreach (var iconItem in itemBarPanel.Children.OfType<Icon>())
+            foreach (var iconItem in HotbarSlot.Children.OfType<Icon>())
             {
                 iconItem.OnClick = (Entity entity) =>
                 {
-                    InventoryManager.Instance.UseItemInSlotBar(iconItem.ItemId);
+                    InventoryManager.Instance.UseItemInHotbar(iconItem.ItemId);
                 };
             }
         }
@@ -140,19 +173,19 @@ namespace Medicraft.Systems.Managers
         public void InitInventoryUI()
         {
             // สร้าง Panel หลัก
-            var mainInvenPanel = new Panel(new Vector2(1200, 650), PanelSkin.Simple, Anchor.Center)
+            var InventoryPanel = new Panel(new Vector2(1200, 650), PanelSkin.Simple, Anchor.Center)
             {
                 Identifier = "invenMainPanel"
             };
-            Panels.Add(mainInvenPanel);
-            UserInterface.Active.AddEntity(mainInvenPanel);
+            Panels.Add(InventoryPanel);
+            UserInterface.Active.AddEntity(InventoryPanel);
 
             // สร้าง Panel สำหรับฝั่งซ้าย
             var leftInvenPanel = new Panel(new Vector2(500, 600), PanelSkin.ListBackground, Anchor.TopLeft)
             {
                 Identifier = "invenLeftPanel"
             };
-            mainInvenPanel.AddChild(leftInvenPanel);
+            InventoryPanel.AddChild(leftInvenPanel);
 
             var invenDescriptPanel = new Panel(new Vector2(450, 225), PanelSkin.Fancy, Anchor.AutoCenter)
             {
@@ -190,7 +223,7 @@ namespace Medicraft.Systems.Managers
             {
                 Identifier = "invenRightPanel"
             };
-            mainInvenPanel.AddChild(rightInvenPanel);
+            InventoryPanel.AddChild(rightInvenPanel);
 
             rightInvenPanel.AddChild(new Header("IVENTORY"));
             rightInvenPanel.AddChild(new HorizontalLine());
@@ -217,11 +250,11 @@ namespace Medicraft.Systems.Managers
 
                     // Toggle the IsOpenInventory flag
                     GameGlobals.Instance.IsOpenInventoryPanel = false;
-                    GameGlobals.Instance.IsRefreshItemBar = false;
-                    CurrentGUI = ItemBar;
+                    GameGlobals.Instance.IsRefreshHotbar = false;
+                    CurrentGUI = Hotbar;
                 }
             };
-            mainInvenPanel.AddChild(exitBtn);
+            InventoryPanel.AddChild(exitBtn);
 
             var offsetX = 64;
 
@@ -236,22 +269,52 @@ namespace Medicraft.Systems.Managers
                     InventoryManager.Instance.UseItem(currItemInv);
                 }
             };
-            mainInvenPanel.AddChild(useInvenItemButton);
+            InventoryPanel.AddChild(useInvenItemButton);
 
             offsetX += 216;
-            var setItemBarButton = new Button("Set", anchor: Anchor.BottomLeft
+            var invenSetHotbarButton = new Button("Setup Hotbar", anchor: Anchor.BottomLeft
                 , size: new Vector2(200, -1), offset: new Vector2(offsetX, -100))
             {
-                Identifier = "invenSetItemButton",
+                Identifier = "invenSetHotbarButton",
                 Enabled = false,
                 OnClick = (Entity entity) =>
                 {
                     var currItemInv = InventoryManager.Instance.SelectedInventoryItem;
-                    var slotNum = InventoryManager.Instance.SetItemBarSlot(6);
-                    InventoryManager.Instance.SetEquipmentOrItemBarSlot(currItemInv, slotNum);
+
+                    var hotbarSetupForm = new Form([
+                            new FormFieldData(FormFieldType.DropDown, "dropdown_setup_hotbar", "Hotbar Slot")
+                            {                                 
+                                ToolTipText = "Click to select a Hotbar Slot",
+                                Choices = ["Slot 1", "Slot 2", "Slot 3", "Slot 4", "Slot 5", "Slot 6", "Slot 7", "Slot 8"] 
+                            },                           
+                        ], null);                 
+
+                    GeonBit.UI.Utils.MessageBox.ShowMsgBox("Setup Hotbar Slot"
+                        , "", "Done"
+                        , extraEntities: [hotbarSetupForm.FormPanel]
+                        , onDone: () => {
+
+                            if (hotbarSetupForm.GetValue("dropdown_setup_hotbar") != null)
+                            {
+                                GeonBit.UI.Utils.MessageBox.ShowMsgBox("Setup Complete",
+                                    $"Set '{currItemInv.GetName()}' on '{hotbarSetupForm.GetValueString("dropdown_setup_hotbar")}'"
+                                );
+
+                                var output = hotbarSetupForm.GetValueString("dropdown_setup_hotbar");
+                                var slotNum = InventoryManager.Instance.GetIHotbarSlot(output);
+                                InventoryManager.Instance.SetHotbarItem(currItemInv, slotNum);
+                            }
+                            else
+                            {
+                                GeonBit.UI.Utils.MessageBox.ShowMsgBox("Setup Complete",
+                                    $"Ya didn't select a for '{currItemInv.GetName()}'"
+                                );
+                            }
+                        }
+                    );;   
                 }
             };
-            mainInvenPanel.AddChild(setItemBarButton);
+            InventoryPanel.AddChild(invenSetHotbarButton);
 
             //offsetX += 216;
             //_closeButton = new("Close", anchor: Anchor.BottomLeft, size: new Vector2(200, -1)
@@ -274,6 +337,7 @@ namespace Medicraft.Systems.Managers
             var invenRightPanel = InventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenRightPanel"));
             var listItemPanel = invenRightPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("listItemPanel"));
             var invenUseItemButton = InventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenUseItemButton"));
+            var invenSetHotbarButton = InventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenSetHotbarButton"));
 
             if (listItemPanel.Children.Count != 0)
             {
@@ -282,14 +346,25 @@ namespace Medicraft.Systems.Managers
                 SetLeftPanelDisplay(fisrtItem);
 
                 // Setup Enable or Disable the button for fisrtItem
-                InventoryManager.Instance.InventoryBag.TryGetValue(fisrtItem.ItemId.ToString(), out InventoryItemData item);
+                InventoryManager.Instance.InventoryBag.TryGetValue(fisrtItem.ItemId.ToString()
+                    , out InventoryItemData item);
                 InventoryManager.Instance.SelectedInventoryItem = item;
 
                 if (GameGlobals.Instance.IsUsableItem(fisrtItem.ItemId))
                 {
                     invenUseItemButton.Enabled = true;
+
+                    if (!GameGlobals.Instance.GetItemCategory(fisrtItem.ItemId).Equals("Equipment"))
+                    {
+                        invenSetHotbarButton.Enabled = true;
+                    }
+                    else invenSetHotbarButton.Enabled = false;
                 }
-                else invenUseItemButton.Enabled = false;
+                else
+                {
+                    invenUseItemButton.Enabled = false;
+                    invenSetHotbarButton.Enabled = true;
+                }
             }
         }
 
@@ -301,18 +376,15 @@ namespace Medicraft.Systems.Managers
             var listItemPanel = invenRightPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("listItemPanel"));
             var invenDescriptPanel = invenLeftPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenDescriptPanel"));
             var invenUseItemButton = InventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenUseItemButton"));
- 
+            var invenSetHotbarButton = InventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenSetHotbarButton"));
+
             // Clear inventory display
             listItemPanel.ClearChildren();
 
             // if true den set invisible to all entity in invenLeftPanel
             if (isClearLeftPanel)
-            {
                 foreach (var entity in invenLeftPanel.Children)
-                {
                     entity.Visible = false;
-                }
-            }
 
             //// Set item
             foreach (var item in InventoryManager.Instance.InventoryBag.Values)
@@ -344,19 +416,29 @@ namespace Medicraft.Systems.Managers
                     SetLeftPanelDisplay(iconItem);
 
                     foreach (var itemLeftPanel in invenLeftPanel.Children)
-                    {
                         itemLeftPanel.Visible = true;
-                    }
 
                     // Enable or Disable the button for each item icon
-                    InventoryManager.Instance.InventoryBag.TryGetValue(iconItem.ItemId.ToString(), out InventoryItemData item);
+                    InventoryManager.Instance.InventoryBag.TryGetValue(iconItem.ItemId.ToString()
+                        , out InventoryItemData item);
                     InventoryManager.Instance.SelectedInventoryItem = item;
 
                     if (GameGlobals.Instance.IsUsableItem(iconItem.ItemId))
                     {
                         invenUseItemButton.Enabled = true;
+
+                        if (!GameGlobals.Instance.GetItemCategory(iconItem.ItemId).Equals("Equipment"))
+                        {
+                            invenSetHotbarButton.Enabled = true;
+                        }
+                        else invenSetHotbarButton.Enabled = false;
                     }
-                    else invenUseItemButton.Enabled = false;
+                    else
+                    {
+                        invenUseItemButton.Enabled = false;
+                        invenSetHotbarButton.Enabled = true;
+                    }
+       
                 };
             }
         }

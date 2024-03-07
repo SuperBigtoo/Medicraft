@@ -113,8 +113,8 @@ namespace Medicraft.Systems.Managers
                     GameGlobals.Instance.IsOpenInventoryPanel = false;
                     if (GUIManager.Instance.CurrentGUI.Equals(GUIManager.InventoryPanel))
                     {
-                        GUIManager.Instance.CurrentGUI = GUIManager.ItemBar;
-                        GameGlobals.Instance.IsRefreshItemBar = false;
+                        GUIManager.Instance.CurrentGUI = GUIManager.Hotbar;
+                        GameGlobals.Instance.IsRefreshHotbar = false;
                     }
                     else GUIManager.Instance.CurrentGUI = GUIManager.InventoryPanel;
                 }
@@ -136,8 +136,8 @@ namespace Medicraft.Systems.Managers
                     GameGlobals.Instance.IsOpenCraftingPanel = !GameGlobals.Instance.IsOpenCraftingPanel;
                     if (GUIManager.Instance.CurrentGUI.Equals(GUIManager.CraftingTablePanel))
                     {
-                        GUIManager.Instance.CurrentGUI = GUIManager.ItemBar;
-                        GameGlobals.Instance.IsRefreshItemBar = false;
+                        GUIManager.Instance.CurrentGUI = GUIManager.Hotbar;
+                        GameGlobals.Instance.IsRefreshHotbar = false;
                     }
                     else GUIManager.Instance.CurrentGUI = GUIManager.CraftingTablePanel;
                 }
@@ -147,61 +147,124 @@ namespace Medicraft.Systems.Managers
                 }
 
                 // Select Item Bar Slot
-                if (keyboardCur.IsKeyDown(Keys.D1))
+                if (keyboardCur.IsKeyDown(Keys.D1) && !GameGlobals.Instance.SwitchSlot_1)
                 {
+                    GameGlobals.Instance.SwitchSlot_1 = true;
+
                     GameGlobals.Instance.CurrentSlotBarSelect = 0;
-                    var slotBarItem = InventoryManager.Instance.EquipmentAndBarItemSlot[InventoryManager.ItemBarSlot_1];
+                    var slotBarItem = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(
+                        i => i.Slot.Equals(InventoryManager.HotbarSlot_1));
 
-                    if (slotBarItem != null) InventoryManager.Instance.UseItemInSlotBar(slotBarItem.ItemId);
+                    if (slotBarItem != null) InventoryManager.Instance.UseItemInHotbar(slotBarItem.ItemId);
                 }
-                else if (keyboardCur.IsKeyDown(Keys.D2))
+                else if (keyboardCur.IsKeyUp(Keys.D1))
                 {
+                    GameGlobals.Instance.SwitchSlot_1 = false;
+                }
+
+                if (keyboardCur.IsKeyDown(Keys.D2) && !GameGlobals.Instance.SwitchSlot_2)
+                {
+                    GameGlobals.Instance.SwitchSlot_2 = true;
+
                     GameGlobals.Instance.CurrentSlotBarSelect = 1;
-                    var slotBarItem = InventoryManager.Instance.EquipmentAndBarItemSlot[InventoryManager.ItemBarSlot_2];
+                    var slotBarItem = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(
+                        i => i.Slot.Equals(InventoryManager.HotbarSlot_2));
 
-                    if (slotBarItem != null) InventoryManager.Instance.UseItemInSlotBar(slotBarItem.ItemId);
+                    if (slotBarItem != null) InventoryManager.Instance.UseItemInHotbar(slotBarItem.ItemId);
                 }
-                else if (keyboardCur.IsKeyDown(Keys.D3))
+                else if (keyboardCur.IsKeyUp(Keys.D2))
                 {
+                    GameGlobals.Instance.SwitchSlot_2 = false;
+                }
+
+                if (keyboardCur.IsKeyDown(Keys.D3) && !GameGlobals.Instance.SwitchSlot_3)
+                {
+                    GameGlobals.Instance.SwitchSlot_3 = true;
+
                     GameGlobals.Instance.CurrentSlotBarSelect = 2;
-                    var slotBarItem = InventoryManager.Instance.EquipmentAndBarItemSlot[InventoryManager.ItemBarSlot_3];
+                    var slotBarItem = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(
+                        i => i.Slot.Equals(InventoryManager.HotbarSlot_3));
 
-                    if (slotBarItem != null) InventoryManager.Instance.UseItemInSlotBar(slotBarItem.ItemId);
+                    if (slotBarItem != null) InventoryManager.Instance.UseItemInHotbar(slotBarItem.ItemId);
                 }
-                else if (keyboardCur.IsKeyDown(Keys.D4))
+                else if (keyboardCur.IsKeyUp(Keys.D3))
                 {
+                    GameGlobals.Instance.SwitchSlot_3 = false;
+                }
+
+                if (keyboardCur.IsKeyDown(Keys.D4) && !GameGlobals.Instance.SwitchSlot_4)
+                {
+                    GameGlobals.Instance.SwitchSlot_4 = true;
+
                     GameGlobals.Instance.CurrentSlotBarSelect = 3;
-                    var slotBarItem = InventoryManager.Instance.EquipmentAndBarItemSlot[InventoryManager.ItemBarSlot_4];
+                    var slotBarItem = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(
+                        i => i.Slot.Equals(InventoryManager.HotbarSlot_4));
 
-                    if (slotBarItem != null) InventoryManager.Instance.UseItemInSlotBar(slotBarItem.ItemId);
+                    if (slotBarItem != null) InventoryManager.Instance.UseItemInHotbar(slotBarItem.ItemId);
                 }
-                else if (keyboardCur.IsKeyDown(Keys.D5))
+                else if (keyboardCur.IsKeyUp(Keys.D4))
                 {
+                    GameGlobals.Instance.SwitchSlot_4 = false;
+                }
+
+                if (keyboardCur.IsKeyDown(Keys.D5) && !GameGlobals.Instance.SwitchSlot_5)
+                {
+                    GameGlobals.Instance.SwitchSlot_5 = true;
+
                     GameGlobals.Instance.CurrentSlotBarSelect = 4;
-                    var slotBarItem = InventoryManager.Instance.EquipmentAndBarItemSlot[InventoryManager.ItemBarSlot_5];
+                    var slotBarItem = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(
+                        i => i.Slot.Equals(InventoryManager.HotbarSlot_5));
 
-                    if (slotBarItem != null) InventoryManager.Instance.UseItemInSlotBar(slotBarItem.ItemId);
+                    if (slotBarItem != null) InventoryManager.Instance.UseItemInHotbar(slotBarItem.ItemId);
                 }
-                else if (keyboardCur.IsKeyDown(Keys.D6))
+                else if (keyboardCur.IsKeyUp(Keys.D5))
                 {
+                    GameGlobals.Instance.SwitchSlot_5 = false;
+                }
+
+                if (keyboardCur.IsKeyDown(Keys.D6) && !GameGlobals.Instance.SwitchSlot_6)
+                {
+                    GameGlobals.Instance.SwitchSlot_6 = true;
+
                     GameGlobals.Instance.CurrentSlotBarSelect = 5;
-                    var slotBarItem = InventoryManager.Instance.EquipmentAndBarItemSlot[InventoryManager.ItemBarSlot_6];
+                    var slotBarItem = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(
+                        i => i.Slot.Equals(InventoryManager.HotbarSlot_6));
 
-                    if (slotBarItem != null) InventoryManager.Instance.UseItemInSlotBar(slotBarItem.ItemId);
+                    if (slotBarItem != null) InventoryManager.Instance.UseItemInHotbar(slotBarItem.ItemId);
                 }
-                else if (keyboardCur.IsKeyDown(Keys.D7))
+                else if (keyboardCur.IsKeyUp(Keys.D6))
                 {
+                    GameGlobals.Instance.SwitchSlot_6 = false;
+                }
+
+                if (keyboardCur.IsKeyDown(Keys.D7) && !GameGlobals.Instance.SwitchSlot_7)
+                {
+                    GameGlobals.Instance.SwitchSlot_7 = true;
+
                     GameGlobals.Instance.CurrentSlotBarSelect = 6;
-                    var slotBarItem = InventoryManager.Instance.EquipmentAndBarItemSlot[InventoryManager.ItemBarSlot_7];
+                    var slotBarItem = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(
+                        i => i.Slot.Equals(InventoryManager.HotbarSlot_7));
 
-                    if (slotBarItem != null) InventoryManager.Instance.UseItemInSlotBar(slotBarItem.ItemId);
+                    if (slotBarItem != null) InventoryManager.Instance.UseItemInHotbar(slotBarItem.ItemId);
                 }
-                else if (keyboardCur.IsKeyDown(Keys.D8))
+                else if (keyboardCur.IsKeyUp(Keys.D7))
                 {
-                    GameGlobals.Instance.CurrentSlotBarSelect = 7;
-                    var slotBarItem = InventoryManager.Instance.EquipmentAndBarItemSlot[InventoryManager.ItemBarSlot_8];
+                    GameGlobals.Instance.SwitchSlot_7 = false;
+                }
 
-                    if (slotBarItem != null) InventoryManager.Instance.UseItemInSlotBar(slotBarItem.ItemId);
+                if (keyboardCur.IsKeyDown(Keys.D8) && !GameGlobals.Instance.SwitchSlot_8)
+                {
+                    GameGlobals.Instance.SwitchSlot_8 = true;
+
+                    GameGlobals.Instance.CurrentSlotBarSelect = 7;
+                    var slotBarItem = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(
+                        i => i.Slot.Equals(InventoryManager.HotbarSlot_8));
+
+                    if (slotBarItem != null) InventoryManager.Instance.UseItemInHotbar(slotBarItem.ItemId);
+                }
+                else if (keyboardCur.IsKeyUp(Keys.D8))
+                {
+                    GameGlobals.Instance.SwitchSlot_8 = false;
                 }
             }
 

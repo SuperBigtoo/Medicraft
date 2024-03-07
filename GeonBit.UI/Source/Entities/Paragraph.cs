@@ -19,6 +19,7 @@ using GeonBit.UI.DataTypes;
 using MonoGame.Extended.BitmapFonts;
 using System.Text;
 using System;
+using MonoGame.Extended;
 
 namespace GeonBit.UI.Entities
 {
@@ -85,7 +86,7 @@ namespace GeonBit.UI.Entities
         public SpriteFont FontOverride = null;
 
         // the size of a single space character with current font.
-        private Vector2 SingleCharacterSize;
+        private Size2 SingleCharacterSize;
 
         /// <summary>
         /// If true and have background color, will use the paragraph box size for it instead of the text actual size.
@@ -295,14 +296,14 @@ namespace GeonBit.UI.Entities
 
                 // get current word and its width
                 string word = words[i];
-                int wordWidth = (int)((font.MeasureString(word).X + SingleCharacterSize.X) * fontSize);
+                int wordWidth = (int)((font.MeasureString(word).X + SingleCharacterSize.Width) * fontSize);
 
                 // special case: word itself is longer than line width
                 if (BreakWordsIfMust && wordWidth >= maxLineWidth && word.Length >= 4)
                 {
                     // find breaking position
                     int breakPos = 0;
-                    int currWordWidth = (int)(SingleCharacterSize.X * fontSize);
+                    int currWordWidth = (int)(SingleCharacterSize.Width * fontSize);
                     foreach (char c in word)
                     {
                         currWordWidth += (int)(font.MeasureString(c.ToString()).X * fontSize);
@@ -403,7 +404,7 @@ namespace GeonBit.UI.Entities
                 {
                     // find breaking position
                     int breakPos = 0;
-                    int currWordWidth = (int)(SingleCharacterSize.X * fontSize);
+                    int currWordWidth = (int)(SingleCharacterSize.Width * fontSize);
                     foreach (char c in word)
                     {
                         currWordWidth += (int)(font.MeasureString(c.ToString()).Width * fontSize);
@@ -492,9 +493,9 @@ namespace GeonBit.UI.Entities
         /// Get the currently active font for this paragraph.
         /// </summary>
         /// <returns>Current font.</returns>
-        protected SpriteFont GetCurrFont()
+        protected BitmapFont GetCurrFont()
         {
-            return FontOverride ?? Resources.Instance.Fonts[(int)TextStyle];
+            return Resources.Instance.FontTA8BitBold;//FontOverride ?? Resources.Instance.Fonts[(int)TextStyle];
         }
 
         /// <summary>
@@ -515,23 +516,22 @@ namespace GeonBit.UI.Entities
         /// </summary>
         private void UpdateFontPropertiesIfNeeded()
         {
-            //SpriteFont font = GetCurrFont();
-            //if (font != _currFont)
-            //{
-            //    // mark as dirty so we'll recalculate positions and line breaks
-            //    MarkAsDirty();
+            BitmapFont font = GetCurrFont();
+            if (font != _currFont)
+            {
+                // mark as dirty so we'll recalculate positions and line breaks
+                MarkAsDirty();
 
-            //    // set font and get single character size
-            //    _currFont = font;
-            //    SingleCharacterSize = _currFont.MeasureString(" ");
+                // set font and get single character size
+                _currFont = font;
+                SingleCharacterSize = _currFont.MeasureString(" ");
 
-            //    // sanity test
-            //    if ((SingleCharacterSize.X * 2) != _currFont.MeasureString("!.").X)
-            //    {
-            //        throw new Exceptions.InvalidValueException("Cannot use non-monospace fonts!");
-            //    }
-            //}
-            _currFont = Resources.Instance.FontTA8BitBold;
+                // sanity test
+                if (SingleCharacterSize.Width != _currFont.MeasureString(" ").Width)
+                {
+                    throw new Exceptions.InvalidValueException("Cannot use non-monospace fonts!");
+                }
+            }
         }
 
         /// <summary>

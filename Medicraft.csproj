@@ -57,7 +57,6 @@
     <PackageReference Include="MonoGame.Extended.Tweening" Version="3.9.0-alpha0107" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
-    <PackageReference Include="Myra" Version="1.5.5" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="GeonBit.UI\GeonBit.UI.csproj" />
