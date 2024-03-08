@@ -86,7 +86,7 @@ namespace GeonBit.UI.Entities
         public SpriteFont FontOverride = null;
 
         // the size of a single space character with current font.
-        private Size2 SingleCharacterSize;
+        private Vector2 SingleCharacterSize;
 
         /// <summary>
         /// If true and have background color, will use the paragraph box size for it instead of the text actual size.
@@ -258,106 +258,106 @@ namespace GeonBit.UI.Entities
         /// <param name="maxLineWidth">Max line width to wrap.</param>
         /// <param name="fontSize">Font scale (scale you are about to use when drawing the text).</param>
         /// <returns>Text that is wrapped to fit the given length (by adding line breaks at the right places).</returns>
-        public string WrapText(SpriteFont font, string text, float maxLineWidth, float fontSize)
-        {
-            // invalid width (can happen during init steps - skip
-            if (maxLineWidth <= 0) { return text; }
+        //public string WrapText(SpriteFont font, string text, float maxLineWidth, float fontSize)
+        //{
+        //    // invalid width (can happen during init steps - skip
+        //    if (maxLineWidth <= 0) { return text; }
 
-            // create string to return as result
-            StringBuilder ret = new StringBuilder(string.Empty);
+        //    // create string to return as result
+        //    StringBuilder ret = new StringBuilder(string.Empty);
 
-            // if text got line breaks, break into lines and process them seperately
-            if (text.Contains("\n"))
-            {
-                // break into lines
-                string[] lines = text.Split('\n');
+        //    // if text got line breaks, break into lines and process them seperately
+        //    if (text.Contains("\n"))
+        //    {
+        //        // break into lines
+        //        string[] lines = text.Split('\n');
 
-                // iterate lines and wrap them
-                foreach (string line in lines)
-                {
-                    ret.AppendLine(WrapText(font, line, maxLineWidth, fontSize));
-                }
+        //        // iterate lines and wrap them
+        //        foreach (string line in lines)
+        //        {
+        //            ret.AppendLine(WrapText(font, line, maxLineWidth, fontSize));
+        //        }
 
-                // remove the last extra linebreak that was added in this process and return.
-                ret = ret.Remove(ret.Length - 1, 1);
-                return ret.ToString();
-            }
+        //        // remove the last extra linebreak that was added in this process and return.
+        //        ret = ret.Remove(ret.Length - 1, 1);
+        //        return ret.ToString();
+        //    }
 
-            // if got here it means we are processing a single line. break it into words.
-            // note: we use a list so we can push words in the middle while iterating (to handle words too long).
-            List<string> words = new List<string>(text.Split(' '));
+        //    // if got here it means we are processing a single line. break it into words.
+        //    // note: we use a list so we can push words in the middle while iterating (to handle words too long).
+        //    List<string> words = new List<string>(text.Split(' '));
 
-            // iterate words
-            int currWidth = 0;
-            for (int i = 0; i < words.Count; ++i)
-            {
-                // is it last word?
-                bool lastWord = (i == words.Count - 1);
+        //    // iterate words
+        //    int currWidth = 0;
+        //    for (int i = 0; i < words.Count; ++i)
+        //    {
+        //        // is it last word?
+        //        bool lastWord = (i == words.Count - 1);
 
-                // get current word and its width
-                string word = words[i];
-                int wordWidth = (int)((font.MeasureString(word).X + SingleCharacterSize.Width) * fontSize);
+        //        // get current word and its width
+        //        string word = words[i];
+        //        int wordWidth = (int)((font.MeasureString(word).X + SingleCharacterSize.X) * fontSize);
 
-                // special case: word itself is longer than line width
-                if (BreakWordsIfMust && wordWidth >= maxLineWidth && word.Length >= 4)
-                {
-                    // find breaking position
-                    int breakPos = 0;
-                    int currWordWidth = (int)(SingleCharacterSize.Width * fontSize);
-                    foreach (char c in word)
-                    {
-                        currWordWidth += (int)(font.MeasureString(c.ToString()).X * fontSize);
-                        if (currWordWidth >= maxLineWidth)
-                        {
-                            break;
-                        }
-                        breakPos++;
-                    }
-                    breakPos -= 3;
-                    if (breakPos >= word.Length - 1) { breakPos -= 2; }
-                    if (breakPos <= 0) { breakPos = 1; }
+        //        // special case: word itself is longer than line width
+        //        if (BreakWordsIfMust && wordWidth >= maxLineWidth && word.Length >= 4)
+        //        {
+        //            // find breaking position
+        //            int breakPos = 0;
+        //            int currWordWidth = (int)(SingleCharacterSize.Width * fontSize);
+        //            foreach (char c in word)
+        //            {
+        //                currWordWidth += (int)(font.MeasureString(c.ToString()).X * fontSize);
+        //                if (currWordWidth >= maxLineWidth)
+        //                {
+        //                    break;
+        //                }
+        //                breakPos++;
+        //            }
+        //            breakPos -= 3;
+        //            if (breakPos >= word.Length - 1) { breakPos -= 2; }
+        //            if (breakPos <= 0) { breakPos = 1; }
 
-                    // break the word into two and add to the list of words after this position.
-                    // we will process them in next loop iterations.
-                    string firstHalf = word.Substring(0, breakPos);
-                    string secondHalf = word.Substring(breakPos, word.Length - breakPos);
-                    if (AddHyphenWhenBreakWord) { firstHalf += '-'; }
-                    words.Insert(i + 1, firstHalf);
-                    words.Insert(i + 2, secondHalf);
+        //            // break the word into two and add to the list of words after this position.
+        //            // we will process them in next loop iterations.
+        //            string firstHalf = word.Substring(0, breakPos);
+        //            string secondHalf = word.Substring(breakPos, word.Length - breakPos);
+        //            if (AddHyphenWhenBreakWord) { firstHalf += '-'; }
+        //            words.Insert(i + 1, firstHalf);
+        //            words.Insert(i + 2, secondHalf);
 
-                    // continue to skip current word (it will be added later, with its broken parts)
-                    continue;
-                }
+        //            // continue to skip current word (it will be added later, with its broken parts)
+        //            continue;
+        //        }
 
-                // add to total width
-                currWidth += wordWidth;
+        //        // add to total width
+        //        currWidth += wordWidth;
 
-                // did overflow max width? add line break and reset current width.
-                if (currWidth >= maxLineWidth)
-                {
-                    ret.Append('\n');
-                    ret.Append(word);
-                    if (!lastWord) ret.Append(' ');
-                    currWidth = wordWidth;
-                }
-                // if didn't overflow just add the word as-is
-                else
-                {
-                    ret.Append(word);
-                    if (!lastWord) ret.Append(' ');
-                }
-            }
+        //        // did overflow max width? add line break and reset current width.
+        //        if (currWidth >= maxLineWidth)
+        //        {
+        //            ret.Append('\n');
+        //            ret.Append(word);
+        //            if (!lastWord) ret.Append(' ');
+        //            currWidth = wordWidth;
+        //        }
+        //        // if didn't overflow just add the word as-is
+        //        else
+        //        {
+        //            ret.Append(word);
+        //            if (!lastWord) ret.Append(' ');
+        //        }
+        //    }
 
-            // special case - if last word was just the size of the line, it will add a useless trailing \n and create double line breaks.
-            // remove that extra line break.
-            if (ret.Length > 0 && ret[ret.Length - 1] == '\n')
-            {
-                ret = ret.Remove(ret.Length - 1, 1);
-            }
+        //    // special case - if last word was just the size of the line, it will add a useless trailing \n and create double line breaks.
+        //    // remove that extra line break.
+        //    if (ret.Length > 0 && ret[ret.Length - 1] == '\n')
+        //    {
+        //        ret = ret.Remove(ret.Length - 1, 1);
+        //    }
 
-            // return the final wrapped text
-            return ret.ToString();
-        }
+        //    // return the final wrapped text
+        //    return ret.ToString();
+        //}
 
         public string WrapText(BitmapFont font, string text, float maxLineWidth, float fontSize)
         {
@@ -397,17 +397,19 @@ namespace GeonBit.UI.Entities
 
                 // get current word and its width
                 string word = words[i];
-                int wordWidth = (int)((font.MeasureString(word).Width) * fontSize);
+                Vector2 measureWord = font.MeasureString(word);
+                int wordWidth = (int)((measureWord.X + SingleCharacterSize.X) * fontSize);
 
                 // special case: word itself is longer than line width
                 if (BreakWordsIfMust && wordWidth >= maxLineWidth && word.Length >= 4)
                 {
                     // find breaking position
-                    int breakPos = 0;
-                    int currWordWidth = (int)(SingleCharacterSize.Width * fontSize);
+                    int breakPos = 0;              
+                    int currWordWidth = (int)(SingleCharacterSize.X * fontSize);
                     foreach (char c in word)
                     {
-                        currWordWidth += (int)(font.MeasureString(c.ToString()).Width * fontSize);
+                        Vector2 measureCurrWordWidht = font.MeasureString(c.ToString());
+                        currWordWidth += (int)(measureCurrWordWidht.X * fontSize);
                         if (currWordWidth >= maxLineWidth)
                         {
                             break;
@@ -525,9 +527,10 @@ namespace GeonBit.UI.Entities
                 // set font and get single character size
                 _currFont = font;
                 SingleCharacterSize = _currFont.MeasureString(" ");
+                Vector2 measureCurrFont = _currFont.MeasureString(" ");
 
                 // sanity test
-                if (SingleCharacterSize.Width != _currFont.MeasureString(" ").Width)
+                if (SingleCharacterSize.X != measureCurrFont.X)
                 {
                     throw new Exceptions.InvalidValueException("Cannot use non-monospace fonts!");
                 }

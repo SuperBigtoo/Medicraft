@@ -10,37 +10,34 @@ namespace Medicraft.Screens
 {
     public class SplashScreen : Screen
     {
-        private Color color;
+        private Color _color;
 
-        private Texture2D logo;
-        private BitmapFont font;
+        private Texture2D _logo;
+        private BitmapFont _font;
 
-        private bool show;
-        private int alpha;
-        private int alphaTime;
-        private int index;
-        private float timer;
-        private float timePerUpdate;
+        private bool _show;
+        private float _alpha;
+        private float _alphaTime;
+        private int _index;
 
         public SplashScreen()
         {
-            show = true;
-            timer = 0f;
-            timePerUpdate = 0.055f;
-            index = 0;
-            alpha = 0;
-            alphaTime = 0;
-            color = new Color(255, 255, 255, alpha);
+            _show = true;
+            _index = 0;
+            _alpha = 0f;
+            _alphaTime = 0;
         }
 
         public override void LoadContent()
         {
             base.LoadContent();
 
-            font = _content.Load<BitmapFont>("fonts/Mincraft_Ten/Mincraft_Ten");
-            logo = GameGlobals.Instance.Content.Load<Texture2D>("gui/logo_wakeup");
+            _font = _content.Load<BitmapFont>("fonts/Mincraft_Ten/Mincraft_Ten");
+            _logo = GameGlobals.Instance.Content.Load<Texture2D>("gui/logo_wakeup");
 
-            GameGlobals.Instance.TestIcon = logo;
+            GameGlobals.Instance.TestIcon = _logo;
+
+            GameGlobals.Instance.InitialCameraPos = GameGlobals.Instance.GameScreenCenter;
         }
 
         public override void UnloadContent()
@@ -55,46 +52,44 @@ namespace Medicraft.Screens
 
         public override void Update(GameTime gameTime)
         {
-            timer += (float)gameTime.ElapsedGameTime.Ticks / TimeSpan.TicksPerSecond;
-
             GameGlobals.Instance.PrevMouse = GameGlobals.Instance.CurMouse;
             GameGlobals.Instance.CurMouse = Mouse.GetState();
 
-            if (index == 3) timePerUpdate -= 0.01f;
-            if (timer >= timePerUpdate)
+            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (_show)
             {
-                if (show)
+                _alphaTime += deltaSeconds;
+
+                if (_alpha < 1f) _alpha += deltaSeconds * 0.5f;
+
+                if (_alphaTime >= 3f)
                 {
-                    alphaTime += 5;
-                    if (alpha < 255) alpha += 5;
-                    if (alphaTime >= 300)
+                    _show = false;
+
+                    if (_index == 3)
                     {
-                        show = false;
-                        if (index == 3) ScreenManager.Instance.LoadScreen(ScreenManager.GameScreen.TestScreen);
+                        ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.TestScreen);
                     }
                 }
-                else
+            }
+            else
+            {                                     
+                _alphaTime -= deltaSeconds;
+
+                if (_alpha > 0f && _alphaTime <= 2f) _alpha -= deltaSeconds;
+
+                if (_alphaTime <= 0f)
                 {
-                    alphaTime -= 5;
-                    if (alpha > 0) alpha -= 5;
-                    if (alphaTime <= 0)
-                    {
-                        show = true;
-                        index++;
-                        if (index == 1)
-                        {
-                            color = Color.CornflowerBlue;
-                        }
-                    }
+                    _show = true;
+                    _index++;
                 }
-                timer -= timePerUpdate;
-                color.A = (byte)alpha;
             }
 
             if (GameGlobals.Instance.CurMouse.LeftButton == ButtonState.Pressed
-                    && GameGlobals.Instance.PrevMouse.LeftButton == ButtonState.Released)
+                    && GameGlobals.Instance.PrevMouse.LeftButton == ButtonState.Released && !_index.Equals(3))
             {
-                ScreenManager.Instance.LoadScreen(ScreenManager.GameScreen.TestScreen);
+                ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.TestScreen);
             }
         }
 
@@ -102,49 +97,72 @@ namespace Medicraft.Screens
         {
             string textString1;
             string textString2;
+            string textString3;
+            string textString4;
             Vector2 textSize1;
             Vector2 textSize2;
+            Vector2 textSize3;
+            Vector2 textSize4;
             float totalHeight;
             Vector2 position;
-            switch (index)
+
+            switch (_index)
             {
                 case 0:
-                    Vector2 logoSize = new Vector2(logo.Width, logo.Height) * 0.5f;
+                    Vector2 logoSize = new Vector2(_logo.Width, _logo.Height) * 0.5f;
+
                     position = new Vector2((GameGlobals.Instance.GameScreen.X - logoSize.X) / 2
                         , (GameGlobals.Instance.GameScreen.Y - logoSize.Y) / 2);
-                    spriteBatch.Draw(logo, position, null, color, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);                 
+
+                    spriteBatch.Draw(_logo, position, null, Color.White * _alpha, 0f, Vector2.Zero, 0.5f
+                        , SpriteEffects.None, 0f);                 
                     break;
 
                 case 1:
-                    textString1 = "This game is a part of";
-                    textString2 = "Computer Game Programming : Final assignment";
-                    textSize1 = font.MeasureString(textString1);
-                    textSize2 = font.MeasureString(textString2);
+                    textString1 = "This game is part of the Special Problems";
+                    textString2 = "Study program for the Bachelor of Science degree.";
+                    textString3 = "Department of Computer Science Faculty of Science";
+                    textString4 = "King Mongkut's Institute of Technology Ladkrabang Academic year 2023";
 
-                    totalHeight = textSize1.Y + textSize2.Y;
+                    textSize1 = _font.MeasureString(textString1);
+                    textSize2 = _font.MeasureString(textString2);
+                    textSize3 = _font.MeasureString(textString3);
+                    textSize4 = _font.MeasureString(textString4);
+
+                    totalHeight = textSize1.Y + textSize2.Y + textSize3.Y + textSize4.Y;
                     position = new Vector2((GameGlobals.Instance.GameScreen.X - textSize1.X) / 2
                         , (GameGlobals.Instance.GameScreen.Y - totalHeight) / 2);                                    
 
-                    spriteBatch.DrawString(font, textString1, position, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-                    position.X += (textSize1.X - font.MeasureString(textString2).Width) / 2;
+                    spriteBatch.DrawString(_font, textString1, position, Color.DodgerBlue * _alpha, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    position.X += (textSize1.X - _font.MeasureString(textString2).Width) / 2;
                     position.Y += textSize1.Y;
-                    spriteBatch.DrawString(font, textString2, position, new Color(255, 102, 178, alpha), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+                    spriteBatch.DrawString(_font, textString2, position, Color.SlateBlue * _alpha, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    position.X += (textSize2.X - _font.MeasureString(textString3).Width) / 2;
+                    position.Y += textSize2.Y;
+
+                    spriteBatch.DrawString(_font, textString3, position, Color.DodgerBlue * _alpha, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    position.X += (textSize3.X - _font.MeasureString(textString4).Width) / 2;
+                    position.Y += textSize3.Y;
+
+                    spriteBatch.DrawString(_font, textString4, position, Color.SlateBlue * _alpha, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     break;
 
                 case 2:
                     textString1 = "Presented by";
-                    textString2 = "Phakorn Pasawast";
-                    textSize1 = font.MeasureString(textString1);
-                    textSize2 = font.MeasureString(textString2);
+                    textString2 = "Phakorn Pasawast & ";
+                    textSize1 = _font.MeasureString(textString1);
+                    textSize2 = _font.MeasureString(textString2);
 
                     totalHeight = textSize1.Y + textSize2.Y;
                     position = new Vector2((GameGlobals.Instance.GameScreen.X - textSize1.X) / 2
                         , (GameGlobals.Instance.GameScreen.Y - totalHeight) / 2);
           
-                    spriteBatch.DrawString(font, textString1, position, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-                    position.X += (textSize1.X - font.MeasureString(textString2).Width) / 2;
+                    spriteBatch.DrawString(_font, textString1, position, Color.DodgerBlue * _alpha, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    position.X += (textSize1.X - _font.MeasureString(textString2).Width) / 2;
                     position.Y += textSize1.Y;
-                    spriteBatch.DrawString(font, textString2, position, new Color(255, 102, 178, alpha), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+                    spriteBatch.DrawString(_font, textString2, position, Color.SlateBlue * _alpha, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     break;
             }
         }

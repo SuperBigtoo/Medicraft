@@ -1,4 +1,5 @@
 ﻿using Medicraft.Data;
+using Medicraft.Data.Models;
 using Medicraft.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -41,9 +42,7 @@ namespace Medicraft.Systems.Managers
 
                 // Initial Player
                 var basePlayerData = gameSave.PlayerData;
-
                 ScreenManager.Instance.CurrentMap = basePlayerData.CurrentMap;
-
                 Player = new Player(playerSprite, basePlayerData);
 
                 // Adjust HUD and camera positions
@@ -72,8 +71,8 @@ namespace Medicraft.Systems.Managers
             GameGlobals.Instance.TopLeftCornerPosition = Player.Position - GameGlobals.Instance.GameScreenCenter;
 
             // Initialize display inventory item after init Player's inventory data
-            // GUIManager.Instance.RefreshItemBarDisplay();
             GUIManager.Instance.InitInventoryItemDisplay();
+            GUIManager.Instance.InitCraftableItemDisplay();
         }
 
         public static void UpdateGameController(GameTime gameTime)
@@ -91,8 +90,9 @@ namespace Medicraft.Systems.Managers
             var mousePrev = GameGlobals.Instance.PrevMouse;
 
             // Only receive input if on PlayScreen or TestScreen
-            if (ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.TestScreen
-                || ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.PlayScreen)
+            if (!ScreenManager.Instance.IsTransitioning 
+                && (ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.TestScreen
+                || ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.Map1))
             {
                 // Save Game for Test
                 if (keyboardCur.IsKeyUp(Keys.M) && keyboardPrev.IsKeyDown(Keys.M))
@@ -101,7 +101,9 @@ namespace Medicraft.Systems.Managers
                 }
 
                 // Open Inventory
-                if (keyboardCur.IsKeyDown(Keys.I) && !GameGlobals.Instance.SwitchOpenInventoryPanel)
+                if (keyboardCur.IsKeyDown(Keys.I) && !GameGlobals.Instance.SwitchOpenInventoryPanel && !GameGlobals.Instance.IsOpenGUI
+                    || keyboardCur.IsKeyDown(Keys.I) && !GameGlobals.Instance.SwitchOpenInventoryPanel && GameGlobals.Instance.IsOpenGUI
+                        && GUIManager.Instance.CurrentGUI.Equals(GUIManager.InventoryPanel))
                 {
                     GameGlobals.Instance.SwitchOpenInventoryPanel = true;
 
@@ -124,7 +126,9 @@ namespace Medicraft.Systems.Managers
                 }
 
                 // Open Crafting Panel 
-                if (keyboardCur.IsKeyDown(Keys.O) && !GameGlobals.Instance.SwitchOpenCraftingPanel)
+                if (keyboardCur.IsKeyDown(Keys.O) && !GameGlobals.Instance.SwitchOpenCraftingPanel && !GameGlobals.Instance.IsOpenGUI
+                    || keyboardCur.IsKeyDown(Keys.O) && !GameGlobals.Instance.SwitchOpenCraftingPanel && GameGlobals.Instance.IsOpenGUI
+                        && GUIManager.Instance.CurrentGUI.Equals(GUIManager.CraftingPanel))
                 {
                     GameGlobals.Instance.SwitchOpenCraftingPanel = true;
 
@@ -133,13 +137,13 @@ namespace Medicraft.Systems.Managers
                     GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
 
                     // Toggle IsOpenCraftingPanel & refresh crafting item display       
-                    GameGlobals.Instance.IsOpenCraftingPanel = !GameGlobals.Instance.IsOpenCraftingPanel;
-                    if (GUIManager.Instance.CurrentGUI.Equals(GUIManager.CraftingTablePanel))
+                    GameGlobals.Instance.IsOpenCraftingPanel = false;
+                    if (GUIManager.Instance.CurrentGUI.Equals(GUIManager.CraftingPanel))
                     {
                         GUIManager.Instance.CurrentGUI = GUIManager.Hotbar;
                         GameGlobals.Instance.IsRefreshHotbar = false;
                     }
-                    else GUIManager.Instance.CurrentGUI = GUIManager.CraftingTablePanel;
+                    else GUIManager.Instance.CurrentGUI = GUIManager.CraftingPanel;
                 }
                 else if (keyboardCur.IsKeyUp(Keys.O))
                 {
@@ -269,7 +273,9 @@ namespace Medicraft.Systems.Managers
             }
 
             // Check if CurrentScreen is TestScreen
-            if (ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.TestScreen)
+            if (!ScreenManager.Instance.IsTransitioning
+                && (ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.TestScreen
+                || ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.Map1))
             {
                 // Debug Mode
                 if (keyboardCur.IsKeyDown(Keys.B) && !GameGlobals.Instance.SwitchDebugMode)
@@ -336,6 +342,9 @@ namespace Medicraft.Systems.Managers
 
             Player.Update(gameTime, keyboardCur, keyboardPrev, mouseCur, mousePrev);
 
+            // Update Crafting
+            CraftingManager.Instance.Update(gameTime);
+
             // Check Player HP for Deadq
             if (Player.HP <= 0 && !IsPlayerDead) IsPlayerDead = true;
 
@@ -343,11 +352,28 @@ namespace Medicraft.Systems.Managers
                 if (GameGlobals.Instance.CurMouse.LeftButton == ButtonState.Pressed
                     && GameGlobals.Instance.PrevMouse.LeftButton == ButtonState.Released)
                         RespawnPlayer();
+
+            UpdateMapPositionData();
         }
 
         public void UpdateMapPositionData()
         {
-            
+            var EnteringZoneArea = GameGlobals.Instance.EnteringZoneArea;
+            foreach (var zoneArea in EnteringZoneArea)
+            {
+                if (Player.BoundingDetectCollisions.Intersects(zoneArea.Bounds) && !ScreenManager.Instance.IsTransitioning)
+                {
+                    GameGlobals.Instance.InitialCameraPos = Player.Position;
+                    var currLoadMapAction = ScreenManager.GetLoadMapAction(zoneArea.Name);
+
+                    // if the zoneArea.Name not be found in LoadMapAction then return
+                    if (currLoadMapAction == ScreenManager.LoadMapAction.None) return;
+
+                    ScreenManager.Instance.CurrentLoadMapAction = currLoadMapAction;
+                    ScreenManager.Instance.TranstisionToScreen(ScreenManager.Instance.GetPlayScreen());
+                    break;
+                }
+            }
         }
 
         public void SetupPlayerPosition(ScreenManager.LoadMapAction loadAction)
@@ -357,15 +383,40 @@ namespace Medicraft.Systems.Managers
             var curMap = ScreenManager.Instance.CurrentMap;
             Player.PlayerData.CurrentMap = curMap;
 
-            var mapPositionData = GameGlobals.Instance.MapLocationPointDatas.Where(m => m.Name.Equals(curMap));
-            var positionData = mapPositionData.ElementAt(0).Positions.Where(p => p.Name.Equals("Respawn"));
-            var position = new Vector2(
-                (float)positionData.ElementAt(0).Value[0],
-                (float)positionData.ElementAt(0).Value[1]);
+            var mapPositionData = GameGlobals.Instance.MapLocationPointDatas
+                .FirstOrDefault(m => m.Name.Equals(curMap));
+            PositionData positionData;
+            Vector2 position = Vector2.One;
+
+            switch (loadAction)
+            {
+                default:
+
+                case ScreenManager.LoadMapAction.NewGame:        
+                    positionData = mapPositionData.Positions.FirstOrDefault(p => p.Name.Equals("Respawn"));
+                    position = new Vector2(
+                        (float)positionData.Value[0],
+                        (float)positionData.Value[1]);
+                    break;
+
+                case ScreenManager.LoadMapAction.map_1_to_Test:     // Get position in Test where map_1 to Test 
+                    positionData = mapPositionData.Positions.FirstOrDefault(p => p.Name.Equals("map_1_to_Test"));
+                    position = new Vector2(
+                        (float)positionData.Value[0],
+                        (float)positionData.Value[1]);
+                    break;
+
+                case ScreenManager.LoadMapAction.Test_to_map_1:
+                    positionData = mapPositionData.Positions.FirstOrDefault(p => p.Name.Equals("Test_to_map_1"));
+                    position = new Vector2(
+                        (float)positionData.Value[0],
+                        (float)positionData.Value[1]);
+                    break;
+            }          
 
             Player.Position = position;
 
-            // Adjust HUD and camera positions
+            //// Adjust HUD and camera positions
             GameGlobals.Instance.TopLeftCornerPosition = Player.Position - GameGlobals.Instance.GameScreenCenter;
             GameGlobals.Instance.InitialCameraPos = Player.Position;
             GameGlobals.Instance.AddingCameraPos = Vector2.Zero;

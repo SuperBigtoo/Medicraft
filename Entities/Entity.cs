@@ -414,7 +414,8 @@ namespace Medicraft.Entities
             }
 
             // Check movement according to PathFinding
-            if (!IsStunning && ((!IsKnockback && !IsAttacking) || (!IsAttacked && !IsAttacking)))
+            if (ScreenManager.Instance.IsScreenLoaded && !IsStunning 
+                && ((!IsKnockback && !IsAttacking) || (!IsAttacked && !IsAttacking)))
             {
                 if (_pathFinding.GetPath().Count != 0)
                 {
@@ -722,7 +723,8 @@ namespace Medicraft.Entities
         protected void CombatControl(float deltaSeconds)
         {
             // Do Attack
-            if (BoundingDetectEntity.Intersects(PlayerManager.Instance.Player.BoundingHitBox) && !IsAttacking && !IsStunning)
+            if (BoundingDetectEntity.Intersects(PlayerManager.Instance.Player.BoundingHitBox)
+                && ScreenManager.Instance.IsScreenLoaded && !IsAttacking && !IsStunning)
             {
                 CurrentAnimation = SpriteCycle + "_attacking";
                 Sprite.Play(CurrentAnimation);

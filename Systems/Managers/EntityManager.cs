@@ -67,12 +67,14 @@ namespace Medicraft.Systems.Managers
             StatusEffectManager.Instance.Update(gameTime);
 
             // Mob Spawner
-            _mobSpawner.Update(gameTime);
-            SpawnTime = _mobSpawner.SpawnTimer;
+            _mobSpawner?.Update(gameTime);
+
+            if (_mobSpawner != null)
+                SpawnTime = _mobSpawner.SpawnTimer;
 
             entities.RemoveAll(e => e.IsDestroyed);
 
-            _mobSpawner.Spawn();
+            _mobSpawner?.Spawn();
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -83,6 +85,11 @@ namespace Medicraft.Systems.Managers
             }
 
             PlayerManager.Instance.Player.Draw(spriteBatch);
+        }
+
+        public void ClearEntity()
+        {
+            entities.Clear();
         }
 
         public static EntityManager Instance

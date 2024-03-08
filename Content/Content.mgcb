@@ -855,6 +855,18 @@
 /processorParam:TextureFormat=Color
 /build:gui/selected_slot.png
 
+#begin gui/transition_texture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/transition_texture.png
+
 #begin item/drug_1.png
 /importer:TextureImporter
 /processor:TextureProcessor

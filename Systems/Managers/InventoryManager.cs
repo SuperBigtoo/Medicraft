@@ -27,7 +27,7 @@ namespace Medicraft.Systems.Managers
         public int MaximunCount { private set; get; }
         public int GoldCoin { private set; get; }
         public Dictionary<string, InventoryItemData> InventoryBag { private set; get; }
-        public InventoryItemData SelectedInventoryItem { set; get; }
+        public InventoryItemData InventoryItemSelected { set; get; }
 
         private static InventoryManager instance;
 
@@ -89,6 +89,7 @@ namespace Medicraft.Systems.Managers
             }
 
             HUDSystem.AddFeedItem(itemId, quantity);
+            GUIManager.Instance.RefreshHotbarDisplay();
         }
 
         public void AddGoldCoin(int goldCoin)
@@ -122,7 +123,7 @@ namespace Medicraft.Systems.Managers
                     SetEquipmentItem(selectedItem, selectedItem.EquipmentType());
 
                     // then set player stats from player
-
+                    //
                     return true;
             }
 

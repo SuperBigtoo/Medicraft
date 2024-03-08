@@ -1,10 +1,10 @@
 ﻿using GeonBit.UI;
-using GeonBit.UI.Entities;
 using Medicraft.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using System;
 
 namespace Medicraft.Systems.Managers
 {
@@ -13,7 +13,7 @@ namespace Medicraft.Systems.Managers
         private static ScreenManager instance;
 
         private SpriteBatch _spriteBatch;
-        private Screen _curScreen;
+        private Screen _curScreen, _prevScreen;
 
         public Game Game { private set; get; }
         public GraphicsDevice GraphicsDevice { private set; get; }
@@ -26,19 +26,33 @@ namespace Medicraft.Systems.Managers
             TestScreen,
             SplashScreen,
             MainMenuScreen,
-            PlayScreen
+            Map1
         }
         public GameScreen CurrentScreen { private set; get; }
+        public GameScreen ScreenTransitioningTo { private set; get; }
 
-        public string CurrentMap { set; get; }
         public enum LoadMapAction
         {
+            None,
             NewGame,
-            LoadGameSave
-        }
+            LoadGameSave,
+            Test_to_map_1,
+            map_1_to_Test
+        }     
         public LoadMapAction CurrentLoadMapAction { set; get; }
+        public string CurrentMap { set; get; }
 
-        public ScreenManager()
+        // For Transition Screen
+        public bool IsTransitioning { private set; get; } = false;
+        public bool IsScreenLoaded { private set; get; } = false;
+
+        private float _transitionTime = 1.5f; // Total transition time in seconds
+        private float _pauseTime = 0.5f; // Pause time in seconds
+        private float _transitionTimer;
+        private float _transitionRadius;
+        private const float _transitionSpeed = 30;
+
+        private ScreenManager()
         {
             _curScreen = new SplashScreen();
             CurrentScreen = GameScreen.SplashScreen;
@@ -53,9 +67,6 @@ namespace Medicraft.Systems.Managers
             Camera = new Camera(GraphicsDevice.Viewport);
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // Initialize GUI Panels
-            GUIManager.Instance.InitializeThemeAndUI(GameGlobals.Instance.BuiltinTheme);
         }
 
         public void LoadContent()
@@ -73,15 +84,57 @@ namespace Medicraft.Systems.Managers
             _curScreen?.Dispose();
         }
 
-        public void LoadScreen(GameScreen gameScreen)
+        public void TranstisionToScreen(GameScreen gameScreen)
         {
-            _curScreen?.UnloadContent();
-
             switch (gameScreen)
             {
                 case GameScreen.TestScreen:
+                    ScreenTransitioningTo = GameScreen.TestScreen;
+                    break;
+
+                case GameScreen.SplashScreen:
+                    ScreenTransitioningTo = GameScreen.SplashScreen;
+                    break;
+
+                case GameScreen.Map1:
+                    ScreenTransitioningTo = GameScreen.Map1;
+                    break;
+            }
+
+            IsTransitioning = true;
+            IsScreenLoaded = false;
+            _transitionTimer = 0f;
+            _transitionRadius = -0.01f;
+        }
+
+        public GameScreen GetPlayScreen()
+        {
+            GameScreen gameScreen = CurrentScreen;
+
+            switch (CurrentLoadMapAction)
+            {
+                case LoadMapAction.Test_to_map_1:
+                    gameScreen = GameScreen.Map1;
+                    break;
+
+                case LoadMapAction.map_1_to_Test:
+                    gameScreen = GameScreen.TestScreen;
+                    break;
+            }
+
+            return gameScreen;
+        }
+
+        private void LoadScreen()
+        {
+            _prevScreen = _curScreen;
+            _prevScreen?.UnloadContent();
+
+            switch (ScreenTransitioningTo)
+            {
+                case GameScreen.TestScreen:
                     CurrentScreen = GameScreen.TestScreen;
-                    _curScreen = new TestScreen();                  
+                    _curScreen = new TestScreen();               
                     _curScreen.LoadContent();
                     break;
 
@@ -90,77 +143,133 @@ namespace Medicraft.Systems.Managers
                     _curScreen = new SplashScreen();                 
                     _curScreen.LoadContent();
                     break;
-            }
+
+                case GameScreen.Map1:
+                    CurrentScreen = GameScreen.Map1;
+                    _curScreen = new Map1();
+                    _curScreen.LoadContent();
+                    break;
+            }       
         }
 
         public void Update(GameTime gameTime)
         {
             GameGlobals.Instance.IsGameActive = Game.IsActive;
 
-            if (GameGlobals.Instance.IsGameActive)
+            // update UI
+            UserInterface.Active.Update(gameTime);
+
+            if (!GameGlobals.Instance.IsGamePause)
             {
-                // update UI
-                UserInterface.Active.Update(gameTime);                        
+                _curScreen.Update(gameTime);
+            }
 
-                if (!GameGlobals.Instance.IsGamePause)
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed
+                    || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                        Game.Exit();
+
+            // Current GUI Panel
+            switch (GUIManager.Instance.CurrentGUI)
+            {
+                case GUIManager.Hotbar:
+                    // Item bar
+                    if (!GameGlobals.Instance.IsRefreshHotbar)
+                    {
+                        GUIManager.Instance.CurrentGUI = GUIManager.Hotbar;
+                        GUIManager.Instance.RefreshHotbarDisplay();
+                        GUIManager.Instance.UpdateAfterChangeGUI();
+
+                        GameGlobals.Instance.IsRefreshHotbar = true;
+                    }
+                    break;
+
+                case GUIManager.InventoryPanel:
+                    // Inventory
+                    if (!GameGlobals.Instance.IsOpenInventoryPanel)
+                    {
+                        GUIManager.Instance.CurrentGUI = GUIManager.InventoryPanel;
+                        GUIManager.Instance.RefreshInvenrotyItemDisplay(false);
+                        GUIManager.Instance.UpdateAfterChangeGUI();
+
+                        GameGlobals.Instance.IsOpenInventoryPanel = true;
+                    }
+                    break;
+
+                case GUIManager.CraftingPanel:
+                    // Crafting
+                    if (!GameGlobals.Instance.IsOpenCraftingPanel)
+                    {
+                        GUIManager.Instance.CurrentGUI = GUIManager.CraftingPanel;
+                        GUIManager.Instance.RefreshCraftableItemDisplay(GUIManager.Instance.CurrentCraftingList);
+                        GUIManager.Instance.UpdateAfterChangeGUI();
+
+                        GameGlobals.Instance.IsOpenCraftingPanel = true;
+                    }
+                    break;
+            }
+
+            PlayerManager.UpdateGameController(gameTime);
+
+            UpdateTransitionScreen(gameTime);
+        }
+
+        public void UpdateTransitionScreen(GameTime gameTime)
+        {
+            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (IsTransitioning)
+            {
+                _transitionTimer += deltaSeconds;
+
+                if (_transitionTimer <= _transitionTime)
                 {
-                    _curScreen.Update(gameTime);                
+                    // Transition in progress
+                    _transitionRadius += deltaSeconds * _transitionSpeed;
                 }
-                else
+                else if (_transitionTimer >= _transitionTime && _transitionTimer <= _transitionTime + _pauseTime)
                 {
-                    if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                         Game.Exit();
+                    // Pause after reaching full size and load new screen                
+                    if (!IsScreenLoaded)
+                    {
+                        LoadScreen();
+                        IsScreenLoaded = true;
+                    }
                 }
-
-                // Current GUI Panel
-                switch (GUIManager.Instance.CurrentGUI)
+                else if (_transitionTimer > _transitionTime + _pauseTime)
                 {
-                    case GUIManager.Hotbar:
-                        // Item bar
-                        if (!GameGlobals.Instance.IsRefreshHotbar)
-                        {
-                            GUIManager.Instance.CurrentGUI = GUIManager.Hotbar;
-                            GUIManager.Instance.RefreshHotbarDisplay();
-                            GUIManager.Instance.UpdateAfterChangeGUI();
-
-                            GameGlobals.Instance.IsRefreshHotbar = true;
-                        }
-                        break;
-
-                    case GUIManager.InventoryPanel:
-                        // Inventory
-                        if (!GameGlobals.Instance.IsOpenInventoryPanel)
-                        {
-                            GUIManager.Instance.CurrentGUI = GUIManager.InventoryPanel;
-                            GUIManager.Instance.RefreshInvenrotyItemDisplay(false);
-                            GUIManager.Instance.UpdateAfterChangeGUI();
-
-                            GameGlobals.Instance.IsOpenInventoryPanel = true;
-                        }
-                        break;
-
-                    case GUIManager.CraftingTablePanel:
-                        // Crafting
-                        if (!GameGlobals.Instance.IsOpenCraftingPanel)
-                        {
-
-                        }
-                        break;
+                    // Transition back in progress
+                    _transitionRadius -= deltaSeconds * _transitionSpeed;
                 }
 
-                PlayerManager.UpdateGameController(gameTime);
-            }                     
+                if (_transitionTimer >= (_transitionTime * 2) + _pauseTime)
+                {
+                    IsTransitioning = false;
+                }
+            }
         }
 
         public void Draw()
         {
-            GraphicsDevice.Clear(Color.Black);
+            // Draw UI
+            UserInterface.Active.Draw(_spriteBatch);
 
-            if (GameGlobals.Instance.IsGameActive) 
+            GraphicsDevice.Clear(Color.White);
+
+            if (CurrentScreen == GameScreen.SplashScreen)
             {
-                // Draw UI
-                UserInterface.Active.Draw(_spriteBatch);
-
+                _spriteBatch.Begin
+                (
+                    SpriteSortMode.Deferred,
+                    samplerState: SamplerState.LinearClamp,
+                    blendState: BlendState.AlphaBlend,
+                    depthStencilState: DepthStencilState.None,
+                    rasterizerState: RasterizerState.CullCounterClockwise,
+                    transformMatrix: Camera.GetTransform(
+                        GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)
+                );
+            }
+            else
+            {
                 _spriteBatch.Begin
                 (
                     SpriteSortMode.BackToFront,
@@ -169,49 +278,101 @@ namespace Medicraft.Systems.Managers
                     transformMatrix: Camera.GetTransform(
                         GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)
                 );
+            }
 
-                // Draw on Screen here
-                _curScreen.Draw(_spriteBatch);
+            // Draw on Screen here
+            _curScreen.Draw(_spriteBatch);
+            _spriteBatch.End();
+
+            // OpenGUI Panel such as Invenotory, Character Inspect and Crafting Panel
+            if (GameGlobals.Instance.IsOpenGUI)
+            {
+                _spriteBatch.Begin
+                (
+                    SpriteSortMode.Deferred,
+                    samplerState: SamplerState.LinearClamp,
+                    blendState: BlendState.AlphaBlend,
+                    depthStencilState: DepthStencilState.None,
+                    rasterizerState: RasterizerState.CullCounterClockwise,
+                    transformMatrix: Camera.GetTransform(
+                        GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)
+                );
+                // Draw Background
+                DrawBackgound(_spriteBatch, Color.Black, 0.6f);
                 _spriteBatch.End();
+            }
 
-                // OpenGUI Panel such as Invenotory, Character Inspect and Crafting Panel
-                if (GameGlobals.Instance.IsOpenGUI)
+            // Draw render UI
+            if (CurrentScreen != GameScreen.SplashScreen)
+                UserInterface.Active.DrawMainRenderTarget(_spriteBatch);
+
+            if (!GameGlobals.Instance.IsGamePause && IsScreenLoaded)
+            {
+                _spriteBatch.Begin
+                (
+                    SpriteSortMode.Deferred,
+                    samplerState: SamplerState.LinearClamp,
+                    blendState: BlendState.AlphaBlend,
+                    depthStencilState: DepthStencilState.None,
+                    rasterizerState: RasterizerState.CullCounterClockwise,
+                    transformMatrix: Camera.GetTransform(
+                        GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)
+                );
+
+                HUDSystem.DrawSelectedSlotItemBar(_spriteBatch);
+
+                _spriteBatch.End();
+            }
+
+            DrawTransitionScreen(_spriteBatch);
+        }
+
+        public void DrawTransitionScreen(SpriteBatch spriteBatch)
+        {
+            if (IsTransitioning)
+            {
+                var texture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.transition_texture);
+
+                var position = GameGlobals.Instance.InitialCameraPos;
+
+                // Draw the black circle
+                spriteBatch.Begin
+                (
+                    SpriteSortMode.Immediate,
+                    samplerState: SamplerState.LinearClamp,
+                    blendState: BlendState.AlphaBlend,
+                    depthStencilState: DepthStencilState.None,
+                    rasterizerState: RasterizerState.CullCounterClockwise,
+                    transformMatrix: Camera.GetTransform(
+                        GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));          
+
+                if (_transitionTimer < _transitionTime)
                 {
-                    _spriteBatch.Begin(
-                        SpriteSortMode.Deferred,
-                        samplerState: SamplerState.LinearClamp,
-                        blendState: BlendState.AlphaBlend,
-                        depthStencilState: DepthStencilState.None,
-                        rasterizerState: RasterizerState.CullCounterClockwise,
-                        transformMatrix: Camera.GetTransform(
-                            GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)
-                    );
-                    // Draw Background
-                    DrawBackgound(_spriteBatch, Color.Black, 0.6f);
-                    _spriteBatch.End();                
+                    // Transition in progress
+                    spriteBatch.Draw(texture
+                        , position - new Vector2((texture.Width * _transitionRadius / 2)
+                        , (texture.Height * _transitionRadius / 2))
+                        , null, Color.Black, 0f, Vector2.Zero, _transitionRadius, SpriteEffects.None, 0f);
+                }
+                else if (_transitionTimer >= _transitionTime && _transitionTimer <= _transitionTime + _pauseTime)
+                {
+                    // Pause after reaching full size
+                    spriteBatch.Draw(texture
+                        , position - new Vector2((texture.Width * _transitionRadius / 2)
+                        , (texture.Height * _transitionRadius / 2))
+                        , null, Color.Black, 0f, Vector2.Zero, _transitionRadius, SpriteEffects.None, 0f);
+                }
+                else if (_transitionTimer > _transitionTime + _pauseTime)
+                {
+                    // Transition back in progress
+                    spriteBatch.Draw(texture
+                        , position - new Vector2((texture.Width * _transitionRadius / 2)
+                        , (texture.Height * _transitionRadius / 2))
+                        , null, Color.Black, 0f, Vector2.Zero, _transitionRadius, SpriteEffects.None, 0f);
                 }
 
-                // Draw render UI
-                if (CurrentScreen == GameScreen.TestScreen || CurrentScreen == GameScreen.PlayScreen)
-                    UserInterface.Active.DrawMainRenderTarget(_spriteBatch);
-
-                if (!GameGlobals.Instance.IsGamePause)
-                {
-                    _spriteBatch.Begin(
-                        SpriteSortMode.Deferred,
-                        samplerState: SamplerState.LinearClamp,
-                        blendState: BlendState.AlphaBlend,
-                        depthStencilState: DepthStencilState.None,
-                        rasterizerState: RasterizerState.CullCounterClockwise,
-                        transformMatrix: Camera.GetTransform(
-                            GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)
-                    );
-
-                    HUDSystem.DrawSelectedSlotItemBar(_spriteBatch);
-
-                    _spriteBatch.End();
-                }
-            }        
+                spriteBatch.End();
+            }
         }
 
         public static void DrawBackgound(SpriteBatch spriteBatch, Color color, float transparency)
@@ -222,6 +383,16 @@ namespace Medicraft.Systems.Managers
                 , Instance.GraphicsDevice.Viewport.Width
                 , Instance.GraphicsDevice.Viewport.Height
                 , color * transparency);
+        }
+
+        public static LoadMapAction GetLoadMapAction(string zoneName)
+        {
+            if (Enum.TryParse(zoneName, true, out LoadMapAction enumValue))
+            {
+                return enumValue;
+            }
+
+            return LoadMapAction.None;
         }
 
         public static ScreenManager Instance

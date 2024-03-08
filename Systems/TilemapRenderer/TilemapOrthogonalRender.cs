@@ -120,13 +120,16 @@ namespace Medicraft.Systems.TilemapRenderer
 
             foreach (var o in _tileMap.ObjectGroups["EnteringZoneArea"]?.Objects)
             {
-                GameGlobals.Instance.EnteringZoneArea.Add(
-                    new RectangleF((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+                GameGlobals.Instance.EnteringZoneArea.Add(new AreaData()
+                {
+                    Name = o.Name,
+                    Bounds = new RectangleF((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height)
+                });
             }
 
             foreach (var o in _tileMap.ObjectGroups["MobPartrolArea"]?.Objects)
             {
-                GameGlobals.Instance.MobPartrolArea.Add(new PartrolAreaData() 
+                GameGlobals.Instance.MobPartrolArea.Add(new AreaData() 
                 {
                     Name = o.Name,
                     Bounds = new RectangleF((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height)

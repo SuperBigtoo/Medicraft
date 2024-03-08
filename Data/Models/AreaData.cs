@@ -2,7 +2,7 @@
 
 namespace Medicraft.Data.Models
 {
-    public class PartrolAreaData
+    public class AreaData
     {
         public string Name { get; set; }
         public RectangleF Bounds { get; set; }

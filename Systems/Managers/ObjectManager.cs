@@ -53,12 +53,14 @@ namespace Medicraft.Systems.Managers
             }
 
             // Object Spawner
-            _objectSpawner.Update(gameTime);
-            SpawnTime = _objectSpawner.SpawnTime;
+            _objectSpawner?.Update(gameTime);
+
+            if (_objectSpawner != null)
+                SpawnTime = _objectSpawner.SpawnTime;
 
             gameObjects.RemoveAll(e => e.IsDestroyed);
 
-            _objectSpawner.Spawn();
+            _objectSpawner?.Spawn();
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -67,6 +69,11 @@ namespace Medicraft.Systems.Managers
             {
                 gameObject.Draw(spriteBatch);
             }
+        }
+
+        public void ClearGameObject()
+        {
+            gameObjects.Clear();
         }
 
         public static ObjectManager Instance

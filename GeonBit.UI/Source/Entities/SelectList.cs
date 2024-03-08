@@ -92,7 +92,10 @@ namespace GeonBit.UI.Entities
         public string AddWhenClipping = "..";
 
         // icons to add next to paragraphs
-        Dictionary<int, string> _icons = new Dictionary<int, string>();
+        public Dictionary<int, string> IconsPathTexture { get; set; } = new Dictionary<int, string>();
+
+        // This one for Medicraft
+        public Dictionary<int, Texture2D> IconsTexture { get; set; } = [];
 
         /// <summary>When set to true, users cannot change the currently selected value.
         /// Note: unlike the basic entity "Locked" that prevent all input from entity and its children,
@@ -255,7 +258,8 @@ namespace GeonBit.UI.Entities
         /// </summary>
         public void ClearIcons()
         {
-            _icons.Clear();
+            IconsPathTexture.Clear();
+            IconsTexture.Clear();
         }
 
         /// <summary>
@@ -267,11 +271,24 @@ namespace GeonBit.UI.Entities
         {
             if (texturePath == null)
             {
-                if (_icons.ContainsKey(index)) { _icons.Remove(index); }
+                if (IconsPathTexture.ContainsKey(index)) { IconsPathTexture.Remove(index); }
             }
             else
             {
-                _icons[index] = texturePath;
+                IconsPathTexture[index] = texturePath;
+            }
+        }
+
+        // This one for Medicraft
+        public void SetIcon(Texture2D texture, int index)
+        {
+            if (texture == null)
+            {
+                if (IconsTexture.ContainsKey(index)) { IconsTexture.Remove(index); }
+            }
+            else
+            {
+                IconsTexture[index] = texture;
             }
         }
 
@@ -288,6 +305,20 @@ namespace GeonBit.UI.Entities
                 if (item == itemText)
                 {
                     SetIcon(texturePath, index);
+                }
+                index++;
+            }
+        }
+
+        // This one for Medicraft
+        public void SetIcon(Texture2D texture, string itemText)
+        {
+            var index = 0;
+            foreach (var item in _valuesList)
+            {
+                if (item == itemText)
+                {
+                    SetIcon(texture, index);
                 }
                 index++;
             }
@@ -779,28 +810,57 @@ namespace GeonBit.UI.Entities
                     par.Visible = true;
 
                     // set icon
-                    if (_icons.TryGetValue(item_index, out string texturePath))
+                    if (IconsPathTexture.Count != 0)
                     {
-                        // check if need to create a new icon
-                        if ((par.Children.Count == 0) || ((par.Find("__ListIcon__")?.AttachedData as string) != texturePath))
+                        if (IconsPathTexture.TryGetValue(item_index, out string texturePath))
                         {
-                            par.ClearChildren();
-                            var icon = new Image(texturePath, anchor: Anchor.CenterLeft);
-                            icon.AttachedData = texturePath;
-                            icon.Identifier = "__ListIcon__";
-                            par.AddChild(icon);
-                            var ratio = ((float)icon.Texture.Width / (float)icon.Texture.Height);
-                            var height = par.Size.Y * IconsScale;
-                            icon.Size = new Vector2(height * ratio, height);
-                            icon.Offset = new Vector2(-(icon.Size.X * 2 + IconsOffsetX), 0);
-                            par.Offset = new Vector2(icon.Size.X, 0);
-                            par.BackgroundColorOffset = new Point((int)-icon.Size.X, 0);
+                            // check if need to create a new icon
+                            if ((par.Children.Count == 0) || ((par.Find("__ListIcon__")?.AttachedData as string) != texturePath))
+                            {
+                                par.ClearChildren();
+                                var icon = new Image(texturePath, anchor: Anchor.CenterLeft);
+                                icon.AttachedData = texturePath;
+                                icon.Identifier = "__ListIcon__";
+                                par.AddChild(icon);
+                                var ratio = ((float)icon.Texture.Width / (float)icon.Texture.Height);
+                                var height = par.Size.Y * IconsScale;
+                                icon.Size = new Vector2(height * ratio, height);
+                                icon.Offset = new Vector2(-(icon.Size.X * 2 + IconsOffsetX), 0);
+                                par.Offset = new Vector2(icon.Size.X, 0);
+                                par.BackgroundColorOffset = new Point((int)-icon.Size.X, 0);
+                            }
+                        }
+                        // remove previously set icons
+                        else if (par.Children.Count > 0)
+                        {
+                            par.Find("__ListIcon__")?.RemoveFromParent();
                         }
                     }
-                    // remove previously set icons
-                    else if (par.Children.Count > 0)
+                    else if (IconsTexture.Count != 0)
                     {
-                        par.Find("__ListIcon__")?.RemoveFromParent();
+                        if (IconsTexture.TryGetValue(item_index, out Texture2D texture))
+                        {
+                            // check if need to create a new icon
+                            if ((par.Children.Count == 0) || ((par.Find("__ListIcon__")?.AttachedData as Texture2D) != texture))
+                            {
+                                par.ClearChildren();
+                                var icon = new Image(texture, anchor: Anchor.CenterLeft);
+                                icon.AttachedData = texture;
+                                icon.Identifier = "__ListIcon__";
+                                par.AddChild(icon);
+                                var ratio = ((float)icon.Texture.Width / (float)icon.Texture.Height);
+                                var height = par.Size.Y * IconsScale;
+                                icon.Size = new Vector2(height * ratio, height);
+                                icon.Offset = new Vector2(-(icon.Size.X * 2 + IconsOffsetX), 0);
+                                par.Offset = new Vector2(icon.Size.X, 0);
+                                par.BackgroundColorOffset = new Point((int)-icon.Size.X, 0);
+                            }
+                        }
+                        // remove previously set icons
+                        else if (par.Children.Count > 0)
+                        {
+                            par.Find("__ListIcon__")?.RemoveFromParent();
+                        }
                     }
 
                     // check if we need to trim size

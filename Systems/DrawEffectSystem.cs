@@ -88,7 +88,7 @@ namespace Medicraft.Systems
             return particleEffect;
         }
 
-        public static void Dispose()
+        public void Dispose()
         {
             ParticleTexture?.Dispose();
 
@@ -470,10 +470,9 @@ namespace Medicraft.Systems
         {
             var itemObject = ObjectManager.Instance.GameObjects;
 
-            foreach (var item in itemObject)
-            {
-                spriteBatch.Draw(item.ParticleEffect);
-            }   
+            if (itemObject != null || itemObject.Any())
+                foreach (var item in itemObject)
+                    spriteBatch.Draw(item.ParticleEffect);
         }
     }
 }

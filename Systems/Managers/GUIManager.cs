@@ -16,40 +16,41 @@ namespace Medicraft.Systems.Managers
 
         private float _deltaSeconds = 0;
 
+        public int CurrentGUI { get; set; }
+
         public const int Hotbar = 0;
         public const int InventoryPanel = 1;
-        public const int CharacterInspectPanel = 2;
-        public const int CraftingTablePanel = 3;
+        public const int CraftingPanel = 2;
+        public const int CharacterInspectPanel = 3;
 
-        public readonly List<Panel> Panels = [];
+        public string CurrentCraftingList { get; set; }
 
-        public int CurrentGUI { get; set; }
+        public const string ThaiTraditionalMedicine = "Thai traditional medicine";
+        public const string ConsumableItem = "Consumable item";
+        public const string Equipment = "Equipment";
+
+        // ui elements
+        private readonly List<Panel> _mainPanels = [];
 
         private GUIManager()
         {
             CurrentGUI = Hotbar;
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            _deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            CurrentCraftingList = ThaiTraditionalMedicine;
         }
 
         public void UpdateAfterChangeGUI()
         {
             // hide all panels and show current example panel
-            foreach (Panel panel in Panels)
+            foreach (Panel panel in _mainPanels)
             {
                 panel.Visible = false;
             }
 
-            Panels[CurrentGUI].Visible = true;
+            _mainPanels[CurrentGUI].Visible = true;
         }
 
         public void InitializeThemeAndUI(BuiltinThemes theme)
         {
-            // clear previous panels
-            Panels.Clear();
 
             // create and init the UI manager
             var content = new ContentManager(GameGlobals.Instance.Content.ServiceProvider, "Content");
@@ -69,6 +70,9 @@ namespace Medicraft.Systems.Managers
             // InventoryPanel = 1
             InitInventoryUI();
 
+            // Crafting = 2
+            InitCraftingUI();
+
             // update ui panel
             UpdateAfterChangeGUI();
         }
@@ -77,20 +81,20 @@ namespace Medicraft.Systems.Managers
         /// <summary>
         /// Item Bar and Slot Item
         /// </summary>
-        public void InitHotbarUI()
+        private void InitHotbarUI()
         {
             var panel = new Panel(new Vector2(500, 87), PanelSkin.None, Anchor.BottomCenter)
             { 
                 Identifier = "hotbarItem",
                 //AdjustHeightAutomatically = true,
             };
-            Panels.Add(panel);
+            _mainPanels.Add(panel);
             UserInterface.Active.AddEntity(panel);
         }
 
         public void RefreshHotbarDisplay()
         {
-            var HotbarSlot = Panels.ElementAt(Hotbar);
+            var HotbarSlot = _mainPanels.ElementAt(Hotbar);
             
             HotbarSlot.ClearChildren();
 
@@ -170,22 +174,22 @@ namespace Medicraft.Systems.Managers
         /// <summary>
         /// Inventory Panel, Display list of items in inventory and Description
         /// </summary>
-        public void InitInventoryUI()
+        private void InitInventoryUI()
         {
             // สร้าง Panel หลัก
-            var InventoryPanel = new Panel(new Vector2(1200, 650), PanelSkin.Simple, Anchor.Center)
+            var inventoryPanel = new Panel(new Vector2(1200, 650), PanelSkin.Default, Anchor.Center)
             {
                 Identifier = "invenMainPanel"
             };
-            Panels.Add(InventoryPanel);
-            UserInterface.Active.AddEntity(InventoryPanel);
+            _mainPanels.Add(inventoryPanel);
+            UserInterface.Active.AddEntity(inventoryPanel);
 
             // สร้าง Panel สำหรับฝั่งซ้าย
             var leftInvenPanel = new Panel(new Vector2(500, 600), PanelSkin.ListBackground, Anchor.TopLeft)
             {
                 Identifier = "invenLeftPanel"
             };
-            InventoryPanel.AddChild(leftInvenPanel);
+            inventoryPanel.AddChild(leftInvenPanel);
 
             var invenDescriptPanel = new Panel(new Vector2(450, 225), PanelSkin.Fancy, Anchor.AutoCenter)
             {
@@ -223,7 +227,7 @@ namespace Medicraft.Systems.Managers
             {
                 Identifier = "invenRightPanel"
             };
-            InventoryPanel.AddChild(rightInvenPanel);
+            inventoryPanel.AddChild(rightInvenPanel);
 
             rightInvenPanel.AddChild(new Header("IVENTORY"));
             rightInvenPanel.AddChild(new HorizontalLine());
@@ -237,8 +241,8 @@ namespace Medicraft.Systems.Managers
             listItemPanel.Scrollbar.AdjustMaxAutomatically = true;
             rightInvenPanel.AddChild(listItemPanel);
 
-            // add exit button
-            Button exitBtn = new("Close", anchor: Anchor.BottomRight
+            // add close button
+            var closeInventoryButton = new Button("Close", anchor: Anchor.BottomRight
                 , size: new Vector2(200, -1), offset: new Vector2(64, -100))
             {
                 OnClick = (Entity entity) =>
@@ -254,7 +258,7 @@ namespace Medicraft.Systems.Managers
                     CurrentGUI = Hotbar;
                 }
             };
-            InventoryPanel.AddChild(exitBtn);
+            inventoryPanel.AddChild(closeInventoryButton);
 
             var offsetX = 64;
 
@@ -265,11 +269,11 @@ namespace Medicraft.Systems.Managers
                 Enabled = false,
                 OnClick = (Entity entity) =>
                 {
-                    var currItemInv = InventoryManager.Instance.SelectedInventoryItem;
+                    var currItemInv = InventoryManager.Instance.InventoryItemSelected;
                     InventoryManager.Instance.UseItem(currItemInv);
                 }
             };
-            InventoryPanel.AddChild(useInvenItemButton);
+            inventoryPanel.AddChild(useInvenItemButton);
 
             offsetX += 216;
             var invenSetHotbarButton = new Button("Setup Hotbar", anchor: Anchor.BottomLeft
@@ -279,7 +283,7 @@ namespace Medicraft.Systems.Managers
                 Enabled = false,
                 OnClick = (Entity entity) =>
                 {
-                    var currItemInv = InventoryManager.Instance.SelectedInventoryItem;
+                    var currItemInv = InventoryManager.Instance.InventoryItemSelected;
 
                     var hotbarSetupForm = new Form([
                             new FormFieldData(FormFieldType.DropDown, "dropdown_setup_hotbar", "Hotbar Slot")
@@ -296,7 +300,7 @@ namespace Medicraft.Systems.Managers
 
                             if (hotbarSetupForm.GetValue("dropdown_setup_hotbar") != null)
                             {
-                                GeonBit.UI.Utils.MessageBox.ShowMsgBox("Setup Complete",
+                                GeonBit.UI.Utils.MessageBox.ShowMsgBox("Setup Hotbar Successfully",
                                     $"Set '{currItemInv.GetName()}' on '{hotbarSetupForm.GetValueString("dropdown_setup_hotbar")}'"
                                 );
 
@@ -314,18 +318,7 @@ namespace Medicraft.Systems.Managers
                     );;   
                 }
             };
-            InventoryPanel.AddChild(invenSetHotbarButton);
-
-            //offsetX += 216;
-            //_closeButton = new("Close", anchor: Anchor.BottomLeft, size: new Vector2(200, -1)
-            //  , offset: new Vector2(offsetX, -150))
-            //{
-            //    OnClick = (Entity entity) =>
-            //    {
-            //        _mainPanel.Visible = false;                  
-            //    }
-            //};
-            //UserInterface.Active.AddEntity(_closeButton);
+            inventoryPanel.AddChild(invenSetHotbarButton);
         }
 
         // Call this after initialize Player's Inventory Data
@@ -333,22 +326,22 @@ namespace Medicraft.Systems.Managers
         {
             RefreshInvenrotyItemDisplay(false);
 
-            var InventoryPanel = Panels.ElementAt(GUIManager.InventoryPanel);
-            var invenRightPanel = InventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenRightPanel"));
+            var inventoryPanel = _mainPanels.ElementAt(InventoryPanel);
+            var invenRightPanel = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenRightPanel"));
             var listItemPanel = invenRightPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("listItemPanel"));
-            var invenUseItemButton = InventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenUseItemButton"));
-            var invenSetHotbarButton = InventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenSetHotbarButton"));
+            var invenUseItemButton = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenUseItemButton"));
+            var invenSetHotbarButton = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenSetHotbarButton"));
 
             if (listItemPanel.Children.Count != 0)
             {
                 var fisrtItem = listItemPanel.Children.OfType<Icon>().ToList().ElementAt(0);
 
-                SetLeftPanelDisplay(fisrtItem);
+                SetInventoryItemDisplay(fisrtItem);
 
                 // Setup Enable or Disable the button for fisrtItem
                 InventoryManager.Instance.InventoryBag.TryGetValue(fisrtItem.ItemId.ToString()
                     , out InventoryItemData item);
-                InventoryManager.Instance.SelectedInventoryItem = item;
+                InventoryManager.Instance.InventoryItemSelected = item;
 
                 if (GameGlobals.Instance.IsUsableItem(fisrtItem.ItemId))
                 {
@@ -370,21 +363,21 @@ namespace Medicraft.Systems.Managers
 
         public void RefreshInvenrotyItemDisplay(bool isClearLeftPanel)
         {
-            var InventoryPanel = Panels.ElementAt(GUIManager.InventoryPanel);          
-            var invenRightPanel = InventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenRightPanel"));
-            var invenLeftPanel = InventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenLeftPanel"));
+            var inventoryPanel = _mainPanels.ElementAt(InventoryPanel);          
+            var invenRightPanel = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenRightPanel"));
+            var invenLeftPanel = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenLeftPanel"));
             var listItemPanel = invenRightPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("listItemPanel"));
             var invenDescriptPanel = invenLeftPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenDescriptPanel"));
-            var invenUseItemButton = InventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenUseItemButton"));
-            var invenSetHotbarButton = InventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenSetHotbarButton"));
+            var invenUseItemButton = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenUseItemButton"));
+            var invenSetHotbarButton = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenSetHotbarButton"));
 
             // Clear inventory display
             listItemPanel.ClearChildren();
 
             // if true den set invisible to all entity in invenLeftPanel
             if (isClearLeftPanel)
-                foreach (var entity in invenLeftPanel.Children)
-                    entity.Visible = false;
+                foreach (var itemLeftPanel in invenLeftPanel.Children)
+                    itemLeftPanel.Visible = false;
 
             //// Set item
             foreach (var item in InventoryManager.Instance.InventoryBag.Values)
@@ -413,7 +406,7 @@ namespace Medicraft.Systems.Managers
             {
                 iconItem.OnClick = (Entity entity) =>
                 {
-                    SetLeftPanelDisplay(iconItem);
+                    SetInventoryItemDisplay(iconItem);
 
                     foreach (var itemLeftPanel in invenLeftPanel.Children)
                         itemLeftPanel.Visible = true;
@@ -421,7 +414,8 @@ namespace Medicraft.Systems.Managers
                     // Enable or Disable the button for each item icon
                     InventoryManager.Instance.InventoryBag.TryGetValue(iconItem.ItemId.ToString()
                         , out InventoryItemData item);
-                    InventoryManager.Instance.SelectedInventoryItem = item;
+
+                    InventoryManager.Instance.InventoryItemSelected = item;
 
                     if (GameGlobals.Instance.IsUsableItem(iconItem.ItemId))
                     {
@@ -443,26 +437,457 @@ namespace Medicraft.Systems.Managers
             }
         }
 
-        public void SetLeftPanelDisplay(Icon icon)
+        private void SetInventoryItemDisplay(Icon icon)
         {
             var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(icon.ItemId));
 
-            var InventoryPanel = Panels.ElementAt(GUIManager.InventoryPanel);
-            var invenLeftPanel = InventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenLeftPanel"));
+            var inventoryPanel = _mainPanels.ElementAt(InventoryPanel);
+            var invenLeftPanel = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenLeftPanel"));
             var invenDescriptPanel = invenLeftPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenDescriptPanel"));
 
             // Clone the clicked icon and add it to the left panel
-            var itemIcon = invenLeftPanel.Children.OfType<Icon>().FirstOrDefault(i => i.Identifier.Equals("itemIcon"));
+            var itemIcon = invenLeftPanel.Children.OfType<Icon>().FirstOrDefault
+                (i => i.Identifier.Equals("itemIcon"));
             itemIcon.Texture = icon.Texture;
 
             // สร้าง Label เพื่อแสดงชื่อของไอคอน
-            var iconLabel = invenDescriptPanel.Children.OfType<Label>().FirstOrDefault(i => i.Identifier.Equals("iconLabel"));
+            var iconLabel = invenDescriptPanel.Children.OfType<Label>().FirstOrDefault
+                (i => i.Identifier.Equals("iconLabel"));
             iconLabel.Text = itemData.Name;
 
             // Description item
-            var description = invenDescriptPanel.Children.OfType<Label>().FirstOrDefault(i => i.Identifier.Equals("description"));
+            var description = invenDescriptPanel.Children.OfType<Label>().FirstOrDefault
+                (i => i.Identifier.Equals("description"));
             description.Text = itemData.Description;                 
-        }  
+        }
+
+
+        /// <summary>
+        /// Crafting Panel, Display list of craftable items that play unlocked
+        /// </summary>
+        private void InitCraftingUI()
+        {
+            // สร้าง Panel หลัก
+            var craftingPanel = new Panel(new Vector2(1400, 800), PanelSkin.Default, Anchor.Center)
+            {
+                Visible = true,
+                Identifier = "craftingMainPanel"
+            };
+            _mainPanels.Add(craftingPanel);
+            UserInterface.Active.AddEntity(craftingPanel);
+
+            // สร้าง Panel สำหรับฝั่งซ้าย
+            var leftCraftingPanel = new Panel(new Vector2(650, 660), PanelSkin.ListBackground, Anchor.TopLeft)
+            {
+                Identifier = "leftCraftingPanel"
+            };
+            craftingPanel.AddChild(leftCraftingPanel);
+
+            var craftingDescriptPanel = new Panel(new Vector2(550, 285), PanelSkin.Fancy, Anchor.AutoCenter)
+            {
+                Identifier = "craftingDescriptPanel",
+                PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll
+            };
+            craftingDescriptPanel.Scrollbar.AdjustMaxAutomatically = true;
+
+            craftingDescriptPanel.AddChild(new Label("iconLabel", Anchor.AutoCenter)
+            {
+                Size = new Vector2(250, 30), // กำหนดขนาดของ Label
+                Scale = 1.3f,
+                Identifier = "iconLabel"
+            });
+            craftingDescriptPanel.AddChild(new Label("description", Anchor.AutoInline)
+            {
+                Size = new Vector2(380, 200), // กำหนดขนาดของ Label
+                Scale = 1f,
+                WrapWords = true,
+                Identifier = "description"
+            });
+            craftingDescriptPanel.AddChild(new LineSpace());
+
+            leftCraftingPanel.AddChild(new Icon(IconType.None, Anchor.AutoCenter, 1, false)
+            {
+                Size = new Vector2(300, 300),   // ปรับขนาดของไอคอน
+                Locked = true,
+                Identifier = "itemIcon"
+            });
+            leftCraftingPanel.AddChild(new LineSpace());
+            leftCraftingPanel.AddChild(craftingDescriptPanel);
+
+            // สร้าง Panel สำหรับฝั่งขวา
+            var rightCraftingPanel = new Panel(new Vector2(650, 660), PanelSkin.ListBackground, Anchor.TopRight)
+            {
+                Identifier = "rightCraftingPanel"
+            };
+            craftingPanel.AddChild(rightCraftingPanel);
+
+            rightCraftingPanel.AddChild(new Header("CRAFTING ITEM LIST"));
+            rightCraftingPanel.AddChild(new HorizontalLine());
+            rightCraftingPanel.AddChild(new LineSpace());
+
+            var listCraftableItemPanel = new Panel(new Vector2(550, 530), PanelSkin.Fancy, Anchor.AutoCenter)
+            {
+                PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll,
+                Identifier = "listCraftableItemPanel",
+            };
+            listCraftableItemPanel.Scrollbar.AdjustMaxAutomatically = true;
+            rightCraftingPanel.AddChild(listCraftableItemPanel);
+
+            // Crafting Selected Item
+            // Panel
+            var craftingSelectItemPanel = new Panel(new Vector2(1400, 800), PanelSkin.Default, Anchor.Center)
+            {
+                Identifier = "craftingSelectItemPanel",
+                Visible = false,
+            };
+            UserInterface.Active.AddEntity(craftingSelectItemPanel);
+
+            var leftCraftingSelectItemPanel = new Panel(new Vector2(650, 660), PanelSkin.ListBackground, Anchor.TopLeft)
+            {
+                Identifier = "leftCraftingSelectItemPanel"
+            };
+            craftingSelectItemPanel.AddChild(leftCraftingSelectItemPanel);
+
+            leftCraftingSelectItemPanel.AddChild(new Icon(IconType.None, Anchor.AutoCenter, 1, false)
+            {
+                Size = new Vector2(300, 300),   // ปรับขนาดของไอคอน
+                Locked = true,
+                Identifier = "itemIcon"
+            });
+            leftCraftingSelectItemPanel.AddChild(new LineSpace(1));
+
+            var quantitySelectorPanel = new Panel(new Vector2(500, 200), PanelSkin.None, Anchor.BottomCenter)
+            {
+                Identifier = "quantitySelectorPanel"
+            };
+
+            var quantitySlider = new Slider(1, 10, SliderSkin.Fancy, Anchor.AutoCenter)
+            {
+                Identifier = "quantitySlider"
+            };
+
+            var quantityLabel = new Label("Quantity: " + quantitySlider.Min, Anchor.AutoCenter)
+            {
+                Identifier = "quantityLabel",
+                Scale = 1.2f,
+            };
+            quantitySlider.OnValueChange = (Entity entity) =>
+            {
+                quantityLabel.Text = "Quantity: " + quantitySlider.Value;
+            };
+
+            quantitySelectorPanel.AddChild(quantityLabel);
+            quantitySelectorPanel.AddChild(quantitySlider);
+
+            leftCraftingSelectItemPanel.AddChild(quantitySelectorPanel);
+
+            var rightCraftingSelectPanel = new Panel(new Vector2(650, 660), PanelSkin.None, Anchor.TopRight)
+            {
+                Identifier = "rightCraftingSelectPanel"
+            };
+            craftingSelectItemPanel.AddChild(rightCraftingSelectPanel);
+
+            rightCraftingSelectPanel.AddChild(new Header("INGREDINES"));
+            rightCraftingSelectPanel.AddChild(new HorizontalLine());
+            rightCraftingSelectPanel.AddChild(new LineSpace());
+
+            var ingredientList = new SelectList(new Vector2(550, 530), Anchor.AutoCenter, skin: PanelSkin.ListBackground)
+            {
+                Identifier = "ingredientList",
+                Padding = new Vector2(40, 16),
+                LockSelection = true
+            };         
+
+            rightCraftingSelectPanel.AddChild(ingredientList);
+
+            var closeCraftingSelectedButton = new Button("Back", anchor: Anchor.BottomRight
+                , size: new Vector2(200, -1), offset: new Vector2(64, 10))
+            {
+                Identifier = "closeCraftingSelectButton",
+                OnClick = (Entity entity) =>
+                {
+                    craftingPanel.Visible = !craftingPanel.Visible;
+                    craftingSelectItemPanel.Visible = !craftingSelectItemPanel.Visible;
+
+                    quantitySlider.Value = 1;
+                }
+            };
+            craftingSelectItemPanel.AddChild(closeCraftingSelectedButton);
+
+            var craftingSelectedButton = new Button("Craft", anchor: Anchor.BottomLeft
+                , size: new Vector2(250, -1), offset: new Vector2(200, 10))
+            {
+                Enabled = false,
+                Identifier = "craftingSelectedButton",
+                OnClick = (Entity entity) =>
+                {
+                    var itemCraftingSelected = CraftingManager.Instance.CraftingItemSelected;
+                    var itemQuantity = quantitySlider.Value;
+                    var craftableCount = CraftingManager.Instance.GetCraftableNumber(itemCraftingSelected.ItemId);
+
+                    if (craftableCount != 0 && itemQuantity <= craftableCount)
+                    {
+                        for (int i = 0; i < itemQuantity; i++)
+                            CraftingManager.Instance.CraftingItem(itemCraftingSelected.ItemId);
+                    }
+                    else return;
+
+                    GeonBit.UI.Utils.MessageBox.ShowMsgBox("Crafting Item", "Item created successfully");
+
+                    // Reset craft button
+                    var craftingSelectItemPanel = UserInterface.Active.Root.Children.FirstOrDefault
+                        (i => i.Identifier.Equals("craftingSelectItemPanel"));
+                    var craftingSelectedButton = craftingSelectItemPanel.Children.OfType<Button>().FirstOrDefault
+                        (i => i.Identifier.Equals("craftingSelectedButton"));
+
+                    var maxQuantity = CraftingManager.Instance.GetCraftableNumber(itemCraftingSelected.ItemId);
+
+                    if (maxQuantity > 0)
+                    {
+                        quantitySlider.Max = maxQuantity;
+                        quantitySlider.Enabled = true;
+                        craftingSelectedButton.Enabled = true;
+                    }
+                    else
+                    {
+                        quantitySlider.Max = 1;
+                        quantitySlider.Enabled = false;
+                        craftingSelectedButton.Enabled = false;
+                    }
+                }
+            };
+            craftingSelectItemPanel.AddChild(craftingSelectedButton);
+
+            // CraftingPanel
+            // add close button
+            var closeCraftingButton = new Button("Close", anchor: Anchor.BottomRight
+                , size: new Vector2(200, -1), offset: new Vector2(64, 10))
+            {
+                Identifier = "closeCraftingButton",
+                OnClick = (Entity entity) =>
+                {
+                    // Closing Inventory and reset current gui panel
+                    // Pause PlayScreen
+                    GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
+                    GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
+
+                    // Toggle the IsOpenCraftingPanel flag
+                    GameGlobals.Instance.IsOpenCraftingPanel = false;
+                    GameGlobals.Instance.IsRefreshHotbar = false;
+                    CurrentGUI = Hotbar;
+                }
+            };
+            craftingPanel.AddChild(closeCraftingButton);
+
+            var craftingItemButton = new Button("Craft", anchor: Anchor.BottomLeft
+                , size: new Vector2(250, -1), offset: new Vector2(200, 10))
+            {
+                Identifier = "craftingItemButton",
+                Enabled = false,
+                OnClick = (Entity entity) =>
+                {
+                    // Set display crafting item selected & indredients
+                    var itemCraftingSelected = CraftingManager.Instance.CraftingItemSelected;
+                    SetCraftingItemSelectedDisplay(itemCraftingSelected);
+                    SetItemIngredientDisplay(itemCraftingSelected);
+
+                    // Set craftable quantity
+                    var maxQuantity = CraftingManager.Instance.GetCraftableNumber(itemCraftingSelected.ItemId);
+
+                    if (maxQuantity > 0)
+                    {
+                        quantitySlider.Max = maxQuantity;
+                        quantitySlider.Enabled = true;
+                        craftingSelectedButton.Enabled = true;
+                    }
+                    else
+                    {
+                        quantitySlider.Max = 1;
+                        quantitySlider.Enabled = false;
+                        craftingSelectedButton.Enabled = false;
+                    }
+
+                    craftingPanel.Visible = !craftingPanel.Visible;
+                    craftingSelectItemPanel.Visible = !craftingSelectItemPanel.Visible;
+                }
+            };
+            craftingPanel.AddChild(craftingItemButton);
+        }
+
+        public void InitCraftableItemDisplay()
+        {
+            RefreshCraftableItemDisplay(CurrentCraftingList);
+
+            var craftingPanel = _mainPanels.ElementAt(CraftingPanel);
+            var rightCraftingPanel = craftingPanel.Children?.FirstOrDefault(e => e.Identifier.Equals("rightCraftingPanel"));
+            var listCraftableItemPanel = rightCraftingPanel.Children?.FirstOrDefault(e => e.Identifier.Equals("listCraftableItemPanel"));
+            var craftingItemButton = craftingPanel.Children?.FirstOrDefault(e => e.Identifier.Equals("craftingItemButton"));
+            var leftCraftingPanel = craftingPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("leftCraftingPanel"));
+
+            List<CraftableItemData> craftableItemList = [];
+
+            switch (CurrentCraftingList)
+            {
+                case "Thai traditional medicine":
+                    craftableItemList = CraftingManager.Instance.CraftableMedicineItem;
+                    break;
+
+                case "Consumable item":
+                    craftableItemList = CraftingManager.Instance.CraftableFoodItem;
+                    break;
+
+                case "Equipment":
+                    craftableItemList = CraftingManager.Instance.CraftableEquipmentItem;
+                    break;
+            }
+
+            if (listCraftableItemPanel.Children.Count != 0)
+            {
+                var fisrtItem = listCraftableItemPanel.Children.OfType<Icon>().ToList().ElementAt(0);
+
+                SetCraftableItemDisplay(fisrtItem);
+
+                var craftingItemselected = craftableItemList.FirstOrDefault(i => i.ItemId.Equals(fisrtItem.ItemId));
+                CraftingManager.Instance.CraftingItemSelected = craftingItemselected;
+
+                // Enable or Disable the button for each item icon
+                if (fisrtItem.Enabled) craftingItemButton.Enabled = true;
+            }
+        }
+
+        public void RefreshCraftableItemDisplay(string craftableType)
+        {
+            var craftingPanel = _mainPanels.ElementAt(CraftingPanel);
+            var rightCraftingPanel = craftingPanel.Children?.FirstOrDefault(e => e.Identifier.Equals("rightCraftingPanel"));
+            var listCraftableItemPanel = rightCraftingPanel.Children?.FirstOrDefault(e => e.Identifier.Equals("listCraftableItemPanel"));
+            var craftingItemButton = craftingPanel.Children?.FirstOrDefault(e => e.Identifier.Equals("craftingItemButton"));
+            var leftCraftingPanel = craftingPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("leftCraftingPanel"));
+
+            craftingItemButton.Enabled = false;
+
+            // Clear craftable item display
+            listCraftableItemPanel.ClearChildren();
+
+            List<CraftableItemData> craftableItemList = [];
+
+            switch (craftableType)
+            {
+                case "Thai traditional medicine":
+                    craftableItemList = CraftingManager.Instance.CraftableMedicineItem;
+                    break;
+
+                case "Consumable item":
+                    craftableItemList = CraftingManager.Instance.CraftableFoodItem;
+                    break;
+
+                case "Equipment":
+                    craftableItemList = CraftingManager.Instance.CraftableEquipmentItem;
+                    break;
+            }
+
+            // Set item
+            foreach (var item in craftableItemList)
+            {
+                // Item Icon
+                var iconItem = new Icon(IconType.None, Anchor.AutoInline, 1, true)
+                {
+                    Enabled = item.IsCraftable,
+                    ItemId = item.ItemId,
+                    Texture = GameGlobals.Instance.GetItemTexture(item.ItemId),
+                };
+
+                listCraftableItemPanel.AddChild(iconItem);
+            }
+
+            foreach (var iconItem in listCraftableItemPanel.Children.OfType<Icon>())
+            {
+                iconItem.OnClick = (Entity entity) =>
+                {
+                    SetCraftableItemDisplay(iconItem);
+
+                    var craftingItemselected = craftableItemList.FirstOrDefault(i => i.ItemId.Equals(iconItem.ItemId));
+                    CraftingManager.Instance.CraftingItemSelected = craftingItemselected;              
+
+                    // Enable or Disable the button for each item icon
+                    if (iconItem.Enabled) craftingItemButton.Enabled = true;
+                };
+            }
+        }
+
+        private void SetCraftableItemDisplay(Icon icon)
+        {
+            var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(icon.ItemId));
+
+            var craftingPanel = _mainPanels.ElementAt(CraftingPanel);
+            var leftCraftingPanel = craftingPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("leftCraftingPanel"));
+            var craftingDescriptPanel = leftCraftingPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("craftingDescriptPanel"));
+
+            // Clone the clicked icon and add it to the left panel
+            var itemIcon = leftCraftingPanel.Children.OfType<Icon>().FirstOrDefault
+                (i => i.Identifier.Equals("itemIcon"));
+            itemIcon.Texture = icon.Texture;
+
+            // สร้าง Label เพื่อแสดงชื่อของไอคอน
+            var iconLabel = craftingDescriptPanel.Children.OfType<Label>().FirstOrDefault
+                (i => i.Identifier.Equals("iconLabel"));
+            iconLabel.Text = itemData.Name;
+
+            // Description item
+            var description = craftingDescriptPanel.Children.OfType<Label>().FirstOrDefault
+                (i => i.Identifier.Equals("description"));
+            description.Text = itemData.Description;
+        }
+
+        private void SetCraftingItemSelectedDisplay(CraftableItemData itemCrafting)
+        {            
+            var craftingSelectItemPanel = UserInterface.Active.Root.Children.FirstOrDefault
+                (i => i.Identifier.Equals("craftingSelectItemPanel"));
+            var leftCraftingSelectItemPanel = craftingSelectItemPanel.Children.FirstOrDefault
+                (i => i.Identifier.Equals("leftCraftingSelectItemPanel"));
+
+            var itemIcon = leftCraftingSelectItemPanel.Children.OfType<Icon>().FirstOrDefault
+                (i => i.Identifier.Equals("itemIcon"));
+            itemIcon.Texture = GameGlobals.Instance.GetItemTexture(itemCrafting.ItemId);
+        }
+
+        private void SetItemIngredientDisplay(CraftableItemData itemCrafting)
+        {
+            var recipeData = GameGlobals.Instance.CraftingRecipeDatas.FirstOrDefault
+                (i => i.RecipeId.Equals(itemCrafting.ItemId));
+
+            var craftingSelectItemPanel = UserInterface.Active.Root.Children.FirstOrDefault
+                (i => i.Identifier.Equals("craftingSelectItemPanel"));
+            var rightCraftingSelectPanel = craftingSelectItemPanel.Children.FirstOrDefault
+                (i => i.Identifier.Equals("rightCraftingSelectPanel"));
+            var ingredientList = rightCraftingSelectPanel.Children.OfType<SelectList>().FirstOrDefault
+                (i => i.Identifier.Equals("ingredientList"));
+
+            ingredientList.ClearItems();
+
+            foreach (var ingredient in recipeData.Ingredients)
+            {
+                // Add ingredient of selected crafting item
+                string ingLabel = "";
+
+                var isItemFound = InventoryManager.Instance.InventoryBag.TryGetValue(
+                    ingredient.ItemId.ToString(), out InventoryItemData itemData);
+
+                if (isItemFound)
+                {
+                    if (itemData.Count < ingredient.Quantity)
+                    {
+                        var count = itemData.Count - ingredient.Quantity;
+                        ingLabel = ingredient.Name + " x " + ingredient.Quantity + " (-" + count + ")";
+                    }
+                    else ingLabel = ingredient.Name + " x " + ingredient.Quantity + " (" + itemData.Count + ")";
+                }
+                else ingLabel = ingredient.Name + " x " + ingredient.Quantity + " (-" + ingredient.Quantity + ")";
+
+                ingredientList.AddItem(ingLabel);
+                ingredientList.IconsScale *= 1f;
+                ingredientList.SetIcon(GameGlobals.Instance.GetItemTexture(ingredient.ItemId), ingLabel);
+            }
+        }      
 
         public static GUIManager Instance
         {

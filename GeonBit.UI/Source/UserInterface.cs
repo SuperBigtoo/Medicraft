@@ -656,7 +656,6 @@ namespace GeonBit.UI
                 // if didn't create a new render target, clear it
                 else
                 {
-                    //spriteBatch.GraphicsDevice.SetRenderTarget(_renderTarget);
                     spriteBatch.GraphicsDevice.SetRenderTarget(_renderTarget);
                     spriteBatch.GraphicsDevice.Clear(Color.Transparent);
                 }

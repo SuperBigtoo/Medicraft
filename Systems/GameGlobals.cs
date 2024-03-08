@@ -1,7 +1,6 @@
 ﻿using GeonBit.UI;
 using Medicraft.Data;
 using Medicraft.Data.Models;
-using Medicraft.GameObjects;
 using Medicraft.Systems.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -12,7 +11,6 @@ using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
-using MonoGame.Extended.Timers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,8 +43,7 @@ namespace Medicraft.Systems
         public bool ShowInsufficientSign { set; get; }
         public bool IsFullScreen { set; get; }
         public bool SwitchFullScreen { set; get; }
-        public bool IsShowPath { set; get; }
-        public bool IsTransitionFinished { set; get; }
+        public bool IsShowPath { set; get; }  
         public bool IsEnteringBossFight { set; get; }
         public float TotalPlayTime { set; get; }
         public int MaxLevel { set; get; }
@@ -127,8 +124,8 @@ namespace Medicraft.Systems
         public List<RectangleF> BottomLayerObject { private set; get; }
         public List<RectangleF> CraftingTableArea { private set; get; }
         public List<RectangleF> SavingTableArea { private set; get; }
-        public List<RectangleF> EnteringZoneArea { private set; get; }
-        public List<PartrolAreaData> MobPartrolArea { private set; get; }
+        public List<AreaData> EnteringZoneArea { private set; get; }
+        public List<AreaData> MobPartrolArea { private set; get; }
         public float TopEntityDepth { private set; get; }
         public float MiddleEntityDepth { private set; get; }
         public float BottomEntityDepth { private set; get; }
@@ -201,7 +198,8 @@ namespace Medicraft.Systems
             normal_skill_pic,
             passive_skill_gui,
             passive_skill_gui_alpha,
-            passive_skill_pic
+            passive_skill_pic,
+            transition_texture
         }
 
         private readonly Dictionary<GuiTextureName, int> guiTextureIndices = new()
@@ -240,6 +238,7 @@ namespace Medicraft.Systems
             { GuiTextureName.passive_skill_gui, 31},
             { GuiTextureName.passive_skill_gui_alpha, 32},
             { GuiTextureName.passive_skill_pic, 33},
+            { GuiTextureName.transition_texture, 34},
         };
 
         // For Testing
@@ -266,6 +265,9 @@ namespace Medicraft.Systems
             SwitchOpenInventoryPanel = false;
             IsOpenInventoryPanel = false;
 
+            SwitchOpenCraftingPanel = false;
+            IsOpenCraftingPanel = false;
+
             SwitchDebugMode = false;
             IsDebugMode = false;
 
@@ -277,7 +279,6 @@ namespace Medicraft.Systems
             SwitchFullScreen = false;
 
             IsFullScreen = false;
-            IsTransitionFinished = true;
 
             // hotbar switch
             SwitchSlot_1 = false;
@@ -445,6 +446,10 @@ namespace Medicraft.Systems
             GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_gui"));                  // 31. passive_skill_gui
             GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_gui_alpha"));            // 32. passive_skill_gui_alpha
             GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_pic"));                  // 33. passive_skill_pic
+            GuiTextures.Add(Content.Load<Texture2D>("gui/transition_texture"));                  // 34. transition_texture
+
+            // Initialize GUI Panels
+            GUIManager.Instance.InitializeThemeAndUI(GameGlobals.Instance.BuiltinTheme);
 
             // Gonna do this one in LoadSave Screen
             // Initialize Player Data

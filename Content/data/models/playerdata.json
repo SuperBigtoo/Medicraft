@@ -14,47 +14,119 @@
     "Inventory": [
       {
         "ItemId": 0,
-        "Count": 2,
+        "Count": 100,
         "Slot": 999
       },
       {
         "ItemId": 1,
-        "Count": 2,
+        "Count": 100,
+        "Slot": 999
+      },
+      {
+        "ItemId": 2,
+        "Count": 100,
+        "Slot": 999
+      },
+      {
+        "ItemId": 15,
+        "Count": 100,
+        "Slot": 999
+      },
+      {
+        "ItemId": 25,
+        "Count": 100,
+        "Slot": 999
+      },
+      {
+        "ItemId": 26,
+        "Count": 100,
+        "Slot": 999
+      },
+      {
+        "ItemId": 27,
+        "Count": 100,
+        "Slot": 999
+      },
+      {
+        "ItemId": 28,
+        "Count": 100,
+        "Slot": 999
+      },
+      {
+        "ItemId": 29,
+        "Count": 100,
+        "Slot": 999
+      },
+      {
+        "ItemId": 52,
+        "Count": 100,
+        "Slot": 999
+      },
+      {
+        "ItemId": 56,
+        "Count": 100,
+        "Slot": 999
+      },
+      {
+        "ItemId": 84,
+        "Count": 100,
+        "Slot": 999
+      },
+      {
+        "ItemId": 123,
+        "Count": 100,
+        "Slot": 999
+      },
+      {
+        "ItemId": 124,
+        "Count": 100,
+        "Slot": 999
+      },
+      {
+        "ItemId": 125,
+        "Count": 100,
+        "Slot": 999
+      },
+      {
+        "ItemId": 127,
+        "Count": 100,
+        "Slot": 999
+      },
+      {
+        "ItemId": 128,
+        "Count": 100,
         "Slot": 999
       }
     ]
   },
-  "MedicineProgressionData": {
-    "Medicine_200": false,
-    "Medicine_201": false,
-    "Medicine_202": false,
-    "Medicine_203": false,
-    "Medicine_204": false,
-    "Medicine_205": false,
-    "Medicine_206": false,
-    "Medicine_207": false,
-    "Medicine_208": false,
-    "Medicine_209": false,
-    "Medicine_210": false,
-    "Medicine_211": false,
-    "Medicine_212": false,
-    "Medicine_213": false,
-    "Medicine_214": false,
-    "Medicine_215": false,
-    "Medicine_216": false,
-    "Medicine_217": false,
-    "Medicine_218": false,
-    "Medicine_219": false,
-    "Medicine_220": false,
-    "Medicine_221": false,
-    "Medicine_222": false,
-    "Medicine_223": false,
-    "Medicine_224": false,
-    "Medicine_225": false,
-    "Medicine_226": false,
-    "Medicine_227": false,
-    "Medicine_228": false,
-    "Medicine_229": false
+  "ItemCraftingProgression": {
+    "ThaiTraditionalMedicine": [
+      {
+        "ItemId": 200,
+        "Name": "ยาเขียวหอม",
+        "IsCraftable": true
+      },
+      {
+        "ItemId": 201,
+        "Name": "ยาจันทน์ลีลา",
+        "IsCraftable": true
+      },
+      {
+        "ItemId": 202,
+        "Name": "ยาประสะจันทร์แดง",
+        "IsCraftable": false
+      },
+      {
+        "ItemId": 203,
+        "Name": "ยาประสะเปราะใหญ่",
+        "IsCraftable": false
+      },
+      {
+        "ItemId": 204,
+        "Name": "ยาห้าราก",
+        "IsCraftable": false
+      }
+    ]
   },
   "ChapterProgressionData": {
     "Chapter_1": {

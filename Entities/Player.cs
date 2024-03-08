@@ -231,7 +231,7 @@ namespace Medicraft.Entities
             _initHudPos = GameGlobals.Instance.TopLeftCornerPosition;
             _initCamPos = GameGlobals.Instance.AddingCameraPos;                                             
 
-            if (!IsAttacking)
+            if (!IsAttacking && !IsStunning && ScreenManager.Instance.IsScreenLoaded)
             {
                 if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
                 {
@@ -312,7 +312,9 @@ namespace Medicraft.Entities
             , MouseState mouseCur, MouseState mousePrev)
         {
             // Normal Hit
-            if (!IsAttacking && mouseCur.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released
+            if (ScreenManager.Instance.IsScreenLoaded && !IsAttacking && !IsStunning
+                && mouseCur.LeftButton == ButtonState.Pressed
+                && mousePrev.LeftButton == ButtonState.Released
                 || !IsAttacking && keyboardCur.IsKeyDown(Keys.Space))
             {
                 CurrentAnimation = SpriteCycle + "_attacking_normal_hit";
