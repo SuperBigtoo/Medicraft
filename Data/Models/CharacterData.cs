@@ -13,4 +13,12 @@
         public int Speed { get; set; }
         public double Evasion { get; set; }
     }
+
+    public class SkillDescriptionData
+    {
+        public int SkillId { get; set; }
+        public string Name { get; set; }
+        public int Level { get; set; }
+        public string Description { get; set; }
+    }
 }

@@ -22,7 +22,7 @@ namespace Medicraft.Screens
         private TmxMap _tileMap;
 
         private HUDSystem _hudSystem;
-        private DrawEffectSystem _drawEffectSystem;
+        //private DrawEffectSystem _drawEffectSystem;
 
         private List<EntityData> _entityDatas;
         private MobSpawner _mobSpawner;
@@ -91,7 +91,7 @@ namespace Medicraft.Screens
 
         public override void Dispose()
         {
-            _drawEffectSystem?.Dispose();
+            //_drawEffectSystem?.Dispose();
 
             base.Dispose();
         }
@@ -104,7 +104,7 @@ namespace Medicraft.Screens
 
             _tileMapRender?.Update(gameTime);
 
-            _drawEffectSystem?.Update(gameTime);
+            //_drawEffectSystem?.Update(gameTime);
 
             _hudSystem?.Update(gameTime);
         }
@@ -120,7 +120,7 @@ namespace Medicraft.Screens
                 _tileMapRender?.Draw(spriteBatch);
             }
 
-            _drawEffectSystem?.Draw(spriteBatch);
+            //_drawEffectSystem?.Draw(spriteBatch);
 
             _hudSystem?.Draw(spriteBatch);
         }

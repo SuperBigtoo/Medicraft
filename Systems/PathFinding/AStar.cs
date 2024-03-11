@@ -206,16 +206,26 @@ namespace Medicraft.Systems.PathFinding
             Texture2D pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
             pixelTexture.SetData(new Color[] { Color.White });
 
+            var playerPos = PlayerManager.Instance.Player.Position;         
+            var gameScreenX = ScreenManager.Instance.GraphicsDevice.Viewport.Width * 1.25;
+            var gameScreenY = ScreenManager.Instance.GraphicsDevice.Viewport.Height * 1.25;       
+
             // Draw tiles by Color based on type if are not blank tiles
             for (int row = 0; row < NUM_ROWS; row++)
             {
                 for (int col = 0; col < NUM_COLUMNS; col++)
                 {
-                    // Only draw non blank tiles
-                    if (map[row, col].tileType != BLANK)
+                    var lengthX = MathF.Abs(col * TILE_SIZE - playerPos.X);
+                    var lengthY = MathF.Abs(row * TILE_SIZE - playerPos.Y);
+
+                    if (lengthX <= gameScreenX && lengthY <= gameScreenY)
                     {
-                        spriteBatch.Draw(pixelTexture, map[row, col].rec, map[row, col].color);
-                    }
+                        // Only draw non blank tiles
+                        if (map[row, col].tileType != BLANK)
+                        {
+                            spriteBatch.Draw(pixelTexture, map[row, col].rec, map[row, col].color);
+                        }
+                    }  
                 }
             }
         }
@@ -225,13 +235,21 @@ namespace Medicraft.Systems.PathFinding
             Texture2D pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
             pixelTexture.SetData(new Color[] { Color.White });
 
+            var playerPos = PlayerManager.Instance.Player.Position;
+            var gameScreenX = ScreenManager.Instance.GraphicsDevice.Viewport.Width * 1.25;
+            var gameScreenY = ScreenManager.Instance.GraphicsDevice.Viewport.Height * 1.25;
+
             // Only draw the path if neccessary
             if (path.Count > 0)
             {
                 // Draw each Node of the path in the chosen color
                 for (int i = 0; i < path.Count; i++)
                 {
-                    spriteBatch.Draw(pixelTexture, path[i].rec, Color.Orange);
+                    var lengthX = MathF.Abs((path[i].rec.X * TILE_SIZE) - playerPos.X);
+                    var lengthY = MathF.Abs((path[i].rec.Y * TILE_SIZE) - playerPos.Y);
+
+                    if (lengthX <= gameScreenX && lengthY <= gameScreenY)
+                        spriteBatch.Draw(pixelTexture, path[i].rec, Color.Orange);
                 }
             }
         }
@@ -241,7 +259,15 @@ namespace Medicraft.Systems.PathFinding
             Texture2D pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
             pixelTexture.SetData(new Color[] { Color.White });
 
-            spriteBatch.Draw(pixelTexture, new Rectangle(x, y, length, lineWidth), color);
+            var playerPos = PlayerManager.Instance.Player.Position;
+            var gameScreenX = ScreenManager.Instance.GraphicsDevice.Viewport.Width * 1.25;
+            var gameScreenY = ScreenManager.Instance.GraphicsDevice.Viewport.Height * 1.25;
+
+            var lengthX = MathF.Abs((x * TILE_SIZE) - playerPos.X);
+            var lengthY = MathF.Abs((y * TILE_SIZE) - playerPos.Y);
+
+            if (lengthX <= gameScreenX && lengthY <= gameScreenY)
+                spriteBatch.Draw(pixelTexture, new Rectangle(x, y, length, lineWidth), color);
         }
 
         private void DrawVLine(SpriteBatch spriteBatch, int x, int y, int length, int lineWidth, Color color)
@@ -249,7 +275,15 @@ namespace Medicraft.Systems.PathFinding
             Texture2D pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
             pixelTexture.SetData(new Color[] { Color.White });
 
-            spriteBatch.Draw(pixelTexture, new Rectangle(x, y, lineWidth, length), color);
+            var playerPos = PlayerManager.Instance.Player.Position;
+            var gameScreenX = ScreenManager.Instance.GraphicsDevice.Viewport.Width * 1.25;
+            var gameScreenY = ScreenManager.Instance.GraphicsDevice.Viewport.Height * 1.25;
+
+            var lengthX = MathF.Abs((x * TILE_SIZE) - playerPos.X);
+            var lengthY = MathF.Abs((y * TILE_SIZE) - playerPos.Y);
+
+            if (lengthX <= gameScreenX && lengthY <= gameScreenY)
+                spriteBatch.Draw(pixelTexture, new Rectangle(x, y, lineWidth, length), color);
         }
 
         private void DrawGrid(SpriteBatch spriteBatch)

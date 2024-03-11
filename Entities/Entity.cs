@@ -377,24 +377,15 @@ namespace Medicraft.Entities
 
         protected virtual void SetCharacterStats(CharacterData charData, int level)
         {
-            ATK = charData.ATK + ((level - 1) * 2);
-            MaxHP = (int)(charData.HP + ((level - 1) * (charData.HP * 0.1)));
-            HP = MaxHP;
-            DEF = (float)charData.DEF_Percent;
-            Crit = (float)charData.Crit_Percent;
-            CritDMG = (float)charData.CritDMG_Percent;
-            Speed = charData.Speed;
-            Evasion = (float)charData.Evasion;
-
-            BaseATK = ATK;
-            BaseMaxHP = MaxHP;
-            BaseMaxMana = MaxMana;
-            BaseManaRegenRate = ManaRegenRate;
-            BaseDEF = DEF;
-            BaseCrit = Crit;
-            BaseCritDMG = CritDMG;
-            BaseEvasion = Evasion;
-            BaseSpeed = Speed;
+            BaseATK = ATK = charData.ATK + ((level - 1) * 2);
+            BaseMaxHP = MaxHP = HP = (int)(charData.HP + ((level - 1) * (charData.HP * 0.1)));
+            BaseMaxMana = MaxMana = Mana = (float)(100f + ((level - 1) * (100f * 0.05)));
+            BaseManaRegenRate = ManaRegenRate = 0.5f;
+            BaseDEF = DEF = (float)charData.DEF_Percent;
+            BaseCrit = Crit = (float)charData.Crit_Percent;
+            BaseCritDMG = CritDMG = (float)charData.CritDMG_Percent;
+            BaseSpeed = Speed = charData.Speed;
+            BaseEvasion = Evasion = (float)charData.Evasion;
         }
 
         // Knowing this MovementControl, CombatControl and some methods below this is for Mobs only

@@ -150,7 +150,7 @@ namespace Medicraft.Screens
 
                 case 2:
                     textString1 = "Presented by";
-                    textString2 = "Phakorn Pasawast & ";
+                    textString2 = "Phakorn Pasawast & Wanatchaporn Sanguanchua";
                     textSize1 = _font.MeasureString(textString1);
                     textSize2 = _font.MeasureString(textString2);
 

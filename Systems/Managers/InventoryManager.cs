@@ -1,4 +1,5 @@
 ﻿using Medicraft.Data.Models;
+using Medicraft.Entities;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -123,25 +124,26 @@ namespace Medicraft.Systems.Managers
                     SetEquipmentItem(selectedItem, selectedItem.EquipmentType());
 
                     // then set player stats from player
-                    //
+                    PlayerManager.Instance.RefreshEquipmentStats(true);
+
+                    GUIManager.Instance.RefreshInvenrotyItemDisplay(true);
                     return true;
             }
 
             return false;
         }
 
-        public bool UseItemInHotbar(int itemId)
+        public bool UnEquip(InventoryItemData equipmentItem)
         {
-            InventoryBag.TryGetValue(itemId.ToString(), out InventoryItemData item);
-
-            // Check if item isUsable
-            if (GameGlobals.Instance.IsUsableItem(itemId))
+            if (equipmentItem != null)
             {
-                UseItem(item);
-                GUIManager.Instance.RefreshHotbarDisplay();
+                // For dis one, gonna refresh da stats before changing the slot of equipment item
+                PlayerManager.Instance.RefreshEquipmentStats(false);
+
+                equipmentItem.Slot = GameGlobals.Instance.DefaultInventorySlot;
+                
                 return true;
             }
-
             return false;
         }
 
@@ -159,7 +161,20 @@ namespace Medicraft.Systems.Managers
                     return true;
                 }
             }
+            return false;
+        }
 
+        public bool UseItemInHotbar(int itemId)
+        {
+            InventoryBag.TryGetValue(itemId.ToString(), out InventoryItemData item);
+
+            // Check if item isUsable
+            if (GameGlobals.Instance.IsUsableItem(itemId))
+            {
+                UseItem(item);
+                GUIManager.Instance.RefreshHotbarDisplay();
+                return true;
+            }
             return false;
         }
 
@@ -172,9 +187,10 @@ namespace Medicraft.Systems.Managers
                 if (itemInSlot != null) itemInSlot.Slot = GameGlobals.Instance.DefaultInventorySlot;
 
                 newItem.Slot = selectedSlot;
+
+                GUIManager.Instance.RefreshInvenrotyItemDisplay(true);
                 return true;
             }
-
             return false;
         }
 
@@ -209,7 +225,6 @@ namespace Medicraft.Systems.Managers
                 default:
                     break;
             }
-
             return GameGlobals.Instance.DefaultInventorySlot;
         }
 

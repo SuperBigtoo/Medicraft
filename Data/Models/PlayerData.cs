@@ -7,8 +7,11 @@ namespace Medicraft.Data.Models
         public int CharId { get; set; }
         public int Level { get; set; }
         public int EXP { get; set; }
+        public int CurrentHP { get; set; }
+        public int CurrentMana { get; set; }
         public string CurrentMap { get; set; }
         public double[] Position { get; set; }
+        public int SkillPoint { get; set; }
         public AbilityData Abilities { get; set; }
         public InventoryData InventoryData { get; set; }
         public ItemCraftingProgressionData ItemCraftingProgression { get; set; }
@@ -36,7 +39,6 @@ namespace Medicraft.Data.Models
     public class CraftableItemData()
     {
         public int ItemId { get; set; }
-        public string Name { get; set; }
         public bool IsCraftable { get; set; }
     }
 

@@ -12,19 +12,16 @@ namespace Medicraft.Systems
     public class HUDSystem
     {
         private Vector2 _topLeftCorner;
-
-        private readonly AnimatedSprite _spriteItemPack;
-
         private readonly float _insufficientTime = 3f;
+        private float _insufficientTimer;
+        public static float _deltaSeconds;
 
-        private float _deltaSeconds, _insufficientTimer;
+        private bool _nextFeed;
 
-        private bool _nextFeed;      
-
+        private readonly AnimatedSprite _spriteItemPack = new AnimatedSprite(GameGlobals.Instance.ItemsPackSprites);         
+            
         public HUDSystem()
         {
-            _spriteItemPack = new AnimatedSprite(GameGlobals.Instance.ItemsPackSprites);           
-
             _nextFeed = false;
             _insufficientTimer = _insufficientTime;
         }
@@ -159,39 +156,74 @@ namespace Medicraft.Systems
                 var FontTA8BitBold = GameGlobals.Instance.FontTA8BitBold;
 
                 spriteBatch.DrawString(FontTA8BitBold, $"Level: {PlayerManager.Instance.Player.Level}"
-                    , new Vector2(55f, 225f) + _topLeftCorner, Color.White, clippingRectangle: rect);
+                    , new Vector2(55f, 225f) + _topLeftCorner, Color.Magenta, clippingRectangle: rect);
 
                 spriteBatch.DrawString(FontTA8BitBold
                     , $"EXP: {PlayerManager.Instance.Player.EXP} | EXPMaxCap: {PlayerManager.Instance.Player.EXPMaxCap}"
-                    , new Vector2(55f, 240f) + _topLeftCorner, Color.White, clippingRectangle: rect);
+                    , new Vector2(55f, 240f) + _topLeftCorner, Color.Magenta, clippingRectangle: rect);
 
                 spriteBatch.DrawString(FontTA8BitBold, $"Player ATK: {PlayerManager.Instance.Player.ATK}"
-                    , new Vector2(55f, 260f) + _topLeftCorner, Color.White, clippingRectangle: rect);
+                    , new Vector2(55f, 260f) + _topLeftCorner, Color.Magenta, clippingRectangle: rect);
 
                 spriteBatch.DrawString(FontTA8BitBold, $"Player Crit: {PlayerManager.Instance.Player.Crit}"
-                    , new Vector2(55f, 275f) + _topLeftCorner, Color.White, clippingRectangle: rect);
+                    , new Vector2(55f, 275f) + _topLeftCorner, Color.Magenta, clippingRectangle: rect);
 
                 spriteBatch.DrawString(FontTA8BitBold, $"Player CritDMG: {PlayerManager.Instance.Player.CritDMG}"
-                    , new Vector2(55f, 290f) + _topLeftCorner, Color.White, clippingRectangle: rect);
+                    , new Vector2(55f, 290f) + _topLeftCorner, Color.Magenta, clippingRectangle: rect);
 
                 spriteBatch.DrawString(FontTA8BitBold, $"Player DEF: {PlayerManager.Instance.Player.DEF}"
-                    , new Vector2(55f, 305f) + _topLeftCorner, Color.White, clippingRectangle: rect);
+                    , new Vector2(55f, 305f) + _topLeftCorner, Color.Magenta, clippingRectangle: rect);
 
                 spriteBatch.DrawString(FontTA8BitBold, $"Cooldown Normal Skill: {PlayerManager.Instance.Player.NormalCooldownTimer}"
-                    , new Vector2(55f, 335f) + _topLeftCorner, Color.White);
+                    , new Vector2(55f, 335f) + _topLeftCorner, Color.Magenta);
 
                 spriteBatch.DrawString(FontTA8BitBold, $"Cooldown Normal Skill: {PlayerManager.Instance.Player.BurstCooldownTimer}"
-                    , new Vector2(55f, 350f) + _topLeftCorner, Color.White);
+                    , new Vector2(55f, 350f) + _topLeftCorner, Color.Magenta);
 
                 spriteBatch.DrawString(FontTA8BitBold, $"Cooldown Normal Skill: {PlayerManager.Instance.Player.PassiveCooldownTimer}"
-                    , new Vector2(55f, 365f) + _topLeftCorner, Color.White);
+                    , new Vector2(55f, 365f) + _topLeftCorner, Color.Magenta);
 
                 spriteBatch.DrawString(FontTA8BitBold, $"Normal Skill Time: {PlayerManager.Instance.Player.NormalActivatedTimer}"
-                    , new Vector2(55f, 400f) + _topLeftCorner, Color.White);
+                    , new Vector2(55f, 400f) + _topLeftCorner, Color.Magenta);
 
                 spriteBatch.DrawString(FontTA8BitBold, $"Passive Skill Time: {PlayerManager.Instance.Player.PassiveActivatedTimer}"
-                    , new Vector2(55f, 415f) + _topLeftCorner, Color.White);
+                    , new Vector2(55f, 415f) + _topLeftCorner, Color.Magenta);
             }
+        }
+
+        public static void DrawOnTopUI(SpriteBatch spriteBatch)
+        {
+            switch (GUIManager.Instance.CurrentGUI)
+            {
+                case GUIManager.Hotbar:
+                    // Selected Slot
+                    var selectedSlot = GameGlobals.Instance.CurrentSlotBarSelect;
+                    spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.selected_slot)
+                        , new Vector2(511f + (52 * selectedSlot), 820f) + GameGlobals.Instance.TopLeftCornerPosition, null
+                        , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    break;
+
+                case GUIManager.InspectPanel:
+                    // Character Sprite
+                    if (GameGlobals.Instance.IsOpenInspectPanel && GUIManager.Instance.IsCharacterTabSelected
+                        && !GUIManager.Instance.IsShowConfirmBox)
+                    {
+                        var playerSprite = GUIManager.Instance.PlayerSprite;
+
+                        //playerSprite.Depth = 0.1f;
+                        playerSprite.Play("default_idle");
+                        playerSprite.Update(_deltaSeconds);
+
+                        var transform = new Transform2()
+                        {
+                            Scale = new Vector2(1.5f, 1.5f),
+                            Rotation = 0f,
+                            Position = PlayerManager.Instance.Player.Position - new Vector2(200f, 50f)
+                        };
+                        spriteBatch.Draw(playerSprite, transform);
+                    }                  
+                    break;
+            }              
         }
 
         private void DrawHealthBarGUI(SpriteBatch spriteBatch)
@@ -331,16 +363,7 @@ namespace Medicraft.Systems
                     , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);          
             }
         }
-
-        public static void DrawSelectedSlotItemBar(SpriteBatch spriteBatch)
-        {
-            // Selected Slot
-            var selectedSlot = GameGlobals.Instance.CurrentSlotBarSelect;
-            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.selected_slot)
-                , new Vector2(511f + (52 * selectedSlot), 820f) + GameGlobals.Instance.TopLeftCornerPosition, null
-                , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-        }
-
+   
         private void DrawLevelGUI(SpriteBatch spriteBatch)
         {
             // Level Gui
@@ -540,7 +563,7 @@ namespace Medicraft.Systems
             var entities = EntityManager.Instance.Entities;
             var FontSensation = GameGlobals.Instance.FontSensation;
 
-            foreach (var entity in entities.Where(e => !e.IsDestroyed 
+            foreach (var entity in entities.Where(e => !e.IsDestroyed && e.IsAggro
                 && e.EntityType == Entities.Entity.EntityTypes.Hostile && e.HP > 0))
             {
                 var entityPos = entity.Position;

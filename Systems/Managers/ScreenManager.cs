@@ -46,8 +46,8 @@ namespace Medicraft.Systems.Managers
         public bool IsTransitioning { private set; get; } = false;
         public bool IsScreenLoaded { private set; get; } = false;
 
-        private float _transitionTime = 1.5f; // Total transition time in seconds
-        private float _pauseTime = 0.5f; // Pause time in seconds
+        private readonly float _transitionTime = 1.5f; // Total transition time in seconds
+        private readonly float _pauseTime = 0.5f; // Pause time in seconds
         private float _transitionTimer;
         private float _transitionRadius;
         private const float _transitionSpeed = 30;
@@ -61,8 +61,8 @@ namespace Medicraft.Systems.Managers
         public void Initialize(Game game, GraphicsDeviceManager graphicsDeviceManager)
         {
             Game = game;
-            GraphicsDevice = game.GraphicsDevice;
             GraphicsDeviceManager = graphicsDeviceManager;
+            GraphicsDevice = game.GraphicsDevice;      
             Window = game.Window;
             Camera = new Camera(GraphicsDevice.Viewport);
 
@@ -140,7 +140,7 @@ namespace Medicraft.Systems.Managers
 
                 case GameScreen.SplashScreen:
                     CurrentScreen = GameScreen.SplashScreen;
-                    _curScreen = new SplashScreen();                 
+                    _curScreen = new SplashScreen();               
                     _curScreen.LoadContent();
                     break;
 
@@ -155,6 +155,9 @@ namespace Medicraft.Systems.Managers
         public void Update(GameTime gameTime)
         {
             GameGlobals.Instance.IsGameActive = Game.IsActive;
+
+            if (Game.IsActive)
+                PlayerManager.UpdateGameController(gameTime);
 
             // update UI
             UserInterface.Active.Update(gameTime);
@@ -206,9 +209,20 @@ namespace Medicraft.Systems.Managers
                         GameGlobals.Instance.IsOpenCraftingPanel = true;
                     }
                     break;
-            }
 
-            PlayerManager.UpdateGameController(gameTime);
+                case GUIManager.InspectPanel:
+                    // Inspecting Character
+                    if (!GameGlobals.Instance.IsOpenInspectPanel)
+                    {
+                        GUIManager.Instance.CurrentGUI = GUIManager.InspectPanel;
+                        GUIManager.Instance.PlayerSprite = new(GameGlobals.Instance.PlayerSpriteSheet);
+                        GUIManager.Instance.RefreshInspectCharacterDisply();
+                        GUIManager.Instance.UpdateAfterChangeGUI();
+
+                        GameGlobals.Instance.IsOpenInspectPanel = true;
+                    }
+                    break;
+            }
 
             UpdateTransitionScreen(gameTime);
         }
@@ -251,12 +265,12 @@ namespace Medicraft.Systems.Managers
         public void Draw()
         {
             // Draw UI
-            UserInterface.Active.Draw(_spriteBatch);
-
-            GraphicsDevice.Clear(Color.White);
+            UserInterface.Active.Draw(_spriteBatch);       
 
             if (CurrentScreen == GameScreen.SplashScreen)
             {
+                GraphicsDevice.Clear(Color.White);
+
                 _spriteBatch.Begin
                 (
                     SpriteSortMode.Deferred,
@@ -270,6 +284,8 @@ namespace Medicraft.Systems.Managers
             }
             else
             {
+                GraphicsDevice.Clear(Color.Black);
+
                 _spriteBatch.Begin
                 (
                     SpriteSortMode.BackToFront,
@@ -306,7 +322,8 @@ namespace Medicraft.Systems.Managers
             if (CurrentScreen != GameScreen.SplashScreen)
                 UserInterface.Active.DrawMainRenderTarget(_spriteBatch);
 
-            if (!GameGlobals.Instance.IsGamePause && IsScreenLoaded)
+            // Draw Selected Item on Hotbar
+            if (IsScreenLoaded)
             {
                 _spriteBatch.Begin
                 (
@@ -319,11 +336,12 @@ namespace Medicraft.Systems.Managers
                         GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)
                 );
 
-                HUDSystem.DrawSelectedSlotItemBar(_spriteBatch);
+                HUDSystem.DrawOnTopUI(_spriteBatch);
 
                 _spriteBatch.End();
             }
 
+            // For transition game screen
             DrawTransitionScreen(_spriteBatch);
         }
 

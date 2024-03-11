@@ -19,7 +19,14 @@ namespace Medicraft.Data
             DateTime dateTime = DateTime.Now;
             string dateTimeString = dateTime.ToString().Replace(' ', '_');
 
-            // Get Player Position
+            // Set current Stats
+            PlayerManager.Instance.Player.PlayerData.Level = PlayerManager.Instance.Player.Level;
+            PlayerManager.Instance.Player.PlayerData.EXP = PlayerManager.Instance.Player.EXP;
+            PlayerManager.Instance.Player.PlayerData.CurrentHP = PlayerManager.Instance.Player.HP;
+            PlayerManager.Instance.Player.PlayerData.CurrentMana = (int)PlayerManager.Instance.Player.Mana;
+            PlayerManager.Instance.Player.PlayerData.CurrentMap = ScreenManager.Instance.CurrentMap;
+
+            // Set Player Position
             PlayerManager.Instance.Player.PlayerData.Position[0] = PlayerManager.Instance.Player.Position.X;
             PlayerManager.Instance.Player.PlayerData.Position[1] = PlayerManager.Instance.Player.Position.Y;
 
@@ -127,4 +134,13 @@ namespace Medicraft.Data
 
     // Reader Item Effect Datas: item_effects.json
     public class ItemEffectDataReader : JsonContentTypeReader<List<ItemEffectData>> { }
+
+    // Reader Equipment Item Stats Datas: equipment_stats.json
+    public class EquipmentStatsDataReader : JsonContentTypeReader<List<EquipmentStatsData>> { }
+
+    // Reader Character Skill Description Datas: character_skills.json
+    public class SkillDescriptionDataReader : JsonContentTypeReader<List<SkillDescriptionData>> { }
+
+    //Reader Medicine Description Datas: medicine_description.json
+    public class MedicineDescriptionDataReader : JsonContentTypeReader<List<MedicineDescriptionData>> { }
 }

@@ -1,13 +1,16 @@
 ﻿{
   "CharId": 0,
-  "Level": 1,
+  "Level": 20,
   "EXP": 0,
+  "CurrentHP": 100,
+  "CurrentMana": 100,
   "CurrentMap": "Test",
   "Position": [ 0, 0 ],
+  "SkillPoint": 9,
   "Abilities": {
     "NormalSkillLevel": 1,
-    "BurstSkillLevel": 1,
-    "PassiveSkillLevel": 1
+    "BurstSkillLevel": 10,
+    "PassiveSkillLevel": 9
   },
   "InventoryData": {
     "GoldCoin": 10,
@@ -96,6 +99,91 @@
         "ItemId": 128,
         "Count": 100,
         "Slot": 999
+      },
+      {
+        "ItemId": 300,
+        "Count": 5,
+        "Slot": 999
+      },
+      {
+        "ItemId": 301,
+        "Count": 5,
+        "Slot": 999
+      },
+      {
+        "ItemId": 302,
+        "Count": 5,
+        "Slot": 999
+      },
+      {
+        "ItemId": 303,
+        "Count": 5,
+        "Slot": 999
+      },
+      {
+        "ItemId": 304,
+        "Count": 5,
+        "Slot": 999
+      },
+      {
+        "ItemId": 305,
+        "Count": 5,
+        "Slot": 999
+      },
+      {
+        "ItemId": 306,
+        "Count": 5,
+        "Slot": 999
+      },
+      {
+        "ItemId": 307,
+        "Count": 5,
+        "Slot": 999
+      },
+      {
+        "ItemId": 308,
+        "Count": 5,
+        "Slot": 999
+      },
+      {
+        "ItemId": 309,
+        "Count": 5,
+        "Slot": 999
+      },
+      {
+        "ItemId": 310,
+        "Count": 5,
+        "Slot": 999
+      },
+      {
+        "ItemId": 311,
+        "Count": 5,
+        "Slot": 999
+      },
+      {
+        "ItemId": 312,
+        "Count": 5,
+        "Slot": 999
+      },
+      {
+        "ItemId": 313,
+        "Count": 5,
+        "Slot": 999
+      },
+      {
+        "ItemId": 400,
+        "Count": 1,
+        "Slot": 0
+      },
+      {
+        "ItemId": 402,
+        "Count": 1,
+        "Slot": 2
+      },
+      {
+        "ItemId": 405,
+        "Count": 1,
+        "Slot": 5
       }
     ]
   },
@@ -103,27 +191,22 @@
     "ThaiTraditionalMedicine": [
       {
         "ItemId": 200,
-        "Name": "ยาเขียวหอม",
         "IsCraftable": true
       },
       {
         "ItemId": 201,
-        "Name": "ยาจันทน์ลีลา",
         "IsCraftable": true
       },
       {
         "ItemId": 202,
-        "Name": "ยาประสะจันทร์แดง",
         "IsCraftable": false
       },
       {
         "ItemId": 203,
-        "Name": "ยาประสะเปราะใหญ่",
         "IsCraftable": false
       },
       {
         "ItemId": 204,
-        "Name": "ยาห้าราก",
         "IsCraftable": false
       }
     ]

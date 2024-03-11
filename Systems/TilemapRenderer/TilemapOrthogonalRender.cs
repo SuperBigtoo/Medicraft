@@ -1,4 +1,5 @@
 ﻿using Medicraft.Data.Models;
+using Medicraft.Systems.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -295,7 +296,7 @@ namespace Medicraft.Systems.TilemapRenderer
         private void DrawTile(SpriteBatch spriteBatch, int gid, int index, int i, int j
             , float topLayerDepth, float middleLayerDepth, float bottomLayerDepth, float layerDepthBackground)
         {
-            var tilesetRec = Rectangle.Empty;
+            Rectangle tilesetRec = Rectangle.Empty;
 
             // Check if the tile is animated
             if (_tileAnimationsId.Contains(gid))
@@ -323,25 +324,35 @@ namespace Medicraft.Systems.TilemapRenderer
 
             var tileRec = new Rectangle(x, y, _tileWidth[index], _tileHeight[index]);
 
-            if (_tileMap.TileLayers[i].Name.Equals("TopLayerObject"))
+            // Check Rendering if x y is far from Player position less den Screen width*1.25 and height*1.25
+            var playerPos = PlayerManager.Instance.Player.Position;
+            var lengthX = MathF.Abs(x - playerPos.X);
+            var lengthY = MathF.Abs(y - playerPos.Y);
+            var gameScreenX = ScreenManager.Instance.GraphicsDevice.Viewport.Width * 1.25;
+            var gameScreenY = ScreenManager.Instance.GraphicsDevice.Viewport.Height * 1.25;
+
+            if (lengthX <= gameScreenX && lengthY <= gameScreenY)
             {
-                spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
-                    , Vector2.Zero, SpriteEffects.None, topLayerDepth);
-            }
-            else if (_tileMap.TileLayers[i].Name.Equals("MiddleLayerObject"))
-            {
-                spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
-                    , Vector2.Zero, SpriteEffects.None, middleLayerDepth);
-            }
-            else if (_tileMap.TileLayers[i].Name.Equals("BottomLayerObject"))
-            {
-                spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
-                    , Vector2.Zero, SpriteEffects.None, bottomLayerDepth);
-            }
-            else
-            {
-                spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
-                    , Vector2.Zero, SpriteEffects.None, layerDepthBackground);
+                if (_tileMap.TileLayers[i].Name.Equals("TopLayerObject"))
+                {
+                    spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
+                        , Vector2.Zero, SpriteEffects.None, topLayerDepth);
+                }
+                else if (_tileMap.TileLayers[i].Name.Equals("MiddleLayerObject"))
+                {
+                    spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
+                        , Vector2.Zero, SpriteEffects.None, middleLayerDepth);
+                }
+                else if (_tileMap.TileLayers[i].Name.Equals("BottomLayerObject"))
+                {
+                    spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
+                        , Vector2.Zero, SpriteEffects.None, bottomLayerDepth);
+                }
+                else
+                {
+                    spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
+                        , Vector2.Zero, SpriteEffects.None, layerDepthBackground);
+                }
             }
         }
 

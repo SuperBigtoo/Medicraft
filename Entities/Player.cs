@@ -128,23 +128,11 @@ namespace Medicraft.Entities
 
         protected override void InitializeCharacterData(int charId, int level)
         {           
-            base.InitializeCharacterData(charId, level);
+            base.InitializeCharacterData(charId, level);       
 
-            MaxMana = (float)(100f + ((level - 1) * (100f * 0.05)));
-            Mana = MaxMana;
-            ManaRegenRate = 0.5f;
-
-            BaseATK = ATK;
-            BaseMaxHP = MaxHP;
-            BaseMaxMana = MaxMana;
-            BaseManaRegenRate = ManaRegenRate;
-            BaseDEF = DEF;
-            BaseCrit = Crit;
-            BaseCritDMG = CritDMG;
-            BaseEvasion = Evasion;
-            BaseSpeed = Speed;
-
-            // gonna calculate character stats with the equipment's stats too
+            // Set current HP & Mana
+            HP = PlayerData.CurrentHP;
+            Mana = PlayerData.CurrentMana;
         }
 
         // Update Player
@@ -216,7 +204,7 @@ namespace Medicraft.Entities
         public override void DrawShadow(SpriteBatch spriteBatch, Texture2D shadowTexture)
         {
             var positionPlayer = new Vector2(Position.X - (shadowTexture.Width * 1.2f) / 2.2f
-                , BoundingDetectCollisions.Bottom - (shadowTexture.Height * 1.2f) / 2f);
+                , BoundingDetectCollisions.Center.Y - (shadowTexture.Height * 1.2f) / 5f);
 
             spriteBatch.Draw(shadowTexture, positionPlayer, null, Color.White
                 , 0f, Vector2.Zero, 1.2f, SpriteEffects.None, Sprite.Depth + 0.0000025f);
@@ -384,10 +372,10 @@ namespace Medicraft.Entities
             switch (skillLevel)
             {
                 case 1:
-                    tempATK = (int)(BaseATK * 0.5);
+                    tempATK = (int)(BaseATK * 0.15);
                     tempCrit = 0.1f;
-                    tempCritDMG = 0.5f;
-                    NormalActivatedTime = 8f;
+                    tempCritDMG = 0.2f;
+                    NormalActivatedTime = 6f;
 
                     ATK += tempATK;
                     Crit += tempCrit;
@@ -396,30 +384,111 @@ namespace Medicraft.Entities
                     break;
 
                 case 2:
+                    tempATK = (int)(BaseATK * 0.2);
+                    tempCrit = 0.125f;
+                    tempCritDMG = 0.3f;
+                    NormalActivatedTime = 6f;
+
+                    ATK += tempATK;
+                    Crit += tempCrit;
+                    CritDMG += tempCritDMG;
+                    NormalActivatedTimer = NormalActivatedTime;
                     break;
 
                 case 3:
+                    tempATK = (int)(BaseATK * 0.25);
+                    tempCrit = 0.15f;
+                    tempCritDMG = 0.4f;
+                    NormalActivatedTime = 6f;
+
+                    ATK += tempATK;
+                    Crit += tempCrit;
+                    CritDMG += tempCritDMG;
+                    NormalActivatedTimer = NormalActivatedTime;
                     break;
 
                 case 4:
+                    tempATK = (int)(BaseATK * 0.3);
+                    tempCrit = 0.175f;
+                    tempCritDMG = 0.5f;
+                    NormalActivatedTime = 6f;
+
+                    ATK += tempATK;
+                    Crit += tempCrit;
+                    CritDMG += tempCritDMG;
+                    NormalActivatedTimer = NormalActivatedTime;
                     break;
 
                 case 5:
+                    tempATK = (int)(BaseATK * 0.35);
+                    tempCrit = 0.2f;
+                    tempCritDMG = 0.6f;
+                    NormalActivatedTime = 6f;
+
+                    ATK += tempATK;
+                    Crit += tempCrit;
+                    CritDMG += tempCritDMG;
+                    NormalActivatedTimer = NormalActivatedTime;
                     break;
 
                 case 6:
+                    tempATK = (int)(BaseATK * 0.4);
+                    tempCrit = 0.225f;
+                    tempCritDMG = 0.7f;
+                    NormalActivatedTime = 6f;
+
+                    ATK += tempATK;
+                    Crit += tempCrit;
+                    CritDMG += tempCritDMG;
+                    NormalActivatedTimer = NormalActivatedTime;
                     break;
 
                 case 7:
+                    tempATK = (int)(BaseATK * 0.45);
+                    tempCrit = 0.25f;
+                    tempCritDMG = 0.8f;
+                    NormalActivatedTime = 6f;
+
+                    ATK += tempATK;
+                    Crit += tempCrit;
+                    CritDMG += tempCritDMG;
+                    NormalActivatedTimer = NormalActivatedTime;
                     break;
 
                 case 8:
+                    tempATK = (int)(BaseATK * 0.5);
+                    tempCrit = 0.275f;
+                    tempCritDMG = 0.9f;
+                    NormalActivatedTime = 6f;
+
+                    ATK += tempATK;
+                    Crit += tempCrit;
+                    CritDMG += tempCritDMG;
+                    NormalActivatedTimer = NormalActivatedTime;
                     break;
 
                 case 9:
+                    tempATK = (int)(BaseATK * 0.55);
+                    tempCrit = 0.3f;
+                    tempCritDMG = 1f;
+                    NormalActivatedTime = 6f;
+
+                    ATK += tempATK;
+                    Crit += tempCrit;
+                    CritDMG += tempCritDMG;
+                    NormalActivatedTimer = NormalActivatedTime;
                     break;
 
                 case 10:
+                    tempATK = (int)(BaseATK * 0.6);
+                    tempCrit = 0.325f;
+                    tempCritDMG = 1.1f;
+                    NormalActivatedTime = 6f;
+
+                    ATK += tempATK;
+                    Crit += tempCrit;
+                    CritDMG += tempCritDMG;
+                    NormalActivatedTimer = NormalActivatedTime;
                     break;
             }
 
@@ -440,34 +509,61 @@ namespace Medicraft.Entities
                 case 1:
                     BoundingDetectEntity.Radius = 140f;
                     _knockbackForce = 60f;
-                    CheckAttackDetection(ATK, 1.75f, true, 1.5f, BurstSkillEffectAttacked);
+                    CheckAttackDetection(ATK, 1.25f, true, 1f, BurstSkillEffectAttacked);
                     break;
 
                 case 2:
+                    BoundingDetectEntity.Radius = 140f;
+                    _knockbackForce = 60f;
+                    CheckAttackDetection(ATK, 1.4f, true, 1.25f, BurstSkillEffectAttacked);
                     break;
 
                 case 3:
+                    BoundingDetectEntity.Radius = 140f;
+                    _knockbackForce = 70f;
+                    CheckAttackDetection(ATK, 1.55f, true, 1.5f, BurstSkillEffectAttacked);
                     break;
 
                 case 4:
+                    BoundingDetectEntity.Radius = 140f;
+                    _knockbackForce = 70f;
+                    CheckAttackDetection(ATK, 1.7f, true, 1.75f, BurstSkillEffectAttacked);
                     break;
 
                 case 5:
+                    BoundingDetectEntity.Radius = 140f;
+                    _knockbackForce = 80f;
+                    CheckAttackDetection(ATK, 1.85f, true, 2f, BurstSkillEffectAttacked);
                     break;
 
                 case 6:
+                    BoundingDetectEntity.Radius = 140f;
+                    _knockbackForce = 80f;
+                    CheckAttackDetection(ATK, 2f, true, 2.25f, BurstSkillEffectAttacked);
                     break;
 
                 case 7:
+                    BoundingDetectEntity.Radius = 140f;
+                    _knockbackForce = 90f;
+                    CheckAttackDetection(ATK, 2.15f, true, 2.5f, BurstSkillEffectAttacked);
                     break;
 
                 case 8:
+                    BoundingDetectEntity.Radius = 140f;
+                    _knockbackForce = 90f;
+                    CheckAttackDetection(ATK, 2.3f, true, 2.75f, BurstSkillEffectAttacked);
                     break;
 
                 case 9:
+                    BoundingDetectEntity.Radius = 140f;
+                    _knockbackForce = 100f;
+                    CheckAttackDetection(ATK, 2.45f, true, 3f, BurstSkillEffectAttacked);
                     break;
 
                 case 10:
+                    BoundingDetectEntity.Radius = 140f;
+                    _knockbackForce = 100f;
+                    CheckAttackDetection(ATK, 2.6f, true, 3.25f, BurstSkillEffectAttacked);
                     break;
             }
 
@@ -488,6 +584,46 @@ namespace Medicraft.Entities
             {
                 case 1:
                     healingValue = (int)(BaseMaxHP * 0.25);
+                    tempDEF = 0.15f;
+                    PassiveActivatedTime = 6f;
+
+                    HP += healingValue;
+                    DEF += tempDEF;
+                    PassiveActivatedTimer = PassiveActivatedTime;
+                    break;
+
+                case 2:
+                    healingValue = (int)(BaseMaxHP * 0.275);
+                    tempDEF = 0.175f;
+                    PassiveActivatedTime = 6f;
+
+                    HP += healingValue;
+                    DEF += tempDEF;
+                    PassiveActivatedTimer = PassiveActivatedTime;
+                    break;
+
+                case 3:
+                    healingValue = (int)(BaseMaxHP * 0.3);
+                    tempDEF = 0.2f;
+                    PassiveActivatedTime = 7f;
+
+                    HP += healingValue;
+                    DEF += tempDEF;
+                    PassiveActivatedTimer = PassiveActivatedTime;
+                    break;
+
+                case 4:
+                    healingValue = (int)(BaseMaxHP * 0.325);
+                    tempDEF = 0.225f;
+                    PassiveActivatedTime = 7f;
+
+                    HP += healingValue;
+                    DEF += tempDEF;
+                    PassiveActivatedTimer = PassiveActivatedTime;
+                    break;
+
+                case 5:
+                    healingValue = (int)(BaseMaxHP * 0.35);
                     tempDEF = 0.25f;
                     PassiveActivatedTime = 8f;
 
@@ -496,31 +632,54 @@ namespace Medicraft.Entities
                     PassiveActivatedTimer = PassiveActivatedTime;
                     break;
 
-                case 2:
-                    break;
-
-                case 3:
-                    break;
-
-                case 4:
-                    break;
-
-                case 5:
-                    break;
-
                 case 6:
+                    healingValue = (int)(BaseMaxHP * 0.375);
+                    tempDEF = 0.275f;
+                    PassiveActivatedTime = 8f;
+
+                    HP += healingValue;
+                    DEF += tempDEF;
+                    PassiveActivatedTimer = PassiveActivatedTime;
                     break;
 
                 case 7:
+                    healingValue = (int)(BaseMaxHP * 0.4);
+                    tempDEF = 0.3f;
+                    PassiveActivatedTime = 9f;
+
+                    HP += healingValue;
+                    DEF += tempDEF;
+                    PassiveActivatedTimer = PassiveActivatedTime;
                     break;
 
                 case 8:
+                    healingValue = (int)(BaseMaxHP * 0.425);
+                    tempDEF = 0.325f;
+                    PassiveActivatedTime = 9f;
+
+                    HP += healingValue;
+                    DEF += tempDEF;
+                    PassiveActivatedTimer = PassiveActivatedTime;
                     break;
 
                 case 9:
+                    healingValue = (int)(BaseMaxHP * 0.45);
+                    tempDEF = 0.35f;
+                    PassiveActivatedTime = 10f;
+
+                    HP += healingValue;
+                    DEF += tempDEF;
+                    PassiveActivatedTimer = PassiveActivatedTime;
                     break;
 
                 case 10:
+                    healingValue = (int)(BaseMaxHP * 0.5);
+                    tempDEF = 0.4f;
+                    PassiveActivatedTime = 10f;
+
+                    HP += healingValue;
+                    DEF += tempDEF;
+                    PassiveActivatedTimer = PassiveActivatedTime;
                     break;
             }
 
@@ -964,6 +1123,56 @@ namespace Medicraft.Entities
                     , PassiveSkillEffectActivated);
 
                 return true;
+            }
+
+            return false;
+        }
+
+        public bool UpSkillLevle(string skillName)
+        {
+            switch (skillName)
+            {
+                case "I've got the Scent!":
+                    if (PlayerData.Abilities.NormalSkillLevel != 10)
+                    {
+                        if (PlayerData.Abilities.NormalSkillLevel == 3 && Level < 11)
+                            return false;
+
+                        if (PlayerData.Abilities.NormalSkillLevel == 6 && Level < 21)
+                            return false;
+
+                        PlayerData.Abilities.NormalSkillLevel++;
+                        PlayerData.SkillPoint--;
+                    }
+                    return true;
+
+                case "Noah Strike":
+                    if (PlayerData.Abilities.BurstSkillLevel != 10)
+                    {
+                        if (PlayerData.Abilities.BurstSkillLevel == 3 && Level < 11)
+                            return false;
+
+                        if (PlayerData.Abilities.BurstSkillLevel == 6 && Level < 21)
+                            return false;
+
+                        PlayerData.Abilities.BurstSkillLevel++;
+                        PlayerData.SkillPoint--;
+                    }
+                    return true;
+
+                case "Survivalist":
+                    if (PlayerData.Abilities.PassiveSkillLevel != 10)
+                    {
+                        if (PlayerData.Abilities.PassiveSkillLevel == 3 && Level < 11)
+                            return false;
+
+                        if (PlayerData.Abilities.PassiveSkillLevel == 6 && Level < 21)
+                            return false;
+
+                        PlayerData.Abilities.PassiveSkillLevel++;
+                        PlayerData.SkillPoint--;
+                    }
+                    return true;
             }
 
             return false;

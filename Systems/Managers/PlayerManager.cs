@@ -4,6 +4,7 @@ using Medicraft.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Sprites;
+using System;
 using System.Linq;
 
 namespace Medicraft.Systems.Managers
@@ -22,7 +23,7 @@ namespace Medicraft.Systems.Managers
         public void Initialize()
         {
             var initialPlayerData = GameGlobals.Instance.InitialPlayerData;
-            var playerSprite = new AnimatedSprite(GameGlobals.Instance.PlayerAnimation);
+            var playerSprite = new AnimatedSprite(GameGlobals.Instance.PlayerSpriteSheet);
 
             if (GameGlobals.Instance.GameSave.Count != 0)
             {
@@ -70,6 +71,9 @@ namespace Medicraft.Systems.Managers
             SetPlayerExpMaxCap(Player.Level);
             GameGlobals.Instance.TopLeftCornerPosition = Player.Position - GameGlobals.Instance.GameScreenCenter;
 
+            // Initialize equipment stats
+            RefreshEquipmentStats(true);
+
             // Initialize display inventory item after init Player's inventory data
             GUIManager.Instance.InitInventoryItemDisplay();
             GUIManager.Instance.InitCraftableItemDisplay();
@@ -102,8 +106,8 @@ namespace Medicraft.Systems.Managers
 
                 // Open Inventory
                 if (keyboardCur.IsKeyDown(Keys.I) && !GameGlobals.Instance.SwitchOpenInventoryPanel && !GameGlobals.Instance.IsOpenGUI
-                    || keyboardCur.IsKeyDown(Keys.I) && !GameGlobals.Instance.SwitchOpenInventoryPanel && GameGlobals.Instance.IsOpenGUI
-                        && GUIManager.Instance.CurrentGUI.Equals(GUIManager.InventoryPanel))
+                    || (keyboardCur.IsKeyDown(Keys.I) || keyboardCur.IsKeyDown(Keys.Escape)) && !GameGlobals.Instance.SwitchOpenInventoryPanel
+                        && GameGlobals.Instance.IsOpenGUI && GUIManager.Instance.CurrentGUI.Equals(GUIManager.InventoryPanel))
                 {
                     GameGlobals.Instance.SwitchOpenInventoryPanel = true;
 
@@ -127,8 +131,8 @@ namespace Medicraft.Systems.Managers
 
                 // Open Crafting Panel 
                 if (keyboardCur.IsKeyDown(Keys.O) && !GameGlobals.Instance.SwitchOpenCraftingPanel && !GameGlobals.Instance.IsOpenGUI
-                    || keyboardCur.IsKeyDown(Keys.O) && !GameGlobals.Instance.SwitchOpenCraftingPanel && GameGlobals.Instance.IsOpenGUI
-                        && GUIManager.Instance.CurrentGUI.Equals(GUIManager.CraftingPanel))
+                    || (keyboardCur.IsKeyDown(Keys.O) || keyboardCur.IsKeyDown(Keys.Escape)) && !GameGlobals.Instance.SwitchOpenCraftingPanel
+                        && GameGlobals.Instance.IsOpenGUI && GUIManager.Instance.CurrentGUI.Equals(GUIManager.CraftingPanel))
                 {
                     GameGlobals.Instance.SwitchOpenCraftingPanel = true;
 
@@ -148,6 +152,33 @@ namespace Medicraft.Systems.Managers
                 else if (keyboardCur.IsKeyUp(Keys.O))
                 {
                     GameGlobals.Instance.SwitchOpenCraftingPanel = false;
+                }
+
+                // Open Inspect Panel 
+                if (keyboardCur.IsKeyDown(Keys.C) && !GameGlobals.Instance.SwitchOpenInspectPanel && !GameGlobals.Instance.IsOpenGUI
+                    || (keyboardCur.IsKeyDown(Keys.C) || keyboardCur.IsKeyDown(Keys.Escape)) && !GameGlobals.Instance.SwitchOpenInspectPanel
+                        && GameGlobals.Instance.IsOpenGUI && GUIManager.Instance.CurrentGUI.Equals(GUIManager.InspectPanel))
+                {
+                    GameGlobals.Instance.SwitchOpenInspectPanel = true;
+
+                    // Pause PlayScreen
+                    GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
+                    GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
+
+                    // Toggle IsOpenCraftingPanel & refresh crafting item display       
+                    GameGlobals.Instance.IsOpenInspectPanel = false;
+                    GUIManager.Instance.IsCharacterTabSelected = true;
+                    if (GUIManager.Instance.CurrentGUI.Equals(GUIManager.InspectPanel))
+                    {                     
+                        GUIManager.Instance.CurrentGUI = GUIManager.Hotbar;
+                        GameGlobals.Instance.IsRefreshHotbar = false;
+                        GUIManager.Instance.ClearSkillDescription();
+                    }
+                    else GUIManager.Instance.CurrentGUI = GUIManager.InspectPanel;
+                }
+                else if (keyboardCur.IsKeyUp(Keys.C))
+                {
+                    GameGlobals.Instance.SwitchOpenInspectPanel = false;
                 }
 
                 // Select Item Bar Slot
@@ -274,8 +305,7 @@ namespace Medicraft.Systems.Managers
 
             // Check if CurrentScreen is TestScreen
             if (!ScreenManager.Instance.IsTransitioning
-                && (ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.TestScreen
-                || ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.Map1))
+                && ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.TestScreen)
             {
                 // Debug Mode
                 if (keyboardCur.IsKeyDown(Keys.B) && !GameGlobals.Instance.SwitchDebugMode)
@@ -471,6 +501,7 @@ namespace Medicraft.Systems.Managers
                 if (Player.EXP >= Player.EXPMaxCap)
                 {
                     Player.Level++;
+                    Player.PlayerData.SkillPoint++;
 
                     if (Player.Level == GameGlobals.Instance.MaxLevel)
                     {
@@ -484,6 +515,81 @@ namespace Medicraft.Systems.Managers
                     }
                 }
             } 
+        }
+
+        public void RefreshEquipmentStats(bool isEquip)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                var itemEquipmentData = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(e => e.Slot.Equals(i));
+
+                if (itemEquipmentData != null)
+                {
+                    var isEquipmentFound = InventoryManager.Instance.InventoryBag.TryGetValue
+                    (itemEquipmentData.ItemId.ToString(), out InventoryItemData equipmentItem);
+
+                    if (isEquipmentFound)
+                    {
+                        var equipmentStats = GameGlobals.Instance.EquipmentStatsDatas.FirstOrDefault
+                            (e => e.ItemId.Equals(equipmentItem.ItemId));
+
+                        foreach (var stats in equipmentStats.Stats)
+                        {
+                            switch (stats.Target)
+                            {
+                                case "TrueATK":
+                                    var valueTrueATK = (int)(stats.Value);
+                                    Player.ATK = isEquip ? (Player.ATK + valueTrueATK) : (Player.ATK - valueTrueATK);
+                                    break;
+
+                                case "ATK%":
+                                    var valueATK = (int)(Player.BaseATK * stats.Value);
+                                    Player.ATK = isEquip ? (Player.ATK + valueATK) : (Player.ATK - valueATK);
+                                    break;
+
+                                case "HP%":
+                                    var valueMaxHP = (int)(Player.BaseMaxHP * stats.Value);
+                                    var valueHP = (int)(Player.HP * stats.Value);
+                                    Player.MaxHP = isEquip ? (Player.MaxHP + valueMaxHP) : (Player.MaxHP - valueMaxHP);
+                                    Player.HP = isEquip ? (Player.HP + valueHP) : (Player.HP - valueHP);
+                                    break;
+
+                                case "Mana%":
+                                    var valueMaxMana = (float)(Player.BaseMaxMana * stats.Value);
+                                    var valueMana = (float)(Player.Mana * stats.Value);
+                                    Player.MaxMana = isEquip ? (Player.MaxMana + valueMaxMana) : (Player.MaxMana - valueMaxMana);
+                                    Player.Mana = isEquip ? (Player.Mana + valueMana) : (Player.Mana - valueMana);
+                                    break;
+
+                                case "DEF%":
+                                    var valueDEF = (float)stats.Value;
+                                    Player.DEF = isEquip ? (Player.DEF + valueDEF) : (Player.DEF - valueDEF);
+                                    break;
+
+                                case "Crit%":
+                                    var valueCrit = (float)stats.Value;
+                                    Player.Crit = isEquip ? (Player.Crit + valueCrit) : (Player.Crit - valueCrit);
+                                    break;
+
+                                case "CritDMG%":
+                                    var valueCritDMG = (float)stats.Value;
+                                    Player.CritDMG = isEquip ? (Player.CritDMG + valueCritDMG) : (Player.CritDMG - valueCritDMG);
+                                    break;
+
+                                case "Evasion%":
+                                    var valueEvasion = (float)stats.Value;
+                                    Player.Evasion = isEquip ? (Player.Evasion + valueEvasion) : (Player.Evasion - valueEvasion);
+                                    break;
+
+                                case "Speed%":
+                                    var valueSpeed = (int)(Player.BaseSpeed * stats.Value);
+                                    Player.Speed = isEquip ? (Player.Speed + valueSpeed) : (Player.Speed - valueSpeed);
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public static PlayerManager Instance

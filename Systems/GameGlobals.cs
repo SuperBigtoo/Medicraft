@@ -84,11 +84,14 @@ namespace Medicraft.Systems
         // Crafting
         public bool SwitchOpenCraftingPanel { set; get; }
         public bool IsOpenCraftingPanel { set; get; }
-        // CurrentCraftingItemSelect
+
+        // Inspecting
+        public bool SwitchOpenInspectPanel { set; get; }
+        public bool IsOpenInspectPanel { set; get; }
 
         // Game Datas
         public PlayerData InitialPlayerData { private set; get; }
-        public SpriteSheet PlayerAnimation { private set; get; }
+        public SpriteSheet PlayerSpriteSheet { private set; get; }
         public BitmapFont FontSensation { private set; get; }
         public BitmapFont FontMinecraft { private set; get; }
         public BitmapFont FontTA8Bit { private set; get; }
@@ -98,11 +101,13 @@ namespace Medicraft.Systems
         public List<ExperienceCapacityData> ExperienceCapacityDatas { private set; get; }
         public List<MapLocationPointData> MapLocationPointDatas { private set; get; }         // All Point Loaction of Maps
         public List<ItemData> ItemsDatas { private set; get; }       // All items data
-        // All equipments stats data
+        public List<EquipmentStatsData> EquipmentStatsDatas { private set; get; }
         public List<ItemEffectData> ItemEffectDatas { private set; get; }
         public List<CraftingRecipeData> CraftingRecipeDatas { private set; get; }       // All Crafting Recipe data
         public List<CharacterData> CharacterDatas { private set; get; }                 // All Character data
         public List<ChapterItemData> ChapterItemDatas { private set; get; }
+        public List<SkillDescriptionData> SkillDescriptionDatas { private set; get; }
+        public List<MedicineDescriptionData> MedicineDescriptionDatas { private set; get; }
         public SpriteSheet ItemsPackSprites { private set; get; }                   // All Item sprite
         public SpriteSheet HitSpriteEffect { private set; get; }
         public SpriteSheet HitSkillSpriteEffect { private set; get; }
@@ -262,11 +267,17 @@ namespace Medicraft.Systems
             IsOpenGUI = false;
             IsRefreshHotbar = false;
 
+            // inventory
             SwitchOpenInventoryPanel = false;
             IsOpenInventoryPanel = false;
 
+            // crafting
             SwitchOpenCraftingPanel = false;
             IsOpenCraftingPanel = false;
+
+            // inspecting
+            SwitchOpenInspectPanel = false;
+            IsOpenInspectPanel = false;
 
             SwitchDebugMode = false;
             IsDebugMode = false;
@@ -379,7 +390,7 @@ namespace Medicraft.Systems
 
             // Load Initialize Player Data
             InitialPlayerData = Content.Load<PlayerData>("data/models/playerdata");
-            PlayerAnimation = Content.Load<SpriteSheet>("entity/mc/mc_animation.sf", new JsonContentLoader());
+            PlayerSpriteSheet = Content.Load<SpriteSheet>("entity/mc/mc_animation.sf", new JsonContentLoader());
 
             // Load Item Sprite Sheet
             ItemsPackSprites = Content.Load<SpriteSheet>("item/itemspack_spritesheet.sf", new JsonContentLoader());
@@ -387,12 +398,19 @@ namespace Medicraft.Systems
             // Load Item Data
             ItemsDatas = Content.Load<List<ItemData>>("data/models/items");
             ItemEffectDatas = Content.Load<List<ItemEffectData>>("data/models/item_effects");
+            EquipmentStatsDatas = Content.Load<List<EquipmentStatsData>>("data/models/equipment_stats");
 
             // Load Crafting Recipes Data
             CraftingRecipeDatas = Content.Load<List<CraftingRecipeData>>("data/models/crafting_recipes");
 
             // Load Character Datas
             CharacterDatas = Content.Load<List<CharacterData>>("data/models/characters");
+
+            // Load Character Skill Description
+            SkillDescriptionDatas = Content.Load<List<SkillDescriptionData>>("data/models/character_skills");
+
+            // Load Thai Traditional Medicine
+            MedicineDescriptionDatas = Content.Load<List<MedicineDescriptionData>>("data/models/medicine_descriptions");
 
             // Load Effect Sprite Sheet
             HitSpriteEffect = Content.Load<SpriteSheet>("effect/hit_effect.sf", new JsonContentLoader());
@@ -449,7 +467,7 @@ namespace Medicraft.Systems
             GuiTextures.Add(Content.Load<Texture2D>("gui/transition_texture"));                  // 34. transition_texture
 
             // Initialize GUI Panels
-            GUIManager.Instance.InitializeThemeAndUI(GameGlobals.Instance.BuiltinTheme);
+            GUIManager.Instance.InitializeThemeAndUI(BuiltinTheme);
 
             // Gonna do this one in LoadSave Screen
             // Initialize Player Data

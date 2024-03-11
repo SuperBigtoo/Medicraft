@@ -20,6 +20,12 @@
 /processorParam:ContentType=Medicraft.Data.ChapterItemDataReader, Medicraft
 /build:data/models/chapter_item.json
 
+#begin data/models/character_skills.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.SkillDescriptionDataReader, Medicraft
+/build:data/models/character_skills.json
+
 #begin data/models/characters.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor
@@ -31,6 +37,12 @@
 /processor:JsonContentProcessor
 /processorParam:ContentType=Medicraft.Data.CraftingRecipeDataReader, Medicraft
 /build:data/models/crafting_recipes.json
+
+#begin data/models/equipment_stats.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.EquipmentStatsDataReader, Medicraft
+/build:data/models/equipment_stats.json
 
 #begin data/models/exp_capacity.json
 /importer:JsonContentImporter
@@ -55,6 +67,12 @@
 /processor:JsonContentProcessor
 /processorParam:ContentType=Medicraft.Data.MapLocationPointDataReader, Medicraft
 /build:data/models/map_locations_point.json
+
+#begin data/models/medicine_descriptions.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.MedicineDescriptionDataReader, Medicraft
+/build:data/models/medicine_descriptions.json
 
 #begin data/models/playerdata.json
 /importer:JsonContentImporter

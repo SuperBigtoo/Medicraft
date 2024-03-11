@@ -1,0 +1,302 @@
+﻿[
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "ยาผง ยาผง (รพ.) ยาเม็ด (รพ.)",
+    "Recipe": "\rในผงยา 90 กรัม ประกอบด้วย\n\r - ใบพิมเสน 5 กรัม\n\r - ใบผักกระโฉม 5 กรัม\n\r - ใบหมากผู้ 5 กรัม\n\r - ใบหมากเมีย 5 กรัม\n\r - ใบสันพร้าหอม 5 กรัม\n\r รากแฝกหอม 5 กรัม\n\r - หัวเปราะหอม 5 กรัม\n\r - แก่นจันทน์ขาวหรือจันทร์ชะมด 5 กรัม\n\r - แก่นจันทน์แดง 5 กรัม\n\r - ว่านกีบแรด 5 กรัม\n\r - ว่านร่อนทอง 5 กรัม\n\r - เนระพูสี 5 กรัม\n\r - พิษนาศน์ 5 กรัม\n\r - มหาสดำ 5 กรัม\n\r - ดอกพิกุล 5 กรัม\n\r - ดอกบุนนาค 5 กรัม\n\r - ดอกสารภี 5 กรัม\n\r - เกสรบัวหลวง 5 กรัม",
+    "Instructions": "\r1. บรรเทาอาการไข้ ร้อนในกระหายน้ำ\n\r2. แก้พิษหัด พิษอีสุกอีใส (บรรเทาอาการไข้จากหัดและอีสุกอีใส)",
+    "HowtoUse": "\rชนิดผง \n\rผู้ใหญ่ \n\rรับประทานครั้งละ 1 กรัม ละลายน้ำกระสายยา ทุก 4 - 6 ชั่วโมง เมื่อมีอาการ \n\rเด็ก อายุ 6 - 12 ปี \n\rรับประทานครั้งละ 500 มิลลิกรัม ละลายน้ำกระสายยา ทุก 4 - 6 ชั่วโมง เมื่อมีอาการ \n\rน้ำกระสายยาที่ใช้ \n\r - กรณีบรรเทาอาการไข้ ร้อนในกระหายน้ำ ใช้น้ำสุก หรือน้ำดอกมะลิ เป็นน้ำกระสายยา \n\r - กรณีแก้พิษหัด พิษอีสุกอีใส ละลายน้ำรากผักชีต้ม เป็นน้ำกระสายยาทั้งรับประทานและชโลม \n\rหมายเหตุ การชโลมใช้ยาผงละลายน้ำ 1 ต่อ 3 แล้วชโลม (ประพรม) ทั่วตามตัวบริเวณที่ตุ่มใสยังไม่แตก \n\rชนิดเม็ด \n\rผู้ใหญ่ \n\rรับประทานครั้งละ 1 กรัม ทุก 4 - 6 ชั่วโมง เมื่อมีอาการ \n\rเด็ก อายุ 6 - 12 ปี \n\rรับประทานครั้งละ 500 มิลลิกรัม ทุก 4 - 6 ชั่วโมง เมื่อมีอาการ",
+    "Warning": "\r - ควรระวังการใช้ยาในผู้ป่วยที่แพ้ละอองแก้เกสรดอกไม้ \n\r - ไม่แนะนำให้ใช้ในผู้ที่สงสัยว่าเป็นไข้เลือดออก เนื่องจากอาจบดบังอาการของไข้เลือดออก \n\r - หากใช้ยาเป็นเวลานานเกิน 3 วัน แล้วอาการไม่ดีขึ้น ควรปรึกษาแพทย์"
+  },
+  {
+    "ItemId": 201,
+    "Name": "ยาจันทน์ลีลา",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 202,
+    "Name": "ยาประสะจันทร์แดง",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 203,
+    "Name": "ยาประสะเปราะใหญ่",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 204,
+    "Name": "ยาห้าราก",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  },
+  {
+    "ItemId": 200,
+    "Name": "ยาเขียวหอม",
+    "Group": "ยาแก้ไข้",
+    "Characteristics": "",
+    "Recipe": "",
+    "Instructions": "",
+    "HowtoUse": "",
+    "Warning": ""
+  }
+]
