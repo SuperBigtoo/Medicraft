@@ -1,0 +1,29 @@
+{
+  "textureAtlas": {
+    "texture": "reaper_spritesheet.png",
+    "regionWidth": 288,
+    "regionHeight": 216
+  },
+  "cycles": {
+    "default_attacking": {
+      "frames": [0,1,2,2],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "default_idle": {
+      "frames": [6,7],
+      "isLooping": false,
+      "frameDuration": 0.24
+    },
+    "default_dying": {
+      "frames": [6,7],
+      "isLooping": false,
+      "frameDuration": 0.3
+    },
+    "default_walking": {
+      "frames": [3,4,4],
+      "isLooping": false,
+      "frameDuration": 0.25
+    }
+  }
+}

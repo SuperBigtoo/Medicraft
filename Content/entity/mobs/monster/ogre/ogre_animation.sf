@@ -1,0 +1,29 @@
+{
+  "textureAtlas": {
+    "texture": "ogre_spritesheet.png",
+    "regionWidth": 264,
+    "regionHeight": 264
+  },
+  "cycles": {
+    "default_attacking": {
+      "frames": [0,1,1,1,2],
+      "isLooping": false,
+      "frameDuration": 0.15
+    },
+    "default_idle": {
+      "frames": [8,9],
+      "isLooping": false,
+      "frameDuration": 0.25
+    },
+    "default_dying": {
+      "frames": [8,9],
+      "isLooping": false,
+      "frameDuration": 0.3
+    },
+    "default_walking": {
+      "frames": [4,5,6,7],
+      "isLooping": false,
+      "frameDuration": 0.2
+    }
+  }
+}

@@ -319,7 +319,7 @@ namespace Medicraft.Systems
 
             BuiltinTheme = BuiltinThemes.hd;
             MaximunInventorySlot = 64;
-            MaximunItemCount = 9999;
+            MaximunItemCount = 999;
             DefaultInventorySlot = 999;
             MaxItemBarSlot = 8;
             CurrentSlotBarSelect = 0;
@@ -623,6 +623,13 @@ namespace Medicraft.Systems
             }
 
             return true;
+        }
+
+        public string GetItemName(int itemId)
+        {
+            var itemData = ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(itemId));
+
+            return itemData != null ? itemData.Name : "";
         }
 
         public string GetItemCategory(int itemId)

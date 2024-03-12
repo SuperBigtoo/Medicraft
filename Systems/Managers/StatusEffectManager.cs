@@ -153,119 +153,60 @@ namespace Medicraft.Systems.Managers
 
         private void ApplyEffect(StatusEffect statusEffect, bool isBuff)
         {
-            if (isBuff)   // Buff Activate | Debuff Deactivate
+            // Buff Activate | Debuff Deactivate
+            switch (statusEffect.Effect.Target)
             {
-                switch (statusEffect.Effect.Target)
-                {
-                    case "MaxHP":
-                        var valueMaxHP = (int)(statusEffect.TargetEntity.BaseMaxHP * statusEffect.Effect.Value);
-                        var valueHP = (int)(statusEffect.TargetEntity.HP * statusEffect.Effect.Value);
+                case "MaxHP":
+                    var valueMaxHP = (int)(statusEffect.TargetEntity.BaseMaxHP * statusEffect.Effect.Value);
+                    var valueHP = (int)(statusEffect.TargetEntity.HP * statusEffect.Effect.Value);
 
-                        statusEffect.TargetEntity.MaxHP += valueMaxHP;
-                        statusEffect.TargetEntity.HP += valueHP;
-                        break;
+                    statusEffect.TargetEntity.MaxHP = isBuff ? statusEffect.TargetEntity.MaxHP + valueMaxHP : statusEffect.TargetEntity.MaxHP - valueMaxHP;
+                    statusEffect.TargetEntity.HP = isBuff ? statusEffect.TargetEntity.HP + valueHP : statusEffect.TargetEntity.HP - valueHP;
+                    break;
 
-                    case "MaxMana":
-                        var valueMaxMana = (statusEffect.TargetEntity.BaseMaxMana * statusEffect.Effect.Value);
-                        var valueMana = (statusEffect.TargetEntity.Mana * statusEffect.Effect.Value);
+                case "MaxMana":
+                    var valueMaxMana = (int)(statusEffect.TargetEntity.BaseMaxMana * statusEffect.Effect.Value);
+                    var valueMana = (int)(statusEffect.TargetEntity.Mana * statusEffect.Effect.Value);
 
-                        statusEffect.TargetEntity.MaxMana += (float)valueMaxMana;
-                        statusEffect.TargetEntity.Mana += (float)valueMana;
-                        break;
+                    statusEffect.TargetEntity.MaxMana = isBuff ? statusEffect.TargetEntity.MaxMana + valueMaxMana : statusEffect.TargetEntity.MaxMana - valueMaxMana;
+                    statusEffect.TargetEntity.Mana = isBuff ? statusEffect.TargetEntity.Mana + valueMana : statusEffect.TargetEntity.Mana - valueMana;
+                    break;
 
-                    case "ATK":
-                        var valueATK = (int)(statusEffect.TargetEntity.BaseATK * statusEffect.Effect.Value);
+                case "ATK":
+                    var valueATK = (int)(statusEffect.TargetEntity.BaseATK * statusEffect.Effect.Value);
 
-                        statusEffect.TargetEntity.ATK += valueATK;
-                        break;
+                    statusEffect.TargetEntity.ATK = isBuff ? statusEffect.TargetEntity.ATK + valueATK : statusEffect.TargetEntity.ATK - valueATK;
+                    break;
 
-                    case "DEF":
-                        var valueDEF = statusEffect.Effect.Value;
+                case "DEF":
+                    var valueDEF = (float)statusEffect.Effect.Value;
 
-                        statusEffect.TargetEntity.DEF += (float)valueDEF;
-                        break;
+                    statusEffect.TargetEntity.DEF = isBuff ? statusEffect.TargetEntity.DEF + valueDEF : statusEffect.TargetEntity.DEF - valueDEF;
+                    break;
 
-                    case "Crit":
-                        var valueCrit = statusEffect.Effect.Value;
+                case "Crit":
+                    var valueCrit = (float)statusEffect.Effect.Value;
 
-                        statusEffect.TargetEntity.Crit += (float)valueCrit;
-                        break;
+                    statusEffect.TargetEntity.Crit = isBuff ? statusEffect.TargetEntity.Crit + valueCrit : statusEffect.TargetEntity.Crit - valueCrit;
+                    break;
 
-                    case "CritDMG":
-                        var valueCritDMG = statusEffect.Effect.Value;
+                case "CritDMG":
+                    var valueCritDMG = (float)statusEffect.Effect.Value;
 
-                        statusEffect.TargetEntity.CritDMG += (float)valueCritDMG;
-                        break;
+                    statusEffect.TargetEntity.CritDMG = isBuff ? statusEffect.TargetEntity.CritDMG + valueCritDMG : statusEffect.TargetEntity.CritDMG - valueCritDMG;
+                    break;
 
-                    case "Evasion":
-                        var valueEvasion = statusEffect.Effect.Value;
+                case "Evasion":
+                    var valueEvasion = (float)statusEffect.Effect.Value;
 
-                        statusEffect.TargetEntity.Evasion += (float)valueEvasion;
-                        break;
+                    statusEffect.TargetEntity.Evasion = isBuff ? statusEffect.TargetEntity.Evasion + valueEvasion : statusEffect.TargetEntity.Evasion - valueEvasion;
+                    break;
 
-                    case "Speed":
-                        var valueSpeed = (int)(statusEffect.TargetEntity.BaseSpeed * statusEffect.Effect.Value);
+                case "Speed":
+                    var valueSpeed = (int)(statusEffect.TargetEntity.BaseSpeed * statusEffect.Effect.Value);
 
-                        statusEffect.TargetEntity.Speed += valueSpeed;
-                        break;
-                }
-            }
-            else // Buff Deactivate | Debuff Activate
-            {
-                switch (statusEffect.Effect.Target)
-                {
-                    case "MaxHP":
-                        var valueMaxHP = (int)(statusEffect.TargetEntity.BaseMaxHP * statusEffect.Effect.Value);
-                        var valueHP = (int)(statusEffect.TargetEntity.HP * statusEffect.Effect.Value);
-
-                        statusEffect.TargetEntity.MaxHP -= valueMaxHP;
-                        statusEffect.TargetEntity.HP -= valueHP;
-                        break;
-
-                    case "MaxMana":
-                        var valueMaxMana = (statusEffect.TargetEntity.BaseMaxMana * statusEffect.Effect.Value);
-                        var valueMana = (statusEffect.TargetEntity.Mana * statusEffect.Effect.Value);
-
-                        statusEffect.TargetEntity.MaxMana -= (float)valueMaxMana;
-                        statusEffect.TargetEntity.Mana -= (float)valueMana;
-                        break;
-
-                    case "ATK":
-                        var valueATK = (int)(statusEffect.TargetEntity.BaseATK * statusEffect.Effect.Value);
-
-                        statusEffect.TargetEntity.ATK -= valueATK;
-                        break;
-
-                    case "DEF":
-                        var valueDEF = statusEffect.Effect.Value;
-
-                        statusEffect.TargetEntity.DEF -= (float)valueDEF;
-                        break;
-
-                    case "Crit":
-                        var valueCrit = statusEffect.Effect.Value;
-
-                        statusEffect.TargetEntity.Crit -= (float)valueCrit;
-                        break;
-
-                    case "CritDMG":
-                        var valueCritDMG = statusEffect.Effect.Value;
-
-                        statusEffect.TargetEntity.CritDMG -= (float)valueCritDMG;
-                        break;
-
-                    case "Evasion":
-                        var valueEvasion = statusEffect.Effect.Value;
-
-                        statusEffect.TargetEntity.Evasion -= (float)valueEvasion;
-                        break;
-
-                    case "Speed":
-                        var valueSpeed = (int)(statusEffect.TargetEntity.BaseSpeed * statusEffect.Effect.Value);
-
-                        statusEffect.TargetEntity.Speed -= valueSpeed;
-                        break;
-                }
+                    statusEffect.TargetEntity.Speed = isBuff ? statusEffect.TargetEntity.Speed + valueSpeed : statusEffect.TargetEntity.Speed - valueSpeed;
+                    break;
             }
         }
 

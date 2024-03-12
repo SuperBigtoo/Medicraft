@@ -1,0 +1,29 @@
+{
+  "textureAtlas": {
+    "texture": "mimic_spritesheet.png",
+    "regionWidth": 144,
+    "regionHeight": 128
+  },
+  "cycles": {
+    "default_attacking": {
+      "frames": [0,1,1],
+      "isLooping": false,
+      "frameDuration": 0.24
+    },
+    "default_idle": {
+      "frames": [8,9],
+      "isLooping": false,
+      "frameDuration": 0.24
+    },
+    "default_dying": {
+      "frames": [8,9],
+      "isLooping": false,
+      "frameDuration": 0.24
+    },
+    "default_walking": {
+      "frames": [4,5,6,7],
+      "isLooping": false,
+      "frameDuration": 0.12
+    }
+  }
+}

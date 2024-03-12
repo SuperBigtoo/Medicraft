@@ -118,17 +118,18 @@ namespace Medicraft.Systems.Managers
             // Set Item
             for (int i = minSlotNum; i <= maxSlotNum; i++)
             {
-                var itemInSlot = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(item => item.Slot.Equals(i));
+                var itemInSlot = InventoryManager.Instance.NewInventoryBag.FirstOrDefault(item => item.Value.Slot.Equals(i));
 
-                if (itemInSlot != null)
+                if (itemInSlot.Value != null)
                 {
                     var iconItem = new Icon(IconType.None, Anchor.BottomLeft, 0.80f, false, offset: new Vector2(offSetX, 3f))
                     {
-                        ItemId = itemInSlot.ItemId,
-                        Count = itemInSlot.Count,
-                        Slot = itemInSlot.Slot,
+                        ItemId = itemInSlot.Value.ItemId,
+                        Count = itemInSlot.Value.Count,
+                        Slot = itemInSlot.Value.Slot,
+                        KeyIndex = itemInSlot.Key,
                         Size = new Vector2(42, 42),
-                        Texture = GameGlobals.Instance.GetItemTexture(itemInSlot.ItemId),
+                        Texture = GameGlobals.Instance.GetItemTexture(itemInSlot.Value.ItemId),
                     };
 
                     iconItem.AddChild(new Label(iconItem.Count.ToString(), Anchor.BottomRight, offset: new Vector2(-25f, -33))
@@ -177,7 +178,7 @@ namespace Medicraft.Systems.Managers
             {
                 iconItem.OnClick = (Entity entity) =>
                 {
-                    InventoryManager.Instance.UseItemInHotbar(iconItem.ItemId);
+                    InventoryManager.Instance.UseItemInHotbar(iconItem.KeyIndex);
                 };
             }
         }
@@ -297,14 +298,14 @@ namespace Medicraft.Systems.Managers
             // Set on Click use item in inventory
             useInvenItemButton.OnClick = (Entity entity) =>
             {
-                var currItemInv = InventoryManager.Instance.InventoryItemSelected;
+                var currItemInv = InventoryManager.Instance.ItemSelected;
 
                 string notifyText = string.Empty;
-                if (currItemInv.GetCategory().Equals("Equipment"))
+                if (currItemInv.Value.GetCategory().Equals("Equipment"))
                 {
-                    notifyText = $"Do you wanna equip '{currItemInv.GetName()}'?";
+                    notifyText = $"Do you wanna equip '{currItemInv.Value.GetName()}'?";
                 }
-                else notifyText = $"Do you wanna use '{currItemInv.GetName()}'?";
+                else notifyText = $"Do you wanna use '{currItemInv.Value.GetName()}'?";
 
                 GeonBit.UI.Utils.MessageBox.ShowMsgBox("Use Item?"
                     , notifyText
@@ -313,9 +314,9 @@ namespace Medicraft.Systems.Managers
                             new("Ok", () =>
                             {
                                 // Use selected item from inventory
-                                InventoryManager.Instance.UseItem(currItemInv);
+                                InventoryManager.Instance.UseItem(currItemInv.Key, currItemInv.Value);
 
-                                InventoryManager.Instance.InventoryItemSelected = null;
+                                //InventoryManager.Instance.ItemSelected = null;
                                 useInvenItemButton.Enabled = false;
                                 invenSetHotbarButton.Enabled = false;
                                 return true;
@@ -330,7 +331,7 @@ namespace Medicraft.Systems.Managers
             // Set on Click set Hotbar item
             invenSetHotbarButton.OnClick = (Entity entity) =>
             {
-                var currItemInv = InventoryManager.Instance.InventoryItemSelected;
+                var currItemInv = InventoryManager.Instance.ItemSelected;
 
                 var hotbarSetupForm = new Form([
                     new FormFieldData(FormFieldType.DropDown, "dropdown_setup_hotbar", "Hotbar Slot")
@@ -348,19 +349,19 @@ namespace Medicraft.Systems.Managers
                         if (hotbarSetupForm.GetValue("dropdown_setup_hotbar") != null)
                         {
                             GeonBit.UI.Utils.MessageBox.ShowMsgBox("Setup Hotbar Successfully"
-                                , $"Set '{currItemInv.GetName()}' on '{hotbarSetupForm.GetValueString("dropdown_setup_hotbar")}'");
+                                , $"Set '{currItemInv.Value.GetName()}' on '{hotbarSetupForm.GetValueString("dropdown_setup_hotbar")}'");
 
                             var output = hotbarSetupForm.GetValueString("dropdown_setup_hotbar");
                             var slotNum = InventoryManager.Instance.GetIHotbarSlot(output);
-                            InventoryManager.Instance.SetHotbarItem(currItemInv, slotNum);
+                            InventoryManager.Instance.SetHotbarItem(currItemInv.Value, slotNum);
                         }
                         else
                         {
-                            GeonBit.UI.Utils.MessageBox.ShowMsgBox("Setup Complete", $"Ya didn't select a for '{currItemInv.GetName()}'");
-                            GUIManager.Instance.RefreshInvenrotyItemDisplay(true);
+                            GeonBit.UI.Utils.MessageBox.ShowMsgBox("Setup Complete", $"Ya didn't select a for '{currItemInv.Value.GetName()}'");
+                            RefreshInvenrotyItemDisplay(true);
                         }
 
-                        InventoryManager.Instance.InventoryItemSelected = null;
+                        //InventoryManager.Instance.ItemSelected = null;
                         useInvenItemButton.Enabled = false;
                         invenSetHotbarButton.Enabled = false;
                     });
@@ -385,9 +386,11 @@ namespace Medicraft.Systems.Managers
                 SetInventoryItemDisplay(fisrtItem);
 
                 // Setup Enable or Disable the button for fisrtItem
-                InventoryManager.Instance.InventoryBag.TryGetValue(fisrtItem.ItemId.ToString()
-                    , out InventoryItemData item);
-                InventoryManager.Instance.InventoryItemSelected = item;
+                //InventoryManager.Instance.InventoryBag.TryGetValue(fisrtItem.ItemId.ToString()
+                //    , out InventoryItemData item);
+                var item = InventoryManager.Instance.NewInventoryBag.FirstOrDefault(i => i.Key.Equals(fisrtItem.KeyIndex));
+
+                InventoryManager.Instance.ItemSelected = item;
 
                 if (GameGlobals.Instance.IsUsableItem(fisrtItem.ItemId))
                 {
@@ -402,7 +405,7 @@ namespace Medicraft.Systems.Managers
                         // In case selected item is Equipment
                         invenSetHotbarButton.Enabled = false;
 
-                        if (!item.Slot.Equals(GameGlobals.Instance.DefaultInventorySlot))
+                        if (!item.Value.Slot.Equals(GameGlobals.Instance.DefaultInventorySlot))
                             invenUseItemButton.Enabled = false;
                     }
                 }
@@ -433,15 +436,16 @@ namespace Medicraft.Systems.Managers
                     itemLeftPanel.Visible = false;
 
             //// Set item
-            foreach (var item in InventoryManager.Instance.InventoryBag.Values)
+            foreach (var item in InventoryManager.Instance.NewInventoryBag)
             {
                 // Item Icon
                 var iconItem = new Icon(IconType.None, Anchor.AutoInline, 1, true)
                 {
-                    ItemId = item.ItemId,
-                    Count = item.Count,
-                    Slot = item.Slot,
-                    Texture = GameGlobals.Instance.GetItemTexture(item.ItemId),
+                    ItemId = item.Value.ItemId,
+                    Count = item.Value.Count,
+                    Slot = item.Value.Slot,
+                    KeyIndex = item.Key,
+                    Texture = GameGlobals.Instance.GetItemTexture(item.Value.ItemId),
                 };
 
                 // Item Count
@@ -465,10 +469,11 @@ namespace Medicraft.Systems.Managers
                         itemLeftPanel.Visible = true;
 
                     // Enable or Disable the button for each item icon
-                    InventoryManager.Instance.InventoryBag.TryGetValue(iconItem.ItemId.ToString()
-                        , out InventoryItemData item);
+                    //InventoryManager.Instance.InventoryBag.TryGetValue(iconItem.ItemId.ToString()
+                    //    , out InventoryItemData item);
+                    var item = InventoryManager.Instance.NewInventoryBag.FirstOrDefault(i => i.Key.Equals(iconItem.KeyIndex));
 
-                    InventoryManager.Instance.InventoryItemSelected = item;
+                    InventoryManager.Instance.ItemSelected = item;
 
                     if (GameGlobals.Instance.IsUsableItem(iconItem.ItemId))
                     {
@@ -483,7 +488,7 @@ namespace Medicraft.Systems.Managers
                             // In case selected item is Equipment
                             invenSetHotbarButton.Enabled = false;
 
-                            if (!item.Slot.Equals(GameGlobals.Instance.DefaultInventorySlot))
+                            if (!item.Value.Slot.Equals(GameGlobals.Instance.DefaultInventorySlot))
                                 invenUseItemButton.Enabled = false;
                         }
                     }
@@ -549,6 +554,11 @@ namespace Medicraft.Systems.Managers
                 PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll
             };
             craftingDescriptPanel.Scrollbar.AdjustMaxAutomatically = true;
+            craftingDescriptPanel.Scrollbar.Opacity = 0;
+            craftingDescriptPanel.OnMouseEnter = (e) =>
+            {
+                UserInterface.Active.ActiveEntity = craftingDescriptPanel;
+            };
 
             craftingDescriptPanel.AddChild(new Label("iconLabel", Anchor.AutoCenter)
             {
@@ -595,7 +605,7 @@ namespace Medicraft.Systems.Managers
 
             // Crafting Selected Item
             // Panel
-            var craftingSelectItemPanel = new Panel(new Vector2(1400, 710), PanelSkin.Default, Anchor.Center)
+            var craftingSelectItemPanel = new Panel(new Vector2(1400, 710), PanelSkin.Fancy, Anchor.Center)
             {
                 Identifier = "craftingSelectItemPanel",
                 Visible = false,
@@ -683,39 +693,57 @@ namespace Medicraft.Systems.Managers
                 Skin = ButtonSkin.Fancy,
                 OnClick = (Entity entity) =>
                 {
-                    var itemCraftingSelected = CraftingManager.Instance.CraftingItemSelected;
-                    var itemQuantity = quantitySlider.Value;
-                    var craftableCount = CraftingManager.Instance.GetCraftableNumber(itemCraftingSelected.ItemId);
+                    var craftingSelected = CraftingManager.Instance.CraftingItemSelected;
 
-                    if (craftableCount != 0 && itemQuantity <= craftableCount)
+                    GeonBit.UI.Utils.MessageBox.ShowMsgBox("Crafting Item?"
+                    , $"Do ya wanna craft '{GameGlobals.Instance.GetItemName(craftingSelected.ItemId)}'?"
+                    , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
                     {
-                        for (int i = 0; i < itemQuantity; i++)
-                            CraftingManager.Instance.CraftingItem(itemCraftingSelected.ItemId);
-                    }
-                    else return;
+                            new("Ok", () =>
+                            {
+                                var itemQuantity = quantitySlider.Value;
+                                var craftableCount = CraftingManager.Instance.GetCraftableNumber(craftingSelected.ItemId);
 
-                    GeonBit.UI.Utils.MessageBox.ShowMsgBox("Crafting Item", "Item created successfully");
+                                if (craftableCount != 0 && itemQuantity <= craftableCount)
+                                {
+                                    for (int i = 0; i < itemQuantity; i++)
+                                        CraftingManager.Instance.CraftingItem(craftingSelected.ItemId);
+                                }
+                                else
+                                {
+                                    GeonBit.UI.Utils.MessageBox.ShowMsgBox("ERROR", "Insufficient ingredients. \nPlease select a new quantity.");
+                                    return true;
+                                }
 
-                    // Reset craft button
-                    var craftingSelectItemPanel = UserInterface.Active.Root.Children.FirstOrDefault
-                        (i => i.Identifier.Equals("craftingSelectItemPanel"));
-                    var craftingSelectedButton = craftingSelectItemPanel.Children.OfType<Button>().FirstOrDefault
-                        (i => i.Identifier.Equals("craftingSelectedButton"));
+                                GeonBit.UI.Utils.MessageBox.ShowMsgBox("Crafting Item", "Item created successfully");
 
-                    var maxQuantity = CraftingManager.Instance.GetCraftableNumber(itemCraftingSelected.ItemId);
+                                // Reset craft button
+                                var craftingSelectItemPanel = UserInterface.Active.Root.Children.FirstOrDefault
+                                    (i => i.Identifier.Equals("craftingSelectItemPanel"));
+                                var craftingSelectedButton = craftingSelectItemPanel.Children.OfType<Button>().FirstOrDefault
+                                    (i => i.Identifier.Equals("craftingSelectedButton"));
 
-                    if (maxQuantity > 0)
-                    {
-                        quantitySlider.Max = maxQuantity;
-                        quantitySlider.Enabled = true;
-                        craftingSelectedButton.Enabled = true;
-                    }
-                    else
-                    {
-                        quantitySlider.Max = 1;
-                        quantitySlider.Enabled = false;
-                        craftingSelectedButton.Enabled = false;
-                    }
+                                var maxQuantity = CraftingManager.Instance.GetCraftableNumber(craftingSelected.ItemId);
+
+                                if (maxQuantity > 0)
+                                {
+                                    quantitySlider.Max = maxQuantity;
+                                    quantitySlider.Enabled = true;
+                                    craftingSelectedButton.Enabled = true;
+                                }
+                                else
+                                {
+                                    quantitySlider.Max = 1;
+                                    quantitySlider.Enabled = false;
+                                    craftingSelectedButton.Enabled = false;
+                                }
+                                return true;
+                            }),
+                            new("Cancel", () =>
+                            {
+                                return true;
+                            })
+                    });
                 }
             };
             craftingSelectItemPanel.AddChild(craftingSelectedButton);
@@ -933,17 +961,23 @@ namespace Medicraft.Systems.Managers
                 // Add ingredient of selected crafting item
                 string ingLabel = "";
 
-                var isItemFound = InventoryManager.Instance.InventoryBag.TryGetValue(
-                    ingredient.ItemId.ToString(), out InventoryItemData itemData);
+                //var isItemFound = InventoryManager.Instance.InventoryBag.TryGetValue(
+                //    ingredient.ItemId.ToString(), out InventoryItemData itemData);
+                var items = InventoryManager.Instance.NewInventoryBag.Values.Where
+                    (i => i.ItemId.Equals(ingredient.ItemId));
 
-                if (isItemFound)
+                if (items != null || items.Any())
                 {
-                    if (itemData.Count < ingredient.Quantity)
+                    int totalItemCount = 0;
+                    foreach (var item in items)
+                        totalItemCount += item.Count;
+
+                    if (totalItemCount < ingredient.Quantity)
                     {
-                        var count = itemData.Count - ingredient.Quantity;
+                        var count = totalItemCount - ingredient.Quantity;
                         ingLabel = ingredient.Name + " x " + ingredient.Quantity + " (-" + count + ")";
                     }
-                    else ingLabel = ingredient.Name + " x " + ingredient.Quantity + " (" + itemData.Count + ")";
+                    else ingLabel = ingredient.Name + " x " + ingredient.Quantity + " (" + totalItemCount + ")";
                 }
                 else ingLabel = ingredient.Name + " x " + ingredient.Quantity + " (-" + ingredient.Quantity + ")";
 
@@ -1478,6 +1512,11 @@ namespace Medicraft.Systems.Managers
                     Identifier = "leftPanel"
                 };
                 leftPanel.Scrollbar.AdjustMaxAutomatically = true;
+                leftPanel.Scrollbar.Opacity = 0;
+                leftPanel.OnMouseEnter = (e) =>
+                {
+                    UserInterface.Active.ActiveEntity = leftPanel;
+                };
                 progressionTab.panel.AddChild(leftPanel);
 
                 leftPanel.AddChild(new Icon(IconType.None, Anchor.AutoCenter, 1, false)
@@ -1674,17 +1713,18 @@ namespace Medicraft.Systems.Managers
             // Equipment Slot
             for (int i = 0; i < 6; i++)
             {
-                var itemEquipmentData = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(e => e.Slot.Equals(i));
+                var itemEquipmentData = InventoryManager.Instance.NewInventoryBag.FirstOrDefault(e => e.Value.Slot.Equals(i));
                 Icon iconEquipmentSlot;
 
-                if (itemEquipmentData != null)
+                if (itemEquipmentData.Value != null)
                 {
                     iconEquipmentSlot = new Icon(IconType.None, Anchor.AutoInline, 1, true)
                     {
                         Identifier = "Slot_" + i,
-                        ItemId = itemEquipmentData.ItemId,
-                        Slot = itemEquipmentData.Slot,
-                        Texture = GameGlobals.Instance.GetItemTexture(itemEquipmentData.ItemId),
+                        ItemId = itemEquipmentData.Value.ItemId,
+                        Slot = itemEquipmentData.Value.Slot,
+                        KeyIndex = itemEquipmentData.Key, 
+                        Texture = GameGlobals.Instance.GetItemTexture(itemEquipmentData.Value.ItemId),
                         ToolTipText = "Click to unequip",
                         Locked = false,
                         Offset = new Vector2(-16, 0),
@@ -1694,17 +1734,20 @@ namespace Medicraft.Systems.Managers
                     {
                         IsShowConfirmBox = true;
 
-                        InventoryManager.Instance.InventoryBag.TryGetValue(iconEquipmentSlot.ItemId.ToString()
-                            , out InventoryItemData item);
+                        //InventoryManager.Instance.InventoryBag.TryGetValue(iconEquipmentSlot.ItemId.ToString()
+                        //    , out InventoryItemData item);
+
+                        var item = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                            (i => i.Key.Equals(iconEquipmentSlot.KeyIndex));
 
                         GeonBit.UI.Utils.MessageBox.ShowMsgBox("Use Item?"
-                            , $"Do ya wanna unequip '{item.GetName()}'"
+                            , $"Do ya wanna unequip '{item.Value.GetName()}'"
                             , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
                             {
                                     new("Ok", () =>
                                     {
                                         // Use selected item from inventory
-                                        InventoryManager.Instance.UnEquip(item);
+                                        InventoryManager.Instance.UnEquip(item.Value);
 
                                         RefreshInspectCharacterDisply();
 

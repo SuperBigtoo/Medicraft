@@ -266,7 +266,7 @@ namespace Medicraft.Systems
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             // Text Health Point
-            var textHP = $"{PlayerManager.Instance.Player.HP}/{PlayerManager.Instance.Player.MaxHP}";
+            var textHP = $"{(int)PlayerManager.Instance.Player.HP}/{(int)PlayerManager.Instance.Player.MaxHP}";
             var textSizeHP = GameGlobals.Instance.FontTA8BitBold.MeasureString(textHP);
             var positionHP = new Vector2(
                 (166f + hpGaugeTexture.Width / 2) - (textSizeHP.Width / 2),
@@ -567,7 +567,7 @@ namespace Medicraft.Systems
                 && e.EntityType == Entities.Entity.EntityTypes.Hostile && e.HP > 0))
             {
                 var entityPos = entity.Position;
-                var text = $"{entity.HP}";
+                var text = $"{(int)entity.HP}";
                 var textSize = FontSensation.MeasureString(text);
                 var position = entityPos - new Vector2(textSize.Width / 2
                     , (textSize.Height / 2) + (entity.Sprite.TextureRegion.Height / 2));

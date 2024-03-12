@@ -8,7 +8,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
 using System;
 
-namespace Medicraft.Entities
+namespace Medicraft.Entities.Mobs.Monster
 {
     public class Slime : Entity
     {
@@ -35,9 +35,9 @@ namespace Medicraft.Entities
             Level = entityData.Level;
             InitializeCharacterData(entityData.CharId, Level);
 
-            _attackSpeed = 0.25f;
-            _cooldownAttack = 0.7f;
-            _cooldownAttackTimer = _cooldownAttack;
+            attackSpeed = 0.25f;
+            cooldownAttack = 0.7f;
+            cooldownAttackTimer = cooldownAttack;
             DyingTime = 1.3f;
 
             IsRespawnable = true;
@@ -61,12 +61,12 @@ namespace Medicraft.Entities
             BoundingCollisionY = 12;
 
             // Rec for check Collision
-            BoundingDetectCollisions = new Rectangle(
+            BoundingDetectCollisions = new RectangleF(
                 (int)((int)Position.X - Sprite.TextureRegion.Width / BoundingCollisionX),
                 (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
                 (int)(Sprite.TextureRegion.Width / 2.5f),
                 Sprite.TextureRegion.Height / 6
-            );     
+            );
 
             BoundingHitBox = new CircleF(Position, 20);         // Circle for Entity to hit
 
@@ -98,7 +98,7 @@ namespace Medicraft.Entities
             Sprite = slime.Sprite;
             EntityData = slime.EntityData;
 
-            EntityType = slime.EntityType;        
+            EntityType = slime.EntityType;
             Id = slime.Id;
             Name = slime.Name;
             ATK = slime.ATK;
@@ -108,9 +108,9 @@ namespace Medicraft.Entities
             Speed = slime.Speed;
             Evasion = slime.Evasion;
 
-            _attackSpeed = slime._attackSpeed;
-            _cooldownAttack = slime._cooldownAttack;
-            _cooldownAttackTimer = _cooldownAttack;
+            attackSpeed = slime.attackSpeed;
+            cooldownAttack = slime.cooldownAttack;
+            cooldownAttackTimer = cooldownAttack;
             DyingTime = slime.DyingTime;
 
             IsRespawnable = slime.IsRespawnable;
@@ -157,7 +157,7 @@ namespace Medicraft.Entities
             Sprite.Color = Color.White;
             Sprite.Depth = 0.1f;
             Sprite.Play(SpriteCycle + "_walking");
-        }    
+        }
 
         // Update Slime
         public override void Update(GameTime gameTime, float playerDepth, float topDepth, float middleDepth, float bottomDepth)
@@ -165,7 +165,7 @@ namespace Medicraft.Entities
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (!IsDying)
-            {                
+            {
                 UpdateTargetNode(deltaSeconds, EntityData);
 
                 // Setup PathFinding
@@ -182,7 +182,7 @@ namespace Medicraft.Entities
                     // Check Aggro Player
                     CheckAggro();
                 }
-                
+
                 // Update layer depth
                 UpdateLayerDepth(playerDepth, topDepth, middleDepth, bottomDepth);
             }
@@ -230,7 +230,7 @@ namespace Medicraft.Entities
             UpdateTimerConditions(deltaSeconds);
 
             // Ensure hp or mana doesn't exceed the maximum & minimum value
-            MinimumCapacity();           
+            MinimumCapacity();
 
             Sprite.Update(deltaSeconds);
         }
@@ -240,7 +240,7 @@ namespace Medicraft.Entities
         {
             if (GameGlobals.Instance.IsShowPath)
             {
-                _pathFinding.Draw(spriteBatch);
+                //_pathFinding.Draw(spriteBatch);
             }
 
             spriteBatch.Draw(Sprite, Transform);
@@ -260,8 +260,8 @@ namespace Medicraft.Entities
 
         public override void DrawShadow(SpriteBatch spriteBatch, Texture2D shadowTexture)
         {
-            var position = new Vector2(Position.X - (shadowTexture.Width * 1.2f) / 2f
-                    , BoundingDetectCollisions.Bottom - (Sprite.TextureRegion.Height * 1.2f) / 10);
+            var position = new Vector2(Position.X - shadowTexture.Width * 1.2f / 2f
+                    , BoundingDetectCollisions.Bottom - Sprite.TextureRegion.Height * 1.2f / 10);
 
             spriteBatch.Draw(shadowTexture, position, null, Color.White
                 , 0f, Vector2.Zero, 1.2f, SpriteEffects.None, Sprite.Depth + 0.0000025f);

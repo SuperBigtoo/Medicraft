@@ -168,6 +168,7 @@ namespace GeonBit.UI.Entities
         public int ItemId { get; set; }
         public int Count { get; set; }
         public int Slot { get; set; }
+        public int KeyIndex { get; set; }
 
         //public InventoryItemData ItemInBag { get; set; }
 

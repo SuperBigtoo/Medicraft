@@ -1,0 +1,29 @@
+{
+  "textureAtlas": {
+    "texture": "treant_spritesheet.png",
+    "regionWidth": 216,
+    "regionHeight": 216
+  },
+  "cycles": {
+    "default_idle": {
+      "frames": [0,1,2],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "default_dying": {
+      "frames": [0,1,2],
+      "isLooping": false,
+      "frameDuration": 0.3
+    },
+    "default_attacking": {
+      "frames": [4,5,6,7,7],
+      "isLooping": false,
+      "frameDuration": 0.16
+    },
+    "default_walking": {
+      "frames": [8,9,10,11],
+      "isLooping": false,
+      "frameDuration": 0.2
+    }
+  }
+}

@@ -23,9 +23,9 @@ namespace Medicraft.Entities
         public int EXPMaxCap { get; set; }     // meant for playable
 
         // Character Stats
-        public int ATK { get; set; }
-        public int HP { get; set; }
-        public int MaxHP { get; set; }
+        public float ATK { get; set; }
+        public float HP { get; set; }
+        public float MaxHP { get; set; }
         public float MaxMana { get; set; }
         public float Mana { get; set; }
         public float ManaRegenRate { get; set; }
@@ -36,8 +36,8 @@ namespace Medicraft.Entities
         public float Evasion { get; set; }
 
         // Keeping the default stats values for Buffs and Debuffs 
-        public int BaseATK { get; protected set; }
-        public int BaseMaxHP { get; protected set; }
+        public float BaseATK { get; protected set; }
+        public float BaseMaxHP { get; protected set; }
         public int BaseSpeed { get; protected set; }
         public float BaseMaxMana { get; protected set; }
         public float BaseManaRegenRate { get; protected set; }
@@ -145,10 +145,10 @@ namespace Medicraft.Entities
         public float BuffTimer { get; set; }
         public float DebuffTimer { get; set; }
 
-        protected float _attackSpeed;
-        protected float _cooldownAttack;
-        protected float _cooldownAttackTimer;
-        protected bool _isAttackCooldown;
+        protected float attackSpeed;
+        protected float cooldownAttack;
+        protected float cooldownAttackTimer;
+        protected bool isAttackCooldown;
 
         // Combat Nunber
         public int CombatNumCase { get; set; }
@@ -213,10 +213,10 @@ namespace Medicraft.Entities
             BuffTimer = 0f;
             DebuffTimer = 0f;
 
-            _attackSpeed = 1f;
-            _cooldownAttack = 0.4f;
-            _cooldownAttackTimer = _cooldownAttack;
-            _isAttackCooldown = false;
+            attackSpeed = 1f;
+            cooldownAttack = 0.4f;
+            cooldownAttackTimer = cooldownAttack;
+            isAttackCooldown = false;
 
             IsRespawnable = true;
             IsStunable = true;
@@ -279,10 +279,10 @@ namespace Medicraft.Entities
             BuffTimer = 0f;
             DebuffTimer = 0f;
 
-            _attackSpeed = entity._attackSpeed;
-            _cooldownAttack = entity._cooldownAttack;
-            _cooldownAttackTimer = _cooldownAttack;
-            _isAttackCooldown = entity._isAttackCooldown;
+            attackSpeed = entity.attackSpeed;
+            cooldownAttack = entity.cooldownAttack;
+            cooldownAttackTimer = cooldownAttack;
+            isAttackCooldown = entity.isAttackCooldown;
 
             IsRespawnable = entity.IsRespawnable;
             IsStunable = entity.IsStunable;
@@ -377,8 +377,8 @@ namespace Medicraft.Entities
 
         protected virtual void SetCharacterStats(CharacterData charData, int level)
         {
-            BaseATK = ATK = charData.ATK + ((level - 1) * 2);
-            BaseMaxHP = MaxHP = HP = (int)(charData.HP + ((level - 1) * (charData.HP * 0.1)));
+            BaseATK = ATK = (float)(charData.ATK + ((level - 1) * 2));
+            BaseMaxHP = MaxHP = HP = (float)(charData.HP + ((level - 1) * (charData.HP * 0.1)));
             BaseMaxMana = MaxMana = Mana = (float)(100f + ((level - 1) * (100f * 0.05)));
             BaseManaRegenRate = ManaRegenRate = 0.5f;
             BaseDEF = DEF = (float)charData.DEF_Percent;
@@ -389,7 +389,7 @@ namespace Medicraft.Entities
         }
 
         // Knowing this MovementControl, CombatControl and some methods below this is for Mobs only
-        protected void MovementControl(float deltaSeconds)
+        protected virtual void MovementControl(float deltaSeconds)
         {
             var walkSpeed = deltaSeconds * Speed;
             _initPos = Position;
@@ -400,7 +400,7 @@ namespace Medicraft.Entities
             // Play Sprite: Idle 
             if (!IsAttacking && !IsMoving)
             {
-                CurrentAnimation = SpriteCycle + "_walking";  // Idle
+                CurrentAnimation = SpriteCycle + "_idle";  // Idle
                 Sprite.Play(CurrentAnimation);
             }
 
@@ -410,45 +410,40 @@ namespace Medicraft.Entities
             {
                 if (_pathFinding.GetPath().Count != 0)
                 {
-                    if (_currentNodeIndex < _pathFinding.GetPath().Count - _stoppingNodeIndex)
+                    if (_pathFinding.GetPath().Count > 2)
                     {
-                        // Calculate direction to the next node
-                        var direction = new Vector2(_pathFinding.GetPath()[_currentNodeIndex + 1].col
-                            - _pathFinding.GetPath()[_currentNodeIndex].col, _pathFinding.GetPath()[_currentNodeIndex + 1].row
-                            - _pathFinding.GetPath()[_currentNodeIndex].row);
-                        direction.Normalize();
+                        if (_currentNodeIndex < _pathFinding.GetPath().Count - _stoppingNodeIndex)
+                        {
+                            // Calculate direction to the next node
+                            var direction = new Vector2(_pathFinding.GetPath()[_currentNodeIndex + 1].col
+                                - _pathFinding.GetPath()[_currentNodeIndex].col, _pathFinding.GetPath()[_currentNodeIndex + 1].row
+                                - _pathFinding.GetPath()[_currentNodeIndex].row);
+                            direction.Normalize();
 
-                        // Move the character towards the next node
-                        Position += direction * walkSpeed;
-                        IsMoving = true;
+                            // Move the character towards the next node
+                            Position += direction * walkSpeed;
+                            IsMoving = true;
 
-                        // Check Animation
-                        if (Position.Y >= (PlayerManager.Instance.Player.Position.Y + 50f))
-                        {
-                            CurrentAnimation = SpriteCycle + "_walking";     // Up
-                        }
-                        if (Position.Y < (PlayerManager.Instance.Player.Position.Y - 30f))
-                        {
-                            CurrentAnimation = SpriteCycle + "_walking";     // Down
-                        }
-                        if (Position.X > (PlayerManager.Instance.Player.Position.X + 50f))
-                        {
-                            CurrentAnimation = SpriteCycle + "_walking";     // Left
-                        }
-                        if (Position.X < (PlayerManager.Instance.Player.Position.X - 50f))
-                        {
-                            CurrentAnimation = SpriteCycle + "_walking";     // Right
-                        }
+                            // Check Animation
+                            if (direction.Y == -1)
+                            {
+                                CurrentAnimation = SpriteCycle + "_walking";     // Up
+                            }
+                            if (direction.Y == 1)
+                            {
+                                CurrentAnimation = SpriteCycle + "_walking";     // Down
+                            }
+                            if (direction.X == -1)
+                            {
+                                CurrentAnimation = SpriteCycle + "_walking";     // Left
+                            }
+                            if (direction.X == 1)
+                            {
+                                CurrentAnimation = SpriteCycle + "_walking";     // Right
+                            }
 
-                        Sprite.Play(CurrentAnimation);
-
-                        // Check if the character has reached the next node
-                        if (Vector2.Distance(Position, new Vector2((_pathFinding.GetPath()[_currentNodeIndex + 1].col * 64) + 32
-                            , (_pathFinding.GetPath()[_currentNodeIndex + 1].row * 64) + 32)) < 1f)
-                        {
-                            _currentNodeIndex++;
+                            Sprite.Play(CurrentAnimation);
                         }
-                        //System.Diagnostics.Debug.WriteLine($"Pos Mob: {Position.X} {Position.Y}");       
                     }
                     else IsMoving = false;
                 }
@@ -497,7 +492,7 @@ namespace Medicraft.Entities
             }
         }
 
-        protected void UpdateTargetNode(float deltaSeconds, EntityData entityData)
+        protected virtual void UpdateTargetNode(float deltaSeconds, EntityData entityData)
         {
             _nextNodeTimer += deltaSeconds;
 
@@ -711,7 +706,7 @@ namespace Medicraft.Entities
         }
 
         // Mostly this one for Hostile Mobs
-        protected void CombatControl(float deltaSeconds)
+        protected virtual void CombatControl(float deltaSeconds)
         {
             // Do Attack
             if (BoundingDetectEntity.Intersects(PlayerManager.Instance.Player.BoundingHitBox)
@@ -721,8 +716,8 @@ namespace Medicraft.Entities
                 Sprite.Play(CurrentAnimation);
 
                 IsAttacking = true;
-                ActionTimer = _attackSpeed;
-                _cooldownAttackTimer = _cooldownAttack;
+                ActionTimer = attackSpeed;
+                cooldownAttackTimer = cooldownAttack;
             }
 
             if (IsAttacking)
@@ -734,21 +729,21 @@ namespace Medicraft.Entities
                 }
                 else
                 {
-                    if (!_isAttackCooldown)
+                    if (!isAttackCooldown)
                     {
                         CheckAttackDetection();
-                        _isAttackCooldown = true;
+                        isAttackCooldown = true;
                     }
                     else
                     {
-                        if (_cooldownAttackTimer > 0)
+                        if (cooldownAttackTimer > 0)
                         {
-                            _cooldownAttackTimer -= deltaSeconds;
+                            cooldownAttackTimer -= deltaSeconds;
                         }
                         else
                         {
                             IsAttacking = false;
-                            _isAttackCooldown = false;
+                            isAttackCooldown = false;
                         }
                     }
                 }
@@ -762,13 +757,13 @@ namespace Medicraft.Entities
             {
                 if (PlayerManager.Instance.Player.HP > 0)
                 {
-                    int totalDamage = TotalDamage(ATK
+                    float totalDamage = TotalDamage(ATK
                         , PlayerManager.Instance.Player.DEF
                         , PlayerManager.Instance.Player.Evasion);
 
                     var combatNumVelocity = PlayerManager.Instance.Player.SetCombatNumDirection();
                     PlayerManager.Instance.Player.AddCombatLogNumbers(Name
-                        , totalDamage.ToString()
+                        , ((int)totalDamage).ToString()
                         , CombatNumCase
                         , combatNumVelocity
                         , NormalHitEffectAttacked);
@@ -785,12 +780,12 @@ namespace Medicraft.Entities
             }
         }
 
-        protected virtual int TotalDamage(int ATK, float DefPercent, float EvasionPercent)
+        protected virtual float TotalDamage(float ATK, float DefPercent, float EvasionPercent)
         {
             var random = new Random();
 
             // Default total damage
-            int totalDamage = ATK;
+            float totalDamage = ATK;
 
             // Check evasion
             int evaChance = random.Next(1, 101);
@@ -803,7 +798,15 @@ namespace Medicraft.Entities
             else
             {
                 // if Attacked
-                CombatNumCase = 1;
+                // Check crit chance           
+                int critChance = random.Next(1, 101);
+                if (critChance <= Crit * 100)
+                {
+                    totalDamage += (int)(totalDamage * CritDMG);
+                    CombatNumCase = 1;
+                }
+                else CombatNumCase = 0;
+
                 // Calculate DEF
                 totalDamage -= (int)(totalDamage * DefPercent);
             }
@@ -821,10 +824,7 @@ namespace Medicraft.Entities
                 {
                     Sprite.Depth = playerDepth - 0.00001f; // In front Player
                 }
-                else
-                {
-                    Sprite.Depth = playerDepth + 0.00001f; // Behide Player
-                }
+                else Sprite.Depth = playerDepth + 0.00001f; // Behide Player
             }
 
             var TopLayerObject = GameGlobals.Instance.TopLayerObject;

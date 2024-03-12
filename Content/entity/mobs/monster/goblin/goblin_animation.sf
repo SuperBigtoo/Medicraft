@@ -1,0 +1,29 @@
+{
+  "textureAtlas": {
+    "texture": "goblin_spritesheet.png",
+    "regionWidth": 144,
+    "regionHeight": 144
+  },
+  "cycles": {
+    "default_idle": {
+      "frames": [0,1,2],
+      "isLooping": false,
+      "frameDuration": 0.17
+    },
+    "default_attacking": {
+      "frames": [6,7,8,9,9],
+      "isLooping": false,
+      "frameDuration": 0.14
+    },
+    "default_walking": {
+      "frames": [12,13,14,15,16,17],
+      "isLooping": false,
+      "frameDuration": 0.1
+    },
+    "default_dying": {
+      "frames": [0,1,2],
+      "isLooping": false,
+      "frameDuration": 0.17
+    }
+  }
+}

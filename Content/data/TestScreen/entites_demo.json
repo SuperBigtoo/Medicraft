@@ -39,5 +39,37 @@
     "RoutePoint": [ [] ],
     "AggroTime": 5,
     "Position": [ 1276, 566 ]
+  },
+  {
+    "Id": 3,
+    "CharId": 100,
+    "Level": 1,
+    "Name": "Cat",
+    "PathFindingType": 0,
+    "NodeCycleTime": 10,
+    "PartrolArea": "",
+    "RoutePoint": [
+      [ 573, 1056 ],
+      [ 638, 1250 ],
+      [ 960, 1184 ],
+      [ 1273, 1272 ],
+      [ 1481, 1100 ],
+      [ 1189, 989 ],
+      [ 916, 1000 ]
+    ],
+    "AggroTime": 5,
+    "Position": [ 916, 1000 ]
+  },
+  {
+    "Id": 4,
+    "CharId": 201,
+    "Level": 1,
+    "Name": "Cat",
+    "PathFindingType": 1,
+    "NodeCycleTime": 10,
+    "PartrolArea": "zone_2",
+    "RoutePoint": [ [] ],
+    "AggroTime": 5,
+    "Position": [ 1173, 1596 ]
   }
 ]

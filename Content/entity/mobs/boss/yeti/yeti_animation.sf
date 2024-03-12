@@ -1,0 +1,34 @@
+{
+  "textureAtlas": {
+    "texture": "yeti_spritesheet.png",
+    "regionWidth": 274,
+    "regionHeight": 336
+  },
+  "cycles": {
+    "default_idle": {
+      "frames": [18,19,20],
+      "isLooping": false,
+      "frameDuration": 0.25
+    },
+    "default_walking": {
+      "frames": [12,13,14,15,16,17],
+      "isLooping": false,
+      "frameDuration": 0.1
+    },
+    "default_attacking": {
+      "frames": [6,7,8,9,9,9],
+      "isLooping": false,
+      "frameDuration": 0.1
+    },
+    "default_skill": {
+      "frames": [0,1,2,3,1,2,3,1,2,3,3],
+      "isLooping": false,
+      "frameDuration": 0.16
+    },
+    "default_dying": {
+      "frames": [18,19,20],
+      "isLooping": false,
+      "frameDuration": 0.2
+    }
+  }
+}

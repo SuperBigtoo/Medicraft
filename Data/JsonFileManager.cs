@@ -22,8 +22,8 @@ namespace Medicraft.Data
             // Set current Stats
             PlayerManager.Instance.Player.PlayerData.Level = PlayerManager.Instance.Player.Level;
             PlayerManager.Instance.Player.PlayerData.EXP = PlayerManager.Instance.Player.EXP;
-            PlayerManager.Instance.Player.PlayerData.CurrentHP = PlayerManager.Instance.Player.HP;
-            PlayerManager.Instance.Player.PlayerData.CurrentMana = (int)PlayerManager.Instance.Player.Mana;
+            PlayerManager.Instance.Player.PlayerData.CurrentHPPercentage = PlayerManager.Instance.Player.HP;
+            PlayerManager.Instance.Player.PlayerData.CurrentManaPercentage = (int)PlayerManager.Instance.Player.Mana;
             PlayerManager.Instance.Player.PlayerData.CurrentMap = ScreenManager.Instance.CurrentMap;
 
             // Set Player Position
@@ -32,7 +32,11 @@ namespace Medicraft.Data
 
             // Set Current InventoryData
             var inventoryItems = new List<InventoryItemData>();
-            foreach (var item in InventoryManager.Instance.InventoryBag.Values)
+            //foreach (var item in InventoryManager.Instance.InventoryBag.Values)
+            //{
+            //    inventoryItems.Add(item);
+            //}
+            foreach (var item in InventoryManager.Instance.NewInventoryBag.Values)
             {
                 inventoryItems.Add(item);
             }

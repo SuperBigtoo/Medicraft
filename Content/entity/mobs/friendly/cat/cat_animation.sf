@@ -7,12 +7,12 @@
   "cycles": {
     "white_idle_1": {
       "frames": [ 60, 61, 62 ],
-      "isLooping": false,
+      "isLooping": true,
       "frameDuration": 0.15
     },
     "white_idle_2": {
       "frames": [ 36, 37, 38 ],
-      "isLooping": false,
+      "isLooping": true,
       "frameDuration": 0.2
     },
     "white_walking_down": {
@@ -37,12 +37,12 @@
     },
     "siamnese_idle_1": {
       "frames": [ 159, 160, 161 ],
-      "isLooping": false,
+      "isLooping": true,
       "frameDuration": 0.15
     },
     "siamnese_idle_2": {
       "frames": [ 111, 112, 113 ],
-      "isLooping": false,
+      "isLooping": true,
       "frameDuration": 0.2
     },
     "siamnese_walking_down": {
@@ -67,12 +67,12 @@
     },
     "cow_idle_1": {
       "frames": [ 188, 187, 186 ],
-      "isLooping": false,
+      "isLooping": true,
       "frameDuration": 0.15
     },
     "cow_idle_2": {
       "frames": [ 140, 139, 138 ],
-      "isLooping": false,
+      "isLooping": true,
       "frameDuration": 0.2
     },
     "cow_walking_down": {
@@ -97,12 +97,12 @@
     },
     "som_idle_1": {
       "frames": [ 180, 181, 182 ],
-      "isLooping": false,
+      "isLooping": true,
       "frameDuration": 0.15
     },
     "som_idle_2": {
       "frames": [ 108, 109, 110 ],
-      "isLooping": false,
+      "isLooping": true,
       "frameDuration": 0.2
     },
     "som_walking_down": {
@@ -127,12 +127,12 @@
     },
     "chok_idle_1": {
       "frames": [ 63, 64, 65 ],
-      "isLooping": false,
+      "isLooping": true,
       "frameDuration": 0.15
     },
     "chok_idle_2": {
       "frames": [ 15, 16, 17 ],
-      "isLooping": false,
+      "isLooping": true,
       "frameDuration": 0.2
     },
     "chok_walking_down": {
@@ -157,12 +157,12 @@
     },
     "brown_idle_1": {
       "frames": [ 66, 67, 68 ],
-      "isLooping": false,
+      "isLooping": true,
       "frameDuration": 0.15
     },
     "brown_idle_2": {
       "frames": [ 18, 19, 20 ],
-      "isLooping": false,
+      "isLooping": true,
       "frameDuration": 0.2
     },
     "brown_walking_down": {
@@ -187,12 +187,12 @@
     },
     "tiger_idle_1": {
       "frames": [ 189, 190, 191 ],
-      "isLooping": false,
+      "isLooping": true,
       "frameDuration": 0.15
     },
     "tiger_idle_2": {
       "frames": [ 141, 142, 143 ],
-      "isLooping": false,
+      "isLooping": true,
       "frameDuration": 0.2
     },
     "tiger_walking_down": {
@@ -217,12 +217,12 @@
     },
     "black_idle_1": {
       "frames": [ 69, 70, 71 ],
-      "isLooping": false,
+      "isLooping": true,
       "frameDuration": 0.15
     },
     "black_idle_2": {
       "frames": [ 21, 22, 23 ],
-      "isLooping": false,
+      "isLooping": true,
       "frameDuration": 0.2
     },
     "black_walking_down": {

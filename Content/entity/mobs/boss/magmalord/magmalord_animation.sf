@@ -1,0 +1,34 @@
+{
+  "textureAtlas": {
+    "texture": "magmalord_spritesheet.png",
+    "regionWidth": 780,
+    "regionHeight": 520
+  },
+  "cycles": {
+    "default_attacking": {
+      "frames": [0,1,1,2,2],
+      "isLooping": false,
+      "frameDuration": 0.3
+    },
+    "default_idle": {
+      "frames": [12,13,14],
+      "isLooping": false,
+      "frameDuration": 0.3
+    },
+    "default_walking": {
+      "frames": [8,9,10,11],
+      "isLooping": false,
+      "frameDuration": 0.3
+    },
+    "default_skill": {
+      "frames": [4,5,6,6,7,7,7],
+      "isLooping": false,
+      "frameDuration": 0.3
+    },
+    "default_dying": {
+      "frames": [12,13,14],
+      "isLooping": false,
+      "frameDuration": 0.3
+    }
+  }
+}

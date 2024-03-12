@@ -1,16 +1,16 @@
 ﻿{
   "CharId": 0,
-  "Level": 20,
+  "Level": 1,
   "EXP": 0,
-  "CurrentHP": 100,
-  "CurrentMana": 100,
+  "CurrentHPPercentage": 1.0,
+  "CurrentManaPercentage": 1.0,
   "CurrentMap": "Test",
   "Position": [ 0, 0 ],
   "SkillPoint": 9,
   "Abilities": {
     "NormalSkillLevel": 1,
-    "BurstSkillLevel": 10,
-    "PassiveSkillLevel": 9
+    "BurstSkillLevel": 1,
+    "PassiveSkillLevel": 1
   },
   "InventoryData": {
     "GoldCoin": 10,

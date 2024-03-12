@@ -37,8 +37,8 @@ namespace Medicraft.Entities
         public float PassiveActivatedTime { get; private set; }
         public float PassiveActivatedTimer { get; private set; }       
 
-        public int tempATK, tempHP, tempSpeed;
-        public float tempMana, tempDEF, tempCrit, tempCritDMG, tempEvasion;
+        public int tempSpeed;
+        public float tempATK, tempHP, tempMana, tempDEF, tempCrit, tempCritDMG, tempEvasion;
 
         private float _knockbackForce, _percentNormalHit;
 
@@ -102,7 +102,7 @@ namespace Medicraft.Entities
             BoundingCollisionY = 2.60f;
 
             // Rec for check Collision
-            BoundingDetectCollisions = new Rectangle(
+            BoundingDetectCollisions = new RectangleF(
                 (int)((int)Position.X - sprite.TextureRegion.Width / BoundingCollisionX),
                 (int)((int)Position.Y + sprite.TextureRegion.Height / BoundingCollisionY),
                 sprite.TextureRegion.Width / 8,
@@ -131,8 +131,8 @@ namespace Medicraft.Entities
             base.InitializeCharacterData(charId, level);       
 
             // Set current HP & Mana
-            HP = PlayerData.CurrentHP;
-            Mana = PlayerData.CurrentMana;
+            HP = (float)(BaseMaxHP * PlayerData.CurrentHPPercentage);
+            Mana = (float)(BaseMaxMana * PlayerData.CurrentManaPercentage);
         }
 
         // Update Player
@@ -160,9 +160,6 @@ namespace Medicraft.Entities
 
                 // Mana regeneration
                 ManaRegeneration(deltaSeconds);
-
-                // Blinking if attacked
-                HitBlinking(deltaSeconds);
             }
             else
             {
@@ -176,6 +173,9 @@ namespace Medicraft.Entities
 
             // Update time conditions
             UpdateTimerConditions(deltaSeconds);
+
+            // Blinking if attacked
+            HitBlinking(deltaSeconds);
 
             // Ensure hp or mana doesn't exceed the maximum & minimum value
             MinimumCapacity();
@@ -352,7 +352,7 @@ namespace Medicraft.Entities
                 IsPassiveSkillCooldown = true;
 
                 // Do passive skill
-                var combatNumbers = PassiveSkillControl(PlayerData.Abilities.PassiveSkillLevel);
+                var combatNumbers = (int)PassiveSkillControl(PlayerData.Abilities.PassiveSkillLevel);
 
                 CombatNumCase = 2;
                 var combatNumVelocity = SetCombatNumDirection();
@@ -576,14 +576,14 @@ namespace Medicraft.Entities
         /// Instantly restore Player Character's HP when the HP is below 10% and increase DEF_Percent for an amount of time
         /// </summary>
         /// <param name="skillLevel">Passive Skill level base on PlayerData.Abilities.PassiveSkillLevel</param>
-        private int PassiveSkillControl(int skillLevel)
+        private float PassiveSkillControl(int skillLevel)
         {
-            var healingValue = 0;       
+            float healingValue = 0;       
 
             switch (skillLevel)
             {
                 case 1:
-                    healingValue = (int)(BaseMaxHP * 0.25);
+                    healingValue = BaseMaxHP * 0.25f;
                     tempDEF = 0.15f;
                     PassiveActivatedTime = 6f;
 
@@ -593,7 +593,7 @@ namespace Medicraft.Entities
                     break;
 
                 case 2:
-                    healingValue = (int)(BaseMaxHP * 0.275);
+                    healingValue = BaseMaxHP * 0.275f;
                     tempDEF = 0.175f;
                     PassiveActivatedTime = 6f;
 
@@ -603,7 +603,7 @@ namespace Medicraft.Entities
                     break;
 
                 case 3:
-                    healingValue = (int)(BaseMaxHP * 0.3);
+                    healingValue = BaseMaxHP * 0.3f;
                     tempDEF = 0.2f;
                     PassiveActivatedTime = 7f;
 
@@ -613,7 +613,7 @@ namespace Medicraft.Entities
                     break;
 
                 case 4:
-                    healingValue = (int)(BaseMaxHP * 0.325);
+                    healingValue = BaseMaxHP * 0.325f;
                     tempDEF = 0.225f;
                     PassiveActivatedTime = 7f;
 
@@ -623,7 +623,7 @@ namespace Medicraft.Entities
                     break;
 
                 case 5:
-                    healingValue = (int)(BaseMaxHP * 0.35);
+                    healingValue = BaseMaxHP * 0.35f;
                     tempDEF = 0.25f;
                     PassiveActivatedTime = 8f;
 
@@ -633,7 +633,7 @@ namespace Medicraft.Entities
                     break;
 
                 case 6:
-                    healingValue = (int)(BaseMaxHP * 0.375);
+                    healingValue = BaseMaxHP * 0.375f;
                     tempDEF = 0.275f;
                     PassiveActivatedTime = 8f;
 
@@ -643,7 +643,7 @@ namespace Medicraft.Entities
                     break;
 
                 case 7:
-                    healingValue = (int)(BaseMaxHP * 0.4);
+                    healingValue = BaseMaxHP * 0.4f;
                     tempDEF = 0.3f;
                     PassiveActivatedTime = 9f;
 
@@ -653,7 +653,7 @@ namespace Medicraft.Entities
                     break;
 
                 case 8:
-                    healingValue = (int)(BaseMaxHP * 0.425);
+                    healingValue = BaseMaxHP * 0.425f;
                     tempDEF = 0.325f;
                     PassiveActivatedTime = 9f;
 
@@ -663,7 +663,7 @@ namespace Medicraft.Entities
                     break;
 
                 case 9:
-                    healingValue = (int)(BaseMaxHP * 0.45);
+                    healingValue = BaseMaxHP * 0.45f;
                     tempDEF = 0.35f;
                     PassiveActivatedTime = 10f;
 
@@ -673,7 +673,7 @@ namespace Medicraft.Entities
                     break;
 
                 case 10:
-                    healingValue = (int)(BaseMaxHP * 0.5);
+                    healingValue = BaseMaxHP * 0.5f;
                     tempDEF = 0.4f;
                     PassiveActivatedTime = 10f;
 
@@ -689,7 +689,7 @@ namespace Medicraft.Entities
         }
 
         // Check Attack
-        private void CheckAttackDetection(int atk, float percentHit, bool isUndodgeable, float stunTime, string effectAttacked)
+        private void CheckAttackDetection(float atk, float percentHit, bool isUndodgeable, float stunTime, string effectAttacked)
         {
             foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed))
             {
@@ -702,7 +702,7 @@ namespace Medicraft.Entities
                             var totalDamage = TotalDamage(atk, percentHit, entity.DEF, entity.Evasion, isUndodgeable);                                                 
 
                             var combatNumVelocity = entity.SetCombatNumDirection();
-                            entity.AddCombatLogNumbers(Name, totalDamage.ToString()
+                            entity.AddCombatLogNumbers(Name, ((int)totalDamage).ToString()
                                 , CombatNumCase, combatNumVelocity, effectAttacked);
 
                             // In case the Attack doesn't Missed
@@ -740,12 +740,12 @@ namespace Medicraft.Entities
             }
         }
 
-        private int TotalDamage(int ATK, float HitPercent, float DefPercent, float EvasionPercent, bool IsUndodgeable)
+        private float TotalDamage(float ATK, float HitPercent, float DefPercent, float EvasionPercent, bool IsUndodgeable)
         {
             var random = new Random();
 
             // Default total damage
-            int totalDamage = (int)(ATK * HitPercent);
+            float totalDamage = ATK * HitPercent;
 
             // Check evasion
             int evaChance = random.Next(1, 101);
@@ -819,7 +819,7 @@ namespace Medicraft.Entities
 
                         case GameObjects.GameObject.GameObjectType.Item:
 
-                            var itemId = gameObject.ReferId.ToString();
+                            var itemId = gameObject.ReferId;
                             var quantityDrop = gameObject.QuantityDrop;
 
                             // Collecting Item into Player's Inventory                         
@@ -1038,7 +1038,7 @@ namespace Medicraft.Entities
             return CombatNumVelocity;
         }
 
-        public bool RestoresHP(string actorName, int value, bool isCheckingCap)
+        public bool RestoresHP(string actorName, float value, bool isCheckingCap)
         {
             if (isCheckingCap)
             {
@@ -1051,7 +1051,7 @@ namespace Medicraft.Entities
                     CombatNumCase = 2;
                     var combatNumVelocity = SetCombatNumDirection();
                     AddCombatLogNumbers(actorName
-                        , value.ToString()
+                        , ((int)value).ToString()
                         , CombatNumCase
                         , combatNumVelocity
                         , PassiveSkillEffectActivated);
@@ -1072,7 +1072,7 @@ namespace Medicraft.Entities
                 CombatNumCase = 2;
                 var combatNumVelocity = SetCombatNumDirection();
                 AddCombatLogNumbers(actorName
-                    , value.ToString()
+                    , ((int)value).ToString()
                     , CombatNumCase
                     , combatNumVelocity
                     , PassiveSkillEffectActivated);

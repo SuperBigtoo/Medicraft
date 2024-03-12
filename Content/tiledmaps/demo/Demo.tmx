@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="32" tileheight="32" infinite="0" nextlayerid="21" nextobjectid="62">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="32" tileheight="32" infinite="0" nextlayerid="21" nextobjectid="71">
  <tileset firstgid="1" name="rpg_maker_vx_rtp_tileset_by_telles0808" tilewidth="32" tileheight="32" tilecount="8064" columns="64">
   <image source="rpg_maker_vx_rtp_tileset_by_telles0808.png" width="2048" height="4032"/>
   <tile id="4028">
@@ -766,6 +766,27 @@
   <object id="61" name="Respawn" x="992" y="1150.67">
    <point/>
   </object>
+  <object id="62" name="cat_route_1" x="573.333" y="1056">
+   <point/>
+  </object>
+  <object id="63" name="cat_route_2" x="638.667" y="1250.67">
+   <point/>
+  </object>
+  <object id="64" name="cat_route_3" x="960" y="1184">
+   <point/>
+  </object>
+  <object id="65" name="cat_route_4" x="1273.33" y="1272">
+   <point/>
+  </object>
+  <object id="66" name="cat_route_5" x="1481.33" y="1100">
+   <point/>
+  </object>
+  <object id="67" name="cat_route_6" x="1189.33" y="989.333">
+   <point/>
+  </object>
+  <object id="68" name="cat_route_7" x="916" y="1000">
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup id="15" name="CraftingTableArea">
   <object id="42" name="TableCraft" x="1165.67" y="1069" width="99.3333" height="104"/>
@@ -776,5 +797,6 @@
  </objectgroup>
  <objectgroup id="20" name="MobPartrolArea">
   <object id="52" name="zone_1" x="898" y="378" width="484" height="232"/>
+  <object id="69" name="zone_2" x="1090.67" y="1505.33" width="604" height="190.667"/>
  </objectgroup>
 </map>

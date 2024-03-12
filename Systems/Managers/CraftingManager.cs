@@ -38,24 +38,34 @@ namespace Medicraft.Systems.Managers
         {
             var recipeData = _craftingRecipeDatas.FirstOrDefault(i => i.RecipeId.Equals(craftingItemId));
             var ingredients = recipeData.Ingredients;
-            var craftableQuantity = 0;
+            var craftableQuantity = new List<int>();
 
             foreach (var ingredient in ingredients)
             {
-                var isItemFound = InventoryManager.Instance.InventoryBag.TryGetValue(
-                    ingredient.ItemId.ToString(), out InventoryItemData itemInBag);
+                //var isItemFound = InventoryManager.Instance.InventoryBag.TryGetValue(
+                //    ingredient.ItemId.ToString(), out InventoryItemData itemInBag);
+
+                var stackItem = InventoryManager.Instance.NewInventoryBag.Where
+                    (i => i.Value.ItemId.Equals(ingredient.ItemId));
 
                 // if any of itemInBag if null or not found BREAK!  
-                if (!isItemFound) return 0;
+                if (stackItem == null || !stackItem.Any()) return 0;
+
+                // Sum the count of item in stackItem
+                int totalCount = 0;
+                foreach (var item in stackItem)
+                {
+                    totalCount += item.Value.Count;
+                }
 
                 // if any of itemInBag count is less than ingredient count then BREAK!!
-                if (itemInBag.Count < ingredient.Quantity) return 0;
+                if (totalCount < ingredient.Quantity) return 0;
 
                 // check craftable quantity with ingredient count and itemInBag count
-                craftableQuantity = itemInBag.Count / ingredient.Quantity;
+                craftableQuantity.Add(totalCount / ingredient.Quantity);
             }
 
-            return craftableQuantity;
+            return craftableQuantity.Min();
         }
 
         public void CraftingItem(int craftingItemId)
@@ -65,12 +75,31 @@ namespace Medicraft.Systems.Managers
 
             foreach (var ingredient in ingredients)
             {
-                var itemInBag = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(i => i.ItemId.Equals(ingredient.ItemId));
+                //var itemInBag = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(i => i.ItemId.Equals(ingredient.ItemId));
 
-                itemInBag.Count -= ingredient.Quantity;
+                //itemInBag.Count -= ingredient.Quantity;
 
-                if (itemInBag.Count == 0) 
-                    InventoryManager.Instance.InventoryBag.Remove(itemInBag.ItemId.ToString());
+                //if (itemInBag.Count == 0) 
+                //    InventoryManager.Instance.InventoryBag.Remove(itemInBag.ItemId.ToString());
+
+                var stackItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                    (i => i.Value.ItemId.Equals(ingredient.ItemId));
+
+                stackItem.Value.Count -= ingredient.Quantity;
+
+                if (stackItem.Value.Count == 0)
+                {
+                    InventoryManager.Instance.NewInventoryBag.Remove(stackItem.Key);
+                }
+                else if (stackItem.Value.Count < 0)
+                {
+                    var tempCount = stackItem.Value.Count;
+                    InventoryManager.Instance.NewInventoryBag.Remove(stackItem.Key);
+
+                    var newStackItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                        (i => i.Value.ItemId.Equals(ingredient.ItemId));
+                    newStackItem.Value.Count += tempCount; 
+                }
             }
 
             InventoryManager.Instance.AddItem(recipeData.RecipeId, recipeData.ResultQuantity);

@@ -218,7 +218,7 @@ namespace GeonBit.UI
         public DrawUtils DrawUtils = null;
 
         /// <summary>Current active entity, eg last entity user interacted with.</summary>
-        public Entity ActiveEntity { get; internal set; } = null!;
+        public Entity ActiveEntity { get; set; } = null!;
 
         /// <summary>The current target entity, eg what cursor points on. Can be null if cursor don't point on any entity.</summary>
         public Entity TargetEntity { get; private set; } = null!;

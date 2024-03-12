@@ -11,9 +11,9 @@
   },
   {
     "Id": 1,
-    "ReferId": 1,
+    "ReferId": 400,
     "Category": 0,
-    "Name": "ดอกบุนนาค",
+    "Name": "ดาบ",
     "Description": "test herb 2",
     "Position": [ 751, 1133 ],
     "IsRespawnable": true,

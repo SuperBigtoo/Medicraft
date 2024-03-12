@@ -4,7 +4,6 @@ using Medicraft.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Sprites;
-using System;
 using System.Linq;
 
 namespace Medicraft.Systems.Managers
@@ -72,7 +71,11 @@ namespace Medicraft.Systems.Managers
             GameGlobals.Instance.TopLeftCornerPosition = Player.Position - GameGlobals.Instance.GameScreenCenter;
 
             // Initialize equipment stats
-            RefreshEquipmentStats(true);
+            var itemEquipmentData = InventoryManager.Instance.NewInventoryBag.Values.Where
+                (e => e.Slot >= 0 && e.Slot < 6);
+
+            foreach (var item in itemEquipmentData)
+                RefreshEquipmentStats(item, true);
 
             // Initialize display inventory item after init Player's inventory data
             GUIManager.Instance.InitInventoryItemDisplay();
@@ -185,12 +188,13 @@ namespace Medicraft.Systems.Managers
                 if (keyboardCur.IsKeyDown(Keys.D1) && !GameGlobals.Instance.SwitchSlot_1)
                 {
                     GameGlobals.Instance.SwitchSlot_1 = true;
-
                     GameGlobals.Instance.CurrentSlotBarSelect = 0;
-                    var slotBarItem = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(
-                        i => i.Slot.Equals(InventoryManager.HotbarSlot_1));
 
-                    if (slotBarItem != null) InventoryManager.Instance.UseItemInHotbar(slotBarItem.ItemId);
+                    var hotbarItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                        (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_1));
+
+                    if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
+
                 }
                 else if (keyboardCur.IsKeyUp(Keys.D1))
                 {
@@ -200,12 +204,12 @@ namespace Medicraft.Systems.Managers
                 if (keyboardCur.IsKeyDown(Keys.D2) && !GameGlobals.Instance.SwitchSlot_2)
                 {
                     GameGlobals.Instance.SwitchSlot_2 = true;
-
                     GameGlobals.Instance.CurrentSlotBarSelect = 1;
-                    var slotBarItem = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(
-                        i => i.Slot.Equals(InventoryManager.HotbarSlot_2));
 
-                    if (slotBarItem != null) InventoryManager.Instance.UseItemInHotbar(slotBarItem.ItemId);
+                    var hotbarItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                        (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_2));
+
+                    if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
                 }
                 else if (keyboardCur.IsKeyUp(Keys.D2))
                 {
@@ -215,12 +219,12 @@ namespace Medicraft.Systems.Managers
                 if (keyboardCur.IsKeyDown(Keys.D3) && !GameGlobals.Instance.SwitchSlot_3)
                 {
                     GameGlobals.Instance.SwitchSlot_3 = true;
-
                     GameGlobals.Instance.CurrentSlotBarSelect = 2;
-                    var slotBarItem = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(
-                        i => i.Slot.Equals(InventoryManager.HotbarSlot_3));
 
-                    if (slotBarItem != null) InventoryManager.Instance.UseItemInHotbar(slotBarItem.ItemId);
+                    var hotbarItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                        (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_3));
+
+                    if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
                 }
                 else if (keyboardCur.IsKeyUp(Keys.D3))
                 {
@@ -230,12 +234,12 @@ namespace Medicraft.Systems.Managers
                 if (keyboardCur.IsKeyDown(Keys.D4) && !GameGlobals.Instance.SwitchSlot_4)
                 {
                     GameGlobals.Instance.SwitchSlot_4 = true;
-
                     GameGlobals.Instance.CurrentSlotBarSelect = 3;
-                    var slotBarItem = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(
-                        i => i.Slot.Equals(InventoryManager.HotbarSlot_4));
 
-                    if (slotBarItem != null) InventoryManager.Instance.UseItemInHotbar(slotBarItem.ItemId);
+                    var hotbarItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                        (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_4));
+
+                    if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
                 }
                 else if (keyboardCur.IsKeyUp(Keys.D4))
                 {
@@ -245,12 +249,12 @@ namespace Medicraft.Systems.Managers
                 if (keyboardCur.IsKeyDown(Keys.D5) && !GameGlobals.Instance.SwitchSlot_5)
                 {
                     GameGlobals.Instance.SwitchSlot_5 = true;
-
                     GameGlobals.Instance.CurrentSlotBarSelect = 4;
-                    var slotBarItem = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(
-                        i => i.Slot.Equals(InventoryManager.HotbarSlot_5));
 
-                    if (slotBarItem != null) InventoryManager.Instance.UseItemInHotbar(slotBarItem.ItemId);
+                    var hotbarItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                        (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_5));
+
+                    if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
                 }
                 else if (keyboardCur.IsKeyUp(Keys.D5))
                 {
@@ -260,12 +264,12 @@ namespace Medicraft.Systems.Managers
                 if (keyboardCur.IsKeyDown(Keys.D6) && !GameGlobals.Instance.SwitchSlot_6)
                 {
                     GameGlobals.Instance.SwitchSlot_6 = true;
-
                     GameGlobals.Instance.CurrentSlotBarSelect = 5;
-                    var slotBarItem = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(
-                        i => i.Slot.Equals(InventoryManager.HotbarSlot_6));
 
-                    if (slotBarItem != null) InventoryManager.Instance.UseItemInHotbar(slotBarItem.ItemId);
+                    var hotbarItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                        (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_6));
+
+                    if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
                 }
                 else if (keyboardCur.IsKeyUp(Keys.D6))
                 {
@@ -275,12 +279,11 @@ namespace Medicraft.Systems.Managers
                 if (keyboardCur.IsKeyDown(Keys.D7) && !GameGlobals.Instance.SwitchSlot_7)
                 {
                     GameGlobals.Instance.SwitchSlot_7 = true;
-
                     GameGlobals.Instance.CurrentSlotBarSelect = 6;
-                    var slotBarItem = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(
-                        i => i.Slot.Equals(InventoryManager.HotbarSlot_7));
+                    var hotbarItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                        (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_7));
 
-                    if (slotBarItem != null) InventoryManager.Instance.UseItemInHotbar(slotBarItem.ItemId);
+                    if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
                 }
                 else if (keyboardCur.IsKeyUp(Keys.D7))
                 {
@@ -290,12 +293,12 @@ namespace Medicraft.Systems.Managers
                 if (keyboardCur.IsKeyDown(Keys.D8) && !GameGlobals.Instance.SwitchSlot_8)
                 {
                     GameGlobals.Instance.SwitchSlot_8 = true;
-
                     GameGlobals.Instance.CurrentSlotBarSelect = 7;
-                    var slotBarItem = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(
-                        i => i.Slot.Equals(InventoryManager.HotbarSlot_8));
 
-                    if (slotBarItem != null) InventoryManager.Instance.UseItemInHotbar(slotBarItem.ItemId);
+                    var hotbarItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                        (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_8));
+
+                    if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
                 }
                 else if (keyboardCur.IsKeyUp(Keys.D8))
                 {
@@ -457,6 +460,7 @@ namespace Medicraft.Systems.Managers
             if (IsPlayerDead)
             {
                 Player.HP = Player.MaxHP;
+                Player.Mana = Player.MaxMana;
 
                 var curMap = ScreenManager.Instance.CurrentMap;
                 var mapPositionData = GameGlobals.Instance.MapLocationPointDatas.Where(m => m.Name.Equals(curMap));
@@ -517,76 +521,65 @@ namespace Medicraft.Systems.Managers
             } 
         }
 
-        public void RefreshEquipmentStats(bool isEquip)
+        public void RefreshEquipmentStats(InventoryItemData itemEquipmentData, bool isEquip)
         {
-            for (int i = 0; i < 6; i++)
+            if (itemEquipmentData != null)
             {
-                var itemEquipmentData = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(e => e.Slot.Equals(i));
+                var equipmentStats = GameGlobals.Instance.EquipmentStatsDatas.FirstOrDefault
+                        (e => e.ItemId.Equals(itemEquipmentData.ItemId));
 
-                if (itemEquipmentData != null)
+                foreach (var stats in equipmentStats.Stats)
                 {
-                    var isEquipmentFound = InventoryManager.Instance.InventoryBag.TryGetValue
-                    (itemEquipmentData.ItemId.ToString(), out InventoryItemData equipmentItem);
-
-                    if (isEquipmentFound)
+                    switch (stats.Target)
                     {
-                        var equipmentStats = GameGlobals.Instance.EquipmentStatsDatas.FirstOrDefault
-                            (e => e.ItemId.Equals(equipmentItem.ItemId));
+                        case "TrueATK":
+                            var valueTrueATK = (float)stats.Value;
+                            Player.ATK = isEquip ? (Player.ATK + valueTrueATK) : (Player.ATK - valueTrueATK);
+                            break;
 
-                        foreach (var stats in equipmentStats.Stats)
-                        {
-                            switch (stats.Target)
-                            {
-                                case "TrueATK":
-                                    var valueTrueATK = (int)(stats.Value);
-                                    Player.ATK = isEquip ? (Player.ATK + valueTrueATK) : (Player.ATK - valueTrueATK);
-                                    break;
+                        case "ATK%":
+                            var valueATK = Player.BaseATK * (float)stats.Value;
+                            Player.ATK = isEquip ? (Player.ATK + valueATK) : (Player.ATK - valueATK);
+                            break;
 
-                                case "ATK%":
-                                    var valueATK = (int)(Player.BaseATK * stats.Value);
-                                    Player.ATK = isEquip ? (Player.ATK + valueATK) : (Player.ATK - valueATK);
-                                    break;
+                        case "HP%":
+                            var valueMaxHP = Player.BaseMaxHP * (float)stats.Value;
+                            var valueHP = Player.HP * (float)stats.Value;
+                            Player.MaxHP = isEquip ? (Player.MaxHP + valueMaxHP) : (Player.MaxHP - valueMaxHP);
+                            Player.HP = isEquip ? (Player.HP + valueHP) : (Player.HP - (valueHP - (int)(stats.Value * 100)));
+                            break;
 
-                                case "HP%":
-                                    var valueMaxHP = (int)(Player.BaseMaxHP * stats.Value);
-                                    var valueHP = (int)(Player.HP * stats.Value);
-                                    Player.MaxHP = isEquip ? (Player.MaxHP + valueMaxHP) : (Player.MaxHP - valueMaxHP);
-                                    Player.HP = isEquip ? (Player.HP + valueHP) : (Player.HP - valueHP);
-                                    break;
+                        case "Mana%":
+                            var valueMaxMana = Player.BaseMaxMana * (float)stats.Value;
+                            var valueMana = Player.Mana * (float)stats.Value;
+                            Player.MaxMana = isEquip ? (Player.MaxMana + valueMaxMana) : (Player.MaxMana - valueMaxMana);
+                            Player.Mana = isEquip ? (Player.Mana + valueMana) : (Player.Mana - (valueMana - (int)(stats.Value * 100)));
+                            break;
 
-                                case "Mana%":
-                                    var valueMaxMana = (float)(Player.BaseMaxMana * stats.Value);
-                                    var valueMana = (float)(Player.Mana * stats.Value);
-                                    Player.MaxMana = isEquip ? (Player.MaxMana + valueMaxMana) : (Player.MaxMana - valueMaxMana);
-                                    Player.Mana = isEquip ? (Player.Mana + valueMana) : (Player.Mana - valueMana);
-                                    break;
+                        case "DEF%":
+                            var valueDEF = (float)stats.Value;
+                            Player.DEF = isEquip ? (Player.DEF + valueDEF) : (Player.DEF - valueDEF);
+                            break;
 
-                                case "DEF%":
-                                    var valueDEF = (float)stats.Value;
-                                    Player.DEF = isEquip ? (Player.DEF + valueDEF) : (Player.DEF - valueDEF);
-                                    break;
+                        case "Crit%":
+                            var valueCrit = (float)stats.Value;
+                            Player.Crit = isEquip ? (Player.Crit + valueCrit) : (Player.Crit - valueCrit);
+                            break;
 
-                                case "Crit%":
-                                    var valueCrit = (float)stats.Value;
-                                    Player.Crit = isEquip ? (Player.Crit + valueCrit) : (Player.Crit - valueCrit);
-                                    break;
+                        case "CritDMG%":
+                            var valueCritDMG = (float)stats.Value;
+                            Player.CritDMG = isEquip ? (Player.CritDMG + valueCritDMG) : (Player.CritDMG - valueCritDMG);
+                            break;
 
-                                case "CritDMG%":
-                                    var valueCritDMG = (float)stats.Value;
-                                    Player.CritDMG = isEquip ? (Player.CritDMG + valueCritDMG) : (Player.CritDMG - valueCritDMG);
-                                    break;
+                        case "Evasion%":
+                            var valueEvasion = (float)stats.Value;
+                            Player.Evasion = isEquip ? (Player.Evasion + valueEvasion) : (Player.Evasion - valueEvasion);
+                            break;
 
-                                case "Evasion%":
-                                    var valueEvasion = (float)stats.Value;
-                                    Player.Evasion = isEquip ? (Player.Evasion + valueEvasion) : (Player.Evasion - valueEvasion);
-                                    break;
-
-                                case "Speed%":
-                                    var valueSpeed = (int)(Player.BaseSpeed * stats.Value);
-                                    Player.Speed = isEquip ? (Player.Speed + valueSpeed) : (Player.Speed - valueSpeed);
-                                    break;
-                            }
-                        }
+                        case "Speed%":
+                            var valueSpeed = (int)(Player.BaseSpeed * stats.Value);
+                            Player.Speed = isEquip ? (Player.Speed + valueSpeed) : (Player.Speed - valueSpeed);
+                            break;
                     }
                 }
             }

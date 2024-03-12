@@ -61,7 +61,9 @@ namespace Medicraft.Screens
             // Adding Mobs to MobSpawner
             Dictionary<int, SpriteSheet> entitySpriteSheets = new()
             {
-                { 200,  _content.Load<SpriteSheet>("entity/mobs/monster/slime/slimes_animation.sf", new JsonContentLoader())}
+                { 100,  _content.Load<SpriteSheet>("entity/mobs/friendly/cat/cat_animation.sf", new JsonContentLoader())},
+                { 200,  _content.Load<SpriteSheet>("entity/mobs/monster/slime/slimes_animation.sf", new JsonContentLoader())},
+                { 201,  _content.Load<SpriteSheet>("entity/mobs/monster/goblin/goblin_animation.sf", new JsonContentLoader())}
             };
 
             _mobSpawner = new MobSpawner(10f);

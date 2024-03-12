@@ -5,6 +5,8 @@ using Medicraft.Entities;
 using Medicraft.Systems.Managers;
 using Medicraft.Data.Models;
 using MonoGame.Extended.Sprites;
+using Medicraft.Entities.Mobs.Monster;
+using Medicraft.Entities.Mobs.Friendly;
 
 namespace Medicraft.Systems.Spawners
 {
@@ -157,16 +159,21 @@ namespace Medicraft.Systems.Spawners
         {
             foreach (var entityData in entityDatas)
             {
-                var charId = entityData.CharId;
-
-                switch (charId)
+                switch (entityData.CharId)
                 {
+                    case 100:
+                        spriteSheets.TryGetValue(100, out SpriteSheet spriteSheetCat);
+                        AddEntity(new Cat(new AnimatedSprite(spriteSheetCat), entityData, Vector2.One));
+                        break;
+
                     case 200:
-                        spriteSheets.TryGetValue(200, out SpriteSheet _spriteSheetSlime);
-                        AddEntity(new Slime(new AnimatedSprite(_spriteSheetSlime), entityData, Vector2.One));
+                        spriteSheets.TryGetValue(200, out SpriteSheet spriteSheetSlime);
+                        AddEntity(new Slime(new AnimatedSprite(spriteSheetSlime), entityData, Vector2.One));
                         break;
 
                     case 201:
+                        spriteSheets.TryGetValue(201, out SpriteSheet spriteSheetGoblin);
+                        AddEntity(new Goblin(new AnimatedSprite(spriteSheetGoblin), entityData, Vector2.One));
                         break;
 
                     case 202:
