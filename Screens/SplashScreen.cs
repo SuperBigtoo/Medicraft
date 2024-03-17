@@ -69,7 +69,7 @@ namespace Medicraft.Screens
 
                     if (_index == 3)
                     {
-                        ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.TestScreen);
+                        ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.MainMenuScreen);
                     }
                 }
             }
@@ -89,7 +89,7 @@ namespace Medicraft.Screens
             if (GameGlobals.Instance.CurMouse.LeftButton == ButtonState.Pressed
                     && GameGlobals.Instance.PrevMouse.LeftButton == ButtonState.Released && !_index.Equals(3))
             {
-                ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.TestScreen);
+                ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.MainMenuScreen);
             }
         }
 

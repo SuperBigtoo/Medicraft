@@ -66,12 +66,14 @@ namespace Medicraft.Screens
                 { 201,  _content.Load<SpriteSheet>("entity/mobs/monster/goblin/goblin_animation.sf", new JsonContentLoader())}
             };
 
-            _mobSpawner = new MobSpawner(10f);
+            _mobSpawner = new MobSpawner(GameGlobals.Instance.MobsTestSpawnTime
+                , GameGlobals.Instance.MobsTestSpawnTimer);
             _mobSpawner.SetupSpawner(_entityDatas, entitySpriteSheets);
             EntityManager.Instance.Initialize(_mobSpawner);
 
             // Adding GameObject to ObjectSpawner
-            _objectSpawner = new ObjectSpawner(10f);
+            _objectSpawner = new ObjectSpawner(GameGlobals.Instance.ObjectTestSpawnTime
+                , GameGlobals.Instance.ObjectTestSpawnTimer);
             _objectSpawner.SetupSpawner(_objectDatas);
             ObjectManager.Instance.Initialize(_objectSpawner);
 
@@ -93,8 +95,6 @@ namespace Medicraft.Screens
 
         public override void Dispose()
         {
-            _drawEffectSystem?.Dispose();
-
             base.Dispose();
         }
 

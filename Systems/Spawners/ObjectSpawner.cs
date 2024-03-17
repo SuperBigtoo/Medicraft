@@ -10,10 +10,10 @@ using System.Linq;
 
 namespace Medicraft.Systems.Spawners
 {
-    public class ObjectSpawner(float initialSpawnTime) : IObjectManager
+    public class ObjectSpawner(float spawnTime, float spawnTimer) : IObjectManager
     {
-        public float InitialSpawnTime = initialSpawnTime;
-        public float SpawnTime = initialSpawnTime;
+        public float SpawnTime = spawnTime;
+        public float SpawnTimer = spawnTimer;
         public bool IsSpawn = false;
 
         private readonly List<GameObject> _initialObjects = [];
@@ -38,14 +38,14 @@ namespace Medicraft.Systems.Spawners
         public void Update(GameTime gameTime)
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            SpawnTime -= deltaSeconds;
+            SpawnTimer -= deltaSeconds;
 
             foreach (var obj in ObjectManager.Instance.GameObjects.Where(e => e.IsDestroyed))
             {
                 _destroyedObjects.Add(obj);
             }
 
-            if (SpawnTime <= 0)
+            if (SpawnTimer <= 0)
             {
                 if (_destroyedObjects.Count != 0)
                 {
@@ -59,7 +59,7 @@ namespace Medicraft.Systems.Spawners
                 }
 
                 IsSpawn = true;
-                SpawnTime = InitialSpawnTime;
+                SpawnTimer = SpawnTime;
             }
         }
 

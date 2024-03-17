@@ -51,6 +51,8 @@ namespace Medicraft.Entities
         public string CurrentAnimation { get; protected set; }
         
         public AnimatedSprite StatesSprite { get; set; }
+        public AnimatedSprite BuffSprite { get; set; }
+        public AnimatedSprite DebuffSprite { get; set; }
 
         // Used Effect Name
         public string NormalHitEffectActivated { get; protected set; }
@@ -325,14 +327,15 @@ namespace Medicraft.Entities
 
         protected virtual void InitializeCharacterData(int charId, int level)
         {
-            var charData = GameGlobals.Instance.CharacterDatas.Where(c => c.CharId.Equals(charId));
+            var charData = GameGlobals.Instance.CharacterDatas.FirstOrDefault
+                (c => c.CharId.Equals(charId));
 
-            CharId = charData.ElementAt(0).CharId;
-            Name = charData.ElementAt(0).Name;
+            CharId = charData.CharId;
+            Name = charData.Name;
 
-            SetEntityType(charData.ElementAt(0).Category);
+            SetEntityType(charData.Category);
 
-            SetCharacterStats(charData.ElementAt(0), level);
+            SetCharacterStats(charData, level);
         }
 
         protected virtual void SetEntityType(int category)
@@ -375,7 +378,7 @@ namespace Medicraft.Entities
             }
         }
 
-        protected virtual void SetCharacterStats(CharacterData charData, int level)
+        public virtual void SetCharacterStats(CharacterData charData, int level)
         {
             BaseATK = ATK = (float)(charData.ATK + ((level - 1) * 2));
             BaseMaxHP = MaxHP = HP = (float)(charData.HP + ((level - 1) * (charData.HP * 0.1)));
@@ -642,31 +645,21 @@ namespace Medicraft.Entities
                 }
             }
 
-            // Show Buff Timer
-            if (IsBuffOn)
+            // Decreasing BuffTimer
+            if (BuffTimer > 0f)
             {
-                if (BuffTimer > 0f)
-                {
-                    BuffTimer -= deltaSeconds;
-                }
-                else
-                {
-                    IsBuffOn = false;
-                }
+                IsBuffOn = true;
+                BuffTimer -= deltaSeconds;
             }
+            else IsBuffOn = false;
 
-            // Show Debuff Timer
-            if (IsDebuffOn)
+            // Decreasing DebuffTimer
+            if (DebuffTimer > 0f)
             {
-                if (DebuffTimer > 0f)
-                {
-                    DebuffTimer -= deltaSeconds;
-                }
-                else
-                {
-                    IsDebuffOn = false;
-                }
+                IsDebuffOn = true;
+                DebuffTimer -= deltaSeconds;
             }
+            else IsDebuffOn = false;
 
             // Show combat numbers timer
             if (IsShowCombatNumbers)
@@ -820,7 +813,7 @@ namespace Medicraft.Entities
             Sprite.Depth = topDepth; // Default depth
             if (BoundingHitBox.Intersects(PlayerManager.Instance.Player.BoundingDetectEntity))
             {
-                if (Transform.Position.Y >= PlayerManager.Instance.Player.BoundingDetectCollisions.Center.Y)
+                if (BoundingDetectCollisions.Bottom >= PlayerManager.Instance.Player.BoundingDetectCollisions.Bottom)
                 {
                     Sprite.Depth = playerDepth - 0.00001f; // In front Player
                 }

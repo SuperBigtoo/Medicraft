@@ -123,15 +123,13 @@ namespace Medicraft.Systems
             // All Entity that initialized in Entities from EntityManager
             DrawAttackedEffectToMob(spriteBatch);
 
-            DrawBossSkillActivatedEffect(spriteBatch);
+            DrawBossEffects(spriteBatch);
 
             DrawMobStatusEffect(spriteBatch);
 
             DrawAttackedEffectToPlayer(spriteBatch);
 
-            DrawPlayerSkillEffect(spriteBatch);
-
-            DrawPlayerStatusEffect(spriteBatch);
+            DrawPlayerEffects(spriteBatch);
 
             DrawCompanionAttackedEffect(spriteBatch);
 
@@ -170,7 +168,7 @@ namespace Medicraft.Systems
                                 log.IsEffectPlayed = true;
                             }
 
-                            var _transform = new Transform2
+                            var transform = new Transform2
                             {
                                 Scale = new Vector2(3f, 3f),
                                 Rotation = 0f,
@@ -184,7 +182,7 @@ namespace Medicraft.Systems
 
                             if (log.ElapsedTime < duration)
                             {
-                                spriteBatch.Draw(log.AnimatedSprite, _transform);
+                                spriteBatch.Draw(log.AnimatedSprite, transform);
                             }
                         }
                     }
@@ -192,7 +190,7 @@ namespace Medicraft.Systems
             }
         }
 
-        private void DrawBossSkillActivatedEffect(SpriteBatch spriteBatch)
+        private void DrawBossEffects(SpriteBatch spriteBatch)
         {
             
         }
@@ -220,7 +218,7 @@ namespace Medicraft.Systems
 
                     if (entity.StunningTimer > 0)
                     {
-                        var _transform = new Transform2
+                        var transform = new Transform2
                         {
                             Scale = new Vector2(1f, 1f),
                             Rotation = 0f,
@@ -230,7 +228,7 @@ namespace Medicraft.Systems
 
                         entity.StatesSprite.Update(_deltaSeconds);
 
-                        spriteBatch.Draw(entity.StatesSprite, _transform);
+                        spriteBatch.Draw(entity.StatesSprite, transform);
                     }
                 }
                 else if (entity.IsAggro)
@@ -250,7 +248,7 @@ namespace Medicraft.Systems
 
                     if (entity.AggroDrawEffectTimer > 0)
                     {
-                        var _transform = new Transform2
+                        var transform = new Transform2
                         {
                             Scale = new Vector2(1f, 1f),
                             Rotation = 0f,
@@ -260,8 +258,53 @@ namespace Medicraft.Systems
 
                         entity.StatesSprite.Update(_deltaSeconds);
 
-                        spriteBatch.Draw(entity.StatesSprite, _transform);
+                        spriteBatch.Draw(entity.StatesSprite, transform);
                     }
+                }
+
+                // Effect on Player
+                entity.BuffSprite ??= new AnimatedSprite(_statesSpriteSheet)
+                {
+                    Depth = entity.Sprite.Depth - 0.0000026f
+                };
+
+                entity.DebuffSprite ??= new AnimatedSprite(_statesSpriteSheet)
+                {
+                    Depth = entity.Sprite.Depth - 0.0000027f
+                };
+
+                // Buff
+                if (entity.IsBuffOn)
+                {
+                    entity.BuffSprite.Play("effect_buff&shock");
+
+                    var transform = new Transform2
+                    {
+                        Scale = new Vector2(1.3f, 1.3f),
+                        Rotation = 0f,
+                        Position = entity.Position
+                    };
+
+                    entity.BuffSprite.Update(_deltaSeconds);
+
+                    spriteBatch.Draw(entity.BuffSprite, transform);
+                }
+
+                // Debuff
+                if (entity.IsDebuffOn)
+                {
+                    entity.DebuffSprite.Play("effect_debuff");
+
+                    var transform = new Transform2
+                    {
+                        Scale = new Vector2(1.3f, 1.3f),
+                        Rotation = 0f,
+                        Position = entity.Position
+                    };
+
+                    entity.DebuffSprite.Update(_deltaSeconds);
+
+                    spriteBatch.Draw(entity.DebuffSprite, transform);
                 }
             }
         }
@@ -292,7 +335,7 @@ namespace Medicraft.Systems
 
                         var position = PlayerManager.Instance.Player.Position;
 
-                        var _transform = new Transform2
+                        var transform = new Transform2
                         {
                             Scale = new Vector2(3f, 3f),
                             Rotation = 0f,
@@ -306,109 +349,17 @@ namespace Medicraft.Systems
 
                         if (log.ElapsedTime < duration)
                         {
-                            spriteBatch.Draw(log.AnimatedSprite, _transform);
+                            spriteBatch.Draw(log.AnimatedSprite, transform);
                         }
                     } 
                 }
             }
         }
 
-        private void DrawPlayerSkillEffect(SpriteBatch spriteBatch)
+        private void DrawPlayerEffects(SpriteBatch spriteBatch)
         {
-            // Stun
-            if (PlayerManager.Instance.Player.IsStunning)
-            {
-                if (!PlayerManager.Instance.Player.IsStunningEffectDraw)
-                {
-                    PlayerManager.Instance.Player.StatesSprite = new AnimatedSprite(_statesSpriteSheet)
-                    {
-                        Depth = PlayerManager.Instance.Player.Sprite.Depth - 0.0000025f
-                    };
-
-                    PlayerManager.Instance.Player.StatesSprite.Play("effect_stun");
-
-                    PlayerManager.Instance.Player.IsStunningEffectDraw = true;
-                }
-
-                if (PlayerManager.Instance.Player.StunningTimer > 0)
-                {
-                    var _transform = new Transform2
-                    {
-                        Scale = new Vector2(1.25f, 1.25f),
-                        Rotation = 0f,
-                        Position = PlayerManager.Instance.Player.Position
-                    };
-
-                    PlayerManager.Instance.Player.StatesSprite.Update(_deltaSeconds);
-
-                    spriteBatch.Draw(PlayerManager.Instance.Player.StatesSprite, _transform);
-                }
-            }
-
-            // Normal Skill
-            if (PlayerManager.Instance.Player.IsNormalSkillActivate)
-            {
-                if (PlayerManager.Instance.Player.NormalActivatedTimer
-                    > PlayerManager.Instance.Player.NormalActivatedTime - 0.5f)
-                {
-                    PlayerManager.Instance.Player.StatesSprite = new AnimatedSprite(_statesSpriteSheet)
-                    {
-                        Depth = PlayerManager.Instance.Player.Sprite.Depth - 0.0000025f
-                    };
-
-                    PlayerManager.Instance.Player.StatesSprite.Play("effect_buff&shock");
-                }
-
-                if (PlayerManager.Instance.Player.NormalActivatedTimer > 0)
-                {
-                    var _transform = new Transform2
-                    {
-                        Scale = new Vector2(1.5f, 1.5f),
-                        Rotation = 0f,
-                        Position = PlayerManager.Instance.Player.Position
-                    };
-
-                    PlayerManager.Instance.Player.StatesSprite.Update(_deltaSeconds);
-
-                    spriteBatch.Draw(PlayerManager.Instance.Player.StatesSprite, _transform);
-                }
-            }
-
-            // Passive Skill
-            if (PlayerManager.Instance.Player.IsPassiveSkillActivate)
-            {
-                if (PlayerManager.Instance.Player.PassiveActivatedTimer
-                    > PlayerManager.Instance.Player.PassiveActivatedTime - 0.5f)
-                {
-                    PlayerManager.Instance.Player.StatesSprite = new AnimatedSprite(_statesSpriteSheet)
-                    {
-                        Depth = PlayerManager.Instance.Player.Sprite.Depth - 0.0000025f
-                    };
-
-                    PlayerManager.Instance.Player.StatesSprite.Play("effect_low_hp");
-                }
-
-                if (PlayerManager.Instance.Player.PassiveActivatedTimer > 0)
-                {
-                    var _transform = new Transform2
-                    {
-                        Scale = new Vector2(1.5f, 1.5f),
-                        Rotation = 0f,
-                        Position = new Vector2(PlayerManager.Instance.Player.Position.X
-                            , PlayerManager.Instance.Player.Position.Y - 32f)
-                    };
-
-                    PlayerManager.Instance.Player.StatesSprite.Update(_deltaSeconds);
-
-                    spriteBatch.Draw(PlayerManager.Instance.Player.StatesSprite, _transform);
-                }
-            }
-        }
-
-        private void DrawPlayerStatusEffect(SpriteBatch spriteBatch)
-        {         
+            // Activate Effect
             var combatLog = PlayerManager.Instance.Player.CombatLogs;
-
             if (combatLog.Count != 0)
             {
                 foreach (var log in combatLog.Where(l => l.ElapsedTime < 1f
@@ -430,7 +381,7 @@ namespace Medicraft.Systems
 
                         var position = PlayerManager.Instance.Player.Position;
 
-                        var _transform = new Transform2
+                        var transform = new Transform2
                         {
                             Scale = new Vector2(1f, 1f),
                             Rotation = 0f,
@@ -439,15 +390,115 @@ namespace Medicraft.Systems
 
                         log.AnimatedSprite.Update(_deltaSeconds);
 
-                        var cycleEffect = _hitSkillSpriteSheet.Cycles.Where(c => c.Key.Equals(log.EffectName)).ElementAt(0);
+                        var cycleEffect = _hitSkillSpriteSheet.Cycles.FirstOrDefault(c => c.Key.Equals(log.EffectName));
                         var duration = cycleEffect.Value.FrameDuration * cycleEffect.Value.Frames.Capacity;
 
                         if (log.ElapsedTime < duration)
                         {
-                            spriteBatch.Draw(log.AnimatedSprite, _transform);
+                            spriteBatch.Draw(log.AnimatedSprite, transform);
                         }
                     }
                 }
+            }   
+
+            PlayerManager.Instance.Player.StatesSprite ??= new AnimatedSprite(_statesSpriteSheet)
+            {
+                Depth = PlayerManager.Instance.Player.Sprite.Depth - 0.0000025f
+            };
+
+            // Stun
+            if (PlayerManager.Instance.Player.IsStunning)
+            {
+                if (!PlayerManager.Instance.Player.IsStunningEffectDraw)
+                {
+                    PlayerManager.Instance.Player.StatesSprite.Play("effect_stun");
+
+                    PlayerManager.Instance.Player.IsStunningEffectDraw = true;
+                }
+
+                if (PlayerManager.Instance.Player.StunningTimer > 0)
+                {
+                    var transform = new Transform2
+                    {
+                        Scale = new Vector2(1.25f, 1.25f),
+                        Rotation = 0f,
+                        Position = PlayerManager.Instance.Player.Position
+                    };
+
+                    PlayerManager.Instance.Player.StatesSprite.Update(_deltaSeconds);
+
+                    spriteBatch.Draw(PlayerManager.Instance.Player.StatesSprite, transform);
+                }
+            }
+
+            // Passive Skill
+            if (PlayerManager.Instance.Player.IsPassiveSkillActivate)
+            {
+                if (PlayerManager.Instance.Player.PassiveActivatedTimer
+                    > PlayerManager.Instance.Player.PassiveActivatedTime - 0.5f)
+                {
+                    PlayerManager.Instance.Player.StatesSprite.Play("effect_low_hp");
+                }
+
+                if (PlayerManager.Instance.Player.PassiveActivatedTimer > 0)
+                {
+                    var transform = new Transform2
+                    {
+                        Scale = new Vector2(1.5f, 1.5f),
+                        Rotation = 0f,
+                        Position = new Vector2(PlayerManager.Instance.Player.Position.X
+                            , PlayerManager.Instance.Player.Position.Y - 32f)
+                    };
+
+                    PlayerManager.Instance.Player.StatesSprite.Update(_deltaSeconds);
+
+                    spriteBatch.Draw(PlayerManager.Instance.Player.StatesSprite, transform);
+                }
+            }
+
+            // Effect on Player
+            PlayerManager.Instance.Player.BuffSprite ??= new AnimatedSprite(_statesSpriteSheet)
+            {
+                Depth = PlayerManager.Instance.Player.Sprite.Depth - 0.0000026f
+            };
+
+            PlayerManager.Instance.Player.DebuffSprite ??= new AnimatedSprite(_statesSpriteSheet)
+            {
+                Depth = PlayerManager.Instance.Player.Sprite.Depth - 0.0000027f
+            };
+
+            // Buff
+            if (PlayerManager.Instance.Player.IsBuffOn || PlayerManager.Instance.Player.IsNormalSkillActivate)
+            {
+                PlayerManager.Instance.Player.BuffSprite.Play("effect_buff&shock");
+
+                var transform = new Transform2
+                {
+                    Scale = new Vector2(1.6f, 1.5f),
+                    Rotation = 0f,
+                    Position = PlayerManager.Instance.Player.Position
+                };
+
+                PlayerManager.Instance.Player.BuffSprite.Update(_deltaSeconds);
+
+                spriteBatch.Draw(PlayerManager.Instance.Player.BuffSprite, transform);
+            }
+
+            // Debuff
+            if (PlayerManager.Instance.Player.IsDebuffOn)
+            {
+                PlayerManager.Instance.Player.DebuffSprite.Play("effect_debuff");
+
+                var transform = new Transform2
+                {
+                    Scale = new Vector2(1.6f, 1.5f),
+                    Rotation = 0f,
+                    Position = PlayerManager.Instance.Player.Position
+                };
+
+                PlayerManager.Instance.Player.DebuffSprite.Update(_deltaSeconds);
+
+                spriteBatch.Draw(PlayerManager.Instance.Player.DebuffSprite, transform);
             }
         }
 

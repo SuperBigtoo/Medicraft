@@ -10,10 +10,10 @@ using Medicraft.Entities.Mobs.Friendly;
 
 namespace Medicraft.Systems.Spawners
 {
-    public class MobSpawner(float initialSpawnTime) : IEntityManager
+    public class MobSpawner(float spawnTime, float spawnTimer) : IEntityManager
     {
-        public float SpawnTime = initialSpawnTime;
-        public float SpawnTimer = initialSpawnTime;
+        public float SpawnTime = spawnTime;
+        public float SpawnTimer = spawnTimer;
         public bool IsSpawn = false;
 
         private readonly List<Entity> _initialEntities = [];
@@ -31,7 +31,7 @@ namespace Medicraft.Systems.Spawners
                     switch (ScreenManager.Instance.CurrentMap)
                     {
                         case "Test":                           
-                            if (GameGlobals.Instance.IsBoss_TestDead)
+                            if (GameGlobals.Instance.IsBossTestDead)
                             {                             
                                 _spawningEntities.Add(clonedBoss);
                             }
@@ -39,7 +39,7 @@ namespace Medicraft.Systems.Spawners
                             break;
 
                         case "dungeon_1":
-                            if (GameGlobals.Instance.IsBoss_1_Dead)
+                            if (GameGlobals.Instance.IsBossOneDead)
                             {
                                 _spawningEntities.Add(clonedBoss);
                             }
@@ -65,35 +65,6 @@ namespace Medicraft.Systems.Spawners
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             SpawnTimer -= deltaSeconds;
-
-            switch (ScreenManager.Instance.CurrentMap)
-            {
-                case "Test":
-                    if (GameGlobals.Instance.IsBoss_TestDead)
-                    {
-                        GameGlobals.Instance.SpawnTimer_Boss_Test -= deltaSeconds;
-
-                        if (GameGlobals.Instance.SpawnTimer_Boss_Test < 0)
-                        {
-                            GameGlobals.Instance.SpawnTimer_Boss_Test = GameGlobals.Instance.SpawnTime_Boss_Test;
-                            GameGlobals.Instance.IsBoss_TestDead = false;
-                        }
-                    }
-                    break;
-
-                case "dungeon_1":
-                    if (GameGlobals.Instance.IsBoss_1_Dead)
-                    {
-                        GameGlobals.Instance.SpawnTimer_Boss_1 -= deltaSeconds;
-
-                        if (GameGlobals.Instance.SpawnTimer_Boss_1 < 0)
-                        {
-                            GameGlobals.Instance.SpawnTimer_Boss_1 = GameGlobals.Instance.SpawnTime_Boss_1;
-                            GameGlobals.Instance.IsBoss_1_Dead = false;
-                        }
-                    }
-                    break;
-            }
 
             foreach (var entity in EntityManager.Instance.Entities.Where(e => e.IsDestroyed))
             {
@@ -139,11 +110,11 @@ namespace Medicraft.Systems.Spawners
                 switch (ScreenManager.Instance.CurrentMap)
                 {
                     case "Test":
-                        isBossDead = GameGlobals.Instance.IsBoss_TestDead;
+                        isBossDead = GameGlobals.Instance.IsBossTestDead;
                         break;
 
                     case "dungeon_1":
-                        isBossDead = GameGlobals.Instance.IsBoss_1_Dead;
+                        isBossDead = GameGlobals.Instance.IsBossOneDead;
                         break;
                 }
 

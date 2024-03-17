@@ -1,5 +1,6 @@
 ﻿using GeonBit.UI;
 using Medicraft.Screens;
+using Medicraft.Screens.chapter_1;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -96,6 +97,10 @@ namespace Medicraft.Systems.Managers
                     ScreenTransitioningTo = GameScreen.SplashScreen;
                     break;
 
+                case GameScreen.MainMenuScreen:
+                    ScreenTransitioningTo = GameScreen.MainMenuScreen;
+                    break;
+
                 case GameScreen.Map1:
                     ScreenTransitioningTo = GameScreen.Map1;
                     break;
@@ -144,6 +149,12 @@ namespace Medicraft.Systems.Managers
                     _curScreen.LoadContent();
                     break;
 
+                case GameScreen.MainMenuScreen:
+                    CurrentScreen = GameScreen.MainMenuScreen;
+                    _curScreen = new MainMenuScreen();
+                    _curScreen.LoadContent();
+                    break;
+
                 case GameScreen.Map1:
                     CurrentScreen = GameScreen.Map1;
                     _curScreen = new Map1();
@@ -174,15 +185,16 @@ namespace Medicraft.Systems.Managers
             // Current GUI Panel
             switch (GUIManager.Instance.CurrentGUI)
             {
-                case GUIManager.Hotbar:
-                    // Item bar
-                    if (!GameGlobals.Instance.IsRefreshHotbar)
+                case GUIManager.PlayScreen:
+                    // play screen ui
+                    if (!GameGlobals.Instance.IsRefreshPlayScreenUI)
                     {
-                        GUIManager.Instance.CurrentGUI = GUIManager.Hotbar;
+                        GUIManager.Instance.CurrentGUI = GUIManager.PlayScreen;
                         GUIManager.Instance.RefreshHotbarDisplay();
+                        // Quest list
                         GUIManager.Instance.UpdateAfterChangeGUI();
 
-                        GameGlobals.Instance.IsRefreshHotbar = true;
+                        GameGlobals.Instance.IsRefreshPlayScreenUI = true;
                     }
                     break;
 
@@ -215,7 +227,6 @@ namespace Medicraft.Systems.Managers
                     if (!GameGlobals.Instance.IsOpenInspectPanel)
                     {
                         GUIManager.Instance.CurrentGUI = GUIManager.InspectPanel;
-                        GUIManager.Instance.PlayerSprite = new(GameGlobals.Instance.PlayerSpriteSheet);
                         GUIManager.Instance.RefreshInspectCharacterDisply();
                         GUIManager.Instance.UpdateAfterChangeGUI();
 

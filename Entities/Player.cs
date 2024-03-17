@@ -15,7 +15,7 @@ namespace Medicraft.Entities
     {
         public PlayerData PlayerData { get; private set; }
 
-        public const float NormalSkillCost = 10f, BurstSkillCost = 20f;
+        public const float NormalSkillCost = 15f, BurstSkillCost = 25f;
         public const float BaseCooldownNormal = 16f, BaseCooldownBurst = 20f, BaseCooldownPassive = 60f;
 
         public bool IsNormalSkillCooldown { get; private set; }

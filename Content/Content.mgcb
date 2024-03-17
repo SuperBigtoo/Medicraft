@@ -987,6 +987,246 @@
 /processorParam:TextureFormat=Color
 /build:item/itemspack.png
 
+#begin music/ch-1/Boss.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/ch-1/Boss.ogg
+
+#begin music/ch-1/Mon.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/ch-1/Mon.ogg
+
+#begin music/ch-1/Town.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/ch-1/Town.ogg
+
+#begin music/ch-2/Boss.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/ch-2/Boss.ogg
+
+#begin music/ch-2/Mon.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/ch-2/Mon.ogg
+
+#begin music/ch-2/Town.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/ch-2/Town.ogg
+
+#begin music/ch-3/Boss.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/ch-3/Boss.ogg
+
+#begin music/ch-3/Mon.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/ch-3/Mon.ogg
+
+#begin music/ch-3/Town.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/ch-3/Town.ogg
+
+#begin music/ch-4/Boss.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/ch-4/Boss.ogg
+
+#begin music/ch-4/Mon.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/ch-4/Mon.ogg
+
+#begin music/ch-4/Town.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/ch-4/Town.ogg
+
+#begin music/ch-5/Boss.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/ch-5/Boss.ogg
+
+#begin music/ch-5/Mon.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/ch-5/Mon.ogg
+
+#begin music/ch-5/Town.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/ch-5/Town.ogg
+
+#begin music/ch-6/Boss.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/ch-6/Boss.ogg
+
+#begin music/ch-6/Mon.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/ch-6/Mon.ogg
+
+#begin music/ch-6/Town.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/ch-6/Town.ogg
+
+#begin music/dova-action_battle.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/dova-action_battle.ogg
+
+#begin music/dova-gogonoukurere.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/dova-gogonoukurere.ogg
+
+#begin music/dova-Good_night.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/dova-Good_night.ogg
+
+#begin music/dova-ikirusinrin.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/dova-ikirusinrin.ogg
+
+#begin music/dova-Moonlight.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/dova-Moonlight.ogg
+
+#begin music/dova-pastel_green.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/dova-pastel_green.ogg
+
+#begin music/dova-wagaya.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/dova-wagaya.ogg
+
+#begin music/FinalStorm.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/FinalStorm.ogg
+
+#begin music/Izanai.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/Izanai.ogg
+
+#begin music/KBF_Town_Village_01.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/KBF_Town_Village_01.ogg
+
+#begin music/kokoro_hiraite.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/kokoro_hiraite.ogg
+
+#begin music/LRPG_Tale_of_Aurora_D.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/LRPG_Tale_of_Aurora_D.ogg
+
+#begin music/m308_unmei.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/m308_unmei.ogg
+
+#begin music/Morinonakanoseirei.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/Morinonakanoseirei.ogg
+
+#begin music/winered.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/winered.ogg
+
+#begin sound/Attack1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Attack1.wav
+
+#begin sound/Attack2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Attack2.wav
+
+#begin sound/damage01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/damage01.wav
+
+#begin sound/damage02.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/damage02.wav
+
+#begin sound/Dead.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Dead.wav
+
+#begin sound/ItemPurchase1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/ItemPurchase1.wav
+
+#begin sound/quest.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/quest.wav
+
 #begin tiledmaps/chapter_1/battlezone_1.tmx
 /copy:tiledmaps/chapter_1/battlezone_1.tmx
 

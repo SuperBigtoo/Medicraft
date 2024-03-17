@@ -1,6 +1,4 @@
 ﻿using Medicraft.Data.Models;
-using Medicraft.Entities;
-using Microsoft.Xna.Framework.Content;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,9 +26,8 @@ namespace Medicraft.Systems.Managers
         public int MaximunSlot { private set; get; }
         public int MaximunCount { private set; get; }
         public int GoldCoin { private set; get; }
-        //public Dictionary<string, InventoryItemData> InventoryBag { private set; get; }
         public int KeyIdex { set; get; }
-        public Dictionary<int, InventoryItemData> NewInventoryBag { private set; get; }
+        public Dictionary<int, InventoryItemData> InventoryBag { private set; get; }
         public KeyValuePair<int, InventoryItemData> ItemSelected { set; get; }
 
         private static InventoryManager instance;
@@ -39,8 +36,7 @@ namespace Medicraft.Systems.Managers
         {
             MaximunSlot = GameGlobals.Instance.MaximunInventorySlot;
             MaximunCount = GameGlobals.Instance.MaximunItemCount;
-            //InventoryBag = [];
-            NewInventoryBag = [];
+            InventoryBag = [];
             KeyIdex = 0;
             GoldCoin = 0;
         }
@@ -50,8 +46,7 @@ namespace Medicraft.Systems.Managers
         {
             // Clear Inventory
             GoldCoin = 0;
-            //InventoryBag.Clear();
-            NewInventoryBag.Clear();
+            InventoryBag.Clear();
 
             // Setup Gold Coin
             GoldCoin = inventoryData.GoldCoin;
@@ -59,22 +54,20 @@ namespace Medicraft.Systems.Managers
             // Setup Item in Inventory
             foreach (var item in inventoryData.Inventory)
             {
-                //InventoryBag.Add(item.ItemId.ToString(), item);
-                NewInventoryBag.Add(KeyIdex++, item);
+                InventoryBag.Add(KeyIdex++, item);
             }
         }
 
         public bool IsInventoryFull(int itemId, int quantity)
         {
-            //var isItemFound = InventoryBag.TryGetValue(itemId, out InventoryItemData itemInBag);
-            var itemInBag = NewInventoryBag.FirstOrDefault(i => i.Value.ItemId.Equals(itemId)).Value;
+            var itemInBag = InventoryBag.FirstOrDefault(i => i.Value.ItemId.Equals(itemId)).Value;
 
             // Item not found && Bag is mot full yet
-            if (itemInBag == null && NewInventoryBag.Count < MaximunSlot)
+            if (itemInBag == null && InventoryBag.Count < MaximunSlot)
                 return false;
 
             // Item found and not reach maximum count
-            if (itemInBag != null && (itemInBag.Count + quantity < MaximunCount || NewInventoryBag.Count < MaximunSlot))
+            if (itemInBag != null && (itemInBag.Count + quantity < MaximunCount || InventoryBag.Count < MaximunSlot))
                 return false;
 
             return true;
@@ -84,7 +77,7 @@ namespace Medicraft.Systems.Managers
         {
             var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(itemId));
 
-            var itemInBag = NewInventoryBag.Values.FirstOrDefault(i => i.ItemId.Equals(itemId));
+            var itemInBag = InventoryBag.Values.FirstOrDefault(i => i.ItemId.Equals(itemId));
 
             if (itemInBag != null && itemInBag.IsStackable())
             {
@@ -96,7 +89,7 @@ namespace Medicraft.Systems.Managers
                     itemInBag.Count -= MaximunCount;
 
                     // Add new stack to Inventory
-                    NewInventoryBag.Add(KeyIdex++, new InventoryItemData()
+                    InventoryBag.Add(KeyIdex++, new InventoryItemData()
                     {
                         ItemId = itemId,
                         Count = tempCount,
@@ -107,7 +100,7 @@ namespace Medicraft.Systems.Managers
             else
             {
                 // Add new item to Inventory
-                NewInventoryBag.Add(KeyIdex++, new InventoryItemData()
+                InventoryBag.Add(KeyIdex++, new InventoryItemData()
                 {
                     ItemId = itemId,
                     Count = quantity,
@@ -137,7 +130,7 @@ namespace Medicraft.Systems.Managers
                     {
                         item.Count--;
 
-                        if (item.Count == 0) NewInventoryBag.Remove(keyIndex);
+                        if (item.Count == 0) InventoryBag.Remove(keyIndex);
 
                         // refresh display item after selectedItem has been use
                         GUIManager.Instance.RefreshInvenrotyItemDisplay(true);
@@ -174,7 +167,7 @@ namespace Medicraft.Systems.Managers
             {
                 if (selectedSlot >= 0 && selectedSlot <= 5)
                 {
-                    var itemInSlot = NewInventoryBag.Values.FirstOrDefault(i => i.Slot.Equals(selectedSlot));
+                    var itemInSlot = InventoryBag.Values.FirstOrDefault(i => i.Slot.Equals(selectedSlot));
 
                     if (itemInSlot != null)
                     {                     
@@ -193,7 +186,7 @@ namespace Medicraft.Systems.Managers
 
         public bool UseItemInHotbar(int keyIndex)
         {
-            NewInventoryBag.TryGetValue(keyIndex, out InventoryItemData item);
+            InventoryBag.TryGetValue(keyIndex, out InventoryItemData item);
 
             // Check if item isUsable
             if (item.IsUsable())
@@ -209,7 +202,7 @@ namespace Medicraft.Systems.Managers
         {
             if (selectedSlot >= 6 && selectedSlot <= 13)
             {
-                var itemInSlot = NewInventoryBag.Values.FirstOrDefault(i => i.Slot.Equals(selectedSlot));
+                var itemInSlot = InventoryBag.Values.FirstOrDefault(i => i.Slot.Equals(selectedSlot));
 
                 if (itemInSlot != null) itemInSlot.Slot = GameGlobals.Instance.DefaultInventorySlot;
 

@@ -1,8 +1,8 @@
-﻿using GeonBit.UI;
-using Medicraft.Systems;
+﻿using Medicraft.Systems;
 using Medicraft.Systems.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Medicraft
 {
@@ -25,8 +25,8 @@ namespace Medicraft
             _graphics.PreferredBackBufferWidth = (int)_singleton.GameScreen.X;
             _graphics.PreferredBackBufferHeight = (int)_singleton.GameScreen.Y;
             _graphics.SynchronizeWithVerticalRetrace = true;
-            //Window.Position = new Point((GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2) - (_graphics.PreferredBackBufferWidth / 2)
-            //    , (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2) - (_graphics.PreferredBackBufferHeight / 2));
+            Window.Position = new Point((GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2) - (_graphics.PreferredBackBufferWidth / 2)
+                , (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2) - (_graphics.PreferredBackBufferHeight / 2));
             //_graphics.ToggleFullScreen();
             _graphics.ApplyChanges();
 

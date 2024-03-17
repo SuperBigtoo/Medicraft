@@ -3,9 +3,11 @@ using Medicraft.Data;
 using Medicraft.Data.Models;
 using Medicraft.Systems.Managers;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Content;
@@ -35,7 +37,7 @@ namespace Medicraft.Systems
         public bool IsGameActive { set; get; }
         public bool IsGamePause { set; get; }
         public bool IsOpenGUI { set; get; }
-        public bool IsRefreshHotbar { set; get; }
+        public bool IsRefreshPlayScreenUI { set; get; }
         public bool SwitchDebugMode { set; get; }
         public bool IsDebugMode { set; get; }
         public bool SwitchShowPath { set; get; }
@@ -49,6 +51,10 @@ namespace Medicraft.Systems
         public int MaxLevel { set; get; }
         public BuiltinThemes BuiltinTheme { set; get; }
 
+        // Sound & Music Volume
+        public float SoundEffectVolume { set; get; }
+        public float BackgroundMusicVolume { set; get; }
+
         // Hotbar Slot Numbers
         public bool SwitchSlot_1 { set; get; }
         public bool SwitchSlot_2 { set; get; }
@@ -59,13 +65,29 @@ namespace Medicraft.Systems
         public bool SwitchSlot_7 { set; get; }
         public bool SwitchSlot_8 { set; get; }
 
-        // Boss
-        public bool IsBoss_TestDead { set; get; }
-        public float SpawnTime_Boss_Test { get; private set; }
-        public float SpawnTimer_Boss_Test { get; set; }
-        public bool IsBoss_1_Dead { set; get; }
-        public float SpawnTime_Boss_1 { get; private set; }
-        public float SpawnTimer_Boss_1 { get; set; }
+        // TestMap
+        public float MobsTestSpawnTime { private set; get; }
+        public float MobsTestSpawnTimer { set; get; }
+        public bool IsBossTestDead { set; get; }
+        public float BossTestSpawnTime { private set; get; }
+        public float BossTestSpawnTimer { set; get; }
+        public float ObjectTestSpawnTime { private set; get; }
+        public float ObjectTestSpawnTimer { set; get; }
+
+        // Chapter 1
+        public float MobsOneSpawnTime { private set; get; }
+        public float MobsOneSpawnTimer { set; get; }
+        public bool IsBossOneDead { set; get; }
+        public float BossOneSpawnTime { private set; get; }
+        public float BossOneSpawnTimer { set; get; }
+        public float ObjectOneSpawnTime { private set; get; }
+        public float ObjectOneSpawnTimer { set; get; }
+
+        // Chapter 2
+        // Chapter 3
+        // Chapter 4
+        // Chapter 5
+        // Chapter 6
 
         // GameSave
         public int GameSaveIdex { private set; get; }
@@ -77,7 +99,7 @@ namespace Medicraft.Systems
         public int MaximunItemCount { private set; get; }
         public int DefaultInventorySlot { private set; get; }
         public int MaxItemBarSlot { private set; get; }
-        public int CurrentSlotBarSelect { set; get; }
+        public int CurrentHotbarSelect { set; get; }
         public bool SwitchOpenInventoryPanel { set; get; }
         public bool IsOpenInventoryPanel { set; get; }
 
@@ -114,6 +136,8 @@ namespace Medicraft.Systems
         public SpriteSheet BossSpriteEffect { private set; get; }
         public SpriteSheet StatesSpriteEffect { private set; get; }
         public List<Texture2D> ShadowTextures { private set; get; }
+        public List<SoundEffect> SoundEffects { private set; get; }
+        public List<Song> BackgroundMusic { private set; get; }
 
         // Collecting Item Feed
         public List<InventoryItemData> CollectedItemFeed { private set; get; }      // Feed collected item
@@ -142,19 +166,6 @@ namespace Medicraft.Systems
         public int NUM_ROWS { set; get; }
         public int NUM_COLUMNS { set; get; }
         public int[,] Map { set; get; }
-
-        //public enum GUIPanel
-        //{
-        //    None,
-        //    MainMenu,
-        //    PauseMenu,
-        //    SaveGame,
-        //    Inventory,
-        //    CharacterInspect,
-        //    CraftingTable,
-        //    WrapMenu
-        //}
-        //public GUIPanel CurrentGUIPanel { get; set; }
 
         public enum ShadowTextureName
         {
@@ -246,6 +257,102 @@ namespace Medicraft.Systems
             { GuiTextureName.transition_texture, 34},
         };
 
+        public enum Sound
+        {
+            Attack1,
+            Attack2,
+            damage01,
+            damage02,
+            Dead,
+            ItemPurchase1,
+            quest
+        }
+
+        private readonly Dictionary<Sound, int> soundEffectIndices = new()
+        {
+            { Sound.Attack1, 0 },
+            { Sound.Attack2, 1 },
+            { Sound.damage01, 2 },
+            { Sound.damage02, 3 },
+            { Sound.Dead, 4 },
+            { Sound.ItemPurchase1, 5 },
+            { Sound.quest, 6 }
+        };
+
+        public enum Music
+        {
+            ch_1_Town,
+            ch_1_Mon,
+            ch_1_Boss,
+            ch_2_Town,
+            ch_2_Mon,
+            ch_2_Boss,
+            ch_3_Town,
+            ch_3_Mon,
+            ch_3_Boss,
+            ch_4_Town,
+            ch_4_Mon,
+            ch_4_Boss,
+            ch_5_Town,
+            ch_5_Mon,
+            ch_5_Boss,
+            ch_6_Town,
+            ch_6_Mon,
+            ch_6_Boss,
+            dova_action_battle,
+            dova_gogonoukurere,
+            dova_Good_night,
+            dova_ikirusinrin,
+            dova_Moonlight,
+            dova_pastel_green,
+            dova_wagaya,
+            FinalStorm,
+            Izanai,
+            KBF_Town_Village_01,
+            kokoro_hiraite,
+            LRPG_Tale_of_Aurora_D,
+            m308_unmei,
+            Morinonakanoseirei,
+            winered
+        }
+
+        private readonly Dictionary<Music, int> musicBGIndices = new()
+        {
+            { Music.ch_1_Town, 0 },
+            { Music.ch_1_Mon, 1 },
+            { Music.ch_1_Boss, 2 },
+            { Music.ch_2_Town, 3 },
+            { Music.ch_2_Mon, 4 },
+            { Music.ch_2_Boss, 5 },
+            { Music.ch_3_Town, 6 },
+            { Music.ch_3_Mon, 7 },
+            { Music.ch_3_Boss, 8 },
+            { Music.ch_4_Town, 9 },
+            { Music.ch_4_Mon, 10 },
+            { Music.ch_4_Boss, 11 },
+            { Music.ch_5_Town, 12 },
+            { Music.ch_5_Mon, 13 },
+            { Music.ch_5_Boss, 14 },
+            { Music.ch_6_Town, 15 },
+            { Music.ch_6_Mon, 16 },
+            { Music.ch_6_Boss, 17 },
+            { Music.dova_action_battle, 18 },
+            { Music.dova_gogonoukurere, 19 },
+            { Music.dova_Good_night, 20 },
+            { Music.dova_ikirusinrin, 21 },
+            { Music.dova_Moonlight, 22 },
+            { Music.dova_pastel_green, 23 },
+            { Music.dova_wagaya, 24 },
+            { Music.FinalStorm, 25 },
+            { Music.Izanai, 26 },
+            { Music.KBF_Town_Village_01, 27 },
+            { Music.kokoro_hiraite, 28 },
+            { Music.LRPG_Tale_of_Aurora_D, 29 },
+            { Music.m308_unmei, 30 },
+            { Music.Morinonakanoseirei, 31 },
+            { Music.winered, 32 }
+        };
+
         // For Testing
         public int TestInt { set; get; }
         public Texture2D TestIcon { set; get; }
@@ -262,10 +369,13 @@ namespace Medicraft.Systems
             TopLeftCornerPosition = Vector2.Zero;
             InitialCameraPos = Vector2.Zero;
             AddingCameraPos = Vector2.Zero;
-
+            IsFullScreen = false;
             IsGamePause = false;
             IsOpenGUI = false;
-            IsRefreshHotbar = false;
+            IsRefreshPlayScreenUI = false;
+
+            // ui
+            BuiltinTheme = BuiltinThemes.hd;
 
             // inventory
             SwitchOpenInventoryPanel = false;
@@ -289,7 +399,9 @@ namespace Medicraft.Systems
             ShowInsufficientSign = false;
             SwitchFullScreen = false;
 
-            IsFullScreen = false;
+            // sound & music
+            SoundEffectVolume = 0.75f;
+            BackgroundMusicVolume = 0.75f;
 
             // hotbar switch
             SwitchSlot_1 = false;
@@ -301,29 +413,44 @@ namespace Medicraft.Systems
             SwitchSlot_7 = false;
             SwitchSlot_8 = false;
 
+            // boss
             IsEnteringBossFight = false;
-            IsBoss_TestDead = false;
-            SpawnTime_Boss_Test = 60f;
-            SpawnTimer_Boss_Test = SpawnTime_Boss_Test;
-            IsBoss_1_Dead = false;
-            SpawnTime_Boss_1 = 60f;
-            SpawnTimer_Boss_1 = SpawnTime_Boss_1;
 
+            // TestMap
+            MobsTestSpawnTime = 10f;
+            MobsTestSpawnTimer = MobsTestSpawnTime;
+            IsBossTestDead = false;
+            BossTestSpawnTime = 15f;
+            BossTestSpawnTimer = BossTestSpawnTime;
+            ObjectTestSpawnTime = 10f;
+            ObjectTestSpawnTimer = ObjectTestSpawnTime;
+
+            // Chapter 1
+            MobsOneSpawnTime = 60f;
+            MobsOneSpawnTimer = MobsTestSpawnTime;
+            IsBossOneDead = false;
+            BossOneSpawnTime = 180f;
+            BossOneSpawnTimer = BossOneSpawnTime;
+            ObjectOneSpawnTime = 180f;
+            ObjectOneSpawnTimer = ObjectOneSpawnTime;
+
+            // gamesave
             MaxLevel = 30;
             TotalPlayTime = 0;
             GameSave = [];
             GameSaveIdex = 0; // to be initial
-            GameSavePath = "save/gamesaves.json";
-
-            FeedPoint = new(180f, 380f);
-
-            BuiltinTheme = BuiltinThemes.hd;
+            GameSavePath = "save/gamesaves.json";         
+           
+            // invnetory
             MaximunInventorySlot = 64;
             MaximunItemCount = 999;
             DefaultInventorySlot = 999;
             MaxItemBarSlot = 8;
-            CurrentSlotBarSelect = 0;
+            CurrentHotbarSelect = 0;
 
+            // data & resource
+            SoundEffects = [];
+            BackgroundMusic = [];
             ShadowTextures = [];
             GuiTextures = [];
             ExperienceCapacityDatas = [];
@@ -332,13 +459,15 @@ namespace Medicraft.Systems
             CharacterDatas = [];
             CraftingRecipeDatas = [];
 
+            // feed
+            FeedPoint = new(200f, 380f);
             CollectedItemFeed = [];
             MaximumItemFeed = 6;
             DisplayFeedTime = 0;
             MaximumDisplayFeedTime = 6f;
 
+            // tilemap
             TILE_SIZE = 32;
-
             CollistionObject = [];
             TopLayerObject = [];
             MiddleLayerObject = [];
@@ -465,6 +594,50 @@ namespace Medicraft.Systems
             GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_gui_alpha"));            // 32. passive_skill_gui_alpha
             GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_pic"));                  // 33. passive_skill_pic
             GuiTextures.Add(Content.Load<Texture2D>("gui/transition_texture"));                  // 34. transition_texture
+            
+            // Load Sound Effects
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Attack1"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Attack2"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/damage01"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/damage02"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Dead"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/ItemPurchase1"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/quest"));
+
+            // Load Music Background
+            BackgroundMusic.Add(Content.Load<Song>("music/ch-1/Town"));
+            BackgroundMusic.Add(Content.Load<Song>("music/ch-1/Mon"));
+            BackgroundMusic.Add(Content.Load<Song>("music/ch-1/Boss"));
+            BackgroundMusic.Add(Content.Load<Song>("music/ch-2/Town"));
+            BackgroundMusic.Add(Content.Load<Song>("music/ch-2/Mon"));
+            BackgroundMusic.Add(Content.Load<Song>("music/ch-2/Boss"));
+            BackgroundMusic.Add(Content.Load<Song>("music/ch-3/Town"));
+            BackgroundMusic.Add(Content.Load<Song>("music/ch-3/Mon"));
+            BackgroundMusic.Add(Content.Load<Song>("music/ch-3/Boss"));
+            BackgroundMusic.Add(Content.Load<Song>("music/ch-4/Town"));
+            BackgroundMusic.Add(Content.Load<Song>("music/ch-4/Mon"));
+            BackgroundMusic.Add(Content.Load<Song>("music/ch-4/Boss"));
+            BackgroundMusic.Add(Content.Load<Song>("music/ch-5/Town"));
+            BackgroundMusic.Add(Content.Load<Song>("music/ch-5/Mon"));
+            BackgroundMusic.Add(Content.Load<Song>("music/ch-5/Boss"));
+            BackgroundMusic.Add(Content.Load<Song>("music/ch-6/Town"));
+            BackgroundMusic.Add(Content.Load<Song>("music/ch-6/Mon"));
+            BackgroundMusic.Add(Content.Load<Song>("music/ch-6/Boss"));
+            BackgroundMusic.Add(Content.Load<Song>("music/dova-action_battle"));
+            BackgroundMusic.Add(Content.Load<Song>("music/dova-gogonoukurere"));
+            BackgroundMusic.Add(Content.Load<Song>("music/dova-Good_night"));
+            BackgroundMusic.Add(Content.Load<Song>("music/dova-ikirusinrin"));
+            BackgroundMusic.Add(Content.Load<Song>("music/dova-Moonlight"));
+            BackgroundMusic.Add(Content.Load<Song>("music/dova-pastel_green"));
+            BackgroundMusic.Add(Content.Load<Song>("music/dova-wagaya"));
+            BackgroundMusic.Add(Content.Load<Song>("music/FinalStorm"));
+            BackgroundMusic.Add(Content.Load<Song>("music/Izanai"));
+            BackgroundMusic.Add(Content.Load<Song>("music/KBF_Town_Village_01"));
+            BackgroundMusic.Add(Content.Load<Song>("music/kokoro_hiraite"));
+            BackgroundMusic.Add(Content.Load<Song>("music/LRPG_Tale_of_Aurora_D"));
+            BackgroundMusic.Add(Content.Load<Song>("music/m308_unmei"));
+            BackgroundMusic.Add(Content.Load<Song>("music/Morinonakanoseirei"));
+            BackgroundMusic.Add(Content.Load<Song>("music/winered"));
 
             // Initialize GUI Panels
             GUIManager.Instance.InitializeThemeAndUI(BuiltinTheme);
@@ -480,8 +653,56 @@ namespace Medicraft.Systems
 
             TotalPlayTime += _deltaSeconds;
 
-            var mouseState = Mouse.GetState();
+            // Spawn Timer: Testmap
+            // Mobs
+            if (MobsTestSpawnTimer > 0)
+            {
+                MobsTestSpawnTimer -= _deltaSeconds;
+            }
+            else MobsTestSpawnTimer = MobsTestSpawnTime;
+            // Object
+            if (ObjectTestSpawnTimer > 0)
+            {
+                ObjectTestSpawnTimer -= _deltaSeconds;
+            }
+            else ObjectTestSpawnTimer = ObjectTestSpawnTime;
+            // Boss
+            if (IsBossTestDead)
+            {
+                BossTestSpawnTimer -= _deltaSeconds;
 
+                if (BossTestSpawnTimer < 0)
+                {
+                    BossTestSpawnTimer = Instance.BossTestSpawnTime;
+                    Instance.IsBossTestDead = false;
+                }
+            }
+            // Spawn Timer: Chapter 1
+            // Mobs
+            if (MobsOneSpawnTimer > 0)
+            {
+                MobsOneSpawnTimer -= _deltaSeconds;
+            }
+            else MobsOneSpawnTimer = MobsOneSpawnTime;
+            // Object
+            if (ObjectOneSpawnTimer > 0)
+            {
+                ObjectOneSpawnTimer -= _deltaSeconds;
+            }
+            else ObjectOneSpawnTimer = ObjectOneSpawnTime;
+            // Boss
+            if (Instance.IsBossOneDead)
+            {
+                Instance.BossOneSpawnTimer -= _deltaSeconds;
+
+                if (Instance.BossOneSpawnTimer < 0)
+                {
+                    Instance.BossOneSpawnTimer = Instance.BossOneSpawnTime;
+                    Instance.IsBossOneDead = false;
+                }
+            }
+
+            var mouseState = Mouse.GetState();
             MousePosition = new Point2(mouseState.X, mouseState.Y);
         }
 
@@ -500,6 +721,26 @@ namespace Medicraft.Systems
             if (guiTextureIndices.TryGetValue(guiTextureName, out int index) && index < GuiTextures.Count)
             {
                 return GuiTextures.ElementAt(index);
+            }
+
+            return null;
+        }
+
+        public SoundEffect GetSoundEffect(Sound soundEffectName)
+        {
+            if (soundEffectIndices.TryGetValue(soundEffectName, out int index) && index < SoundEffects.Count)
+            {
+                return SoundEffects.ElementAt(index);
+            }
+
+            return null;
+        }
+
+        public Song GetBackgroundMusic(Music musicBG)
+        {
+            if (musicBGIndices.TryGetValue(musicBG, out int index) && index < BackgroundMusic.Count)
+            {
+                return BackgroundMusic.ElementAt(index);
             }
 
             return null;

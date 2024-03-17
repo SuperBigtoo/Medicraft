@@ -45,7 +45,7 @@ namespace Medicraft.Systems.Managers
                 //var isItemFound = InventoryManager.Instance.InventoryBag.TryGetValue(
                 //    ingredient.ItemId.ToString(), out InventoryItemData itemInBag);
 
-                var stackItem = InventoryManager.Instance.NewInventoryBag.Where
+                var stackItem = InventoryManager.Instance.InventoryBag.Where
                     (i => i.Value.ItemId.Equals(ingredient.ItemId));
 
                 // if any of itemInBag if null or not found BREAK!  
@@ -82,21 +82,21 @@ namespace Medicraft.Systems.Managers
                 //if (itemInBag.Count == 0) 
                 //    InventoryManager.Instance.InventoryBag.Remove(itemInBag.ItemId.ToString());
 
-                var stackItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                var stackItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                     (i => i.Value.ItemId.Equals(ingredient.ItemId));
 
                 stackItem.Value.Count -= ingredient.Quantity;
 
                 if (stackItem.Value.Count == 0)
                 {
-                    InventoryManager.Instance.NewInventoryBag.Remove(stackItem.Key);
+                    InventoryManager.Instance.InventoryBag.Remove(stackItem.Key);
                 }
                 else if (stackItem.Value.Count < 0)
                 {
                     var tempCount = stackItem.Value.Count;
-                    InventoryManager.Instance.NewInventoryBag.Remove(stackItem.Key);
+                    InventoryManager.Instance.InventoryBag.Remove(stackItem.Key);
 
-                    var newStackItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                    var newStackItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                         (i => i.Value.ItemId.Equals(ingredient.ItemId));
                     newStackItem.Value.Count += tempCount; 
                 }

@@ -61,9 +61,9 @@ namespace Medicraft.Entities.Mobs.Friendly
                 Sprite.TextureRegion.Height / 6
             );
 
-            BoundingHitBox = new CircleF(Position, 20);         // Circle for Entity to hit
+            BoundingHitBox = new CircleF(Position, 32);         // Circle for Entity to hit
 
-            BoundingDetectEntity = new CircleF(Position, 30);   // Circle for check attacking      
+            BoundingDetectEntity = new CircleF(Position, 32);   // Circle for check attacking      
 
             _pathFinding = new AStar(
                 (int)BoundingDetectCollisions.Center.X,

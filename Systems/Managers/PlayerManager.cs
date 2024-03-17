@@ -4,6 +4,7 @@ using Medicraft.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Sprites;
+using System;
 using System.Linq;
 
 namespace Medicraft.Systems.Managers
@@ -71,7 +72,7 @@ namespace Medicraft.Systems.Managers
             GameGlobals.Instance.TopLeftCornerPosition = Player.Position - GameGlobals.Instance.GameScreenCenter;
 
             // Initialize equipment stats
-            var itemEquipmentData = InventoryManager.Instance.NewInventoryBag.Values.Where
+            var itemEquipmentData = InventoryManager.Instance.InventoryBag.Values.Where
                 (e => e.Slot >= 0 && e.Slot < 6);
 
             foreach (var item in itemEquipmentData)
@@ -122,8 +123,8 @@ namespace Medicraft.Systems.Managers
                     GameGlobals.Instance.IsOpenInventoryPanel = false;
                     if (GUIManager.Instance.CurrentGUI.Equals(GUIManager.InventoryPanel))
                     {
-                        GUIManager.Instance.CurrentGUI = GUIManager.Hotbar;
-                        GameGlobals.Instance.IsRefreshHotbar = false;
+                        GUIManager.Instance.CurrentGUI = GUIManager.PlayScreen;
+                        GameGlobals.Instance.IsRefreshPlayScreenUI = false;
                     }
                     else GUIManager.Instance.CurrentGUI = GUIManager.InventoryPanel;
                 }
@@ -147,8 +148,8 @@ namespace Medicraft.Systems.Managers
                     GameGlobals.Instance.IsOpenCraftingPanel = false;
                     if (GUIManager.Instance.CurrentGUI.Equals(GUIManager.CraftingPanel))
                     {
-                        GUIManager.Instance.CurrentGUI = GUIManager.Hotbar;
-                        GameGlobals.Instance.IsRefreshHotbar = false;
+                        GUIManager.Instance.CurrentGUI = GUIManager.PlayScreen;
+                        GameGlobals.Instance.IsRefreshPlayScreenUI = false;
                     }
                     else GUIManager.Instance.CurrentGUI = GUIManager.CraftingPanel;
                 }
@@ -173,8 +174,8 @@ namespace Medicraft.Systems.Managers
                     GUIManager.Instance.IsCharacterTabSelected = true;
                     if (GUIManager.Instance.CurrentGUI.Equals(GUIManager.InspectPanel))
                     {                     
-                        GUIManager.Instance.CurrentGUI = GUIManager.Hotbar;
-                        GameGlobals.Instance.IsRefreshHotbar = false;
+                        GUIManager.Instance.CurrentGUI = GUIManager.PlayScreen;
+                        GameGlobals.Instance.IsRefreshPlayScreenUI = false;
                         GUIManager.Instance.ClearSkillDescription();
                     }
                     else GUIManager.Instance.CurrentGUI = GUIManager.InspectPanel;
@@ -188,9 +189,9 @@ namespace Medicraft.Systems.Managers
                 if (keyboardCur.IsKeyDown(Keys.D1) && !GameGlobals.Instance.SwitchSlot_1)
                 {
                     GameGlobals.Instance.SwitchSlot_1 = true;
-                    GameGlobals.Instance.CurrentSlotBarSelect = 0;
+                    GameGlobals.Instance.CurrentHotbarSelect = 0;
 
-                    var hotbarItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                    var hotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                         (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_1));
 
                     if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
@@ -204,9 +205,9 @@ namespace Medicraft.Systems.Managers
                 if (keyboardCur.IsKeyDown(Keys.D2) && !GameGlobals.Instance.SwitchSlot_2)
                 {
                     GameGlobals.Instance.SwitchSlot_2 = true;
-                    GameGlobals.Instance.CurrentSlotBarSelect = 1;
+                    GameGlobals.Instance.CurrentHotbarSelect = 1;
 
-                    var hotbarItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                    var hotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                         (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_2));
 
                     if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
@@ -219,9 +220,9 @@ namespace Medicraft.Systems.Managers
                 if (keyboardCur.IsKeyDown(Keys.D3) && !GameGlobals.Instance.SwitchSlot_3)
                 {
                     GameGlobals.Instance.SwitchSlot_3 = true;
-                    GameGlobals.Instance.CurrentSlotBarSelect = 2;
+                    GameGlobals.Instance.CurrentHotbarSelect = 2;
 
-                    var hotbarItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                    var hotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                         (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_3));
 
                     if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
@@ -234,9 +235,9 @@ namespace Medicraft.Systems.Managers
                 if (keyboardCur.IsKeyDown(Keys.D4) && !GameGlobals.Instance.SwitchSlot_4)
                 {
                     GameGlobals.Instance.SwitchSlot_4 = true;
-                    GameGlobals.Instance.CurrentSlotBarSelect = 3;
+                    GameGlobals.Instance.CurrentHotbarSelect = 3;
 
-                    var hotbarItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                    var hotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                         (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_4));
 
                     if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
@@ -249,9 +250,9 @@ namespace Medicraft.Systems.Managers
                 if (keyboardCur.IsKeyDown(Keys.D5) && !GameGlobals.Instance.SwitchSlot_5)
                 {
                     GameGlobals.Instance.SwitchSlot_5 = true;
-                    GameGlobals.Instance.CurrentSlotBarSelect = 4;
+                    GameGlobals.Instance.CurrentHotbarSelect = 4;
 
-                    var hotbarItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                    var hotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                         (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_5));
 
                     if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
@@ -264,9 +265,9 @@ namespace Medicraft.Systems.Managers
                 if (keyboardCur.IsKeyDown(Keys.D6) && !GameGlobals.Instance.SwitchSlot_6)
                 {
                     GameGlobals.Instance.SwitchSlot_6 = true;
-                    GameGlobals.Instance.CurrentSlotBarSelect = 5;
+                    GameGlobals.Instance.CurrentHotbarSelect = 5;
 
-                    var hotbarItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                    var hotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                         (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_6));
 
                     if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
@@ -279,8 +280,8 @@ namespace Medicraft.Systems.Managers
                 if (keyboardCur.IsKeyDown(Keys.D7) && !GameGlobals.Instance.SwitchSlot_7)
                 {
                     GameGlobals.Instance.SwitchSlot_7 = true;
-                    GameGlobals.Instance.CurrentSlotBarSelect = 6;
-                    var hotbarItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                    GameGlobals.Instance.CurrentHotbarSelect = 6;
+                    var hotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                         (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_7));
 
                     if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
@@ -293,9 +294,9 @@ namespace Medicraft.Systems.Managers
                 if (keyboardCur.IsKeyDown(Keys.D8) && !GameGlobals.Instance.SwitchSlot_8)
                 {
                     GameGlobals.Instance.SwitchSlot_8 = true;
-                    GameGlobals.Instance.CurrentSlotBarSelect = 7;
+                    GameGlobals.Instance.CurrentHotbarSelect = 7;
 
-                    var hotbarItem = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                    var hotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                         (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_8));
 
                     if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
@@ -507,6 +508,9 @@ namespace Medicraft.Systems.Managers
                     Player.Level++;
                     Player.PlayerData.SkillPoint++;
 
+                    // Re-Stats
+                    ReStatsPlayer();
+
                     if (Player.Level == GameGlobals.Instance.MaxLevel)
                     {
                         SetPlayerExpMaxCap(Player.Level);
@@ -519,6 +523,21 @@ namespace Medicraft.Systems.Managers
                     }
                 }
             } 
+        }
+
+        private void ReStatsPlayer()
+        {
+            var charData = GameGlobals.Instance.CharacterDatas.FirstOrDefault
+                (c => c.CharId.Equals(Player.CharId));
+
+            Player.SetCharacterStats(charData, Player.Level);
+
+            // Now re-stats Equipments
+            var itemEquipmentData = InventoryManager.Instance.InventoryBag.Values.Where
+                (e => e.Slot >= 0 && e.Slot < 6);
+
+            foreach (var item in itemEquipmentData)
+                RefreshEquipmentStats(item, true);
         }
 
         public void RefreshEquipmentStats(InventoryItemData itemEquipmentData, bool isEquip)

@@ -56,7 +56,7 @@ namespace Medicraft.Systems.Managers
             _objectSpawner?.Update(gameTime);
 
             if (_objectSpawner != null)
-                SpawnTime = _objectSpawner.SpawnTime;
+                SpawnTime = _objectSpawner.SpawnTimer;
 
             gameObjects.RemoveAll(e => e.IsDestroyed);
 

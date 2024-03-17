@@ -9,9 +9,9 @@ namespace Medicraft.Systems.Managers
 {
     public class StatusEffectManager
     {
-        private readonly List<StatusEffect> statusEffects;
+        public List<StatusEffect> StatusEffects { get; private set; }
 
-        private readonly List<StatusEffect> effectsToRemove;
+        public List<StatusEffect> EffectsToRemove { get; private set; }
 
         private const float _activateTime = 3f;
 
@@ -21,22 +21,22 @@ namespace Medicraft.Systems.Managers
 
         private StatusEffectManager()
         {
-            statusEffects = [];
-            effectsToRemove = [];
+            StatusEffects = [];
+            EffectsToRemove = [];
         }
 
         public void Update(GameTime gameTime)
         {
             _deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            // If statusEffects has any Effect ActivationType = Periodic then calculate timer else reset timer
-            if (statusEffects.Any(statusEffect => statusEffect.Effect.ActivationType.Equals("Periodic")))
+            // If statusEffects has any Effect ActivationType = Periodic then do timer else reset timer
+            if (StatusEffects.Any(statusEffect => statusEffect.Effect.ActivationType.Equals("Periodic")))
             {
                 _activateTimer -= _deltaSeconds;
             }
             else _activateTimer = 0;
 
-            foreach (var statusEffect in statusEffects)
+            foreach (var statusEffect in StatusEffects)
             {             
                 statusEffect.Effect.Timer -= _deltaSeconds;
 
@@ -60,7 +60,7 @@ namespace Medicraft.Systems.Managers
                     statusEffect.Effect.IsActive = false;
                     statusEffect.Effect.Timer = statusEffect.Effect.Time;
 
-                    effectsToRemove.Add(statusEffect);
+                    EffectsToRemove.Add(statusEffect);
                 }
                 else
                 {
@@ -98,7 +98,7 @@ namespace Medicraft.Systems.Managers
 
                             statusEffect.Effect.IsActive = true;
 
-                            var periodicEffects = statusEffects.Where(
+                            var periodicEffects = StatusEffects.Where(
                                 statusEffect => statusEffect.Effect.ActivationType.Equals("Periodic"));
 
                             if (periodicEffects.All(statusEffect => statusEffect.Effect.IsActive))
@@ -116,11 +116,11 @@ namespace Medicraft.Systems.Managers
             }
 
             // remove all effect that has time = 0
-            foreach (var effectToRemove in effectsToRemove)
+            foreach (var effectToRemove in EffectsToRemove)
             {
-                statusEffects.Remove(effectToRemove);
+                StatusEffects.Remove(effectToRemove);
             }
-            effectsToRemove.Clear();
+            EffectsToRemove.Clear();
         }
 
         private void RegenerateEffect(StatusEffect statusEffect)
@@ -212,22 +212,46 @@ namespace Medicraft.Systems.Managers
 
         public void AddStatusEffect(Entity entity, string effectName, Effect effect)
         {
-            if (statusEffects.Count != 0)
-            {
-                if (statusEffects.Any(statusEffect => statusEffect.EffectName.Equals(effectName)))
-                {
-                    var statusEffect = statusEffects.FirstOrDefault(se => se.EffectName.Equals(effectName));
+            //if (StatusEffects.Count != 0)
+            //{
+            //    if (StatusEffects.Any(statusEffect => statusEffect.EffectName.Equals(effectName)))
+            //    {
+            //        var statusEffect = StatusEffects.FirstOrDefault(se => se.EffectName.Equals(effectName));
 
-                    statusEffect.Effect.Timer = statusEffect.Effect.Time;
-                }
-                else
-                {
-                    statusEffects.Add(new StatusEffect(entity, effectName, effect));
-                }
+            //        statusEffect.Effect.Timer = statusEffect.Effect.Time;
+            //    }
+            //    else
+            //    {
+            //        StatusEffects.Add(new StatusEffect(entity, effectName, effect));
+            //    }
+            //}
+            //else
+            //{
+            //    StatusEffects.Add(new StatusEffect(entity, effectName, effect));
+            //}
+
+            // Check if any status effect with the given name exists
+            var existingEffect = StatusEffects.FirstOrDefault(se => se.EffectName.Equals(effectName));
+
+            if (existingEffect != null)
+            {
+                // Update the timer of the existing status effect
+                existingEffect.Effect.Timer = existingEffect.Effect.Time;
             }
             else
             {
-                statusEffects.Add(new StatusEffect(entity, effectName, effect));
+                // Add a new status effect
+                StatusEffects.Add(new StatusEffect(entity, effectName, effect));
+            }
+
+            // Check if it a Buff or Debuff
+            if (effect.EffectType.Equals("Buff"))
+            {
+                entity.BuffTimer = effect.Time;
+            }
+            else if (effect.EffectType.Equals("Debuff"))
+            {
+                entity.DebuffTimer = effect.Time;
             }
         }
 

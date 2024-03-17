@@ -195,9 +195,9 @@ namespace Medicraft.Systems
         {
             switch (GUIManager.Instance.CurrentGUI)
             {
-                case GUIManager.Hotbar:
+                case GUIManager.PlayScreen:
                     // Selected Slot
-                    var selectedSlot = GameGlobals.Instance.CurrentSlotBarSelect;
+                    var selectedSlot = GameGlobals.Instance.CurrentHotbarSelect;
                     spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.selected_slot)
                         , new Vector2(511f + (52 * selectedSlot), 820f) + GameGlobals.Instance.TopLeftCornerPosition, null
                         , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);

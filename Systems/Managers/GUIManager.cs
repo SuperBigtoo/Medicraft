@@ -2,7 +2,6 @@
 using GeonBit.UI.Entities;
 using GeonBit.UI.Utils.Forms;
 using Medicraft.Data.Models;
-using Medicraft.GameObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Sprites;
@@ -20,7 +19,7 @@ namespace Medicraft.Systems.Managers
 
         public int CurrentGUI { get; set; }
 
-        public const int Hotbar = 0;
+        public const int PlayScreen = 0;
         public const int InventoryPanel = 1;
         public const int CraftingPanel = 2;
         public const int InspectPanel = 3;
@@ -43,7 +42,7 @@ namespace Medicraft.Systems.Managers
 
         private GUIManager()
         {
-            CurrentGUI = Hotbar;
+            CurrentGUI = PlayScreen;
             CurrentCraftingList = ThaiTraditionalMedicine;
         }
 
@@ -73,8 +72,8 @@ namespace Medicraft.Systems.Managers
             UserInterface.Active.ShowCursor = false;
 
             // init all ui panel
-            // Hotbar = 0
-            InitHotbarUI();
+            // PlayScreen = 0
+            InitPlayScreenUI();
 
             // Inventory = 1
             InitInventoryUI();
@@ -93,20 +92,20 @@ namespace Medicraft.Systems.Managers
         /// <summary>
         /// Item Bar and Slot Item
         /// </summary>
-        private void InitHotbarUI()
+        private void InitPlayScreenUI()
         {
-            var panel = new Panel(new Vector2(500, 87), PanelSkin.None, Anchor.BottomCenter)
+            var playScreenUI = new Panel(new Vector2(500, 87), PanelSkin.None, Anchor.BottomCenter)
             { 
-                Identifier = "hotbarItem",
+                Identifier = "playScreenUI",
                 //AdjustHeightAutomatically = true,
             };
-            _mainPanels.Add(panel);
-            UserInterface.Active.AddEntity(panel);
+            _mainPanels.Add(playScreenUI);
+            UserInterface.Active.AddEntity(playScreenUI);
         }
 
         public void RefreshHotbarDisplay()
         {
-            var HotbarSlot = _mainPanels.ElementAt(Hotbar);
+            var HotbarSlot = _mainPanels.ElementAt(PlayScreen);
             
             HotbarSlot.ClearChildren();
 
@@ -118,7 +117,7 @@ namespace Medicraft.Systems.Managers
             // Set Item
             for (int i = minSlotNum; i <= maxSlotNum; i++)
             {
-                var itemInSlot = InventoryManager.Instance.NewInventoryBag.FirstOrDefault(item => item.Value.Slot.Equals(i));
+                var itemInSlot = InventoryManager.Instance.InventoryBag.FirstOrDefault(item => item.Value.Slot.Equals(i));
 
                 if (itemInSlot.Value != null)
                 {
@@ -210,10 +209,15 @@ namespace Medicraft.Systems.Managers
                 PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll
             };
             invenDescriptPanel.Scrollbar.AdjustMaxAutomatically = true;
+            invenDescriptPanel.OnMouseEnter = (e) =>
+            {
+                UserInterface.Active.ActiveEntity = invenDescriptPanel;
+            };
 
             invenDescriptPanel.AddChild(new Label("iconLabel", Anchor.AutoCenter)
             {
                 Scale = 1.25f,
+                ClickThrough = true,
                 Identifier = "iconLabel"
             });
             invenDescriptPanel.AddChild(new Paragraph("description", Anchor.AutoInline)
@@ -221,6 +225,7 @@ namespace Medicraft.Systems.Managers
                 //Size = new Vector2(380, 200), // กำหนดขนาดของ Label
                 Scale = 1f,
                 WrapWords = true,
+                ClickThrough = true,
                 Identifier = "description"
             });
             invenDescriptPanel.AddChild(new LineSpace(1));
@@ -268,8 +273,8 @@ namespace Medicraft.Systems.Managers
 
                     // Toggle the IsOpenInventory flag
                     GameGlobals.Instance.IsOpenInventoryPanel = false;
-                    GameGlobals.Instance.IsRefreshHotbar = false;
-                    CurrentGUI = Hotbar;
+                    GameGlobals.Instance.IsRefreshPlayScreenUI = false;
+                    CurrentGUI = PlayScreen;
                 }
             };
             inventoryPanel.AddChild(closeInventoryButton);
@@ -388,7 +393,7 @@ namespace Medicraft.Systems.Managers
                 // Setup Enable or Disable the button for fisrtItem
                 //InventoryManager.Instance.InventoryBag.TryGetValue(fisrtItem.ItemId.ToString()
                 //    , out InventoryItemData item);
-                var item = InventoryManager.Instance.NewInventoryBag.FirstOrDefault(i => i.Key.Equals(fisrtItem.KeyIndex));
+                var item = InventoryManager.Instance.InventoryBag.FirstOrDefault(i => i.Key.Equals(fisrtItem.KeyIndex));
 
                 InventoryManager.Instance.ItemSelected = item;
 
@@ -436,7 +441,7 @@ namespace Medicraft.Systems.Managers
                     itemLeftPanel.Visible = false;
 
             //// Set item
-            foreach (var item in InventoryManager.Instance.NewInventoryBag)
+            foreach (var item in InventoryManager.Instance.InventoryBag)
             {
                 // Item Icon
                 var iconItem = new Icon(IconType.None, Anchor.AutoInline, 1, true)
@@ -471,7 +476,7 @@ namespace Medicraft.Systems.Managers
                     // Enable or Disable the button for each item icon
                     //InventoryManager.Instance.InventoryBag.TryGetValue(iconItem.ItemId.ToString()
                     //    , out InventoryItemData item);
-                    var item = InventoryManager.Instance.NewInventoryBag.FirstOrDefault(i => i.Key.Equals(iconItem.KeyIndex));
+                    var item = InventoryManager.Instance.InventoryBag.FirstOrDefault(i => i.Key.Equals(iconItem.KeyIndex));
 
                     InventoryManager.Instance.ItemSelected = item;
 
@@ -554,7 +559,6 @@ namespace Medicraft.Systems.Managers
                 PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll
             };
             craftingDescriptPanel.Scrollbar.AdjustMaxAutomatically = true;
-            craftingDescriptPanel.Scrollbar.Opacity = 0;
             craftingDescriptPanel.OnMouseEnter = (e) =>
             {
                 UserInterface.Active.ActiveEntity = craftingDescriptPanel;
@@ -562,8 +566,9 @@ namespace Medicraft.Systems.Managers
 
             craftingDescriptPanel.AddChild(new Label("iconLabel", Anchor.AutoCenter)
             {
-                Size = new Vector2(250, 30), // กำหนดขนาดของ Label
-                Scale = 1.3f,
+                //Size = new Vector2(250, 30), // กำหนดขนาดของ Label
+                Scale = 1.25f,
+                ClickThrough = true,
                 Identifier = "iconLabel"
             });
             craftingDescriptPanel.AddChild(new Paragraph("description", Anchor.AutoInline)
@@ -571,6 +576,7 @@ namespace Medicraft.Systems.Managers
                 //Size = new Vector2(380, 200), // กำหนดขนาดของ Label
                 Scale = 1f,
                 WrapWords = true,
+                ClickThrough = true,
                 Identifier = "description"
             });
             craftingDescriptPanel.AddChild(new LineSpace(1));
@@ -764,8 +770,8 @@ namespace Medicraft.Systems.Managers
 
                     // Toggle the IsOpenCraftingPanel flag
                     GameGlobals.Instance.IsOpenCraftingPanel = false;
-                    GameGlobals.Instance.IsRefreshHotbar = false;
-                    CurrentGUI = Hotbar;
+                    GameGlobals.Instance.IsRefreshPlayScreenUI = false;
+                    CurrentGUI = PlayScreen;
                 }
             };
             craftingPanel.AddChild(closeCraftingButton);
@@ -963,7 +969,7 @@ namespace Medicraft.Systems.Managers
 
                 //var isItemFound = InventoryManager.Instance.InventoryBag.TryGetValue(
                 //    ingredient.ItemId.ToString(), out InventoryItemData itemData);
-                var items = InventoryManager.Instance.NewInventoryBag.Values.Where
+                var items = InventoryManager.Instance.InventoryBag.Values.Where
                     (i => i.ItemId.Equals(ingredient.ItemId));
 
                 if (items != null || items.Any())
@@ -1692,6 +1698,8 @@ namespace Medicraft.Systems.Managers
 
         public void RefreshInspectCharacterDisply()
         {
+            PlayerSprite = new(GameGlobals.Instance.PlayerSpriteSheet);
+
             var inspectPanel = _mainPanels.ElementAt(InspectPanel);
             var inspectTabs = inspectPanel.Children.OfType<PanelTabs>().FirstOrDefault(t => t.Identifier.Equals("inspectTabs"));
             inspectTabs.SelectTab("Character");
@@ -1713,7 +1721,7 @@ namespace Medicraft.Systems.Managers
             // Equipment Slot
             for (int i = 0; i < 6; i++)
             {
-                var itemEquipmentData = InventoryManager.Instance.NewInventoryBag.FirstOrDefault(e => e.Value.Slot.Equals(i));
+                var itemEquipmentData = InventoryManager.Instance.InventoryBag.FirstOrDefault(e => e.Value.Slot.Equals(i));
                 Icon iconEquipmentSlot;
 
                 if (itemEquipmentData.Value != null)
@@ -1737,7 +1745,7 @@ namespace Medicraft.Systems.Managers
                         //InventoryManager.Instance.InventoryBag.TryGetValue(iconEquipmentSlot.ItemId.ToString()
                         //    , out InventoryItemData item);
 
-                        var item = InventoryManager.Instance.NewInventoryBag.FirstOrDefault
+                        var item = InventoryManager.Instance.InventoryBag.FirstOrDefault
                             (i => i.Key.Equals(iconEquipmentSlot.KeyIndex));
 
                         GeonBit.UI.Utils.MessageBox.ShowMsgBox("Use Item?"

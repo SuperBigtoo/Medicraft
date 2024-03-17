@@ -19,24 +19,24 @@ namespace Medicraft.Data
             DateTime dateTime = DateTime.Now;
             string dateTimeString = dateTime.ToString().Replace(' ', '_');
 
-            // Set current Stats
+            // Set current Stats          
             PlayerManager.Instance.Player.PlayerData.Level = PlayerManager.Instance.Player.Level;
             PlayerManager.Instance.Player.PlayerData.EXP = PlayerManager.Instance.Player.EXP;
-            PlayerManager.Instance.Player.PlayerData.CurrentHPPercentage = PlayerManager.Instance.Player.HP;
-            PlayerManager.Instance.Player.PlayerData.CurrentManaPercentage = (int)PlayerManager.Instance.Player.Mana;
-            PlayerManager.Instance.Player.PlayerData.CurrentMap = ScreenManager.Instance.CurrentMap;
+            // HP Percentage
+            var hpPercentage = (float)Math.Round(PlayerManager.Instance.Player.HP / PlayerManager.Instance.Player.MaxHP, 2);
+            PlayerManager.Instance.Player.PlayerData.CurrentHPPercentage = hpPercentage;
+            // Mana Percentage
+            var manaPercentage = (float)Math.Round(PlayerManager.Instance.Player.Mana / PlayerManager.Instance.Player.MaxMana, 2);
+            PlayerManager.Instance.Player.PlayerData.CurrentManaPercentage = manaPercentage;
 
             // Set Player Position
+            PlayerManager.Instance.Player.PlayerData.CurrentMap = ScreenManager.Instance.CurrentMap;
             PlayerManager.Instance.Player.PlayerData.Position[0] = PlayerManager.Instance.Player.Position.X;
             PlayerManager.Instance.Player.PlayerData.Position[1] = PlayerManager.Instance.Player.Position.Y;
 
             // Set Current InventoryData
             var inventoryItems = new List<InventoryItemData>();
-            //foreach (var item in InventoryManager.Instance.InventoryBag.Values)
-            //{
-            //    inventoryItems.Add(item);
-            //}
-            foreach (var item in InventoryManager.Instance.NewInventoryBag.Values)
+            foreach (var item in InventoryManager.Instance.InventoryBag.Values)
             {
                 inventoryItems.Add(item);
             }
