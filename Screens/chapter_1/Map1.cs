@@ -82,17 +82,11 @@ namespace Medicraft.Screens.chapter_1
 
         public override void UnloadContent()
         {
-            EntityManager.Instance.ClearEntity();
-
-            ObjectManager.Instance.ClearGameObject();
-
             base.UnloadContent();
         }
 
         public override void Dispose()
         {
-            //_drawEffectSystem?.Dispose();
-
             base.Dispose();
         }
 

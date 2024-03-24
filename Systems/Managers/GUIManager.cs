@@ -1,9 +1,12 @@
 ﻿using GeonBit.UI;
 using GeonBit.UI.Entities;
 using GeonBit.UI.Utils.Forms;
+using Medicraft.Data;
 using Medicraft.Data.Models;
+using Medicraft.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Sprites;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +26,8 @@ namespace Medicraft.Systems.Managers
         public const int InventoryPanel = 1;
         public const int CraftingPanel = 2;
         public const int InspectPanel = 3;
+        public const int MainMenu = 4;
+        public const int PauseMenu = 5;
 
         public string CurrentCraftingList { get; set; }
 
@@ -42,7 +47,7 @@ namespace Medicraft.Systems.Managers
 
         private GUIManager()
         {
-            CurrentGUI = PlayScreen;
+            CurrentGUI = MainMenu;
             CurrentCraftingList = ThaiTraditionalMedicine;
         }
 
@@ -84,6 +89,11 @@ namespace Medicraft.Systems.Managers
             // Inspect = 3
             InitInspectUI();
 
+            // Main Menu = 4
+            InitMainMenuUI();
+
+            // Pause Menu = 5
+
             // update ui panel
             UpdateAfterChangeGUI();
         }
@@ -96,8 +106,7 @@ namespace Medicraft.Systems.Managers
         {
             var playScreenUI = new Panel(new Vector2(500, 87), PanelSkin.None, Anchor.BottomCenter)
             { 
-                Identifier = "playScreenUI",
-                //AdjustHeightAutomatically = true,
+                Identifier = "playScreenUI"
             };
             _mainPanels.Add(playScreenUI);
             UserInterface.Active.AddEntity(playScreenUI);
@@ -1930,6 +1939,281 @@ namespace Medicraft.Systems.Managers
             descripLeftSkill.Text = "";
             upSkillButton.Enabled = false;
             descripRightSkill.Text = "";
+        }
+
+        /// <summary>
+        /// This is Main Menu nothing more nothing less
+        /// </summary>
+        private void InitMainMenuUI()
+        {
+            var mainMenuPanel = new Panel(new Vector2(GameGlobals.Instance.GameScreen.X, GameGlobals.Instance.GameScreen.Y))
+            {
+                Skin = PanelSkin.None,
+                Identifier = "mainMenuPanel"
+            };
+            _mainPanels.Add(mainMenuPanel);
+            UserInterface.Active.AddEntity(mainMenuPanel);
+
+            // Main panel
+            var mainPanel = new Panel(new Vector2(520, -1), PanelSkin.None)
+            {
+                Identifier = "mainPanel"
+            };
+            mainMenuPanel.AddChild(mainPanel);
+
+            // Option panel
+            var optionPanel = new Panel(new Vector2(520, -1))
+            {
+                Visible = false,
+                Identifier = "optionPanel"
+            };
+            mainMenuPanel.AddChild(optionPanel);
+
+            // Graphics Setting panel
+            var graphicsSettingPanel = new Panel(new Vector2(520, -1))
+            {
+                Identifier = "graphicsSettingPanel",
+                Visible = false
+            };
+            mainMenuPanel.AddChild(graphicsSettingPanel);
+
+            // Sound Setting panel
+            var soundSettingPanel = new Panel(new Vector2(520, -1))
+            {
+                Identifier = "soundSettingPanel",
+                Visible = false
+            };
+            mainMenuPanel.AddChild(soundSettingPanel);
+
+            // Load GameSave panel
+            var loadGameSavePanel = new Panel()
+            {
+                Identifier = "loadGameSavePanel",
+                Skin = PanelSkin.None,
+                Visible = false
+            };
+            mainMenuPanel.AddChild(loadGameSavePanel);
+
+            // Initialize UI Elements
+            // Main Menu
+            {              
+                // add title
+                var title = new Image(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.game_name)
+                    , anchor: Anchor.TopCenter, offset: new Vector2(0, -20))
+                {
+                    Identifier = "title",
+                    Size = new Vector2(800, 480),
+                    ShadowColor = new Color(0, 0, 0, 128),
+                    ShadowOffset = Vector2.One * -6
+                };
+                mainPanel.AddChild(title);
+
+                var newGameButton = new Button("New Game", ButtonSkin.Default)
+                {
+                    Identifier = "newGameButton",
+                    OnClick = (btn) =>
+                    {
+                        MainMenuScreen.PlayTime();
+                    }
+                };
+                mainPanel.AddChild(newGameButton);
+
+                var loadButton = new Button("Load Save", ButtonSkin.Default)
+                {
+                    Identifier = "loadButton",
+                    OnClick = (Entity btn) =>
+                    {
+                        mainPanel.Visible = false;
+                        loadGameSavePanel.Visible = true;
+                    }
+                };
+                mainPanel.AddChild(loadButton);
+
+                var optionsButton = new Button("Options", ButtonSkin.Default)
+                {
+                    Identifier = "optionsButton",
+                    OnClick = (Entity btn) =>
+                    {
+                        mainPanel.Visible = false;
+                        optionPanel.Visible = true;
+                    }
+                };
+                mainPanel.AddChild(optionsButton);
+
+                var quitButton = new Button("Quit", ButtonSkin.Default)
+                {
+                    Identifier = "quitButton",
+                    OnClick = (Entity entity) => { ScreenManager.Instance.Game.Exit(); }
+                };
+                mainPanel.AddChild(quitButton);
+            }
+
+            // Option Menu
+            {
+                var graphicsSettingsButton = new Button("Graphics Settings", ButtonSkin.Default)
+                {
+                    Identifier = "graphicsSettingsButton",
+                    OnClick = (Entity btn) =>
+                    {
+                        optionPanel.Visible = false;
+                        graphicsSettingPanel.Visible = true;
+                    }
+                };
+                optionPanel.AddChild(graphicsSettingsButton);
+
+                var soundSettingsButton = new Button("Sound Settings", ButtonSkin.Default)
+                {
+                    Identifier = "soundSettingsButton",
+                    OnClick = (Entity btn) =>
+                    {
+                        optionPanel.Visible = false;
+                        soundSettingPanel.Visible = true;
+                    }
+                };
+                optionPanel.AddChild(soundSettingsButton);
+
+                optionPanel.AddChild(new LineSpace(3));
+                var backButton = new Button("Back", ButtonSkin.Default)
+                {
+                    Identifier = "backButton",
+                    OnClick = (Entity btn) =>
+                    {
+                        optionPanel.Visible = false;
+                        mainPanel.Visible = true;
+                    }
+                };
+                optionPanel.AddChild(backButton);
+            }
+
+            // Graphics Setting
+            {
+                // radio
+                graphicsSettingPanel.AddChild(new LineSpace(3));
+                graphicsSettingPanel.AddChild(new Header("Graphics Setting"));
+                graphicsSettingPanel.AddChild(new HorizontalLine());
+                graphicsSettingPanel.AddChild(new Label("Full Screen") { Scale = 1.25f });
+
+                var radioFullScreenOn = new RadioButton("ON", offset: new Vector2(15, 0))
+                {
+                    Identifier = "radioFullScreenOn",
+                    OnClick = (e) =>
+                    {
+                        GameGlobals.Instance.IsFullScreen = true;
+                        ScreenManager.ToggleFullScreen();
+                    }
+                };
+                graphicsSettingPanel.AddChild(radioFullScreenOn);
+
+                var radioFullScreenOff = new RadioButton("OFF", offset: new Vector2(15, 0))
+                {
+                    Identifier = "radioFullScreenOff",
+                    OnClick = (e) =>
+                    {
+                        GameGlobals.Instance.IsFullScreen = false;
+                        ScreenManager.ToggleFullScreen();
+                    }
+                };
+                graphicsSettingPanel.AddChild(radioFullScreenOff);
+
+                if (GameGlobals.Instance.IsFullScreen)
+                {
+                    radioFullScreenOn.Checked = true;
+                }
+                else radioFullScreenOff.Checked = true;
+
+                graphicsSettingPanel.AddChild(new LineSpace(3));
+                var backButton = new Button("Back", ButtonSkin.Default)
+                {
+                    Identifier = "backButton",
+                    OnClick = (Entity btn) =>
+                    {
+                        graphicsSettingPanel.Visible = false;
+                        optionPanel.Visible = true;
+
+                        // Save GameConfig
+                        JsonFileManager.SaveConfig();
+                    }
+                };
+                graphicsSettingPanel.AddChild(backButton);
+            }
+
+            // Sound Settings
+            {             
+                // sliders title
+                soundSettingPanel.AddChild(new Header("Sound Settings"));
+                soundSettingPanel.AddChild(new HorizontalLine());
+
+                soundSettingPanel.AddChild(new Label("SFX Volume") { Scale = 1.25f });
+                {
+                    var sliderSFX = soundSettingPanel.AddChild(new Slider(0, 100, SliderSkin.Default)
+                    {
+                        Identifier = "sliderSFX"
+                    }) as Slider;
+                    sliderSFX.Value = (int)(GameGlobals.Instance.SoundEffectVolume * 100);
+
+                    var valueLabel = new Label("Value: " + sliderSFX.Value) { Scale = 1.1f };
+                    sliderSFX.OnValueChange = (Entity entity) =>
+                    {
+                        valueLabel.Text = "Value: " + sliderSFX.Value;
+                        GameGlobals.Instance.SoundEffectVolume = sliderSFX.GetValueAsPercent();
+                    };
+                    soundSettingPanel.AddChild(valueLabel);
+                }
+                soundSettingPanel.AddChild(new LineSpace(1));
+
+                soundSettingPanel.AddChild(new Label("Background Music Volume") { Scale = 1.25f });
+                {
+                    var sliderBG = soundSettingPanel.AddChild(new Slider(0, 100, SliderSkin.Default)
+                    {
+                        Identifier = "sliderBG"
+                    }) as Slider;
+                    sliderBG.Value = (int)(GameGlobals.Instance.BackgroundMusicVolume * 100);
+
+                    var valueLabel = new Label("Value: " + sliderBG.Value) { Scale = 1.1f };
+                    sliderBG.OnValueChange = (Entity entity) =>
+                    {
+                        valueLabel.Text = "Value: " + sliderBG.Value;
+                        GameGlobals.Instance.BackgroundMusicVolume = sliderBG.GetValueAsPercent();
+                    };
+                    soundSettingPanel.AddChild(valueLabel);
+                }
+                soundSettingPanel.AddChild(new LineSpace(3));
+
+                var backButton = new Button("Back", ButtonSkin.Default)
+                {
+                    Identifier = "backButton",
+                    OnClick = (Entity btn) =>
+                    {
+                        soundSettingPanel.Visible = false;
+                        optionPanel.Visible = true;
+
+                        // Save GameConfig
+                        JsonFileManager.SaveConfig();
+                    }
+                };
+                soundSettingPanel.AddChild(backButton);
+            }
+
+            // Load GameSave: Continues
+            {
+                // add title and text
+                loadGameSavePanel.AddChild(new Header("Load Save"));
+                loadGameSavePanel.AddChild(new HorizontalLine());
+
+                // 
+
+                loadGameSavePanel.AddChild(new LineSpace(3));
+                var backButton = new Button("Back", ButtonSkin.Default)
+                {
+                    Identifier = "backButton",
+                    OnClick = (Entity btn) =>
+                    {
+                        loadGameSavePanel.Visible = false;
+                        mainPanel.Visible = true;
+                    }
+                };
+                loadGameSavePanel.AddChild(backButton);
+            }
         }
 
         public static GUIManager Instance

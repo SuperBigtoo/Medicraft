@@ -128,7 +128,6 @@ namespace Medicraft.Entities.Mobs.Friendly
             Sprite.Play(SpriteCycle + "_idle_1");
         }
 
-        // Update Slime
         public override void Update(GameTime gameTime, float playerDepth, float topDepth, float middleDepth, float bottomDepth)
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -192,19 +191,19 @@ namespace Medicraft.Entities.Mobs.Friendly
                             _isPlayIdle = false;
 
                             // Check Animation
-                            if (direction.Y == -1)
+                            if (direction.Y < 0)
                             {
                                 CurrentAnimation = SpriteCycle + "_walking_up";     // Up
                             }
-                            if (direction.Y == 1)
+                            if (direction.Y > 0)
                             {
                                 CurrentAnimation = SpriteCycle + "_walking_down";     // Down
                             }
-                            if (direction.X == -1)
+                            if (direction.X < 0)
                             {
                                 CurrentAnimation = SpriteCycle + "_walking_left";     // Left
                             }
-                            if (direction.X == 1)
+                            if (direction.X > 0)
                             {
                                 CurrentAnimation = SpriteCycle + "_walking_right";     // Right
                             }
@@ -218,7 +217,6 @@ namespace Medicraft.Entities.Mobs.Friendly
             else IsMoving = false;
         }
 
-        // Draw Slime
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (GameGlobals.Instance.IsShowPath)

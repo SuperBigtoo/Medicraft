@@ -85,11 +85,7 @@ namespace Medicraft.Screens
         }
 
         public override void UnloadContent()
-        {
-            EntityManager.Instance.ClearEntity();
-
-            ObjectManager.Instance.ClearGameObject();
-
+        {        
             base.UnloadContent();
         }
 

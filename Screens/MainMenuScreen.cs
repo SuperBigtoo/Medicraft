@@ -2,31 +2,37 @@
 using Medicraft.Systems.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
 namespace Medicraft.Screens
 {
     public class MainMenuScreen : Screen
     {
+        private Texture2D _mainMenuBG;
+
         private float _volumeScale;
-        private bool _startingBG, _endingBG;
+        private bool _startingBG;
 
         public MainMenuScreen()
         {
             _volumeScale = 0f;
             _startingBG = true;
-            _endingBG = false;
+            GameGlobals.Instance.IsMainBGEnding = false;
         }
 
         public override void LoadContent()
         {
             base.LoadContent();
 
-            var bgMusic = GameGlobals.Instance.GetBackgroundMusic(GameGlobals.Music.kokoro_hiraite);
+            GUIManager.Instance.CurrentGUI = GUIManager.MainMenu;
+
+            _mainMenuBG = _content.Load<Texture2D>("gui/main_menu_screen");
+
+            Song _bgMusic = GameGlobals.Instance.AddCurrentMapMusic(GameGlobals.Music.kokoro_hiraite, _content);
+
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = GameGlobals.Instance.BackgroundMusicVolume * _volumeScale;
-            MediaPlayer.Play(bgMusic);
+            MediaPlayer.Play(_bgMusic);
         }
 
         public override void UnloadContent()
@@ -41,9 +47,8 @@ namespace Medicraft.Screens
 
         public override void Update(GameTime gameTime)
         {
-            GameGlobals.Instance.PrevMouse = GameGlobals.Instance.CurMouse;
-            GameGlobals.Instance.CurMouse = Mouse.GetState();
             MediaPlayer.Volume = GameGlobals.Instance.BackgroundMusicVolume * _volumeScale;
+
 
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -56,31 +61,38 @@ namespace Medicraft.Screens
                     _volumeScale = 1f;
                     _startingBG = false;
                 }  
-            }
+            }          
 
-            if (GameGlobals.Instance.CurMouse.LeftButton == ButtonState.Pressed
-                    && GameGlobals.Instance.PrevMouse.LeftButton == ButtonState.Released)
-            {
-                _endingBG = true;
-                ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.TestScreen);
-            }
-
-            if (_endingBG)
+            if (GameGlobals.Instance.IsMainBGEnding)
             {
                 _volumeScale -= deltaSeconds * 0.75f;
 
                 if (_volumeScale <= 0f)
                 {
-                    _volumeScale = 0f;
-                    _endingBG = false;
+                    _volumeScale = 0f;              
                     MediaPlayer.Stop();
+                    GameGlobals.Instance.IsMainBGEnding = false;
                 }
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public static void PlayTime()
         {
-            ScreenManager.Instance.GraphicsDevice.Clear(Color.CornflowerBlue);
+            GameGlobals.Instance.IsMainBGEnding = true;
+            PlayerManager.Instance.Initialize(true);
+            GameGlobals.Instance.InitialCameraPos = GameGlobals.Instance.GameScreenCenter;
+            ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.TestScreen);
+
+            // Toggle the IsOpenMainMenu flag
+            GUIManager.Instance.CurrentGUI = GUIManager.PlayScreen;
+            GameGlobals.Instance.IsOpenMainMenu = false;
+            GameGlobals.Instance.IsRefreshPlayScreenUI = false;          
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {      
+            spriteBatch.Draw(_mainMenuBG, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            ScreenManager.DrawBackgound(spriteBatch, Color.Black, 0.2f);
         }
     }
 }

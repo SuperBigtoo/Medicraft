@@ -64,7 +64,7 @@
     "Id": 4,
     "CharId": 201,
     "Level": 1,
-    "Name": "Cat",
+    "Name": "Goblin",
     "PathFindingType": 1,
     "NodeCycleTime": 10,
     "PartrolArea": "zone_2",

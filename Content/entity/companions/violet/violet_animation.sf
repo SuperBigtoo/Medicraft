@@ -6,42 +6,42 @@
   },
   "cycles": {
     "default_idle": {
-      "frames": [ 40, 41, 40, 41, 42, 43, 42, 41 ],
+      "frames": [40,41,40,41,42,43,42,41],
       "isLooping": false,
       "frameDuration": 0.25
     },
-    "default_walking_down": {
-      "frames": [ 0, 1, 2, 3, 4, 5 ],
+    "default_walking_up": {
+      "frames": [32,33,34,35,36,37],
       "isLooping": false,
       "frameDuration": 0.1
     },
-    "default_walking_up": {
-      "frames": [ 32, 33, 34, 35, 36, 37 ],
+    "default_walking_down": {
+      "frames": [0,1,2,3,4,5],
       "isLooping": false,
       "frameDuration": 0.1
     },
     "default_walking_left": {
-      "frames": [ 48, 49, 50, 51, 52, 53 ],
+      "frames": [48,49,50,51,52,53],
       "isLooping": false,
       "frameDuration": 0.1
     },
     "default_walking_right": {
-      "frames": [ 56, 57, 58, 59, 60, 61 ],
+      "frames": [56,57,58,59,60,61],
       "isLooping": false,
       "frameDuration": 0.1
     },
     "default_attacking_normal_hit": {
-      "frames": [ 16, 17, 18, 19, 20 ],
+      "frames": [16,17,18,19,20],
       "isLooping": false,
       "frameDuration": 0.11
     },
     "default_attacking_normal_skill": {
-      "frames": [ 24, 25, 26, 27, 28, 29 ],
+      "frames": [24,25,26,27,28,29],
       "isLooping": false,
       "frameDuration": 0.1
     },
     "default_attacking_burst_skill": {
-      "frames": [ 8, 9, 10, 11, 12, 13, 14, 15 ],
+      "frames": [8,9,10,11,12,13,14,15],
       "isLooping": false,
       "frameDuration": 0.08
     }

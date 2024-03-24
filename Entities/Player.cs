@@ -15,7 +15,7 @@ namespace Medicraft.Entities
     {
         public PlayerData PlayerData { get; private set; }
 
-        public const float NormalSkillCost = 15f, BurstSkillCost = 25f;
+        public const float NormalSkillCost = 15f, BurstSkillCost = 20f;
         public const float BaseCooldownNormal = 16f, BaseCooldownBurst = 20f, BaseCooldownPassive = 60f;
 
         public bool IsNormalSkillCooldown { get; private set; }
@@ -691,51 +691,49 @@ namespace Medicraft.Entities
         // Check Attack
         private void CheckAttackDetection(float atk, float percentHit, bool isUndodgeable, float stunTime, string effectAttacked)
         {
-            foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed))
+            foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed
+                && e.EntityType == EntityTypes.Hostile || e.EntityType == EntityTypes.Boss))
             {
                 if (entity.BoundingHitBox.Intersects(BoundingDetectEntity))
                 {
-                    if (entity.EntityType == EntityTypes.Hostile)
+                    if (!entity.IsDying)
                     {
-                        if (!entity.IsDying)
+                        var totalDamage = TotalDamage(atk, percentHit, entity.DEF, entity.Evasion, isUndodgeable);
+
+                        var combatNumVelocity = entity.SetCombatNumDirection();
+                        entity.AddCombatLogNumbers(Name, ((int)totalDamage).ToString()
+                            , CombatNumCase, combatNumVelocity, effectAttacked);
+
+                        // In case the Attack doesn't Missed
+                        if (CombatNumCase != 3)
                         {
-                            var totalDamage = TotalDamage(atk, percentHit, entity.DEF, entity.Evasion, isUndodgeable);                                                 
+                            // Mob being hit by Player
+                            entity.IsAttacked = true;
 
-                            var combatNumVelocity = entity.SetCombatNumDirection();
-                            entity.AddCombatLogNumbers(Name, ((int)totalDamage).ToString()
-                                , CombatNumCase, combatNumVelocity, effectAttacked);
+                            entity.HP -= totalDamage;
 
-                            // In case the Attack doesn't Missed
-                            if (CombatNumCase != 3)
+                            if (entity.IsKnockbackable)
                             {
-                                // Mob being hit by Player
-                                entity.IsAttacked = true;
+                                var knockBackDirection = (entity.Position - new Vector2(0, 50)) - Position;
+                                knockBackDirection.Normalize();
+                                entity.Velocity = knockBackDirection * _knockbackForce;
 
-                                entity.HP -= totalDamage;
-
-                                if (entity.IsKnockbackable)
-                                {
-                                    var knockBackDirection = (entity.Position - new Vector2(0, 50)) - Position;
-                                    knockBackDirection.Normalize();
-                                    entity.Velocity = knockBackDirection * _knockbackForce;
-
-                                    entity.IsKnockback = true;
-                                    entity.KnockbackedTimer = 0.2f;
-                                }
-
-                                if (stunTime > 0f && entity.IsStunable)
-                                {
-                                    entity.IsStunning = true;
-                                    entity.StunningTimer = stunTime;
-                                }
+                                entity.IsKnockback = true;
+                                entity.KnockbackedTimer = 0.2f;
                             }
 
-                            if (entity.HP <= 0)
+                            if (stunTime > 0f && entity.IsStunable)
                             {
-                                entity.IsDying = true;
+                                entity.IsStunning = true;
+                                entity.StunningTimer = stunTime;
                             }
                         }
-                    } 
+
+                        if (entity.HP <= 0)
+                        {
+                            entity.IsDying = true;
+                        }
+                    }
                 }
             }
         }

@@ -37,6 +37,8 @@ namespace Medicraft.Systems
         public bool IsGameActive { set; get; }
         public bool IsGamePause { set; get; }
         public bool IsOpenGUI { set; get; }
+        public bool IsOpenMainMenu { set; get; }
+        public bool IsMainBGEnding { set; get; }
         public bool IsRefreshPlayScreenUI { set; get; }
         public bool SwitchDebugMode { set; get; }
         public bool IsDebugMode { set; get; }
@@ -51,9 +53,10 @@ namespace Medicraft.Systems
         public int MaxLevel { set; get; }
         public BuiltinThemes BuiltinTheme { set; get; }
 
-        // Sound & Music Volume
+        // Sound & Music
         public float SoundEffectVolume { set; get; }
         public float BackgroundMusicVolume { set; get; }
+        public List<MusicData> CurrentMapMusics { private set; get; }
 
         // Hotbar Slot Numbers
         public bool SwitchSlot_1 { set; get; }
@@ -89,10 +92,12 @@ namespace Medicraft.Systems
         // Chapter 5
         // Chapter 6
 
-        // GameSave
+        // GameSave & Config
         public int GameSaveIdex { private set; get; }
         public string GameSavePath { private set; get; }
         public List<GameSaveData> GameSave { private set; get; }
+        public string GameConfigPath { private set; get; }
+        public GameConfigData GameConfig { private set; get; }
 
         // Inventory
         public int MaximunInventorySlot { private set; get; }
@@ -114,6 +119,7 @@ namespace Medicraft.Systems
         // Game Datas
         public PlayerData InitialPlayerData { private set; get; }
         public SpriteSheet PlayerSpriteSheet { private set; get; }
+        public List<SpriteSheet> CompanionSpriteSheet { private set; get; }
         public BitmapFont FontSensation { private set; get; }
         public BitmapFont FontMinecraft { private set; get; }
         public BitmapFont FontTA8Bit { private set; get; }
@@ -137,7 +143,7 @@ namespace Medicraft.Systems
         public SpriteSheet StatesSpriteEffect { private set; get; }
         public List<Texture2D> ShadowTextures { private set; get; }
         public List<SoundEffect> SoundEffects { private set; get; }
-        public List<Song> BackgroundMusic { private set; get; }
+        public List<string> BackgroundMusicPath { private set; get; }
 
         // Collecting Item Feed
         public List<InventoryItemData> CollectedItemFeed { private set; get; }      // Feed collected item
@@ -215,7 +221,8 @@ namespace Medicraft.Systems
             passive_skill_gui,
             passive_skill_gui_alpha,
             passive_skill_pic,
-            transition_texture
+            transition_texture,
+            game_name
         }
 
         private readonly Dictionary<GuiTextureName, int> guiTextureIndices = new()
@@ -255,6 +262,7 @@ namespace Medicraft.Systems
             { GuiTextureName.passive_skill_gui_alpha, 32},
             { GuiTextureName.passive_skill_pic, 33},
             { GuiTextureName.transition_texture, 34},
+            { GuiTextureName.game_name, 35}
         };
 
         public enum Sound
@@ -372,7 +380,10 @@ namespace Medicraft.Systems
             IsFullScreen = false;
             IsGamePause = false;
             IsOpenGUI = false;
+            IsOpenMainMenu = false;
+            IsMainBGEnding = false;
             IsRefreshPlayScreenUI = false;
+            CompanionSpriteSheet = [];
 
             // ui
             BuiltinTheme = BuiltinThemes.hd;
@@ -400,8 +411,9 @@ namespace Medicraft.Systems
             SwitchFullScreen = false;
 
             // sound & music
-            SoundEffectVolume = 0.75f;
-            BackgroundMusicVolume = 0.75f;
+            SoundEffectVolume = 0.70f;
+            BackgroundMusicVolume = 0.70f;
+            CurrentMapMusics = [];
 
             // hotbar switch
             SwitchSlot_1 = false;
@@ -439,8 +451,9 @@ namespace Medicraft.Systems
             TotalPlayTime = 0;
             GameSave = [];
             GameSaveIdex = 0; // to be initial
-            GameSavePath = "save/gamesaves.json";         
-           
+            GameSavePath = "save/gamesaves.json";
+            GameConfigPath = "config/gameoptions.json";
+
             // invnetory
             MaximunInventorySlot = 64;
             MaximunItemCount = 999;
@@ -450,7 +463,7 @@ namespace Medicraft.Systems
 
             // data & resource
             SoundEffects = [];
-            BackgroundMusic = [];
+            BackgroundMusicPath = [];
             ShadowTextures = [];
             GuiTextures = [];
             ExperienceCapacityDatas = [];
@@ -498,8 +511,8 @@ namespace Medicraft.Systems
         {
             //System.Diagnostics.Debug.WriteLine($"totalFrames : {(int)(_totalMilliseconds / totalDuration) % totalFrames}");
 
-            // Load GameSave
-            var gameSave = JsonFileManager.LoadFlie(GameSavePath);
+            // Load GameSave and Config
+            var gameSave = JsonFileManager.LoadGameSave(GameSavePath);
             if (gameSave.Count != 0)
             {
                 foreach (var save in gameSave)
@@ -507,6 +520,11 @@ namespace Medicraft.Systems
                     GameSave.Add(save);
                 }
             }
+            GameConfig = JsonFileManager.LoadGameConfig(GameConfigPath);
+            IsFullScreen = GameConfig.IsFullScreen;
+            ScreenManager.ToggleFullScreen();
+            SoundEffectVolume = (float)GameConfig.SFXVolume;
+            BackgroundMusicVolume = (float)GameConfig.BGMusicVolume;
 
             // Load Map Position Data
             MapLocationPointDatas = Content.Load<List<MapLocationPointData>>("data/models/map_locations_point");
@@ -517,9 +535,14 @@ namespace Medicraft.Systems
             // Load EXP Cap Data
             ExperienceCapacityDatas = Content.Load<List<ExperienceCapacityData>>("data/models/exp_capacity");
 
-            // Load Initialize Player Data
+            // Load Player Data
             InitialPlayerData = Content.Load<PlayerData>("data/models/playerdata");
             PlayerSpriteSheet = Content.Load<SpriteSheet>("entity/mc/mc_animation.sf", new JsonContentLoader());
+
+            // Load Companions Sprite Sheet
+            // Violet = 0
+            CompanionSpriteSheet.Add(Content.Load<SpriteSheet>("entity/companions/violet/violet_animation.sf"
+                , new JsonContentLoader()));
 
             // Load Item Sprite Sheet
             ItemsPackSprites = Content.Load<SpriteSheet>("item/itemspack_spritesheet.sf", new JsonContentLoader());
@@ -593,8 +616,9 @@ namespace Medicraft.Systems
             GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_gui"));                  // 31. passive_skill_gui
             GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_gui_alpha"));            // 32. passive_skill_gui_alpha
             GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_pic"));                  // 33. passive_skill_pic
-            GuiTextures.Add(Content.Load<Texture2D>("gui/transition_texture"));                  // 34. transition_texture
-            
+            GuiTextures.Add(Content.Load<Texture2D>("gui/transition_texture"));                 // 34. transition_texture
+            GuiTextures.Add(Content.Load<Texture2D>("gui/game_name"));
+
             // Load Sound Effects
             SoundEffects.Add(Content.Load<SoundEffect>("sound/Attack1"));
             SoundEffects.Add(Content.Load<SoundEffect>("sound/Attack2"));
@@ -604,47 +628,43 @@ namespace Medicraft.Systems
             SoundEffects.Add(Content.Load<SoundEffect>("sound/ItemPurchase1"));
             SoundEffects.Add(Content.Load<SoundEffect>("sound/quest"));
 
-            // Load Music Background
-            BackgroundMusic.Add(Content.Load<Song>("music/ch-1/Town"));
-            BackgroundMusic.Add(Content.Load<Song>("music/ch-1/Mon"));
-            BackgroundMusic.Add(Content.Load<Song>("music/ch-1/Boss"));
-            BackgroundMusic.Add(Content.Load<Song>("music/ch-2/Town"));
-            BackgroundMusic.Add(Content.Load<Song>("music/ch-2/Mon"));
-            BackgroundMusic.Add(Content.Load<Song>("music/ch-2/Boss"));
-            BackgroundMusic.Add(Content.Load<Song>("music/ch-3/Town"));
-            BackgroundMusic.Add(Content.Load<Song>("music/ch-3/Mon"));
-            BackgroundMusic.Add(Content.Load<Song>("music/ch-3/Boss"));
-            BackgroundMusic.Add(Content.Load<Song>("music/ch-4/Town"));
-            BackgroundMusic.Add(Content.Load<Song>("music/ch-4/Mon"));
-            BackgroundMusic.Add(Content.Load<Song>("music/ch-4/Boss"));
-            BackgroundMusic.Add(Content.Load<Song>("music/ch-5/Town"));
-            BackgroundMusic.Add(Content.Load<Song>("music/ch-5/Mon"));
-            BackgroundMusic.Add(Content.Load<Song>("music/ch-5/Boss"));
-            BackgroundMusic.Add(Content.Load<Song>("music/ch-6/Town"));
-            BackgroundMusic.Add(Content.Load<Song>("music/ch-6/Mon"));
-            BackgroundMusic.Add(Content.Load<Song>("music/ch-6/Boss"));
-            BackgroundMusic.Add(Content.Load<Song>("music/dova-action_battle"));
-            BackgroundMusic.Add(Content.Load<Song>("music/dova-gogonoukurere"));
-            BackgroundMusic.Add(Content.Load<Song>("music/dova-Good_night"));
-            BackgroundMusic.Add(Content.Load<Song>("music/dova-ikirusinrin"));
-            BackgroundMusic.Add(Content.Load<Song>("music/dova-Moonlight"));
-            BackgroundMusic.Add(Content.Load<Song>("music/dova-pastel_green"));
-            BackgroundMusic.Add(Content.Load<Song>("music/dova-wagaya"));
-            BackgroundMusic.Add(Content.Load<Song>("music/FinalStorm"));
-            BackgroundMusic.Add(Content.Load<Song>("music/Izanai"));
-            BackgroundMusic.Add(Content.Load<Song>("music/KBF_Town_Village_01"));
-            BackgroundMusic.Add(Content.Load<Song>("music/kokoro_hiraite"));
-            BackgroundMusic.Add(Content.Load<Song>("music/LRPG_Tale_of_Aurora_D"));
-            BackgroundMusic.Add(Content.Load<Song>("music/m308_unmei"));
-            BackgroundMusic.Add(Content.Load<Song>("music/Morinonakanoseirei"));
-            BackgroundMusic.Add(Content.Load<Song>("music/winered"));
+            // Music Background Path
+            BackgroundMusicPath.Add("music/ch-1/Town");
+            BackgroundMusicPath.Add("music/ch-1/Mon");
+            BackgroundMusicPath.Add("music/ch-1/Boss");
+            BackgroundMusicPath.Add("music/ch-2/Town");
+            BackgroundMusicPath.Add("music/ch-2/Mon");
+            BackgroundMusicPath.Add("music/ch-2/Boss");
+            BackgroundMusicPath.Add("music/ch-3/Town");
+            BackgroundMusicPath.Add("music/ch-3/Mon");
+            BackgroundMusicPath.Add("music/ch-3/Boss");
+            BackgroundMusicPath.Add("music/ch-4/Town");
+            BackgroundMusicPath.Add("music/ch-4/Mon");
+            BackgroundMusicPath.Add("music/ch-4/Boss");
+            BackgroundMusicPath.Add("music/ch-5/Town");
+            BackgroundMusicPath.Add("music/ch-5/Mon");
+            BackgroundMusicPath.Add("music/ch-5/Boss");
+            BackgroundMusicPath.Add("music/ch-6/Town");
+            BackgroundMusicPath.Add("music/ch-6/Mon");
+            BackgroundMusicPath.Add("music/ch-6/Boss");
+            BackgroundMusicPath.Add("music/dova-action_battle");
+            BackgroundMusicPath.Add("music/dova-gogonoukurere");
+            BackgroundMusicPath.Add("music/dova-Good_night");
+            BackgroundMusicPath.Add("music/dova-ikirusinrin");
+            BackgroundMusicPath.Add("music/dova-Moonlight");
+            BackgroundMusicPath.Add("music/dova-pastel_green");
+            BackgroundMusicPath.Add("music/dova-wagaya");
+            BackgroundMusicPath.Add("music/FinalStorm");
+            BackgroundMusicPath.Add("music/Izanai");
+            BackgroundMusicPath.Add("music/KBF_Town_Village_01");
+            BackgroundMusicPath.Add("music/kokoro_hiraite");
+            BackgroundMusicPath.Add("music/LRPG_Tale_of_Aurora_D");
+            BackgroundMusicPath.Add("music/m308_unmei");
+            BackgroundMusicPath.Add("music/Morinonakanoseirei");
+            BackgroundMusicPath.Add("music/winered");
 
             // Initialize GUI Panels
             GUIManager.Instance.InitializeThemeAndUI(BuiltinTheme);
-
-            // Gonna do this one in LoadSave Screen
-            // Initialize Player Data
-            PlayerManager.Instance.Initialize();
         }
 
         public void Update(GameTime gameTime)
@@ -736,14 +756,29 @@ namespace Medicraft.Systems
             return null;
         }
 
-        public Song GetBackgroundMusic(Music musicBG)
+        public string GetBackgroundMusicPath(Music musicBG)
         {
-            if (musicBGIndices.TryGetValue(musicBG, out int index) && index < BackgroundMusic.Count)
+            if (musicBGIndices.TryGetValue(musicBG, out int index) && index < BackgroundMusicPath.Count)
             {
-                return BackgroundMusic.ElementAt(index);
+                return BackgroundMusicPath.ElementAt(index);
             }
 
             return null;
+        }
+
+        public Song AddCurrentMapMusic(Music musicBG, ContentManager content)
+        {
+            var path = GetBackgroundMusicPath(musicBG);
+            var song = content.Load<Song>(path);
+
+            CurrentMapMusics.Add(new MusicData()
+            {
+                Name = musicBG,
+                Path = path,
+                Song = song
+            });
+
+            return song;
         }
 
         public Texture2D GetItemTexture(int itemId)

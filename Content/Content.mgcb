@@ -597,6 +597,18 @@
 /processorParam:TextureFormat=Color
 /build:gui/exp_gauge.png
 
+#begin gui/game_name.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/game_name.png
+
 #begin gui/gold_coin.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -776,6 +788,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:gui/logo_wakeup.png
+
+#begin gui/main_menu_screen.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/main_menu_screen.png
 
 #begin gui/mana_gauge.png
 /importer:TextureImporter

@@ -47,11 +47,11 @@ namespace Medicraft.Systems.Managers
         public bool IsTransitioning { private set; get; } = false;
         public bool IsScreenLoaded { private set; get; } = false;
 
-        private readonly float _transitionTime = 1.5f; // Total transition time in seconds
-        private readonly float _pauseTime = 0.5f; // Pause time in seconds
+        private readonly float _transitionTime = 1.5f;  // Total transition time in seconds
+        private readonly float _pauseTime = 0.5f;       // Pause time in seconds
         private float _transitionTimer;
         private float _transitionRadius;
-        private const float _transitionSpeed = 30;
+        private const float _transitionSpeed = 30f;
 
         private ScreenManager()
         {
@@ -71,8 +71,8 @@ namespace Medicraft.Systems.Managers
         }
 
         public void LoadContent()
-        {           
-            _curScreen.LoadContent();
+        {
+            _curScreen?.LoadContent();
         }
 
         public void UnloadContent()
@@ -167,20 +167,22 @@ namespace Medicraft.Systems.Managers
         {
             GameGlobals.Instance.IsGameActive = Game.IsActive;
 
+            // Only receive input if Game is Active
             if (Game.IsActive)
-                PlayerManager.UpdateGameController(gameTime);
-
-            // update UI
-            UserInterface.Active.Update(gameTime);
-
-            if (!GameGlobals.Instance.IsGamePause)
             {
-                _curScreen.Update(gameTime);
-            }
+                PlayerManager.UpdateGameController();
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed
+                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed
                     || Keyboard.GetState().IsKeyDown(Keys.Escape))
                         Game.Exit();
+            }
+
+            // Update UI
+            if (CurrentScreen != GameScreen.SplashScreen)
+                UserInterface.Active.Update(gameTime);
+
+            if (!GameGlobals.Instance.IsGamePause)
+                _curScreen.Update(gameTime);
 
             // Current GUI Panel
             switch (GUIManager.Instance.CurrentGUI)
@@ -189,7 +191,6 @@ namespace Medicraft.Systems.Managers
                     // play screen ui
                     if (!GameGlobals.Instance.IsRefreshPlayScreenUI)
                     {
-                        GUIManager.Instance.CurrentGUI = GUIManager.PlayScreen;
                         GUIManager.Instance.RefreshHotbarDisplay();
                         // Quest list
                         GUIManager.Instance.UpdateAfterChangeGUI();
@@ -202,7 +203,6 @@ namespace Medicraft.Systems.Managers
                     // Inventory
                     if (!GameGlobals.Instance.IsOpenInventoryPanel)
                     {
-                        GUIManager.Instance.CurrentGUI = GUIManager.InventoryPanel;
                         GUIManager.Instance.RefreshInvenrotyItemDisplay(false);
                         GUIManager.Instance.UpdateAfterChangeGUI();
 
@@ -214,7 +214,6 @@ namespace Medicraft.Systems.Managers
                     // Crafting
                     if (!GameGlobals.Instance.IsOpenCraftingPanel)
                     {
-                        GUIManager.Instance.CurrentGUI = GUIManager.CraftingPanel;
                         GUIManager.Instance.RefreshCraftableItemDisplay(GUIManager.Instance.CurrentCraftingList);
                         GUIManager.Instance.UpdateAfterChangeGUI();
 
@@ -226,11 +225,18 @@ namespace Medicraft.Systems.Managers
                     // Inspecting Character
                     if (!GameGlobals.Instance.IsOpenInspectPanel)
                     {
-                        GUIManager.Instance.CurrentGUI = GUIManager.InspectPanel;
                         GUIManager.Instance.RefreshInspectCharacterDisply();
                         GUIManager.Instance.UpdateAfterChangeGUI();
 
                         GameGlobals.Instance.IsOpenInspectPanel = true;
+                    }
+                    break;
+
+                case GUIManager.MainMenu:
+                    if (!GameGlobals.Instance.IsOpenMainMenu)
+                    {
+                        GUIManager.Instance.UpdateAfterChangeGUI();
+                        GameGlobals.Instance.IsOpenMainMenu = true;
                     }
                     break;
             }
@@ -278,7 +284,7 @@ namespace Medicraft.Systems.Managers
             // Draw UI
             UserInterface.Active.Draw(_spriteBatch);       
 
-            if (CurrentScreen == GameScreen.SplashScreen)
+            if (CurrentScreen == GameScreen.SplashScreen || CurrentScreen == GameScreen.MainMenuScreen)
             {
                 GraphicsDevice.Clear(Color.White);
 
@@ -334,7 +340,7 @@ namespace Medicraft.Systems.Managers
                 UserInterface.Active.DrawMainRenderTarget(_spriteBatch);
 
             // Draw Selected Item on Hotbar
-            if (IsScreenLoaded)
+            if (CurrentScreen != GameScreen.SplashScreen || CurrentScreen != GameScreen.MainMenuScreen)
             {
                 _spriteBatch.Begin
                 (
@@ -422,6 +428,23 @@ namespace Medicraft.Systems.Managers
             }
 
             return LoadMapAction.None;
+        }
+
+        public static void ToggleFullScreen()
+        {
+            if (GameGlobals.Instance.IsFullScreen)
+            {
+                Instance.GraphicsDeviceManager.IsFullScreen = true;
+                Instance.GraphicsDeviceManager.ApplyChanges();
+            }
+            else
+            {
+                Instance.GraphicsDeviceManager.IsFullScreen = false;
+                Instance.GraphicsDeviceManager.ApplyChanges();
+
+                Instance.GraphicsDeviceManager.IsFullScreen = false;
+                Instance.GraphicsDeviceManager.ApplyChanges();
+            }
         }
 
         public static ScreenManager Instance

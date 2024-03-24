@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using System;
 using Microsoft.Xna.Framework.Input;
 using Medicraft.Systems;
 using MonoGame.Extended.BitmapFonts;
@@ -33,7 +32,7 @@ namespace Medicraft.Screens
             base.LoadContent();
 
             _font = _content.Load<BitmapFont>("fonts/Mincraft_Ten/Mincraft_Ten");
-            _logo = GameGlobals.Instance.Content.Load<Texture2D>("gui/logo_wakeup");
+            _logo = _content.Load<Texture2D>("gui/logo_wakeup");
 
             GameGlobals.Instance.TestIcon = _logo;
 
@@ -52,8 +51,9 @@ namespace Medicraft.Screens
 
         public override void Update(GameTime gameTime)
         {
-            GameGlobals.Instance.PrevMouse = GameGlobals.Instance.CurMouse;
-            GameGlobals.Instance.CurMouse = Mouse.GetState();
+            // Mouse Control
+            var mouseCur = GameGlobals.Instance.CurMouse;
+            var mousePrev = GameGlobals.Instance.PrevMouse;
 
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -86,8 +86,8 @@ namespace Medicraft.Screens
                 }
             }
 
-            if (GameGlobals.Instance.CurMouse.LeftButton == ButtonState.Pressed
-                    && GameGlobals.Instance.PrevMouse.LeftButton == ButtonState.Released && !_index.Equals(3))
+            if (mouseCur.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released
+                && !_index.Equals(3))
             {
                 ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.MainMenuScreen);
             }

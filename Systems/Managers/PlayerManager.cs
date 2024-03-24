@@ -1,31 +1,42 @@
 ﻿using Medicraft.Data;
 using Medicraft.Data.Models;
 using Medicraft.Entities;
+using Medicraft.Entities.Companion;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Sprites;
-using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Medicraft.Systems.Managers
 {
     public class PlayerManager
     {
+        // Player: Noah
         public Player Player { private set; get; }
         public bool IsPlayerDead { private set; get; }
+        
+        // Companions
+        public List<Companion> Companions { private set; get; }
+        public bool IsCompanionSpawned { private set; get; }
+        public bool IsCompanionDead { private set; get; } 
 
         private static PlayerManager instance;
         private PlayerManager()
         {
             IsPlayerDead = false;
+
+            Companions = [];
+            IsCompanionSpawned = false;
+            IsCompanionDead = false;
         }
 
-        public void Initialize()
+        public void Initialize(bool isNewGame)
         {
             var initialPlayerData = GameGlobals.Instance.InitialPlayerData;
             var playerSprite = new AnimatedSprite(GameGlobals.Instance.PlayerSpriteSheet);
 
-            if (GameGlobals.Instance.GameSave.Count != 0)
+            if (!isNewGame)
             {
                 ScreenManager.Instance.CurrentLoadMapAction = ScreenManager.LoadMapAction.LoadGameSave;
 
@@ -83,7 +94,7 @@ namespace Medicraft.Systems.Managers
             GUIManager.Instance.InitCraftableItemDisplay();
         }
 
-        public static void UpdateGameController(GameTime gameTime)
+        public static void UpdateGameController()
         {
             // Key Control
             GameGlobals.Instance.PrevKeyboard = GameGlobals.Instance.CurKeyboard;
@@ -336,30 +347,6 @@ namespace Medicraft.Systems.Managers
                 else if (keyboardCur.IsKeyUp(Keys.V))
                 {
                     GameGlobals.Instance.SwitchShowPath = false;
-                }
-
-                // Full Screen On/Off               
-                if ((keyboardCur.IsKeyUp(Keys.PageUp) && keyboardPrev.IsKeyDown(Keys.PageUp))
-                    && !GameGlobals.Instance.SwitchFullScreen)
-                {
-                    GameGlobals.Instance.SwitchFullScreen = !GameGlobals.Instance.SwitchFullScreen;
-                    GameGlobals.Instance.IsFullScreen = true;
-
-                    ScreenManager.Instance.GraphicsDeviceManager.IsFullScreen = true;
-                    ScreenManager.Instance.GraphicsDeviceManager.ApplyChanges();
-                }
-                else if ((keyboardCur.IsKeyUp(Keys.PageUp) && keyboardPrev.IsKeyDown(Keys.PageUp))
-                    && GameGlobals.Instance.SwitchFullScreen)
-                {
-                    GameGlobals.Instance.SwitchFullScreen = !GameGlobals.Instance.SwitchFullScreen;
-                    GameGlobals.Instance.IsFullScreen = false;
-
-                    ScreenManager.Instance.GraphicsDeviceManager.IsFullScreen = false;
-                    ScreenManager.Instance.GraphicsDeviceManager.ApplyChanges();
-
-                    // do it again
-                    ScreenManager.Instance.GraphicsDeviceManager.IsFullScreen = false;
-                    ScreenManager.Instance.GraphicsDeviceManager.ApplyChanges();
                 }
             }
         }

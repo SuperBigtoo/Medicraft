@@ -81,10 +81,22 @@ namespace Medicraft.Data
                 });
             }
 
-            SaveFile(GameGlobals.Instance.GameSave, GameGlobals.Instance.GameSavePath);
+            SaveGameFile(GameGlobals.Instance.GameSave, GameGlobals.Instance.GameSavePath);
+
+            // Game Config
+            SaveConfig();
         }
 
-        public static List<GameSaveData> LoadFlie(string PATH)
+        public static void SaveConfig()
+        {
+            GameGlobals.Instance.GameConfig.IsFullScreen = GameGlobals.Instance.IsFullScreen;
+            GameGlobals.Instance.GameConfig.SFXVolume = Math.Round(GameGlobals.Instance.SoundEffectVolume, 2);
+            GameGlobals.Instance.GameConfig.BGMusicVolume = Math.Round(GameGlobals.Instance.BackgroundMusicVolume, 2);
+
+            SaveConfigFile(GameGlobals.Instance.GameConfig, GameGlobals.Instance.GameConfigPath);
+        }
+
+        public static List<GameSaveData> LoadGameSave(string PATH)
         {
             string fileContents;
             try
@@ -95,7 +107,7 @@ namespace Medicraft.Data
             {
                 {
                     var gameSave = new List<GameSaveData>();
-                    SaveFile(gameSave, PATH);
+                    SaveGameFile(gameSave, PATH);
                     fileContents = File.ReadAllText(PATH);
                 }
             } 
@@ -103,9 +115,40 @@ namespace Medicraft.Data
             return JsonSerializer.Deserialize<List<GameSaveData>>(fileContents);
         }
 
-        private static void SaveFile(List<GameSaveData> gameSave, string PATH)
+        public static GameConfigData LoadGameConfig(string PATH)
+        {
+            string fileContents;
+            try
+            {
+                fileContents = File.ReadAllText(PATH);
+            }
+            catch (IOException)
+            {
+                {
+                    var gameSave = new GameConfigData()
+                    {
+                        IsFullScreen = true,
+                        SFXVolume = Math.Round(GameGlobals.Instance.SoundEffectVolume, 2),
+                        BGMusicVolume = Math.Round(GameGlobals.Instance.BackgroundMusicVolume, 2)
+                    };
+                    SaveConfigFile(gameSave, PATH);
+                    fileContents = File.ReadAllText(PATH);
+                }
+            }
+
+            return JsonSerializer.Deserialize<GameConfigData>(fileContents);
+        }
+
+        private static void SaveGameFile(List<GameSaveData> gameSave, string PATH)
         {
             string serializedText = JsonSerializer.Serialize(gameSave);
+            (new FileInfo(PATH)).Directory.Create();
+            File.WriteAllText(PATH, serializedText);
+        }
+
+        private static void SaveConfigFile(GameConfigData gameConfig, string PATH)
+        {
+            string serializedText = JsonSerializer.Serialize(gameConfig);
             (new FileInfo(PATH)).Directory.Create();
             File.WriteAllText(PATH, serializedText);
         }

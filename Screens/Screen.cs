@@ -25,7 +25,12 @@ namespace Medicraft.Screens
         }
 
         public virtual void UnloadContent()
-        {         
+        {
+            // Clear List Entity, GameObject and MusicBG
+            EntityManager.Instance.ClearEntity();
+            ObjectManager.Instance.ClearGameObject();
+            GameGlobals.Instance.CurrentMapMusics.Clear();
+
             _content?.Unload();
         }
 

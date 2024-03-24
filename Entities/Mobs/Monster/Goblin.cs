@@ -148,7 +148,6 @@ namespace Medicraft.Entities.Mobs.Monster
             Sprite.Play(SpriteCycle + "_walking");
         }
 
-        // Update Slime
         public override void Update(GameTime gameTime, float playerDepth, float topDepth, float middleDepth, float bottomDepth)
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -224,14 +223,8 @@ namespace Medicraft.Entities.Mobs.Monster
             Sprite.Update(deltaSeconds);
         }
 
-        // Draw Slime
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (GameGlobals.Instance.IsShowPath)
-            {
-                //_pathFinding.Draw(spriteBatch);
-            }
-
             spriteBatch.Draw(Sprite, Transform);
 
             var shadowTexture = GameGlobals.Instance.GetShadowTexture(GameGlobals.ShadowTextureName.shadow_1);
@@ -254,7 +247,7 @@ namespace Medicraft.Entities.Mobs.Monster
 
             spriteBatch.Draw(shadowTexture, position, null, Color.White
                 , 0f, Vector2.Zero, 1.2f, SpriteEffects.None, Sprite.Depth + 0.0000025f);
-        }  
+        } 
 
         public override object Clone()
         {

@@ -428,19 +428,19 @@ namespace Medicraft.Entities
                             IsMoving = true;
 
                             // Check Animation
-                            if (direction.Y == -1)
+                            if (direction.Y < 0)
                             {
                                 CurrentAnimation = SpriteCycle + "_walking";     // Up
                             }
-                            if (direction.Y == 1)
+                            if (direction.Y > 0)
                             {
                                 CurrentAnimation = SpriteCycle + "_walking";     // Down
                             }
-                            if (direction.X == -1)
+                            if (direction.X < 0)
                             {
                                 CurrentAnimation = SpriteCycle + "_walking";     // Left
                             }
-                            if (direction.X == 1)
+                            if (direction.X > 0)
                             {
                                 CurrentAnimation = SpriteCycle + "_walking";     // Right
                             }
@@ -511,9 +511,7 @@ namespace Medicraft.Entities
                         // Next route
                         _routeNodeIndex++;
                         if (_routeNodeIndex >= entityData.RoutePoint.Length)
-                        {
                             _routeNodeIndex = 0;
-                        }
 
                         _targetNode = position;
                         break;
@@ -522,11 +520,12 @@ namespace Medicraft.Entities
                         var random = new Random();
 
                         // Define the patrol area from rectangle
-                        var recArea = GameGlobals.Instance.MobPartrolArea.Where(b => b.Name.Equals(entityData.PartrolArea));
-                        var rectangleX = (int)recArea.ElementAt(0).Bounds.X;
-                        var rectangleY = (int)recArea.ElementAt(0).Bounds.Y;
-                        var rectangleWidth = (int)recArea.ElementAt(0).Bounds.Width;
-                        var rectangleHeight = (int)recArea.ElementAt(0).Bounds.Height;
+                        var recArea = GameGlobals.Instance.MobPartrolArea.FirstOrDefault
+                            (b => b.Name.Equals(entityData.PartrolArea));
+                        var rectangleX = (int)recArea.Bounds.X;
+                        var rectangleY = (int)recArea.Bounds.Y;
+                        var rectangleWidth = (int)recArea.Bounds.Width;
+                        var rectangleHeight = (int)recArea.Bounds.Height;
 
                         // Generate random X and Y within the rectangle
                         var randomX = random.Next(rectangleX, rectangleX + rectangleWidth);
