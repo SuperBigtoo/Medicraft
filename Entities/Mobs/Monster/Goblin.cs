@@ -124,11 +124,8 @@ namespace Medicraft.Entities.Mobs.Monster
             BoundingCollisionY = goblin.BoundingCollisionY;
 
             BoundingDetectCollisions = goblin.BoundingDetectCollisions;
-
             BoundingHitBox = goblin.BoundingHitBox;
-
             BoundingAggro = goblin.BoundingAggro;
-
             BoundingDetectEntity = goblin.BoundingDetectEntity;
 
             _pathFinding = new AStar(

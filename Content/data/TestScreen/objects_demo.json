@@ -21,11 +21,31 @@
   },
   {
     "Id": 2,
-    "ReferId": 312,
+    "ReferId": 2,
     "Category": 0,
     "Name": "Meow latte",
     "Description": "Meow Meow Meof Meog",
     "Position": [ 750, 1262 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 3,
+    "ReferId": 312,
+    "Category": 0,
+    "Name": "Meow latte",
+    "Description": "Meow Meow Meof Meog",
+    "Position": [ 821, 1357 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 4,
+    "ReferId": 312,
+    "Category": 0,
+    "Name": "Meow latte",
+    "Description": "Meow Meow Meof Meog",
+    "Position": [ 785.33, 1273.33 ],
     "IsRespawnable": true,
     "IsVisible": true
   }
