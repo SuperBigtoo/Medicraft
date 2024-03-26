@@ -74,25 +74,17 @@ namespace Medicraft.Screens
                     GameGlobals.Instance.IsMainBGEnding = false;
                 }
             }
-        }
-
-        public static void PlayTime()
-        {
-            GameGlobals.Instance.IsMainBGEnding = true;
-            PlayerManager.Instance.Initialize(true);
-            GameGlobals.Instance.InitialCameraPos = GameGlobals.Instance.GameScreenCenter;
-            ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.TestScreen);
-
-            // Toggle the IsOpenMainMenu flag
-            GUIManager.Instance.CurrentGUI = GUIManager.PlayScreen;
-            GameGlobals.Instance.IsOpenMainMenu = false;
-            GameGlobals.Instance.IsRefreshPlayScreenUI = false;          
-        }
+        }      
 
         public override void Draw(SpriteBatch spriteBatch)
         {      
             spriteBatch.Draw(_mainMenuBG, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-            ScreenManager.DrawBackgound(spriteBatch, Color.Black, 0.2f);
+
+            var alphaColor = 0.2f;
+            if (GUIManager.Instance.IsClickedLoadButton)
+                alphaColor = 0.8f;
+
+            ScreenManager.DrawBackgound(spriteBatch, Color.Black, alphaColor);
         }
     }
 }

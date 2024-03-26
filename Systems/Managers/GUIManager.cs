@@ -3,11 +3,10 @@ using GeonBit.UI.Entities;
 using GeonBit.UI.Utils.Forms;
 using Medicraft.Data;
 using Medicraft.Data.Models;
-using Medicraft.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Sprites;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,6 +27,7 @@ namespace Medicraft.Systems.Managers
         public const int InspectPanel = 3;
         public const int MainMenu = 4;
         public const int PauseMenu = 5;
+        public const int SaveMenu = 6;
 
         public string CurrentCraftingList { get; set; }
 
@@ -39,8 +39,14 @@ namespace Medicraft.Systems.Managers
         public bool IsShowConfirmBox { get; set; } = false;
         public AnimatedSprite PlayerSprite { get; set; }
 
+        // Load Save
+        public bool IsClickedLoadButton { get; private set; } = false;
+        public List<Panel> GameSaveFromMainMenu { get; private set; } = [];
+        public List<Panel> GameSaveFromSaveMenu { get; private set; } = [];
+        public Panel SelectedGameSavePanel { get; private set; }
+
         // Skill selected
-        private string _noahSkillSelected; 
+        public string NoahSelectedSkill { get; private set; }
 
         // UI elements
         private readonly List<Panel> _mainPanels = [];
@@ -48,7 +54,7 @@ namespace Medicraft.Systems.Managers
         private GUIManager()
         {
             CurrentGUI = MainMenu;
-            CurrentCraftingList = ThaiTraditionalMedicine;
+            CurrentCraftingList = ConsumableItem;
         }
 
         public void UpdateAfterChangeGUI()
@@ -94,6 +100,8 @@ namespace Medicraft.Systems.Managers
 
             // Pause Menu = 5
 
+            // Save Menu = 6
+
             // update ui panel
             UpdateAfterChangeGUI();
         }
@@ -112,7 +120,7 @@ namespace Medicraft.Systems.Managers
             UserInterface.Active.AddEntity(playScreenUI);
         }
 
-        public void RefreshHotbarDisplay()
+        public void RefreshHotbar()
         {
             var HotbarSlot = _mainPanels.ElementAt(PlayScreen);
             
@@ -372,7 +380,7 @@ namespace Medicraft.Systems.Managers
                         else
                         {
                             GeonBit.UI.Utils.MessageBox.ShowMsgBox("Setup Complete", $"Ya didn't select a for '{currItemInv.Value.GetName()}'");
-                            RefreshInvenrotyItemDisplay(true);
+                            RefreshInvenrotyItem(true);
                         }
 
                         //InventoryManager.Instance.ItemSelected = null;
@@ -385,7 +393,7 @@ namespace Medicraft.Systems.Managers
         // Call this after initialize Player's Inventory Data
         public void InitInventoryItemDisplay()
         {
-            RefreshInvenrotyItemDisplay(false);
+            RefreshInvenrotyItem(false);
 
             var inventoryPanel = _mainPanels.ElementAt(InventoryPanel);
             var invenRightPanel = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenRightPanel"));
@@ -431,7 +439,7 @@ namespace Medicraft.Systems.Managers
             }
         }
 
-        public void RefreshInvenrotyItemDisplay(bool isClearLeftPanel)
+        public void RefreshInvenrotyItem(bool isClearLeftPanel)
         {
             var inventoryPanel = _mainPanels.ElementAt(InventoryPanel);          
             var invenRightPanel = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenRightPanel"));
@@ -823,7 +831,7 @@ namespace Medicraft.Systems.Managers
 
         public void InitCraftableItemDisplay()
         {
-            RefreshCraftableItemDisplay(CurrentCraftingList);
+            RefreshCraftableItem(CurrentCraftingList);
 
             var craftingPanel = _mainPanels.ElementAt(CraftingPanel);
             var rightCraftingPanel = craftingPanel.Children?.FirstOrDefault(e => e.Identifier.Equals("rightCraftingPanel"));
@@ -831,19 +839,19 @@ namespace Medicraft.Systems.Managers
             var craftingItemButton = craftingPanel.Children?.FirstOrDefault(e => e.Identifier.Equals("craftingItemButton"));
             var leftCraftingPanel = craftingPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("leftCraftingPanel"));
 
-            List<CraftableItemData> craftableItemList = [];
+            List<CraftableItem> craftableItemList = [];
 
             switch (CurrentCraftingList)
             {
-                case "Thai traditional medicine":
+                case ThaiTraditionalMedicine:
                     craftableItemList = CraftingManager.Instance.CraftableMedicineItem;
                     break;
 
-                case "Consumable item":
+                case ConsumableItem:
                     craftableItemList = CraftingManager.Instance.CraftableFoodItem;
                     break;
 
-                case "Equipment":
+                case Equipment:
                     craftableItemList = CraftingManager.Instance.CraftableEquipmentItem;
                     break;
             }
@@ -862,7 +870,7 @@ namespace Medicraft.Systems.Managers
             }
         }
 
-        public void RefreshCraftableItemDisplay(string craftableType)
+        public void RefreshCraftableItem(string craftableType)
         {
             var craftingPanel = _mainPanels.ElementAt(CraftingPanel);
             var rightCraftingPanel = craftingPanel.Children?.FirstOrDefault(e => e.Identifier.Equals("rightCraftingPanel"));
@@ -875,19 +883,19 @@ namespace Medicraft.Systems.Managers
             // Clear craftable item display
             listCraftableItemPanel.ClearChildren();
 
-            List<CraftableItemData> craftableItemList = [];
+            List<CraftableItem> craftableItemList = [];
 
             switch (craftableType)
             {
-                case "Thai traditional medicine":
+                case ThaiTraditionalMedicine:
                     craftableItemList = CraftingManager.Instance.CraftableMedicineItem;
                     break;
 
-                case "Consumable item":
+                case ConsumableItem:
                     craftableItemList = CraftingManager.Instance.CraftableFoodItem;
                     break;
 
-                case "Equipment":
+                case Equipment:
                     craftableItemList = CraftingManager.Instance.CraftableEquipmentItem;
                     break;
             }
@@ -945,7 +953,7 @@ namespace Medicraft.Systems.Managers
             description.Text = itemData.Description;
         }
 
-        private void SetCraftingItemSelectedDisplay(CraftableItemData itemCrafting)
+        private void SetCraftingItemSelectedDisplay(CraftableItem itemCrafting)
         {            
             var craftingSelectItemPanel = UserInterface.Active.Root.Children.FirstOrDefault
                 (i => i.Identifier.Equals("craftingSelectItemPanel"));
@@ -957,7 +965,7 @@ namespace Medicraft.Systems.Managers
             itemIcon.Texture = GameGlobals.Instance.GetItemTexture(itemCrafting.ItemId);
         }
 
-        private void SetItemIngredientDisplay(CraftableItemData itemCrafting)
+        private void SetItemIngredientDisplay(CraftableItem itemCrafting)
         {
             var recipeData = GameGlobals.Instance.CraftingRecipeDatas.FirstOrDefault
                 (i => i.RecipeId.Equals(itemCrafting.ItemId));
@@ -990,11 +998,11 @@ namespace Medicraft.Systems.Managers
                     if (totalItemCount < ingredient.Quantity)
                     {
                         var count = totalItemCount - ingredient.Quantity;
-                        ingLabel = ingredient.Name + " x " + ingredient.Quantity + " (-" + count + ")";
+                        ingLabel = ingredient.Name + " x " + ingredient.Quantity + " (" + count + ")";
                     }
                     else ingLabel = ingredient.Name + " x " + ingredient.Quantity + " (" + totalItemCount + ")";
                 }
-                else ingLabel = ingredient.Name + " x " + ingredient.Quantity + " (-" + ingredient.Quantity + ")";
+                else ingLabel = ingredient.Name + " x " + ingredient.Quantity + " (" + ingredient.Quantity + ")";
 
                 ingredientList.AddItem(ingLabel);
                 ingredientList.IconsScale *= 1f;
@@ -1028,7 +1036,7 @@ namespace Medicraft.Systems.Managers
                 // Set true if character tab is clicked
                 characterTab.button.OnClick = (Entity entity) =>
                 {
-                    RefreshInspectCharacterDisply();
+                    RefreshInspectCharacterDisplay();
                     ClearSkillDescription();
                     
                     IsCharacterTabSelected = true;
@@ -1053,6 +1061,15 @@ namespace Medicraft.Systems.Managers
                     Identifier = "characterNameHeader",
                     Scale = 1.5f,
                     Anchor = Anchor.TopCenter
+                });
+
+                // Display Skill point
+                displayCharacterPanel.AddChild(new Label()
+                {
+                    Identifier = "skillPoint",
+                    Scale = 1.15f,
+                    Padding = new Vector2(15, 0),
+                    Anchor = Anchor.TopLeft
                 });
 
                 // Left Equipment Panel
@@ -1176,9 +1193,9 @@ namespace Medicraft.Systems.Managers
                     burstSkillIcon.Enabled = true;
                     passiveSkillIcon.Enabled = true;
 
-                    _noahSkillSelected = "I've got the Scent!";
+                    NoahSelectedSkill = "I've got the Scent!";
 
-                    var descNormal = GameGlobals.Instance.SkillDescriptionDatas.Where(s => s.Name.Equals(_noahSkillSelected)).ToList();
+                    var descNormal = GameGlobals.Instance.SkillDescriptionDatas.Where(s => s.Name.Equals(NoahSelectedSkill)).ToList();
                     var levelNormal = PlayerManager.Instance.Player.PlayerData.Abilities.NormalSkillLevel;
 
                     // Refesh skill description
@@ -1191,9 +1208,9 @@ namespace Medicraft.Systems.Managers
                     normalSkillIcon.Enabled = true;
                     passiveSkillIcon.Enabled = true;
 
-                    _noahSkillSelected = "Noah Strike";
+                    NoahSelectedSkill = "Noah Strike";
 
-                    var descBurst = GameGlobals.Instance.SkillDescriptionDatas.Where(s => s.Name.Equals(_noahSkillSelected)).ToList();
+                    var descBurst = GameGlobals.Instance.SkillDescriptionDatas.Where(s => s.Name.Equals(NoahSelectedSkill)).ToList();
                     var levelBurst = PlayerManager.Instance.Player.PlayerData.Abilities.BurstSkillLevel;
 
                     // Refesh skill description
@@ -1206,9 +1223,9 @@ namespace Medicraft.Systems.Managers
                     normalSkillIcon.Enabled = true;
                     burstSkillIcon.Enabled = true;
 
-                    _noahSkillSelected = "Survivalist";
+                    NoahSelectedSkill = "Survivalist";
 
-                    var descPassive = GameGlobals.Instance.SkillDescriptionDatas.Where(s => s.Name.Equals(_noahSkillSelected)).ToList();
+                    var descPassive = GameGlobals.Instance.SkillDescriptionDatas.Where(s => s.Name.Equals(NoahSelectedSkill)).ToList();
                     var levelPassive = PlayerManager.Instance.Player.PlayerData.Abilities.PassiveSkillLevel;
 
                     // Refesh skill description
@@ -1221,21 +1238,21 @@ namespace Medicraft.Systems.Managers
                     if (PlayerManager.Instance.Player.PlayerData.SkillPoint > 0)
                     {
                         GeonBit.UI.Utils.MessageBox.ShowMsgBox("Up Level Skill"
-                            , $"Do you want to level up the skill '{_noahSkillSelected}'?"
+                            , $"Do you want to level up the skill '{NoahSelectedSkill}'?"
                             , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
                             {
                                 new("Ok", () =>
                                 {
                                     // Do up level skill
-                                    var isUpLevelSucc = PlayerManager.Instance.Player.UpSkillLevle(_noahSkillSelected);
+                                    var isUpLevelSucc = PlayerManager.Instance.Player.UpSkillLevle(NoahSelectedSkill);
 
                                     if (isUpLevelSucc)
                                     {
-                                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("LEVEL UP!!", $"'{_noahSkillSelected}' was successfully up level."
+                                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("LEVEL UP!!", $"'{NoahSelectedSkill}' was successfully up level."
                                             , onDone: () =>
                                             {                                                                                       
                                                 // Refesh skill description
-                                                var descSkill = GameGlobals.Instance.SkillDescriptionDatas.Where(s => s.Name.Equals(_noahSkillSelected)).ToList();
+                                                var descSkill = GameGlobals.Instance.SkillDescriptionDatas.Where(s => s.Name.Equals(NoahSelectedSkill)).ToList();
                                                 int level = 1;
 
                                                 if (normalSkillIcon.Enabled == false)
@@ -1252,14 +1269,38 @@ namespace Medicraft.Systems.Managers
                                                 }
 
                                                 RefreshSkillDescription(descSkill, level);
+                                                
+                                                // Set Display Skill point
+                                                var skillPoint = displayCharacterPanel.Children.OfType<Label>().FirstOrDefault
+                                                    (l => l.Identifier.Equals("skillPoint"));
+                                                skillPoint.Text = "SP: " + PlayerManager.Instance.Player.PlayerData.SkillPoint;
+
+                                                // Set Skill Level
+                                                // Normal Skill icon
+                                                normalSkillIcon.Count = PlayerManager.Instance.Player.PlayerData.Abilities.NormalSkillLevel;
+                                                var normalSkillLevel = normalSkillIcon.Children.OfType<Label>().FirstOrDefault
+                                                            (e => e.Identifier.Equals("normalSkillLevel"));
+                                                normalSkillLevel.Text = $"+{normalSkillIcon.Count}";
+
+                                                // Burst Skill Icon
+                                                burstSkillIcon.Count = PlayerManager.Instance.Player.PlayerData.Abilities.BurstSkillLevel;
+                                                var burstSkillLevel = burstSkillIcon.Children.OfType<Label>().FirstOrDefault
+                                                            (e => e.Identifier.Equals("burstSkillLevel"));
+                                                burstSkillLevel.Text = $"+{burstSkillIcon.Count}";
+
+                                                // Passive Skill Icon
+                                                passiveSkillIcon.Count = PlayerManager.Instance.Player.PlayerData.Abilities.PassiveSkillLevel;
+                                                var passiveSkillLevel = passiveSkillIcon.Children.OfType<Label>().FirstOrDefault
+                                                            (e => e.Identifier.Equals("passiveSkillLevel"));
+                                                passiveSkillLevel.Text = $"+{passiveSkillIcon.Count}";
+
                                                 IsShowConfirmBox = false;
                                             });
-                                        return true;
                                     }
                                     else
                                     {
                                         int capLevel = 0;
-                                        switch (_noahSkillSelected)
+                                        switch (NoahSelectedSkill)
                                         {
                                             case "I've got the Scent!":
                                                 capLevel = PlayerManager.Instance.Player.PlayerData.Abilities.NormalSkillLevel == 3? 11 : 21;
@@ -1279,8 +1320,9 @@ namespace Medicraft.Systems.Managers
                                             {
                                                 IsShowConfirmBox = false;                                                      
                                             });
-                                        return true;
-                                    }                                       
+                                    }
+
+                                    return true;
                                 }),
                                 new("Cancel", () =>
                                 {
@@ -1291,7 +1333,7 @@ namespace Medicraft.Systems.Managers
                     }
                     else
                     {
-                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("Not Enough Skill Point!", "It seems that ya don't have enough 'Skill Point' for this huhh?, go get some level up."
+                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("Not Enough SP!", "It seems that ya don't have enough 'Skill Point' for this huhh?, go get some level up."
                             , onDone: () => { IsShowConfirmBox = false; } );
                     }
                 };
@@ -1633,7 +1675,7 @@ namespace Medicraft.Systems.Managers
             // Clear craftable item display
             listCraftableMedicine.ClearChildren();
 
-            List<CraftableItemData> craftableItemList = CraftingManager.Instance.CraftableMedicineItem;
+            List<CraftableItem> craftableItemList = CraftingManager.Instance.CraftableMedicineItem;
 
             // Set item
             foreach (var item in craftableItemList)
@@ -1705,7 +1747,7 @@ namespace Medicraft.Systems.Managers
             Warning.Text = itemData.Warning;
         }
 
-        public void RefreshInspectCharacterDisply()
+        public void RefreshInspectCharacterDisplay()
         {
             PlayerSprite = new(GameGlobals.Instance.PlayerSpriteSheet);
 
@@ -1722,6 +1764,11 @@ namespace Medicraft.Systems.Managers
             var characterNameHeader = displayCharacterPanel.Children.OfType<Header>().FirstOrDefault
                 (h => h.Identifier.Equals("characterNameHeader"));
             characterNameHeader.Text = PlayerManager.Instance.Player.Name;
+            
+            // Set Display Skill point
+            var skillPoint = displayCharacterPanel.Children.OfType<Label>().FirstOrDefault
+                (l => l.Identifier.Equals("skillPoint"));
+            skillPoint.Text = "SP: " + PlayerManager.Instance.Player.PlayerData.SkillPoint;
 
             // Clear Equipment Slot
             leftEquipmentPanel.ClearChildren();
@@ -1766,7 +1813,7 @@ namespace Medicraft.Systems.Managers
                                         // Use selected item from inventory
                                         InventoryManager.Instance.UnEquip(item.Value);
 
-                                        RefreshInspectCharacterDisply();
+                                        RefreshInspectCharacterDisplay();
 
                                         IsShowConfirmBox = false;
                                         return true;
@@ -1806,6 +1853,7 @@ namespace Medicraft.Systems.Managers
             // Normal Skill icon
             var normalSkillIcon = skillIconPanel.Children.OfType<Icon>().FirstOrDefault
                         (e => e.Identifier.Equals("normalSkillIcon"));
+            normalSkillIcon.Enabled = true;
             normalSkillIcon.Texture = GameGlobals.Instance.GetItemTexture(400);
             normalSkillIcon.Count = PlayerManager.Instance.Player.PlayerData.Abilities.NormalSkillLevel;
             var normalSkillLevel = normalSkillIcon.Children.OfType<Label>().FirstOrDefault
@@ -1815,6 +1863,7 @@ namespace Medicraft.Systems.Managers
             // Burst Skill Icon
             var burstSkillIcon = skillIconPanel.Children.OfType<Icon>().FirstOrDefault
                         (e => e.Identifier.Equals("burstSkillIcon"));
+            burstSkillIcon.Enabled = true;
             burstSkillIcon.Texture = GameGlobals.Instance.GetItemTexture(400);
             burstSkillIcon.Count = PlayerManager.Instance.Player.PlayerData.Abilities.BurstSkillLevel;
             var burstSkillLevel = burstSkillIcon.Children.OfType<Label>().FirstOrDefault
@@ -1824,6 +1873,7 @@ namespace Medicraft.Systems.Managers
             // Passive Skill Icon
             var passiveSkillIcon = skillIconPanel.Children.OfType<Icon>().FirstOrDefault
                         (e => e.Identifier.Equals("passiveSkillIcon"));
+            passiveSkillIcon.Enabled = true;
             passiveSkillIcon.Texture = GameGlobals.Instance.GetItemTexture(400);
             passiveSkillIcon.Count = PlayerManager.Instance.Player.PlayerData.Abilities.PassiveSkillLevel;
             var passiveSkillLevel = passiveSkillIcon.Children.OfType<Label>().FirstOrDefault
@@ -1906,15 +1956,15 @@ namespace Medicraft.Systems.Managers
           
             if (level < 10)
             {
-                descripLeftSkill.Text = $"Lv.{level} : {_noahSkillSelected}\n"
+                descripLeftSkill.Text = $"Lv.{level} : {NoahSelectedSkill}\n"
                     + descSkill.FirstOrDefault(s => s.Level.Equals(level)).Description;
                 upSkillButton.Enabled = true;
-                descripRightSkill.Text = $"Lv.{level + 1} : {_noahSkillSelected}\n"
+                descripRightSkill.Text = $"Lv.{level + 1} : {NoahSelectedSkill}\n"
                     + descSkill.FirstOrDefault(s => s.Level.Equals(level + 1)).Description;
             }
             else
             {
-                descripLeftSkill.Text = $"Lv.{level} : {_noahSkillSelected}\n"
+                descripLeftSkill.Text = $"Lv.{level} : {NoahSelectedSkill}\n"
                     + descSkill.FirstOrDefault(s => s.Level.Equals(level)).Description;
                 upSkillButton.Enabled = false;
                 descripRightSkill.Text = "Skill level has reached maximum.";
@@ -1986,7 +2036,7 @@ namespace Medicraft.Systems.Managers
             mainMenuPanel.AddChild(soundSettingPanel);
 
             // Load GameSave panel
-            var loadGameSavePanel = new Panel()
+            var loadGameSavePanel = new Panel(new Vector2(1200, 800))
             {
                 Identifier = "loadGameSavePanel",
                 Skin = PanelSkin.None,
@@ -2013,7 +2063,7 @@ namespace Medicraft.Systems.Managers
                     Identifier = "newGameButton",
                     OnClick = (btn) =>
                     {
-                        MainMenuScreen.PlayTime();
+                        ScreenManager.StartGame(true);
                     }
                 };
                 mainPanel.AddChild(newGameButton);
@@ -2025,6 +2075,8 @@ namespace Medicraft.Systems.Managers
                     {
                         mainPanel.Visible = false;
                         loadGameSavePanel.Visible = true;
+
+                        IsClickedLoadButton = true;
                     }
                 };
                 mainPanel.AddChild(loadButton);
@@ -2197,22 +2249,274 @@ namespace Medicraft.Systems.Managers
             // Load GameSave: Continues
             {
                 // add title and text
-                loadGameSavePanel.AddChild(new Header("Load Save"));
-                loadGameSavePanel.AddChild(new HorizontalLine());
+                loadGameSavePanel.AddChild(new Header("Select Save Slot", Anchor.TopCenter));
+                loadGameSavePanel.AddChild(new LineSpace(1));
 
-                // 
+                // Save List
+                for (int i = 0; i < GameGlobals.Instance.MaxGameSaveSlot; i++)
+                {
+                    var gameSavePanel = new Panel(new Vector2(1000, 120), PanelSkin.Simple, Anchor.AutoCenter)
+                    {
+                        Identifier = $"gameSavePanel_{i}"
+                    };
+                    loadGameSavePanel.AddChild(gameSavePanel);
+                    loadGameSavePanel.AddChild(new LineSpace(1));
 
+                    var saveName = new Label("Name", Anchor.TopLeft)
+                    {
+                        Identifier = "saveName",
+                        Scale = 1.1f,
+                        ClickThrough = true
+                    };
+                    gameSavePanel.AddChild(saveName);
+
+                    var playTime = new Label("Total PlayTime", Anchor.BottomLeft)
+                    {
+                        Identifier = "playTime",
+                        Scale = 1.1f,
+                        ClickThrough = true
+                    };
+                    gameSavePanel.AddChild(playTime);
+
+                    var createdTime = new Label("Created Time", Anchor.TopRight)
+                    {
+                        Identifier = "createdTime",
+                        Scale = 1.1f,
+                        ClickThrough = true
+                    };
+                    gameSavePanel.AddChild(createdTime);
+
+                    var updatedTime = new Label("last Updated Time", Anchor.BottomRight)
+                    {
+                        Identifier = "updatedTime",
+                        Scale = 1.1f,
+                        ClickThrough = true
+                    };
+                    gameSavePanel.AddChild(updatedTime);
+
+                    var textSaveEmpty = new Label($"Empty Slot {i + 1}", Anchor.Center)
+                    {
+                        Identifier = "textSaveEmpty",
+                        Visible = false,
+                        Scale = 1.1f,
+                        ClickThrough = true
+                    };
+                    gameSavePanel.AddChild(textSaveEmpty);
+
+                    GameSaveFromMainMenu.Add(gameSavePanel);
+                }
+
+                // Buttons
                 loadGameSavePanel.AddChild(new LineSpace(3));
-                var backButton = new Button("Back", ButtonSkin.Default)
+                var buttonPanel = new Panel(new Vector2(1000, 125), PanelSkin.None, Anchor.BottomCenter)
+                {
+                    Identifier = "buttonPanel"
+                };
+                loadGameSavePanel.AddChild(buttonPanel);
+
+                // Play
+                var playButton = new Button("Play Selected Save", ButtonSkin.Default, Anchor.TopCenter)
+                {
+                    Identifier = "playButton",
+                    Enabled = false,
+                    Size = new Vector2(300, 50),
+                    OnClick = (Entity btn) =>
+                    {
+                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("Play Selected Save!", "Do you want to play the selected save?"
+                            , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
+                            {
+                                new("Yes", () =>
+                                {
+                                    ScreenManager.StartGame(false);
+                                    return true;
+                                }),
+                                new("No", () => 
+                                {                                    
+                                    return true;
+                                })
+                            });
+                    }
+                };
+                buttonPanel.AddChild(playButton);
+
+                // Rename
+                var renameButton = new Button("Rename", ButtonSkin.Default, Anchor.BottomCenter)
+                {
+                    Identifier = "renameButton",
+                    Enabled = false,
+                    Size = new Vector2(145, 50),
+                    Offset = new Vector2(-77.5f, -30),
+                    OnClick = (Entity btn) =>
+                    {
+                        var gameSaveData = GameGlobals.Instance.GameSave[GameGlobals.Instance.SelectedGameSaveIndex];
+
+                        var textInput = new TextInput(false)
+                        {
+                            Value = gameSaveData.Name,
+                            PlaceholderText = "Enter your new save name"
+                        };
+                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("Rename", ""
+                            , [
+                                new("Done", () =>
+                                {
+                                    if (!textInput.Value.Equals("") || !textInput.Value.Equals(" "))
+                                    {
+                                        gameSaveData.Name = textInput.Value;
+                                        JsonFileManager.SaveGame(JsonFileManager.RenameGameSave);
+                                    }
+                                    RefreshGameSave(MainMenu);
+
+                                    return true;
+                                })
+                            ]
+                            , [textInput]);
+                    }
+                };
+                buttonPanel.AddChild(renameButton);
+
+                // Delete
+                var deleteButton = new Button("Delete", ButtonSkin.Default, Anchor.BottomCenter)
+                {
+                    Identifier = "deleteButton",
+                    Enabled = false,
+                    Size = new Vector2(145, 50),
+                    Offset = new Vector2(77.5f, -30),
+                    OnClick = (Entity btn) =>
+                    {
+                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("Delete Selected Save!", "Do you want to delete the selected save?"
+                            , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
+                            {
+                                new("Yes", () =>
+                                {
+                                    JsonFileManager.SaveGame(JsonFileManager.DeleteGameSave);
+                                    RefreshGameSave(MainMenu);
+
+                                    return true;
+                                }),
+                                new("No", () =>
+                                {
+                                    return true;
+                                })
+                            });
+                    }
+                };
+                buttonPanel.AddChild(deleteButton);
+
+                var backButton = new Button("Back", ButtonSkin.Default, Anchor.BottomRight)
                 {
                     Identifier = "backButton",
+                    Size = new Vector2(145, 90),
+                    Offset = new Vector2(0, -20),
                     OnClick = (Entity btn) =>
                     {
                         loadGameSavePanel.Visible = false;
                         mainPanel.Visible = true;
+
+                        // Reset Buttons
+                        playButton.Enabled = false;
+                        renameButton.Enabled = false;
+                        deleteButton.Enabled = false;
+
+                        IsClickedLoadButton = false;
                     }
                 };
-                loadGameSavePanel.AddChild(backButton);
+                buttonPanel.AddChild(backButton);
+
+                // Set OnClick GameSave Panel
+                foreach (var gameSavePanel in GameSaveFromMainMenu)
+                {
+                    gameSavePanel.OnClick = (entity) =>
+                    {
+                        // Set Enable Buttons
+                        playButton.Enabled = true;
+                        renameButton.Enabled = true;
+                        deleteButton.Enabled = true;
+
+                        SelectedGameSavePanel = gameSavePanel;
+                        UpdateSelectedGameSave();
+                    };
+                }
+            }
+        }
+
+        public void RefreshGameSave(int fromGUI)
+        {
+            List<Panel> gameSavePanels;
+
+            if (fromGUI == MainMenu)
+            {
+                gameSavePanels = GameSaveFromMainMenu;
+            }
+            else gameSavePanels = GameSaveFromSaveMenu;
+
+            for (int i = 0; i < GameGlobals.Instance.MaxGameSaveSlot; i++)
+            {
+                var gameSavePanel = gameSavePanels[i];
+                var saveName = gameSavePanel.Children.OfType<Label>().FirstOrDefault
+                    (l => l.Identifier.Equals("saveName"));
+                var playTime = gameSavePanel.Children.OfType<Label>().FirstOrDefault
+                    (l => l.Identifier.Equals("playTime"));
+                var createdTime = gameSavePanel.Children.OfType<Label>().FirstOrDefault
+                    (l => l.Identifier.Equals("createdTime"));
+                var updatedTime = gameSavePanel.Children.OfType<Label>().FirstOrDefault
+                    (l => l.Identifier.Equals("updatedTime"));
+                var textSaveEmpty = gameSavePanel.Children.OfType<Label>().FirstOrDefault
+                    (l => l.Identifier.Equals("textSaveEmpty"));
+                
+                try
+                {
+                    var gameSaveData = GameGlobals.Instance.GameSave[i];
+
+                    saveName.Text = gameSaveData.Name;
+                    playTime.Text = $"Total PlayTime: {gameSaveData.TotalPlayTime[0]}h | {gameSaveData.TotalPlayTime[1]}m | {gameSaveData.TotalPlayTime[2]}s";
+                    createdTime.Text = gameSaveData.CreatedTime.Replace("_", " ");
+                    updatedTime.Text = gameSaveData.LastUpdated.Replace("_", " ");
+                    textSaveEmpty.Visible = false;
+
+                    gameSavePanel.Enabled = true;
+                    gameSavePanel.Opacity = 255;
+                    gameSavePanel.OutlineColor = Color.White;
+                    gameSavePanel.OutlineWidth = 0;
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    saveName.Text = "";
+                    playTime.Text = "";
+                    createdTime.Text = "";
+                    updatedTime.Text = "";
+                    textSaveEmpty.Visible = true;
+
+                    gameSavePanel.Enabled = false;
+                    gameSavePanel.Opacity = 128;
+                    gameSavePanel.OutlineColor = Color.White;
+                    gameSavePanel.OutlineWidth = 0;
+                }                           
+            }
+        }
+
+        private void UpdateSelectedGameSave()
+        {
+            var numberString = SelectedGameSavePanel.Identifier.Replace("gameSavePanel_", "");
+
+            if (int.TryParse(numberString, out int numberIndex))
+            {
+                GameGlobals.Instance.SelectedGameSaveIndex = numberIndex;
+
+                System.Diagnostics.Debug.WriteLine($"numberIndex : {numberIndex}");
+            }
+
+            foreach (var gameSavePanel in GameSaveFromMainMenu)
+            {
+                if (gameSavePanel == SelectedGameSavePanel)
+                {
+                    gameSavePanel.OutlineColor = Color.Yellow;
+                    gameSavePanel.OutlineWidth = 2;
+                }
+                else
+                {
+                    gameSavePanel.OutlineColor = Color.White;
+                    gameSavePanel.OutlineWidth = 0;
+                }
             }
         }
 

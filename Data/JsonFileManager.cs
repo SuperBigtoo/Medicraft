@@ -12,73 +12,103 @@ namespace Medicraft.Data
 {
     public class JsonFileManager
     {
+        public const int SavingPlayerData = 0;
+        public const int RenameGameSave = 1;
+        public const int DeleteGameSave = 2;
+
         //Load & Save Game Basically
-        public static void SaveGame()
+        public static void SaveGame(int SavingCase)
         {
-            // Get Time
-            DateTime dateTime = DateTime.Now;
-            string dateTimeString = dateTime.ToString().Replace(' ', '_');
-
-            // Set current Stats          
-            PlayerManager.Instance.Player.PlayerData.Level = PlayerManager.Instance.Player.Level;
-            PlayerManager.Instance.Player.PlayerData.EXP = PlayerManager.Instance.Player.EXP;
-            // HP Percentage
-            var hpPercentage = (float)Math.Round(PlayerManager.Instance.Player.HP / PlayerManager.Instance.Player.MaxHP, 2);
-            PlayerManager.Instance.Player.PlayerData.CurrentHPPercentage = hpPercentage;
-            // Mana Percentage
-            var manaPercentage = (float)Math.Round(PlayerManager.Instance.Player.Mana / PlayerManager.Instance.Player.MaxMana, 2);
-            PlayerManager.Instance.Player.PlayerData.CurrentManaPercentage = manaPercentage;
-
-            // Set Player Position
-            PlayerManager.Instance.Player.PlayerData.CurrentMap = ScreenManager.Instance.CurrentMap;
-            PlayerManager.Instance.Player.PlayerData.Position[0] = PlayerManager.Instance.Player.Position.X;
-            PlayerManager.Instance.Player.PlayerData.Position[1] = PlayerManager.Instance.Player.Position.Y;
-
-            // Set Current InventoryData
-            var inventoryItems = new List<InventoryItemData>();
-            foreach (var item in InventoryManager.Instance.InventoryBag.Values)
+            switch (SavingCase)
             {
-                inventoryItems.Add(item);
-            }
-            var inventoryData = new InventoryData() {
-                GoldCoin = InventoryManager.Instance.GoldCoin,
-                Inventory = inventoryItems
-            };
-            PlayerManager.Instance.Player.PlayerData.InventoryData = inventoryData;
+                case SavingPlayerData:
+                    // Set current Stats          
+                    PlayerManager.Instance.Player.PlayerData.Level = PlayerManager.Instance.Player.Level;
+                    PlayerManager.Instance.Player.PlayerData.EXP = PlayerManager.Instance.Player.EXP;
+                    // HP Percentage
+                    var hpPercentage = PlayerManager.Instance.Player.HP / PlayerManager.Instance.Player.MaxHP;
+                    PlayerManager.Instance.Player.PlayerData.CurrentHPPercentage = Math.Round(hpPercentage, 2);
+                    // Mana Percentage
+                    var manaPercentage = PlayerManager.Instance.Player.Mana / PlayerManager.Instance.Player.MaxMana;
+                    PlayerManager.Instance.Player.PlayerData.CurrentManaPercentage = Math.Round(manaPercentage, 2);
 
-            // Set save name
-            var saveName = "Save_" + dateTimeString;
+                    // Set Player Position
+                    PlayerManager.Instance.Player.PlayerData.CurrentMap = ScreenManager.Instance.CurrentMap;
+                    PlayerManager.Instance.Player.PlayerData.Position[0] = Math.Round(PlayerManager.Instance.Player.Position.X, 2);
+                    PlayerManager.Instance.Player.PlayerData.Position[1] = Math.Round(PlayerManager.Instance.Player.Position.Y, 2);
 
-            // Ser total playtime
-            var second = (int)GameGlobals.Instance.TotalPlayTime % 60;
-            var minute = (int)GameGlobals.Instance.TotalPlayTime / 60;
-            var hour = (int)GameGlobals.Instance.TotalPlayTime / 3600;
+                    // Set Current InventoryData
+                    var inventoryItems = new List<InventoryItemData>();
+                    foreach (var item in InventoryManager.Instance.InventoryBag.Values)
+                    {
+                        inventoryItems.Add(item);
+                    }
+                    var inventoryData = new InventoryData()
+                    {
+                        GoldCoin = InventoryManager.Instance.GoldCoin,
+                        Inventory = inventoryItems
+                    };
+                    PlayerManager.Instance.Player.PlayerData.InventoryData = inventoryData;
 
-            var playTime = new int[] { hour, minute, second};
+                    // Get Time
+                    DateTime dateTime = DateTime.Now;
+                    string dateTimeString = dateTime.ToString().Replace(' ', '_');
 
-            if (GameGlobals.Instance.GameSave.Count != 0)
-            {
-                GameGlobals.Instance.GameSave[GameGlobals.Instance.GameSaveIdex] = new GameSaveData()
-                {
-                    SaveId = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.GameSaveIdex).SaveId,
-                    Name = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.GameSaveIdex).Name,
-                    CreatedTime = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.GameSaveIdex).CreatedTime,
-                    LastUpdated = dateTimeString,
-                    TotalPlayTime = playTime,
-                    PlayerData = PlayerManager.Instance.Player.PlayerData
-                };
-            }
-            else
-            {
-                GameGlobals.Instance.GameSave.Add(new GameSaveData()
-                {
-                    SaveId = 0,
-                    Name = saveName,
-                    CreatedTime = dateTimeString,
-                    LastUpdated = dateTimeString,
-                    TotalPlayTime = playTime,
-                    PlayerData = PlayerManager.Instance.Player.PlayerData
-                });
+                    // Set save name
+                    var saveName = "Save_" + dateTimeString;
+
+                    // Ser total playtime
+                    var second = (int)GameGlobals.Instance.TotalPlayTime % 60;
+                    var minute = (int)GameGlobals.Instance.TotalPlayTime / 60;
+                    var hour = (int)GameGlobals.Instance.TotalPlayTime / 3600;
+
+                    var playTime = new int[] { hour, minute, second };      
+
+                    try
+                    {
+                        var gameSaveData = GameGlobals.Instance.GameSave[GameGlobals.Instance.SelectedGameSaveIndex];
+
+                        GameGlobals.Instance.GameSave[GameGlobals.Instance.SelectedGameSaveIndex] = new GameSaveData()
+                        {
+                            SaveId = gameSaveData.SaveId,
+                            Name = gameSaveData.Name,
+                            CreatedTime = gameSaveData.CreatedTime,
+                            LastUpdated = dateTimeString,
+                            TotalPlayTime = playTime,
+                            PlayerData = PlayerManager.Instance.Player.PlayerData
+                        };
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        GameGlobals.Instance.GameSave.Add(new GameSaveData()
+                        {
+                            SaveId = GameGlobals.Instance.GameSave.Count,
+                            Name = saveName,
+                            CreatedTime = dateTimeString,
+                            LastUpdated = dateTimeString,
+                            TotalPlayTime = playTime,
+                            PlayerData = PlayerManager.Instance.Player.PlayerData
+                        });
+                    }
+
+                    break;
+
+                case RenameGameSave:
+                    GameGlobals.Instance.GameSave[GameGlobals.Instance.SelectedGameSaveIndex] = new GameSaveData()
+                    {
+                        SaveId = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).SaveId,
+                        Name = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).Name,
+                        CreatedTime = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).CreatedTime,
+                        LastUpdated = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).LastUpdated,
+                        TotalPlayTime = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).TotalPlayTime,
+                        PlayerData = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).PlayerData
+                    };
+
+                    break;
+
+                case DeleteGameSave:
+                    GameGlobals.Instance.GameSave.Remove(GameGlobals.Instance.GameSave[GameGlobals.Instance.SelectedGameSaveIndex]);
+                    break;
             }
 
             SaveGameFile(GameGlobals.Instance.GameSave, GameGlobals.Instance.GameSavePath);

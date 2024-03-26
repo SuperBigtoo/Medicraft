@@ -191,7 +191,7 @@ namespace Medicraft.Systems.Managers
                     // play screen ui
                     if (!GameGlobals.Instance.IsRefreshPlayScreenUI)
                     {
-                        GUIManager.Instance.RefreshHotbarDisplay();
+                        GUIManager.Instance.RefreshHotbar();
                         // Quest list
                         GUIManager.Instance.UpdateAfterChangeGUI();
 
@@ -203,7 +203,7 @@ namespace Medicraft.Systems.Managers
                     // Inventory
                     if (!GameGlobals.Instance.IsOpenInventoryPanel)
                     {
-                        GUIManager.Instance.RefreshInvenrotyItemDisplay(false);
+                        GUIManager.Instance.RefreshInvenrotyItem(false);
                         GUIManager.Instance.UpdateAfterChangeGUI();
 
                         GameGlobals.Instance.IsOpenInventoryPanel = true;
@@ -214,7 +214,7 @@ namespace Medicraft.Systems.Managers
                     // Crafting
                     if (!GameGlobals.Instance.IsOpenCraftingPanel)
                     {
-                        GUIManager.Instance.RefreshCraftableItemDisplay(GUIManager.Instance.CurrentCraftingList);
+                        GUIManager.Instance.RefreshCraftableItem(GUIManager.Instance.CurrentCraftingList);
                         GUIManager.Instance.UpdateAfterChangeGUI();
 
                         GameGlobals.Instance.IsOpenCraftingPanel = true;
@@ -225,7 +225,7 @@ namespace Medicraft.Systems.Managers
                     // Inspecting Character
                     if (!GameGlobals.Instance.IsOpenInspectPanel)
                     {
-                        GUIManager.Instance.RefreshInspectCharacterDisply();
+                        GUIManager.Instance.RefreshInspectCharacterDisplay();
                         GUIManager.Instance.UpdateAfterChangeGUI();
 
                         GameGlobals.Instance.IsOpenInspectPanel = true;
@@ -235,7 +235,9 @@ namespace Medicraft.Systems.Managers
                 case GUIManager.MainMenu:
                     if (!GameGlobals.Instance.IsOpenMainMenu)
                     {
+                        GUIManager.Instance.RefreshGameSave(GUIManager.MainMenu);
                         GUIManager.Instance.UpdateAfterChangeGUI();
+
                         GameGlobals.Instance.IsOpenMainMenu = true;
                     }
                     break;
@@ -428,6 +430,19 @@ namespace Medicraft.Systems.Managers
             }
 
             return LoadMapAction.None;
+        }
+
+        public static void StartGame(bool isNewGame)
+        {
+            GameGlobals.Instance.IsMainBGEnding = true;
+            PlayerManager.Instance.Initialize(isNewGame);
+            GameGlobals.Instance.InitialCameraPos = GameGlobals.Instance.GameScreenCenter;
+            Instance.TranstisionToScreen(GameScreen.TestScreen);
+
+            // Toggle the IsOpenMainMenu flag
+            GUIManager.Instance.CurrentGUI = GUIManager.PlayScreen;
+            GameGlobals.Instance.IsOpenMainMenu = false;
+            GameGlobals.Instance.IsRefreshPlayScreenUI = false;
         }
 
         public static void ToggleFullScreen()

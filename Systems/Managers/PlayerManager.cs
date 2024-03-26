@@ -41,26 +41,21 @@ namespace Medicraft.Systems.Managers
                 ScreenManager.Instance.CurrentLoadMapAction = ScreenManager.LoadMapAction.LoadGameSave;
 
                 // Load save game according to selected index. 
-                var gameSave = GameGlobals.Instance.GameSave[GameGlobals.Instance.GameSaveIdex];
+                var gameSaveData = GameGlobals.Instance.GameSave[GameGlobals.Instance.SelectedGameSaveIndex];
 
                 // Set Total Playtime
-                GameGlobals.Instance.TotalPlayTime = gameSave.TotalPlayTime[0] * 3600 
-                                                    + gameSave.TotalPlayTime[1] * 60
-                                                    + gameSave.TotalPlayTime[2];
+                GameGlobals.Instance.TotalPlayTime = gameSaveData.TotalPlayTime[0] * 3600 
+                                                    + gameSaveData.TotalPlayTime[1] * 60
+                                                    + gameSaveData.TotalPlayTime[2];
 
                 // Initialize Player's Inventory
-                var inventoryData = gameSave.PlayerData.InventoryData;
+                var inventoryData = gameSaveData.PlayerData.InventoryData;
                 InventoryManager.Instance.InitializeInventory(inventoryData);
 
                 // Initial Player
-                var basePlayerData = gameSave.PlayerData;
+                var basePlayerData = gameSaveData.PlayerData;
                 ScreenManager.Instance.CurrentMap = basePlayerData.CurrentMap;
-                Player = new Player(playerSprite, basePlayerData);
-
-                // Adjust HUD and camera positions
-                GameGlobals.Instance.TopLeftCornerPosition = Player.Position - GameGlobals.Instance.GameScreenCenter;
-                GameGlobals.Instance.InitialCameraPos = Player.Position;
-                GameGlobals.Instance.AddingCameraPos = Vector2.Zero;
+                Player = new Player(playerSprite, basePlayerData);            
             }
             else // In case New Game
             {
@@ -116,7 +111,7 @@ namespace Medicraft.Systems.Managers
                 // Save Game for Test
                 if (keyboardCur.IsKeyUp(Keys.M) && keyboardPrev.IsKeyDown(Keys.M))
                 {
-                    JsonFileManager.SaveGame();
+                    JsonFileManager.SaveGame(JsonFileManager.SavingPlayerData);
                 }
 
                 // Open Inventory

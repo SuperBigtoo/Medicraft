@@ -1,28 +1,28 @@
 [
-  {
-    "Name": "Test",
-    "Positions": [
-      {
-        "Name": "Respawn",
-        "Value": [ 992, 1150 ]
-      },
-      {
-        "Name": "map_1_to_Test",
-        "Value": [ 1617, 1215 ]
-      }
-    ]
-  },
-  {
-    "Name": "map_1",
-    "Positions": [
-      {
-        "Name": "Respawn",
-        "Value": [ 2047, 4088 ]
-      },
-      {
-        "Name": "Test_to_map_1",
-        "Value": [ 1852, 2142 ]
-      }
-    ]
-  }
+    {
+        "Name": "Test",
+        "Positions": [
+            {
+                "Name": "Respawn",
+                "Value": [ 992, 1150 ]
+            },
+            {
+                "Name": "map_1_to_Test",
+                "Value": [ 1617, 1215 ]
+            }
+        ]
+    },
+    {
+        "Name": "map_1",
+        "Positions": [
+            {
+                "Name": "Respawn",
+                "Value": [ 2047, 4088 ]
+            },
+            {
+                "Name": "Test_to_map_1",
+                "Value": [ 1852, 2142 ]
+            }
+        ]
+    }
 ]

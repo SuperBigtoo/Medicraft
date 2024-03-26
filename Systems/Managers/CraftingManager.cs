@@ -11,11 +11,11 @@ namespace Medicraft.Systems.Managers
 
         private readonly List<CraftingRecipeData> _craftingRecipeDatas;
 
-        public List<CraftableItemData> CraftableMedicineItem { get; private set; }
-        public List<CraftableItemData> CraftableFoodItem { get; private set; }
-        public List<CraftableItemData> CraftableEquipmentItem { get; private set; }
+        public List<CraftableItem> CraftableMedicineItem { get; private set; }
+        public List<CraftableItem> CraftableFoodItem { get; private set; }
+        public List<CraftableItem> CraftableEquipmentItem { get; private set; }
 
-        public CraftableItemData CraftingItemSelected { set; get; }
+        public CraftableItem CraftingItemSelected { set; get; }
 
         private float _deltaSeconds;
 
@@ -29,9 +29,9 @@ namespace Medicraft.Systems.Managers
         private void InitializeCraftableItem()
         {
             // Check Craftable Thai medicine
-            CraftableMedicineItem = PlayerManager.Instance.Player.PlayerData.ItemCraftingProgression.ThaiTraditionalMedicine;
-            CraftableFoodItem = [];
-            CraftableEquipmentItem = [];
+            CraftableMedicineItem = PlayerManager.Instance.Player.PlayerData.CraftingProgression.ThaiTraditionalMedicine;
+            CraftableFoodItem = PlayerManager.Instance.Player.PlayerData.CraftingProgression.ConsumableItem;
+            CraftableEquipmentItem = PlayerManager.Instance.Player.PlayerData.CraftingProgression.EquipmentItem;
         }
 
         public int GetCraftableNumber(int craftingItemId)

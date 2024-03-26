@@ -1,324 +1,870 @@
 ﻿{
-  "CharId": 0,
-  "Level": 1,
-  "EXP": 0,
-  "CurrentHPPercentage": 1.0,
-  "CurrentManaPercentage": 1.0,
-  "CurrentMap": "Test",
-  "Position": [ 0, 0 ],
-  "SkillPoint": 9,
-  "Abilities": {
-    "NormalSkillLevel": 1,
-    "BurstSkillLevel": 1,
-    "PassiveSkillLevel": 1
-  },
-  "InventoryData": {
-    "GoldCoin": 10,
-    "Inventory": [
-      {
-        "ItemId": 0,
-        "Count": 100,
-        "Slot": 999
-      },
-      {
-        "ItemId": 1,
-        "Count": 100,
-        "Slot": 999
-      },
-      {
-        "ItemId": 2,
-        "Count": 100,
-        "Slot": 999
-      },
-      {
-        "ItemId": 15,
-        "Count": 100,
-        "Slot": 999
-      },
-      {
-        "ItemId": 25,
-        "Count": 100,
-        "Slot": 999
-      },
-      {
-        "ItemId": 26,
-        "Count": 100,
-        "Slot": 999
-      },
-      {
-        "ItemId": 27,
-        "Count": 100,
-        "Slot": 999
-      },
-      {
-        "ItemId": 28,
-        "Count": 100,
-        "Slot": 999
-      },
-      {
-        "ItemId": 29,
-        "Count": 100,
-        "Slot": 999
-      },
-      {
-        "ItemId": 52,
-        "Count": 100,
-        "Slot": 999
-      },
-      {
-        "ItemId": 56,
-        "Count": 100,
-        "Slot": 999
-      },
-      {
-        "ItemId": 84,
-        "Count": 100,
-        "Slot": 999
-      },
-      {
-        "ItemId": 123,
-        "Count": 100,
-        "Slot": 999
-      },
-      {
-        "ItemId": 124,
-        "Count": 100,
-        "Slot": 999
-      },
-      {
-        "ItemId": 125,
-        "Count": 100,
-        "Slot": 999
-      },
-      {
-        "ItemId": 127,
-        "Count": 100,
-        "Slot": 999
-      },
-      {
-        "ItemId": 128,
-        "Count": 100,
-        "Slot": 999
-      },
-      {
-        "ItemId": 300,
-        "Count": 5,
-        "Slot": 999
-      },
-      {
-        "ItemId": 301,
-        "Count": 5,
-        "Slot": 999
-      },
-      {
-        "ItemId": 302,
-        "Count": 5,
-        "Slot": 999
-      },
-      {
-        "ItemId": 303,
-        "Count": 5,
-        "Slot": 999
-      },
-      {
-        "ItemId": 304,
-        "Count": 5,
-        "Slot": 999
-      },
-      {
-        "ItemId": 305,
-        "Count": 5,
-        "Slot": 999
-      },
-      {
-        "ItemId": 306,
-        "Count": 5,
-        "Slot": 999
-      },
-      {
-        "ItemId": 307,
-        "Count": 5,
-        "Slot": 999
-      },
-      {
-        "ItemId": 308,
-        "Count": 5,
-        "Slot": 999
-      },
-      {
-        "ItemId": 309,
-        "Count": 5,
-        "Slot": 999
-      },
-      {
-        "ItemId": 310,
-        "Count": 5,
-        "Slot": 999
-      },
-      {
-        "ItemId": 311,
-        "Count": 5,
-        "Slot": 999
-      },
-      {
-        "ItemId": 312,
-        "Count": 5,
-        "Slot": 999
-      },
-      {
-        "ItemId": 313,
-        "Count": 5,
-        "Slot": 999
-      },
-      {
-        "ItemId": 400,
-        "Count": 1,
-        "Slot": 0
-      },
-      {
-        "ItemId": 402,
-        "Count": 1,
-        "Slot": 2
-      },
-      {
-        "ItemId": 405,
-        "Count": 1,
-        "Slot": 5
-      }
+    "CharId": 0,
+    "Level": 1,
+    "EXP": 0,
+    "CurrentHPPercentage": 1.0,
+    "CurrentManaPercentage": 1.0,
+    "CurrentMap": "Test",
+    "Position": [ 0, 0 ],
+    "SkillPoint": 9,
+    "Abilities": {
+        "NormalSkillLevel": 1,
+        "BurstSkillLevel": 1,
+        "PassiveSkillLevel": 1
+    },
+    "InventoryData": {
+        "GoldCoin": 10,
+        "Inventory": [
+            {
+                "ItemId": 0,
+                "Count": 100,
+                "Slot": 999
+            },
+            {
+                "ItemId": 1,
+                "Count": 100,
+                "Slot": 999
+            },
+            {
+                "ItemId": 2,
+                "Count": 100,
+                "Slot": 999
+            },
+            {
+                "ItemId": 15,
+                "Count": 100,
+                "Slot": 999
+            },
+            {
+                "ItemId": 25,
+                "Count": 100,
+                "Slot": 999
+            },
+            {
+                "ItemId": 26,
+                "Count": 100,
+                "Slot": 999
+            },
+            {
+                "ItemId": 27,
+                "Count": 100,
+                "Slot": 999
+            },
+            {
+                "ItemId": 28,
+                "Count": 100,
+                "Slot": 999
+            },
+            {
+                "ItemId": 29,
+                "Count": 100,
+                "Slot": 999
+            },
+            {
+                "ItemId": 52,
+                "Count": 100,
+                "Slot": 999
+            },
+            {
+                "ItemId": 56,
+                "Count": 100,
+                "Slot": 999
+            },
+            {
+                "ItemId": 84,
+                "Count": 100,
+                "Slot": 999
+            },
+            {
+                "ItemId": 123,
+                "Count": 100,
+                "Slot": 999
+            },
+            {
+                "ItemId": 124,
+                "Count": 100,
+                "Slot": 999
+            },
+            {
+                "ItemId": 125,
+                "Count": 100,
+                "Slot": 999
+            },
+            {
+                "ItemId": 127,
+                "Count": 100,
+                "Slot": 999
+            },
+            {
+                "ItemId": 128,
+                "Count": 100,
+                "Slot": 999
+            },
+            {
+                "ItemId": 300,
+                "Count": 5,
+                "Slot": 999
+            },
+            {
+                "ItemId": 301,
+                "Count": 5,
+                "Slot": 999
+            },
+            {
+                "ItemId": 302,
+                "Count": 5,
+                "Slot": 999
+            },
+            {
+                "ItemId": 303,
+                "Count": 5,
+                "Slot": 999
+            },
+            {
+                "ItemId": 304,
+                "Count": 5,
+                "Slot": 999
+            },
+            {
+                "ItemId": 305,
+                "Count": 5,
+                "Slot": 999
+            },
+            {
+                "ItemId": 306,
+                "Count": 5,
+                "Slot": 999
+            },
+            {
+                "ItemId": 307,
+                "Count": 5,
+                "Slot": 999
+            },
+            {
+                "ItemId": 308,
+                "Count": 5,
+                "Slot": 999
+            },
+            {
+                "ItemId": 309,
+                "Count": 5,
+                "Slot": 999
+            },
+            {
+                "ItemId": 310,
+                "Count": 5,
+                "Slot": 999
+            },
+            {
+                "ItemId": 311,
+                "Count": 5,
+                "Slot": 999
+            },
+            {
+                "ItemId": 312,
+                "Count": 5,
+                "Slot": 999
+            },
+            {
+                "ItemId": 313,
+                "Count": 5,
+                "Slot": 999
+            },
+            {
+                "ItemId": 400,
+                "Count": 1,
+                "Slot": 0
+            },
+            {
+                "ItemId": 402,
+                "Count": 1,
+                "Slot": 2
+            },
+            {
+                "ItemId": 405,
+                "Count": 1,
+                "Slot": 5
+            }
+        ]
+    },
+    "CraftingProgression": {
+        "ThaiTraditionalMedicine": [
+            {
+                "ItemId": 201,
+                "IsCraftable": true
+            },
+            {
+                "ItemId": 200,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 202,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 203,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 204,
+                "IsCraftable": false
+            }
+        ],
+        "ConsumableItem": [
+            {
+                "ItemId": 302,
+                "IsCraftable": true
+            },
+            {
+                "ItemId": 303,
+                "IsCraftable": true
+            },
+            {
+                "ItemId": 304,
+                "IsCraftable": true
+            },
+            {
+                "ItemId": 305,
+                "IsCraftable": true
+            },
+            {
+                "ItemId": 307,
+                "IsCraftable": true
+            },
+            {
+                "ItemId": 308,
+                "IsCraftable": true
+            },
+            {
+                "ItemId": 309,
+                "IsCraftable": true
+            },
+            {
+                "ItemId": 310,
+                "IsCraftable": true
+            },
+            {
+                "ItemId": 311,
+                "IsCraftable": true
+            },
+            {
+                "ItemId": 312,
+                "IsCraftable": true
+            },
+            {
+                "ItemId": 313,
+                "IsCraftable": true
+            }
+        ],
+        "EquipmentItem": [
+            {
+                "ItemId": 400,
+                "IsCraftable": true
+            },
+            {
+                "ItemId": 401,
+                "IsCraftable": true
+            },
+            {
+                "ItemId": 402,
+                "IsCraftable": true
+            },
+            {
+                "ItemId": 403,
+                "IsCraftable": true
+            },
+            {
+                "ItemId": 404,
+                "IsCraftable": true
+            },
+            {
+                "ItemId": 405,
+                "IsCraftable": true
+            }
+        ]
+    },
+    "ChapterProgression": [
+        {
+            "ChapterId": 1,
+            "Name": "Chapter_1",
+            "IsChapterClear": false,
+            "Quests": [
+                {
+                    "QuestId": 101,
+                    "Name": "StoryQuest_101",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 102,
+                    "Name": "StoryQuest_102",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 103,
+                    "Name": "StoryQuest_103",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 104,
+                    "Name": "StoryQuest_104",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 105,
+                    "Name": "StoryQuest_105",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 106,
+                    "Name": "StoryQuest_106",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 107,
+                    "Name": "StoryQuest_107",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 108,
+                    "Name": "StoryQuest_108",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 109,
+                    "Name": "StoryQuest_109",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 110,
+                    "Name": "StoryQuest_110",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 111,
+                    "Name": "StoryQuest_111",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 112,
+                    "Name": "SideQuest_112",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 113,
+                    "Name": "SideQuest_113",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 114,
+                    "Name": "SideQuest_114",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 115,
+                    "Name": "SideQuest_115",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                }
+            ]
+        },
+        {
+            "ChapterId": 2,
+            "Name": "Chapter_2",
+            "IsChapterClear": false,
+            "Quests": [
+                {
+                    "QuestId": 201,
+                    "Name": "StoryQuest_201",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 202,
+                    "Name": "StoryQuest_202",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 203,
+                    "Name": "StoryQuest_203",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 204,
+                    "Name": "StoryQuest_204",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 205,
+                    "Name": "StoryQuest_205",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 206,
+                    "Name": "StoryQuest_206",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 207,
+                    "Name": "StoryQuest_207",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 208,
+                    "Name": "StoryQuest_208",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 209,
+                    "Name": "StoryQuest_209",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 210,
+                    "Name": "StoryQuest_210",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 211,
+                    "Name": "StoryQuest_211",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 212,
+                    "Name": "SideQuest_212",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 213,
+                    "Name": "SideQuest_213",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 214,
+                    "Name": "SideQuest_214",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 215,
+                    "Name": "SideQuest_215",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                }
+            ]
+        },
+        {
+            "ChapterId": 3,
+            "Name": "Chapter_3",
+            "IsChapterClear": false,
+            "Quests": [
+                {
+                    "QuestId": 301,
+                    "Name": "StoryQuest_301",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 302,
+                    "Name": "StoryQuest_302",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 303,
+                    "Name": "StoryQuest_303",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 304,
+                    "Name": "StoryQuest_304",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 305,
+                    "Name": "StoryQuest_305",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 306,
+                    "Name": "StoryQuest_306",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 307,
+                    "Name": "StoryQuest_307",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 308,
+                    "Name": "StoryQuest_308",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 309,
+                    "Name": "StoryQuest_309",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 310,
+                    "Name": "StoryQuest_310",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 311,
+                    "Name": "StoryQuest_311",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 312,
+                    "Name": "SideQuest_312",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 313,
+                    "Name": "SideQuest_313",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 314,
+                    "Name": "SideQuest_314",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 315,
+                    "Name": "SideQuest_315",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                }
+            ]
+        },
+        {
+            "ChapterId": 4,
+            "Name": "Chapter_4",
+            "IsChapterClear": false,
+            "Quests": [
+                {
+                    "QuestId": 401,
+                    "Name": "StoryQuest_401",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 402,
+                    "Name": "StoryQuest_402",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 403,
+                    "Name": "StoryQuest_403",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 404,
+                    "Name": "StoryQuest_404",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 405,
+                    "Name": "StoryQuest_405",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 406,
+                    "Name": "StoryQuest_406",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 407,
+                    "Name": "StoryQuest_407",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 408,
+                    "Name": "StoryQuest_408",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 409,
+                    "Name": "StoryQuest_409",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 410,
+                    "Name": "StoryQuest_410",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 411,
+                    "Name": "StoryQuest_411",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 412,
+                    "Name": "SideQuest_412",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 413,
+                    "Name": "SideQuest_413",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 414,
+                    "Name": "SideQuest_414",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 415,
+                    "Name": "SideQuest_415",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                }
+            ]
+        },
+        {
+            "ChapterId": 5,
+            "Name": "Chapter_5",
+            "IsChapterClear": false,
+            "Quests": [
+                {
+                    "QuestId": 501,
+                    "Name": "StoryQuest_501",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 502,
+                    "Name": "StoryQuest_502",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 503,
+                    "Name": "StoryQuest_503",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 504,
+                    "Name": "StoryQuest_504",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 505,
+                    "Name": "StoryQuest_505",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 506,
+                    "Name": "StoryQuest_506",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 507,
+                    "Name": "StoryQuest_507",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 508,
+                    "Name": "StoryQuest_508",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 509,
+                    "Name": "StoryQuest_509",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 510,
+                    "Name": "StoryQuest_510",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 511,
+                    "Name": "StoryQuest_511",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 512,
+                    "Name": "SideQuest_512",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 513,
+                    "Name": "SideQuest_513",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 514,
+                    "Name": "SideQuest_514",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 515,
+                    "Name": "SideQuest_515",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                }
+            ]
+        },
+        {
+            "ChapterId": 6,
+            "Name": "Chapter_6",
+            "IsChapterClear": false,
+            "Quests": [
+                {
+                    "QuestId": 601,
+                    "Name": "StoryQuest_601",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 602,
+                    "Name": "StoryQuest_602",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 603,
+                    "Name": "StoryQuest_603",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 604,
+                    "Name": "StoryQuest_604",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 605,
+                    "Name": "StoryQuest_605",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 606,
+                    "Name": "StoryQuest_606",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 607,
+                    "Name": "StoryQuest_607",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 608,
+                    "Name": "StoryQuest_608",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 609,
+                    "Name": "StoryQuest_609",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 610,
+                    "Name": "StoryQuest_610",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 611,
+                    "Name": "StoryQuest_611",
+                    "Type": "StoryQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 612,
+                    "Name": "SideQuest_612",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 613,
+                    "Name": "SideQuest_613",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 614,
+                    "Name": "SideQuest_614",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                },
+                {
+                    "QuestId": 615,
+                    "Name": "SideQuest_615",
+                    "Type": "SideQuest",
+                    "IsQuestClear": false
+                }
+            ]
+        }
     ]
-  },
-  "ItemCraftingProgression": {
-    "ThaiTraditionalMedicine": [
-      {
-        "ItemId": 200,
-        "IsCraftable": true
-      },
-      {
-        "ItemId": 201,
-        "IsCraftable": true
-      },
-      {
-        "ItemId": 202,
-        "IsCraftable": false
-      },
-      {
-        "ItemId": 203,
-        "IsCraftable": false
-      },
-      {
-        "ItemId": 204,
-        "IsCraftable": false
-      }
-    ]
-  },
-  "ChapterProgressionData": {
-    "Chapter_1": {
-      "IsQuest_1_Clear": false,
-      "IsQuest_2_Clear": false,
-      "IsQuest_3_Clear": false,
-      "IsQuest_4_Clear": false,
-      "IsQuest_5_Clear": false,
-      "IsQuest_6_Clear": false,
-      "IsQuest_7_Clear": false,
-      "IsQuest_8_Clear": false,
-      "IsQuest_9_Clear": false,
-      "IsQuest_10_Clear": false,
-      "IsQuest_11_Clear": false,
-      "IsQuest_12_Clear": false,
-      "IsQuest_13_Clear": false,
-      "IsQuest_14_Clear": false,
-      "IsQuest_15_Clear": false,
-      "IsChapterClear": false
-    },
-    "Chapter_2": {
-      "IsQuest_1_Clear": false,
-      "IsQuest_2_Clear": false,
-      "IsQuest_3_Clear": false,
-      "IsQuest_4_Clear": false,
-      "IsQuest_5_Clear": false,
-      "IsQuest_6_Clear": false,
-      "IsQuest_7_Clear": false,
-      "IsQuest_8_Clear": false,
-      "IsQuest_9_Clear": false,
-      "IsQuest_10_Clear": false,
-      "IsQuest_11_Clear": false,
-      "IsQuest_12_Clear": false,
-      "IsQuest_13_Clear": false,
-      "IsQuest_14_Clear": false,
-      "IsQuest_15_Clear": false,
-      "IsChapterClear": false
-    },
-    "Chapter_3": {
-      "IsQuest_1_Clear": false,
-      "IsQuest_2_Clear": false,
-      "IsQuest_3_Clear": false,
-      "IsQuest_4_Clear": false,
-      "IsQuest_5_Clear": false,
-      "IsQuest_6_Clear": false,
-      "IsQuest_7_Clear": false,
-      "IsQuest_8_Clear": false,
-      "IsQuest_9_Clear": false,
-      "IsQuest_10_Clear": false,
-      "IsQuest_11_Clear": false,
-      "IsQuest_12_Clear": false,
-      "IsQuest_13_Clear": false,
-      "IsQuest_14_Clear": false,
-      "IsQuest_15_Clear": false,
-      "IsChapterClear": false
-    },
-    "Chapter_4": {
-      "IsQuest_1_Clear": false,
-      "IsQuest_2_Clear": false,
-      "IsQuest_3_Clear": false,
-      "IsQuest_4_Clear": false,
-      "IsQuest_5_Clear": false,
-      "IsQuest_6_Clear": false,
-      "IsQuest_7_Clear": false,
-      "IsQuest_8_Clear": false,
-      "IsQuest_9_Clear": false,
-      "IsQuest_10_Clear": false,
-      "IsQuest_11_Clear": false,
-      "IsQuest_12_Clear": false,
-      "IsQuest_13_Clear": false,
-      "IsQuest_14_Clear": false,
-      "IsQuest_15_Clear": false,
-      "IsChapterClear": false
-    },
-    "Chapter_5": {
-      "IsQuest_1_Clear": false,
-      "IsQuest_2_Clear": false,
-      "IsQuest_3_Clear": false,
-      "IsQuest_4_Clear": false,
-      "IsQuest_5_Clear": false,
-      "IsQuest_6_Clear": false,
-      "IsQuest_7_Clear": false,
-      "IsQuest_8_Clear": false,
-      "IsQuest_9_Clear": false,
-      "IsQuest_10_Clear": false,
-      "IsQuest_11_Clear": false,
-      "IsQuest_12_Clear": false,
-      "IsQuest_13_Clear": false,
-      "IsQuest_14_Clear": false,
-      "IsQuest_15_Clear": false,
-      "IsChapterClear": false
-    },
-    "Chapter_6": {
-      "IsQuest_1_Clear": false,
-      "IsQuest_2_Clear": false,
-      "IsQuest_3_Clear": false,
-      "IsQuest_4_Clear": false,
-      "IsQuest_5_Clear": false,
-      "IsQuest_6_Clear": false,
-      "IsQuest_7_Clear": false,
-      "IsQuest_8_Clear": false,
-      "IsQuest_9_Clear": false,
-      "IsQuest_10_Clear": false,
-      "IsQuest_11_Clear": false,
-      "IsQuest_12_Clear": false,
-      "IsQuest_13_Clear": false,
-      "IsQuest_14_Clear": false,
-      "IsQuest_15_Clear": false,
-      "IsChapterClear": false
-    }
-  }
 }

@@ -1,2823 +1,2823 @@
 ﻿[
-  {
-    "RecipeId": 200,
-    "ResultItemName": "ยาเขียวหอม",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 4,
-    "Ingredients": [
-      {
-        "ItemId": 0,
-        "Name": "ดอกพิกุล",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 1,
-        "Name": "ดอกบุนนาค",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 2,
-        "Name": "ดอกสารภี",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 15,
-        "Name": "เกสรบัวหลวง",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 25,
-        "Name": "ใบพิมเสนต้น",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 26,
-        "Name": "ใบผักกระโฉม",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 27,
-        "Name": "ใบหมากผู้",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 28,
-        "Name": "ใบหมากเมีย",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 29,
-        "Name": "ใบสันพร้าหอม",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 52,
-        "Name": "หัวเปราะหอม",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 56,
-        "Name": "ชุดเครื่องแก่น",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 84,
-        "Name": "รากแฝกหอม",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 123,
-        "Name": "เนระพูสี",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 124,
-        "Name": "พิษนาศน์",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 125,
-        "Name": "มหาสดำ",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 127,
-        "Name": "ว่านกีบแรด",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 128,
-        "Name": "ว่านร่อนทอง",
-        "Quantity": 5
-      }
-    ]
-  },
-  {
-    "RecipeId": 201,
-    "ResultItemName": "ยาจันทน์ลีลา",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 4,
-    "Ingredients": [
-      {
-        "ItemId": 56,
-        "Name": "ชุดเครื่องแก่น",
-        "Quantity": 24
-      },
-      {
-        "ItemId": 91,
-        "Name": "รากปลาไหลเผือก",
-        "Quantity": 12
-      },
-      {
-        "ItemId": 97,
-        "Name": "ชุดเครื่องเถา",
-        "Quantity": 12
-      },
-      {
-        "ItemId": 105,
-        "Name": "ลูกกระดอม",
-        "Quantity": 12
-      },
-      {
-        "ItemId": 107,
-        "Name": "ชุดเครื่องโกฐ",
-        "Quantity": 36
-      },
-      {
-        "ItemId": 109,
-        "Name": "พิมเสน",
-        "Quantity": 3
-      }
-    ]
-  },
-  {
-    "RecipeId": 202,
-    "ResultItemName": "ยาประสะจันทร์แดง",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 3,
-    "Ingredients": [
-      {
-        "ItemId": 1,
-        "Name": "ดอกบุนนาค",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 2,
-        "Name": "ดอกสารภี",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 4,
-        "Name": "ดอกมะลิ",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 15,
-        "Name": "เกสรบัวหลวง",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 52,
-        "Name": "หัวเปราะหอม",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 56,
-        "Name": "ชุดเครื่องแก่น",
-        "Quantity": 40
-      },
-      {
-        "ItemId": 92,
-        "Name": "รากเหมือดคน",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 93,
-        "Name": "รากมะปรางหวาน",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 94,
-        "Name": "รากมะนาว",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 107,
-        "Name": "ชุดเครื่องโกฐ",
-        "Quantity": 4
-      }
-    ]
-  },
-  {
-    "RecipeId": 203,
-    "ResultItemName": "ยาประสะเปราะใหญ่",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 4,
-    "Ingredients": [
-      {
-        "ItemId": 0,
-        "Name": "ดอกพิกุล",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 1,
-        "Name": "ดอกบุนนาค",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 2,
-        "Name": "ดอกสารภี",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 5,
-        "Name": "ดอกจันทน์",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 6,
-        "Name": "ดอกกานพลู",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 15,
-        "Name": "เกสรบัวหลวง",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 52,
-        "Name": "หัวเปราะหอม",
-        "Quantity": 40
-      },
-      {
-        "ItemId": 56,
-        "Name": "ชุดเครื่องแก่น",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 100,
-        "Name": "ลูกจันทน์",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 101,
-        "Name": "ลูกกระวาน",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 107,
-        "Name": "ชุดเครื่องโกฐ",
-        "Quantity": 10
-      },
-      {
-        "ItemId": 108,
-        "Name": "ชุดเครื่องเทียน",
-        "Quantity": 10
-      }
-    ]
-  },
-  {
-    "RecipeId": 204,
-    "ResultItemName": "ยาห้าราก",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 4,
-    "Ingredients": [
-      {
-        "ItemId": 86,
-        "Name": "รากย่านาง",
-        "Quantity": 20
-      },
-      {
-        "ItemId": 87,
-        "Name": "รากคนทา",
-        "Quantity": 20
-      },
-      {
-        "ItemId": 88,
-        "Name": "รากมะเดื่อชุมพร",
-        "Quantity": 20
-      },
-      {
-        "ItemId": 89,
-        "Name": "รากชิงชี่",
-        "Quantity": 20
-      },
-      {
-        "ItemId": 90,
-        "Name": "รากไม้เท้ายายม่อม",
-        "Quantity": 20
-      }
-    ]
-  },
-  {
-    "RecipeId": 205,
-    "ResultItemName": "ยาหอมทิพโอสถ",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 6,
-    "Ingredients": [
-      {
-        "ItemId": 0,
-        "Name": "ดอกพิกุล",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 1,
-        "Name": "ดอกบุนนาค",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 2,
-        "Name": "ดอกสารภี",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 4,
-        "Name": "ดอกมะลิ",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 5,
-        "Name": "ดอกจันทน์",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 9,
-        "Name": "ดอกกระดังงา",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 10,
-        "Name": "ดอกจำปา",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 11,
-        "Name": "ดอกบัวจงกลนี",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 12,
-        "Name": "ดอกคำไทย",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 15,
-        "Name": "เกสรบัวหลวง",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 44,
-        "Name": "หัวแห้วไทย",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 52,
-        "Name": "หัวเปราะหอม",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 55,
-        "Name": "กระจับ",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 56,
-        "Name": "ชุดเครื่องแก่น",
-        "Quantity": 24
-      },
-      {
-        "ItemId": 57,
-        "Name": "กฤษณา",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 69,
-        "Name": "เปลือกชะลูด",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 70,
-        "Name": "เปลือกอบเชย",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 73,
-        "Name": "เปลือกสมุลแว้ง",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 80,
-        "Name": "ชุดเครื่องเหง้า",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 81,
-        "Name": "รากชะเอมเทศ",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 98,
-        "Name": "ลำต้นข่าต้น",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 100,
-        "Name": "ลูกจันทน์",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 107,
-        "Name": "ชุดเครื่องโกฐ",
-        "Quantity": 18
-      },
-      {
-        "ItemId": 108,
-        "Name": "ชุดเครื่องเทียน",
-        "Quantity": 9
-      },
-      {
-        "ItemId": 109,
-        "Name": "พิมเสน",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 110,
-        "Name": "การบูร",
-        "Quantity": 2
-      }
-    ]
-  },
-  {
-    "RecipeId": 206,
-    "ResultItemName": "ยาหอมเทพจิตร",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 15,
-    "Ingredients": [
-      {
-        "ItemId": 0,
-        "Name": "ดอกพิกุล",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 1,
-        "Name": "ดอกบุนนาค",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 2,
-        "Name": "ดอกสารภี",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 4,
-        "Name": "ดอกมะลิ",
-        "Quantity": 183
-      },
-      {
-        "ItemId": 5,
-        "Name": "ดอกจันทน์",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 6,
-        "Name": "ดอกกานพลู",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 7,
-        "Name": "ดอกบัวขม",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 8,
-        "Name": "ดอกบัวเผื่อน",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 15,
-        "Name": "เกสรบัวหลวง",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 16,
-        "Name": "ผิวมะกรูด",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 17,
-        "Name": "ผิวมะงั่ว",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 18,
-        "Name": "ผิวมะนาว",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 19,
-        "Name": "ผิวส้มตรังกานู",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 20,
-        "Name": "ผิวส้มจีน",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 21,
-        "Name": "ผิวส้มโอ",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 22,
-        "Name": "ผิวส้มเขียวหวาน",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 32,
-        "Name": "ส้มซ่า",
-        "Quantity": 28
-      },
-      {
-        "ItemId": 52,
-        "Name": "หัวเปราะหอม",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 56,
-        "Name": "ชุดเครื่องแก่น",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 57,
-        "Name": "กฤษณา",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 59,
-        "Name": "กระลำพัก",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 62,
-        "Name": "ขอนดอก",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 69,
-        "Name": "เปลือกชะลูด",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 70,
-        "Name": "เปลือกอบเชย",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 84,
-        "Name": "รากแฝกหอม",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 100,
-        "Name": "ลูกจันทน์",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 101,
-        "Name": "ลูกกระวาน",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 107,
-        "Name": "ชุดเครื่องโกฐ",
-        "Quantity": 36
-      },
-      {
-        "ItemId": 108,
-        "Name": "ชุดเครื่องเทียน",
-        "Quantity": 36
-      },
-      {
-        "ItemId": 109,
-        "Name": "พิมเสน",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 110,
-        "Name": "การบูร",
-        "Quantity": 1
-      }
-    ]
-  },
-  {
-    "RecipeId": 207,
-    "ResultItemName": "ยาหอมนวโกฐ",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 9,
-    "Ingredients": [
-      {
-        "ItemId": 0,
-        "Name": "ดอกพิกุล",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 1,
-        "Name": "ดอกบุนนาค",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 2,
-        "Name": "ดอกสารภี",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 3,
-        "Name": "ดอกดีปลี",
-        "Quantity": 3
-      },
-      {
-        "ItemId": 4,
-        "Name": "ดอกมะลิ",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 5,
-        "Name": "ดอกจันทน์",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 6,
-        "Name": "ดอกกานพลู",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 15,
-        "Name": "เกสรบัวหลวง",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 50,
-        "Name": "หัวแห้วหมู",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 52,
-        "Name": "หัวเปราะหอม",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 56,
-        "Name": "ชุดเครื่องแก่น",
-        "Quantity": 16
-      },
-      {
-        "ItemId": 57,
-        "Name": "กฤษณา",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 59,
-        "Name": "กระลำพัก",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 62,
-        "Name": "ขอนดอก",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 63,
-        "Name": "ลูกสมอพิเภก",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 66,
-        "Name": "ลูกมะขามป้อม",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 69,
-        "Name": "เปลือกชะลูด",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 72,
-        "Name": "เปลือกอบเชยญวน",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 73,
-        "Name": "เปลือกสมุลแว้ง",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 79,
-        "Name": "หญ้าตีนนก",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 80,
-        "Name": "ชุดเครื่องเหง้า",
-        "Quantity": 3
-      },
-      {
-        "ItemId": 81,
-        "Name": "รากชะเอมเทศ",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 83,
-        "Name": "รากเจตมูลเพลิงแดง",
-        "Quantity": 3
-      },
-      {
-        "ItemId": 84,
-        "Name": "รากแฝกหอม",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 85,
-        "Name": "รากช้าพลู",
-        "Quantity": 3
-      },
-      {
-        "ItemId": 97,
-        "Name": "ชุดเครื่องเถา",
-        "Quantity": 7
-      },
-      {
-        "ItemId": 99,
-        "Name": "ลูกผักชีลา",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 100,
-        "Name": "ลูกจันทน์",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 101,
-        "Name": "ลูกกระวาน",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 102,
-        "Name": "ลูกราชดัด",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 104,
-        "Name": "ลูกสารพัดพิษ",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 105,
-        "Name": "ลูกกระดอม",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 107,
-        "Name": "ชุดเครื่องโกฐ",
-        "Quantity": 36
-      },
-      {
-        "ItemId": 108,
-        "Name": "ชุดเครื่องเทียน",
-        "Quantity": 36
-      },
-      {
-        "ItemId": 109,
-        "Name": "พิมเสน",
-        "Quantity": 1
-      }
-    ]
-  },
-  {
-    "RecipeId": 208,
-    "ResultItemName": "ยาหอมแก้ลมวิงเวียน",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 9,
-    "Ingredients": [
-      {
-        "ItemId": 0,
-        "Name": "ดอกพิกุล",
-        "Quantity": 6
-      },
-      {
-        "ItemId": 1,
-        "Name": "ดอกบุนนาค",
-        "Quantity": 6
-      },
-      {
-        "ItemId": 2,
-        "Name": "ดอกสารภี",
-        "Quantity": 6
-      },
-      {
-        "ItemId": 6,
-        "Name": "ดอกกานพลู",
-        "Quantity": 12
-      },
-      {
-        "ItemId": 15,
-        "Name": "เกสรบัวหลวง",
-        "Quantity": 12
-      },
-      {
-        "ItemId": 56,
-        "Name": "ชุดเครื่องแก่น",
-        "Quantity": 28
-      },
-      {
-        "ItemId": 57,
-        "Name": "กฤษณา",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 59,
-        "Name": "กระลำพัก",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 62,
-        "Name": "ขอนดอก",
-        "Quantity": 6
-      },
-      {
-        "ItemId": 69,
-        "Name": "เปลือกชะลูด",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 71,
-        "Name": "เปลือกอบเชยเทศ",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 72,
-        "Name": "เปลือกอบเชยญวน",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 73,
-        "Name": "เปลือกสมุลแว้ง",
-        "Quantity": 10
-      },
-      {
-        "ItemId": 81,
-        "Name": "รากชะเอมเทศ",
-        "Quantity": 32
-      },
-      {
-        "ItemId": 84,
-        "Name": "รากแฝกหอม",
-        "Quantity": 12
-      },
-      {
-        "ItemId": 97,
-        "Name": "ชุดเครื่องเถา",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 107,
-        "Name": "ชุดเครื่องโกฐ",
-        "Quantity": 40
-      },
-      {
-        "ItemId": 109,
-        "Name": "พิมเสน",
-        "Quantity": 6
-      },
-      {
-        "ItemId": 141,
-        "Name": "น้ำประสานทองสะตุ",
-        "Quantity": 4
-      }
-    ]
-  },
-  {
-    "RecipeId": 209,
-    "ResultItemName": "ยาหอมอินทจักร์",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 4,
-    "Ingredients": [
-      {
-        "ItemId": 0,
-        "Name": "ดอกพิกุล",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 1,
-        "Name": "ดอกบุนนาค",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 2,
-        "Name": "ดอกสารภี",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 3,
-        "Name": "ดอกดีปลี",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 4,
-        "Name": "ดอกมะลิ",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 5,
-        "Name": "ดอกจันทน์",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 6,
-        "Name": "ดอกกานพลู",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 9,
-        "Name": "ดอกกระดังงา",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 10,
-        "Name": "ดอกจำปา",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 12,
-        "Name": "ดอกคำไทย",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 56,
-        "Name": "ชุดเครื่องแก่น",
-        "Quantity": 6
-      },
-      {
-        "ItemId": 57,
-        "Name": "กฤษณา",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 58,
-        "Name": "กำยาน",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 59,
-        "Name": "กระลำพัก",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 60,
-        "Name": "ลำพันแดง",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 62,
-        "Name": "ขอนดอก",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 69,
-        "Name": "เปลือกชะลูด",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 70,
-        "Name": "เปลือกอบเชย",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 73,
-        "Name": "เปลือกสมุลแว้ง",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 80,
-        "Name": "ชุดเครื่องเหง้า",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 83,
-        "Name": "รากเจตมูลเพลิงแดง",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 85,
-        "Name": "รากช้าพลู",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 86,
-        "Name": "รากย่านาง",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 97,
-        "Name": "ชุดเครื่องเถา",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 99,
-        "Name": "ลูกผักชีลา",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 100,
-        "Name": "ลูกจันทน์",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 101,
-        "Name": "ลูกกระวาน",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 105,
-        "Name": "ลูกกระดอม",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 107,
-        "Name": "ชุดเครื่องโกฐ",
-        "Quantity": 18
-      },
-      {
-        "ItemId": 108,
-        "Name": "ชุดเครื่องเทียน",
-        "Quantity": 10
-      },
-      {
-        "ItemId": 109,
-        "Name": "พิมเสน",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 119,
-        "Name": "น้ำดีวัว",
-        "Quantity": 2
-      }
-    ]
-  },
-  {
-    "RecipeId": 210,
-    "ResultItemName": "ยาธาตุบรรจบ",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 4,
-    "Ingredients": [
-      {
-        "ItemId": 3,
-        "Name": "ดอกดีปลี",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 5,
-        "Name": "ดอกจันทน์",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 6,
-        "Name": "ดอกกานพลู",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 25,
-        "Name": "ใบพิมเสนต้น",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 52,
-        "Name": "หัวเปราะหอม",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 64,
-        "Name": "ลูกสมอไทย",
-        "Quantity": 16
-      },
-      {
-        "ItemId": 73,
-        "Name": "เปลือกสมุลแว้ง",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 80,
-        "Name": "ชุดเครื่องเหง้า",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 99,
-        "Name": "ลูกผักชีลา",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 100,
-        "Name": "ลูกจันทน์",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 101,
-        "Name": "ลูกกระวาน",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 107,
-        "Name": "ชุดเครื่องโกฐ",
-        "Quantity": 24
-      },
-      {
-        "ItemId": 108,
-        "Name": "ชุดเครื่องเทียน",
-        "Quantity": 20
-      },
-      {
-        "ItemId": 110,
-        "Name": "การบูร",
-        "Quantity": 4
-      }
-    ]
-  },
-  {
-    "RecipeId": 211,
-    "ResultItemName": "ยาธรณีสันฑะฆาต",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 6,
-    "Ingredients": [
-      {
-        "ItemId": 5,
-        "Name": "ดอกจันทน์",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 6,
-        "Name": "ดอกกานพลู",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 34,
-        "Name": "พริกไทยล่อน",
-        "Quantity": 96
-      },
-      {
-        "ItemId": 36,
-        "Name": "ยาดำสะตุ",
-        "Quantity": 20
-      },
-      {
-        "ItemId": 38,
-        "Name": "รงทอง",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 40,
-        "Name": "ผักแพวแดง",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 45,
-        "Name": "หัวดองดึง",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 46,
-        "Name": "หัวบุก",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 47,
-        "Name": "หัวกลอย",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 48,
-        "Name": "หัวกระดาดขาว",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 49,
-        "Name": "หัวกระดาดแดง",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 64,
-        "Name": "ลูกสมอไทย",
-        "Quantity": 6
-      },
-      {
-        "ItemId": 66,
-        "Name": "ลูกมะขามป้อม",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 80,
-        "Name": "ชุดเครื่องเหง้า",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 81,
-        "Name": "รากชะเอมเทศ",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 83,
-        "Name": "รากเจตมูลเพลิงแดง",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 100,
-        "Name": "ลูกจันทน์",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 101,
-        "Name": "ลูกกระวาน",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 103,
-        "Name": "ลูกเร่ว",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 107,
-        "Name": "ชุดเครื่องโกฐ",
-        "Quantity": 3
-      },
-      {
-        "ItemId": 108,
-        "Name": "ชุดเครื่องเทียน",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 110,
-        "Name": "การบูร",
-        "Quantity": 6
-      },
-      {
-        "ItemId": 111,
-        "Name": "มหาหิงคุ์",
-        "Quantity": 6
-      }
-    ]
-  },
-  {
-    "RecipeId": 212,
-    "ResultItemName": "ยาเหลืองปิดสมุทร",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 4,
-    "Ingredients": [
-      {
-        "ItemId": 3,
-        "Name": "ดอกดีปลี",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 30,
-        "Name": "ใบเทียน",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 31,
-        "Name": "ใบทับทิม",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 50,
-        "Name": "หัวแห้วหมู",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 54,
-        "Name": "หัวกระเทียมคั่ว",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 74,
-        "Name": "เปลือกสีเสียดไทย",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 75,
-        "Name": "เปลือกเพกา",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 80,
-        "Name": "ชุดเครื่องเหง้า",
-        "Quantity": 35
-      },
-      {
-        "ItemId": 113,
-        "Name": "ชันย้อย",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 114,
-        "Name": "ครั่ง",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 115,
-        "Name": "สีเสียดเทศ",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 116,
-        "Name": "รากกล้วยตีบ",
-        "Quantity": 5
-      }
-    ]
-  },
-  {
-    "RecipeId": 213,
-    "ResultItemName": "ยาริดสีดวงมหากาฬ",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 4,
-    "Ingredients": [
-      {
-        "ItemId": 3,
-        "Name": "ดอกดีปลี",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 5,
-        "Name": "ดอกจันทน์",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 33,
-        "Name": "มดยอบคั่ว",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 34,
-        "Name": "พริกไทยล่อน",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 41,
-        "Name": "ขอบชะนางแดง",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 42,
-        "Name": "ขอบชะนางขาว",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 56,
-        "Name": "ชุดเครื่องแก่น",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 71,
-        "Name": "เปลือกอบเชยเทศ",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 73,
-        "Name": "เปลือกสมุลแว้ง",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 80,
-        "Name": "ชุดเครื่องเหง้า",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 97,
-        "Name": "ชุดเครื่องเถา",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 100,
-        "Name": "ลูกจันทน์",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 107,
-        "Name": "ชุดเครื่องโกฐ",
-        "Quantity": 25
-      },
-      {
-        "ItemId": 108,
-        "Name": "ชุดเครื่องเทียน",
-        "Quantity": 25
-      }
-    ]
-  },
-  {
-    "RecipeId": 214,
-    "ResultItemName": "ยาธาตุอบเชย",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 1,
-    "Ingredients": [
-      {
-        "ItemId": 6,
-        "Name": "ดอกกานพลู",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 71,
-        "Name": "เปลือกอบเชยเทศ",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 73,
-        "Name": "เปลือกสมุลแว้ง",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 81,
-        "Name": "รากชะเอมเทศ",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 101,
-        "Name": "ลูกกระวาน",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 110,
-        "Name": "การบูร",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 118,
-        "Name": "เกล็ดสะระแหน่",
-        "Quantity": 1
-      }
-    ]
-  },
-  {
-    "RecipeId": 215,
-    "ResultItemName": "ยาประสะไพล",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 6,
-    "Ingredients": [
-      {
-        "ItemId": 3,
-        "Name": "ดอกดีปลี",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 16,
-        "Name": "ผิวมะกรูด",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 34,
-        "Name": "พริกไทยล่อน",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 51,
-        "Name": "หัวหอม",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 53,
-        "Name": "หัวกระเทียม",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 80,
-        "Name": "ชุดเครื่องเหง้า",
-        "Quantity": 105
-      },
-      {
-        "ItemId": 108,
-        "Name": "ชุดเครื่องเทียน",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 110,
-        "Name": "การบูร",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 112,
-        "Name": "เกลือสินเธาว์",
-        "Quantity": 8
-      }
-    ]
-  },
-  {
-    "RecipeId": 216,
-    "ResultItemName": "ยาไฟประลัยกัลป์",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 3,
-    "Ingredients": [
-      {
-        "ItemId": 3,
-        "Name": "ดอกดีปลี",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 16,
-        "Name": "ผิวมะกรูด",
-        "Quantity": 6
-      },
-      {
-        "ItemId": 34,
-        "Name": "พริกไทยล่อน",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 37,
-        "Name": "สารส้มสะตุ",
-        "Quantity": 6
-      },
-      {
-        "ItemId": 53,
-        "Name": "หัวกระเทียม",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 56,
-        "Name": "ชุดเครื่องแก่น",
-        "Quantity": 6
-      },
-      {
-        "ItemId": 68,
-        "Name": "เปลือกมะรุม",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 80,
-        "Name": "ชุดเครื่องเหง้า",
-        "Quantity": 24
-      },
-      {
-        "ItemId": 83,
-        "Name": "รากเจตมูลเพลิงแดง",
-        "Quantity": 6
-      },
-      {
-        "ItemId": 110,
-        "Name": "การบูร",
-        "Quantity": 6
-      }
-    ]
-  },
-  {
-    "RecipeId": 217,
-    "ResultItemName": "ยาไฟห้ากอง",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 4,
-    "Ingredients": [
-      {
-        "ItemId": 34,
-        "Name": "พริกไทยล่อน",
-        "Quantity": 20
-      },
-      {
-        "ItemId": 37,
-        "Name": "สารส้มสะตุ",
-        "Quantity": 20
-      },
-      {
-        "ItemId": 80,
-        "Name": "ชุดเครื่องเหง้า",
-        "Quantity": 20
-      },
-      {
-        "ItemId": 83,
-        "Name": "รากเจตมูลเพลิงแดง",
-        "Quantity": 20
-      },
-      {
-        "ItemId": 120,
-        "Name": "ฝักส้มป่อย",
-        "Quantity": 20
-      }
-    ]
-  },
-  {
-    "RecipeId": 218,
-    "ResultItemName": "ยาเลือดงาม",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 4,
-    "Ingredients": [
-      {
-        "ItemId": 3,
-        "Name": "ดอกดีปลี",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 6,
-        "Name": "ดอกกานพลู",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 16,
-        "Name": "ผิวมะกรูด",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 24,
-        "Name": "ใบมะนาว",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 34,
-        "Name": "พริกไทยล่อน",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 39,
-        "Name": "ช้าพลู",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 53,
-        "Name": "หัวกระเทียม",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 75,
-        "Name": "เปลือกเพกา",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 80,
-        "Name": "ชุดเครื่องเหง้า",
-        "Quantity": 20
-      },
-      {
-        "ItemId": 81,
-        "Name": "รากชะเอมเทศ",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 83,
-        "Name": "รากเจตมูลเพลิงแดง",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 100,
-        "Name": "ลูกจันทน์",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 103,
-        "Name": "ลูกเร่ว",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 107,
-        "Name": "ชุดเครื่องโกฐ",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 109,
-        "Name": "พิมเสน",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 110,
-        "Name": "การบูร",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 117,
-        "Name": "สะระแหน่",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 121,
-        "Name": "ตะไคร้บ้าน",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 122,
-        "Name": "กะเพรา",
-        "Quantity": 5
-      }
-    ]
-  },
-  {
-    "RecipeId": 219,
-    "ResultItemName": "ยาสตรีหลังคลอด",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 6,
-    "Ingredients": [
-      {
-        "ItemId": 0,
-        "Name": "ดอกพิกุล",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 1,
-        "Name": "ดอกบุนนาค",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 2,
-        "Name": "ดอกสารภี",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 3,
-        "Name": "ดอกดีปลี",
-        "Quantity": 10
-      },
-      {
-        "ItemId": 4,
-        "Name": "ดอกมะลิ",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 13,
-        "Name": "ดอกคำฝอย",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 15,
-        "Name": "เกสรบัวหลวง",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 34,
-        "Name": "พริกไทยล่อน",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 56,
-        "Name": "ชุดเครื่องแก่น",
-        "Quantity": 30
-      },
-      {
-        "ItemId": 83,
-        "Name": "รากเจตมูลเพลิงแดง",
-        "Quantity": 10
-      },
-      {
-        "ItemId": 85,
-        "Name": "รากช้าพลู",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 97,
-        "Name": "ชุดเครื่องเถา",
-        "Quantity": 20
-      },
-      {
-        "ItemId": 107,
-        "Name": "ชุดเครื่องโกฐ",
-        "Quantity": 10
-      },
-      {
-        "ItemId": 126,
-        "Name": "ว่านชักมดลูก",
-        "Quantity": 10
-      }
-    ]
-  },
-  {
-    "RecipeId": 220,
-    "ResultItemName": "ยาแก้ไอผสมกานพลู",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 4,
-    "Ingredients": [
-      {
-        "ItemId": 6,
-        "Name": "ดอกกานพลู",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 14,
-        "Name": "ดอกเก็กฮวย",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 63,
-        "Name": "ลูกสมอพิเภก",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 66,
-        "Name": "ลูกมะขามป้อม",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 67,
-        "Name": "เปลือกส้มจีน",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 70,
-        "Name": "เปลือกอบเชย",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 80,
-        "Name": "ชุดเครื่องเหง้า",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 81,
-        "Name": "รากชะเอมเทศ",
-        "Quantity": 48
-      },
-      {
-        "ItemId": 109,
-        "Name": "พิมเสน",
-        "Quantity": 3
-      },
-      {
-        "ItemId": 118,
-        "Name": "เกล็ดสะระแหน่",
-        "Quantity": 3
-      },
-      {
-        "ItemId": 129,
-        "Name": "บ๊วย",
-        "Quantity": 16
-      },
-      {
-        "ItemId": 130,
-        "Name": "มะนาวดองแห้ง",
-        "Quantity": 10
-      },
-      {
-        "ItemId": 131,
-        "Name": "น้ำตาลกรวด",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 132,
-        "Name": "ผลมะแว้งเครือ",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 133,
-        "Name": "หล่อฮั่งก๊วย",
-        "Quantity": 2
-      }
-    ]
-  },
-  {
-    "RecipeId": 221,
-    "ResultItemName": "ยาแก้ไอผสมมะนาวดอง",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 4,
-    "Ingredients": [
-      {
-        "ItemId": 6,
-        "Name": "ดอกกานพลู",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 66,
-        "Name": "ลูกมะขามป้อม",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 72,
-        "Name": "เปลือกอบเชยญวน",
-        "Quantity": 3
-      },
-      {
-        "ItemId": 81,
-        "Name": "รากชะเอมเทศ",
-        "Quantity": 17
-      },
-      {
-        "ItemId": 82,
-        "Name": "รากชะเอมไทย",
-        "Quantity": 3
-      },
-      {
-        "ItemId": 118,
-        "Name": "เกล็ดสะระแหน่",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 129,
-        "Name": "บ๊วย",
-        "Quantity": 35
-      },
-      {
-        "ItemId": 130,
-        "Name": "มะนาวดองแห้ง",
-        "Quantity": 35
-      },
-      {
-        "ItemId": 132,
-        "Name": "ผลมะแว้งเครือ",
-        "Quantity": 2
-      }
-    ]
-  },
-  {
-    "RecipeId": 222,
-    "ResultItemName": "ยาแก้ไอผสมมะขามป้อม",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 1,
-    "Ingredients": [
-      {
-        "ItemId": 20,
-        "Name": "ผิวส้มจีน",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 63,
-        "Name": "ลูกสมอพิเภก",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 64,
-        "Name": "ลูกสมอไทย",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 66,
-        "Name": "ลูกมะขามป้อม",
-        "Quantity": 30
-      },
-      {
-        "ItemId": 81,
-        "Name": "รากชะเอมเทศ",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 118,
-        "Name": "เกล็ดสะระแหน่",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 129,
-        "Name": "บ๊วย",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 130,
-        "Name": "มะนาวดองแห้ง",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 131,
-        "Name": "น้ำตาลกรวด",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 133,
-        "Name": "หล่อฮั่งก๊วย",
-        "Quantity": 1
-      }
-    ]
-  },
-  {
-    "RecipeId": 223,
-    "ResultItemName": "ยาปราบชมพูทวีป",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 19,
-    "Ingredients": [
-      {
-        "ItemId": 3,
-        "Name": "ดอกดีปลี",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 5,
-        "Name": "ดอกจันทน์",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 6,
-        "Name": "ดอกกานพลู",
-        "Quantity": 10
-      },
-      {
-        "ItemId": 23,
-        "Name": "ใบกัญชาเทศ",
-        "Quantity": 120
-      },
-      {
-        "ItemId": 35,
-        "Name": "พริกไทยดำ",
-        "Quantity": 120
-      },
-      {
-        "ItemId": 46,
-        "Name": "หัวบุก",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 61,
-        "Name": "ลำพันหางหมู",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 64,
-        "Name": "ลูกสมอไทย",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 65,
-        "Name": "ลูกสมอเทศ",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 80,
-        "Name": "ชุดเครื่องเหง้า",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 83,
-        "Name": "รากเจตมูลเพลิงแดง",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 100,
-        "Name": "ลูกจันทน์",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 101,
-        "Name": "ลูกกระวาน",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 106,
-        "Name": "ลูกพิลังกาสา",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 107,
-        "Name": "ชุดเครื่องโกฐ",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 108,
-        "Name": "ชุดเครื่องเทียน",
-        "Quantity": 22
-      },
-      {
-        "ItemId": 110,
-        "Name": "การบูร",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 134,
-        "Name": "เหงือกปลาหมอ",
-        "Quantity": 120
-      },
-      {
-        "ItemId": 135,
-        "Name": "หัศคุณเทศ",
-        "Quantity": 10
-      }
-    ]
-  },
-  {
-    "RecipeId": 224,
-    "ResultItemName": "ยาอำมฤควาที",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 3,
-    "Ingredients": [
-      {
-        "ItemId": 63,
-        "Name": "ลูกสมอพิเภก",
-        "Quantity": 7
-      },
-      {
-        "ItemId": 66,
-        "Name": "ลูกมะขามป้อม",
-        "Quantity": 7
-      },
-      {
-        "ItemId": 81,
-        "Name": "รากชะเอมเทศ",
-        "Quantity": 35
-      },
-      {
-        "ItemId": 99,
-        "Name": "ลูกผักชีลา",
-        "Quantity": 7
-      },
-      {
-        "ItemId": 107,
-        "Name": "ชุดเครื่องโกฐ",
-        "Quantity": 7
-      },
-      {
-        "ItemId": 108,
-        "Name": "ชุดเครื่องเทียน",
-        "Quantity": 7
-      }
-    ]
-  },
-  {
-    "RecipeId": 225,
-    "ResultItemName": "ยากษัยเส้น",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 9,
-    "Ingredients": [
-      {
-        "ItemId": 0,
-        "Name": "ดอกพิกุล",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 1,
-        "Name": "ดอกบุนนาค",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 2,
-        "Name": "ดอกสารภี",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 3,
-        "Name": "ดอกดีปลี",
-        "Quantity": 40
-      },
-      {
-        "ItemId": 4,
-        "Name": "ดอกมะลิ",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 5,
-        "Name": "ดอกจันทน์",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 6,
-        "Name": "ดอกกานพลู",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 15,
-        "Name": "เกสรบัวหลวง",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 34,
-        "Name": "พริกไทยล่อน",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 43,
-        "Name": "หัวกระชาย",
-        "Quantity": 10
-      },
-      {
-        "ItemId": 56,
-        "Name": "ชุดเครื่องแก่น",
-        "Quantity": 10
-      },
-      {
-        "ItemId": 71,
-        "Name": "เปลือกอบเชยเทศ",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 80,
-        "Name": "ชุดเครื่องเหง้า",
-        "Quantity": 38
-      },
-      {
-        "ItemId": 81,
-        "Name": "รากชะเอมเทศ",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 83,
-        "Name": "รากเจตมูลเพลิงแดง",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 85,
-        "Name": "รากช้าพลู",
-        "Quantity": 24
-      },
-      {
-        "ItemId": 97,
-        "Name": "ชุดเครื่องเถา",
-        "Quantity": 52
-      },
-      {
-        "ItemId": 100,
-        "Name": "ลูกจันทน์",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 101,
-        "Name": "ลูกกระวาน",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 107,
-        "Name": "ชุดเครื่องโกฐ",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 110,
-        "Name": "การบูร",
-        "Quantity": 6
-      },
-      {
-        "ItemId": 136,
-        "Name": "กำลังวัวเถลิง",
-        "Quantity": 10
-      }
-    ]
-  },
-  {
-    "RecipeId": 226,
-    "ResultItemName": "ยาแก้ลมอัมพฤกษ์",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 3,
-    "Ingredients": [
-      {
-        "ItemId": 5,
-        "Name": "ดอกจันทน์",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 34,
-        "Name": "พริกไทยล่อน",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 53,
-        "Name": "หัวกระเทียม",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 76,
-        "Name": "เปลือกต้นทองหลาง",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 77,
-        "Name": "เปลือกต้นกุ่มบก",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 78,
-        "Name": "เปลือกต้นกุ่มน้ำ",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 80,
-        "Name": "ชุดเครื่องเหง้า",
-        "Quantity": 15
-      },
-      {
-        "ItemId": 83,
-        "Name": "รากเจตมูลเพลิงแดง",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 100,
-        "Name": "ลูกจันทน์",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 110,
-        "Name": "การบูร",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 112,
-        "Name": "เกลือสินเธาว์",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 137,
-        "Name": "ผักเสี้ยนผี",
-        "Quantity": 5
-      }
-    ]
-  },
-  {
-    "RecipeId": 227,
-    "ResultItemName": "ยาผสมโคคลาน",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 4,
-    "Ingredients": [
-      {
-        "ItemId": 97,
-        "Name": "ชุดเครื่องเถา",
-        "Quantity": 25
-      },
-      {
-        "ItemId": 138,
-        "Name": "โด่ไม่รู้ล้ม",
-        "Quantity": 25
-      },
-      {
-        "ItemId": 139,
-        "Name": "ผลมะตูมอ่อน",
-        "Quantity": 25
-      },
-      {
-        "ItemId": 140,
-        "Name": "ทองพันชั่ง",
-        "Quantity": 25
-      }
-    ]
-  },
-  {
-    "RecipeId": 228,
-    "ResultItemName": "ยาผสมเถาวัลย์เปรียง",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 4,
-    "Ingredients": [
-      {
-        "ItemId": 56,
-        "Name": "ชุดเครื่องแก่น",
-        "Quantity": 50
-      },
-      {
-        "ItemId": 80,
-        "Name": "ชุดเครื่องเหง้า",
-        "Quantity": 25
-      },
-      {
-        "ItemId": 97,
-        "Name": "ชุดเครื่องเถา",
-        "Quantity": 25
-      }
-    ]
-  },
-  {
-    "RecipeId": 229,
-    "ResultItemName": "ยาสหัศธารา",
-    "Category": "Thai traditional medicine",
-    "ResultQuantity": 30,
-    "Ingredients": [
-      {
-        "ItemId": 3,
-        "Name": "ดอกดีปลี",
-        "Quantity": 96
-      },
-      {
-        "ItemId": 5,
-        "Name": "ดอกจันทน์",
-        "Quantity": 13
-      },
-      {
-        "ItemId": 34,
-        "Name": "พริกไทยล่อน",
-        "Quantity": 240
-      },
-      {
-        "ItemId": 64,
-        "Name": "ลูกสมอไทย",
-        "Quantity": 104
-      },
-      {
-        "ItemId": 80,
-        "Name": "ชุดเครื่องเหง้า",
-        "Quantity": 88
-      },
-      {
-        "ItemId": 83,
-        "Name": "รากเจตมูลเพลิงแดง",
-        "Quantity": 224
-      },
-      {
-        "ItemId": 95,
-        "Name": "รากตองแตก",
-        "Quantity": 80
-      },
-      {
-        "ItemId": 96,
-        "Name": "รากจิงจ้อ",
-        "Quantity": 8
-      },
-      {
-        "ItemId": 100,
-        "Name": "ลูกจันทน์",
-        "Quantity": 12
-      },
-      {
-        "ItemId": 107,
-        "Name": "ชุดเครื่องโกฐ",
-        "Quantity": 18
-      },
-      {
-        "ItemId": 108,
-        "Name": "ชุดเครื่องเทียน",
-        "Quantity": 45
-      },
-      {
-        "ItemId": 110,
-        "Name": "การบูร",
-        "Quantity": 14
-      },
-      {
-        "ItemId": 111,
-        "Name": "มหาหิงคุ์",
-        "Quantity": 10
-      },
-      {
-        "ItemId": 135,
-        "Name": "หัศคุณเทศ",
-        "Quantity": 48
-      }
-    ]
-  },
-  {
-    "RecipeId": 302,
-    "ResultItemName": "ซุปเห็ด",
-    "Category": "Consumable item",
-    "ResultQuantity": 1,
-    "Ingredients": [
-      {
-        "ItemId": 146,
-        "Name": "เห็ด",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 147,
-        "Name": "ข้าวสาลี",
-        "Quantity": 3
-      },
-      {
-        "ItemId": 162,
-        "Name": "เกลือ",
-        "Quantity": 1
-      }
-    ]
-  },
-  {
-    "RecipeId": 303,
-    "ResultItemName": "ผัดกระหล่ำปลี",
-    "Category": "Consumable item",
-    "ResultQuantity": 1,
-    "Ingredients": [
-      {
-        "ItemId": 144,
-        "Name": "กระหล่ำปลี",
-        "Quantity": 3
-      },
-      {
-        "ItemId": 148,
-        "Name": "เนื้อสัตว์",
-        "Quantity": 3
-      },
-      {
-        "ItemId": 162,
-        "Name": "เกลือ",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 34,
-        "Name": "พริกไทยล่อน",
-        "Quantity": 1
-      }
-    ]
-  },
-  {
-    "RecipeId": 304,
-    "ResultItemName": "เนื้อโรล",
-    "Category": "Consumable item",
-    "ResultQuantity": 1,
-    "Ingredients": [
-      {
-        "ItemId": 148,
-        "Name": "เนื้อสัตว์",
-        "Quantity": 3
-      },
-      {
-        "ItemId": 145,
-        "Name": "มะเขือเทศ",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 147,
-        "Name": "ข้าวสาลี",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 144,
-        "Name": "กระหล่ำปลี",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 161,
-        "Name": "ซอสมะเขือเทศ",
-        "Quantity": 1
-      }
-    ]
-  },
-  {
-    "RecipeId": 305,
-    "ResultItemName": "สตูว์เนื้อ",
-    "Category": "Consumable item",
-    "ResultQuantity": 1,
-    "Ingredients": [
-      {
-        "ItemId": 142,
-        "Name": "แครรอท",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 134,
-        "Name": "มันฝรั่ง",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 51,
-        "Name": "หัวหอม",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 148,
-        "Name": "เนื้อสัตว์",
-        "Quantity": 2
-      }
-    ]
-  },
-  {
-    "RecipeId": 307,
-    "ResultItemName": "ซุปมันฝรั่ง",
-    "Category": "Consumable item",
-    "ResultQuantity": 1,
-    "Ingredients": [
-      {
-        "ItemId": 143,
-        "Name": "มันฝรั่ง",
-        "Quantity": 3
-      },
-      {
-        "ItemId": 0,
-        "Name": "นม",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 162,
-        "Name": "เกลือ",
-        "Quantity": 1
-      }
-    ]
-  },
-  {
-    "RecipeId": 308,
-    "ResultItemName": "สเต็ก",
-    "Category": "Consumable item",
-    "ResultQuantity": 1,
-    "Ingredients": [
-      {
-        "ItemId": 148,
-        "Name": "เนื้อสัตว์",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 162,
-        "Name": "เกลือ",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 35,
-        "Name": "พริกไทยดำ",
-        "Quantity": 1
-      }
-    ]
-  },
-  {
-    "RecipeId": 309,
-    "ResultItemName": "บาบีคิว",
-    "Category": "Consumable item",
-    "ResultQuantity": 1,
-    "Ingredients": [
-      {
-        "ItemId": 148,
-        "Name": "เนื้อสัตว์",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 145,
-        "Name": "มะเขือเทศ",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 158,
-        "Name": "ปาปริก้า",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 51,
-        "Name": "หัวหอม",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 160,
-        "Name": "ซอสพริก",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 161,
-        "Name": "ซอสมะเขือเทศ",
-        "Quantity": 1
-      }
-    ]
-  },
-  {
-    "RecipeId": 310,
-    "ResultItemName": "ข้าวปั่นสาหร่าย",
-    "Category": "Consumable item",
-    "ResultQuantity": 1,
-    "Ingredients": [
-      {
-        "ItemId": 156,
-        "Name": "ข้าว",
-        "Quantity": 3
-      },
-      {
-        "ItemId": 163,
-        "Name": "สาหร่าย",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 162,
-        "Name": "เกลือ",
-        "Quantity": 1
-      }
-    ]
-  },
-  {
-    "RecipeId": 311,
-    "ResultItemName": "ซูชิวาซาบิแซลมอน",
-    "Category": "Consumable item",
-    "ResultQuantity": 1,
-    "Ingredients": [
-      {
-        "ItemId": 155,
-        "Name": "แซลมอน",
-        "Quantity": 4
-      },
-      {
-        "ItemId": 163,
-        "Name": "สาหร่าย",
-        "Quantity": 1
-      },
-      {
-        "ItemId": 157,
-        "Name": "วาซาบิ",
-        "Quantity": 1
-      }
-    ]
-  },
-  {
-    "RecipeId": 312,
-    "ResultItemName": "เมี๊ยวลาเต้",
-    "Category": "Consumable item",
-    "ResultQuantity": 1,
-    "Ingredients": [
-      {
-        "ItemId": 164,
-        "Name": "เมล็ดกาแฟ",
-        "Quantity": 3
-      },
-      {
-        "ItemId": 306,
-        "Name": "นม",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 131,
-        "Name": "น้ำตาลกรวด",
-        "Quantity": 1
-      }
-    ]
-  },
-  {
-    "RecipeId": 313,
-    "ResultItemName": "ผัดกระเพราเนื้อ",
-    "Category": "Consumable item",
-    "ResultQuantity": 1,
-    "Ingredients": [
-      {
-        "ItemId": 148,
-        "Name": "เนื้อสัตว์",
-        "Quantity": 3
-      },
-      {
-        "ItemId": 159,
-        "Name": "พริก",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 122,
-        "Name": "กะเพรา",
-        "Quantity": 2
-      },
-      {
-        "ItemId": 162,
-        "Name": "เกลือ",
-        "Quantity": 1
-      }
-    ]
-  },
-  {
-    "RecipeId": 400,
-    "ResultItemName": "ดาบนักผจญภัย",
-    "Category": "Equipment",
-    "ResultQuantity": 1,
-    "Ingredients": [
-      {
-        "ItemId": 152,
-        "Name": "แร่เหล็ก",
-        "Quantity": 25
-      },
-      {
-        "ItemId": 149,
-        "Name": "ท่อนไม้",
-        "Quantity": 15
-      }
-    ]
-  },
-  {
-    "RecipeId": 401,
-    "ResultItemName": "หมวกนักผจญภัย",
-    "Category": "Equipment",
-    "ResultQuantity": 1,
-    "Ingredients": [
-      {
-        "ItemId": 152,
-        "Name": "แร่เหล็ก",
-        "Quantity": 20
-      },
-      {
-        "ItemId": 150,
-        "Name": "หนังธรรมดา",
-        "Quantity": 10
-      }
-    ]
-  },
-  {
-    "RecipeId": 402,
-    "ResultItemName": "ชุดเกราะของนักผจญภัย",
-    "Category": "Equipment",
-    "ResultQuantity": 1,
-    "Ingredients": [
-      {
-        "ItemId": 152,
-        "Name": "แร่เหล็ก",
-        "Quantity": 20
-      },
-      {
-        "ItemId": 150,
-        "Name": "หนังธรรมดา",
-        "Quantity": 10
-      },
-      {
-        "ItemId": 151,
-        "Name": "ผ้าธรรมดา",
-        "Quantity": 10
-      }
-    ]
-  },
-  {
-    "RecipeId": 403,
-    "ResultItemName": "ถุงมือนักผจญภัย",
-    "Category": "Equipment",
-    "ResultQuantity": 1,
-    "Ingredients": [
-      {
-        "ItemId": 152,
-        "Name": "แร่เหล็ก",
-        "Quantity": 10
-      },
-      {
-        "ItemId": 150,
-        "Name": "หนังธรรมดา",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 149,
-        "Name": "ท่อนไม้",
-        "Quantity": 5
-      }
-    ]
-  },
-  {
-    "RecipeId": 404,
-    "ResultItemName": "รองเท้าบูทนักผจญภัย",
-    "Category": "Equipment",
-    "ResultQuantity": 1,
-    "Ingredients": [
-      {
-        "ItemId": 150,
-        "Name": "หนังธรรมดา",
-        "Quantity": 15
-      },
-      {
-        "ItemId": 149,
-        "Name": "ท่อนไม้",
-        "Quantity": 5
-      }
-    ]
-  },
-  {
-    "RecipeId": 405,
-    "ResultItemName": "แหวนนักผจญภัย",
-    "Category": "Equipment",
-    "ResultQuantity": 1,
-    "Ingredients": [
-      {
-        "ItemId": 152,
-        "Name": "แร่เหล็ก",
-        "Quantity": 5
-      },
-      {
-        "ItemId": 153,
-        "Name": "แร่ทองแดง",
-        "Quantity": 5
-      }
-    ]
-  }
+    {
+        "RecipeId": 200,
+        "ResultItemName": "ยาเขียวหอม",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 4,
+        "Ingredients": [
+            {
+                "ItemId": 0,
+                "Name": "ดอกพิกุล",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 1,
+                "Name": "ดอกบุนนาค",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 2,
+                "Name": "ดอกสารภี",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 15,
+                "Name": "เกสรบัวหลวง",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 25,
+                "Name": "ใบพิมเสนต้น",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 26,
+                "Name": "ใบผักกระโฉม",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 27,
+                "Name": "ใบหมากผู้",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 28,
+                "Name": "ใบหมากเมีย",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 29,
+                "Name": "ใบสันพร้าหอม",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 52,
+                "Name": "หัวเปราะหอม",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 56,
+                "Name": "ชุดเครื่องแก่น",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 84,
+                "Name": "รากแฝกหอม",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 123,
+                "Name": "เนระพูสี",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 124,
+                "Name": "พิษนาศน์",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 125,
+                "Name": "มหาสดำ",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 127,
+                "Name": "ว่านกีบแรด",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 128,
+                "Name": "ว่านร่อนทอง",
+                "Quantity": 5
+            }
+        ]
+    },
+    {
+        "RecipeId": 201,
+        "ResultItemName": "ยาจันทน์ลีลา",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 4,
+        "Ingredients": [
+            {
+                "ItemId": 56,
+                "Name": "ชุดเครื่องแก่น",
+                "Quantity": 24
+            },
+            {
+                "ItemId": 91,
+                "Name": "รากปลาไหลเผือก",
+                "Quantity": 12
+            },
+            {
+                "ItemId": 97,
+                "Name": "ชุดเครื่องเถา",
+                "Quantity": 12
+            },
+            {
+                "ItemId": 105,
+                "Name": "ลูกกระดอม",
+                "Quantity": 12
+            },
+            {
+                "ItemId": 107,
+                "Name": "ชุดเครื่องโกฐ",
+                "Quantity": 36
+            },
+            {
+                "ItemId": 109,
+                "Name": "พิมเสน",
+                "Quantity": 3
+            }
+        ]
+    },
+    {
+        "RecipeId": 202,
+        "ResultItemName": "ยาประสะจันทร์แดง",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 3,
+        "Ingredients": [
+            {
+                "ItemId": 1,
+                "Name": "ดอกบุนนาค",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 2,
+                "Name": "ดอกสารภี",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 4,
+                "Name": "ดอกมะลิ",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 15,
+                "Name": "เกสรบัวหลวง",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 52,
+                "Name": "หัวเปราะหอม",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 56,
+                "Name": "ชุดเครื่องแก่น",
+                "Quantity": 40
+            },
+            {
+                "ItemId": 92,
+                "Name": "รากเหมือดคน",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 93,
+                "Name": "รากมะปรางหวาน",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 94,
+                "Name": "รากมะนาว",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 107,
+                "Name": "ชุดเครื่องโกฐ",
+                "Quantity": 4
+            }
+        ]
+    },
+    {
+        "RecipeId": 203,
+        "ResultItemName": "ยาประสะเปราะใหญ่",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 4,
+        "Ingredients": [
+            {
+                "ItemId": 0,
+                "Name": "ดอกพิกุล",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 1,
+                "Name": "ดอกบุนนาค",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 2,
+                "Name": "ดอกสารภี",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 5,
+                "Name": "ดอกจันทน์",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 6,
+                "Name": "ดอกกานพลู",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 15,
+                "Name": "เกสรบัวหลวง",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 52,
+                "Name": "หัวเปราะหอม",
+                "Quantity": 40
+            },
+            {
+                "ItemId": 56,
+                "Name": "ชุดเครื่องแก่น",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 100,
+                "Name": "ลูกจันทน์",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 101,
+                "Name": "ลูกกระวาน",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 107,
+                "Name": "ชุดเครื่องโกฐ",
+                "Quantity": 10
+            },
+            {
+                "ItemId": 108,
+                "Name": "ชุดเครื่องเทียน",
+                "Quantity": 10
+            }
+        ]
+    },
+    {
+        "RecipeId": 204,
+        "ResultItemName": "ยาห้าราก",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 4,
+        "Ingredients": [
+            {
+                "ItemId": 86,
+                "Name": "รากย่านาง",
+                "Quantity": 20
+            },
+            {
+                "ItemId": 87,
+                "Name": "รากคนทา",
+                "Quantity": 20
+            },
+            {
+                "ItemId": 88,
+                "Name": "รากมะเดื่อชุมพร",
+                "Quantity": 20
+            },
+            {
+                "ItemId": 89,
+                "Name": "รากชิงชี่",
+                "Quantity": 20
+            },
+            {
+                "ItemId": 90,
+                "Name": "รากไม้เท้ายายม่อม",
+                "Quantity": 20
+            }
+        ]
+    },
+    {
+        "RecipeId": 205,
+        "ResultItemName": "ยาหอมทิพโอสถ",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 6,
+        "Ingredients": [
+            {
+                "ItemId": 0,
+                "Name": "ดอกพิกุล",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 1,
+                "Name": "ดอกบุนนาค",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 2,
+                "Name": "ดอกสารภี",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 4,
+                "Name": "ดอกมะลิ",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 5,
+                "Name": "ดอกจันทน์",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 9,
+                "Name": "ดอกกระดังงา",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 10,
+                "Name": "ดอกจำปา",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 11,
+                "Name": "ดอกบัวจงกลนี",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 12,
+                "Name": "ดอกคำไทย",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 15,
+                "Name": "เกสรบัวหลวง",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 44,
+                "Name": "หัวแห้วไทย",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 52,
+                "Name": "หัวเปราะหอม",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 55,
+                "Name": "กระจับ",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 56,
+                "Name": "ชุดเครื่องแก่น",
+                "Quantity": 24
+            },
+            {
+                "ItemId": 57,
+                "Name": "กฤษณา",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 69,
+                "Name": "เปลือกชะลูด",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 70,
+                "Name": "เปลือกอบเชย",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 73,
+                "Name": "เปลือกสมุลแว้ง",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 80,
+                "Name": "ชุดเครื่องเหง้า",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 81,
+                "Name": "รากชะเอมเทศ",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 98,
+                "Name": "ลำต้นข่าต้น",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 100,
+                "Name": "ลูกจันทน์",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 107,
+                "Name": "ชุดเครื่องโกฐ",
+                "Quantity": 18
+            },
+            {
+                "ItemId": 108,
+                "Name": "ชุดเครื่องเทียน",
+                "Quantity": 9
+            },
+            {
+                "ItemId": 109,
+                "Name": "พิมเสน",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 110,
+                "Name": "การบูร",
+                "Quantity": 2
+            }
+        ]
+    },
+    {
+        "RecipeId": 206,
+        "ResultItemName": "ยาหอมเทพจิตร",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 15,
+        "Ingredients": [
+            {
+                "ItemId": 0,
+                "Name": "ดอกพิกุล",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 1,
+                "Name": "ดอกบุนนาค",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 2,
+                "Name": "ดอกสารภี",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 4,
+                "Name": "ดอกมะลิ",
+                "Quantity": 183
+            },
+            {
+                "ItemId": 5,
+                "Name": "ดอกจันทน์",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 6,
+                "Name": "ดอกกานพลู",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 7,
+                "Name": "ดอกบัวขม",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 8,
+                "Name": "ดอกบัวเผื่อน",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 15,
+                "Name": "เกสรบัวหลวง",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 16,
+                "Name": "ผิวมะกรูด",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 17,
+                "Name": "ผิวมะงั่ว",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 18,
+                "Name": "ผิวมะนาว",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 19,
+                "Name": "ผิวส้มตรังกานู",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 20,
+                "Name": "ผิวส้มจีน",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 21,
+                "Name": "ผิวส้มโอ",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 22,
+                "Name": "ผิวส้มเขียวหวาน",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 32,
+                "Name": "ส้มซ่า",
+                "Quantity": 28
+            },
+            {
+                "ItemId": 52,
+                "Name": "หัวเปราะหอม",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 56,
+                "Name": "ชุดเครื่องแก่น",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 57,
+                "Name": "กฤษณา",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 59,
+                "Name": "กระลำพัก",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 62,
+                "Name": "ขอนดอก",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 69,
+                "Name": "เปลือกชะลูด",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 70,
+                "Name": "เปลือกอบเชย",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 84,
+                "Name": "รากแฝกหอม",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 100,
+                "Name": "ลูกจันทน์",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 101,
+                "Name": "ลูกกระวาน",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 107,
+                "Name": "ชุดเครื่องโกฐ",
+                "Quantity": 36
+            },
+            {
+                "ItemId": 108,
+                "Name": "ชุดเครื่องเทียน",
+                "Quantity": 36
+            },
+            {
+                "ItemId": 109,
+                "Name": "พิมเสน",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 110,
+                "Name": "การบูร",
+                "Quantity": 1
+            }
+        ]
+    },
+    {
+        "RecipeId": 207,
+        "ResultItemName": "ยาหอมนวโกฐ",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 9,
+        "Ingredients": [
+            {
+                "ItemId": 0,
+                "Name": "ดอกพิกุล",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 1,
+                "Name": "ดอกบุนนาค",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 2,
+                "Name": "ดอกสารภี",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 3,
+                "Name": "ดอกดีปลี",
+                "Quantity": 3
+            },
+            {
+                "ItemId": 4,
+                "Name": "ดอกมะลิ",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 5,
+                "Name": "ดอกจันทน์",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 6,
+                "Name": "ดอกกานพลู",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 15,
+                "Name": "เกสรบัวหลวง",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 50,
+                "Name": "หัวแห้วหมู",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 52,
+                "Name": "หัวเปราะหอม",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 56,
+                "Name": "ชุดเครื่องแก่น",
+                "Quantity": 16
+            },
+            {
+                "ItemId": 57,
+                "Name": "กฤษณา",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 59,
+                "Name": "กระลำพัก",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 62,
+                "Name": "ขอนดอก",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 63,
+                "Name": "ลูกสมอพิเภก",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 66,
+                "Name": "ลูกมะขามป้อม",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 69,
+                "Name": "เปลือกชะลูด",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 72,
+                "Name": "เปลือกอบเชยญวน",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 73,
+                "Name": "เปลือกสมุลแว้ง",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 79,
+                "Name": "หญ้าตีนนก",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 80,
+                "Name": "ชุดเครื่องเหง้า",
+                "Quantity": 3
+            },
+            {
+                "ItemId": 81,
+                "Name": "รากชะเอมเทศ",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 83,
+                "Name": "รากเจตมูลเพลิงแดง",
+                "Quantity": 3
+            },
+            {
+                "ItemId": 84,
+                "Name": "รากแฝกหอม",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 85,
+                "Name": "รากช้าพลู",
+                "Quantity": 3
+            },
+            {
+                "ItemId": 97,
+                "Name": "ชุดเครื่องเถา",
+                "Quantity": 7
+            },
+            {
+                "ItemId": 99,
+                "Name": "ลูกผักชีลา",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 100,
+                "Name": "ลูกจันทน์",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 101,
+                "Name": "ลูกกระวาน",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 102,
+                "Name": "ลูกราชดัด",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 104,
+                "Name": "ลูกสารพัดพิษ",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 105,
+                "Name": "ลูกกระดอม",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 107,
+                "Name": "ชุดเครื่องโกฐ",
+                "Quantity": 36
+            },
+            {
+                "ItemId": 108,
+                "Name": "ชุดเครื่องเทียน",
+                "Quantity": 36
+            },
+            {
+                "ItemId": 109,
+                "Name": "พิมเสน",
+                "Quantity": 1
+            }
+        ]
+    },
+    {
+        "RecipeId": 208,
+        "ResultItemName": "ยาหอมแก้ลมวิงเวียน",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 9,
+        "Ingredients": [
+            {
+                "ItemId": 0,
+                "Name": "ดอกพิกุล",
+                "Quantity": 6
+            },
+            {
+                "ItemId": 1,
+                "Name": "ดอกบุนนาค",
+                "Quantity": 6
+            },
+            {
+                "ItemId": 2,
+                "Name": "ดอกสารภี",
+                "Quantity": 6
+            },
+            {
+                "ItemId": 6,
+                "Name": "ดอกกานพลู",
+                "Quantity": 12
+            },
+            {
+                "ItemId": 15,
+                "Name": "เกสรบัวหลวง",
+                "Quantity": 12
+            },
+            {
+                "ItemId": 56,
+                "Name": "ชุดเครื่องแก่น",
+                "Quantity": 28
+            },
+            {
+                "ItemId": 57,
+                "Name": "กฤษณา",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 59,
+                "Name": "กระลำพัก",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 62,
+                "Name": "ขอนดอก",
+                "Quantity": 6
+            },
+            {
+                "ItemId": 69,
+                "Name": "เปลือกชะลูด",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 71,
+                "Name": "เปลือกอบเชยเทศ",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 72,
+                "Name": "เปลือกอบเชยญวน",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 73,
+                "Name": "เปลือกสมุลแว้ง",
+                "Quantity": 10
+            },
+            {
+                "ItemId": 81,
+                "Name": "รากชะเอมเทศ",
+                "Quantity": 32
+            },
+            {
+                "ItemId": 84,
+                "Name": "รากแฝกหอม",
+                "Quantity": 12
+            },
+            {
+                "ItemId": 97,
+                "Name": "ชุดเครื่องเถา",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 107,
+                "Name": "ชุดเครื่องโกฐ",
+                "Quantity": 40
+            },
+            {
+                "ItemId": 109,
+                "Name": "พิมเสน",
+                "Quantity": 6
+            },
+            {
+                "ItemId": 141,
+                "Name": "น้ำประสานทองสะตุ",
+                "Quantity": 4
+            }
+        ]
+    },
+    {
+        "RecipeId": 209,
+        "ResultItemName": "ยาหอมอินทจักร์",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 4,
+        "Ingredients": [
+            {
+                "ItemId": 0,
+                "Name": "ดอกพิกุล",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 1,
+                "Name": "ดอกบุนนาค",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 2,
+                "Name": "ดอกสารภี",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 3,
+                "Name": "ดอกดีปลี",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 4,
+                "Name": "ดอกมะลิ",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 5,
+                "Name": "ดอกจันทน์",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 6,
+                "Name": "ดอกกานพลู",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 9,
+                "Name": "ดอกกระดังงา",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 10,
+                "Name": "ดอกจำปา",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 12,
+                "Name": "ดอกคำไทย",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 56,
+                "Name": "ชุดเครื่องแก่น",
+                "Quantity": 6
+            },
+            {
+                "ItemId": 57,
+                "Name": "กฤษณา",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 58,
+                "Name": "กำยาน",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 59,
+                "Name": "กระลำพัก",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 60,
+                "Name": "ลำพันแดง",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 62,
+                "Name": "ขอนดอก",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 69,
+                "Name": "เปลือกชะลูด",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 70,
+                "Name": "เปลือกอบเชย",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 73,
+                "Name": "เปลือกสมุลแว้ง",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 80,
+                "Name": "ชุดเครื่องเหง้า",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 83,
+                "Name": "รากเจตมูลเพลิงแดง",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 85,
+                "Name": "รากช้าพลู",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 86,
+                "Name": "รากย่านาง",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 97,
+                "Name": "ชุดเครื่องเถา",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 99,
+                "Name": "ลูกผักชีลา",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 100,
+                "Name": "ลูกจันทน์",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 101,
+                "Name": "ลูกกระวาน",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 105,
+                "Name": "ลูกกระดอม",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 107,
+                "Name": "ชุดเครื่องโกฐ",
+                "Quantity": 18
+            },
+            {
+                "ItemId": 108,
+                "Name": "ชุดเครื่องเทียน",
+                "Quantity": 10
+            },
+            {
+                "ItemId": 109,
+                "Name": "พิมเสน",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 119,
+                "Name": "น้ำดีวัว",
+                "Quantity": 2
+            }
+        ]
+    },
+    {
+        "RecipeId": 210,
+        "ResultItemName": "ยาธาตุบรรจบ",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 4,
+        "Ingredients": [
+            {
+                "ItemId": 3,
+                "Name": "ดอกดีปลี",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 5,
+                "Name": "ดอกจันทน์",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 6,
+                "Name": "ดอกกานพลู",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 25,
+                "Name": "ใบพิมเสนต้น",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 52,
+                "Name": "หัวเปราะหอม",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 64,
+                "Name": "ลูกสมอไทย",
+                "Quantity": 16
+            },
+            {
+                "ItemId": 73,
+                "Name": "เปลือกสมุลแว้ง",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 80,
+                "Name": "ชุดเครื่องเหง้า",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 99,
+                "Name": "ลูกผักชีลา",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 100,
+                "Name": "ลูกจันทน์",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 101,
+                "Name": "ลูกกระวาน",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 107,
+                "Name": "ชุดเครื่องโกฐ",
+                "Quantity": 24
+            },
+            {
+                "ItemId": 108,
+                "Name": "ชุดเครื่องเทียน",
+                "Quantity": 20
+            },
+            {
+                "ItemId": 110,
+                "Name": "การบูร",
+                "Quantity": 4
+            }
+        ]
+    },
+    {
+        "RecipeId": 211,
+        "ResultItemName": "ยาธรณีสันฑะฆาต",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 6,
+        "Ingredients": [
+            {
+                "ItemId": 5,
+                "Name": "ดอกจันทน์",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 6,
+                "Name": "ดอกกานพลู",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 34,
+                "Name": "พริกไทยล่อน",
+                "Quantity": 96
+            },
+            {
+                "ItemId": 36,
+                "Name": "ยาดำสะตุ",
+                "Quantity": 20
+            },
+            {
+                "ItemId": 38,
+                "Name": "รงทอง",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 40,
+                "Name": "ผักแพวแดง",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 45,
+                "Name": "หัวดองดึง",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 46,
+                "Name": "หัวบุก",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 47,
+                "Name": "หัวกลอย",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 48,
+                "Name": "หัวกระดาดขาว",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 49,
+                "Name": "หัวกระดาดแดง",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 64,
+                "Name": "ลูกสมอไทย",
+                "Quantity": 6
+            },
+            {
+                "ItemId": 66,
+                "Name": "ลูกมะขามป้อม",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 80,
+                "Name": "ชุดเครื่องเหง้า",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 81,
+                "Name": "รากชะเอมเทศ",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 83,
+                "Name": "รากเจตมูลเพลิงแดง",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 100,
+                "Name": "ลูกจันทน์",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 101,
+                "Name": "ลูกกระวาน",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 103,
+                "Name": "ลูกเร่ว",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 107,
+                "Name": "ชุดเครื่องโกฐ",
+                "Quantity": 3
+            },
+            {
+                "ItemId": 108,
+                "Name": "ชุดเครื่องเทียน",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 110,
+                "Name": "การบูร",
+                "Quantity": 6
+            },
+            {
+                "ItemId": 111,
+                "Name": "มหาหิงคุ์",
+                "Quantity": 6
+            }
+        ]
+    },
+    {
+        "RecipeId": 212,
+        "ResultItemName": "ยาเหลืองปิดสมุทร",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 4,
+        "Ingredients": [
+            {
+                "ItemId": 3,
+                "Name": "ดอกดีปลี",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 30,
+                "Name": "ใบเทียน",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 31,
+                "Name": "ใบทับทิม",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 50,
+                "Name": "หัวแห้วหมู",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 54,
+                "Name": "หัวกระเทียมคั่ว",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 74,
+                "Name": "เปลือกสีเสียดไทย",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 75,
+                "Name": "เปลือกเพกา",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 80,
+                "Name": "ชุดเครื่องเหง้า",
+                "Quantity": 35
+            },
+            {
+                "ItemId": 113,
+                "Name": "ชันย้อย",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 114,
+                "Name": "ครั่ง",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 115,
+                "Name": "สีเสียดเทศ",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 116,
+                "Name": "รากกล้วยตีบ",
+                "Quantity": 5
+            }
+        ]
+    },
+    {
+        "RecipeId": 213,
+        "ResultItemName": "ยาริดสีดวงมหากาฬ",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 4,
+        "Ingredients": [
+            {
+                "ItemId": 3,
+                "Name": "ดอกดีปลี",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 5,
+                "Name": "ดอกจันทน์",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 33,
+                "Name": "มดยอบคั่ว",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 34,
+                "Name": "พริกไทยล่อน",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 41,
+                "Name": "ขอบชะนางแดง",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 42,
+                "Name": "ขอบชะนางขาว",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 56,
+                "Name": "ชุดเครื่องแก่น",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 71,
+                "Name": "เปลือกอบเชยเทศ",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 73,
+                "Name": "เปลือกสมุลแว้ง",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 80,
+                "Name": "ชุดเครื่องเหง้า",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 97,
+                "Name": "ชุดเครื่องเถา",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 100,
+                "Name": "ลูกจันทน์",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 107,
+                "Name": "ชุดเครื่องโกฐ",
+                "Quantity": 25
+            },
+            {
+                "ItemId": 108,
+                "Name": "ชุดเครื่องเทียน",
+                "Quantity": 25
+            }
+        ]
+    },
+    {
+        "RecipeId": 214,
+        "ResultItemName": "ยาธาตุอบเชย",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 1,
+        "Ingredients": [
+            {
+                "ItemId": 6,
+                "Name": "ดอกกานพลู",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 71,
+                "Name": "เปลือกอบเชยเทศ",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 73,
+                "Name": "เปลือกสมุลแว้ง",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 81,
+                "Name": "รากชะเอมเทศ",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 101,
+                "Name": "ลูกกระวาน",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 110,
+                "Name": "การบูร",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 118,
+                "Name": "เกล็ดสะระแหน่",
+                "Quantity": 1
+            }
+        ]
+    },
+    {
+        "RecipeId": 215,
+        "ResultItemName": "ยาประสะไพล",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 6,
+        "Ingredients": [
+            {
+                "ItemId": 3,
+                "Name": "ดอกดีปลี",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 16,
+                "Name": "ผิวมะกรูด",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 34,
+                "Name": "พริกไทยล่อน",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 51,
+                "Name": "หัวหอม",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 53,
+                "Name": "หัวกระเทียม",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 80,
+                "Name": "ชุดเครื่องเหง้า",
+                "Quantity": 105
+            },
+            {
+                "ItemId": 108,
+                "Name": "ชุดเครื่องเทียน",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 110,
+                "Name": "การบูร",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 112,
+                "Name": "เกลือสินเธาว์",
+                "Quantity": 8
+            }
+        ]
+    },
+    {
+        "RecipeId": 216,
+        "ResultItemName": "ยาไฟประลัยกัลป์",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 3,
+        "Ingredients": [
+            {
+                "ItemId": 3,
+                "Name": "ดอกดีปลี",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 16,
+                "Name": "ผิวมะกรูด",
+                "Quantity": 6
+            },
+            {
+                "ItemId": 34,
+                "Name": "พริกไทยล่อน",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 37,
+                "Name": "สารส้มสะตุ",
+                "Quantity": 6
+            },
+            {
+                "ItemId": 53,
+                "Name": "หัวกระเทียม",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 56,
+                "Name": "ชุดเครื่องแก่น",
+                "Quantity": 6
+            },
+            {
+                "ItemId": 68,
+                "Name": "เปลือกมะรุม",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 80,
+                "Name": "ชุดเครื่องเหง้า",
+                "Quantity": 24
+            },
+            {
+                "ItemId": 83,
+                "Name": "รากเจตมูลเพลิงแดง",
+                "Quantity": 6
+            },
+            {
+                "ItemId": 110,
+                "Name": "การบูร",
+                "Quantity": 6
+            }
+        ]
+    },
+    {
+        "RecipeId": 217,
+        "ResultItemName": "ยาไฟห้ากอง",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 4,
+        "Ingredients": [
+            {
+                "ItemId": 34,
+                "Name": "พริกไทยล่อน",
+                "Quantity": 20
+            },
+            {
+                "ItemId": 37,
+                "Name": "สารส้มสะตุ",
+                "Quantity": 20
+            },
+            {
+                "ItemId": 80,
+                "Name": "ชุดเครื่องเหง้า",
+                "Quantity": 20
+            },
+            {
+                "ItemId": 83,
+                "Name": "รากเจตมูลเพลิงแดง",
+                "Quantity": 20
+            },
+            {
+                "ItemId": 120,
+                "Name": "ฝักส้มป่อย",
+                "Quantity": 20
+            }
+        ]
+    },
+    {
+        "RecipeId": 218,
+        "ResultItemName": "ยาเลือดงาม",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 4,
+        "Ingredients": [
+            {
+                "ItemId": 3,
+                "Name": "ดอกดีปลี",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 6,
+                "Name": "ดอกกานพลู",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 16,
+                "Name": "ผิวมะกรูด",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 24,
+                "Name": "ใบมะนาว",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 34,
+                "Name": "พริกไทยล่อน",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 39,
+                "Name": "ช้าพลู",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 53,
+                "Name": "หัวกระเทียม",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 75,
+                "Name": "เปลือกเพกา",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 80,
+                "Name": "ชุดเครื่องเหง้า",
+                "Quantity": 20
+            },
+            {
+                "ItemId": 81,
+                "Name": "รากชะเอมเทศ",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 83,
+                "Name": "รากเจตมูลเพลิงแดง",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 100,
+                "Name": "ลูกจันทน์",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 103,
+                "Name": "ลูกเร่ว",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 107,
+                "Name": "ชุดเครื่องโกฐ",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 109,
+                "Name": "พิมเสน",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 110,
+                "Name": "การบูร",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 117,
+                "Name": "สะระแหน่",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 121,
+                "Name": "ตะไคร้บ้าน",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 122,
+                "Name": "กะเพรา",
+                "Quantity": 5
+            }
+        ]
+    },
+    {
+        "RecipeId": 219,
+        "ResultItemName": "ยาสตรีหลังคลอด",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 6,
+        "Ingredients": [
+            {
+                "ItemId": 0,
+                "Name": "ดอกพิกุล",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 1,
+                "Name": "ดอกบุนนาค",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 2,
+                "Name": "ดอกสารภี",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 3,
+                "Name": "ดอกดีปลี",
+                "Quantity": 10
+            },
+            {
+                "ItemId": 4,
+                "Name": "ดอกมะลิ",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 13,
+                "Name": "ดอกคำฝอย",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 15,
+                "Name": "เกสรบัวหลวง",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 34,
+                "Name": "พริกไทยล่อน",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 56,
+                "Name": "ชุดเครื่องแก่น",
+                "Quantity": 30
+            },
+            {
+                "ItemId": 83,
+                "Name": "รากเจตมูลเพลิงแดง",
+                "Quantity": 10
+            },
+            {
+                "ItemId": 85,
+                "Name": "รากช้าพลู",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 97,
+                "Name": "ชุดเครื่องเถา",
+                "Quantity": 20
+            },
+            {
+                "ItemId": 107,
+                "Name": "ชุดเครื่องโกฐ",
+                "Quantity": 10
+            },
+            {
+                "ItemId": 126,
+                "Name": "ว่านชักมดลูก",
+                "Quantity": 10
+            }
+        ]
+    },
+    {
+        "RecipeId": 220,
+        "ResultItemName": "ยาแก้ไอผสมกานพลู",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 4,
+        "Ingredients": [
+            {
+                "ItemId": 6,
+                "Name": "ดอกกานพลู",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 14,
+                "Name": "ดอกเก็กฮวย",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 63,
+                "Name": "ลูกสมอพิเภก",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 66,
+                "Name": "ลูกมะขามป้อม",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 67,
+                "Name": "เปลือกส้มจีน",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 70,
+                "Name": "เปลือกอบเชย",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 80,
+                "Name": "ชุดเครื่องเหง้า",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 81,
+                "Name": "รากชะเอมเทศ",
+                "Quantity": 48
+            },
+            {
+                "ItemId": 109,
+                "Name": "พิมเสน",
+                "Quantity": 3
+            },
+            {
+                "ItemId": 118,
+                "Name": "เกล็ดสะระแหน่",
+                "Quantity": 3
+            },
+            {
+                "ItemId": 129,
+                "Name": "บ๊วย",
+                "Quantity": 16
+            },
+            {
+                "ItemId": 130,
+                "Name": "มะนาวดองแห้ง",
+                "Quantity": 10
+            },
+            {
+                "ItemId": 131,
+                "Name": "น้ำตาลกรวด",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 132,
+                "Name": "ผลมะแว้งเครือ",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 133,
+                "Name": "หล่อฮั่งก๊วย",
+                "Quantity": 2
+            }
+        ]
+    },
+    {
+        "RecipeId": 221,
+        "ResultItemName": "ยาแก้ไอผสมมะนาวดอง",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 4,
+        "Ingredients": [
+            {
+                "ItemId": 6,
+                "Name": "ดอกกานพลู",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 66,
+                "Name": "ลูกมะขามป้อม",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 72,
+                "Name": "เปลือกอบเชยญวน",
+                "Quantity": 3
+            },
+            {
+                "ItemId": 81,
+                "Name": "รากชะเอมเทศ",
+                "Quantity": 17
+            },
+            {
+                "ItemId": 82,
+                "Name": "รากชะเอมไทย",
+                "Quantity": 3
+            },
+            {
+                "ItemId": 118,
+                "Name": "เกล็ดสะระแหน่",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 129,
+                "Name": "บ๊วย",
+                "Quantity": 35
+            },
+            {
+                "ItemId": 130,
+                "Name": "มะนาวดองแห้ง",
+                "Quantity": 35
+            },
+            {
+                "ItemId": 132,
+                "Name": "ผลมะแว้งเครือ",
+                "Quantity": 2
+            }
+        ]
+    },
+    {
+        "RecipeId": 222,
+        "ResultItemName": "ยาแก้ไอผสมมะขามป้อม",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 1,
+        "Ingredients": [
+            {
+                "ItemId": 20,
+                "Name": "ผิวส้มจีน",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 63,
+                "Name": "ลูกสมอพิเภก",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 64,
+                "Name": "ลูกสมอไทย",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 66,
+                "Name": "ลูกมะขามป้อม",
+                "Quantity": 30
+            },
+            {
+                "ItemId": 81,
+                "Name": "รากชะเอมเทศ",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 118,
+                "Name": "เกล็ดสะระแหน่",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 129,
+                "Name": "บ๊วย",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 130,
+                "Name": "มะนาวดองแห้ง",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 131,
+                "Name": "น้ำตาลกรวด",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 133,
+                "Name": "หล่อฮั่งก๊วย",
+                "Quantity": 1
+            }
+        ]
+    },
+    {
+        "RecipeId": 223,
+        "ResultItemName": "ยาปราบชมพูทวีป",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 19,
+        "Ingredients": [
+            {
+                "ItemId": 3,
+                "Name": "ดอกดีปลี",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 5,
+                "Name": "ดอกจันทน์",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 6,
+                "Name": "ดอกกานพลู",
+                "Quantity": 10
+            },
+            {
+                "ItemId": 23,
+                "Name": "ใบกัญชาเทศ",
+                "Quantity": 120
+            },
+            {
+                "ItemId": 35,
+                "Name": "พริกไทยดำ",
+                "Quantity": 120
+            },
+            {
+                "ItemId": 46,
+                "Name": "หัวบุก",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 61,
+                "Name": "ลำพันหางหมู",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 64,
+                "Name": "ลูกสมอไทย",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 65,
+                "Name": "ลูกสมอเทศ",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 80,
+                "Name": "ชุดเครื่องเหง้า",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 83,
+                "Name": "รากเจตมูลเพลิงแดง",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 100,
+                "Name": "ลูกจันทน์",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 101,
+                "Name": "ลูกกระวาน",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 106,
+                "Name": "ลูกพิลังกาสา",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 107,
+                "Name": "ชุดเครื่องโกฐ",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 108,
+                "Name": "ชุดเครื่องเทียน",
+                "Quantity": 22
+            },
+            {
+                "ItemId": 110,
+                "Name": "การบูร",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 134,
+                "Name": "เหงือกปลาหมอ",
+                "Quantity": 120
+            },
+            {
+                "ItemId": 135,
+                "Name": "หัศคุณเทศ",
+                "Quantity": 10
+            }
+        ]
+    },
+    {
+        "RecipeId": 224,
+        "ResultItemName": "ยาอำมฤควาที",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 3,
+        "Ingredients": [
+            {
+                "ItemId": 63,
+                "Name": "ลูกสมอพิเภก",
+                "Quantity": 7
+            },
+            {
+                "ItemId": 66,
+                "Name": "ลูกมะขามป้อม",
+                "Quantity": 7
+            },
+            {
+                "ItemId": 81,
+                "Name": "รากชะเอมเทศ",
+                "Quantity": 35
+            },
+            {
+                "ItemId": 99,
+                "Name": "ลูกผักชีลา",
+                "Quantity": 7
+            },
+            {
+                "ItemId": 107,
+                "Name": "ชุดเครื่องโกฐ",
+                "Quantity": 7
+            },
+            {
+                "ItemId": 108,
+                "Name": "ชุดเครื่องเทียน",
+                "Quantity": 7
+            }
+        ]
+    },
+    {
+        "RecipeId": 225,
+        "ResultItemName": "ยากษัยเส้น",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 9,
+        "Ingredients": [
+            {
+                "ItemId": 0,
+                "Name": "ดอกพิกุล",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 1,
+                "Name": "ดอกบุนนาค",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 2,
+                "Name": "ดอกสารภี",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 3,
+                "Name": "ดอกดีปลี",
+                "Quantity": 40
+            },
+            {
+                "ItemId": 4,
+                "Name": "ดอกมะลิ",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 5,
+                "Name": "ดอกจันทน์",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 6,
+                "Name": "ดอกกานพลู",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 15,
+                "Name": "เกสรบัวหลวง",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 34,
+                "Name": "พริกไทยล่อน",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 43,
+                "Name": "หัวกระชาย",
+                "Quantity": 10
+            },
+            {
+                "ItemId": 56,
+                "Name": "ชุดเครื่องแก่น",
+                "Quantity": 10
+            },
+            {
+                "ItemId": 71,
+                "Name": "เปลือกอบเชยเทศ",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 80,
+                "Name": "ชุดเครื่องเหง้า",
+                "Quantity": 38
+            },
+            {
+                "ItemId": 81,
+                "Name": "รากชะเอมเทศ",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 83,
+                "Name": "รากเจตมูลเพลิงแดง",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 85,
+                "Name": "รากช้าพลู",
+                "Quantity": 24
+            },
+            {
+                "ItemId": 97,
+                "Name": "ชุดเครื่องเถา",
+                "Quantity": 52
+            },
+            {
+                "ItemId": 100,
+                "Name": "ลูกจันทน์",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 101,
+                "Name": "ลูกกระวาน",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 107,
+                "Name": "ชุดเครื่องโกฐ",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 110,
+                "Name": "การบูร",
+                "Quantity": 6
+            },
+            {
+                "ItemId": 136,
+                "Name": "กำลังวัวเถลิง",
+                "Quantity": 10
+            }
+        ]
+    },
+    {
+        "RecipeId": 226,
+        "ResultItemName": "ยาแก้ลมอัมพฤกษ์",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 3,
+        "Ingredients": [
+            {
+                "ItemId": 5,
+                "Name": "ดอกจันทน์",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 34,
+                "Name": "พริกไทยล่อน",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 53,
+                "Name": "หัวกระเทียม",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 76,
+                "Name": "เปลือกต้นทองหลาง",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 77,
+                "Name": "เปลือกต้นกุ่มบก",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 78,
+                "Name": "เปลือกต้นกุ่มน้ำ",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 80,
+                "Name": "ชุดเครื่องเหง้า",
+                "Quantity": 15
+            },
+            {
+                "ItemId": 83,
+                "Name": "รากเจตมูลเพลิงแดง",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 100,
+                "Name": "ลูกจันทน์",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 110,
+                "Name": "การบูร",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 112,
+                "Name": "เกลือสินเธาว์",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 137,
+                "Name": "ผักเสี้ยนผี",
+                "Quantity": 5
+            }
+        ]
+    },
+    {
+        "RecipeId": 227,
+        "ResultItemName": "ยาผสมโคคลาน",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 4,
+        "Ingredients": [
+            {
+                "ItemId": 97,
+                "Name": "ชุดเครื่องเถา",
+                "Quantity": 25
+            },
+            {
+                "ItemId": 138,
+                "Name": "โด่ไม่รู้ล้ม",
+                "Quantity": 25
+            },
+            {
+                "ItemId": 139,
+                "Name": "ผลมะตูมอ่อน",
+                "Quantity": 25
+            },
+            {
+                "ItemId": 140,
+                "Name": "ทองพันชั่ง",
+                "Quantity": 25
+            }
+        ]
+    },
+    {
+        "RecipeId": 228,
+        "ResultItemName": "ยาผสมเถาวัลย์เปรียง",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 4,
+        "Ingredients": [
+            {
+                "ItemId": 56,
+                "Name": "ชุดเครื่องแก่น",
+                "Quantity": 50
+            },
+            {
+                "ItemId": 80,
+                "Name": "ชุดเครื่องเหง้า",
+                "Quantity": 25
+            },
+            {
+                "ItemId": 97,
+                "Name": "ชุดเครื่องเถา",
+                "Quantity": 25
+            }
+        ]
+    },
+    {
+        "RecipeId": 229,
+        "ResultItemName": "ยาสหัศธารา",
+        "Category": "Thai traditional medicine",
+        "ResultQuantity": 30,
+        "Ingredients": [
+            {
+                "ItemId": 3,
+                "Name": "ดอกดีปลี",
+                "Quantity": 96
+            },
+            {
+                "ItemId": 5,
+                "Name": "ดอกจันทน์",
+                "Quantity": 13
+            },
+            {
+                "ItemId": 34,
+                "Name": "พริกไทยล่อน",
+                "Quantity": 240
+            },
+            {
+                "ItemId": 64,
+                "Name": "ลูกสมอไทย",
+                "Quantity": 104
+            },
+            {
+                "ItemId": 80,
+                "Name": "ชุดเครื่องเหง้า",
+                "Quantity": 88
+            },
+            {
+                "ItemId": 83,
+                "Name": "รากเจตมูลเพลิงแดง",
+                "Quantity": 224
+            },
+            {
+                "ItemId": 95,
+                "Name": "รากตองแตก",
+                "Quantity": 80
+            },
+            {
+                "ItemId": 96,
+                "Name": "รากจิงจ้อ",
+                "Quantity": 8
+            },
+            {
+                "ItemId": 100,
+                "Name": "ลูกจันทน์",
+                "Quantity": 12
+            },
+            {
+                "ItemId": 107,
+                "Name": "ชุดเครื่องโกฐ",
+                "Quantity": 18
+            },
+            {
+                "ItemId": 108,
+                "Name": "ชุดเครื่องเทียน",
+                "Quantity": 45
+            },
+            {
+                "ItemId": 110,
+                "Name": "การบูร",
+                "Quantity": 14
+            },
+            {
+                "ItemId": 111,
+                "Name": "มหาหิงคุ์",
+                "Quantity": 10
+            },
+            {
+                "ItemId": 135,
+                "Name": "หัศคุณเทศ",
+                "Quantity": 48
+            }
+        ]
+    },
+    {
+        "RecipeId": 302,
+        "ResultItemName": "ซุปเห็ด",
+        "Category": "Consumable item",
+        "ResultQuantity": 1,
+        "Ingredients": [
+            {
+                "ItemId": 146,
+                "Name": "เห็ด",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 147,
+                "Name": "ข้าวสาลี",
+                "Quantity": 3
+            },
+            {
+                "ItemId": 162,
+                "Name": "เกลือ",
+                "Quantity": 1
+            }
+        ]
+    },
+    {
+        "RecipeId": 303,
+        "ResultItemName": "ผัดกระหล่ำปลี",
+        "Category": "Consumable item",
+        "ResultQuantity": 1,
+        "Ingredients": [
+            {
+                "ItemId": 144,
+                "Name": "กระหล่ำปลี",
+                "Quantity": 3
+            },
+            {
+                "ItemId": 148,
+                "Name": "เนื้อสัตว์",
+                "Quantity": 3
+            },
+            {
+                "ItemId": 162,
+                "Name": "เกลือ",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 34,
+                "Name": "พริกไทยล่อน",
+                "Quantity": 1
+            }
+        ]
+    },
+    {
+        "RecipeId": 304,
+        "ResultItemName": "เนื้อโรล",
+        "Category": "Consumable item",
+        "ResultQuantity": 1,
+        "Ingredients": [
+            {
+                "ItemId": 148,
+                "Name": "เนื้อสัตว์",
+                "Quantity": 3
+            },
+            {
+                "ItemId": 145,
+                "Name": "มะเขือเทศ",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 147,
+                "Name": "ข้าวสาลี",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 144,
+                "Name": "กระหล่ำปลี",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 161,
+                "Name": "ซอสมะเขือเทศ",
+                "Quantity": 1
+            }
+        ]
+    },
+    {
+        "RecipeId": 305,
+        "ResultItemName": "สตูว์เนื้อ",
+        "Category": "Consumable item",
+        "ResultQuantity": 1,
+        "Ingredients": [
+            {
+                "ItemId": 142,
+                "Name": "แครรอท",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 134,
+                "Name": "มันฝรั่ง",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 51,
+                "Name": "หัวหอม",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 148,
+                "Name": "เนื้อสัตว์",
+                "Quantity": 2
+            }
+        ]
+    },
+    {
+        "RecipeId": 307,
+        "ResultItemName": "ซุปมันฝรั่ง",
+        "Category": "Consumable item",
+        "ResultQuantity": 1,
+        "Ingredients": [
+            {
+                "ItemId": 143,
+                "Name": "มันฝรั่ง",
+                "Quantity": 3
+            },
+            {
+                "ItemId": 0,
+                "Name": "นม",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 162,
+                "Name": "เกลือ",
+                "Quantity": 1
+            }
+        ]
+    },
+    {
+        "RecipeId": 308,
+        "ResultItemName": "สเต็ก",
+        "Category": "Consumable item",
+        "ResultQuantity": 1,
+        "Ingredients": [
+            {
+                "ItemId": 148,
+                "Name": "เนื้อสัตว์",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 162,
+                "Name": "เกลือ",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 35,
+                "Name": "พริกไทยดำ",
+                "Quantity": 1
+            }
+        ]
+    },
+    {
+        "RecipeId": 309,
+        "ResultItemName": "บาบีคิว",
+        "Category": "Consumable item",
+        "ResultQuantity": 1,
+        "Ingredients": [
+            {
+                "ItemId": 148,
+                "Name": "เนื้อสัตว์",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 145,
+                "Name": "มะเขือเทศ",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 158,
+                "Name": "ปาปริก้า",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 51,
+                "Name": "หัวหอม",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 160,
+                "Name": "ซอสพริก",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 161,
+                "Name": "ซอสมะเขือเทศ",
+                "Quantity": 1
+            }
+        ]
+    },
+    {
+        "RecipeId": 310,
+        "ResultItemName": "ข้าวปั่นสาหร่าย",
+        "Category": "Consumable item",
+        "ResultQuantity": 1,
+        "Ingredients": [
+            {
+                "ItemId": 156,
+                "Name": "ข้าว",
+                "Quantity": 3
+            },
+            {
+                "ItemId": 163,
+                "Name": "สาหร่าย",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 162,
+                "Name": "เกลือ",
+                "Quantity": 1
+            }
+        ]
+    },
+    {
+        "RecipeId": 311,
+        "ResultItemName": "ซูชิวาซาบิแซลมอน",
+        "Category": "Consumable item",
+        "ResultQuantity": 1,
+        "Ingredients": [
+            {
+                "ItemId": 155,
+                "Name": "แซลมอน",
+                "Quantity": 4
+            },
+            {
+                "ItemId": 163,
+                "Name": "สาหร่าย",
+                "Quantity": 1
+            },
+            {
+                "ItemId": 157,
+                "Name": "วาซาบิ",
+                "Quantity": 1
+            }
+        ]
+    },
+    {
+        "RecipeId": 312,
+        "ResultItemName": "เมี๊ยวลาเต้",
+        "Category": "Consumable item",
+        "ResultQuantity": 1,
+        "Ingredients": [
+            {
+                "ItemId": 164,
+                "Name": "เมล็ดกาแฟ",
+                "Quantity": 3
+            },
+            {
+                "ItemId": 306,
+                "Name": "นม",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 131,
+                "Name": "น้ำตาลกรวด",
+                "Quantity": 1
+            }
+        ]
+    },
+    {
+        "RecipeId": 313,
+        "ResultItemName": "ผัดกระเพราเนื้อ",
+        "Category": "Consumable item",
+        "ResultQuantity": 1,
+        "Ingredients": [
+            {
+                "ItemId": 148,
+                "Name": "เนื้อสัตว์",
+                "Quantity": 3
+            },
+            {
+                "ItemId": 159,
+                "Name": "พริก",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 122,
+                "Name": "กะเพรา",
+                "Quantity": 2
+            },
+            {
+                "ItemId": 162,
+                "Name": "เกลือ",
+                "Quantity": 1
+            }
+        ]
+    },
+    {
+        "RecipeId": 400,
+        "ResultItemName": "ดาบนักผจญภัย",
+        "Category": "Equipment",
+        "ResultQuantity": 1,
+        "Ingredients": [
+            {
+                "ItemId": 152,
+                "Name": "แร่เหล็ก",
+                "Quantity": 25
+            },
+            {
+                "ItemId": 149,
+                "Name": "ท่อนไม้",
+                "Quantity": 15
+            }
+        ]
+    },
+    {
+        "RecipeId": 401,
+        "ResultItemName": "หมวกนักผจญภัย",
+        "Category": "Equipment",
+        "ResultQuantity": 1,
+        "Ingredients": [
+            {
+                "ItemId": 152,
+                "Name": "แร่เหล็ก",
+                "Quantity": 20
+            },
+            {
+                "ItemId": 150,
+                "Name": "หนังธรรมดา",
+                "Quantity": 10
+            }
+        ]
+    },
+    {
+        "RecipeId": 402,
+        "ResultItemName": "ชุดเกราะของนักผจญภัย",
+        "Category": "Equipment",
+        "ResultQuantity": 1,
+        "Ingredients": [
+            {
+                "ItemId": 152,
+                "Name": "แร่เหล็ก",
+                "Quantity": 20
+            },
+            {
+                "ItemId": 150,
+                "Name": "หนังธรรมดา",
+                "Quantity": 10
+            },
+            {
+                "ItemId": 151,
+                "Name": "ผ้าธรรมดา",
+                "Quantity": 10
+            }
+        ]
+    },
+    {
+        "RecipeId": 403,
+        "ResultItemName": "ถุงมือนักผจญภัย",
+        "Category": "Equipment",
+        "ResultQuantity": 1,
+        "Ingredients": [
+            {
+                "ItemId": 152,
+                "Name": "แร่เหล็ก",
+                "Quantity": 10
+            },
+            {
+                "ItemId": 150,
+                "Name": "หนังธรรมดา",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 149,
+                "Name": "ท่อนไม้",
+                "Quantity": 5
+            }
+        ]
+    },
+    {
+        "RecipeId": 404,
+        "ResultItemName": "รองเท้าบูทนักผจญภัย",
+        "Category": "Equipment",
+        "ResultQuantity": 1,
+        "Ingredients": [
+            {
+                "ItemId": 150,
+                "Name": "หนังธรรมดา",
+                "Quantity": 15
+            },
+            {
+                "ItemId": 149,
+                "Name": "ท่อนไม้",
+                "Quantity": 5
+            }
+        ]
+    },
+    {
+        "RecipeId": 405,
+        "ResultItemName": "แหวนนักผจญภัย",
+        "Category": "Equipment",
+        "ResultQuantity": 1,
+        "Ingredients": [
+            {
+                "ItemId": 152,
+                "Name": "แร่เหล็ก",
+                "Quantity": 5
+            },
+            {
+                "ItemId": 153,
+                "Name": "แร่ทองแดง",
+                "Quantity": 5
+            }
+        ]
+    }
 ]

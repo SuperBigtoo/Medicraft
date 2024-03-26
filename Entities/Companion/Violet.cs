@@ -65,7 +65,9 @@ namespace Medicraft.Entities.Companion
             );
 
             // Set Effect
-            NormalHitEffectAttacked = "hit_effect_1";
+            NormalHitEffectAttacked = "hit_effect_9";
+            NormalSkillEffectAttacked = "hit_effect_8";
+            BurstSkillEffectAttacked = "hit_effect_6";
 
             Sprite.Depth = 0.1f;
             Sprite.Play(SpriteCycle + "_idle");

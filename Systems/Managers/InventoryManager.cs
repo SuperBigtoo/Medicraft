@@ -109,7 +109,7 @@ namespace Medicraft.Systems.Managers
             }
 
             HUDSystem.AddFeedItem(itemId, quantity);
-            GUIManager.Instance.RefreshHotbarDisplay();
+            GUIManager.Instance.RefreshHotbar();
         }
 
         public void AddGoldCoin(int goldCoin)
@@ -133,7 +133,7 @@ namespace Medicraft.Systems.Managers
                         if (item.Count == 0) InventoryBag.Remove(keyIndex);
 
                         // refresh display item after selectedItem has been use
-                        GUIManager.Instance.RefreshInvenrotyItemDisplay(true);
+                        GUIManager.Instance.RefreshInvenrotyItem(true);
                         return true;
                     }
                     break;
@@ -142,7 +142,7 @@ namespace Medicraft.Systems.Managers
                     
                     SetEquipmentItem(item, item.EquipmentType());
 
-                    GUIManager.Instance.RefreshInvenrotyItemDisplay(true);
+                    GUIManager.Instance.RefreshInvenrotyItem(true);
                     return true;
             }
 
@@ -192,7 +192,7 @@ namespace Medicraft.Systems.Managers
             if (item.IsUsable())
             {
                 UseItem(keyIndex, item);
-                GUIManager.Instance.RefreshHotbarDisplay();
+                GUIManager.Instance.RefreshHotbar();
                 return true;
             }
             return false;
@@ -208,7 +208,7 @@ namespace Medicraft.Systems.Managers
 
                 newItem.Slot = selectedSlot;
 
-                GUIManager.Instance.RefreshInvenrotyItemDisplay(true);
+                GUIManager.Instance.RefreshInvenrotyItem(true);
                 return true;
             }
             return false;

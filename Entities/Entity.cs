@@ -19,7 +19,7 @@ namespace Medicraft.Entities
         public int CharId { get; protected set; }
         public string Name { get; protected set; }
         public int Level { get; set; }
-        public int EXP { get; set; }    // meant for playable
+        public int EXP { get; set; }            // meant for playable
         public int EXPMaxCap { get; set; }     // meant for playable
 
         // Character Stats

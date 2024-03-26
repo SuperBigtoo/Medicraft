@@ -33,6 +33,7 @@ namespace Medicraft.Screens
         {
             ScreenManager.Instance.CurrentMap = MapName;
 
+            // Adjust HUD and camera position
             GameGlobals.Instance.TopLeftCornerPosition = PlayerManager.Instance.Player.Position - GameGlobals.Instance.GameScreenCenter;
             GameGlobals.Instance.InitialCameraPos = PlayerManager.Instance.Player.Position;
             GameGlobals.Instance.AddingCameraPos = Vector2.Zero;

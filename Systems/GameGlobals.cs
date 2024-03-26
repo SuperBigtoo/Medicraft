@@ -46,7 +46,6 @@ namespace Medicraft.Systems
         public bool IsDetectedGameObject { set; get; }
         public bool ShowInsufficientSign { set; get; }
         public bool IsFullScreen { set; get; }
-        public bool SwitchFullScreen { set; get; }
         public bool IsShowPath { set; get; }  
         public bool IsEnteringBossFight { set; get; }
         public float TotalPlayTime { set; get; }
@@ -93,7 +92,8 @@ namespace Medicraft.Systems
         // Chapter 6
 
         // GameSave & Config
-        public int GameSaveIdex { private set; get; }
+        public int SelectedGameSaveIndex { set; get; }
+        public int MaxGameSaveSlot { private set; get; }
         public string GameSavePath { private set; get; }
         public List<GameSaveData> GameSave { private set; get; }
         public string GameConfigPath { private set; get; }
@@ -408,7 +408,6 @@ namespace Medicraft.Systems
 
             IsDetectedGameObject = false;
             ShowInsufficientSign = false;
-            SwitchFullScreen = false;
 
             // sound & music
             SoundEffectVolume = 0.70f;
@@ -450,7 +449,8 @@ namespace Medicraft.Systems
             MaxLevel = 30;
             TotalPlayTime = 0;
             GameSave = [];
-            GameSaveIdex = 0; // to be initial
+            SelectedGameSaveIndex = 0; // to be initial
+            MaxGameSaveSlot = 4;
             GameSavePath = "save/gamesaves.json";
             GameConfigPath = "config/gameoptions.json";
 

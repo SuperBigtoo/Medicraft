@@ -1,285 +1,285 @@
 [
-  {
-    "ItemEffectId": 1,
-    "Name": "Restores_5%_HP",
-    "Category": "Recovery",
-    "Description": "Restores 5% of Max HP",
-    "Effects": [
-      {
-        "Target": "HP",
-        "ActivationType": "Instant",
-        "EffectType": "Restore",
-        "Value": 0.05,
-        "Time": 0,
-        "Timer": 0,
-        "IsActive": false
-      }
-    ]
-  },
-  {
-    "ItemEffectId": 2,
-    "Name": "Restores_5%_Mana",
-    "Category": "Recovery",
-    "Description": "Restores 5% of Max Mana",
-    "Effects": [
-      {
-        "Target": "Mana",
-        "ActivationType": "Instant",
-        "EffectType": "Restore",
-        "Value": 0.05,
-        "Time": 0,
-        "Timer": 0,
-        "IsActive": false
-      }
-    ]
-  },
-  {
-    "ItemEffectId": 3,
-    "Name": "Restores_10%_HP",
-    "Category": "Recovery",
-    "Description": "Restores 10% of Max HP",
-    "Effects": [
-      {
-        "Target": "HP",
-        "ActivationType": "Instant",
-        "EffectType": "Restore",
-        "Value": 0.1,
-        "Time": 0,
-        "Timer": 0,
-        "IsActive": false
-      }
-    ]
-  },
-  {
-    "ItemEffectId": 4,
-    "Name": "Restores_10%_Mana",
-    "Category": "Recovery",
-    "Description": "Restores 10% of Max Mana",
-    "Effects": [
-      {
-        "Target": "Mana",
-        "ActivationType": "Instant",
-        "EffectType": "Restore",
-        "Value": 0.1,
-        "Time": 0,
-        "Timer": 0,
-        "IsActive": false
-      }
-    ]
-  },
-  {
-    "ItemEffectId": 5,
-    "Name": "Restores_20%_HP",
-    "Category": "Recovery",
-    "Description": "Restores 20% of Max HP",
-    "Effects": [
-      {
-        "Target": "HP",
-        "ActivationType": "Instant",
-        "EffectType": "Restore",
-        "Value": 0.2,
-        "Time": 0,
-        "Timer": 0,
-        "IsActive": false
-      }
-    ]
-  },
-  {
-    "ItemEffectId": 6,
-    "Name": "Restores_20%_Mana",
-    "Category": "Recovery",
-    "Description": "Restores 20% of Max Mana",
-    "Effects": [
-      {
-        "Target": "Mana",
-        "ActivationType": "Instant",
-        "EffectType": "Restore",
-        "Value": 0.2,
-        "Time": 0,
-        "Timer": 0,
-        "IsActive": false
-      }
-    ]
-  },
-  {
-    "ItemEffectId": 7,
-    "Name": "Regenerates_5%_HP",
-    "Category": "Recovery",
-    "Description": "Regenerates 5% of Max HP every 3s for 15s",
-    "Effects": [
-      {
-        "Target": "HP",
-        "ActivationType": "Periodic",
-        "EffectType": "Regenerate",
-        "Value": 0.05,
-        "Time": 15,
-        "Timer": 15,
-        "IsActive": false
-      }
-    ]
-  },
-  {
-    "ItemEffectId": 8,
-    "Name": "Regenerates_5%_Mana",
-    "Category": "Recovery",
-    "Description": "Regenerates 5% of Max Mana every 3s for 15s",
-    "Effects": [
-      {
-        "Target": "Mana",
-        "ActivationType": "Periodic",
-        "EffectType": "Regenerate",
-        "Value": 0.05,
-        "Time": 15,
-        "Timer": 15,
-        "IsActive": false
-      }
-    ]
-  },
-  {
-    "ItemEffectId": 9,
-    "Name": "Increases_20%_ATK",
-    "Category": "Boosting",
-    "Description": "Increases 20% of Base ATK for 10s",
-    "Effects": [
-      {
-        "Target": "ATK",
-        "ActivationType": "Instant",
-        "EffectType": "Buff",
-        "Value": 0.2,
-        "Time": 10,
-        "Timer": 10,
-        "IsActive": false
-      }
-    ]
-  },
-  {
-    "ItemEffectId": 10,
-    "Name": "Restores_10%_HP_&_Mana",
-    "Category": "Recovery",
-    "Description": "Restores 10% of Max HP and Mana",
-    "Effects": [
-      {
-        "Target": "HP",
-        "ActivationType": "Instant",
-        "EffectType": "Restore",
-        "Value": 0.1,
-        "Time": 0,
-        "Timer": 0,
-        "IsActive": false
-      },
-      {
-        "Target": "Mana",
-        "ActivationType": "Instant",
-        "EffectType": "Restore",
-        "Value": 0.1,
-        "Time": 0,
-        "Timer": 0,
-        "IsActive": false
-      }
-    ]
-  },
-  {
-    "ItemEffectId": 11,
-    "Name": "Restores_15%_HP_&_Mana",
-    "Category": "Recovery",
-    "Description": "Restores 15% of Max HP and Mana",
-    "Effects": [
-      {
-        "Target": "HP",
-        "ActivationType": "Instant",
-        "EffectType": "Restore",
-        "Value": 0.15,
-        "Time": 0,
-        "Timer": 0,
-        "IsActive": false
-      },
-      {
-        "Target": "Mana",
-        "ActivationType": "Instant",
-        "EffectType": "Restore",
-        "Value": 0.15,
-        "Time": 0,
-        "Timer": 0,
-        "IsActive": false
-      }
-    ]
-  },
-  {
-    "ItemEffectId": 12,
-    "Name": "Increases_30%_ATK_&_DEF",
-    "Category": "Boosting",
-    "Description": "Increases 30% of Base ATK and DEF for 10s",
-    "Effects": [
-      {
-        "Target": "ATK",
-        "ActivationType": "Instant",
-        "EffectType": "Buff",
-        "Value": 0.30,
-        "Time": 10,
-        "Timer": 10,
-        "IsActive": false
-      },
-      {
-        "Target": "DEF",
-        "ActivationType": "Instant",
-        "EffectType": "Buff",
-        "Value": 0.10,
-        "Time": 10,
-        "Timer": 10,
-        "IsActive": false
-      }
-    ]
-  },
-  {
-    "ItemEffectId": 13,
-    "Name": "Increases_15%_Crit_&_30%_CritDMG",
-    "Category": "Boosting",
-    "Description": "Increases 15% of Crit Chance and 30% CritDMG for 10s",
-    "Effects": [
-      {
-        "Target": "Crit",
-        "ActivationType": "Instant",
-        "EffectType": "Buff",
-        "Value": 0.15,
-        "Time": 10,
-        "Timer": 10,
-        "IsActive": false
-      },
-      {
-        "Target": "CritDMG",
-        "ActivationType": "Instant",
-        "EffectType": "Buff",
-        "Value": 0.30,
-        "Time": 10,
-        "Timer": 10,
-        "IsActive": false
-      }
-    ]
-  },
-  {
-    "ItemEffectId": 14,
-    "Name": "Regenerates_5%_HP_&_Mana",
-    "Category": "Recovery",
-    "Description": "Regenerates 5% of Max HP and Mana every 3s for 30s",
-    "Effects": [
-      {
-        "Target": "HP",
-        "ActivationType": "Periodic",
-        "EffectType": "Regenerate",
-        "Value": 0.05,
-        "Time": 30,
-        "Timer": 30,
-        "IsActive": false
-      },
-      {
-        "Target": "Mana",
-        "ActivationType": "Periodic",
-        "EffectType": "Regenerate",
-        "Value": 0.05,
-        "Time": 30,
-        "Timer": 30,
-        "IsActive": false
-      }
-    ]
-  }
+    {
+        "ItemEffectId": 1,
+        "Name": "Restores_5%_HP",
+        "Category": "Recovery",
+        "Description": "Restores 5% of Max HP",
+        "Effects": [
+            {
+                "Target": "HP",
+                "ActivationType": "Instant",
+                "EffectType": "Restore",
+                "Value": 0.05,
+                "Time": 0,
+                "Timer": 0,
+                "IsActive": false
+            }
+        ]
+    },
+    {
+        "ItemEffectId": 2,
+        "Name": "Restores_5%_Mana",
+        "Category": "Recovery",
+        "Description": "Restores 5% of Max Mana",
+        "Effects": [
+            {
+                "Target": "Mana",
+                "ActivationType": "Instant",
+                "EffectType": "Restore",
+                "Value": 0.05,
+                "Time": 0,
+                "Timer": 0,
+                "IsActive": false
+            }
+        ]
+    },
+    {
+        "ItemEffectId": 3,
+        "Name": "Restores_10%_HP",
+        "Category": "Recovery",
+        "Description": "Restores 10% of Max HP",
+        "Effects": [
+            {
+                "Target": "HP",
+                "ActivationType": "Instant",
+                "EffectType": "Restore",
+                "Value": 0.1,
+                "Time": 0,
+                "Timer": 0,
+                "IsActive": false
+            }
+        ]
+    },
+    {
+        "ItemEffectId": 4,
+        "Name": "Restores_10%_Mana",
+        "Category": "Recovery",
+        "Description": "Restores 10% of Max Mana",
+        "Effects": [
+            {
+                "Target": "Mana",
+                "ActivationType": "Instant",
+                "EffectType": "Restore",
+                "Value": 0.1,
+                "Time": 0,
+                "Timer": 0,
+                "IsActive": false
+            }
+        ]
+    },
+    {
+        "ItemEffectId": 5,
+        "Name": "Restores_20%_HP",
+        "Category": "Recovery",
+        "Description": "Restores 20% of Max HP",
+        "Effects": [
+            {
+                "Target": "HP",
+                "ActivationType": "Instant",
+                "EffectType": "Restore",
+                "Value": 0.2,
+                "Time": 0,
+                "Timer": 0,
+                "IsActive": false
+            }
+        ]
+    },
+    {
+        "ItemEffectId": 6,
+        "Name": "Restores_20%_Mana",
+        "Category": "Recovery",
+        "Description": "Restores 20% of Max Mana",
+        "Effects": [
+            {
+                "Target": "Mana",
+                "ActivationType": "Instant",
+                "EffectType": "Restore",
+                "Value": 0.2,
+                "Time": 0,
+                "Timer": 0,
+                "IsActive": false
+            }
+        ]
+    },
+    {
+        "ItemEffectId": 7,
+        "Name": "Regenerates_5%_HP",
+        "Category": "Recovery",
+        "Description": "Regenerates 5% of Max HP every 3s for 15s",
+        "Effects": [
+            {
+                "Target": "HP",
+                "ActivationType": "Periodic",
+                "EffectType": "Regenerate",
+                "Value": 0.05,
+                "Time": 15,
+                "Timer": 15,
+                "IsActive": false
+            }
+        ]
+    },
+    {
+        "ItemEffectId": 8,
+        "Name": "Regenerates_5%_Mana",
+        "Category": "Recovery",
+        "Description": "Regenerates 5% of Max Mana every 3s for 15s",
+        "Effects": [
+            {
+                "Target": "Mana",
+                "ActivationType": "Periodic",
+                "EffectType": "Regenerate",
+                "Value": 0.05,
+                "Time": 15,
+                "Timer": 15,
+                "IsActive": false
+            }
+        ]
+    },
+    {
+        "ItemEffectId": 9,
+        "Name": "Increases_20%_ATK",
+        "Category": "Boosting",
+        "Description": "Increases 20% of Base ATK for 10s",
+        "Effects": [
+            {
+                "Target": "ATK",
+                "ActivationType": "Instant",
+                "EffectType": "Buff",
+                "Value": 0.2,
+                "Time": 10,
+                "Timer": 10,
+                "IsActive": false
+            }
+        ]
+    },
+    {
+        "ItemEffectId": 10,
+        "Name": "Restores_10%_HP_&_Mana",
+        "Category": "Recovery",
+        "Description": "Restores 10% of Max HP and Mana",
+        "Effects": [
+            {
+                "Target": "HP",
+                "ActivationType": "Instant",
+                "EffectType": "Restore",
+                "Value": 0.1,
+                "Time": 0,
+                "Timer": 0,
+                "IsActive": false
+            },
+            {
+                "Target": "Mana",
+                "ActivationType": "Instant",
+                "EffectType": "Restore",
+                "Value": 0.1,
+                "Time": 0,
+                "Timer": 0,
+                "IsActive": false
+            }
+        ]
+    },
+    {
+        "ItemEffectId": 11,
+        "Name": "Restores_15%_HP_&_Mana",
+        "Category": "Recovery",
+        "Description": "Restores 15% of Max HP and Mana",
+        "Effects": [
+            {
+                "Target": "HP",
+                "ActivationType": "Instant",
+                "EffectType": "Restore",
+                "Value": 0.15,
+                "Time": 0,
+                "Timer": 0,
+                "IsActive": false
+            },
+            {
+                "Target": "Mana",
+                "ActivationType": "Instant",
+                "EffectType": "Restore",
+                "Value": 0.15,
+                "Time": 0,
+                "Timer": 0,
+                "IsActive": false
+            }
+        ]
+    },
+    {
+        "ItemEffectId": 12,
+        "Name": "Increases_30%_ATK_&_DEF",
+        "Category": "Boosting",
+        "Description": "Increases 30% of Base ATK and DEF for 10s",
+        "Effects": [
+            {
+                "Target": "ATK",
+                "ActivationType": "Instant",
+                "EffectType": "Buff",
+                "Value": 0.30,
+                "Time": 10,
+                "Timer": 10,
+                "IsActive": false
+            },
+            {
+                "Target": "DEF",
+                "ActivationType": "Instant",
+                "EffectType": "Buff",
+                "Value": 0.10,
+                "Time": 10,
+                "Timer": 10,
+                "IsActive": false
+            }
+        ]
+    },
+    {
+        "ItemEffectId": 13,
+        "Name": "Increases_15%_Crit_&_30%_CritDMG",
+        "Category": "Boosting",
+        "Description": "Increases 15% of Crit Chance and 30% CritDMG for 10s",
+        "Effects": [
+            {
+                "Target": "Crit",
+                "ActivationType": "Instant",
+                "EffectType": "Buff",
+                "Value": 0.15,
+                "Time": 10,
+                "Timer": 10,
+                "IsActive": false
+            },
+            {
+                "Target": "CritDMG",
+                "ActivationType": "Instant",
+                "EffectType": "Buff",
+                "Value": 0.30,
+                "Time": 10,
+                "Timer": 10,
+                "IsActive": false
+            }
+        ]
+    },
+    {
+        "ItemEffectId": 14,
+        "Name": "Regenerates_5%_HP_&_Mana",
+        "Category": "Recovery",
+        "Description": "Regenerates 5% of Max HP and Mana every 3s for 30s",
+        "Effects": [
+            {
+                "Target": "HP",
+                "ActivationType": "Periodic",
+                "EffectType": "Regenerate",
+                "Value": 0.05,
+                "Time": 30,
+                "Timer": 30,
+                "IsActive": false
+            },
+            {
+                "Target": "Mana",
+                "ActivationType": "Periodic",
+                "EffectType": "Regenerate",
+                "Value": 0.05,
+                "Time": 30,
+                "Timer": 30,
+                "IsActive": false
+            }
+        ]
+    }
 ]

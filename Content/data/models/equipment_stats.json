@@ -1,92 +1,92 @@
 ﻿[
-  {
-    "ItemId": 400,
-    "Name": "ดาบนักผจญภัย",
-    "EquipmentType": 0,
-    "Stats": [
-      {
-        "Target": "TrueATK",
-        "Value": 6
-      }
-    ]
-  },
-  {
-    "ItemId": 401,
-    "Name": "หมวกนักผจญภัย",
-    "EquipmentType": 1,
-    "Stats": [
-      {
-        "Target": "ATK%",
-        "Value": 0.1
-      },
-      {
-        "Target": "HP%",
-        "Value": 0.1
-      }
-    ]
-  },
-  {
-    "ItemId": 402,
-    "Name": "ชุดเกราะของนักผจญภัย",
-    "EquipmentType": 2,
-    "Stats": [
-      {
-        "Target": "HP%",
-        "Value": 0.1
-      },
-      {
-        "Target": "DEF%",
-        "Value": 0.05
-      }
-    ]
-  },
-  {
-    "ItemId": 403,
-    "Name": "ถุงมือนักผจญภัย",
-    "EquipmentType": 3,
-    "Stats": [
-      {
-        "Target": "ATK%",
-        "Value": 0.1
-      },
-      {
-        "Target": "DEF%",
-        "Value": 0.05
-      }
-    ]
-  },
-  {
-    "ItemId": 404,
-    "Name": "รองเท้าบูทนักผจญภัย",
-    "EquipmentType": 4,
-    "Stats": [
-      {
-        "Target": "DEF%",
-        "Value": 0.025
-      },
-      {
-        "Target": "Speed%",
-        "Value": 0.1
-      },
-      {
-        "Target": "Evasion%",
-        "Value": 0.05
-      }
-    ]
-  },
-  {
-    "ItemId": 405,
-    "Name": "แหวนนักผจญภัย",
-    "EquipmentType": 5,
-    "Stats": [
-      {
-        "Target": "Crit%",
-        "Value": 0.05
-      },
-      {
-        "Target": "CritDMG%",
-        "Value": 0.1
-      }
-    ]
-  }
+    {
+        "ItemId": 400,
+        "Name": "ดาบนักผจญภัย",
+        "EquipmentType": 0,
+        "Stats": [
+            {
+                "Target": "TrueATK",
+                "Value": 6
+            }
+        ]
+    },
+    {
+        "ItemId": 401,
+        "Name": "หมวกนักผจญภัย",
+        "EquipmentType": 1,
+        "Stats": [
+            {
+                "Target": "ATK%",
+                "Value": 0.1
+            },
+            {
+                "Target": "HP%",
+                "Value": 0.1
+            }
+        ]
+    },
+    {
+        "ItemId": 402,
+        "Name": "ชุดเกราะของนักผจญภัย",
+        "EquipmentType": 2,
+        "Stats": [
+            {
+                "Target": "HP%",
+                "Value": 0.1
+            },
+            {
+                "Target": "DEF%",
+                "Value": 0.05
+            }
+        ]
+    },
+    {
+        "ItemId": 403,
+        "Name": "ถุงมือนักผจญภัย",
+        "EquipmentType": 3,
+        "Stats": [
+            {
+                "Target": "ATK%",
+                "Value": 0.1
+            },
+            {
+                "Target": "DEF%",
+                "Value": 0.05
+            }
+        ]
+    },
+    {
+        "ItemId": 404,
+        "Name": "รองเท้าบูทนักผจญภัย",
+        "EquipmentType": 4,
+        "Stats": [
+            {
+                "Target": "DEF%",
+                "Value": 0.025
+            },
+            {
+                "Target": "Speed%",
+                "Value": 0.1
+            },
+            {
+                "Target": "Evasion%",
+                "Value": 0.05
+            }
+        ]
+    },
+    {
+        "ItemId": 405,
+        "Name": "แหวนนักผจญภัย",
+        "EquipmentType": 5,
+        "Stats": [
+            {
+                "Target": "Crit%",
+                "Value": 0.05
+            },
+            {
+                "Target": "CritDMG%",
+                "Value": 0.1
+            }
+        ]
+    }
 ]

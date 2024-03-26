@@ -14,8 +14,8 @@ namespace Medicraft.Data.Models
         public int SkillPoint { get; set; }
         public AbilityData Abilities { get; set; }
         public InventoryData InventoryData { get; set; }
-        public ItemCraftingProgressionData ItemCraftingProgression { get; set; }
-        public ChapterProgressionData ChapterProgressionData { get; set; }
+        public CraftingProgressionData CraftingProgression { get; set; }
+        public List<ChapterData> ChapterProgression { get; set; }
     }
 
     public class AbilityData
@@ -31,25 +31,17 @@ namespace Medicraft.Data.Models
         public List<InventoryItemData> Inventory { get; set; }
     }
 
-    public class ItemCraftingProgressionData
+    public class CraftingProgressionData
     {
-        public List<CraftableItemData> ThaiTraditionalMedicine { get; set; }
+        public List<CraftableItem> ThaiTraditionalMedicine { get; set; }
+        public List<CraftableItem> ConsumableItem { get; set; }
+        public List<CraftableItem> EquipmentItem { get; set; }
     }
 
-    public class CraftableItemData()
+    public class CraftableItem()
     {
         public int ItemId { get; set; }
         public bool IsCraftable { get; set; }
-    }
-
-    public class ChapterProgressionData
-    {
-        public ChapterData Chapter_1 { get; set; }
-        public ChapterData Chapter_2 { get; set; }
-        public ChapterData Chapter_3 { get; set; }
-        public ChapterData Chapter_4 { get; set; }
-        public ChapterData Chapter_5 { get; set; }
-        public ChapterData Chapter_6 { get; set; }
     }
 
     public class ExperienceCapacityData
