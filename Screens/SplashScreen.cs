@@ -19,8 +19,11 @@ namespace Medicraft.Screens
         private float _alphaTime;
         private int _index;
 
+        private bool _isClicked;
+
         public SplashScreen()
         {
+            _isClicked = false;
             _show = true;
             _index = 0;
             _alpha = 0f;
@@ -36,7 +39,8 @@ namespace Medicraft.Screens
 
             GameGlobals.Instance.TestIcon = _logo;
 
-            GameGlobals.Instance.InitialCameraPos = GameGlobals.Instance.GameScreenCenter;
+            ScreenManager.Camera.ResetCameraPosition(false);
+            ScreenManager.Camera.SetPosition(GameGlobals.Instance.GameScreenCenter);
         }
 
         public override void UnloadContent()
@@ -87,8 +91,9 @@ namespace Medicraft.Screens
             }
 
             if (mouseCur.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released
-                && !_index.Equals(3))
+                && !_index.Equals(3) && !_isClicked)
             {
+                _isClicked = true;
                 ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.MainMenuScreen);
             }
         }

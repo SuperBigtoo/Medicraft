@@ -114,14 +114,39 @@ namespace Medicraft.Systems.Managers
                     JsonFileManager.SaveGame(JsonFileManager.SavingPlayerData);
                 }
 
+                // Open Pause Menu
+                if (keyboardCur.IsKeyDown(Keys.Escape) && !GameGlobals.Instance.SwitchOpenPauseMenuPanel && !GameGlobals.Instance.IsOpenGUI && GameGlobals.Instance.IsPauseMenuAllowed
+                    || keyboardCur.IsKeyDown(Keys.Escape) && !GameGlobals.Instance.SwitchOpenPauseMenuPanel && GameGlobals.Instance.IsOpenGUI
+                    && GUIManager.Instance.CurrentGUI.Equals(GUIManager.PauseMenu) && GameGlobals.Instance.IsPauseMenuAllowed)
+                {
+                    GameGlobals.Instance.SwitchOpenPauseMenuPanel = true;
+
+                    // Toggle Pause PlayScreen
+                    GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
+                    GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
+
+                    // Toggle IsOpenPauseMenu              
+                    GameGlobals.Instance.IsOpenPauseMenu = false;
+                    if (GUIManager.Instance.CurrentGUI.Equals(GUIManager.PauseMenu))
+                    {
+                        GUIManager.Instance.CurrentGUI = GUIManager.PlayScreen;
+                        GameGlobals.Instance.IsRefreshPlayScreenUI = false;
+                    }
+                    else GUIManager.Instance.CurrentGUI = GUIManager.PauseMenu;
+                }
+                else if (keyboardCur.IsKeyUp(Keys.Escape))
+                {
+                    GameGlobals.Instance.SwitchOpenPauseMenuPanel = false;
+                }
+
                 // Open Inventory
                 if (keyboardCur.IsKeyDown(Keys.I) && !GameGlobals.Instance.SwitchOpenInventoryPanel && !GameGlobals.Instance.IsOpenGUI
                     || (keyboardCur.IsKeyDown(Keys.I) || keyboardCur.IsKeyDown(Keys.Escape)) && !GameGlobals.Instance.SwitchOpenInventoryPanel
-                        && GameGlobals.Instance.IsOpenGUI && GUIManager.Instance.CurrentGUI.Equals(GUIManager.InventoryPanel))
+                    && GameGlobals.Instance.IsOpenGUI && GUIManager.Instance.CurrentGUI.Equals(GUIManager.InventoryPanel))
                 {
                     GameGlobals.Instance.SwitchOpenInventoryPanel = true;
 
-                    // Pause PlayScreen
+                    // Toggle Pause PlayScreen
                     GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
                     GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
 
@@ -142,11 +167,11 @@ namespace Medicraft.Systems.Managers
                 // Open Crafting Panel 
                 if (keyboardCur.IsKeyDown(Keys.O) && !GameGlobals.Instance.SwitchOpenCraftingPanel && !GameGlobals.Instance.IsOpenGUI
                     || (keyboardCur.IsKeyDown(Keys.O) || keyboardCur.IsKeyDown(Keys.Escape)) && !GameGlobals.Instance.SwitchOpenCraftingPanel
-                        && GameGlobals.Instance.IsOpenGUI && GUIManager.Instance.CurrentGUI.Equals(GUIManager.CraftingPanel))
+                    && GameGlobals.Instance.IsOpenGUI && GUIManager.Instance.CurrentGUI.Equals(GUIManager.CraftingPanel))
                 {
                     GameGlobals.Instance.SwitchOpenCraftingPanel = true;
 
-                    // Pause PlayScreen
+                    // Toggle Pause PlayScreen
                     GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
                     GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
 
@@ -167,15 +192,15 @@ namespace Medicraft.Systems.Managers
                 // Open Inspect Panel 
                 if (keyboardCur.IsKeyDown(Keys.C) && !GameGlobals.Instance.SwitchOpenInspectPanel && !GameGlobals.Instance.IsOpenGUI
                     || (keyboardCur.IsKeyDown(Keys.C) || keyboardCur.IsKeyDown(Keys.Escape)) && !GameGlobals.Instance.SwitchOpenInspectPanel
-                        && GameGlobals.Instance.IsOpenGUI && GUIManager.Instance.CurrentGUI.Equals(GUIManager.InspectPanel))
+                    && GameGlobals.Instance.IsOpenGUI && GUIManager.Instance.CurrentGUI.Equals(GUIManager.InspectPanel))
                 {
                     GameGlobals.Instance.SwitchOpenInspectPanel = true;
 
-                    // Pause PlayScreen
+                    // Toggle Pause PlayScreen
                     GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
                     GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
 
-                    // Toggle IsOpenCraftingPanel & refresh crafting item display       
+                    // Toggle IsOpenInspectPanel      
                     GameGlobals.Instance.IsOpenInspectPanel = false;
                     GUIManager.Instance.IsCharacterTabSelected = true;
                     if (GUIManager.Instance.CurrentGUI.Equals(GUIManager.InspectPanel))
@@ -185,6 +210,8 @@ namespace Medicraft.Systems.Managers
                         GUIManager.Instance.ClearSkillDescription();
                     }
                     else GUIManager.Instance.CurrentGUI = GUIManager.InspectPanel;
+
+                    System.Diagnostics.Debug.WriteLine($"Test : {GUIManager.Instance.CurrentGUI} {GUIManager.Instance.PreviosGUI}");
                 }
                 else if (keyboardCur.IsKeyUp(Keys.C))
                 {

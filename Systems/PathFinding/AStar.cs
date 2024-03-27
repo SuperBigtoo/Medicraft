@@ -191,7 +191,7 @@ namespace Medicraft.Systems.PathFinding
 
             var _graphicsDevice = ScreenManager.Instance.GraphicsDevice;
             spriteBatch.Begin(
-                transformMatrix: ScreenManager.Instance.Camera.GetTransform(_graphicsDevice.Viewport.Width
+                transformMatrix: ScreenManager.Camera.GetTransform(_graphicsDevice.Viewport.Width
                 , _graphicsDevice.Viewport.Height)
             );
 

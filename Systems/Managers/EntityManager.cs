@@ -48,33 +48,36 @@ namespace Medicraft.Systems.Managers
             var middleDepth = GameGlobals.Instance.MiddleEntityDepth;
             var bottomDepth = GameGlobals.Instance.BottomEntityDepth;
 
-            // Update Playable Character: Player and Companion
-            PlayerManager.Instance.Update(gameTime);
-
-            var playerDepth = PlayerManager.Instance.Player.GetDepth();
-
-            // Update Mob & NPC
-            foreach (var entity in entities.Where(e => !e.IsDestroyed))
+            if (!GameGlobals.Instance.IsOpenGUI)
             {
-                playerDepth -= 0.000001f;
-                topDepth -= 0.000001f;
-                middleDepth -= 0.000001f;
-                bottomDepth -= 0.000001f;
-                entity.Update(gameTime, playerDepth, topDepth, middleDepth, bottomDepth);
+                // Update Playable Character: Player and Companion
+                PlayerManager.Instance.Update(gameTime);
+
+                var playerDepth = PlayerManager.Instance.Player.GetDepth();
+
+                // Update Mob & NPC
+                foreach (var entity in entities.Where(e => !e.IsDestroyed))
+                {
+                    playerDepth -= 0.000001f;
+                    topDepth -= 0.000001f;
+                    middleDepth -= 0.000001f;
+                    bottomDepth -= 0.000001f;
+                    entity.Update(gameTime, playerDepth, topDepth, middleDepth, bottomDepth);
+                }
+
+                // Update Status Effect
+                StatusEffectManager.Instance.Update(gameTime);
+
+                // Mob Spawner
+                _mobSpawner?.Update(gameTime);
+
+                if (_mobSpawner != null)
+                    SpawnTime = _mobSpawner.SpawnTimer;
+
+                entities.RemoveAll(e => e.IsDestroyed);
+
+                _mobSpawner?.Spawn();
             }
-
-            // Update Status Effect
-            StatusEffectManager.Instance.Update(gameTime);
-
-            // Mob Spawner
-            _mobSpawner?.Update(gameTime);
-
-            if (_mobSpawner != null)
-                SpawnTime = _mobSpawner.SpawnTimer;
-
-            entities.RemoveAll(e => e.IsDestroyed);
-
-            _mobSpawner?.Spawn();
         }
 
         public void Draw(SpriteBatch spriteBatch)

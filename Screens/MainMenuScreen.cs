@@ -18,6 +18,18 @@ namespace Medicraft.Screens
             _volumeScale = 0f;
             _startingBG = true;
             GameGlobals.Instance.IsMainBGEnding = false;
+
+            // Toggle Pause PlayScreen
+            GameGlobals.Instance.IsGamePause = false;
+            GameGlobals.Instance.IsOpenGUI = false;
+
+            // Toggle the IsOpenPauseMenu flag
+            GameGlobals.Instance.IsOpenPauseMenu = false;
+            GameGlobals.Instance.IsOpenMainMenu = false;
+            GUIManager.Instance.CurrentGUI = GUIManager.MainMenu;
+         
+            ScreenManager.Camera.ResetCameraPosition(false);
+            ScreenManager.Camera.SetPosition(GameGlobals.Instance.GameScreenCenter);
         }
 
         public override void LoadContent()
@@ -65,7 +77,7 @@ namespace Medicraft.Screens
 
             if (GameGlobals.Instance.IsMainBGEnding)
             {
-                _volumeScale -= deltaSeconds * 0.75f;
+                _volumeScale -= deltaSeconds * 0.8f;
 
                 if (_volumeScale <= 0f)
                 {
@@ -77,7 +89,7 @@ namespace Medicraft.Screens
         }      
 
         public override void Draw(SpriteBatch spriteBatch)
-        {      
+        {   
             spriteBatch.Draw(_mainMenuBG, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             var alphaColor = 0.2f;

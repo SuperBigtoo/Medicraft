@@ -19,7 +19,17 @@ namespace Medicraft.Systems.Managers
 
         private float _deltaSeconds = 0;
 
-        public int CurrentGUI { get; set; }
+        public int PreviosGUI {  get; private set; }
+        private int currentGUI;
+        public int CurrentGUI
+        {
+            get => currentGUI;
+            set
+            {
+                PreviosGUI = currentGUI;
+                currentGUI = value;
+            }
+        }
 
         public const int PlayScreen = 0;
         public const int InventoryPanel = 1;
@@ -41,8 +51,8 @@ namespace Medicraft.Systems.Managers
 
         // Load Save
         public bool IsClickedLoadButton { get; private set; } = false;
-        public List<Panel> GameSaveFromMainMenu { get; private set; } = [];
-        public List<Panel> GameSaveFromSaveMenu { get; private set; } = [];
+        public List<Panel> MainMenuSaveSlots { get; private set; } = [];
+        public List<Panel> SaveMenuSaveSlots { get; private set; } = [];
         public Panel SelectedGameSavePanel { get; private set; }
 
         // Skill selected
@@ -54,6 +64,7 @@ namespace Medicraft.Systems.Managers
         private GUIManager()
         {
             CurrentGUI = MainMenu;
+            PreviosGUI = MainMenu;
             CurrentCraftingList = ConsumableItem;
         }
 
@@ -99,6 +110,7 @@ namespace Medicraft.Systems.Managers
             InitMainMenuUI();
 
             // Pause Menu = 5
+            InitPauseMenuUI();
 
             // Save Menu = 6
 
@@ -998,11 +1010,11 @@ namespace Medicraft.Systems.Managers
                     if (totalItemCount < ingredient.Quantity)
                     {
                         var count = totalItemCount - ingredient.Quantity;
-                        ingLabel = ingredient.Name + " x " + ingredient.Quantity + " (" + count + ")";
+                        ingLabel = $"{ingredient.Name} x {ingredient.Quantity} ({count})";     
                     }
-                    else ingLabel = ingredient.Name + " x " + ingredient.Quantity + " (" + totalItemCount + ")";
+                    else ingLabel = $"{ingredient.Name} x {ingredient.Quantity} ({totalItemCount})";
                 }
-                else ingLabel = ingredient.Name + " x " + ingredient.Quantity + " (" + ingredient.Quantity + ")";
+                else ingLabel = $"{ingredient.Name} x {ingredient.Quantity} (-{ingredient.Quantity})";
 
                 ingredientList.AddItem(ingLabel);
                 ingredientList.IconsScale *= 1f;
@@ -2076,7 +2088,8 @@ namespace Medicraft.Systems.Managers
                         mainPanel.Visible = false;
                         loadGameSavePanel.Visible = true;
 
-                        IsClickedLoadButton = true;
+                        RefreshGameSave(MainMenu);
+                        IsClickedLoadButton = true;                  
                     }
                 };
                 mainPanel.AddChild(loadButton);
@@ -2095,156 +2108,28 @@ namespace Medicraft.Systems.Managers
                 var quitButton = new Button("Quit", ButtonSkin.Default)
                 {
                     Identifier = "quitButton",
-                    OnClick = (Entity entity) => { ScreenManager.Instance.Game.Exit(); }
+                    OnClick = (Entity entity) =>
+                    {
+                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("Quit the Game!?", "Do you want to quit?"
+                            , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
+                            {
+                                new("Yes", () =>
+                                {
+                                    ScreenManager.Instance.Game.Exit();
+                                    return true;
+                                }),
+                                new("No", () =>
+                                {
+                                    return true;
+                                })
+                            });
+                    }
                 };
                 mainPanel.AddChild(quitButton);
             }
 
-            // Option Menu
-            {
-                var graphicsSettingsButton = new Button("Graphics Settings", ButtonSkin.Default)
-                {
-                    Identifier = "graphicsSettingsButton",
-                    OnClick = (Entity btn) =>
-                    {
-                        optionPanel.Visible = false;
-                        graphicsSettingPanel.Visible = true;
-                    }
-                };
-                optionPanel.AddChild(graphicsSettingsButton);
-
-                var soundSettingsButton = new Button("Sound Settings", ButtonSkin.Default)
-                {
-                    Identifier = "soundSettingsButton",
-                    OnClick = (Entity btn) =>
-                    {
-                        optionPanel.Visible = false;
-                        soundSettingPanel.Visible = true;
-                    }
-                };
-                optionPanel.AddChild(soundSettingsButton);
-
-                optionPanel.AddChild(new LineSpace(3));
-                var backButton = new Button("Back", ButtonSkin.Default)
-                {
-                    Identifier = "backButton",
-                    OnClick = (Entity btn) =>
-                    {
-                        optionPanel.Visible = false;
-                        mainPanel.Visible = true;
-                    }
-                };
-                optionPanel.AddChild(backButton);
-            }
-
-            // Graphics Setting
-            {
-                // radio
-                graphicsSettingPanel.AddChild(new LineSpace(3));
-                graphicsSettingPanel.AddChild(new Header("Graphics Setting"));
-                graphicsSettingPanel.AddChild(new HorizontalLine());
-                graphicsSettingPanel.AddChild(new Label("Full Screen") { Scale = 1.25f });
-
-                var radioFullScreenOn = new RadioButton("ON", offset: new Vector2(15, 0))
-                {
-                    Identifier = "radioFullScreenOn",
-                    OnClick = (e) =>
-                    {
-                        GameGlobals.Instance.IsFullScreen = true;
-                        ScreenManager.ToggleFullScreen();
-                    }
-                };
-                graphicsSettingPanel.AddChild(radioFullScreenOn);
-
-                var radioFullScreenOff = new RadioButton("OFF", offset: new Vector2(15, 0))
-                {
-                    Identifier = "radioFullScreenOff",
-                    OnClick = (e) =>
-                    {
-                        GameGlobals.Instance.IsFullScreen = false;
-                        ScreenManager.ToggleFullScreen();
-                    }
-                };
-                graphicsSettingPanel.AddChild(radioFullScreenOff);
-
-                if (GameGlobals.Instance.IsFullScreen)
-                {
-                    radioFullScreenOn.Checked = true;
-                }
-                else radioFullScreenOff.Checked = true;
-
-                graphicsSettingPanel.AddChild(new LineSpace(3));
-                var backButton = new Button("Back", ButtonSkin.Default)
-                {
-                    Identifier = "backButton",
-                    OnClick = (Entity btn) =>
-                    {
-                        graphicsSettingPanel.Visible = false;
-                        optionPanel.Visible = true;
-
-                        // Save GameConfig
-                        JsonFileManager.SaveConfig();
-                    }
-                };
-                graphicsSettingPanel.AddChild(backButton);
-            }
-
-            // Sound Settings
-            {             
-                // sliders title
-                soundSettingPanel.AddChild(new Header("Sound Settings"));
-                soundSettingPanel.AddChild(new HorizontalLine());
-
-                soundSettingPanel.AddChild(new Label("SFX Volume") { Scale = 1.25f });
-                {
-                    var sliderSFX = soundSettingPanel.AddChild(new Slider(0, 100, SliderSkin.Default)
-                    {
-                        Identifier = "sliderSFX"
-                    }) as Slider;
-                    sliderSFX.Value = (int)(GameGlobals.Instance.SoundEffectVolume * 100);
-
-                    var valueLabel = new Label("Value: " + sliderSFX.Value) { Scale = 1.1f };
-                    sliderSFX.OnValueChange = (Entity entity) =>
-                    {
-                        valueLabel.Text = "Value: " + sliderSFX.Value;
-                        GameGlobals.Instance.SoundEffectVolume = sliderSFX.GetValueAsPercent();
-                    };
-                    soundSettingPanel.AddChild(valueLabel);
-                }
-                soundSettingPanel.AddChild(new LineSpace(1));
-
-                soundSettingPanel.AddChild(new Label("Background Music Volume") { Scale = 1.25f });
-                {
-                    var sliderBG = soundSettingPanel.AddChild(new Slider(0, 100, SliderSkin.Default)
-                    {
-                        Identifier = "sliderBG"
-                    }) as Slider;
-                    sliderBG.Value = (int)(GameGlobals.Instance.BackgroundMusicVolume * 100);
-
-                    var valueLabel = new Label("Value: " + sliderBG.Value) { Scale = 1.1f };
-                    sliderBG.OnValueChange = (Entity entity) =>
-                    {
-                        valueLabel.Text = "Value: " + sliderBG.Value;
-                        GameGlobals.Instance.BackgroundMusicVolume = sliderBG.GetValueAsPercent();
-                    };
-                    soundSettingPanel.AddChild(valueLabel);
-                }
-                soundSettingPanel.AddChild(new LineSpace(3));
-
-                var backButton = new Button("Back", ButtonSkin.Default)
-                {
-                    Identifier = "backButton",
-                    OnClick = (Entity btn) =>
-                    {
-                        soundSettingPanel.Visible = false;
-                        optionPanel.Visible = true;
-
-                        // Save GameConfig
-                        JsonFileManager.SaveConfig();
-                    }
-                };
-                soundSettingPanel.AddChild(backButton);
-            }
+            // Initialize Options Menu
+            InitOptionMenu(mainPanel, optionPanel, graphicsSettingPanel, soundSettingPanel);
 
             // Load GameSave: Continues
             {
@@ -2252,59 +2137,8 @@ namespace Medicraft.Systems.Managers
                 loadGameSavePanel.AddChild(new Header("Select Save Slot", Anchor.TopCenter));
                 loadGameSavePanel.AddChild(new LineSpace(1));
 
-                // Save List
-                for (int i = 0; i < GameGlobals.Instance.MaxGameSaveSlot; i++)
-                {
-                    var gameSavePanel = new Panel(new Vector2(1000, 120), PanelSkin.Simple, Anchor.AutoCenter)
-                    {
-                        Identifier = $"gameSavePanel_{i}"
-                    };
-                    loadGameSavePanel.AddChild(gameSavePanel);
-                    loadGameSavePanel.AddChild(new LineSpace(1));
-
-                    var saveName = new Label("Name", Anchor.TopLeft)
-                    {
-                        Identifier = "saveName",
-                        Scale = 1.1f,
-                        ClickThrough = true
-                    };
-                    gameSavePanel.AddChild(saveName);
-
-                    var playTime = new Label("Total PlayTime", Anchor.BottomLeft)
-                    {
-                        Identifier = "playTime",
-                        Scale = 1.1f,
-                        ClickThrough = true
-                    };
-                    gameSavePanel.AddChild(playTime);
-
-                    var createdTime = new Label("Created Time", Anchor.TopRight)
-                    {
-                        Identifier = "createdTime",
-                        Scale = 1.1f,
-                        ClickThrough = true
-                    };
-                    gameSavePanel.AddChild(createdTime);
-
-                    var updatedTime = new Label("last Updated Time", Anchor.BottomRight)
-                    {
-                        Identifier = "updatedTime",
-                        Scale = 1.1f,
-                        ClickThrough = true
-                    };
-                    gameSavePanel.AddChild(updatedTime);
-
-                    var textSaveEmpty = new Label($"Empty Slot {i + 1}", Anchor.Center)
-                    {
-                        Identifier = "textSaveEmpty",
-                        Visible = false,
-                        Scale = 1.1f,
-                        ClickThrough = true
-                    };
-                    gameSavePanel.AddChild(textSaveEmpty);
-
-                    GameSaveFromMainMenu.Add(gameSavePanel);
-                }
+                // Initialize save slots
+                InitSaveSlot(loadGameSavePanel, MainMenu);
 
                 // Buttons
                 loadGameSavePanel.AddChild(new LineSpace(3));
@@ -2380,16 +2214,23 @@ namespace Medicraft.Systems.Managers
                     Identifier = "deleteButton",
                     Enabled = false,
                     Size = new Vector2(145, 50),
-                    Offset = new Vector2(77.5f, -30),
-                    OnClick = (Entity btn) =>
-                    {
-                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("Delete Selected Save!", "Do you want to delete the selected save?"
-                            , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
-                            {
+                    Offset = new Vector2(77.5f, -30)
+                };
+                buttonPanel.AddChild(deleteButton);
+                deleteButton.OnClick = (Entity btn) =>
+                {
+                    GeonBit.UI.Utils.MessageBox.ShowMsgBox("Delete Selected Save!", "Do you want to delete the selected save?"
+                        , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
+                        {
                                 new("Yes", () =>
                                 {
                                     JsonFileManager.SaveGame(JsonFileManager.DeleteGameSave);
                                     RefreshGameSave(MainMenu);
+
+                                    // Reset Buttons
+                                    playButton.Enabled = false;
+                                    renameButton.Enabled = false;
+                                    deleteButton.Enabled = false;
 
                                     return true;
                                 }),
@@ -2397,10 +2238,8 @@ namespace Medicraft.Systems.Managers
                                 {
                                     return true;
                                 })
-                            });
-                    }
+                        });
                 };
-                buttonPanel.AddChild(deleteButton);
 
                 var backButton = new Button("Back", ButtonSkin.Default, Anchor.BottomRight)
                 {
@@ -2423,7 +2262,7 @@ namespace Medicraft.Systems.Managers
                 buttonPanel.AddChild(backButton);
 
                 // Set OnClick GameSave Panel
-                foreach (var gameSavePanel in GameSaveFromMainMenu)
+                foreach (var gameSavePanel in MainMenuSaveSlots)
                 {
                     gameSavePanel.OnClick = (entity) =>
                     {
@@ -2433,10 +2272,251 @@ namespace Medicraft.Systems.Managers
                         deleteButton.Enabled = true;
 
                         SelectedGameSavePanel = gameSavePanel;
-                        UpdateSelectedGameSave();
+                        UpdateSelectedGameSave(MainMenu);
                     };
                 }
             }
+        }
+
+        private void InitOptionMenu(Panel mainPanel, Panel optionPanel, Panel graphicsSettingPanel, Panel soundSettingPanel)
+        {
+            // Options Menu
+            {
+                optionPanel.AddChild(new Header("Options") { Scale = 2f });
+                optionPanel.AddChild(new LineSpace(3));
+
+                var graphicsSettingsButton = new Button("Graphics Settings", ButtonSkin.Default)
+                {
+                    Identifier = "graphicsSettingsButton",
+                    OnClick = (Entity btn) =>
+                    {
+                        optionPanel.Visible = false;
+                        graphicsSettingPanel.Visible = true;
+                    }
+                };
+                optionPanel.AddChild(graphicsSettingsButton);
+
+                var soundSettingsButton = new Button("Sound Settings", ButtonSkin.Default)
+                {
+                    Identifier = "soundSettingsButton",
+                    OnClick = (Entity btn) =>
+                    {
+                        optionPanel.Visible = false;
+                        soundSettingPanel.Visible = true;
+                    }
+                };
+                optionPanel.AddChild(soundSettingsButton);
+
+                optionPanel.AddChild(new LineSpace(3));
+                var backButton = new Button("Back", ButtonSkin.Default)
+                {
+                    Identifier = "backButton",
+                    OnClick = (Entity btn) =>
+                    {
+                        optionPanel.Visible = false;
+                        mainPanel.Visible = true;
+                    }
+                };
+                optionPanel.AddChild(backButton);
+            }
+
+            // Graphics Setting
+            {
+                graphicsSettingPanel.AddChild(new Header("Graphics Setting"));
+                graphicsSettingPanel.AddChild(new HorizontalLine());
+                graphicsSettingPanel.AddChild(new Label("Full Screen") { Scale = 1.25f });
+
+                var radioFullScreenOn = new RadioButton("ON", offset: new Vector2(15, 0))
+                {
+                    Identifier = "radioFullScreenOn",
+                    OnClick = (e) =>
+                    {
+                        GameGlobals.Instance.IsFullScreen = true;
+                        ScreenManager.ToggleFullScreen();
+                    }
+                };
+                graphicsSettingPanel.AddChild(radioFullScreenOn);
+
+                var radioFullScreenOff = new RadioButton("OFF", offset: new Vector2(15, 0))
+                {
+                    Identifier = "radioFullScreenOff",
+                    OnClick = (e) =>
+                    {
+                        GameGlobals.Instance.IsFullScreen = false;
+                        ScreenManager.ToggleFullScreen();
+                    }
+                };
+                graphicsSettingPanel.AddChild(radioFullScreenOff);
+
+                if (GameGlobals.Instance.IsFullScreen)
+                {
+                    radioFullScreenOn.Checked = true;
+                }
+                else radioFullScreenOff.Checked = true;
+
+                graphicsSettingPanel.AddChild(new LineSpace(3));
+                var backButton = new Button("Back", ButtonSkin.Default)
+                {
+                    Identifier = "backButton",
+                    OnClick = (Entity btn) =>
+                    {
+                        graphicsSettingPanel.Visible = false;
+                        optionPanel.Visible = true;
+
+                        // Save GameConfig
+                        JsonFileManager.SaveConfig();
+                    }
+                };
+                graphicsSettingPanel.AddChild(backButton);
+            }
+
+            // Sound Settings
+            {
+                // sliders title
+                soundSettingPanel.AddChild(new Header("Sound Settings"));
+                soundSettingPanel.AddChild(new HorizontalLine());
+
+                soundSettingPanel.AddChild(new Label("SFX Volume") { Scale = 1.25f });
+                {
+                    var sliderSFX = soundSettingPanel.AddChild(new Slider(0, 100, SliderSkin.Default)
+                    {
+                        Identifier = "sliderSFX"
+                    }) as Slider;
+                    sliderSFX.Value = (int)(GameGlobals.Instance.SoundEffectVolume * 100);
+
+                    var valueLabel = new Label("Value: " + sliderSFX.Value) { Scale = 1.1f };
+                    sliderSFX.OnValueChange = (Entity entity) =>
+                    {
+                        valueLabel.Text = "Value: " + sliderSFX.Value;
+                        GameGlobals.Instance.SoundEffectVolume = sliderSFX.GetValueAsPercent();
+                    };
+                    soundSettingPanel.AddChild(valueLabel);
+                }
+                soundSettingPanel.AddChild(new LineSpace(1));
+
+                soundSettingPanel.AddChild(new Label("Background Music Volume") { Scale = 1.25f });
+                {
+                    var sliderBG = soundSettingPanel.AddChild(new Slider(0, 100, SliderSkin.Default)
+                    {
+                        Identifier = "sliderBG"
+                    }) as Slider;
+                    sliderBG.Value = (int)(GameGlobals.Instance.BackgroundMusicVolume * 100);
+
+                    var valueLabel = new Label("Value: " + sliderBG.Value) { Scale = 1.1f };
+                    sliderBG.OnValueChange = (Entity entity) =>
+                    {
+                        valueLabel.Text = "Value: " + sliderBG.Value;
+                        GameGlobals.Instance.BackgroundMusicVolume = sliderBG.GetValueAsPercent();
+                    };
+                    soundSettingPanel.AddChild(valueLabel);
+                }
+                soundSettingPanel.AddChild(new LineSpace(3));
+
+                var backButton = new Button("Back", ButtonSkin.Default)
+                {
+                    Identifier = "backButton",
+                    OnClick = (Entity btn) =>
+                    {
+                        soundSettingPanel.Visible = false;
+                        optionPanel.Visible = true;
+
+                        // Save GameConfig
+                        JsonFileManager.SaveConfig();
+                    }
+                };
+                soundSettingPanel.AddChild(backButton);
+            }
+        }
+
+        private void InitSaveSlot(Panel mainPanel, int fromGUI)
+        {
+            for (int i = 0; i < GameGlobals.Instance.MaxGameSaveSlot; i++)
+            {
+                var gameSavePanel = new Panel(new Vector2(1000, 120), PanelSkin.Simple, Anchor.AutoCenter)
+                {
+                    Identifier = $"gameSavePanel_{i}"
+                };
+                mainPanel.AddChild(gameSavePanel);
+                mainPanel.AddChild(new LineSpace(1));
+
+                var saveName = new Label("Name", Anchor.TopLeft)
+                {
+                    Identifier = "saveName",
+                    Scale = 1.1f,
+                    ClickThrough = true
+                };
+                gameSavePanel.AddChild(saveName);
+
+                var playTime = new Label("Total PlayTime", Anchor.BottomLeft)
+                {
+                    Identifier = "playTime",
+                    Scale = 1.1f,
+                    ClickThrough = true
+                };
+                gameSavePanel.AddChild(playTime);
+
+                var createdTime = new Label("Created Time", Anchor.TopRight)
+                {
+                    Identifier = "createdTime",
+                    Scale = 1.1f,
+                    ClickThrough = true
+                };
+                gameSavePanel.AddChild(createdTime);
+
+                var updatedTime = new Label("last Updated Time", Anchor.BottomRight)
+                {
+                    Identifier = "updatedTime",
+                    Scale = 1.1f,
+                    ClickThrough = true
+                };
+                gameSavePanel.AddChild(updatedTime);
+
+                var textSaveEmpty = new Label($"Empty Slot {i + 1}", Anchor.Center)
+                {
+                    Identifier = "textSaveEmpty",
+                    Visible = false,
+                    Scale = 1.1f,
+                    ClickThrough = true
+                };
+                gameSavePanel.AddChild(textSaveEmpty);
+
+                if (fromGUI == MainMenu)
+                {
+                    MainMenuSaveSlots.Add(gameSavePanel);
+                }
+                else SaveMenuSaveSlots.Add(gameSavePanel);
+            }
+        }
+
+        public void RefreshMainMenu()
+        {
+            var mainMenuPanel = _mainPanels[MainMenu];
+            var mainPanel = mainMenuPanel.Children.FirstOrDefault(e => e.Identifier.Equals("mainPanel"));
+            var loadGameSavePanel = mainMenuPanel.Children.FirstOrDefault(e => e.Identifier.Equals("loadGameSavePanel"));
+            var optionPanel = mainMenuPanel.Children.FirstOrDefault(e => e.Identifier.Equals("optionPanel"));
+            var graphicsSettingPanel = mainMenuPanel.Children.FirstOrDefault(e => e.Identifier.Equals("graphicsSettingPanel"));
+            var soundSettingPanel = mainMenuPanel.Children.FirstOrDefault(e => e.Identifier.Equals("soundSettingPanel"));
+
+            mainPanel.Visible = true;
+            loadGameSavePanel.Visible = false;
+            optionPanel.Visible = false;
+            graphicsSettingPanel.Visible = false;
+            soundSettingPanel.Visible = false;
+
+            var buttonPanel = loadGameSavePanel.Children.FirstOrDefault(e => e.Identifier.Equals("buttonPanel"));
+            var playButton = buttonPanel.Children.OfType<Button>().FirstOrDefault
+                (e => e.Identifier.Equals("playButton"));
+            var renameButton = buttonPanel.Children.OfType<Button>().FirstOrDefault
+                (e => e.Identifier.Equals("renameButton"));
+            var deleteButton = buttonPanel.Children.OfType<Button>().FirstOrDefault
+                (e => e.Identifier.Equals("deleteButton"));
+
+            // Reset Buttons
+            playButton.Enabled = false;
+            renameButton.Enabled = false;
+            deleteButton.Enabled = false;
+
+            IsClickedLoadButton = false;
         }
 
         public void RefreshGameSave(int fromGUI)
@@ -2445,9 +2525,9 @@ namespace Medicraft.Systems.Managers
 
             if (fromGUI == MainMenu)
             {
-                gameSavePanels = GameSaveFromMainMenu;
+                gameSavePanels = MainMenuSaveSlots;
             }
-            else gameSavePanels = GameSaveFromSaveMenu;
+            else gameSavePanels = SaveMenuSaveSlots;
 
             for (int i = 0; i < GameGlobals.Instance.MaxGameSaveSlot; i++)
             {
@@ -2494,7 +2574,7 @@ namespace Medicraft.Systems.Managers
             }
         }
 
-        private void UpdateSelectedGameSave()
+        private void UpdateSelectedGameSave(int fromGUI)
         {
             var numberString = SelectedGameSavePanel.Identifier.Replace("gameSavePanel_", "");
 
@@ -2505,7 +2585,15 @@ namespace Medicraft.Systems.Managers
                 System.Diagnostics.Debug.WriteLine($"numberIndex : {numberIndex}");
             }
 
-            foreach (var gameSavePanel in GameSaveFromMainMenu)
+            List<Panel> gameSavePanels;
+
+            if (fromGUI == MainMenu)
+            {
+                gameSavePanels = MainMenuSaveSlots;
+            }
+            else gameSavePanels = SaveMenuSaveSlots;
+
+            foreach (var gameSavePanel in gameSavePanels)
             {
                 if (gameSavePanel == SelectedGameSavePanel)
                 {
@@ -2518,6 +2606,138 @@ namespace Medicraft.Systems.Managers
                     gameSavePanel.OutlineWidth = 0;
                 }
             }
+        }
+
+        /// <summary>
+        /// Pause Menu, use in PlayScreen to display menu and pause the game: Resume, Options, Exit to Main and Quit.
+        /// </summary>
+        private void InitPauseMenuUI()
+        {
+            var pauseMenuPanel = new Panel()
+            {
+                Skin = PanelSkin.None,
+                Identifier = "pauseMenuPanel"
+            };
+            _mainPanels.Add(pauseMenuPanel);
+            UserInterface.Active.AddEntity(pauseMenuPanel);
+
+            // Pause panel
+            var pausePanel = new Panel(new Vector2(520, -1), PanelSkin.None)
+            {
+                Identifier = "mainPanel"
+            };
+            pauseMenuPanel.AddChild(pausePanel);
+
+            // Option panel
+            var optionPanel = new Panel(new Vector2(520, -1))
+            {
+                Visible = false,
+                Identifier = "optionPanel"
+            };
+            pauseMenuPanel.AddChild(optionPanel);
+
+            // Graphics Setting panel
+            var graphicsSettingPanel = new Panel(new Vector2(520, -1))
+            {
+                Identifier = "graphicsSettingPanel",
+                Visible = false
+            };
+            pauseMenuPanel.AddChild(graphicsSettingPanel);
+
+            // Sound Setting panel
+            var soundSettingPanel = new Panel(new Vector2(520, -1))
+            {
+                Identifier = "soundSettingPanel",
+                Visible = false
+            };
+            pauseMenuPanel.AddChild(soundSettingPanel);
+
+            // Initialize UI Elements
+            // Pause Menu
+            {
+                pausePanel.AddChild(new Header("Paused") { Scale = 2f });
+                pausePanel.AddChild(new LineSpace(3));
+
+                var resumeButton = new Button("Resume", ButtonSkin.Default)
+                {
+                    Identifier = "resumeButton",
+                    OnClick = (btn) =>
+                    {
+                        // Back to PlayScreen
+                        // Toggle Pause PlayScreen
+                        GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
+                        GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
+
+                        // Toggle the IsOpenPauseMenu flag
+                        GameGlobals.Instance.IsOpenPauseMenu = false;
+                        GameGlobals.Instance.IsRefreshPlayScreenUI = false;
+                        CurrentGUI = PlayScreen;
+                    }
+                };
+                pausePanel.AddChild(resumeButton);
+
+                var optionsButton = new Button("Options", ButtonSkin.Default)
+                {
+                    Identifier = "optionsButton",
+                    OnClick = (Entity btn) =>
+                    {
+                        pausePanel.Visible = false;
+                        optionPanel.Visible = true;
+                    }
+                };
+                pausePanel.AddChild(optionsButton);
+
+                var exitToMainButton = new Button("Exit to Main", ButtonSkin.Default)
+                {
+                    Identifier = "exitToMainButton",
+                    OnClick = (Entity btn) =>
+                    {
+                        // Exit to MainMenuScreen
+                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("Exit to Main Menu!?", "Do you want to exit to the main menu? \nDon't worry, the game will save automatically."
+                            , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
+                            {
+                                new("Yes", () =>
+                                {
+                                    ScreenManager.Camera.ResetCameraPosition(true);
+                                    JsonFileManager.SaveGame(JsonFileManager.SavingPlayerData);
+                                    ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.MainMenuScreen);
+                                    return true;
+                                }),
+                                new("No", () =>
+                                {
+                                    return true;
+                                })
+                            });
+                    }
+                };
+                pausePanel.AddChild(exitToMainButton);
+
+                var quitButton = new Button("Quit", ButtonSkin.Default)
+                {
+                    Identifier = "quitButton",
+                    OnClick = (Entity entity) => 
+                    {
+                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("Quit the Game!?", "Do you want to quit? \nDon't worry, the game will save automatically."
+                            , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
+                            {
+                                new("Yes", () =>
+                                {
+                                    JsonFileManager.SaveGame(JsonFileManager.SavingPlayerData);
+                                    ScreenManager.Instance.Game.Exit();
+                                    return true;
+                                }),
+                                new("No", () =>
+                                {
+                                    return true;
+                                })
+                            });
+                    }
+                };
+                pausePanel.AddChild(quitButton);
+            }
+
+            // Initialize Options Menu
+            InitOptionMenu(pausePanel, optionPanel, graphicsSettingPanel, soundSettingPanel);
         }
 
         public static GUIManager Instance

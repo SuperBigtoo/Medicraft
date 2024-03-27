@@ -274,7 +274,7 @@ namespace Medicraft.Entities
                 CheckCollision();
 
                 // Update Camera Position
-                ScreenManager.Instance.Camera.Update(deltaSeconds);
+                ScreenManager.Camera.Update(deltaSeconds);
             }
         }
 

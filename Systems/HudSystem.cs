@@ -69,7 +69,7 @@ namespace Medicraft.Systems
                 blendState: BlendState.AlphaBlend,
                 depthStencilState: DepthStencilState.None,
                 rasterizerState: RasterizerState.CullCounterClockwise,
-                transformMatrix: ScreenManager.Instance.Camera.GetTransform(
+                transformMatrix: ScreenManager.Camera.GetTransform(
                     _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height)
             );
 

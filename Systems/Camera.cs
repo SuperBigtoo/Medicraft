@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System;
+using Medicraft.Systems.Managers;
 
 namespace Medicraft.Systems
 {
@@ -30,6 +31,14 @@ namespace Medicraft.Systems
 
             //// Clamp the zoom within the defined range.
             //zoom = MathHelper.Clamp(targetZoom, MinZoom, MaxZoom);
+        }
+
+        public void ResetCameraPosition(bool isPlayerPos)
+        {
+            // Adjust HUD and camera position
+            GameGlobals.Instance.TopLeftCornerPosition = isPlayerPos ? (PlayerManager.Instance.Player.Position - GameGlobals.Instance.GameScreenCenter) : Vector2.Zero;
+            GameGlobals.Instance.InitialCameraPos = isPlayerPos ? PlayerManager.Instance.Player.Position : GameGlobals.Instance.GameScreenCenter;
+            GameGlobals.Instance.AddingCameraPos = Vector2.Zero;
         }
 
         public void SetPosition(Vector2 targetPosition)

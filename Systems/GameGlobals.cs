@@ -35,11 +35,7 @@ namespace Medicraft.Systems
         public Vector2 GameScreen { private set; get; }
         public Vector2 GameScreenCenter { private set; get; }
         public bool IsGameActive { set; get; }
-        public bool IsGamePause { set; get; }
-        public bool IsOpenGUI { set; get; }
-        public bool IsOpenMainMenu { set; get; }
-        public bool IsMainBGEnding { set; get; }
-        public bool IsRefreshPlayScreenUI { set; get; }
+        public bool IsGamePause { set; get; }      
         public bool SwitchDebugMode { set; get; }
         public bool IsDebugMode { set; get; }
         public bool SwitchShowPath { set; get; }
@@ -50,7 +46,19 @@ namespace Medicraft.Systems
         public bool IsEnteringBossFight { set; get; }
         public float TotalPlayTime { set; get; }
         public int MaxLevel { set; get; }
+
+
+        // UI MainMenu & PlayScreen
         public BuiltinThemes BuiltinTheme { set; get; }
+        public bool IsOpenGUI { set; get; }
+        public bool IsPauseMenuAllowed { set; get; }
+        public bool IsOpenMainMenu { set; get; }
+        public bool IsMainBGEnding { set; get; }
+        public bool IsRefreshPlayScreenUI { set; get; }
+
+        // Pause Menu
+        public bool SwitchOpenPauseMenuPanel { set; get; }
+        public bool IsOpenPauseMenu { set; get; }
 
         // Sound & Music
         public float SoundEffectVolume { set; get; }
@@ -379,14 +387,18 @@ namespace Medicraft.Systems
             AddingCameraPos = Vector2.Zero;
             IsFullScreen = false;
             IsGamePause = false;
+
+            // ui
+            BuiltinTheme = BuiltinThemes.hd;
+            IsPauseMenuAllowed = true;
             IsOpenGUI = false;
             IsOpenMainMenu = false;
             IsMainBGEnding = false;
             IsRefreshPlayScreenUI = false;
-            CompanionSpriteSheet = [];
 
-            // ui
-            BuiltinTheme = BuiltinThemes.hd;
+            // pause menu
+            SwitchOpenPauseMenuPanel = false;
+            IsOpenPauseMenu = false;
 
             // inventory
             SwitchOpenInventoryPanel = false;
@@ -448,8 +460,9 @@ namespace Medicraft.Systems
             // gamesave
             MaxLevel = 30;
             TotalPlayTime = 0;
+            CompanionSpriteSheet = [];
             GameSave = [];
-            SelectedGameSaveIndex = 0; // to be initial
+            SelectedGameSaveIndex = 0;
             MaxGameSaveSlot = 4;
             GameSavePath = "save/gamesaves.json";
             GameConfigPath = "config/gameoptions.json";

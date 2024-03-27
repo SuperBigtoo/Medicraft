@@ -33,11 +33,12 @@ namespace Medicraft.Screens.chapter_1
         public Map1()
         {
             ScreenManager.Instance.CurrentMap = MapName;
+            ScreenManager.Camera.ResetCameraPosition(true);
 
-            // Adjust HUD and camera position
-            GameGlobals.Instance.TopLeftCornerPosition = PlayerManager.Instance.Player.Position - GameGlobals.Instance.GameScreenCenter;
-            GameGlobals.Instance.InitialCameraPos = PlayerManager.Instance.Player.Position;
-            GameGlobals.Instance.AddingCameraPos = Vector2.Zero;
+            // Toggle the IsOpenMainMenu flag
+            GUIManager.Instance.CurrentGUI = GUIManager.PlayScreen;
+            GameGlobals.Instance.IsOpenMainMenu = false;
+            GameGlobals.Instance.IsRefreshPlayScreenUI = false;
         }
 
         public override void LoadContent()
