@@ -18,7 +18,7 @@ namespace Medicraft.Systems
 
         private bool _nextFeed;
 
-        private readonly AnimatedSprite _spriteItemPack = new AnimatedSprite(GameGlobals.Instance.ItemsPackSprites);         
+        private readonly AnimatedSprite _spriteItemPack = new(GameGlobals.Instance.ItemsPackSprites);         
             
         public HUDSystem()
         {
@@ -102,9 +102,10 @@ namespace Medicraft.Systems
         {
             DrawHealthBarGUI(spriteBatch);
 
-            // DrawCompanionHealthBarGUI(spriteBatch);
+            DrawCompanionHealthBarGUI(spriteBatch);
 
-            if (GameGlobals.Instance.IsEnteringBossFight) DrawBossHealthBarGUI(spriteBatch);
+            if (GameGlobals.Instance.IsEnteringBossFight)
+                DrawBossHealthBarGUI(spriteBatch);
 
             DrawItemBarGUI(spriteBatch);
 
@@ -424,8 +425,9 @@ namespace Medicraft.Systems
         {
             //  Burst Skill
             var positionBurst = new Vector2(1282f, 726f);
+            var burstTexture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.burst_skill_pic);
 
-            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.burst_skill_pic)
+            spriteBatch.Draw(burstTexture
                 , positionBurst + _topLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
@@ -455,6 +457,18 @@ namespace Medicraft.Systems
                 DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
                     , text, positionText, Color.White, 1.5f, Color.Black, 2);
             }
+            else
+            {
+                // Text Burst Skill Q
+                var text = $"Q";
+                var textSize = GameGlobals.Instance.FontTA8BitBold.MeasureString(text);
+                var positionText = new Vector2(
+                    (positionBurst.X + burstTexture.Width / 2) - ((textSize.Width * 1.5f) / 2),
+                    (positionBurst.Y + burstTexture.Height / 2) - ((textSize.Height * 1.5f) / 2)) + _topLeftCorner;
+
+                DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
+                    , text, positionText, Color.White, 1.5f, Color.Black, 2);
+            }
 
             spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.burst_skill_gui)
                 , positionBurst + _topLeftCorner, null
@@ -462,8 +476,9 @@ namespace Medicraft.Systems
 
             // Normal Skill
             var positionNormal = new Vector2(1186f, 771f);
+            var normalTexture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.normal_skill_pic);
 
-            spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.normal_skill_pic)
+            spriteBatch.Draw(normalTexture
                 , positionNormal + _topLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
@@ -489,6 +504,18 @@ namespace Medicraft.Systems
                 var positionText = new Vector2(
                     (positionNormal.X + cooldownTexture.Width / 2) - ((textSize.Width * 1.25f) / 2),
                     (positionNormal.Y + cooldownTexture.Height / 2) - ((textSize.Height * 1.25f) / 2)) + _topLeftCorner;
+
+                DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
+                    , text, positionText, Color.White, 1.25f, Color.Black, 2);
+            }
+            else
+            {
+                // Text Noraml Skill E
+                var text = $"E";
+                var textSize = GameGlobals.Instance.FontTA8BitBold.MeasureString(text);
+                var positionText = new Vector2(
+                    (positionNormal.X + normalTexture.Width / 2) - ((textSize.Width * 1.25f) / 2),
+                    (positionNormal.Y + normalTexture.Height / 2) - ((textSize.Height * 1.25f) / 2)) + _topLeftCorner;
 
                 DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
                     , text, positionText, Color.White, 1.25f, Color.Black, 2);

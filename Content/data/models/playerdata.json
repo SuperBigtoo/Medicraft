@@ -12,6 +12,19 @@
         "BurstSkillLevel": 1,
         "PassiveSkillLevel": 1
     },
+    "Companions": [
+        {
+            "CharId": 1,
+            "Level": 1,
+            "CurrentHPPercentage": 1.0,
+            "Abilities": {
+                "NormalSkillLevel": 1,
+                "BurstSkillLevel": 1,
+                "PassiveSkillLevel": 1
+            },
+            "IsSummoned": false
+        }
+    ],
     "InventoryData": {
         "GoldCoin": 10,
         "Inventory": [

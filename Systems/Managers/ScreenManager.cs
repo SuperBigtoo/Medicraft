@@ -3,7 +3,6 @@ using Medicraft.Screens;
 using Medicraft.Screens.chapter_1;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using System;
 
@@ -34,9 +33,8 @@ namespace Medicraft.Systems.Managers
 
         public enum LoadMapAction
         {
-            None,
             NewGame,
-            LoadGameSave,
+            LoadSave,
             Test_to_map_1,
             map_1_to_Test
         }     
@@ -47,7 +45,7 @@ namespace Medicraft.Systems.Managers
         public bool IsTransitioning { private set; get; } = false;
         public bool IsScreenLoaded { private set; get; } = false;
 
-        private readonly float _delayAllowPauseMenuTime = 0.2f;
+        private readonly float _delayAllowPauseMenuTime = 0.5f;
         private float _delayAllowPauseMenuTimer = 0f;
 
         private readonly float _transitionTime = 1.5f;  // Total transition time in seconds
@@ -135,6 +133,8 @@ namespace Medicraft.Systems.Managers
 
         private void LoadScreen()
         {
+            PlayerManager.Instance.IsCompanionSpawned = false;
+
             _prevScreen = _curScreen;
             _prevScreen?.UnloadContent();
             _prevScreen = null;
@@ -450,7 +450,7 @@ namespace Medicraft.Systems.Managers
                 return enumValue;
             }
 
-            return LoadMapAction.None;
+            return LoadMapAction.LoadSave;
         }
 
         public static void StartGame(bool isNewGame)

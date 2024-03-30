@@ -81,7 +81,7 @@ namespace Medicraft.Systems.PathFinding
             TILE_SIZE = GameGlobals.Instance.TILE_SIZE;
             NUM_ROWS = GameGlobals.Instance.NUM_ROWS;
             NUM_COLUMNS = GameGlobals.Instance.NUM_COLUMNS;
-            map = (int[,])GameGlobals.Instance.Map.Clone();
+            map = (int[,])GameGlobals.Instance.TILEMAP.Clone();
 
             SetStart(startPosX, startPosY);
             SetEnd(endPosX, endPosY);

@@ -40,15 +40,12 @@ namespace Medicraft.Entities
         public int tempSpeed;
         public float tempATK, tempHP, tempMana, tempDEF, tempCrit, tempCritDMG, tempEvasion;
 
-        private float _knockbackForce, _percentNormalHit;
+        private float _percentNormalHit;
 
         private readonly float _hitRateNormal, _hitRateNormalSkill, _hitRateBurstSkill;
 
         private bool _isCriticalAttack, _isAttackMissed;
 
-        private bool _isBlinkingPlayed = false;
-        private readonly float _blinkingTime = 1f;
-        private float _blinkingTimer = 0f;
         private Vector2 _initHudPos, _initCamPos;
 
         public Player(AnimatedSprite sprite, PlayerData playerData)
@@ -57,14 +54,14 @@ namespace Medicraft.Entities
             PlayerData = playerData;
 
             // Initialize Character Data
-            Id = 999;
+            Id = playerData.CharId;
             Level = PlayerData.Level;
             EXP = PlayerData.EXP;         
             InitializeCharacterData(playerData.CharId, Level);
                  
             IsKnockbackable = true;            
 
-            _knockbackForce = 50f;
+            knockbackForce = 50f;
             _percentNormalHit = 0.5f;
 
             _hitRateNormal = 0.5f;
@@ -89,7 +86,9 @@ namespace Medicraft.Entities
             NormalActivatedTimer = 0;
             PassiveActivatedTimer = 0;
 
-            var position = new Vector2((float)playerData.Position[0], (float)playerData.Position[1]);
+            var position = new Vector2(
+                (float)playerData.Position[0],
+                (float)playerData.Position[1]);
             
             Transform = new Transform2
             {
@@ -99,7 +98,7 @@ namespace Medicraft.Entities
             };
 
             BoundingCollisionX = 20f;
-            BoundingCollisionY = 2.60f;
+            BoundingCollisionY = 2.6f;
 
             // Rec for check Collision
             BoundingDetectCollisions = new RectangleF(
@@ -113,6 +112,8 @@ namespace Medicraft.Entities
             BoundingDetectEntity = new CircleF(Position + new Vector2(0f, 32f), 80f);   // Circle for check attacking
 
             BoundingCollection = new CircleF(Position + new Vector2(0f, 60f), 25f);     // Circle for check interaction with GameObjects
+
+            BoundingAggro = new CircleF(Position + new Vector2(0f, 32f), 150);                                  // Circle for check aggro enemy mobs
 
             NormalHitEffectAttacked = "hit_effect_1";
 
@@ -203,10 +204,10 @@ namespace Medicraft.Entities
 
         public override void DrawShadow(SpriteBatch spriteBatch, Texture2D shadowTexture)
         {
-            var positionPlayer = new Vector2(Position.X - (shadowTexture.Width * 1.2f) / 2.2f
+            var position = new Vector2(Position.X - (shadowTexture.Width * 1.2f) / 2.2f
                 , BoundingDetectCollisions.Center.Y - (shadowTexture.Height * 1.2f) / 5f);
 
-            spriteBatch.Draw(shadowTexture, positionPlayer, null, Color.White
+            spriteBatch.Draw(shadowTexture, position, null, Color.White
                 , 0f, Vector2.Zero, 1.2f, SpriteEffects.None, Sprite.Depth + 0.0000025f);
         }
 
@@ -215,7 +216,7 @@ namespace Medicraft.Entities
         {
             var walkSpeed = deltaSeconds * Speed;
             Velocity = Vector2.Zero;
-            _initPos = Position;
+            initPos = Position;
             _initHudPos = GameGlobals.Instance.TopLeftCornerPosition;
             _initCamPos = GameGlobals.Instance.AddingCameraPos;                                             
 
@@ -286,7 +287,7 @@ namespace Medicraft.Entities
                 if (BoundingDetectCollisions.Intersects(rect))
                 {
                     IsDetectCollistionObject = true;
-                    Position = _initPos;
+                    Position = initPos;
                     GameGlobals.Instance.TopLeftCornerPosition = _initHudPos;
                     GameGlobals.Instance.AddingCameraPos = _initCamPos;
                     break;
@@ -508,67 +509,67 @@ namespace Medicraft.Entities
             {
                 case 1:
                     BoundingDetectEntity.Radius = 140f;
-                    _knockbackForce = 60f;
+                    knockbackForce = 60f;
                     CheckAttackDetection(ATK, 1.25f, true, 1f, BurstSkillEffectAttacked);
                     break;
 
                 case 2:
                     BoundingDetectEntity.Radius = 140f;
-                    _knockbackForce = 60f;
+                    knockbackForce = 60f;
                     CheckAttackDetection(ATK, 1.4f, true, 1.25f, BurstSkillEffectAttacked);
                     break;
 
                 case 3:
                     BoundingDetectEntity.Radius = 140f;
-                    _knockbackForce = 70f;
+                    knockbackForce = 70f;
                     CheckAttackDetection(ATK, 1.55f, true, 1.5f, BurstSkillEffectAttacked);
                     break;
 
                 case 4:
                     BoundingDetectEntity.Radius = 140f;
-                    _knockbackForce = 70f;
+                    knockbackForce = 70f;
                     CheckAttackDetection(ATK, 1.7f, true, 1.75f, BurstSkillEffectAttacked);
                     break;
 
                 case 5:
                     BoundingDetectEntity.Radius = 140f;
-                    _knockbackForce = 80f;
+                    knockbackForce = 80f;
                     CheckAttackDetection(ATK, 1.85f, true, 2f, BurstSkillEffectAttacked);
                     break;
 
                 case 6:
                     BoundingDetectEntity.Radius = 140f;
-                    _knockbackForce = 80f;
+                    knockbackForce = 80f;
                     CheckAttackDetection(ATK, 2f, true, 2.25f, BurstSkillEffectAttacked);
                     break;
 
                 case 7:
                     BoundingDetectEntity.Radius = 140f;
-                    _knockbackForce = 90f;
+                    knockbackForce = 90f;
                     CheckAttackDetection(ATK, 2.15f, true, 2.5f, BurstSkillEffectAttacked);
                     break;
 
                 case 8:
                     BoundingDetectEntity.Radius = 140f;
-                    _knockbackForce = 90f;
+                    knockbackForce = 90f;
                     CheckAttackDetection(ATK, 2.3f, true, 2.75f, BurstSkillEffectAttacked);
                     break;
 
                 case 9:
                     BoundingDetectEntity.Radius = 140f;
-                    _knockbackForce = 100f;
+                    knockbackForce = 100f;
                     CheckAttackDetection(ATK, 2.45f, true, 3f, BurstSkillEffectAttacked);
                     break;
 
                 case 10:
                     BoundingDetectEntity.Radius = 140f;
-                    _knockbackForce = 100f;
+                    knockbackForce = 100f;
                     CheckAttackDetection(ATK, 2.6f, true, 3.25f, BurstSkillEffectAttacked);
                     break;
             }
 
             BoundingDetectEntity.Radius = 80f;
-            _knockbackForce = 50f;
+            knockbackForce = 50f;
             Mana -= manaCost;
         }
 
@@ -709,14 +710,13 @@ namespace Medicraft.Entities
                         {
                             // Mob being hit by Player
                             entity.IsAttacked = true;
-
                             entity.HP -= totalDamage;
 
                             if (entity.IsKnockbackable)
                             {
                                 var knockBackDirection = (entity.Position - new Vector2(0, 50)) - Position;
                                 knockBackDirection.Normalize();
-                                entity.Velocity = knockBackDirection * _knockbackForce;
+                                entity.Velocity = knockBackDirection * knockbackForce;
 
                                 entity.IsKnockback = true;
                                 entity.KnockbackedTimer = 0.2f;
@@ -868,30 +868,6 @@ namespace Medicraft.Entities
             var manaRegenAmount = ManaRegenRate * deltaSeconds;
 
             Mana += manaRegenAmount;
-        }
-
-        private void HitBlinking(float deltaSeconds)
-        {
-            if (IsAttacked && !_isBlinkingPlayed) _isBlinkingPlayed = true;
-
-            if (_isBlinkingPlayed && _blinkingTimer < _blinkingTime)
-            {
-                _blinkingTimer += deltaSeconds;
-
-                var blinkSpeed = 15f; // Adjust the speed of the blinking effect
-                var alphaMultiplier = MathF.Sin(_blinkingTimer * blinkSpeed);
-
-                // Ensure alphaMultiplier is within the valid range [0, 1]
-                alphaMultiplier = MathHelper.Clamp(alphaMultiplier, 0.25f, 2f);
-
-                Sprite.Color = new Color(255, 105, 105) * Math.Min(alphaMultiplier, 1f);
-            }
-            else
-            {
-                _isBlinkingPlayed = false;
-                _blinkingTimer = 0;
-                Sprite.Color = Color.White;
-            }
         }
 
         private void UpdateLayerDepth(float topDepth, float middleDepth, float bottomDepth)

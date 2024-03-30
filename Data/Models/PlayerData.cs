@@ -13,6 +13,7 @@ namespace Medicraft.Data.Models
         public double[] Position { get; set; }
         public int SkillPoint { get; set; }
         public AbilityData Abilities { get; set; }
+        public List<CompanionData> Companions { get; set; }
         public InventoryData InventoryData { get; set; }
         public CraftingProgressionData CraftingProgression { get; set; }
         public List<ChapterData> ChapterProgression { get; set; }
@@ -23,6 +24,15 @@ namespace Medicraft.Data.Models
         public int NormalSkillLevel { get; set; }
         public int BurstSkillLevel { get; set; }
         public int PassiveSkillLevel { get; set; }
+    }
+
+    public class CompanionData
+    {
+        public int CharId { get; set; }
+        public int Level { get; set; }
+        public double CurrentHPPercentage { get; set; }
+        public AbilityData Abilities { get; set; }
+        public bool IsSummoned { get; set; }
     }
 
     public class InventoryData

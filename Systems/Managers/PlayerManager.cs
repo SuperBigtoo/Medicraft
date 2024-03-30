@@ -2,9 +2,11 @@
 using Medicraft.Data.Models;
 using Medicraft.Entities;
 using Medicraft.Entities.Companion;
+using Medicraft.Systems.PathFinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Sprites;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,7 +20,8 @@ namespace Medicraft.Systems.Managers
         
         // Companions
         public List<Companion> Companions { private set; get; }
-        public bool IsCompanionSpawned { private set; get; }
+        public int CurrentCompanionIndex { private set; get; }
+        public bool IsCompanionSpawned { set; get; }
         public bool IsCompanionDead { private set; get; } 
 
         private static PlayerManager instance;
@@ -27,6 +30,7 @@ namespace Medicraft.Systems.Managers
             IsPlayerDead = false;
 
             Companions = [];
+            CurrentCompanionIndex = 0;
             IsCompanionSpawned = false;
             IsCompanionDead = false;
         }
@@ -38,7 +42,7 @@ namespace Medicraft.Systems.Managers
 
             if (!isNewGame)
             {
-                ScreenManager.Instance.CurrentLoadMapAction = ScreenManager.LoadMapAction.LoadGameSave;
+                ScreenManager.Instance.CurrentLoadMapAction = ScreenManager.LoadMapAction.LoadSave;
 
                 // Load save game according to selected index. 
                 var gameSaveData = GameGlobals.Instance.GameSave[GameGlobals.Instance.SelectedGameSaveIndex];
@@ -84,9 +88,55 @@ namespace Medicraft.Systems.Managers
             foreach (var item in itemEquipmentData)
                 RefreshEquipmentStats(item, true);
 
+            // Initialize Companion
+            InitializeCompanion();
+
             // Initialize display inventory item after init Player's inventory data
             GUIManager.Instance.InitInventoryItemDisplay();
             GUIManager.Instance.InitCraftableItemDisplay();
+        }
+
+        private void InitializeCompanion()
+        {
+            Companions.Clear();
+
+            var spriteSheet = GameGlobals.Instance.CompanionSpriteSheet;
+
+            if (Player.PlayerData.Companions != null || Player.PlayerData.Companions.Count != 0)
+                foreach (var compaData in Player.PlayerData.Companions)
+                {
+                    switch (compaData.CharId)
+                    {
+                        case 1:
+                            // Violet
+                            Companions.Add(new Violet(new AnimatedSprite(spriteSheet[0]), compaData, Vector2.One));
+                            break;
+
+                        case 2:
+                            break;
+
+                        case 3:
+                            break;
+                    }
+                }
+
+        }
+
+        public void SummonCurrentCompanion()
+        {
+            if (Companions.Count != 0)
+            {
+                foreach (var compa in Companions)
+                    compa.CompanionData.IsSummoned = false;
+
+                Companions[CurrentCompanionIndex].Position = Player.Position;
+                Companions[CurrentCompanionIndex].pathFinding = new AStar(
+                    (int)Companions[CurrentCompanionIndex].BoundingDetectCollisions.Center.X,
+                    (int)Companions[CurrentCompanionIndex].BoundingDetectCollisions.Center.Y,
+                    (int)Player.BoundingDetectCollisions.Center.X,
+                    (int)Player.BoundingDetectCollisions.Center.Y);
+                Companions[CurrentCompanionIndex].CompanionData.IsSummoned = true;
+            }
         }
 
         public static void UpdateGameController()
@@ -342,7 +392,8 @@ namespace Medicraft.Systems.Managers
 
             // Check if CurrentScreen is TestScreen
             if (!ScreenManager.Instance.IsTransitioning
-                && ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.TestScreen)
+                && (ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.TestScreen
+                || ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.Map1))
             {
                 // Debug Mode
                 if (keyboardCur.IsKeyDown(Keys.B) && !GameGlobals.Instance.SwitchDebugMode)
@@ -392,14 +443,19 @@ namespace Medicraft.Systems.Managers
             if (Player.HP <= 0 && !IsPlayerDead) IsPlayerDead = true;
 
             if (IsPlayerDead)
+            {
+                GameGlobals.Instance.IsEnteringBossFight = false;
+
                 if (GameGlobals.Instance.CurMouse.LeftButton == ButtonState.Pressed
                     && GameGlobals.Instance.PrevMouse.LeftButton == ButtonState.Released)
-                        RespawnPlayer();
+                    RespawnPlayer();
+            }
 
-            UpdateMapPositionData();
+            // This will check if the player enters the area that is the point of crossing over to another map
+            UpdateEnteringZone();
         }
 
-        public void UpdateMapPositionData()
+        public void UpdateEnteringZone()
         {
             var EnteringZoneArea = GameGlobals.Instance.EnteringZoneArea;
             foreach (var zoneArea in EnteringZoneArea)
@@ -410,7 +466,7 @@ namespace Medicraft.Systems.Managers
                     var currLoadMapAction = ScreenManager.GetLoadMapAction(zoneArea.Name);
 
                     // if the zoneArea.Name not be found in LoadMapAction then return
-                    if (currLoadMapAction == ScreenManager.LoadMapAction.None) return;
+                    if (currLoadMapAction == ScreenManager.LoadMapAction.LoadSave) return;
 
                     ScreenManager.Instance.CurrentLoadMapAction = currLoadMapAction;
                     ScreenManager.Instance.TranstisionToScreen(ScreenManager.Instance.GetPlayScreen());
@@ -419,9 +475,11 @@ namespace Medicraft.Systems.Managers
             }
         }
 
-        public void SetupPlayerPosition(ScreenManager.LoadMapAction loadAction)
-        {
-            if (loadAction == ScreenManager.LoadMapAction.LoadGameSave) return;
+        public void SetupPlayerPosition()
+        { 
+            var loadAction = ScreenManager.Instance.CurrentLoadMapAction;
+
+            if (loadAction == ScreenManager.LoadMapAction.LoadSave) return;
 
             var curMap = ScreenManager.Instance.CurrentMap;
             Player.PlayerData.CurrentMap = curMap;
@@ -431,30 +489,21 @@ namespace Medicraft.Systems.Managers
             PositionData positionData;
             Vector2 position = Vector2.One;
 
-            switch (loadAction)
+            if (loadAction == ScreenManager.LoadMapAction.NewGame)
             {
-                default:
+                positionData = mapPositionData.Positions.FirstOrDefault(p => p.Name.Equals("Respawn"));
+                position = new Vector2(
+                    (float)positionData.Value[0],
+                    (float)positionData.Value[1]);
+            }
+            else
+            {
+                var loadActionString = Enum.GetName(typeof(ScreenManager.LoadMapAction), loadAction);
 
-                case ScreenManager.LoadMapAction.NewGame:        
-                    positionData = mapPositionData.Positions.FirstOrDefault(p => p.Name.Equals("Respawn"));
-                    position = new Vector2(
-                        (float)positionData.Value[0],
-                        (float)positionData.Value[1]);
-                    break;
-
-                case ScreenManager.LoadMapAction.map_1_to_Test:     // Get position in Test where map_1 to Test 
-                    positionData = mapPositionData.Positions.FirstOrDefault(p => p.Name.Equals("map_1_to_Test"));
-                    position = new Vector2(
-                        (float)positionData.Value[0],
-                        (float)positionData.Value[1]);
-                    break;
-
-                case ScreenManager.LoadMapAction.Test_to_map_1:
-                    positionData = mapPositionData.Positions.FirstOrDefault(p => p.Name.Equals("Test_to_map_1"));
-                    position = new Vector2(
-                        (float)positionData.Value[0],
-                        (float)positionData.Value[1]);
-                    break;
+                positionData = mapPositionData.Positions.FirstOrDefault(p => p.Name.Equals(loadActionString));
+                position = new Vector2(
+                    (float)positionData.Value[0],
+                    (float)positionData.Value[1]);
             }          
 
             Player.Position = position;

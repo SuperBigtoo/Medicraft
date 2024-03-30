@@ -15,11 +15,9 @@ namespace Medicraft.Systems.Managers
     public class ObjectManager : IObjectManager
     {
         public float SpawnTime = 0f;
-
         public readonly List<GameObject> gameObjects;
 
         private ObjectSpawner _objectSpawner;
-
         private static ObjectManager instance;
 
         public IEnumerable<GameObject> GameObjects => gameObjects;
@@ -74,6 +72,7 @@ namespace Medicraft.Systems.Managers
         public void ClearGameObject()
         {
             gameObjects.Clear();
+            _objectSpawner ??= null;
         }
 
         public static ObjectManager Instance

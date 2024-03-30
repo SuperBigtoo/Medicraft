@@ -72,16 +72,13 @@ namespace Medicraft.Systems.Managers
         {
             // hide all panels and show current example panel
             foreach (Panel panel in _mainPanels)
-            {
                 panel.Visible = false;
-            }
 
             _mainPanels[CurrentGUI].Visible = true;
         }
 
         public void InitializeThemeAndUI(BuiltinThemes theme)
         {
-
             // create and init the UI manager
             var content = new ContentManager(GameGlobals.Instance.Content.ServiceProvider, "Content");
             UserInterface.Initialize(content, theme);
@@ -1076,12 +1073,29 @@ namespace Medicraft.Systems.Managers
                 });
 
                 // Display Skill point
-                displayCharacterPanel.AddChild(new Label()
+                var skillPointPanel = new Panel()
+                {
+                    Identifier = "skillPointPanel",
+                    Anchor = Anchor.TopLeft,
+                    Skin = PanelSkin.None
+                };
+                displayCharacterPanel.AddChild(skillPointPanel);
+
+                skillPointPanel.AddChild(new Icon(IconType.None)
+                {
+                    Identifier = "SPIcon",
+                    Locked = true,
+                    Texture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.skill_point),
+                    Scale = 0.75f,
+                    Offset = new Vector2(-35, -35),
+                    Anchor = Anchor.AutoInlineNoBreak
+                });
+                skillPointPanel.AddChild(new Label()
                 {
                     Identifier = "skillPoint",
                     Scale = 1.15f,
-                    Padding = new Vector2(15, 0),
-                    Anchor = Anchor.TopLeft
+                    Padding = new Vector2(0, -30),
+                    Anchor = Anchor.AutoInlineNoBreak
                 });
 
                 // Left Equipment Panel
@@ -1133,7 +1147,7 @@ namespace Medicraft.Systems.Managers
                 };
                 leftPanel.AddChild(selectedSkillPanel);
 
-                var descripLeftSkill = new Paragraph(@"", Anchor.CenterLeft, Color.White, 0.9f, new Vector2(280, 200))
+                var descripLeftSkill = new Paragraph(@"", Anchor.CenterLeft, Color.White, 0.9f, new Vector2(280, 250))
                 {
                     Identifier = "descripLeftSkill",
                     WrapWords = true
@@ -1149,7 +1163,7 @@ namespace Medicraft.Systems.Managers
                 };
                 selectedSkillPanel.AddChild(upSkillButton);
 
-                var descripRightSkill = new Paragraph(@"", Anchor.CenterRight, Color.White, 0.9f, new Vector2(280, 200))
+                var descripRightSkill = new Paragraph(@"", Anchor.CenterRight, Color.White, 0.9f, new Vector2(280, 250))
                 {
                     Identifier = "descripRightSkill",
                     WrapWords = true
@@ -1283,7 +1297,7 @@ namespace Medicraft.Systems.Managers
                                                 RefreshSkillDescription(descSkill, level);
                                                 
                                                 // Set Display Skill point
-                                                var skillPoint = displayCharacterPanel.Children.OfType<Label>().FirstOrDefault
+                                                var skillPoint = skillPointPanel.Children.OfType<Label>().FirstOrDefault
                                                     (l => l.Identifier.Equals("skillPoint"));
                                                 skillPoint.Text = "SP: " + PlayerManager.Instance.Player.PlayerData.SkillPoint;
 
@@ -1769,6 +1783,7 @@ namespace Medicraft.Systems.Managers
             var currentTabPanel = inspectTabs.ActiveTab.panel;
             var leftPanel = currentTabPanel.Children.FirstOrDefault(p => p.Identifier.Equals("leftPanel"));
             var displayCharacterPanel = leftPanel.Children.FirstOrDefault(p => p.Identifier.Equals("displayCharacterPanel"));
+            var skillPointPanel = displayCharacterPanel.Children.FirstOrDefault(p => p.Identifier.Equals("skillPointPanel"));
             var leftEquipmentPanel = displayCharacterPanel.Children.FirstOrDefault(p => p.Identifier.Equals("leftEquipmentPanel"));
             var rightEquipmentPanel = displayCharacterPanel.Children.FirstOrDefault(p => p.Identifier.Equals("rightEquipmentPanel"));          
 
@@ -1778,7 +1793,7 @@ namespace Medicraft.Systems.Managers
             characterNameHeader.Text = PlayerManager.Instance.Player.Name;
             
             // Set Display Skill point
-            var skillPoint = displayCharacterPanel.Children.OfType<Label>().FirstOrDefault
+            var skillPoint = skillPointPanel.Children.OfType<Label>().FirstOrDefault
                 (l => l.Identifier.Equals("skillPoint"));
             skillPoint.Text = "SP: " + PlayerManager.Instance.Player.PlayerData.SkillPoint;
 
@@ -1866,7 +1881,7 @@ namespace Medicraft.Systems.Managers
             var normalSkillIcon = skillIconPanel.Children.OfType<Icon>().FirstOrDefault
                         (e => e.Identifier.Equals("normalSkillIcon"));
             normalSkillIcon.Enabled = true;
-            normalSkillIcon.Texture = GameGlobals.Instance.GetItemTexture(400);
+            normalSkillIcon.Texture = GameGlobals.Instance.GetAbilityTexture(GameGlobals.AbilityTextureName.Ability_Ive_got_the_Scent);
             normalSkillIcon.Count = PlayerManager.Instance.Player.PlayerData.Abilities.NormalSkillLevel;
             var normalSkillLevel = normalSkillIcon.Children.OfType<Label>().FirstOrDefault
                         (e => e.Identifier.Equals("normalSkillLevel"));
@@ -1876,7 +1891,7 @@ namespace Medicraft.Systems.Managers
             var burstSkillIcon = skillIconPanel.Children.OfType<Icon>().FirstOrDefault
                         (e => e.Identifier.Equals("burstSkillIcon"));
             burstSkillIcon.Enabled = true;
-            burstSkillIcon.Texture = GameGlobals.Instance.GetItemTexture(400);
+            burstSkillIcon.Texture = GameGlobals.Instance.GetAbilityTexture(GameGlobals.AbilityTextureName.Ability_Noah_Strike);
             burstSkillIcon.Count = PlayerManager.Instance.Player.PlayerData.Abilities.BurstSkillLevel;
             var burstSkillLevel = burstSkillIcon.Children.OfType<Label>().FirstOrDefault
                         (e => e.Identifier.Equals("burstSkillLevel"));
@@ -1886,7 +1901,7 @@ namespace Medicraft.Systems.Managers
             var passiveSkillIcon = skillIconPanel.Children.OfType<Icon>().FirstOrDefault
                         (e => e.Identifier.Equals("passiveSkillIcon"));
             passiveSkillIcon.Enabled = true;
-            passiveSkillIcon.Texture = GameGlobals.Instance.GetItemTexture(400);
+            passiveSkillIcon.Texture = GameGlobals.Instance.GetAbilityTexture(GameGlobals.AbilityTextureName.Ability_Survivalist);
             passiveSkillIcon.Count = PlayerManager.Instance.Player.PlayerData.Abilities.PassiveSkillLevel;
             var passiveSkillLevel = passiveSkillIcon.Children.OfType<Label>().FirstOrDefault
                         (e => e.Identifier.Equals("passiveSkillLevel"));
@@ -2070,7 +2085,7 @@ namespace Medicraft.Systems.Managers
                 };
                 mainPanel.AddChild(title);
 
-                var newGameButton = new Button("New Game", ButtonSkin.Default)
+                var newGameButton = new Button("New Game", ButtonSkin.Default, Anchor.AutoCenter)
                 {
                     Identifier = "newGameButton",
                     OnClick = (btn) =>
@@ -2080,7 +2095,7 @@ namespace Medicraft.Systems.Managers
                 };
                 mainPanel.AddChild(newGameButton);
 
-                var loadButton = new Button("Load Save", ButtonSkin.Default)
+                var loadButton = new Button("Load Save", ButtonSkin.Default, Anchor.AutoCenter)
                 {
                     Identifier = "loadButton",
                     OnClick = (Entity btn) =>
@@ -2094,7 +2109,7 @@ namespace Medicraft.Systems.Managers
                 };
                 mainPanel.AddChild(loadButton);
 
-                var optionsButton = new Button("Options", ButtonSkin.Default)
+                var optionsButton = new Button("Options", ButtonSkin.Default, Anchor.AutoCenter)
                 {
                     Identifier = "optionsButton",
                     OnClick = (Entity btn) =>
@@ -2105,7 +2120,7 @@ namespace Medicraft.Systems.Managers
                 };
                 mainPanel.AddChild(optionsButton);
 
-                var quitButton = new Button("Quit", ButtonSkin.Default)
+                var quitButton = new Button("Quit", ButtonSkin.Default, Anchor.AutoCenter)
                 {
                     Identifier = "quitButton",
                     OnClick = (Entity entity) =>
@@ -2140,7 +2155,7 @@ namespace Medicraft.Systems.Managers
                 // Initialize save slots
                 InitSaveSlot(loadGameSavePanel, MainMenu);
 
-                // Buttons
+                // Buttons Panel
                 loadGameSavePanel.AddChild(new LineSpace(3));
                 var buttonPanel = new Panel(new Vector2(1000, 125), PanelSkin.None, Anchor.BottomCenter)
                 {
@@ -2153,23 +2168,7 @@ namespace Medicraft.Systems.Managers
                 {
                     Identifier = "playButton",
                     Enabled = false,
-                    Size = new Vector2(300, 50),
-                    OnClick = (Entity btn) =>
-                    {
-                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("Play Selected Save!", "Do you want to play the selected save?"
-                            , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
-                            {
-                                new("Yes", () =>
-                                {
-                                    ScreenManager.StartGame(false);
-                                    return true;
-                                }),
-                                new("No", () => 
-                                {                                    
-                                    return true;
-                                })
-                            });
-                    }
+                    Size = new Vector2(300, 50)
                 };
                 buttonPanel.AddChild(playButton);
 
@@ -2180,31 +2179,6 @@ namespace Medicraft.Systems.Managers
                     Enabled = false,
                     Size = new Vector2(145, 50),
                     Offset = new Vector2(-77.5f, -30),
-                    OnClick = (Entity btn) =>
-                    {
-                        var gameSaveData = GameGlobals.Instance.GameSave[GameGlobals.Instance.SelectedGameSaveIndex];
-
-                        var textInput = new TextInput(false)
-                        {
-                            Value = gameSaveData.Name,
-                            PlaceholderText = "Enter your new save name"
-                        };
-                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("Rename", ""
-                            , [
-                                new("Done", () =>
-                                {
-                                    if (!textInput.Value.Equals("") || !textInput.Value.Equals(" "))
-                                    {
-                                        gameSaveData.Name = textInput.Value;
-                                        JsonFileManager.SaveGame(JsonFileManager.RenameGameSave);
-                                    }
-                                    RefreshGameSave(MainMenu);
-
-                                    return true;
-                                })
-                            ]
-                            , [textInput]);
-                    }
                 };
                 buttonPanel.AddChild(renameButton);
 
@@ -2217,6 +2191,82 @@ namespace Medicraft.Systems.Managers
                     Offset = new Vector2(77.5f, -30)
                 };
                 buttonPanel.AddChild(deleteButton);
+
+                var backButton = new Button("Back", ButtonSkin.Default, Anchor.BottomRight)
+                {
+                    Identifier = "backButton",
+                    Size = new Vector2(145, 90),
+                    Offset = new Vector2(0, -20)
+                };
+                buttonPanel.AddChild(backButton);
+
+                // Set OnClick GameSave Panel
+                foreach (var gameSavePanel in MainMenuSaveSlots)
+                {
+                    gameSavePanel.OnClick = (entity) =>
+                    {
+                        // Set Enable Buttons
+                        playButton.Enabled = true;
+                        renameButton.Enabled = true;
+                        deleteButton.Enabled = true;
+
+                        SelectedGameSavePanel = gameSavePanel;
+                        UpdateSelectedGameSave(MainMenu);
+                    };
+                }
+
+                // Set OnClick Buttons on Load Save
+                // Play
+                playButton.OnClick = (Entity btn) =>
+                {
+                    GeonBit.UI.Utils.MessageBox.ShowMsgBox("Play Selected Save!", "Do you want to play the selected save?"
+                        , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
+                        {
+                                new("Yes", () =>
+                                {
+                                    ScreenManager.StartGame(false);
+                                    return true;
+                                }),
+                                new("No", () =>
+                                {
+                                    return true;
+                                })
+                        });
+                };
+
+                // Rename
+                renameButton.OnClick = (Entity btn) =>
+                {
+                    var gameSaveData = GameGlobals.Instance.GameSave[GameGlobals.Instance.SelectedGameSaveIndex];
+
+                    var textInput = new TextInput(false)
+                    {
+                        Value = gameSaveData.Name,
+                        PlaceholderText = "Enter your new save name"
+                    };
+                    GeonBit.UI.Utils.MessageBox.ShowMsgBox("Rename", ""
+                        , [
+                            new("Done", () =>
+                                {
+                                    if (!textInput.Value.Equals("") || !textInput.Value.Equals(" "))
+                                    {
+                                        gameSaveData.Name = textInput.Value;
+                                        JsonFileManager.SaveGame(JsonFileManager.RenameGameSave);
+                                    }
+                                    RefreshGameSave(MainMenu);
+
+                                    // Reset Buttons
+                                    playButton.Enabled = false;
+                                    renameButton.Enabled = false;
+                                    deleteButton.Enabled = false;
+
+                                    return true;
+                                })
+                        ]
+                        , [textInput]);
+                };
+
+                // Delete
                 deleteButton.OnClick = (Entity btn) =>
                 {
                     GeonBit.UI.Utils.MessageBox.ShowMsgBox("Delete Selected Save!", "Do you want to delete the selected save?"
@@ -2241,44 +2291,23 @@ namespace Medicraft.Systems.Managers
                         });
                 };
 
-                var backButton = new Button("Back", ButtonSkin.Default, Anchor.BottomRight)
+                // Back
+                backButton.OnClick = (Entity btn) =>
                 {
-                    Identifier = "backButton",
-                    Size = new Vector2(145, 90),
-                    Offset = new Vector2(0, -20),
-                    OnClick = (Entity btn) =>
-                    {
-                        loadGameSavePanel.Visible = false;
-                        mainPanel.Visible = true;
+                    loadGameSavePanel.Visible = false;
+                    mainPanel.Visible = true;
 
-                        // Reset Buttons
-                        playButton.Enabled = false;
-                        renameButton.Enabled = false;
-                        deleteButton.Enabled = false;
+                    // Reset Buttons
+                    playButton.Enabled = false;
+                    renameButton.Enabled = false;
+                    deleteButton.Enabled = false;
 
-                        IsClickedLoadButton = false;
-                    }
+                    IsClickedLoadButton = false;
                 };
-                buttonPanel.AddChild(backButton);
-
-                // Set OnClick GameSave Panel
-                foreach (var gameSavePanel in MainMenuSaveSlots)
-                {
-                    gameSavePanel.OnClick = (entity) =>
-                    {
-                        // Set Enable Buttons
-                        playButton.Enabled = true;
-                        renameButton.Enabled = true;
-                        deleteButton.Enabled = true;
-
-                        SelectedGameSavePanel = gameSavePanel;
-                        UpdateSelectedGameSave(MainMenu);
-                    };
-                }
             }
         }
 
-        private void InitOptionMenu(Panel mainPanel, Panel optionPanel, Panel graphicsSettingPanel, Panel soundSettingPanel)
+        private static void InitOptionMenu(Panel mainPanel, Panel optionPanel, Panel graphicsSettingPanel, Panel soundSettingPanel)
         {
             // Options Menu
             {

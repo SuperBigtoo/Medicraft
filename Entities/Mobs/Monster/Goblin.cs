@@ -67,12 +67,11 @@ namespace Medicraft.Entities.Mobs.Monster
 
             BoundingAggro = new CircleF(Position, 150);         // Circle for check aggro player        
 
-            _pathFinding = new AStar(
+            pathFinding = new AStar(
                 (int)BoundingDetectCollisions.Center.X,
                 (int)BoundingDetectCollisions.Center.Y,
                 (int)EntityData.Position[0],
-                (int)EntityData.Position[1]
-            );
+                (int)EntityData.Position[1]);
 
             _itemDropId = GameGlobals.Instance.RandomItemDrop();
             _quantityDrop = GameGlobals.Instance.RandomItemQuantityDrop(_itemDropId);
@@ -128,12 +127,11 @@ namespace Medicraft.Entities.Mobs.Monster
             BoundingAggro = goblin.BoundingAggro;
             BoundingDetectEntity = goblin.BoundingDetectEntity;
 
-            _pathFinding = new AStar(
+            pathFinding = new AStar(
                 (int)BoundingDetectCollisions.Center.X,
                 (int)BoundingDetectCollisions.Center.Y,
                 (int)EntityData.Position[0],
-                (int)EntityData.Position[1]
-            );
+                (int)EntityData.Position[1]);
 
             _itemDropId = GameGlobals.Instance.RandomItemDrop();
             _quantityDrop = GameGlobals.Instance.RandomItemQuantityDrop(_itemDropId);
@@ -213,6 +211,9 @@ namespace Medicraft.Entities.Mobs.Monster
 
             // Update time conditions
             UpdateTimerConditions(deltaSeconds);
+
+            // Blinking if attacked
+            HitBlinking(deltaSeconds);
 
             // Ensure hp or mana doesn't exceed the maximum & minimum value
             MinimumCapacity();

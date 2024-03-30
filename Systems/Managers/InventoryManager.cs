@@ -53,9 +53,7 @@ namespace Medicraft.Systems.Managers
 
             // Setup Item in Inventory
             foreach (var item in inventoryData.Inventory)
-            {
                 InventoryBag.Add(KeyIdex++, item);
-            }
         }
 
         public bool IsInventoryFull(int itemId, int quantity)

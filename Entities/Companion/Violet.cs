@@ -4,65 +4,52 @@ using MonoGame.Extended;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Sprites;
 using Microsoft.Xna.Framework.Graphics;
+using Medicraft.Systems.Managers;
 
 namespace Medicraft.Entities.Companion
 {
     public class Violet : Companion
     {
-        public Violet(AnimatedSprite sprite, EntityData entityData, Vector2 scale)
+        public Violet(AnimatedSprite sprite, CompanionData companionData, Vector2 scale) : base(scale)
         {
             Sprite = sprite;
+            CompanionData = companionData;
 
             // Initialize Character Data
-            Id = entityData.Id;             // Mot to be confuse with CharId
-            Level = entityData.Level;
-            InitializeCharacterData(entityData.CharId, Level);
+            Id = companionData.CharId;             // Mot to be confuse with CharId
+            Level = companionData.Level;
+            InitializeCharacterData(companionData.CharId, Level);
 
-            knockbackForce = 50f;
             percentNormalHit = 0.5f;
             hitRateNormal = 0.5f;
             hitRateNormalSkill = 0.9f;
             hitRateBurstSkill = 0.9f;
 
             attackSpeed = 0.25f;
-            cooldownAttack = 0.5f;
+            cooldownAttack = 1f;
             cooldownAttackTimer = cooldownAttack;
 
+            AggroTime = 1f;
             DyingTime = 1.3f;
             IsAggroResettable = true;
             IsKnockbackable = true;
 
-            var position = new Vector2((float)entityData.Position[0], (float)entityData.Position[1]);
-            Transform = new Transform2
-            {
-                Scale = scale,
-                Rotation = 0f,
-                Position = position
-            };
-
-            BoundingCollisionX = 9;
-            BoundingCollisionY = 4;
+            BoundingCollisionX = 16;
+            BoundingCollisionY = 2.6f;
 
             // Rec for check Collision
             BoundingDetectCollisions = new RectangleF(
                 (int)((int)Position.X - Sprite.TextureRegion.Width / BoundingCollisionX),
                 (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
-                (int)(Sprite.TextureRegion.Width / 4f),
-                Sprite.TextureRegion.Height / 6
+                (int)(Sprite.TextureRegion.Width / 6.5f),
+                Sprite.TextureRegion.Height / 8
             );
 
             BoundingHitBox = new CircleF(Position, 42f);         // Circle for Entity to hit
 
             BoundingDetectEntity = new CircleF(Position, 80f);   // Circle for check attacking
 
-            BoundingAggro = new CircleF(Position, 1);         // Circle for check aggro enemy mobs        
-
-            _pathFinding = new AStar(
-                (int)BoundingDetectCollisions.Center.X,
-                (int)BoundingDetectCollisions.Center.Y,
-                (int)entityData.Position[0],
-                (int)entityData.Position[1]
-            );
+            BoundingAggro = new CircleF(Position, 30);         // Circle for check aggro enemy mobs
 
             // Set Effect
             NormalHitEffectAttacked = "hit_effect_9";
@@ -85,8 +72,8 @@ namespace Medicraft.Entities.Companion
 
         public override void DrawShadow(SpriteBatch spriteBatch, Texture2D shadowTexture)
         {
-            var position = new Vector2(Position.X - shadowTexture.Width * 1.2f / 2f
-                    , BoundingDetectCollisions.Bottom - Sprite.TextureRegion.Height * 1.2f / 10);
+            var position = new Vector2(Position.X - (shadowTexture.Width * 1.2f) / 2.2f
+                , BoundingDetectCollisions.Center.Y - (shadowTexture.Height * 1.2f) / 5f);
 
             spriteBatch.Draw(shadowTexture, position, null, Color.White
                 , 0f, Vector2.Zero, 1.2f, SpriteEffects.None, Sprite.Depth + 0.0000025f);

@@ -5,19 +5,36 @@ using Microsoft.Xna.Framework;
 using System;
 using MonoGame.Extended.Sprites;
 using System.Linq;
+using Medicraft.Data.Models;
+using MonoGame.Extended;
+using Medicraft.Systems.PathFinding;
 
 namespace Medicraft.Entities.Companion
 {
     public class Companion : Entity
     {
+        public CompanionData CompanionData { get; protected set; }
+
         public bool isCriticalAttack, isAttackMissed;
 
-        protected float knockbackForce, percentNormalHit;
-        protected float hitRateNormal, hitRateNormalSkill, hitRateBurstSkill;     
+        protected float percentNormalHit;
+        protected float hitRateNormal, hitRateNormalSkill, hitRateBurstSkill;
 
-        protected Companion()
+        protected Companion(Vector2 scale)
         {
-            _stoppingNodeIndex = 2;
+            stoppingNodeIndex = 2;
+            knockbackForce = 40;
+
+            var position = new Vector2(
+                PlayerManager.Instance.Player.Position.X,
+                PlayerManager.Instance.Player.Position.Y);
+
+            Transform = new Transform2
+            {
+                Scale = scale,
+                Rotation = 0f,
+                Position = position
+            };
         }
 
         public override void Update(GameTime gameTime, float playerDepth, float topDepth, float middleDepth, float bottomDepth)
@@ -27,7 +44,11 @@ namespace Medicraft.Entities.Companion
             if (!IsDying)
             {
                 // Setup PathFinding
-                //SetPathFindingNode((int)EntityData.Position[0], (int)EntityData.Position[1]);
+                SetPathFindingNode(
+                    (int)PlayerManager.Instance.Player.BoundingDetectCollisions.Center.X,
+                    (int)PlayerManager.Instance.Player.BoundingDetectCollisions.Center.Y);
+
+                //System.Diagnostics.Debug.WriteLine($"pathFinding : {pathFinding.GetPath().Count}");
 
                 if (!PlayerManager.Instance.IsPlayerDead)
                 {
@@ -39,6 +60,21 @@ namespace Medicraft.Entities.Companion
 
                     // Check Aggro Player
                     CheckAggro();
+
+                    // Update Closest Enemy Mob to Player                   
+                    if (IsAggro)
+                    {
+                        var enemyMobs = EntityManager.Instance.Entities.Where(e => !e.IsDying &&
+                            (e.EntityType == EntityTypes.Hostile || e.EntityType == EntityTypes.Boss)).ToList();
+
+                        foreach (var mob in enemyMobs)
+                            if (PlayerManager.Instance.Player.BoundingAggro.Intersects(mob.BoundingHitBox))
+                            {
+                                EntityManager.Instance.ClosestEnemy = FindClosestEntity(enemyMobs, this);
+                                break;
+                            }
+                    }
+                    else EntityManager.Instance.ClosestEnemy = null;
                 }
 
                 // Update layer depth
@@ -76,40 +112,65 @@ namespace Medicraft.Entities.Companion
             // Update time conditions
             UpdateTimerConditions(deltaSeconds);
 
+            // Blinking if attacked
+            HitBlinking(deltaSeconds);
+
             // Ensure hp or mana doesn't exceed the maximum & minimum value
             MinimumCapacity();
 
             Sprite.Update(deltaSeconds);
         }
 
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (GameGlobals.Instance.IsShowPath)
+            {
+                pathFinding.Draw(spriteBatch);
+            }
+
+            spriteBatch.Draw(Sprite, Transform);
+
+            var shadowTexture = GameGlobals.Instance.GetShadowTexture(GameGlobals.ShadowTextureName.shadow_1);
+
+            DrawShadow(spriteBatch, shadowTexture);
+
+            // Test Draw BoundingRec for Collision
+            if (GameGlobals.Instance.IsDebugMode)
+            {
+                var pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
+                pixelTexture.SetData(new Color[] { Color.White });
+                spriteBatch.Draw(pixelTexture, (Rectangle)BoundingDetectCollisions, Color.Red);
+            }
+        }
+
         protected override void MovementControl(float deltaSeconds)
         {
             var walkSpeed = deltaSeconds * Speed;
-            _initPos = Position;
+            initPos = Position;
 
             // Check Object Collsion
             CheckCollision();
 
             // Play Sprite: Idle 
-            if (!IsMoving)
+            if (!IsAttacking && !IsMoving)
             {
                 CurrentAnimation = SpriteCycle + "_idle";
                 Sprite.Play(CurrentAnimation);
             }
 
             // Check movement according to PathFinding
-            if (ScreenManager.Instance.IsScreenLoaded)
+            if (!IsAttacking && !IsStunning && ScreenManager.Instance.IsScreenLoaded)
             {
-                if (_pathFinding.GetPath().Count != 0)
+                if (pathFinding.GetPath().Count != 0)
                 {
-                    if (_pathFinding.GetPath().Count > 2)
+                    if (pathFinding.GetPath().Count > 2)
                     {
-                        if (_currentNodeIndex < _pathFinding.GetPath().Count - _stoppingNodeIndex)
+                        if (currentNodeIndex < pathFinding.GetPath().Count - stoppingNodeIndex)
                         {
                             // Calculate direction to the next node
-                            var direction = new Vector2(_pathFinding.GetPath()[_currentNodeIndex + 1].col
-                                - _pathFinding.GetPath()[_currentNodeIndex].col, _pathFinding.GetPath()[_currentNodeIndex + 1].row
-                                - _pathFinding.GetPath()[_currentNodeIndex].row);
+                            var direction = new Vector2(pathFinding.GetPath()[currentNodeIndex + 1].col
+                                - pathFinding.GetPath()[currentNodeIndex].col, pathFinding.GetPath()[currentNodeIndex + 1].row
+                                - pathFinding.GetPath()[currentNodeIndex].row);
                             direction.Normalize();
 
                             // Move the character towards the next node
@@ -315,21 +376,9 @@ namespace Medicraft.Entities.Companion
             return totalDamage;
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public void SetPathFinding(AStar pathFinding)
         {
-            spriteBatch.Draw(Sprite, Transform);
-
-            var shadowTexture = GameGlobals.Instance.GetShadowTexture(GameGlobals.ShadowTextureName.shadow_1);
-
-            DrawShadow(spriteBatch, shadowTexture);
-
-            // Test Draw BoundingRec for Collision
-            if (GameGlobals.Instance.IsDebugMode)
-            {
-                var pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
-                pixelTexture.SetData(new Color[] { Color.White });
-                spriteBatch.Draw(pixelTexture, (Rectangle)BoundingDetectCollisions, Color.Red);
-            }
+            this.pathFinding = pathFinding;
         }
     }
 }

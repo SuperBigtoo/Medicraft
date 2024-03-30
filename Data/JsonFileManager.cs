@@ -37,7 +37,7 @@ namespace Medicraft.Data
                     PlayerManager.Instance.Player.PlayerData.Position[0] = Math.Round(PlayerManager.Instance.Player.Position.X, 2);
                     PlayerManager.Instance.Player.PlayerData.Position[1] = Math.Round(PlayerManager.Instance.Player.Position.Y, 2);
 
-                    // Set Current InventoryData
+                    // Get Current InventoryData
                     var inventoryItems = new List<InventoryItemData>();
                     foreach (var item in InventoryManager.Instance.InventoryBag.Values)
                     {
@@ -49,6 +49,14 @@ namespace Medicraft.Data
                         Inventory = inventoryItems
                     };
                     PlayerManager.Instance.Player.PlayerData.InventoryData = inventoryData;
+
+                    // Get Current CompanionData
+                    var companions = new List<CompanionData>();
+                    foreach (var compa in PlayerManager.Instance.Companions)
+                    {
+                        companions.Add(compa.CompanionData);
+                    }
+                    PlayerManager.Instance.Player.PlayerData.Companions = companions;
 
                     // Get Time
                     DateTime dateTime = DateTime.Now;

@@ -1,5 +1,6 @@
 ﻿using Medicraft.Data.Models;
 using Medicraft.Systems.Managers;
+using Medicraft.Systems.PathFinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -143,7 +144,7 @@ namespace Medicraft.Systems.TilemapRenderer
             GameGlobals.Instance.TILE_SIZE = _tileSize;             // In this game we using tile size 32*32
             GameGlobals.Instance.NUM_ROWS = _tileMap.Height;
             GameGlobals.Instance.NUM_COLUMNS = _tileMap.Width;
-            GameGlobals.Instance.Map = new int[_tileMap.Height, _tileMap.Width];
+            GameGlobals.Instance.TILEMAP = new int[_tileMap.Height, _tileMap.Width];
 
             int x = 0;
             int y = 0;
@@ -155,9 +156,10 @@ namespace Medicraft.Systems.TilemapRenderer
                     int gid = _tileMap.TileLayers[0].Tiles[j].Gid;
                     if (gid != 0)
                     {
-                        if (gid - 1 == BLOCK_ID) GameGlobals.Instance.Map[y, x] = BLOCK;
+                        if (gid - 1 == BLOCK_ID)
+                            GameGlobals.Instance.TILEMAP[y, x] = BLOCK;
                     }
-                    else GameGlobals.Instance.Map[y, x] = BLANK;
+                    else GameGlobals.Instance.TILEMAP[y, x] = BLANK;
 
                     if (x == _tileMap.Width - 1)
                     {
@@ -176,7 +178,8 @@ namespace Medicraft.Systems.TilemapRenderer
                     int gid = _tileMap.TileLayers[1].Tiles[j].Gid;
                     if (gid != 0)
                     {
-                        if (GameGlobals.Instance.Map[y, x] != BLOCK) GameGlobals.Instance.Map[y, x] = ROAD;
+                        if (GameGlobals.Instance.TILEMAP[y, x] != BLOCK) 
+                            GameGlobals.Instance.TILEMAP[y, x] = ROAD;
                     }
 
                     if (x == _tileMap.Width - 1)
@@ -328,8 +331,8 @@ namespace Medicraft.Systems.TilemapRenderer
             var playerPos = PlayerManager.Instance.Player.Position;
             var lengthX = MathF.Abs(x - playerPos.X);
             var lengthY = MathF.Abs(y - playerPos.Y);
-            var gameScreenX = ScreenManager.Instance.GraphicsDevice.Viewport.Width * 1.25;
-            var gameScreenY = ScreenManager.Instance.GraphicsDevice.Viewport.Height * 1.25;
+            var gameScreenX = ScreenManager.Instance.GraphicsDevice.Viewport.Width * 0.75;
+            var gameScreenY = ScreenManager.Instance.GraphicsDevice.Viewport.Height * 0.75;
 
             if (lengthX <= gameScreenX && lengthY <= gameScreenY)
             {
@@ -371,8 +374,6 @@ namespace Medicraft.Systems.TilemapRenderer
             int totalDuration = frames.Sum(frame => frame.Duration) / totalFrames;
 
             int frameIndex = (int)(_totalMilliseconds / totalDuration) % totalFrames;
-
-            //System.Diagnostics.Debug.WriteLine($"totalFrames : {(int)(_totalMilliseconds / totalDuration) % totalFrames}");
 
             return frames[frameIndex].Id;
         }

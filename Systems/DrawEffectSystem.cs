@@ -129,13 +129,11 @@ namespace Medicraft.Systems
 
             DrawAttackedEffectToPlayer(spriteBatch);
 
-            DrawPlayerEffects(spriteBatch);
+            DrawPlayerAbilityAndStatusEffects(spriteBatch);
 
             DrawCompanionAttackedEffect(spriteBatch);
 
-            DrawCompanionSkillActivatedEffect(spriteBatch);
-
-            DrawCompanionStatusEffect(spriteBatch);
+            DrawCompanionAbilityAndStatusEffect(spriteBatch);
 
             DrawItemParticle(spriteBatch);
         }
@@ -262,7 +260,7 @@ namespace Medicraft.Systems
                     }
                 }
 
-                // Effect on Player
+                // Effect on Mob
                 entity.BuffSprite ??= new AnimatedSprite(_statesSpriteSheet)
                 {
                     Depth = entity.Sprite.Depth - 0.0000026f
@@ -356,9 +354,9 @@ namespace Medicraft.Systems
             }
         }
 
-        private void DrawPlayerEffects(SpriteBatch spriteBatch)
+        private void DrawPlayerAbilityAndStatusEffects(SpriteBatch spriteBatch)
         {
-            // Activate Effect
+            // Activated Effect
             var combatLog = PlayerManager.Instance.Player.CombatLogs;
             if (combatLog.Count != 0)
             {
@@ -504,17 +502,204 @@ namespace Medicraft.Systems
 
         private void DrawCompanionAttackedEffect(SpriteBatch spriteBatch)
         {
+            var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrentCompanionIndex];
+            var combatLog = companion.CombatLogs;
 
+            if (combatLog.Count != 0)
+            {
+                foreach (var log in combatLog.Where(l => l.ElapsedTime < 1f
+                    && (l.Action == CombatNumberData.ActionType.Attack
+                        || l.Action == CombatNumberData.ActionType.CriticalAttack
+                        || l.Action == CombatNumberData.ActionType.Missed)))
+                {
+                    if (log.EffectName != null)
+                    {
+                        if (!log.IsEffectPlayed)
+                        {
+                            log.AnimatedSprite = new AnimatedSprite(_hitSpriteSheet)
+                            {
+                                Depth = companion.Sprite.Depth - 0.00001f
+                            };
+
+                            log.AnimatedSprite.Play(log.EffectName);
+                            log.IsEffectPlayed = true;
+                        }
+
+                        var position = companion.Position;
+
+                        var transform = new Transform2
+                        {
+                            Scale = new Vector2(3f, 3f),
+                            Rotation = 0f,
+                            Position = new Vector2(position.X, position.Y)
+                        };
+
+                        log.AnimatedSprite.Update(_deltaSeconds);
+
+                        var cycleEffect = _hitSpriteSheet.Cycles.Where(c => c.Key.Equals(log.EffectName)).ElementAt(0);
+                        var duration = cycleEffect.Value.FrameDuration * cycleEffect.Value.Frames.Capacity;
+
+                        if (log.ElapsedTime < duration)
+                        {
+                            spriteBatch.Draw(log.AnimatedSprite, transform);
+                        }
+                    }
+                }
+            }
         }
 
-        private void DrawCompanionSkillActivatedEffect(SpriteBatch spriteBatch)
+        private void DrawCompanionAbilityAndStatusEffect(SpriteBatch spriteBatch)
         {
+            var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrentCompanionIndex];
 
-        }
+            // Activated Effect
+            var combatLog = companion.CombatLogs;
+            if (combatLog.Count != 0)
+            {
+                foreach (var log in combatLog.Where(l => l.ElapsedTime < 1f
+                    && (l.Action == CombatNumberData.ActionType.Buff
+                        || l.Action == CombatNumberData.ActionType.Recovery)))
+                {
+                    if (log.EffectName != null)
+                    {
+                        if (!log.IsEffectPlayed)
+                        {
+                            log.AnimatedSprite = new AnimatedSprite(_hitSkillSpriteSheet)
+                            {
+                                Depth = companion.Sprite.Depth - 0.000005f
+                            };
 
-        private void DrawCompanionStatusEffect(SpriteBatch spriteBatch)
-        {
+                            log.AnimatedSprite.Play(log.EffectName);
+                            log.IsEffectPlayed = true;
+                        }
 
+                        var position = companion.Position;
+
+                        var transform = new Transform2
+                        {
+                            Scale = new Vector2(1f, 1f),
+                            Rotation = 0f,
+                            Position = new Vector2(position.X, position.Y)
+                        };
+
+                        log.AnimatedSprite.Update(_deltaSeconds);
+
+                        var cycleEffect = _hitSkillSpriteSheet.Cycles.FirstOrDefault(c => c.Key.Equals(log.EffectName));
+                        var duration = cycleEffect.Value.FrameDuration * cycleEffect.Value.Frames.Capacity;
+
+                        if (log.ElapsedTime < duration)
+                        {
+                            spriteBatch.Draw(log.AnimatedSprite, transform);
+                        }
+                    }
+                }
+            }
+
+            // Stun
+            if (companion.IsStunning)
+            {
+                if (!companion.IsStunningEffectDraw)
+                {
+                    companion.StatesSprite = new AnimatedSprite(_statesSpriteSheet)
+                    {
+                        Depth = companion.Sprite.Depth - 0.0000025f
+                    };
+
+                    companion.StatesSprite.Play("effect_stun");
+
+                    companion.IsStunningEffectDraw = true;
+                }
+
+                if (companion.StunningTimer > 0)
+                {
+                    var transform = new Transform2
+                    {
+                        Scale = new Vector2(1f, 1f),
+                        Rotation = 0f,
+                        Position = new Vector2(companion.Position.X + companion.Sprite.TextureRegion.Width / 5
+                            , companion.Position.Y - companion.Sprite.TextureRegion.Height / 5)
+                    };
+
+                    companion.StatesSprite.Update(_deltaSeconds);
+
+                    spriteBatch.Draw(companion.StatesSprite, transform);
+                }
+            }
+            else if (companion.IsAggro)
+            {
+                if (!companion.IsAggroEffectDraw)
+                {
+                    companion.StatesSprite = new AnimatedSprite(_statesSpriteSheet)
+                    {
+                        Depth = companion.Sprite.Depth - 0.0000025f
+                    };
+
+                    companion.StatesSprite.Play("effect_taunt&aggro");
+
+                    companion.IsAggroEffectDraw = true;
+                    companion.AggroDrawEffectTimer = 3f;
+                }
+
+                if (companion.AggroDrawEffectTimer > 0)
+                {
+                    var transform = new Transform2
+                    {
+                        Scale = new Vector2(1f, 1f),
+                        Rotation = 0f,
+                        Position = new Vector2(companion.Position.X + companion.Sprite.TextureRegion.Width / 5
+                        , companion.Position.Y - companion.Sprite.TextureRegion.Height / 5)
+                    };
+
+                    companion.StatesSprite.Update(_deltaSeconds);
+
+                    spriteBatch.Draw(companion.StatesSprite, transform);
+                }
+            }
+
+            // Effect on Companion
+            companion.BuffSprite ??= new AnimatedSprite(_statesSpriteSheet)
+            {
+                Depth = companion.Sprite.Depth - 0.0000026f
+            };
+
+            companion.DebuffSprite ??= new AnimatedSprite(_statesSpriteSheet)
+            {
+                Depth = companion.Sprite.Depth - 0.0000027f
+            };
+
+            // Buff
+            if (companion.IsBuffOn)
+            {
+                companion.BuffSprite.Play("effect_buff&shock");
+
+                var transform = new Transform2
+                {
+                    Scale = new Vector2(1.3f, 1.3f),
+                    Rotation = 0f,
+                    Position = companion.Position
+                };
+
+                companion.BuffSprite.Update(_deltaSeconds);
+
+                spriteBatch.Draw(companion.BuffSprite, transform);
+            }
+
+            // Debuff
+            if (companion.IsDebuffOn)
+            {
+                companion.DebuffSprite.Play("effect_debuff");
+
+                var transform = new Transform2
+                {
+                    Scale = new Vector2(1.3f, 1.3f),
+                    Rotation = 0f,
+                    Position = companion.Position
+                };
+
+                companion.DebuffSprite.Update(_deltaSeconds);
+
+                spriteBatch.Draw(companion.DebuffSprite, transform);
+            }
         }
 
         private static void DrawItemParticle(SpriteBatch spriteBatch)

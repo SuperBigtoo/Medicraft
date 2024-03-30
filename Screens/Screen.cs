@@ -26,6 +26,8 @@ namespace Medicraft.Screens
 
         public virtual void UnloadContent()
         {
+            EntityManager.Instance.ClosestEnemy = null;
+
             // Clear List Entity, GameObject and MusicBG
             EntityManager.Instance.ClearEntity();
             ObjectManager.Instance.ClearGameObject();

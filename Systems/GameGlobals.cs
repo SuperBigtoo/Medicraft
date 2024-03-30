@@ -2,6 +2,7 @@
 using Medicraft.Data;
 using Medicraft.Data.Models;
 using Medicraft.Systems.Managers;
+using Medicraft.Systems.PathFinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -134,6 +135,7 @@ namespace Medicraft.Systems
         public BitmapFont FontTA8BitBold { private set; get; }
         public BitmapFont FontTA16Bit { private set; get; }
         public List<Texture2D> GuiTextures { private set; get; }
+        public List<Texture2D> AbilityTextures { private set; get; }
         public List<ExperienceCapacityData> ExperienceCapacityDatas { private set; get; }
         public List<MapLocationPointData> MapLocationPointDatas { private set; get; }         // All Point Loaction of Maps
         public List<ItemData> ItemsDatas { private set; get; }       // All items data
@@ -179,19 +181,14 @@ namespace Medicraft.Systems
         public int TILE_SIZE { set; get; }
         public int NUM_ROWS { set; get; }
         public int NUM_COLUMNS { set; get; }
-        public int[,] Map { set; get; }
+        public int[,] TILEMAP { set; get; }
 
         public enum ShadowTextureName
         {
             shadow_1,
             shadow_2
         }
-
-        private readonly Dictionary<ShadowTextureName, int> shadowTextureIndices = new()
-        {
-            { ShadowTextureName.shadow_1, 0 },
-            { ShadowTextureName.shadow_2, 1 }
-        };
+        private readonly Dictionary<ShadowTextureName, int> shadowTextureIndices = [];
 
         public enum GuiTextureName
         {
@@ -230,48 +227,18 @@ namespace Medicraft.Systems
             passive_skill_gui_alpha,
             passive_skill_pic,
             transition_texture,
-            game_name
+            game_name,
+            skill_point
         }
+        private readonly Dictionary<GuiTextureName, int> guiTextureIndices = [];
 
-        private readonly Dictionary<GuiTextureName, int> guiTextureIndices = new()
+        public enum AbilityTextureName
         {
-            { GuiTextureName.logo_wakeup, 0 },
-            { GuiTextureName.press_f, 1 },
-            { GuiTextureName.insufficient, 2 },
-            { GuiTextureName.health_bar, 3 },
-            { GuiTextureName.healthpoints_gauge, 4 },
-            { GuiTextureName.mana_gauge, 5 },
-            { GuiTextureName.health_bar_companion, 6 },
-            { GuiTextureName.healthpoints_gauge_companion, 7 },
-            { GuiTextureName.noah_profile, 8 },
-            { GuiTextureName.companion_profile, 9 },
-            { GuiTextureName.health_bar_boss, 10 },
-            { GuiTextureName.boss_gauge, 11 },
-            { GuiTextureName.item_bar, 12 },
-            { GuiTextureName.item_slot, 13 },
-            { GuiTextureName.gold_coin, 14 },
-            { GuiTextureName.heart, 15 },
-            { GuiTextureName.selected_slot, 16 },
-            { GuiTextureName.health_bar_alpha, 17 },
-            { GuiTextureName.health_bar_companion_alpha, 18 },
-            { GuiTextureName.health_bar_boss_alpha, 19 },
-            { GuiTextureName.quest_stamp, 20},
-            { GuiTextureName.level_gui, 21},
-            { GuiTextureName.exp_bar, 22},
-            { GuiTextureName.exp_bar_alpha, 23},
-            { GuiTextureName.exp_gauge, 24},
-            { GuiTextureName.burst_skill_gui, 25},
-            { GuiTextureName.burst_skill_gui_alpha, 26},
-            { GuiTextureName.burst_skill_pic, 27},
-            { GuiTextureName.normal_skill_gui, 28},
-            { GuiTextureName.normal_skill_gui_alpha, 29},
-            { GuiTextureName.normal_skill_pic, 30},
-            { GuiTextureName.passive_skill_gui, 31},
-            { GuiTextureName.passive_skill_gui_alpha, 32},
-            { GuiTextureName.passive_skill_pic, 33},
-            { GuiTextureName.transition_texture, 34},
-            { GuiTextureName.game_name, 35}
-        };
+            Ability_Ive_got_the_Scent,
+            Ability_Noah_Strike,
+            Ability_Survivalist
+        }
+        private readonly Dictionary<AbilityTextureName, int> abilityTextureIndices = [];
 
         public enum Sound
         {
@@ -283,17 +250,7 @@ namespace Medicraft.Systems
             ItemPurchase1,
             quest
         }
-
-        private readonly Dictionary<Sound, int> soundEffectIndices = new()
-        {
-            { Sound.Attack1, 0 },
-            { Sound.Attack2, 1 },
-            { Sound.damage01, 2 },
-            { Sound.damage02, 3 },
-            { Sound.Dead, 4 },
-            { Sound.ItemPurchase1, 5 },
-            { Sound.quest, 6 }
-        };
+        private readonly Dictionary<Sound, int> soundEffectIndices = [];
 
         public enum Music
         {
@@ -331,43 +288,7 @@ namespace Medicraft.Systems
             Morinonakanoseirei,
             winered
         }
-
-        private readonly Dictionary<Music, int> musicBGIndices = new()
-        {
-            { Music.ch_1_Town, 0 },
-            { Music.ch_1_Mon, 1 },
-            { Music.ch_1_Boss, 2 },
-            { Music.ch_2_Town, 3 },
-            { Music.ch_2_Mon, 4 },
-            { Music.ch_2_Boss, 5 },
-            { Music.ch_3_Town, 6 },
-            { Music.ch_3_Mon, 7 },
-            { Music.ch_3_Boss, 8 },
-            { Music.ch_4_Town, 9 },
-            { Music.ch_4_Mon, 10 },
-            { Music.ch_4_Boss, 11 },
-            { Music.ch_5_Town, 12 },
-            { Music.ch_5_Mon, 13 },
-            { Music.ch_5_Boss, 14 },
-            { Music.ch_6_Town, 15 },
-            { Music.ch_6_Mon, 16 },
-            { Music.ch_6_Boss, 17 },
-            { Music.dova_action_battle, 18 },
-            { Music.dova_gogonoukurere, 19 },
-            { Music.dova_Good_night, 20 },
-            { Music.dova_ikirusinrin, 21 },
-            { Music.dova_Moonlight, 22 },
-            { Music.dova_pastel_green, 23 },
-            { Music.dova_wagaya, 24 },
-            { Music.FinalStorm, 25 },
-            { Music.Izanai, 26 },
-            { Music.KBF_Town_Village_01, 27 },
-            { Music.kokoro_hiraite, 28 },
-            { Music.LRPG_Tale_of_Aurora_D, 29 },
-            { Music.m308_unmei, 30 },
-            { Music.Morinonakanoseirei, 31 },
-            { Music.winered, 32 }
-        };
+        private readonly Dictionary<Music, int> musicBGIndices = [];
 
         // For Testing
         public int TestInt { set; get; }
@@ -479,6 +400,7 @@ namespace Medicraft.Systems
             BackgroundMusicPath = [];
             ShadowTextures = [];
             GuiTextures = [];
+            AbilityTextures = [];
             ExperienceCapacityDatas = [];
             MapLocationPointDatas = [];
             ItemsDatas = [];
@@ -554,8 +476,7 @@ namespace Medicraft.Systems
 
             // Load Companions Sprite Sheet
             // Violet = 0
-            CompanionSpriteSheet.Add(Content.Load<SpriteSheet>("entity/companions/violet/violet_animation.sf"
-                , new JsonContentLoader()));
+            CompanionSpriteSheet.Add(Content.Load<SpriteSheet>("entity/companions/violet/violet_animation.sf", new JsonContentLoader()));
 
             // Load Item Sprite Sheet
             ItemsPackSprites = Content.Load<SpriteSheet>("item/itemspack_spritesheet.sf", new JsonContentLoader());
@@ -594,7 +515,7 @@ namespace Medicraft.Systems
             ShadowTextures.Add(Content.Load<Texture2D>("effect/shadow_1"));
             ShadowTextures.Add(Content.Load<Texture2D>("effect/shadow_2"));
 
-            // Load GUI Texture
+            // Load GUI Textures
             GuiTextures.Add(Content.Load<Texture2D>("gui/logo_wakeup"));                        // 0. logo_wakeup
             GuiTextures.Add(Content.Load<Texture2D>("gui/press_f"));                            // 1. press_f
             GuiTextures.Add(Content.Load<Texture2D>("gui/insufficient"));                       // 2. insufficient
@@ -603,8 +524,8 @@ namespace Medicraft.Systems
             GuiTextures.Add(Content.Load<Texture2D>("gui/mana_gauge"));                         // 5. mana_gauge
             GuiTextures.Add(Content.Load<Texture2D>("gui/health_bar_companion"));               // 6. health_bar_companion
             GuiTextures.Add(Content.Load<Texture2D>("gui/healthpoints_gauge_companion"));       // 7. healthpoints_gauge_companion
-            GuiTextures.Add(Content.Load<Texture2D>("gui/noah_profile"));                       // 8. noah_profile
-            GuiTextures.Add(Content.Load<Texture2D>("gui/companion_profile"));                  // 9. companion_profile
+            GuiTextures.Add(Content.Load<Texture2D>("gui/profile/noah_profile"));               // 8. noah_profile
+            GuiTextures.Add(Content.Load<Texture2D>("gui/profile/violet_profile"));             // 9. violet_profile
             GuiTextures.Add(Content.Load<Texture2D>("gui/health_bar_boss"));                    // 10. health_bar_boss
             GuiTextures.Add(Content.Load<Texture2D>("gui/boss_gauge"));                         // 11. boss_gauge
             GuiTextures.Add(Content.Load<Texture2D>("gui/item_bar"));                           // 12. item_bar
@@ -622,15 +543,21 @@ namespace Medicraft.Systems
             GuiTextures.Add(Content.Load<Texture2D>("gui/exp_gauge"));                          // 24. exp_gauge
             GuiTextures.Add(Content.Load<Texture2D>("gui/burst_skill_gui"));                    // 25. burst_skill_gui
             GuiTextures.Add(Content.Load<Texture2D>("gui/burst_skill_gui_alpha"));              // 26. burst_skill_gui_alpha
-            GuiTextures.Add(Content.Load<Texture2D>("gui/burst_skill_pic"));                    // 27. burst_skill_pic
+            GuiTextures.Add(Content.Load<Texture2D>("gui/ability/burst_skill_pic"));            // 27. burst_skill_pic
             GuiTextures.Add(Content.Load<Texture2D>("gui/normal_skill_gui"));                   // 28. normal_skill_gui
             GuiTextures.Add(Content.Load<Texture2D>("gui/normal_skill_gui_alpha"));             // 29. normal_skill_gui_alpha
-            GuiTextures.Add(Content.Load<Texture2D>("gui/normal_skill_pic"));                   // 30. normal_skill_pic
+            GuiTextures.Add(Content.Load<Texture2D>("gui/ability/normal_skill_pic"));           // 30. normal_skill_pic
             GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_gui"));                  // 31. passive_skill_gui
             GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_gui_alpha"));            // 32. passive_skill_gui_alpha
-            GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_pic"));                  // 33. passive_skill_pic
+            GuiTextures.Add(Content.Load<Texture2D>("gui/ability/passive_skill_pic"));          // 33. passive_skill_pic
             GuiTextures.Add(Content.Load<Texture2D>("gui/transition_texture"));                 // 34. transition_texture
             GuiTextures.Add(Content.Load<Texture2D>("gui/game_name"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/skill_point"));
+
+            // Load Ability Textures
+            AbilityTextures.Add(Content.Load<Texture2D>("gui/ability/Ability_I've_got_the_Scent!"));
+            AbilityTextures.Add(Content.Load<Texture2D>("gui/ability/Ability_Noah_Strike"));
+            AbilityTextures.Add(Content.Load<Texture2D>("gui/ability/Ability_Survivalist"));
 
             // Load Sound Effects
             SoundEffects.Add(Content.Load<SoundEffect>("sound/Attack1"));
@@ -676,8 +603,60 @@ namespace Medicraft.Systems
             BackgroundMusicPath.Add("music/Morinonakanoseirei");
             BackgroundMusicPath.Add("music/winered");
 
+            // Initialize Indices
+            // ShadowTextureName
+            for (int i = 0; i < CountEnums<ShadowTextureName>(); i++)
+            {
+                shadowTextureIndices.Add(GetEnumByIndex<ShadowTextureName>(i), i);
+            }
+
+            // GuiTextureName
+            for (int i = 0; i < CountEnums<GuiTextureName>(); i++)
+            {
+                guiTextureIndices.Add(GetEnumByIndex<GuiTextureName>(i), i);
+            }
+
+            // AbilityTextureName
+            for (int i = 0; i < CountEnums<AbilityTextureName>(); i++)
+            {
+                abilityTextureIndices.Add(GetEnumByIndex<AbilityTextureName>(i), i);
+            }
+
+            // Sound
+            for (int i = 0; i < CountEnums<Sound>(); i++)
+            {
+                soundEffectIndices.Add(GetEnumByIndex<Sound>(i), i);
+            }
+
+            // Music
+            for (int i = 0; i < CountEnums<Music>(); i++)
+            {
+                musicBGIndices.Add(GetEnumByIndex<Music>(i), i);
+            }
+
             // Initialize GUI Panels
             GUIManager.Instance.InitializeThemeAndUI(BuiltinTheme);
+        }
+
+        // Count the number of enums
+        static int CountEnums<T>()
+        {
+            return Enum.GetNames(typeof(T)).Length;
+        }
+
+        // Get enum by index number
+        static T GetEnumByIndex<T>(int index)
+        {
+            string[] enumNames = Enum.GetNames(typeof(T));
+            if (index >= 0 && index < enumNames.Length)
+            {
+                string enumName = enumNames[index];
+                return (T)Enum.Parse(typeof(T), enumName);
+            }
+            else
+            {
+                throw new IndexOutOfRangeException($"Index {index} is out of range for enum {typeof(T)}");
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -754,6 +733,16 @@ namespace Medicraft.Systems
             if (guiTextureIndices.TryGetValue(guiTextureName, out int index) && index < GuiTextures.Count)
             {
                 return GuiTextures.ElementAt(index);
+            }
+
+            return null;
+        }
+
+        public Texture2D GetAbilityTexture(AbilityTextureName abilityTextureName)
+        {
+            if (abilityTextureIndices.TryGetValue(abilityTextureName, out int index) && index < AbilityTextures.Count)
+            {
+                return AbilityTextures.ElementAt(index);
             }
 
             return null;

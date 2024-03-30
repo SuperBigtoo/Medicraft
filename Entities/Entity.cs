@@ -72,23 +72,22 @@ namespace Medicraft.Entities
         public CircleF BoundingCollection;
         public CircleF BoundingAggro;
 
-        protected int _currentNodeIndex = 0;     // Index of the current node in the path
-        protected int _stoppingNodeIndex = 1;    // Distance index from the last node in the path for entity to stop moving
-        protected AStar _pathFinding;
-        protected Vector2 _initPos;
-
-        protected Vector2 _targetNode;
-        protected int _routeNodeIndex = 0;
-        protected float _nextNodeTime;
-        protected float _nextNodeTimer;
+        protected int currentNodeIndex = 0;     // Index of the current node in the path
+        protected int stoppingNodeIndex = 1;    // Distance index from the last node in the path for entity to stop moving
+        public AStar pathFinding;
+        protected Vector2 initPos;
+        protected Vector2 targetNode;
+        protected int routeNodeIndex = 0;
+        protected float nextNodeTime;
+        protected float nextNodeTimer;
 
         protected float NodeCycleTime
         {
-            get => _nextNodeTime;
+            get => nextNodeTime;
             set
             {
-                _nextNodeTime = value;
-                _nextNodeTimer = value;
+                nextNodeTime = value;
+                nextNodeTimer = value;
             }
         }
 
@@ -119,6 +118,7 @@ namespace Medicraft.Entities
         public enum EntityTypes
         {
             Playable,
+            Companion,
             Friendly,
             Hostile,
             Boss
@@ -147,10 +147,17 @@ namespace Medicraft.Entities
         public float BuffTimer { get; set; }
         public float DebuffTimer { get; set; }
 
+        // Attack Control
+        protected float knockbackForce;
         protected float attackSpeed;
         protected float cooldownAttack;
         protected float cooldownAttackTimer;
         protected bool isAttackCooldown;
+
+        // Blinking Damage Taken
+        protected bool isBlinkingPlayed = false;
+        protected readonly float blinkingTime = 1f;
+        protected float blinkingTimer = 0f;
 
         // Combat Nunber
         public int CombatNumCase { get; set; }
@@ -174,6 +181,7 @@ namespace Medicraft.Entities
         public bool IsDebuffOn { get; set; }
         public bool IsShowCombatNumbers { get; set; }
         public bool IsDetectCollistionObject { get; set; }
+        public bool IsPathFindingSet {  get; set; } = true;
         public List<CombatNumberData> CombatLogs { get; protected set; }
 
         protected Entity()
@@ -215,6 +223,7 @@ namespace Medicraft.Entities
             BuffTimer = 0f;
             DebuffTimer = 0f;
 
+            knockbackForce = 25f;
             attackSpeed = 1f;
             cooldownAttack = 0.4f;
             cooldownAttackTimer = cooldownAttack;
@@ -281,6 +290,7 @@ namespace Medicraft.Entities
             BuffTimer = 0f;
             DebuffTimer = 0f;
 
+            knockbackForce = entity.knockbackForce;
             attackSpeed = entity.attackSpeed;
             cooldownAttack = entity.cooldownAttack;
             cooldownAttackTimer = cooldownAttack;
@@ -347,14 +357,18 @@ namespace Medicraft.Entities
                     break;
 
                 case 1:
-                    EntityType = EntityTypes.Friendly;
+                    EntityType = EntityTypes.Companion;
                     break;
 
                 case 2:
-                    EntityType = EntityTypes.Hostile;
+                    EntityType = EntityTypes.Friendly;
                     break;
 
                 case 3:
+                    EntityType = EntityTypes.Hostile;
+                    break;
+
+                case 4:
                     EntityType = EntityTypes.Boss;
                     break;
             }
@@ -395,7 +409,7 @@ namespace Medicraft.Entities
         protected virtual void MovementControl(float deltaSeconds)
         {
             var walkSpeed = deltaSeconds * Speed;
-            _initPos = Position;
+            initPos = Position;
 
             // Check Object Collsion
             CheckCollision();
@@ -411,16 +425,16 @@ namespace Medicraft.Entities
             if (ScreenManager.Instance.IsScreenLoaded && !IsStunning 
                 && ((!IsKnockback && !IsAttacking) || (!IsAttacked && !IsAttacking)))
             {
-                if (_pathFinding.GetPath().Count != 0)
+                if (pathFinding.GetPath().Count != 0)
                 {
-                    if (_pathFinding.GetPath().Count > 2)
+                    if (pathFinding.GetPath().Count > 2)
                     {
-                        if (_currentNodeIndex < _pathFinding.GetPath().Count - _stoppingNodeIndex)
+                        if (currentNodeIndex < pathFinding.GetPath().Count - stoppingNodeIndex)
                         {
                             // Calculate direction to the next node
-                            var direction = new Vector2(_pathFinding.GetPath()[_currentNodeIndex + 1].col
-                                - _pathFinding.GetPath()[_currentNodeIndex].col, _pathFinding.GetPath()[_currentNodeIndex + 1].row
-                                - _pathFinding.GetPath()[_currentNodeIndex].row);
+                            var direction = new Vector2(pathFinding.GetPath()[currentNodeIndex + 1].col
+                                - pathFinding.GetPath()[currentNodeIndex].col, pathFinding.GetPath()[currentNodeIndex + 1].row
+                                - pathFinding.GetPath()[currentNodeIndex].row);
                             direction.Normalize();
 
                             // Move the character towards the next node
@@ -462,14 +476,11 @@ namespace Medicraft.Entities
                 if (BoundingDetectCollisions.Intersects(rect))
                 {
                     IsDetectCollistionObject = true;
-                    Position = _initPos;
+                    Position = initPos;
                     Velocity = Vector2.Zero;
                     break;
                 }
-                else
-                {
-                    IsDetectCollistionObject = false;
-                }
+                else IsDetectCollistionObject = false;
             }
         }
 
@@ -480,8 +491,19 @@ namespace Medicraft.Entities
                 case EntityTypes.Hostile:
 
                 case EntityTypes.Boss:
-                    // Setup Aggrotimer if detected player hit box
-                    if (BoundingAggro.Intersects(PlayerManager.Instance.Player.BoundingHitBox))
+                    // Setup Aggrotimer if detected player or companion
+                    var isPlayerDetected = BoundingAggro.Intersects(PlayerManager.Instance.Player.BoundingHitBox);
+
+                    var isCompanionDetected = false;
+                    if (PlayerManager.Instance.Companions.Count != 0)
+                    {
+                        var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrentCompanionIndex];
+
+                        if (companion != null)
+                            isCompanionDetected = BoundingDetectEntity.Intersects(companion.BoundingHitBox);
+                    }
+
+                    if (isPlayerDetected || isCompanionDetected)
                     {
                         AggroTimer = AggroTime;
                         IsAggro = true;
@@ -489,31 +511,55 @@ namespace Medicraft.Entities
                     break;
 
                 case EntityTypes.Friendly:
+                    break;
 
-                case EntityTypes.Playable:
+                case EntityTypes.Companion:
+                    if (EntityManager.Instance.EntityCount() != 0)
+                        foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed
+                            && e.EntityType == EntityTypes.Hostile || e.EntityType == EntityTypes.Boss))
+                        {
+                            if (BoundingAggro.Intersects(entity.BoundingHitBox))
+                            {
+                                AggroTimer = AggroTime;
+                                IsAggro = true;
+                                break;
+                            }
+                        }
+
+                    if (IsAggro || (PlayerManager.Instance.Player.IsAttacked || PlayerManager.Instance.Player.IsAttacking))
+                    {
+                        BoundingAggro.Radius = 180f;
+                    }
+                    else BoundingAggro.Radius = 30f;
                     break;
             }
         }
 
         protected virtual void UpdateTargetNode(float deltaSeconds, EntityData entityData)
         {
-            _nextNodeTimer += deltaSeconds;
+            nextNodeTimer += deltaSeconds;
 
-            if (_nextNodeTimer >= _nextNodeTime)
+            if (nextNodeTimer >= nextNodeTime)
             {
                 switch (PathFindingType)
                 {
                     case PathFindingTypes.RoutePoint:
                         // Define the current route
-                        var rountNodePoint = entityData.RoutePoint.ElementAt(_routeNodeIndex);
-                        var position = new Vector2((float)rountNodePoint[0], (float)rountNodePoint[1]);
+                        var rountNodePoint = entityData.RoutePoint.ElementAt(routeNodeIndex);
 
-                        // Next route
-                        _routeNodeIndex++;
-                        if (_routeNodeIndex >= entityData.RoutePoint.Length)
-                            _routeNodeIndex = 0;
+                        if (rountNodePoint != null)
+                        {
+                            var position = new Vector2((float)rountNodePoint[0], (float)rountNodePoint[1]);
 
-                        _targetNode = position;
+                            // Next route
+                            routeNodeIndex++;
+                            if (routeNodeIndex >= entityData.RoutePoint.Length)
+                                routeNodeIndex = 0;
+
+                            targetNode = position;
+                        }
+                        else targetNode = new Vector2(Position.X, Position.Y);
+
                         break;
 
                     case PathFindingTypes.RandomPoint:
@@ -522,63 +568,129 @@ namespace Medicraft.Entities
                         // Define the patrol area from rectangle
                         var recArea = GameGlobals.Instance.MobPartrolArea.FirstOrDefault
                             (b => b.Name.Equals(entityData.PartrolArea));
-                        var rectangleX = (int)recArea.Bounds.X;
-                        var rectangleY = (int)recArea.Bounds.Y;
-                        var rectangleWidth = (int)recArea.Bounds.Width;
-                        var rectangleHeight = (int)recArea.Bounds.Height;
 
-                        // Generate random X and Y within the rectangle
-                        var randomX = random.Next(rectangleX, rectangleX + rectangleWidth);
-                        var randomY = random.Next(rectangleY, rectangleY + rectangleHeight);
+                        if (recArea != null)
+                        {
+                            var rectangleX = (int)recArea.Bounds.X;
+                            var rectangleY = (int)recArea.Bounds.Y;
+                            var rectangleWidth = (int)recArea.Bounds.Width;
+                            var rectangleHeight = (int)recArea.Bounds.Height;
 
-                        _targetNode = new Vector2(randomX, randomY);
+                            // Generate random X and Y within the rectangle
+                            var randomX = random.Next(rectangleX, rectangleX + rectangleWidth);
+                            var randomY = random.Next(rectangleY, rectangleY + rectangleHeight);
+
+                            targetNode = new Vector2(randomX, randomY);
+                        }
+                        else targetNode = new Vector2(Position.X, Position.Y);
+
                         break;
 
                     case PathFindingTypes.StationaryPoint:
                         // Its Stationary so we do nothing here
+                        targetNode = new Vector2(Position.X, Position.Y);
                         break;
                 }
 
-                _nextNodeTimer = 0f;
+                nextNodeTimer = 0f;
             }
         }
 
         protected virtual void SetPathFindingNode(int returnPosX, int returnPosY)
         {
-            if (IsAggro)
+            switch (EntityType)
             {
-                _pathFinding = new AStar(
-                    (int)BoundingDetectCollisions.Center.X,
-                    (int)BoundingDetectCollisions.Center.Y,
-                    (int)PlayerManager.Instance.Player.Position.X,
-                    (int)PlayerManager.Instance.Player.Position.Y + 75
-                );
-            }
-            else
-            {
-                switch (PathFindingType)
-                {
-                    case PathFindingTypes.RoutePoint:
+                case EntityTypes.Friendly:
 
-                    case PathFindingTypes.RandomPoint:
-                        _pathFinding = new AStar(
+                case EntityTypes.Hostile:
+
+                case EntityTypes.Boss:
+                    if (IsAggro)
+                    {
+                        // Find Closest Entity: Player or Companion
+                        var entities = new List<Entity>
+                        {
+                            PlayerManager.Instance.Player
+                        };
+
+                        var compa = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrentCompanionIndex];
+                        if (compa != null)
+                            entities.Add(compa);
+
+                        var closestEntity = FindClosestEntity(entities, this);
+
+                        pathFinding = new AStar(
                             (int)BoundingDetectCollisions.Center.X,
                             (int)BoundingDetectCollisions.Center.Y,
-                            (int)_targetNode.X,
-                            (int)_targetNode.Y
-                        );
-                        break;
+                            (int)closestEntity.BoundingDetectCollisions.Center.X,
+                            (int)closestEntity.BoundingDetectCollisions.Center.Y);
+                    }
+                    else
+                    {
+                        switch (PathFindingType)
+                        {
+                            case PathFindingTypes.RoutePoint:
 
-                    case PathFindingTypes.StationaryPoint:
-                        _pathFinding = new AStar(
+                            case PathFindingTypes.RandomPoint:
+                                pathFinding = new AStar(
+                                    (int)BoundingDetectCollisions.Center.X,
+                                    (int)BoundingDetectCollisions.Center.Y,
+                                    (int)targetNode.X,
+                                    (int)targetNode.Y);
+                                break;
+
+                            case PathFindingTypes.StationaryPoint:
+                                pathFinding = new AStar(
+                                    (int)BoundingDetectCollisions.Center.X,
+                                    (int)BoundingDetectCollisions.Center.Y,
+                                    returnPosX,
+                                    returnPosY);
+                                break;
+                        }
+                    }
+                    break;
+
+                case EntityTypes.Companion:
+                    if (IsAggro && EntityManager.Instance.ClosestEnemy != null)
+                    {
+                        pathFinding = new AStar(
+                            (int)BoundingDetectCollisions.Center.X,
+                            (int)BoundingDetectCollisions.Center.Y,
+                            (int)EntityManager.Instance.ClosestEnemy.BoundingDetectCollisions.Center.X,
+                            (int)EntityManager.Instance.ClosestEnemy.BoundingDetectCollisions.Center.Y);
+                    }
+                    else
+                    {
+                        pathFinding = new AStar(
                             (int)BoundingDetectCollisions.Center.X,
                             (int)BoundingDetectCollisions.Center.Y,
                             returnPosX,
-                            returnPosY
-                        );
-                        break;
+                            returnPosY);
+                    }
+                    break;
+            } 
+        }
+
+        protected virtual Entity FindClosestEntity(List<Entity> entities, Entity targetEntity)
+        {                     
+            Entity closestEntity = null;
+            float minDistance = float.MaxValue;
+
+            if (entities != null || entities.Count != 0)
+                foreach (Entity entity in entities)
+                {
+                    // Calculate the distance between the player and the current entity
+                    float distance = Vector2.Distance(targetEntity.Position, entity.Position);
+
+                    // Check if the current entity is closer than the previous closest entity
+                    if (distance < minDistance)
+                    {
+                        closestEntity = entity;
+                        minDistance = distance;
+                    }
                 }
-            }
+
+            return closestEntity;
         }
 
         protected virtual void UpdateTimerConditions(float deltaSeconds)
@@ -700,8 +812,20 @@ namespace Medicraft.Entities
         // Mostly this one for Hostile Mobs
         protected virtual void CombatControl(float deltaSeconds)
         {
+            // Check Dectected
+            var isPlayerDetected = BoundingDetectEntity.Intersects(PlayerManager.Instance.Player.BoundingHitBox);
+
+            var isCompanionDetected = false;
+            if (PlayerManager.Instance.Companions.Count != 0)
+            {
+                var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrentCompanionIndex];
+
+                if (companion != null)
+                    isCompanionDetected = BoundingDetectEntity.Intersects(companion.BoundingHitBox);
+            }
+
             // Do Attack
-            if (BoundingDetectEntity.Intersects(PlayerManager.Instance.Player.BoundingHitBox)
+            if ((isPlayerDetected || isCompanionDetected)
                 && ScreenManager.Instance.IsScreenLoaded && !IsAttacking && !IsStunning)
             {
                 CurrentAnimation = SpriteCycle + "_attacking";
@@ -744,8 +868,19 @@ namespace Medicraft.Entities
 
         protected virtual void CheckAttackDetection()
         {
-            // Chedk Attacking Detec tion for Player
-            if (BoundingDetectEntity.Intersects(PlayerManager.Instance.Player.BoundingHitBox))
+            // Check Attacking Detection for Player and Companions
+            var isPlayerDetected = BoundingDetectEntity.Intersects(PlayerManager.Instance.Player.BoundingHitBox);
+
+            var isCompanionDetected = false;
+            if (PlayerManager.Instance.Companions.Count != 0)
+            {
+                var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrentCompanionIndex];
+
+                if (companion != null)
+                    isCompanionDetected = BoundingDetectEntity.Intersects(companion.BoundingHitBox);
+            }
+
+            if (isPlayerDetected)
             {
                 if (PlayerManager.Instance.Player.HP > 0)
                 {
@@ -765,9 +900,45 @@ namespace Medicraft.Entities
                     {
                         // Player being hit by Mob
                         PlayerManager.Instance.Player.IsAttacked = true;
-
                         PlayerManager.Instance.Player.HP -= totalDamage;
                     }        
+                }
+            }
+
+            if (isCompanionDetected)
+            {
+                var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrentCompanionIndex];
+
+                if (companion.HP > 0)
+                {
+                    float totalDamage = TotalDamage(ATK
+                        , companion.DEF
+                        , companion.Evasion);
+
+                    var combatNumVelocity = companion.SetCombatNumDirection();
+                    companion.AddCombatLogNumbers(Name
+                        , ((int)totalDamage).ToString()
+                        , CombatNumCase
+                        , combatNumVelocity
+                        , NormalHitEffectAttacked);
+
+                    // In case the Attack doesn't Missed
+                    if (CombatNumCase != 3)
+                    {
+                        // companion being hit by Mob
+                        companion.IsAttacked = true;
+                        companion.HP -= totalDamage;
+
+                        if (companion.IsKnockbackable)
+                        {
+                            var knockBackDirection = companion.Position - Position;
+                            knockBackDirection.Normalize();
+                            companion.Velocity = knockBackDirection * knockbackForce;
+
+                            companion.IsKnockback = true;
+                            companion.KnockbackedTimer = 0.2f;
+                        }
+                    }
                 }
             }
         }
@@ -804,6 +975,30 @@ namespace Medicraft.Entities
             }
 
             return totalDamage;
+        }
+
+        protected virtual void HitBlinking(float deltaSeconds)
+        {
+            if (IsAttacked && !isBlinkingPlayed) isBlinkingPlayed = true;
+
+            if (isBlinkingPlayed && blinkingTimer < blinkingTime)
+            {
+                blinkingTimer += deltaSeconds;
+
+                var blinkSpeed = 15f; // Adjust the speed of the blinking effect
+                var alphaMultiplier = MathF.Sin(blinkingTimer * blinkSpeed);
+
+                // Ensure alphaMultiplier is within the valid range [0, 1]
+                alphaMultiplier = MathHelper.Clamp(alphaMultiplier, 0.25f, 2f);
+
+                Sprite.Color = new Color(255, 105, 105) * Math.Min(alphaMultiplier, 1f);
+            }
+            else
+            {
+                isBlinkingPlayed = false;
+                blinkingTimer = 0;
+                Sprite.Color = Color.White;
+            }
         }
 
         protected virtual void UpdateLayerDepth(float playerDepth, float topDepth, float middleDepth, float bottomDepth)

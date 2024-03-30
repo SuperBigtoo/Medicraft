@@ -65,8 +65,7 @@ namespace Medicraft.Entities.Mobs.Monster
                 (int)((int)Position.X - Sprite.TextureRegion.Width / BoundingCollisionX),
                 (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
                 (int)(Sprite.TextureRegion.Width / 2.5f),
-                Sprite.TextureRegion.Height / 6
-            );
+                Sprite.TextureRegion.Height / 6);
 
             BoundingHitBox = new CircleF(Position, 20);         // Circle for Entity to hit
 
@@ -74,12 +73,11 @@ namespace Medicraft.Entities.Mobs.Monster
 
             BoundingAggro = new CircleF(Position, 150);         // Circle for check aggro player        
 
-            _pathFinding = new AStar(
+            pathFinding = new AStar(
                 (int)BoundingDetectCollisions.Center.X,
                 (int)BoundingDetectCollisions.Center.Y,
                 (int)EntityData.Position[0],
-                (int)EntityData.Position[1]
-            );
+                (int)EntityData.Position[1]);
 
             RandomSlimeColor();
 
@@ -140,12 +138,11 @@ namespace Medicraft.Entities.Mobs.Monster
 
             BoundingDetectEntity = slime.BoundingDetectEntity;
 
-            _pathFinding = new AStar(
+            pathFinding = new AStar(
                 (int)BoundingDetectCollisions.Center.X,
                 (int)BoundingDetectCollisions.Center.Y,
                 (int)EntityData.Position[0],
-                (int)EntityData.Position[1]
-            );
+                (int)EntityData.Position[1]);
 
             RandomSlimeColor();
 
@@ -229,6 +226,9 @@ namespace Medicraft.Entities.Mobs.Monster
             // Update time conditions
             UpdateTimerConditions(deltaSeconds);
 
+            // Blinking if attacked
+            HitBlinking(deltaSeconds);
+
             // Ensure hp or mana doesn't exceed the maximum & minimum value
             MinimumCapacity();
 
@@ -240,7 +240,7 @@ namespace Medicraft.Entities.Mobs.Monster
         {
             if (GameGlobals.Instance.IsShowPath)
             {
-                //_pathFinding.Draw(spriteBatch);
+                pathFinding.Draw(spriteBatch);
             }
 
             spriteBatch.Draw(Sprite, Transform);

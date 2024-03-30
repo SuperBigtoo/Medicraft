@@ -65,12 +65,11 @@ namespace Medicraft.Entities.Mobs.Friendly
 
             BoundingDetectEntity = new CircleF(Position, 32);   // Circle for check attacking      
 
-            _pathFinding = new AStar(
+            pathFinding = new AStar(
                 (int)BoundingDetectCollisions.Center.X,
                 (int)BoundingDetectCollisions.Center.Y,
                 (int)EntityData.Position[0],
-                (int)EntityData.Position[1]
-            );
+                (int)EntityData.Position[1]);
 
             RandomCatType();
 
@@ -114,12 +113,11 @@ namespace Medicraft.Entities.Mobs.Friendly
 
             BoundingDetectEntity = cat.BoundingDetectEntity;
 
-            _pathFinding = new AStar(
+            pathFinding = new AStar(
                 (int)BoundingDetectCollisions.Center.X,
                 (int)BoundingDetectCollisions.Center.Y,
                 (int)EntityData.Position[0],
-                (int)EntityData.Position[1]
-            );
+                (int)EntityData.Position[1]);
 
             RandomCatType();
 
@@ -155,7 +153,7 @@ namespace Medicraft.Entities.Mobs.Friendly
         protected override void MovementControl(float deltaSeconds)
         {
             var walkSpeed = deltaSeconds * Speed;
-            _initPos = Position;
+            initPos = Position;
 
             // Check Object Collsion
             CheckCollision();
@@ -173,16 +171,16 @@ namespace Medicraft.Entities.Mobs.Friendly
             // Check movement according to PathFinding
             if (ScreenManager.Instance.IsScreenLoaded)
             {
-                if (_pathFinding.GetPath().Count != 0)
+                if (pathFinding.GetPath().Count != 0)
                 {
-                    if (_pathFinding.GetPath().Count > 2)
+                    if (pathFinding.GetPath().Count > 2)
                     {
-                        if (_currentNodeIndex < _pathFinding.GetPath().Count - _stoppingNodeIndex)
+                        if (currentNodeIndex < pathFinding.GetPath().Count - stoppingNodeIndex)
                         {
                             // Calculate direction to the next node
-                            var direction = new Vector2(_pathFinding.GetPath()[_currentNodeIndex + 1].col
-                                - _pathFinding.GetPath()[_currentNodeIndex].col, _pathFinding.GetPath()[_currentNodeIndex + 1].row
-                                - _pathFinding.GetPath()[_currentNodeIndex].row);
+                            var direction = new Vector2(pathFinding.GetPath()[currentNodeIndex + 1].col
+                                - pathFinding.GetPath()[currentNodeIndex].col, pathFinding.GetPath()[currentNodeIndex + 1].row
+                                - pathFinding.GetPath()[currentNodeIndex].row);
                             direction.Normalize();
 
                             // Move the character towards the next node
@@ -219,11 +217,6 @@ namespace Medicraft.Entities.Mobs.Friendly
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (GameGlobals.Instance.IsShowPath)
-            {
-                _pathFinding.Draw(spriteBatch);
-            }
-
             spriteBatch.Draw(Sprite, Transform);
 
             var shadowTexture = GameGlobals.Instance.GetShadowTexture(GameGlobals.ShadowTextureName.shadow_1);
