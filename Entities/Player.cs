@@ -1,6 +1,7 @@
 ﻿using Medicraft.Data.Models;
 using Medicraft.Systems;
 using Medicraft.Systems.Managers;
+using Medicraft.Systems.PathFinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -156,6 +157,9 @@ namespace Medicraft.Entities
                 // Combat Control
                 CombatControl(deltaSeconds, keyboardCur, keyboardPrev, mouseCur, mousePrev);
 
+                // Blinking if attacked
+                HitBlinking(deltaSeconds);
+
                 // Check interaction with GameObject
                 CheckInteraction(keyboardCur, keyboardPrev);
 
@@ -169,14 +173,15 @@ namespace Medicraft.Entities
                     IsDying = true;
                     CurrentAnimation = SpriteCycle + "_dying";
                     Sprite.Play(CurrentAnimation);
+
+                    isBlinkingPlayed = false;
+                    blinkingTimer = 0;
+                    Sprite.Color = Color.White;
                 }             
             }
 
             // Update time conditions
             UpdateTimerConditions(deltaSeconds);
-
-            // Blinking if attacked
-            HitBlinking(deltaSeconds);
 
             // Ensure hp or mana doesn't exceed the maximum & minimum value
             MinimumCapacity();
@@ -216,7 +221,7 @@ namespace Medicraft.Entities
         {
             var walkSpeed = deltaSeconds * Speed;
             Velocity = Vector2.Zero;
-            initPos = Position;
+            prevPos = Position;
             _initHudPos = GameGlobals.Instance.TopLeftCornerPosition;
             _initCamPos = GameGlobals.Instance.AddingCameraPos;                                             
 
@@ -287,7 +292,7 @@ namespace Medicraft.Entities
                 if (BoundingDetectCollisions.Intersects(rect))
                 {
                     IsDetectCollistionObject = true;
-                    Position = initPos;
+                    Position = prevPos;
                     GameGlobals.Instance.TopLeftCornerPosition = _initHudPos;
                     GameGlobals.Instance.AddingCameraPos = _initCamPos;
                     break;

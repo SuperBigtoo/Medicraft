@@ -58,18 +58,11 @@ namespace Medicraft.Entities.Mobs.Friendly
                 (int)((int)Position.X - Sprite.TextureRegion.Width / BoundingCollisionX),
                 (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
                 (int)(Sprite.TextureRegion.Width / 2.5f),
-                Sprite.TextureRegion.Height / 6
-            );
+                Sprite.TextureRegion.Height / 6);
 
             BoundingHitBox = new CircleF(Position, 32);         // Circle for Entity to hit
 
             BoundingDetectEntity = new CircleF(Position, 32);   // Circle for check attacking      
-
-            pathFinding = new AStar(
-                (int)BoundingDetectCollisions.Center.X,
-                (int)BoundingDetectCollisions.Center.Y,
-                (int)EntityData.Position[0],
-                (int)EntityData.Position[1]);
 
             RandomCatType();
 
@@ -113,12 +106,6 @@ namespace Medicraft.Entities.Mobs.Friendly
 
             BoundingDetectEntity = cat.BoundingDetectEntity;
 
-            pathFinding = new AStar(
-                (int)BoundingDetectCollisions.Center.X,
-                (int)BoundingDetectCollisions.Center.Y,
-                (int)EntityData.Position[0],
-                (int)EntityData.Position[1]);
-
             RandomCatType();
 
             Sprite.Color = Color.White;
@@ -153,7 +140,7 @@ namespace Medicraft.Entities.Mobs.Friendly
         protected override void MovementControl(float deltaSeconds)
         {
             var walkSpeed = deltaSeconds * Speed;
-            initPos = Position;
+            prevPos = Position;
 
             // Check Object Collsion
             CheckCollision();
@@ -171,43 +158,59 @@ namespace Medicraft.Entities.Mobs.Friendly
             // Check movement according to PathFinding
             if (ScreenManager.Instance.IsScreenLoaded)
             {
-                if (pathFinding.GetPath().Count != 0)
+                if (pathFinding != null || pathFinding.GetPath().Count != 0)
                 {
-                    if (pathFinding.GetPath().Count > 2)
+                    if (currentNodeIndex < pathFinding.GetPath().Count - stoppingNodeIndex)
                     {
-                        if (currentNodeIndex < pathFinding.GetPath().Count - stoppingNodeIndex)
+                        // Calculate direction to the next node
+                        var direction = new Vector2(
+                            pathFinding.GetPath()[currentNodeIndex + 1].Col - pathFinding.GetPath()[currentNodeIndex].Col,
+                            pathFinding.GetPath()[currentNodeIndex + 1].Row - pathFinding.GetPath()[currentNodeIndex].Row);
+                        direction.Normalize();
+
+                        // Move the character towards the next node
+                        Position += direction * walkSpeed;
+                        IsMoving = true;
+                        _isPlayIdle = false;
+
+                        // Check Animation
+                        if (direction.Y < 0)
                         {
-                            // Calculate direction to the next node
-                            var direction = new Vector2(pathFinding.GetPath()[currentNodeIndex + 1].col
-                                - pathFinding.GetPath()[currentNodeIndex].col, pathFinding.GetPath()[currentNodeIndex + 1].row
-                                - pathFinding.GetPath()[currentNodeIndex].row);
-                            direction.Normalize();
+                            CurrentAnimation = SpriteCycle + "_walking_up";     // Up
+                        }
+                        if (direction.Y > 0)
+                        {
+                            CurrentAnimation = SpriteCycle + "_walking_down";     // Down
+                        }
+                        if (direction.X < 0)
+                        {
+                            CurrentAnimation = SpriteCycle + "_walking_left";     // Left
+                        }
+                        if (direction.X > 0)
+                        {
+                            CurrentAnimation = SpriteCycle + "_walking_right";     // Right
+                        }
 
-                            // Move the character towards the next node
-                            Position += direction * walkSpeed;
-                            IsMoving = true;
-                            _isPlayIdle = false;
+                        Sprite.Play(CurrentAnimation);
 
-                            // Check Animation
-                            if (direction.Y < 0)
-                            {
-                                CurrentAnimation = SpriteCycle + "_walking_up";     // Up
-                            }
-                            if (direction.Y > 0)
-                            {
-                                CurrentAnimation = SpriteCycle + "_walking_down";     // Down
-                            }
-                            if (direction.X < 0)
-                            {
-                                CurrentAnimation = SpriteCycle + "_walking_left";     // Left
-                            }
-                            if (direction.X > 0)
-                            {
-                                CurrentAnimation = SpriteCycle + "_walking_right";     // Right
-                            }
+                        // Check if the character has passed the next node
+                        var tileSize = GameGlobals.Instance.TILE_SIZE;
+                        var nextNodePosition = new Vector2(
+                            pathFinding.GetPath()[currentNodeIndex + 1].Col * tileSize + tileSize / 2,
+                            pathFinding.GetPath()[currentNodeIndex + 1].Row * tileSize + tileSize / 2);
 
-                            Sprite.Play(CurrentAnimation);
-                        }                  
+                        var boundingCenter = new Vector2(
+                            BoundingDetectCollisions.Center.X,
+                            BoundingDetectCollisions.Center.Y);
+                        if ((boundingCenter - nextNodePosition).Length() < tileSize + tileSize / 4)
+                        {
+                            currentNodeIndex++; // Increase currentNodeIndex
+                        }
+
+                        //System.Diagnostics.Debug.WriteLine($"currentNodeIndex : {currentNodeIndex} | {pathFinding.GetPath().Count}");
+                        //System.Diagnostics.Debug.WriteLine($"Position : {Position}");
+                        //System.Diagnostics.Debug.WriteLine($"nextNodePosition : {nextNodePosition}");
+                        //System.Diagnostics.Debug.WriteLine($"Length : {(Position - nextNodePosition).Length()}");
                     }
                     else IsMoving = false;
                 }

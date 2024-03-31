@@ -1,9 +1,11 @@
-﻿using Medicraft.Systems.Managers;
+﻿using Medicraft.Entities;
+using Medicraft.Systems.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using static Medicraft.Entities.Entity;
 
 namespace Medicraft.Systems.PathFinding
 {
@@ -17,21 +19,21 @@ namespace Medicraft.Systems.PathFinding
         public const int BLANK = 4;
 
         // Grid scaling variables
-        public static int NUM_ROWS;
-        public static int NUM_COLUMNS;
+        public int NUM_ROWS;
+        public int NUM_COLUMNS;
 
         // Maintain size of tiles
-        public static int TILE_SIZE;
+        public int TILE_SIZE;
 
         // Define Colors based on Numbered tile types
-        Color[] tileColors = new Color[]
-        {
+        readonly Color[] tileColors =
+        [
             Color.Red,
             Color.Green,
             Color.Aqua,
             Color.Yellow,
             Color.Tan
-        };
+        ];
 
         // Create a Map 5*5
         //int[,] map = new int[,]
@@ -43,66 +45,103 @@ namespace Medicraft.Systems.PathFinding
         //    { ROAD, ROAD, ROAD, ROAD, ROAD }
         //};
 
-        readonly int[,] map;       
+        // Tile Area of Path Finding
+        public int[,] map;
+        public int startRow;
+        public int startCol;
+        public int endRow;
+        public int endCol;
         const int NOT_FOUND = -1;
 
         // Define movement cost multiplier based on Numbered tile type
-        readonly float[] tileCosts = new float[]
-        {
+        readonly float[] tileCosts =
+        [
             10000f,     // Wall
             0.5f,       // Road
             1f,         // Start
             1f,         // End
             10000f      // Blank
-        };
+        ];
 
         readonly float hvCost = 10f;     // Cost to move horizontally, vertically on standard terrain
         readonly float diagCost = 14f;   // Cost to move diagonally on standard terrain
 
         // Maintain a map that track all of the tile (Node) information
-        Node[,] tileMap;
+        readonly Node[,] tileMap;
         Vector2 mapSize;
 
         // track the Beginning and End of the path
         Node start;
         Node end;
 
-        bool IsFindPath = false;
-
         // Track all of the path Nodes
-        private List<Node> path = new List<Node>();
+        private readonly List<Node> path = [];
 
         // Maintain two lists, one of Nodes to check and one of potential Nodes
-        readonly List<Node> open = new List<Node>();
-        readonly List<Node> closed = new List<Node>();
+        readonly List<Node> open = [];
+        readonly List<Node> closed = [];
+
+        public AStar() { }
 
         public AStar(int startPosX, int startPosY, int endPosX, int endPosY)
         {
             TILE_SIZE = GameGlobals.Instance.TILE_SIZE;
-            NUM_ROWS = GameGlobals.Instance.NUM_ROWS;
-            NUM_COLUMNS = GameGlobals.Instance.NUM_COLUMNS;
-            map = (int[,])GameGlobals.Instance.TILEMAP.Clone();
+
+            var distance = (int)(new Vector2(startPosX, startPosY) - new Vector2(endPosX, endPosY)).Length();
+
+            map = CloneMapAroundCenter(
+                CloneTileType(),
+                startPosY / TILE_SIZE,
+                startPosX / TILE_SIZE,
+                (distance / TILE_SIZE) + 3);
+
+            NUM_ROWS = map.GetLength(0);
+            NUM_COLUMNS = map.GetLength(1);
+
+            //System.Diagnostics.Debug.WriteLine($"NUM_ROWS & NUM_COLUMNS : {NUM_ROWS} {NUM_COLUMNS}");
+
+            mapSize = new Vector2(NUM_ROWS, NUM_COLUMNS);
+            tileMap = new Node[NUM_ROWS, NUM_COLUMNS];
 
             SetStart(startPosX, startPosY);
             SetEnd(endPosX, endPosY);
             Initialize();
-            path = FindPath(tileMap, start, end);
+            path = FindPath(start, end);
+
+            //map = CloneTileType();
+            //NUM_ROWS = GameGlobals.Instance.NUM_ROWS;
+            //NUM_COLUMNS = GameGlobals.Instance.NUM_COLUMNS;
+            //mapSize = new Vector2(NUM_ROWS, NUM_COLUMNS);
+            //tileMap = new Node[NUM_ROWS, NUM_COLUMNS];
+
+            //// Set start and end of row col, in normally case
+            //startCol = 0;
+            //startRow = 0;
+            //endCol = NUM_COLUMNS;
+            //endRow = NUM_ROWS;
+
+            //SetStart(startPosX, startPosY);
+            //SetEnd(endPosX, endPosY);
+            //Initialize();
+            //path = FindPath(start, end);
         }
 
         private void Initialize()
         {
-            // Maintain the grid size of the maps X: Rows = 5 and Y: Columns = 5
-            mapSize = new Vector2(NUM_ROWS, NUM_COLUMNS);
-
-            // Create simple 5*5 tile map from map setup
-            tileMap = new Node[NUM_ROWS, NUM_COLUMNS];
-
             for (int row = 0; row < NUM_ROWS; row++)
             {
                 for (int col = 0; col < NUM_COLUMNS; col++)
                 {
                     // Based on the int map array create a Node of that type in the same grid coordinates
-                    tileMap[row, col] = new Node(row, col, map[row, col], tileColors[map[row, col]], mapSize);
+                    tileMap[row, col] ??= new Node(
+                        startRow + row,
+                        startCol + col,
+                        map[row, col],
+                        tileColors[map[row, col]],
+                        mapSize,
+                        NUM_ROWS,
+                        NUM_COLUMNS,
+                        startRow, startCol, endRow, endCol);
 
                     // Find and track the start and end of the path
                     if (map[row, col] == START)
@@ -118,6 +157,12 @@ namespace Medicraft.Systems.PathFinding
 
             start ??= end;
 
+            //if (entityTypes == EntityTypes.Companion)
+            //{
+            //    System.Diagnostics.Debug.WriteLine($"NUM_ROWS: {NUM_ROWS} NUM_COLUMNS: {NUM_COLUMNS} mapSize: {mapSize}");
+            //    System.Diagnostics.Debug.WriteLine($"start & end : {start.Col} {start.Row} | {end.Col} {end.Row}");
+            //}
+
             // Setup necessary pathing data, adjacent Nodes(Tiles) and the H cost from each Node to the Target
             for (int row = 0; row < NUM_ROWS; row++)
             {
@@ -129,60 +174,117 @@ namespace Medicraft.Systems.PathFinding
             }
 
             // Calcurlate the H cost to get from Every tile to the End space
-            SetHCosts(tileMap, end.row, end.col);
+            SetHCosts(tileMap, end.Row, end.Col);
         }
 
         public void SetStart(float x, float y)
         {
-            var mobPos = new Vector2(x, y);
-            int posX = (int)(mobPos.X / TILE_SIZE);
-            int posY = (int)(mobPos.Y / TILE_SIZE);
+            var startPos = new Vector2(x, y);
 
-            map[posY, posX] = START;
+            // Original Col and Row in base map
+            int col = (int)(startPos.X / TILE_SIZE);
+            int row = (int)(startPos.Y / TILE_SIZE);
+
+            // Set new Col and Row for cropping Map
+            var newCol = col - startCol;
+            var newRow = row - startRow;
+
+            map[newRow, newCol] = START;
+            tileMap[newRow, newCol] = new Node(
+                    row,
+                    col,
+                    map[newRow, newCol],
+                    tileColors[map[newRow, newCol]],
+                    mapSize,
+                    NUM_ROWS,
+                    NUM_COLUMNS,
+                    startRow, startCol, endRow, endCol);
+
+            //System.Diagnostics.Debug.WriteLine($"Vo: {col}");
+            //System.Diagnostics.Debug.WriteLine($"Mo: {GameGlobals.Instance.TILEMAP.GetLength(1)}");
+            //System.Diagnostics.Debug.WriteLine($"Mn: {NUM_COLUMNS}");
+            //System.Diagnostics.Debug.WriteLine($"(Vo/Mo) * Mn: {(float)col / (float)GameGlobals.Instance.TILEMAP.GetLength(1) * NUM_COLUMNS}");
+            //System.Diagnostics.Debug.WriteLine($"newCol & newRow: {newCol} {newRow} | col & row {col} {row}");
+
+            //System.Diagnostics.Debug.WriteLine($"\nstartCol: {startCol}");
+            //System.Diagnostics.Debug.WriteLine($"TILE_SIZE: {TILE_SIZE}");
+            //System.Diagnostics.Debug.WriteLine($"startCol * TILE_SIZE: {startCol * TILE_SIZE}");
+
+            //System.Diagnostics.Debug.WriteLine($"\nstartCol: {startCol}");
+            //System.Diagnostics.Debug.WriteLine($"startRow: {startRow}");
+            //System.Diagnostics.Debug.WriteLine($"START: Row = {(int)newRow} Col = {(int)newCol}");
         }
 
         public void SetEnd(float x, float y)
         {
-            var playerPos = new Vector2(x, y);
-            int posX = (int)(playerPos.X / TILE_SIZE);
-            int posY = (int)(playerPos.Y / TILE_SIZE);
+            var endPos = new Vector2(x, y);
 
-            map[posY, posX] = END;
+            // Original Col and Row in base map
+            int col = (int)(endPos.X / TILE_SIZE);
+            int row = (int)(endPos.Y / TILE_SIZE);
+
+            // Set new Col and Row for cropping Map
+            var newCol = col - startCol;
+            var newRow = row - startRow;
+
+            map[newRow, newCol] = END;
+            tileMap[newRow, newCol] = new Node(
+                    row,
+                    col,
+                    map[newRow, newCol],
+                    tileColors[map[newRow, newCol]],
+                    mapSize,
+                    NUM_ROWS,
+                    NUM_COLUMNS,
+                    startRow, startCol, endRow, endCol);
+
+            //System.Diagnostics.Debug.WriteLine($"END: Row = {(int)newRow} Col = {(int)newCol}");
         }
 
-        public void SetRoad(float x, float y)
+        public static int[,] CloneTileType()
         {
-            var pos = new Vector2(x, y);
-            int posX = (int)(pos.X / TILE_SIZE);
-            int posY = (int)(pos.Y / TILE_SIZE);
+            int[,] tileType = (int[,])GameGlobals.Instance.TILEMAP.Clone();
+            int rows = tileType.GetLength(0);
+            int cols = tileType.GetLength(1);
 
-            map[posY, posX] = ROAD;
+            int[,] deepCopy = new int[rows, cols];
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    deepCopy[i, j] = tileType[i, j];
+                }
+            }
+
+            return deepCopy;
         }
 
-        public void Update()
+        public int[,] CloneMapAroundCenter(int[,] originalMap, int centerRow, int centerCol, int radius)
         {
-            GameGlobals.Instance.PrevKeyboard = GameGlobals.Instance.CurKeyboard;
-            GameGlobals.Instance.CurKeyboard = Keyboard.GetState();
-            var keyboardCur = GameGlobals.Instance.CurKeyboard;
+            int minX = Math.Max(centerCol - radius, 0);
+            int maxX = Math.Min(centerCol + radius, originalMap.GetLength(1) - 1);
+            int minY = Math.Max(centerRow - radius, 0);
+            int maxY = Math.Min(centerRow + radius, originalMap.GetLength(0) - 1);
 
-            // Find or clear the path when space is pressed
-            if (keyboardCur.IsKeyDown(Keys.V) && !IsFindPath)
-            {
-                if (path.Count == 0)
-                {
-                    path = FindPath(tileMap, start, end);
-                }
-                else
-                {
-                    path.Clear();
-                }
+            startCol = minX;
+            startRow = minY;
+            endCol = maxX;
+            endRow = maxY;
 
-                IsFindPath = true;
-            }
-            else if (keyboardCur.IsKeyUp(Keys.V))
+            int newWidth = maxX - minX + 1;
+            int newHeight = maxY - minY + 1;
+
+            int[,] clonedMap = new int[newHeight, newWidth];
+
+            for (int row = minY, newRow = 0; row <= maxY; row++, newRow++)
             {
-                IsFindPath = false;
+                for (int col = minX, newCol = 0; col <= maxX; col++, newCol++)
+                {
+                    clonedMap[newRow, newCol] = originalMap[row, col];
+                }
             }
+
+            return clonedMap;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -197,7 +299,7 @@ namespace Medicraft.Systems.PathFinding
 
             // Draw the world elements including the terrain, the frid and the path in that order for visibility
             DrawTerrain(spriteBatch, tileMap);
-            DrawGrid(spriteBatch);
+            DrawGrid(spriteBatch, tileMap);
             DrawPath(spriteBatch);
         }
 
@@ -207,9 +309,9 @@ namespace Medicraft.Systems.PathFinding
             pixelTexture.SetData(new Color[] { Color.White });      
 
             // Draw tiles by Color based on type if are not blank tiles
-            for (int row = 0; row < NUM_ROWS; row++)
+            for (int row = 0; row < map.GetLength(0); row++)
             {
-                for (int col = 0; col < NUM_COLUMNS; col++)
+                for (int col = 0; col < map.GetLength(1); col++)
                 {
                     // Only draw non blank tiles
                     if (map[row, col].tileType != BLANK)
@@ -252,22 +354,24 @@ namespace Medicraft.Systems.PathFinding
             spriteBatch.Draw(pixelTexture, new Rectangle(x, y, lineWidth, length), color);
         }
 
-        private void DrawGrid(SpriteBatch spriteBatch)
+        private void DrawGrid(SpriteBatch spriteBatch, Node[,] map)
         {
             // Horizontal lines = number of rows + 1
-            for (int i = 0; i < NUM_ROWS; i++)
+            for (int i = 0; i < map.GetLength(0); i++)
             {
-                DrawHLine(spriteBatch, 0, i * TILE_SIZE, TILE_SIZE * NUM_ROWS, 1, Color.Black);
+                DrawHLine(spriteBatch, startCol * TILE_SIZE, (i + startRow) * TILE_SIZE
+                    , TILE_SIZE * map.GetLength(0), 1, Color.Black);
             }
 
             // Vertical lines = number of columns + 1
-            for (int i = 0; i < NUM_COLUMNS; i++)
+            for (int i = 0; i < map.GetLength(1); i++)
             {
-                DrawVLine(spriteBatch, i * TILE_SIZE, 0, TILE_SIZE * NUM_COLUMNS, 1, Color.Black);
+                DrawVLine(spriteBatch, (i + startCol) * TILE_SIZE, startRow * TILE_SIZE
+                    , TILE_SIZE * map.GetLength(1), 1, Color.Black);
             }
         }
 
-        private List<Node> FindPath(Node[,] map, Node start, Node end)
+        private List<Node> FindPath(Node start, Node end)
         {
             // Maintain a resulting path to return
             List<Node> result = new List<Node>();
@@ -324,7 +428,8 @@ namespace Medicraft.Systems.PathFinding
                     compNode = curNode.adjacent[i];
 
                     // A) Check it is not in the closed list and its a walkable type
-                    if (compNode.tileType != BLOCK && ContainsNode(closed, compNode) == NOT_FOUND)
+                    if (compNode.tileType != BLOCK
+                        && ContainsNode(closed, compNode) == NOT_FOUND)
                     {
                         // At this point we  know that compNode will be added or is in the open list
                         // In Both cases we will need to recalculate its G cost
@@ -417,7 +522,7 @@ namespace Medicraft.Systems.PathFinding
                 for (int col = 0; col < NUM_COLUMNS; col++)
                 {
                     // Calculate and set the cost for EACH tile to the end space
-                    map[row, col].h = GetHCost(row, col, targetRow, targetCol);
+                    map[row, col].h = GetHCost(row + startRow, col + startCol, targetRow, targetCol);
                     map[row, col].f = map[row, col].g + map[row, col].h;
                 }
             }
@@ -431,7 +536,7 @@ namespace Medicraft.Systems.PathFinding
         /// <returns>The cumulative cost to get from the starting tile to begin tested</returns>
         private float GetGCost(Node compNode, Node parentNode)
         {
-            if (compNode.row == parentNode.row || compNode.col == parentNode.col)
+            if (compNode.Row == parentNode.Row || compNode.Col == parentNode.Col)
             {
                 // compNode is either directly horizontal or vertical to curNode
                 return parentNode.g + hvCost * tileCosts[compNode.tileType];

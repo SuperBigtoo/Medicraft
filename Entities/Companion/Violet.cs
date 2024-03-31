@@ -26,7 +26,7 @@ namespace Medicraft.Entities.Companion
             hitRateBurstSkill = 0.9f;
 
             attackSpeed = 0.25f;
-            cooldownAttack = 1f;
+            cooldownAttack = 0.75f;
             cooldownAttackTimer = cooldownAttack;
 
             AggroTime = 1f;
@@ -49,7 +49,7 @@ namespace Medicraft.Entities.Companion
 
             BoundingDetectEntity = new CircleF(Position, 80f);   // Circle for check attacking
 
-            BoundingAggro = new CircleF(Position, 30);         // Circle for check aggro enemy mobs
+            BoundingAggro = new CircleF(Position, 50);         // Circle for check aggro enemy mobs
 
             // Set Effect
             NormalHitEffectAttacked = "hit_effect_9";

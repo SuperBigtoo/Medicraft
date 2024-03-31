@@ -75,7 +75,7 @@ namespace Medicraft.Entities
         protected int currentNodeIndex = 0;     // Index of the current node in the path
         protected int stoppingNodeIndex = 1;    // Distance index from the last node in the path for entity to stop moving
         public AStar pathFinding;
-        protected Vector2 initPos;
+        protected Vector2 prevPos;
         protected Vector2 targetNode;
         protected int routeNodeIndex = 0;
         protected float nextNodeTime;
@@ -105,6 +105,7 @@ namespace Medicraft.Entities
                     BoundingHitBox.Center = value + new Vector2(0f, 32f);
                     BoundingDetectEntity.Center = value + new Vector2(0f, 32f);
                     BoundingCollection.Center = value + new Vector2(0f, 60f);
+                    BoundingAggro.Center = value + new Vector2(0f, 32f);
                 }
                 else
                 {
@@ -181,7 +182,7 @@ namespace Medicraft.Entities
         public bool IsDebuffOn { get; set; }
         public bool IsShowCombatNumbers { get; set; }
         public bool IsDetectCollistionObject { get; set; }
-        public bool IsPathFindingSet {  get; set; } = true;
+        public bool IsPathFindingUpdate {  get; set; }
         public List<CombatNumberData> CombatLogs { get; protected set; }
 
         protected Entity()
@@ -247,6 +248,7 @@ namespace Medicraft.Entities
             IsDebuffOn = false;
             IsShowCombatNumbers = false;
             IsDetectCollistionObject = false;
+            IsPathFindingUpdate = false;
 
             CombatLogs = [];
         }
@@ -314,6 +316,7 @@ namespace Medicraft.Entities
             IsDebuffOn = false;
             IsShowCombatNumbers = false;
             IsDetectCollistionObject = false;
+            IsPathFindingUpdate = false;
 
             CombatLogs = [];
         }
@@ -409,7 +412,7 @@ namespace Medicraft.Entities
         protected virtual void MovementControl(float deltaSeconds)
         {
             var walkSpeed = deltaSeconds * Speed;
-            initPos = Position;
+            prevPos = Position;
 
             // Check Object Collsion
             CheckCollision();
@@ -425,41 +428,52 @@ namespace Medicraft.Entities
             if (ScreenManager.Instance.IsScreenLoaded && !IsStunning 
                 && ((!IsKnockback && !IsAttacking) || (!IsAttacked && !IsAttacking)))
             {
-                if (pathFinding.GetPath().Count != 0)
+                if (pathFinding != null || pathFinding.GetPath().Count != 0)
                 {
-                    if (pathFinding.GetPath().Count > 2)
+                    if (currentNodeIndex < pathFinding.GetPath().Count - stoppingNodeIndex)
                     {
-                        if (currentNodeIndex < pathFinding.GetPath().Count - stoppingNodeIndex)
+                        // Calculate direction to the next node
+                        var direction = new Vector2(
+                            pathFinding.GetPath()[currentNodeIndex + 1].Col - pathFinding.GetPath()[currentNodeIndex].Col,
+                            pathFinding.GetPath()[currentNodeIndex + 1].Row - pathFinding.GetPath()[currentNodeIndex].Row);
+                        direction.Normalize();
+
+                        // Move the character towards the next node
+                        Position += direction * walkSpeed;
+                        IsMoving = true;
+
+                        // Check Animation
+                        if (direction.Y < 0)
                         {
-                            // Calculate direction to the next node
-                            var direction = new Vector2(pathFinding.GetPath()[currentNodeIndex + 1].col
-                                - pathFinding.GetPath()[currentNodeIndex].col, pathFinding.GetPath()[currentNodeIndex + 1].row
-                                - pathFinding.GetPath()[currentNodeIndex].row);
-                            direction.Normalize();
+                            CurrentAnimation = SpriteCycle + "_walking";     // Up
+                        }
+                        if (direction.Y > 0)
+                        {
+                            CurrentAnimation = SpriteCycle + "_walking";     // Down
+                        }
+                        if (direction.X < 0)
+                        {
+                            CurrentAnimation = SpriteCycle + "_walking";     // Left
+                        }
+                        if (direction.X > 0)
+                        {
+                            CurrentAnimation = SpriteCycle + "_walking";     // Right
+                        }
 
-                            // Move the character towards the next node
-                            Position += direction * walkSpeed;
-                            IsMoving = true;
+                        Sprite.Play(CurrentAnimation);
 
-                            // Check Animation
-                            if (direction.Y < 0)
-                            {
-                                CurrentAnimation = SpriteCycle + "_walking";     // Up
-                            }
-                            if (direction.Y > 0)
-                            {
-                                CurrentAnimation = SpriteCycle + "_walking";     // Down
-                            }
-                            if (direction.X < 0)
-                            {
-                                CurrentAnimation = SpriteCycle + "_walking";     // Left
-                            }
-                            if (direction.X > 0)
-                            {
-                                CurrentAnimation = SpriteCycle + "_walking";     // Right
-                            }
+                        // Check if the character has passed the next node
+                        var tileSize = GameGlobals.Instance.TILE_SIZE;
+                        var nextNodePosition = new Vector2(
+                            pathFinding.GetPath()[currentNodeIndex + 1].Col * tileSize + tileSize / 2,
+                            pathFinding.GetPath()[currentNodeIndex + 1].Row * tileSize + tileSize / 2);
 
-                            Sprite.Play(CurrentAnimation);
+                        var boundingCenter = new Vector2(
+                            BoundingDetectCollisions.Center.X,
+                            BoundingDetectCollisions.Center.Y);
+                        if ((boundingCenter - nextNodePosition).Length() < tileSize + tileSize / 4)
+                        {
+                            currentNodeIndex++; // Increase currentNodeIndex
                         }
                     }
                     else IsMoving = false;
@@ -476,7 +490,7 @@ namespace Medicraft.Entities
                 if (BoundingDetectCollisions.Intersects(rect))
                 {
                     IsDetectCollistionObject = true;
-                    Position = initPos;
+                    Position = prevPos;
                     Velocity = Vector2.Zero;
                     break;
                 }
@@ -514,23 +528,24 @@ namespace Medicraft.Entities
                     break;
 
                 case EntityTypes.Companion:
-                    if (EntityManager.Instance.EntityCount() != 0)
-                        foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed
-                            && e.EntityType == EntityTypes.Hostile || e.EntityType == EntityTypes.Boss))
-                        {
-                            if (BoundingAggro.Intersects(entity.BoundingHitBox))
-                            {
-                                AggroTimer = AggroTime;
-                                IsAggro = true;
-                                break;
-                            }
-                        }
 
-                    if (IsAggro || (PlayerManager.Instance.Player.IsAttacked || PlayerManager.Instance.Player.IsAttacking))
+                    if (IsAggro || PlayerManager.Instance.Player.IsAttacked || PlayerManager.Instance.Player.IsAttacking)
                     {
                         BoundingAggro.Radius = 180f;
                     }
-                    else BoundingAggro.Radius = 30f;
+                    else BoundingAggro.Radius = 50f;
+
+                    foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDying
+                            && e.EntityType == EntityTypes.Hostile || e.EntityType == EntityTypes.Boss))
+                    {
+                        if (BoundingAggro.Intersects(entity.BoundingHitBox))
+                        {
+                            AggroTimer = AggroTime;
+                            IsAggro = true;
+                            break;
+                        }
+                    }
+
                     break;
             }
         }
@@ -593,6 +608,7 @@ namespace Medicraft.Entities
                 }
 
                 nextNodeTimer = 0f;
+                IsPathFindingUpdate = true;
             }
         }
 
@@ -607,6 +623,8 @@ namespace Medicraft.Entities
                 case EntityTypes.Boss:
                     if (IsAggro)
                     {
+                        currentNodeIndex = 0;
+
                         // Find Closest Entity: Player or Companion
                         var entities = new List<Entity>
                         {
@@ -627,25 +645,32 @@ namespace Medicraft.Entities
                     }
                     else
                     {
-                        switch (PathFindingType)
+                        if (IsPathFindingUpdate)
                         {
-                            case PathFindingTypes.RoutePoint:
+                            currentNodeIndex = 0;
 
-                            case PathFindingTypes.RandomPoint:
-                                pathFinding = new AStar(
-                                    (int)BoundingDetectCollisions.Center.X,
-                                    (int)BoundingDetectCollisions.Center.Y,
-                                    (int)targetNode.X,
-                                    (int)targetNode.Y);
-                                break;
+                            switch (PathFindingType)
+                            {
+                                case PathFindingTypes.RoutePoint:
 
-                            case PathFindingTypes.StationaryPoint:
-                                pathFinding = new AStar(
-                                    (int)BoundingDetectCollisions.Center.X,
-                                    (int)BoundingDetectCollisions.Center.Y,
-                                    returnPosX,
-                                    returnPosY);
-                                break;
+                                case PathFindingTypes.RandomPoint:
+                                    pathFinding = new AStar(
+                                        (int)BoundingDetectCollisions.Center.X,
+                                        (int)BoundingDetectCollisions.Center.Y,
+                                        (int)targetNode.X,
+                                        (int)targetNode.Y);
+                                    break;
+
+                                case PathFindingTypes.StationaryPoint:
+                                    pathFinding = new AStar(
+                                        (int)BoundingDetectCollisions.Center.X,
+                                        (int)BoundingDetectCollisions.Center.Y,
+                                        returnPosX,
+                                        returnPosY);
+                                    break;
+                            }
+
+                            IsPathFindingUpdate = false;
                         }
                     }
                     break;
@@ -653,6 +678,8 @@ namespace Medicraft.Entities
                 case EntityTypes.Companion:
                     if (IsAggro && EntityManager.Instance.ClosestEnemy != null)
                     {
+                        currentNodeIndex = 0;
+
                         pathFinding = new AStar(
                             (int)BoundingDetectCollisions.Center.X,
                             (int)BoundingDetectCollisions.Center.Y,
@@ -661,11 +688,13 @@ namespace Medicraft.Entities
                     }
                     else
                     {
+                        currentNodeIndex = 0;
+
                         pathFinding = new AStar(
-                            (int)BoundingDetectCollisions.Center.X,
-                            (int)BoundingDetectCollisions.Center.Y,
-                            returnPosX,
-                            returnPosY);
+                        (int)BoundingDetectCollisions.Center.X,
+                        (int)BoundingDetectCollisions.Center.Y,
+                        returnPosX,
+                        returnPosY);
                     }
                     break;
             } 

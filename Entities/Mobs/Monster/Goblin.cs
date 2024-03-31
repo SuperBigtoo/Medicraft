@@ -58,20 +58,13 @@ namespace Medicraft.Entities.Mobs.Monster
                 (int)((int)Position.X - Sprite.TextureRegion.Width / BoundingCollisionX),
                 (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
                 (int)(Sprite.TextureRegion.Width / 4f),
-                Sprite.TextureRegion.Height / 6
-            );
+                Sprite.TextureRegion.Height / 6);
 
             BoundingHitBox = new CircleF(Position, 25);         // Circle for Entity to hit
 
             BoundingDetectEntity = new CircleF(Position, 32);   // Circle for check attacking
 
             BoundingAggro = new CircleF(Position, 150);         // Circle for check aggro player        
-
-            pathFinding = new AStar(
-                (int)BoundingDetectCollisions.Center.X,
-                (int)BoundingDetectCollisions.Center.Y,
-                (int)EntityData.Position[0],
-                (int)EntityData.Position[1]);
 
             _itemDropId = GameGlobals.Instance.RandomItemDrop();
             _quantityDrop = GameGlobals.Instance.RandomItemQuantityDrop(_itemDropId);
@@ -127,12 +120,6 @@ namespace Medicraft.Entities.Mobs.Monster
             BoundingAggro = goblin.BoundingAggro;
             BoundingDetectEntity = goblin.BoundingDetectEntity;
 
-            pathFinding = new AStar(
-                (int)BoundingDetectCollisions.Center.X,
-                (int)BoundingDetectCollisions.Center.Y,
-                (int)EntityData.Position[0],
-                (int)EntityData.Position[1]);
-
             _itemDropId = GameGlobals.Instance.RandomItemDrop();
             _quantityDrop = GameGlobals.Instance.RandomItemQuantityDrop(_itemDropId);
 
@@ -166,6 +153,9 @@ namespace Medicraft.Entities.Mobs.Monster
                     CheckAggro();
                 }
 
+                // Blinking if attacked
+                HitBlinking(deltaSeconds);
+
                 // Update layer depth
                 UpdateLayerDepth(playerDepth, topDepth, middleDepth, bottomDepth);
             }
@@ -177,6 +167,10 @@ namespace Medicraft.Entities.Mobs.Monster
 
                 // Check Object Collsion
                 CheckCollision();
+
+                isBlinkingPlayed = false;
+                blinkingTimer = 0;
+                Sprite.Color = Color.White;
 
                 if (DyingTimer < DyingTime)
                 {
@@ -211,9 +205,6 @@ namespace Medicraft.Entities.Mobs.Monster
 
             // Update time conditions
             UpdateTimerConditions(deltaSeconds);
-
-            // Blinking if attacked
-            HitBlinking(deltaSeconds);
 
             // Ensure hp or mana doesn't exceed the maximum & minimum value
             MinimumCapacity();

@@ -73,12 +73,6 @@ namespace Medicraft.Entities.Mobs.Monster
 
             BoundingAggro = new CircleF(Position, 150);         // Circle for check aggro player        
 
-            pathFinding = new AStar(
-                (int)BoundingDetectCollisions.Center.X,
-                (int)BoundingDetectCollisions.Center.Y,
-                (int)EntityData.Position[0],
-                (int)EntityData.Position[1]);
-
             RandomSlimeColor();
 
             _itemDropId = GameGlobals.Instance.RandomItemDrop();
@@ -138,12 +132,6 @@ namespace Medicraft.Entities.Mobs.Monster
 
             BoundingDetectEntity = slime.BoundingDetectEntity;
 
-            pathFinding = new AStar(
-                (int)BoundingDetectCollisions.Center.X,
-                (int)BoundingDetectCollisions.Center.Y,
-                (int)EntityData.Position[0],
-                (int)EntityData.Position[1]);
-
             RandomSlimeColor();
 
             _itemDropId = GameGlobals.Instance.RandomItemDrop();
@@ -180,6 +168,9 @@ namespace Medicraft.Entities.Mobs.Monster
                     CheckAggro();
                 }
 
+                // Blinking if attacked
+                HitBlinking(deltaSeconds);
+
                 // Update layer depth
                 UpdateLayerDepth(playerDepth, topDepth, middleDepth, bottomDepth);
             }
@@ -191,6 +182,10 @@ namespace Medicraft.Entities.Mobs.Monster
 
                 // Check Object Collsion
                 CheckCollision();
+
+                isBlinkingPlayed = false;
+                blinkingTimer = 0;
+                Sprite.Color = Color.White;
 
                 if (DyingTimer < DyingTime)
                 {
@@ -226,9 +221,6 @@ namespace Medicraft.Entities.Mobs.Monster
             // Update time conditions
             UpdateTimerConditions(deltaSeconds);
 
-            // Blinking if attacked
-            HitBlinking(deltaSeconds);
-
             // Ensure hp or mana doesn't exceed the maximum & minimum value
             MinimumCapacity();
 
@@ -240,7 +232,7 @@ namespace Medicraft.Entities.Mobs.Monster
         {
             if (GameGlobals.Instance.IsShowPath)
             {
-                pathFinding.Draw(spriteBatch);
+                //pathFinding.Draw(spriteBatch);
             }
 
             spriteBatch.Draw(Sprite, Transform);

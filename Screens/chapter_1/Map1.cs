@@ -67,10 +67,10 @@ namespace Medicraft.Screens.chapter_1
                 { 200,  _content.Load<SpriteSheet>("entity/mobs/monster/slime/slimes_animation.sf", new JsonContentLoader())}
             };
 
-            _mobSpawner = new MobSpawner(GameGlobals.Instance.MobsTestSpawnTime
-                , GameGlobals.Instance.MobsTestSpawnTimer);
-            _mobSpawner.SetupSpawner(_entityDatas, entitySpriteSheets);
-            EntityManager.Instance.Initialize(_mobSpawner);
+            //_mobSpawner = new MobSpawner(GameGlobals.Instance.MobsTestSpawnTime
+            //    , GameGlobals.Instance.MobsTestSpawnTimer);
+            //_mobSpawner.SetupSpawner(_entityDatas, entitySpriteSheets);
+            //EntityManager.Instance.Initialize(_mobSpawner);
 
             // Adding GameObject to ObjectSpawner
             //_objectSpawner = new ObjectSpawner(10f);

@@ -17,6 +17,7 @@ using MonoGame.Extended.Sprites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Medicraft.Systems
 {
@@ -444,7 +445,10 @@ namespace Medicraft.Systems
 
         public void LoadContent()
         {
-            //System.Diagnostics.Debug.WriteLine($"totalFrames : {(int)(_totalMilliseconds / totalDuration) % totalFrames}");
+            //System.Diagnostics.Debug.WriteLine($"totalFrames : {}");
+
+            // test
+            //Test();
 
             // Load GameSave and Config
             var gameSave = JsonFileManager.LoadGameSave(GameSavePath);
@@ -915,6 +919,46 @@ namespace Medicraft.Systems
             var itemData = ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(itemId));
 
             return itemData != null ? itemData.Category : "";
+        }
+
+        public static void PrintMap(int[,] map)
+        {
+            for (int i = 0; i < map.GetLength(0); i++)
+            {
+                for (int j = 0; j < map.GetLength(1); j++)
+                {
+                    System.Diagnostics.Debug.Write(map[i, j] + " ");
+                }
+                System.Diagnostics.Debug.WriteLine(" ");
+            }
+        }
+
+        private void Test()
+        {
+            int ROAD = 1;
+            int BLOCK = 2;
+            int WALL = 3;
+
+            int[,] originalMap = new int[,]
+            {
+                { ROAD, ROAD, ROAD, ROAD, ROAD },
+                { ROAD, WALL, ROAD, ROAD, ROAD },
+                { ROAD, ROAD, BLOCK, ROAD, ROAD },
+                { ROAD, ROAD, ROAD, WALL, ROAD },
+                { ROAD, ROAD, ROAD, ROAD, ROAD },
+            };
+
+            int centerRow = 2;
+            int centerCol = 2;
+            int radius = 1;
+
+            int[,] clonedMap = new AStar().CloneMapAroundCenter(originalMap, centerRow, centerCol, radius);
+
+            System.Diagnostics.Debug.WriteLine("originalMap");
+            PrintMap(originalMap);
+            System.Diagnostics.Debug.WriteLine("");
+            System.Diagnostics.Debug.WriteLine("clonedMap");
+            PrintMap(clonedMap);
         }
 
         public static GameGlobals Instance

@@ -1,9 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Medicraft.Systems.PathFinding
 {
@@ -18,48 +14,69 @@ namespace Medicraft.Systems.PathFinding
         public Node parent = null;
 
         // Tile specific data
-        public int row;
-        public int col;
+        public int Row { get; set; }
+        public int Col { get; set; }
         public int id;
         public int tileType;
 
+        // Map Row and Col number
+        public int NUM_ROWS;
+        public int NUM_COLUMNS;
+        public int startRow;
+        public int startCol;
+        public int endRow;
+        public int endCol;
+
         // Maintain a list of all valid tile touching this that can be walked to
-        public List<Node> adjacent = new List<Node>();
+        public List<Node> adjacent = [];
 
         // Tile graphical data
         public Rectangle rec;
         public Color color;
 
         // This code is called whenever a new Tile is to be created
-        public Node(int row, int col, int tileType, Color color, Vector2 mapSize)
+        public Node(int row, int col, int tileType, Color color, Vector2 mapSize, int NUM_ROWS, int NUM_COLUMNS
+            , int startRow, int startCol, int endRow, int endCol)
         {
+            // map row & col number
+            this.NUM_ROWS = NUM_ROWS;
+            this.NUM_COLUMNS = NUM_COLUMNS;
+            this.startRow = startRow;
+            this.startCol = startCol;
+            this.endRow = endRow;
+            this.endCol = endCol;
+
             // Store the grid location of the tile by row and column
-            this.row = row;
-            this.col = col;
+            Row = row;
+            Col = col;
 
             // Calculate the tiles numerical order (left to right, top to bottom) in the grid
-            this.id = row * (int)mapSize.Y + col;
+            id = row * (int)mapSize.Y + col;
 
             // Store the tile's graphicak data
             this.tileType = tileType;
             this.color = color;
 
-            rec = new Rectangle(col * AStar.TILE_SIZE, row * AStar.TILE_SIZE, AStar.TILE_SIZE, AStar.TILE_SIZE);
+            rec = new Rectangle(
+                col * GameGlobals.Instance.TILE_SIZE,
+                row * GameGlobals.Instance.TILE_SIZE,
+                GameGlobals.Instance.TILE_SIZE,
+                GameGlobals.Instance.TILE_SIZE);
         }
 
         public void SetAdjacencies(Node[,] map)
         {
             // Only add walkable terrain, e.g. ignore walls and other obstacles
-            for (int curRow = row - 1; curRow <= row + 1; curRow++)
+            for (int curRow = (Row - startRow) - 1; curRow <= (Row - startRow) + 1; curRow++)
             {
-                for (int curCol = col - 1; curCol <= col + 1; curCol++)
+                for (int curCol = (Col - startCol) - 1; curCol <= (Col - startCol) + 1; curCol++)
                 {
                     // Do not add itself
-                    if (row != curRow || col != curCol)
+                    if (Row != curRow || Col != curCol)
                     {
                         // Add only Nodes at valid row and column that it walkable terrain
-                        if (curRow >= 0 && curRow < AStar.NUM_ROWS          // Within bounds vertically
-                            && curCol >= 0 && curCol < AStar.NUM_COLUMNS    // Within bounds horizontally
+                        if (curRow >= 0 && curRow < NUM_ROWS          // Within bounds vertically
+                            && curCol >= 0 && curCol < NUM_COLUMNS    // Within bounds horizontally
                             && map[curRow, curCol].tileType != AStar.BLOCK)  //  Valid terrain type
                         {
                             adjacent.Add(map[curRow, curCol]);
