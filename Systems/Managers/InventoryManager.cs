@@ -26,7 +26,7 @@ namespace Medicraft.Systems.Managers
         public int MaximunSlot { private set; get; }
         public int MaximunCount { private set; get; }
         public int GoldCoin { private set; get; }
-        public int KeyIdex { set; get; }
+        public int IdexInven { set; get; }
         public Dictionary<int, InventoryItemData> InventoryBag { private set; get; }
         public KeyValuePair<int, InventoryItemData> ItemSelected { set; get; }
 
@@ -37,7 +37,7 @@ namespace Medicraft.Systems.Managers
             MaximunSlot = GameGlobals.Instance.MaximunInventorySlot;
             MaximunCount = GameGlobals.Instance.MaximunItemCount;
             InventoryBag = [];
-            KeyIdex = 0;
+            IdexInven = 0;
             GoldCoin = 0;
         }
 
@@ -53,7 +53,7 @@ namespace Medicraft.Systems.Managers
 
             // Setup Item in Inventory
             foreach (var item in inventoryData.Inventory)
-                InventoryBag.Add(KeyIdex++, item);
+                InventoryBag.Add(IdexInven++, item);
         }
 
         public bool IsInventoryFull(int itemId, int quantity)
@@ -87,7 +87,7 @@ namespace Medicraft.Systems.Managers
                     itemInBag.Count -= MaximunCount;
 
                     // Add new stack to Inventory
-                    InventoryBag.Add(KeyIdex++, new InventoryItemData()
+                    InventoryBag.Add(IdexInven++, new InventoryItemData()
                     {
                         ItemId = itemId,
                         Count = tempCount,
@@ -98,7 +98,7 @@ namespace Medicraft.Systems.Managers
             else
             {
                 // Add new item to Inventory
-                InventoryBag.Add(KeyIdex++, new InventoryItemData()
+                InventoryBag.Add(IdexInven++, new InventoryItemData()
                 {
                     ItemId = itemId,
                     Count = quantity,

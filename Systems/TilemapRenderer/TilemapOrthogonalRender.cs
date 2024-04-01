@@ -1,4 +1,5 @@
 ﻿using Medicraft.Data.Models;
+using Medicraft.Screens.chapter_1;
 using Medicraft.Systems.Managers;
 using Medicraft.Systems.PathFinding;
 using Microsoft.Xna.Framework;
@@ -17,6 +18,12 @@ namespace Medicraft.Systems.TilemapRenderer
         private readonly Texture2D[] _tileSets;
         private readonly int _tileSize;
 
+        private readonly Dictionary<string, TmxLayerTile[,]> _tmxLayerTiles;
+        private int startRow;
+        private int startCol;
+        private int endRow;
+        private int endCol;
+
         private readonly int[] _firstGid;
         private readonly int[] _tileWidth;
         private readonly int[] _tileHeight;
@@ -26,20 +33,17 @@ namespace Medicraft.Systems.TilemapRenderer
         // For calcurlate the frame rate of tile animation
         private float _totalMilliseconds = 0f;
 
-        // Maintain tile types by number representation
-        private const int BLOCK = 0;
-        private const int ROAD = 1;
-        private const int START = 2;
-        private const int END = 3;
-        private const int BLANK = 4;
-
         private const int BLOCK_ID = 7050;
+
+        // Scale Rendering
+        const int TileRadiusFactor = 25;
 
         public TilemapOrthogonalRender(TmxMap tileMap, Texture2D[] tileSets, int tileSize)
         {
             _tileMap = tileMap;
             _tileSets = tileSets;
             _tileSize = tileSize;
+            _tmxLayerTiles = [];
 
             _firstGid = new int[tileSets.Length];
             _tileWidth = new int[tileSets.Length];
@@ -70,6 +74,29 @@ namespace Medicraft.Systems.TilemapRenderer
                         _tileAnimationsId.Add(tile.Id + 1);
                     }
                 }
+            }
+
+            // Set the base TileMap for cropping
+            foreach (var tileLayer in _tileMap.TileLayers.Where(e => e.Name != "Block"))
+            {
+                var row = 0;
+                var col = 0;
+                var tileArray = new TmxLayerTile[_tileMap.Height, _tileMap.Width];
+
+                foreach (var tile in tileLayer.Tiles)
+                {
+                    tileArray[row, col] = tile;
+
+                    if (col == _tileMap.Width - 1)
+                    {
+                        col = 0;
+                        row++;
+                        if (row == _tileMap.Height) row = 0;
+                    }
+                    else col++;
+                }
+                
+                _tmxLayerTiles.Add(tileLayer.Name, tileArray);
             }
         }
 
@@ -157,9 +184,9 @@ namespace Medicraft.Systems.TilemapRenderer
                     if (gid != 0)
                     {
                         if (gid - 1 == BLOCK_ID)
-                            GameGlobals.Instance.TILEMAP[y, x] = BLOCK;
+                            GameGlobals.Instance.TILEMAP[y, x] = AStar.BLOCK;
                     }
-                    else GameGlobals.Instance.TILEMAP[y, x] = BLANK;
+                    else GameGlobals.Instance.TILEMAP[y, x] = AStar.BLANK;
 
                     if (x == _tileMap.Width - 1)
                     {
@@ -178,8 +205,8 @@ namespace Medicraft.Systems.TilemapRenderer
                     int gid = _tileMap.TileLayers[1].Tiles[j].Gid;
                     if (gid != 0)
                     {
-                        if (GameGlobals.Instance.TILEMAP[y, x] != BLOCK) 
-                            GameGlobals.Instance.TILEMAP[y, x] = ROAD;
+                        if (GameGlobals.Instance.TILEMAP[y, x] != AStar.BLOCK) 
+                            GameGlobals.Instance.TILEMAP[y, x] = AStar.ROAD;
                     }
 
                     if (x == _tileMap.Width - 1)
@@ -200,103 +227,132 @@ namespace Medicraft.Systems.TilemapRenderer
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            // Tile Layer
+            // Tile layer depth
             var layerDepthBackground = GameGlobals.Instance.BackgroundDepth;
             var topLayerDepth = GameGlobals.Instance.TopObjectDepth;
             var middleLayerDepth = GameGlobals.Instance.MiddleObjectDepth;
             var bottomLayerDepth = GameGlobals.Instance.BottomObjectDepth;
 
-            for (int i = 0; i < _tileMap.TileLayers.Count; i++)
-            {
-                for (int j = 0; j < _tileMap.TileLayers[i].Tiles.Count; j++)
+            // Player position
+            var playerPos = PlayerManager.Instance.Player.Position;
+
+            for (int i = 0; i < _tmxLayerTiles.Count; i++)
+            {   
+                var map = _tmxLayerTiles.ElementAt(i);
+
+                var clonedMap = CloneMapAroundCenter(
+                    map.Value,
+                    (int)(playerPos.Y / _tileSize),
+                    (int)(playerPos.X / _tileSize),
+                    TileRadiusFactor);
+
+                for (int row = 0; row < clonedMap.GetLength(0); row++)
                 {
-                    int gid = _tileMap.TileLayers[i].Tiles[j].Gid;
-                    if (gid != 0)
+                    for (int col = 0, j = startCol; col < clonedMap.GetLength(1); col++, j++)
                     {
-                        switch (_tileSets.Length)
+                        int gid = clonedMap[row, col].Gid;
+                        if (gid != 0)
                         {
-                            case 1:
-                                DrawTile(spriteBatch, gid, 0, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
-                                break;
+                            switch (_tileSets.Length)
+                            {
+                                case 1:
+                                    DrawTile(spriteBatch, gid, 0, row, col, map.Key
+                                        , topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
+                                    break;
 
-                            case 2:
-                                if (gid >= _firstGid[1])
-                                {
-                                    DrawTile(spriteBatch, gid, 1, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
-                                }
-                                else
-                                {
-                                    DrawTile(spriteBatch, gid, 0, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
-                                }
-                                break;
+                                case 2:
+                                    if (gid >= _firstGid[1])
+                                    {
+                                        DrawTile(spriteBatch, gid, 1, row, col, map.Key
+                                            , topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
+                                    }
+                                    else
+                                    {
+                                        DrawTile(spriteBatch, gid, 0, row, col, map.Key
+                                            , topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
+                                    }
+                                    break;
 
-                            case 3:
-                                if (gid >= _firstGid[2])
-                                {
-                                    DrawTile(spriteBatch, gid, 2, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
-                                }
-                                else if (gid >= _firstGid[1])
-                                {
-                                    DrawTile(spriteBatch, gid, 1, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
-                                }
-                                else
-                                {
-                                    DrawTile(spriteBatch, gid, 0, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
-                                }
-                                break;
+                                case 3:
+                                    if (gid >= _firstGid[2])
+                                    {
+                                        DrawTile(spriteBatch, gid, 2, row, col, map.Key
+                                            , topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
+                                    }
+                                    else if (gid >= _firstGid[1])
+                                    {
+                                        DrawTile(spriteBatch, gid, 1, row, col, map.Key
+                                            , topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
+                                    }
+                                    else
+                                    {
+                                        DrawTile(spriteBatch, gid, 0, row, col, map.Key
+                                            , topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
+                                    }
+                                    break;
 
-                            case 4:
-                                if (gid >= _firstGid[3])
-                                {
-                                    DrawTile(spriteBatch, gid, 3, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
-                                }
-                                else if (gid >= _firstGid[2])
-                                {
-                                    DrawTile(spriteBatch, gid, 2, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
-                                }
-                                else if (gid >= _firstGid[1])
-                                {
-                                    DrawTile(spriteBatch, gid, 1, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
-                                }
-                                else
-                                {
-                                    DrawTile(spriteBatch, gid, 0, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
-                                }
-                                break;
+                                case 4:
+                                    if (gid >= _firstGid[3])
+                                    {
+                                        DrawTile(spriteBatch, gid, 3, row, col, map.Key
+                                            , topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
+                                    }
+                                    else if (gid >= _firstGid[2])
+                                    {
+                                        DrawTile(spriteBatch, gid, 2, row, col, map.Key
+                                            , topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
+                                    }
+                                    else if (gid >= _firstGid[1])
+                                    {
+                                        DrawTile(spriteBatch, gid, 1, row, col, map.Key
+                                            , topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
+                                    }
+                                    else
+                                    {
+                                        DrawTile(spriteBatch, gid, 0, row, col, map.Key
+                                            , topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
+                                    }
+                                    break;
 
-                            case 5:
-                                if (gid >= _firstGid[4])
-                                {
-                                    DrawTile(spriteBatch, gid, 4, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
-                                }
-                                else if (gid >= _firstGid[3])
-                                {
-                                    DrawTile(spriteBatch, gid, 3, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
-                                }
-                                else if (gid >= _firstGid[2])
-                                {
-                                    DrawTile(spriteBatch, gid, 2, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
-                                }
-                                else if (gid >= _firstGid[1])
-                                {
-                                    DrawTile(spriteBatch, gid, 1, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
-                                }
-                                else
-                                {
-                                    DrawTile(spriteBatch, gid, 0, i, j, topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
-                                }
-                                break;
+                                case 5:
+                                    if (gid >= _firstGid[4])
+                                    {
+                                        DrawTile(spriteBatch, gid, 4, row, col, map.Key
+                                            , topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
+                                    }
+                                    else if (gid >= _firstGid[3])
+                                    {
+                                        DrawTile(spriteBatch, gid, 3, row, col, map.Key
+                                            , topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
+                                    }
+                                    else if (gid >= _firstGid[2])
+                                    {
+                                        DrawTile(spriteBatch, gid, 2, row, col, map.Key
+                                            , topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
+                                    }
+                                    else if (gid >= _firstGid[1])
+                                    {
+                                        DrawTile(spriteBatch, gid, 1, row, col, map.Key
+                                            , topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
+                                    }
+                                    else
+                                    {
+                                        DrawTile(spriteBatch, gid, 0, row, col, map.Key
+                                            , topLayerDepth, middleLayerDepth, bottomLayerDepth, layerDepthBackground);
+                                    }
+                                    break;
+                            }
+                            topLayerDepth -= 0.000001f;
+                            middleLayerDepth -= 0.000001f;
+                            bottomLayerDepth -= 0.000001f;
+                            layerDepthBackground -= 0.000001f;
                         }
-                        topLayerDepth -= 0.000001f;
-                        middleLayerDepth -= 0.000001f;
-                        bottomLayerDepth -= 0.000001f;
-                        layerDepthBackground -= 0.000001f;
                     }
                 }
             }
         }
 
-        private void DrawTile(SpriteBatch spriteBatch, int gid, int index, int i, int j
+        private void DrawTile(SpriteBatch spriteBatch, int gid, int index, int row, int col, string layerName
             , float topLayerDepth, float middleLayerDepth, float bottomLayerDepth, float layerDepthBackground)
         {
             Rectangle tilesetRec = Rectangle.Empty;
@@ -305,57 +361,47 @@ namespace Medicraft.Systems.TilemapRenderer
             if (_tileAnimationsId.Contains(gid))
             {
                 int frameIndex = GetCurrentAnimationFrame(gid - 1);
-                int column = frameIndex % _tilesetTileWide[index];
-                int row = (int)Math.Floor(frameIndex / (double)_tilesetTileWide[index]);
+                int colTileSet = frameIndex % _tilesetTileWide[index];
+                int rowTileSet = (int)Math.Floor(frameIndex / (double)_tilesetTileWide[index]);
 
-                tilesetRec = new Rectangle(_tileWidth[index] * column, _tileHeight[index] * row
+                tilesetRec = new Rectangle(_tileWidth[index] * colTileSet, _tileHeight[index] * rowTileSet
                     , _tileWidth[index], _tileHeight[index]);
             }
             else
             {
                 // If not animated den do dis
                 int tileFrame = gid - _firstGid[index];
-                int column = tileFrame % _tilesetTileWide[index];
-                int row = (int)Math.Floor(tileFrame / (double)_tilesetTileWide[index]);
+                int colTileSet = tileFrame % _tilesetTileWide[index];
+                int rowTileSet = (int)Math.Floor(tileFrame / (double)_tilesetTileWide[index]);
 
-                tilesetRec = new Rectangle(_tileWidth[index] * column, _tileHeight[index] * row
+                tilesetRec = new Rectangle(_tileWidth[index] * colTileSet, _tileHeight[index] * rowTileSet
                     , _tileWidth[index], _tileHeight[index]);
             }
 
-            int x = j % _tileMap.Width * _tileMap.TileWidth;
-            int y = (int)Math.Floor((double)(j / _tileMap.Width)) * _tileMap.TileHeight;
+            var x = (col + startCol) * _tileSize;
+            var y = (row + startRow) * _tileSize;
 
             var tileRec = new Rectangle(x, y, _tileWidth[index], _tileHeight[index]);
 
-            // Check Rendering if x y is far from Player position less den Screen width*1.25 and height*1.25
-            var playerPos = PlayerManager.Instance.Player.Position;
-            var lengthX = MathF.Abs(x - playerPos.X);
-            var lengthY = MathF.Abs(y - playerPos.Y);
-            var gameScreenX = ScreenManager.Instance.GraphicsDevice.Viewport.Width * 0.75;
-            var gameScreenY = ScreenManager.Instance.GraphicsDevice.Viewport.Height * 0.75;
-
-            if (lengthX <= gameScreenX && lengthY <= gameScreenY)
+            if (layerName.Equals("TopLayerObject"))
             {
-                if (_tileMap.TileLayers[i].Name.Equals("TopLayerObject"))
-                {
-                    spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
-                        , Vector2.Zero, SpriteEffects.None, topLayerDepth);
-                }
-                else if (_tileMap.TileLayers[i].Name.Equals("MiddleLayerObject"))
-                {
-                    spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
-                        , Vector2.Zero, SpriteEffects.None, middleLayerDepth);
-                }
-                else if (_tileMap.TileLayers[i].Name.Equals("BottomLayerObject"))
-                {
-                    spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
-                        , Vector2.Zero, SpriteEffects.None, bottomLayerDepth);
-                }
-                else
-                {
-                    spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
-                        , Vector2.Zero, SpriteEffects.None, layerDepthBackground);
-                }
+                spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
+                    , Vector2.Zero, SpriteEffects.None, topLayerDepth);
+            }
+            else if (layerName.Equals("MiddleLayerObject"))
+            {
+                spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
+                    , Vector2.Zero, SpriteEffects.None, middleLayerDepth);
+            }
+            else if (layerName.Equals("BottomLayerObject"))
+            {
+                spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
+                    , Vector2.Zero, SpriteEffects.None, bottomLayerDepth);
+            }
+            else
+            {
+                spriteBatch.Draw(_tileSets[index], tileRec, tilesetRec, Color.White, 0f
+                    , Vector2.Zero, SpriteEffects.None, layerDepthBackground);
             }
         }
 
@@ -376,6 +422,34 @@ namespace Medicraft.Systems.TilemapRenderer
             int frameIndex = (int)(_totalMilliseconds / totalDuration) % totalFrames;
 
             return frames[frameIndex].Id;
+        }
+
+        private TmxLayerTile[,] CloneMapAroundCenter(TmxLayerTile[,] originalMap, int centerRow, int centerCol, int radius)
+        {
+            int minX = Math.Max(centerCol - radius, 0);
+            int maxX = Math.Min(centerCol + radius, originalMap.GetLength(1) - 1);
+            int minY = Math.Max(centerRow - radius, 0);
+            int maxY = Math.Min(centerRow + radius, originalMap.GetLength(0) - 1);
+
+            startCol = minX;
+            startRow = minY;
+            endCol = maxX;
+            endRow = maxY;
+
+            int newWidth = maxX - minX + 1;
+            int newHeight = maxY - minY + 1;
+
+            TmxLayerTile[,] clonedMap = new TmxLayerTile[newHeight, newWidth];
+
+            for (int row = minY, newRow = 0; row <= maxY; row++, newRow++)
+            {
+                for (int col = minX, newCol = 0; col <= maxX; col++, newCol++)
+                {
+                    clonedMap[newRow, newCol] = originalMap[row, col];
+                }
+            }
+
+            return clonedMap;
         }
     }
 }

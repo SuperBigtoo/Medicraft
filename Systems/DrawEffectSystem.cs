@@ -131,7 +131,7 @@ namespace Medicraft.Systems
 
             DrawPlayerAbilityAndStatusEffects(spriteBatch);
 
-            DrawCompanionAttackedEffect(spriteBatch);
+            DrawAttackedEffectToCompanion(spriteBatch);
 
             DrawCompanionAbilityAndStatusEffect(spriteBatch);
 
@@ -175,7 +175,7 @@ namespace Medicraft.Systems
 
                             log.AnimatedSprite.Update(_deltaSeconds);
 
-                            var cycleEffect = _hitSpriteSheet.Cycles.Where(c => c.Key.Equals(log.EffectName)).ElementAt(0);
+                            var cycleEffect = _hitSpriteSheet.Cycles.FirstOrDefault(c => c.Key.Equals(log.EffectName));
                             var duration = cycleEffect.Value.FrameDuration * cycleEffect.Value.Frames.Capacity;
 
                             if (log.ElapsedTime < duration)
@@ -378,7 +378,6 @@ namespace Medicraft.Systems
                         }
 
                         var position = PlayerManager.Instance.Player.Position;
-
                         var transform = new Transform2
                         {
                             Scale = new Vector2(1f, 1f),
@@ -500,9 +499,9 @@ namespace Medicraft.Systems
             }
         }
 
-        private void DrawCompanionAttackedEffect(SpriteBatch spriteBatch)
+        private void DrawAttackedEffectToCompanion(SpriteBatch spriteBatch)
         {
-            var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrentCompanionIndex];
+            var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
             var combatLog = companion.CombatLogs;
 
             if (combatLog.Count != 0)
@@ -526,7 +525,6 @@ namespace Medicraft.Systems
                         }
 
                         var position = companion.Position;
-
                         var transform = new Transform2
                         {
                             Scale = new Vector2(3f, 3f),
@@ -536,11 +534,12 @@ namespace Medicraft.Systems
 
                         log.AnimatedSprite.Update(_deltaSeconds);
 
-                        var cycleEffect = _hitSpriteSheet.Cycles.Where(c => c.Key.Equals(log.EffectName)).ElementAt(0);
+                        var cycleEffect = _hitSpriteSheet.Cycles.FirstOrDefault(c => c.Key.Equals(log.EffectName));
                         var duration = cycleEffect.Value.FrameDuration * cycleEffect.Value.Frames.Capacity;
 
                         if (log.ElapsedTime < duration)
                         {
+                            System.Diagnostics.Debug.WriteLine($"combatLog draw! : {log.Action} by {log.Actor}");
                             spriteBatch.Draw(log.AnimatedSprite, transform);
                         }
                     }
@@ -550,10 +549,10 @@ namespace Medicraft.Systems
 
         private void DrawCompanionAbilityAndStatusEffect(SpriteBatch spriteBatch)
         {
-            var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrentCompanionIndex];
+            var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
+            var combatLog = companion.CombatLogs;
 
             // Activated Effect
-            var combatLog = companion.CombatLogs;
             if (combatLog.Count != 0)
             {
                 foreach (var log in combatLog.Where(l => l.ElapsedTime < 1f

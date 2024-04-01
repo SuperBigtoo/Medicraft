@@ -20,9 +20,9 @@ namespace Medicraft.Systems.Managers
         
         // Companions
         public List<Companion> Companions { private set; get; }
-        public int CurrentCompanionIndex { private set; get; }
-        public bool IsCompanionSpawned { set; get; }
-        public bool IsCompanionDead { private set; get; } 
+        public int CurrCompaIndex { private set; get; }
+        public bool IsCompanionSummoned { set; get; }
+        public bool IsCompanionDead { set; get; } 
 
         private static PlayerManager instance;
         private PlayerManager()
@@ -30,8 +30,8 @@ namespace Medicraft.Systems.Managers
             IsPlayerDead = false;
 
             Companions = [];
-            CurrentCompanionIndex = 0;
-            IsCompanionSpawned = false;
+            CurrCompaIndex = 0;
+            IsCompanionSummoned = false;
             IsCompanionDead = false;
         }
 
@@ -101,6 +101,7 @@ namespace Medicraft.Systems.Managers
             Companions.Clear();
 
             var spriteSheet = GameGlobals.Instance.CompanionSpriteSheet;
+            var indexCompa = 0;
 
             if (Player.PlayerData.Companions != null || Player.PlayerData.Companions.Count != 0)
                 foreach (var compaData in Player.PlayerData.Companions)
@@ -109,7 +110,7 @@ namespace Medicraft.Systems.Managers
                     {
                         case 1:
                             // Violet
-                            Companions.Add(new Violet(new AnimatedSprite(spriteSheet[0]), compaData, Vector2.One));
+                            Companions.Add(new Violet(new AnimatedSprite(spriteSheet[0]), compaData, Vector2.One, indexCompa++));
                             break;
 
                         case 2:
@@ -129,13 +130,15 @@ namespace Medicraft.Systems.Managers
                 foreach (var compa in Companions)
                     compa.CompanionData.IsSummoned = false;
 
-                Companions[CurrentCompanionIndex].Position = Player.Position;
-                Companions[CurrentCompanionIndex].pathFinding = new AStar(
-                    (int)Companions[CurrentCompanionIndex].BoundingDetectCollisions.Center.X,
-                    (int)Companions[CurrentCompanionIndex].BoundingDetectCollisions.Center.Y,
+                Companions[CurrCompaIndex].Position = Player.Position;
+                Companions[CurrCompaIndex].pathFinding = new AStar(
+                    (int)Companions[CurrCompaIndex].BoundingDetectCollisions.Center.X,
+                    (int)Companions[CurrCompaIndex].BoundingDetectCollisions.Center.Y,
                     (int)Player.BoundingDetectCollisions.Center.X,
                     (int)Player.BoundingDetectCollisions.Center.Y);
-                Companions[CurrentCompanionIndex].CompanionData.IsSummoned = true;
+
+                Companions[CurrCompaIndex].CompanionData.IsSummoned = true;
+                IsCompanionDead = false;
             }
         }
 
@@ -153,10 +156,10 @@ namespace Medicraft.Systems.Managers
             var mouseCur = GameGlobals.Instance.CurMouse;
             var mousePrev = GameGlobals.Instance.PrevMouse;
 
-            // Only receive input if on PlayScreen or TestScreen
+            // Only receive input if on PlayScreen
             if (!ScreenManager.Instance.IsTransitioning 
-                && (ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.TestScreen
-                || ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.Map1))
+                && (ScreenManager.Instance.CurrentScreen != ScreenManager.GameScreen.SplashScreen
+                || ScreenManager.Instance.CurrentScreen != ScreenManager.GameScreen.MainMenuScreen))
             {
                 // Save Game for Test
                 if (keyboardCur.IsKeyUp(Keys.M) && keyboardPrev.IsKeyDown(Keys.M))
@@ -439,8 +442,12 @@ namespace Medicraft.Systems.Managers
             // Update Crafting
             CraftingManager.Instance.Update(gameTime);
 
-            // Check Player HP for Deadq
-            if (Player.HP <= 0 && !IsPlayerDead) IsPlayerDead = true;
+            // Check Player and Companion HP for Deadq
+            if (Player.HP <= 0 && !IsPlayerDead)
+                IsPlayerDead = true;
+
+            if (Companions[CurrCompaIndex].HP <= 0 && !IsCompanionDead)
+                IsCompanionDead = true;
 
             if (IsPlayerDead)
             {
@@ -449,6 +456,12 @@ namespace Medicraft.Systems.Managers
                 if (GameGlobals.Instance.CurMouse.LeftButton == ButtonState.Pressed
                     && GameGlobals.Instance.PrevMouse.LeftButton == ButtonState.Released)
                     RespawnPlayer();
+            }
+
+            if (IsCompanionDead)
+            {
+                IsCompanionSummoned = false;
+                Companions[CurrCompaIndex].CompanionData.IsSummoned = false;
             }
 
             // This will check if the player enters the area that is the point of crossing over to another map

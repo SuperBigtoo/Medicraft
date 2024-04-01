@@ -102,7 +102,8 @@ namespace Medicraft.Systems
         {
             DrawHealthBarGUI(spriteBatch);
 
-            DrawCompanionHealthBarGUI(spriteBatch);
+            if (!PlayerManager.Instance.IsCompanionDead && PlayerManager.Instance.IsCompanionSummoned)
+                DrawCompanionHealthBarGUI(spriteBatch);
 
             if (GameGlobals.Instance.IsEnteringBossFight)
                 DrawBossHealthBarGUI(spriteBatch);
@@ -288,6 +289,8 @@ namespace Medicraft.Systems
 
         private void DrawCompanionHealthBarGUI(SpriteBatch spriteBatch)
         {
+            var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
+
             // Health Bar Companion Alpha
             spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.health_bar_companion_alpha)
                 , new Vector2(127f, 106f) + _topLeftCorner, null
@@ -299,15 +302,25 @@ namespace Medicraft.Systems
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             // HP gauge
-            //var curHealthPoint = PlayerManager.Instance.Player.GetCurrentHealthPercentage();
+            var curHealthPoint = companion.GetCurrentHealthPercentage();
             var hpGaugeTexture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.healthpoints_gauge_companion);
             var hpGaugeSourceRec = new Rectangle(0, 0
-                , (int)(hpGaugeTexture.Width * 1), hpGaugeTexture.Height);
+                , (int)(hpGaugeTexture.Width * curHealthPoint), hpGaugeTexture.Height);
             var hpGaugeRec = new Rectangle((int)(202f + _topLeftCorner.X), (int)(124f + _topLeftCorner.Y)
-                , (int)(hpGaugeTexture.Width * 1), hpGaugeTexture.Height);
+                , (int)(hpGaugeTexture.Width * curHealthPoint), hpGaugeTexture.Height);
 
             spriteBatch.Draw(hpGaugeTexture, hpGaugeRec, hpGaugeSourceRec
                 , Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+
+            // Text Health Point
+            var textHP = $"{(int)companion.HP}/{(int)companion.MaxHP}";
+            var textSizeHP = GameGlobals.Instance.FontTA8BitBold.MeasureString(textHP);
+            var positionHP = new Vector2(
+                (202f + hpGaugeTexture.Width / 2) - ((textSizeHP.Width * 0.8f) / 2),
+                (124f + hpGaugeTexture.Height / 2) - ((textSizeHP.Height * 0.8f) / 2)) + _topLeftCorner;
+
+            DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
+                , textHP, positionHP, Color.White, 0.8f, Color.Black, 2);
 
             // Health Bar Companion GUI
             spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.health_bar_companion)
@@ -606,11 +619,13 @@ namespace Medicraft.Systems
         private static void DrawCombatNumbers(SpriteBatch spriteBatch)
         {
             var entities = EntityManager.Instance.Entities;
-
             foreach (var entity in entities.Where(e => !e.IsDestroyed))
             {
                 entity.DrawCombatNumbers(spriteBatch);
             }
+
+            if (PlayerManager.Instance.IsCompanionSummoned)
+                PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex].DrawCombatNumbers(spriteBatch);
 
             PlayerManager.Instance.Player.DrawCombatNumbers(spriteBatch);
         }

@@ -90,10 +90,10 @@ namespace Medicraft.Systems.PathFinding
             var distance = (int)(new Vector2(startPosX, startPosY) - new Vector2(endPosX, endPosY)).Length();
 
             map = CloneMapAroundCenter(
-                CloneTileType(),
+                (int[,])GameGlobals.Instance.TILEMAP.Clone(),
                 startPosY / TILE_SIZE,
                 startPosX / TILE_SIZE,
-                (distance / TILE_SIZE) + 3);
+                (distance / TILE_SIZE) + 1);
 
             NUM_ROWS = map.GetLength(0);
             NUM_COLUMNS = map.GetLength(1);
@@ -107,23 +107,6 @@ namespace Medicraft.Systems.PathFinding
             SetEnd(endPosX, endPosY);
             Initialize();
             path = FindPath(start, end);
-
-            //map = CloneTileType();
-            //NUM_ROWS = GameGlobals.Instance.NUM_ROWS;
-            //NUM_COLUMNS = GameGlobals.Instance.NUM_COLUMNS;
-            //mapSize = new Vector2(NUM_ROWS, NUM_COLUMNS);
-            //tileMap = new Node[NUM_ROWS, NUM_COLUMNS];
-
-            //// Set start and end of row col, in normally case
-            //startCol = 0;
-            //startRow = 0;
-            //endCol = NUM_COLUMNS;
-            //endRow = NUM_ROWS;
-
-            //SetStart(startPosX, startPosY);
-            //SetEnd(endPosX, endPosY);
-            //Initialize();
-            //path = FindPath(start, end);
         }
 
         private void Initialize()

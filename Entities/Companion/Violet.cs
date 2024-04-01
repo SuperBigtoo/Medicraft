@@ -1,19 +1,18 @@
 ﻿using Medicraft.Data.Models;
-using Medicraft.Systems.PathFinding;
 using MonoGame.Extended;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Sprites;
 using Microsoft.Xna.Framework.Graphics;
-using Medicraft.Systems.Managers;
 
 namespace Medicraft.Entities.Companion
 {
     public class Violet : Companion
     {
-        public Violet(AnimatedSprite sprite, CompanionData companionData, Vector2 scale) : base(scale)
+        public Violet(AnimatedSprite sprite, CompanionData companionData, Vector2 scale, int indexCompa) : base(scale)
         {
             Sprite = sprite;
             CompanionData = companionData;
+            CompanionId = indexCompa;
 
             // Initialize Character Data
             Id = companionData.CharId;             // Mot to be confuse with CharId
@@ -68,27 +67,6 @@ namespace Medicraft.Entities.Companion
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-        }
-
-        public override void DrawShadow(SpriteBatch spriteBatch, Texture2D shadowTexture)
-        {
-            var position = new Vector2(Position.X - (shadowTexture.Width * 1.2f) / 2.2f
-                , BoundingDetectCollisions.Center.Y - (shadowTexture.Height * 1.2f) / 5f);
-
-            spriteBatch.Draw(shadowTexture, position, null, Color.White
-                , 0f, Vector2.Zero, 1.2f, SpriteEffects.None, Sprite.Depth + 0.0000025f);
-        }
-
-        public override Vector2 SetCombatNumDirection()
-        {
-            Vector2 offset = new(Position.X, Position.Y - Sprite.TextureRegion.Height * 1.5f);
-
-            Vector2 numDirection = Position - offset;
-            numDirection.Normalize();
-
-            CombatNumVelocity = numDirection * Sprite.TextureRegion.Height;
-
-            return CombatNumVelocity;
         }
     }
 }

@@ -15,6 +15,8 @@ namespace Medicraft.Entities.Companion
     {
         public CompanionData CompanionData { get; protected set; }
 
+        public int CompanionId { get; protected set; }
+
         public bool isCriticalAttack, isAttackMissed;
 
         protected float percentNormalHit;
@@ -23,7 +25,6 @@ namespace Medicraft.Entities.Companion
         protected Companion(Vector2 scale)
         {
             stoppingNodeIndex = 2;
-
             knockbackForce = 40;
 
             var position = new Vector2(
@@ -42,7 +43,7 @@ namespace Medicraft.Entities.Companion
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (!IsDying)
+            if (!PlayerManager.Instance.IsCompanionDead)
             {
                 // Setup PathFinding
                 SetPathFindingNode(
@@ -86,18 +87,18 @@ namespace Medicraft.Entities.Companion
             }
             else
             {
-                // Dying time before destroy
-                CurrentAnimation = SpriteCycle + "_dying";
-                Sprite.Play(CurrentAnimation);
+                if (!IsDying)
+                {
+                    IsDying = true;
+                    CurrentAnimation = SpriteCycle + "_dying";
+                    Sprite.Play(CurrentAnimation);
 
-                // Check Object Collsion
-                CheckCollision();
+                    isBlinkingPlayed = false;
+                    blinkingTimer = 0;
+                    Sprite.Color = Color.White;
+                }
 
-                isBlinkingPlayed = false;
-                blinkingTimer = 0;
-                Sprite.Color = Color.White;
-
-                if (DyingTimer < DyingTime)
+                if (DyingTimer < DyingTime && IsDying)
                 {
                     DyingTimer += deltaSeconds;
 
@@ -146,6 +147,27 @@ namespace Medicraft.Entities.Companion
                 pixelTexture.SetData(new Color[] { Color.White });
                 spriteBatch.Draw(pixelTexture, (Rectangle)BoundingDetectCollisions, Color.Red);
             }
+        }
+
+        public override void DrawShadow(SpriteBatch spriteBatch, Texture2D shadowTexture)
+        {
+            var position = new Vector2(Position.X - (shadowTexture.Width * 1.2f) / 2.2f
+                , BoundingDetectCollisions.Center.Y - (shadowTexture.Height * 1.2f) / 5f);
+
+            spriteBatch.Draw(shadowTexture, position, null, Color.White
+                , 0f, Vector2.Zero, 1.2f, SpriteEffects.None, Sprite.Depth + 0.0000025f);
+        }
+
+        public override Vector2 SetCombatNumDirection()
+        {
+            Vector2 offset = new(Position.X, Position.Y - Sprite.TextureRegion.Height * 1.5f);
+
+            Vector2 numDirection = Position - offset;
+            numDirection.Normalize();
+
+            CombatNumVelocity = numDirection * Sprite.TextureRegion.Height / 1.5f;
+
+            return CombatNumVelocity;
         }
 
         protected override void MovementControl(float deltaSeconds)
@@ -213,7 +235,7 @@ namespace Medicraft.Entities.Companion
                         var boundingCenter = new Vector2(
                             BoundingDetectCollisions.Center.X,
                             BoundingDetectCollisions.Center.Y);
-                        if ((boundingCenter - nextNodePosition).Length() < tileSize + tileSize / 4)
+                        if ((boundingCenter - nextNodePosition).Length() < tileSize * stoppingNodeIndex + tileSize / 4)
                         {
                             currentNodeIndex++; // Increase currentNodeIndex
                         }

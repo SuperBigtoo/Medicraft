@@ -133,7 +133,8 @@ namespace Medicraft.Systems.Managers
 
         private void LoadScreen()
         {
-            PlayerManager.Instance.IsCompanionSpawned = false;
+            // Reset companion summon
+            PlayerManager.Instance.IsCompanionSummoned = false;
 
             _prevScreen = _curScreen;
             _prevScreen?.UnloadContent();

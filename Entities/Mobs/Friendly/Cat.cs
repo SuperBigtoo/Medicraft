@@ -202,7 +202,7 @@ namespace Medicraft.Entities.Mobs.Friendly
                         var boundingCenter = new Vector2(
                             BoundingDetectCollisions.Center.X,
                             BoundingDetectCollisions.Center.Y);
-                        if ((boundingCenter - nextNodePosition).Length() < tileSize + tileSize / 4)
+                        if ((boundingCenter - nextNodePosition).Length() < tileSize * stoppingNodeIndex + tileSize / 4)
                         {
                             currentNodeIndex++; // Increase currentNodeIndex
                         }

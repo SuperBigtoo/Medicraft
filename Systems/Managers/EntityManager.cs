@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Medicraft.Entities;
 using Medicraft.Systems.Spawners;
+using System;
 
 namespace Medicraft.Systems.Managers
 {
@@ -25,6 +26,9 @@ namespace Medicraft.Systems.Managers
 
         public IEnumerable<Entity> Entities => entities;
 
+        // Scale Rendering
+        const float ScreenWidthFactor = 1f;
+        const float ScreenHeightFactor = 1f;
         public Entity ClosestEnemy { get; set; }
 
         private EntityManager()
@@ -59,7 +63,7 @@ namespace Medicraft.Systems.Managers
                 PlayerManager.Instance.Update(gameTime);
                 var playerDepth = PlayerManager.Instance.Player.GetDepth();
 
-                if (!PlayerManager.Instance.IsCompanionSpawned)
+                if (!PlayerManager.Instance.IsCompanionDead && !PlayerManager.Instance.IsCompanionSummoned)
                 {
                     if (_delayCompaSpawnTimer < _delayCompaSpawnTime)
                     {
@@ -71,14 +75,13 @@ namespace Medicraft.Systems.Managers
                         PlayerManager.Instance.SummonCurrentCompanion();
 
                         _delayCompaSpawnTimer = 0;
-                        PlayerManager.Instance.IsCompanionSpawned = true;
+                        PlayerManager.Instance.IsCompanionSummoned = true;
                     }
                 }
-                else
+                else if (!PlayerManager.Instance.IsCompanionDead && PlayerManager.Instance.IsCompanionSummoned)
                 {
-                    PlayerManager.Instance.Companions[PlayerManager.Instance.CurrentCompanionIndex].Update(
-                        gameTime, playerDepth, topDepth, middleDepth, bottomDepth
-                    );
+                    PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex].Update(
+                        gameTime, playerDepth, topDepth, middleDepth, bottomDepth);
                 }
 
                 // Update Mob & NPC
@@ -86,11 +89,25 @@ namespace Medicraft.Systems.Managers
                 {
                     foreach (var entity in entities.Where(e => !e.IsDestroyed))
                     {
-                        playerDepth -= 0.000001f;
-                        topDepth -= 0.000001f;
-                        middleDepth -= 0.000001f;
-                        bottomDepth -= 0.000001f;
-                        entity.Update(gameTime, playerDepth, topDepth, middleDepth, bottomDepth);
+                        var playerPos = PlayerManager.Instance.Player.Position;
+
+                        // Distance from player
+                        var distanceX = MathF.Abs(entity.Position.X - playerPos.X);
+                        var distanceY = MathF.Abs(entity.Position.Y - playerPos.Y);
+
+                        // Maximum allowed distance
+                        var maxDistanceX = ScreenManager.Instance.GraphicsDevice.Viewport.Width * ScreenWidthFactor;
+                        var maxDistanceY = ScreenManager.Instance.GraphicsDevice.Viewport.Height * ScreenHeightFactor;
+
+                        // Check if the entity is within the visible area
+                        if (distanceX <= maxDistanceX && distanceY <= maxDistanceY)
+                        {
+                            playerDepth -= 0.000001f;
+                            topDepth -= 0.000001f;
+                            middleDepth -= 0.000001f;
+                            bottomDepth -= 0.000001f;
+                            entity.Update(gameTime, playerDepth, topDepth, middleDepth, bottomDepth);
+                        }
                     }
                 }
 
@@ -114,8 +131,8 @@ namespace Medicraft.Systems.Managers
             foreach (var entity in entities.Where(e => !e.IsDestroyed))
                 entity.Draw(spriteBatch);          
 
-            if (PlayerManager.Instance.IsCompanionSpawned)
-                PlayerManager.Instance.Companions[PlayerManager.Instance.CurrentCompanionIndex].Draw(spriteBatch);
+            if (PlayerManager.Instance.IsCompanionSummoned)
+                PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex].Draw(spriteBatch);
 
             PlayerManager.Instance.Player.Draw(spriteBatch);
         }

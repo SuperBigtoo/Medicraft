@@ -333,6 +333,13 @@ namespace Medicraft.Entities
 
         public virtual Vector2 SetCombatNumDirection()
         {
+            Vector2 offset = new(Position.X, Position.Y - Sprite.TextureRegion.Height * 1.5f);
+
+            Vector2 numDirection = Position - offset;
+            numDirection.Normalize();
+
+            CombatNumVelocity = numDirection * Sprite.TextureRegion.Height / 2;
+
             return CombatNumVelocity;
         }
 
@@ -471,7 +478,7 @@ namespace Medicraft.Entities
                         var boundingCenter = new Vector2(
                             BoundingDetectCollisions.Center.X,
                             BoundingDetectCollisions.Center.Y);
-                        if ((boundingCenter - nextNodePosition).Length() < tileSize + tileSize / 4)
+                        if ((boundingCenter - nextNodePosition).Length() < tileSize * stoppingNodeIndex + tileSize / 4)
                         {
                             currentNodeIndex++; // Increase currentNodeIndex
                         }
@@ -511,7 +518,7 @@ namespace Medicraft.Entities
                     var isCompanionDetected = false;
                     if (PlayerManager.Instance.Companions.Count != 0)
                     {
-                        var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrentCompanionIndex];
+                        var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
 
                         if (companion != null)
                             isCompanionDetected = BoundingDetectEntity.Intersects(companion.BoundingHitBox);
@@ -631,7 +638,7 @@ namespace Medicraft.Entities
                             PlayerManager.Instance.Player
                         };
 
-                        var compa = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrentCompanionIndex];
+                        var compa = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
                         if (compa != null)
                             entities.Add(compa);
 
@@ -847,7 +854,7 @@ namespace Medicraft.Entities
             var isCompanionDetected = false;
             if (PlayerManager.Instance.Companions.Count != 0)
             {
-                var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrentCompanionIndex];
+                var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
 
                 if (companion != null)
                     isCompanionDetected = BoundingDetectEntity.Intersects(companion.BoundingHitBox);
@@ -903,7 +910,7 @@ namespace Medicraft.Entities
             var isCompanionDetected = false;
             if (PlayerManager.Instance.Companions.Count != 0)
             {
-                var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrentCompanionIndex];
+                var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
 
                 if (companion != null)
                     isCompanionDetected = BoundingDetectEntity.Intersects(companion.BoundingHitBox);
@@ -936,7 +943,7 @@ namespace Medicraft.Entities
 
             if (isCompanionDetected)
             {
-                var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrentCompanionIndex];
+                var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
 
                 if (companion.HP > 0)
                 {
@@ -1266,6 +1273,21 @@ namespace Medicraft.Entities
                         , log.StrokeSize);
                 }              
             }
+        }
+
+        public float GetDepth()
+        {
+            return Sprite.Depth;
+        }
+
+        public float GetCurrentHealthPercentage()
+        {
+            return HP / MaxHP;
+        }
+
+        public float GetCurrentManaPercentage()
+        {
+            return Mana / MaxMana;
         }
 
         public virtual object Clone()

@@ -1157,21 +1157,6 @@ namespace Medicraft.Entities
             return false;
         }
 
-        public float GetDepth()
-        {
-            return Sprite.Depth;
-        }
-
-        public float GetCurrentHealthPercentage()
-        {
-            return (float)HP / MaxHP;
-        }
-
-        public float GetCurrentManaPercentage()
-        {
-            return Mana / MaxMana;
-        }
-
         public float GetCurrentEXPPercentage()
         {
             return (float)EXP / EXPMaxCap;
