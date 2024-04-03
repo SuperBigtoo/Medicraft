@@ -33,7 +33,7 @@ namespace Medicraft.Systems
             //zoom = MathHelper.Clamp(targetZoom, MinZoom, MaxZoom);
         }
 
-        public void ResetCameraPosition(bool isPlayerPos)
+        public static void ResetCameraPosition(bool isPlayerPos)
         {
             // Adjust HUD and camera position
             GameGlobals.Instance.TopLeftCornerPos = isPlayerPos ? (PlayerManager.Instance.Player.Position - GameGlobals.Instance.GameScreenCenter) : Vector2.Zero;
@@ -69,12 +69,40 @@ namespace Medicraft.Systems
             return _transform;
         }
 
+        public Vector2 GetViewportCenter(int screenWidth, int screenHeight)
+        {
+            float scaleX = screenWidth / _viewportWidth;
+            float scaleY = screenHeight / _viewportHeight;
+            float scale = MathHelper.Min(scaleX, scaleY);
+
+            int barsWidth = screenWidth - (int)(_viewportWidth * scale);
+            int barsHeight = screenHeight - (int)(_viewportHeight * scale);
+
+            // Calculate the viewport rectangle after scaling
+            Rectangle viewportRect = new Rectangle(
+                barsWidth / 2, barsHeight / 2,
+                (int)(_viewportWidth * scale), (int)(_viewportHeight * scale));
+
+            // Calculate the center point of the scaled viewport rectangle
+            Vector2 viewportCenter = new Vector2(
+                viewportRect.X + viewportRect.Width / 2,
+                viewportRect.Y + viewportRect.Height / 2);
+
+            // Get the inverse of the transformation matrix
+            Matrix inverseTransform = Matrix.Invert(GetTransform(screenWidth, screenHeight));
+
+            // Transform the center point back to the original coordinate system
+            Vector2 originalCenter = Vector2.Transform(viewportCenter, inverseTransform);
+
+            return originalCenter;
+        }
+
         public float GetZoom()
         {
             return _zoom;
         }
 
-        public Vector2 GetPosition()
+        public Vector2 GetViewportPosition()
         {
             return _position;
         }

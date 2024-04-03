@@ -35,6 +35,7 @@ namespace Medicraft.Systems
         public Vector2 AddingCameraPos { set; get; }
         public Vector2 GameScreen { private set; get; }
         public Vector2 GameScreenCenter { private set; get; }
+        public Vector2 DefaultAdapterViewport { private set; get; }
         public bool IsGameActive { set; get; }
         public bool IsGamePause { set; get; }      
         public bool SwitchDebugMode { set; get; }
@@ -301,6 +302,9 @@ namespace Medicraft.Systems
 
         private GameGlobals()
         {
+            GameScreen = new Vector2(1440, 900);
+            GameScreenCenter = GameScreen / 2;
+            DefaultAdapterViewport = Vector2.Zero;
             TopLeftCornerPos = Vector2.Zero;
             InitialCameraPos = Vector2.Zero;
             AddingCameraPos = Vector2.Zero;
@@ -437,7 +441,13 @@ namespace Medicraft.Systems
 
         public void Initialize(ContentManager Content)
         {
-            this.Content = Content;      
+            this.Content = Content;
+
+            var viewport = new Vector2(
+                GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width,
+                GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
+
+            DefaultAdapterViewport = new Vector2(viewport.X, viewport.Y);
         }  
 
         public void LoadContent()

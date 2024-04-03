@@ -27,9 +27,9 @@ namespace Medicraft.Screens
             GameGlobals.Instance.IsOpenPauseMenu = false;
             GameGlobals.Instance.IsOpenMainMenu = false;
             GUIManager.Instance.CurrentGUI = GUIManager.MainMenu;
-         
-            ScreenManager.Camera.ResetCameraPosition(false);
-            ScreenManager.Camera.SetPosition(GameGlobals.Instance.GameScreenCenter);
+
+            Camera.ResetCameraPosition(false);
+            ScreenManager.Camera.SetPosition(GameGlobals.Instance.DefaultAdapterViewport / 2);
         }
 
         public override void LoadContent()
@@ -89,8 +89,11 @@ namespace Medicraft.Screens
         }      
 
         public override void Draw(SpriteBatch spriteBatch)
-        {   
-            spriteBatch.Draw(_mainMenuBG, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+        {
+            var screenOffSet = new Vector2(
+                (GameGlobals.Instance.DefaultAdapterViewport.X - GameGlobals.Instance.GameScreen.X) / 6, 0);
+
+            spriteBatch.Draw(_mainMenuBG, ScreenManager.Camera.GetViewportPosition() - screenOffSet, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             var alphaColor = 0.2f;
             if (GUIManager.Instance.IsClickedLoadButton)

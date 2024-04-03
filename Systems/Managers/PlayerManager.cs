@@ -263,8 +263,6 @@ namespace Medicraft.Systems.Managers
                         GUIManager.Instance.ClearSkillDescription();
                     }
                     else GUIManager.Instance.CurrentGUI = GUIManager.InspectPanel;
-
-                    System.Diagnostics.Debug.WriteLine($"Test : {GUIManager.Instance.CurrentGUI} {GUIManager.Instance.PreviosGUI}");
                 }
                 else if (keyboardCur.IsKeyUp(Keys.C))
                 {

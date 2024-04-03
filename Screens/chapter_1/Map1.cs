@@ -21,7 +21,7 @@ namespace Medicraft.Screens.chapter_1
         public Map1()
         {
             ScreenManager.Instance.CurrentMap = MapName;
-            ScreenManager.Camera.ResetCameraPosition(true);
+            Camera.ResetCameraPosition(true);
         }
 
         public override void LoadContent()

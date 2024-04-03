@@ -68,9 +68,6 @@ namespace Medicraft.Systems.Managers
             Window = game.Window;
             Camera = new Camera(GraphicsDevice.Viewport);
 
-            // init game screen globals
-            GameGlobals.Instance.SetGameScreen(GraphicsDevice.Viewport);
-
             _spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
@@ -377,7 +374,7 @@ namespace Medicraft.Systems.Managers
             {
                 var texture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.transition_texture);
 
-                var position = GameGlobals.Instance.InitialCameraPos;
+                var position = Camera.GetViewportCenter(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
                 // Draw the black circle
                 spriteBatch.Begin
@@ -388,30 +385,28 @@ namespace Medicraft.Systems.Managers
                     depthStencilState: DepthStencilState.None,
                     rasterizerState: RasterizerState.CullCounterClockwise,
                     transformMatrix: Camera.GetTransform(
-                        GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));          
+                        GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)
+                );          
 
                 if (_transitionTimer < _transitionTime)
                 {
                     // Transition in progress
                     spriteBatch.Draw(texture
-                        , position - new Vector2((texture.Width * _transitionRadius / 2)
-                        , (texture.Height * _transitionRadius / 2))
+                        , position - new Vector2((texture.Width * _transitionRadius / 2), (texture.Height * _transitionRadius / 2))
                         , null, Color.Black, 0f, Vector2.Zero, _transitionRadius, SpriteEffects.None, 0f);
                 }
                 else if (_transitionTimer >= _transitionTime && _transitionTimer <= _transitionTime + _pauseTime)
                 {
                     // Pause after reaching full size
                     spriteBatch.Draw(texture
-                        , position - new Vector2((texture.Width * _transitionRadius / 2)
-                        , (texture.Height * _transitionRadius / 2))
+                        , position - new Vector2((texture.Width * _transitionRadius / 2), (texture.Height * _transitionRadius / 2))
                         , null, Color.Black, 0f, Vector2.Zero, _transitionRadius, SpriteEffects.None, 0f);
                 }
                 else if (_transitionTimer > _transitionTime + _pauseTime)
                 {
                     // Transition back in progress
                     spriteBatch.Draw(texture
-                        , position - new Vector2((texture.Width * _transitionRadius / 2)
-                        , (texture.Height * _transitionRadius / 2))
+                        , position - new Vector2((texture.Width * _transitionRadius / 2), (texture.Height * _transitionRadius / 2))
                         , null, Color.Black, 0f, Vector2.Zero, _transitionRadius, SpriteEffects.None, 0f);
                 }
 
@@ -421,20 +416,22 @@ namespace Medicraft.Systems.Managers
 
         public static void DrawBackgound(SpriteBatch spriteBatch, Color color, float transparency)
         {
-            var position = Camera.GetPosition();
+            var screenOffSet = new Vector2(
+                (GameGlobals.Instance.DefaultAdapterViewport.X - GameGlobals.Instance.GameScreen.X) / 6, 0);
 
-            spriteBatch.FillRectangle(position.X, position.Y
-                , Instance.GraphicsDevice.Viewport.Width
-                , Instance.GraphicsDevice.Viewport.Height
-                , color * transparency);
+            var position = Camera.GetViewportPosition() - screenOffSet;
+
+            spriteBatch.FillRectangle(
+                position.X, position.Y,
+                GameGlobals.Instance.DefaultAdapterViewport.X,
+                GameGlobals.Instance.DefaultAdapterViewport.Y,
+                color * transparency);
         }
 
         public static LoadMapAction GetLoadMapAction(string zoneName)
         {
             if (Enum.TryParse(zoneName, true, out LoadMapAction enumValue))
-            {
                 return enumValue;
-            }
 
             return LoadMapAction.LoadSave;
         }

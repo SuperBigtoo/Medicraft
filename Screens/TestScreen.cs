@@ -20,7 +20,7 @@ namespace Medicraft.Screens
         public TestScreen()
         {
             ScreenManager.Instance.CurrentMap = MapName;
-            ScreenManager.Camera.ResetCameraPosition(true);
+            Camera.ResetCameraPosition(true);
         }
 
         public override void LoadContent()

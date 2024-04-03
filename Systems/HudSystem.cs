@@ -59,9 +59,10 @@ namespace Medicraft.Systems
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            var _graphicsDevice = ScreenManager.Instance.GraphicsDevice; 
-
             spriteBatch.End();
+
+            var graphicsDevice = ScreenManager.Instance.GraphicsDevice;
+
             spriteBatch.Begin(
                 SpriteSortMode.Deferred,
                 samplerState: SamplerState.LinearClamp,
@@ -69,7 +70,7 @@ namespace Medicraft.Systems
                 depthStencilState: DepthStencilState.None,
                 rasterizerState: RasterizerState.CullCounterClockwise,
                 transformMatrix: ScreenManager.Camera.GetTransform(
-                    _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height)
+                    graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height)
             );
 
             if (!GameGlobals.Instance.IsGamePause)

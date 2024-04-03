@@ -2727,7 +2727,7 @@ namespace Medicraft.Systems.Managers
                             {
                                 new("Yes", () =>
                                 {
-                                    ScreenManager.Camera.ResetCameraPosition(true);
+                                    Camera.ResetCameraPosition(true);
                                     JsonFileManager.SaveGame(JsonFileManager.SavingPlayerData);
                                     ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.MainMenuScreen);
                                     return true;

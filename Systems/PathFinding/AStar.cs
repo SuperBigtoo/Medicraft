@@ -274,10 +274,11 @@ namespace Medicraft.Systems.PathFinding
         {
             spriteBatch.End();
 
-            var _graphicsDevice = ScreenManager.Instance.GraphicsDevice;
+            var graphicsDevice = ScreenManager.Instance.GraphicsDevice;
+
             spriteBatch.Begin(
-                transformMatrix: ScreenManager.Camera.GetTransform(_graphicsDevice.Viewport.Width
-                , _graphicsDevice.Viewport.Height)
+                transformMatrix: ScreenManager.Camera.GetTransform(
+                    graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height)
             );
 
             // Draw the world elements including the terrain, the frid and the path in that order for visibility

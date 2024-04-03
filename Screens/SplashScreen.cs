@@ -12,6 +12,8 @@ namespace Medicraft.Screens
         private Texture2D _logo;
         private BitmapFont _font;
 
+        private Vector2 _offSetScreen = GameGlobals.Instance.DefaultAdapterViewport;
+
         private bool _show;
         private float _alpha;
         private float _alphaTime;
@@ -37,8 +39,8 @@ namespace Medicraft.Screens
 
             GameGlobals.Instance.TestIcon = _logo;
 
-            ScreenManager.Camera.ResetCameraPosition(false);
-            ScreenManager.Camera.SetPosition(GameGlobals.Instance.GameScreenCenter);
+            Camera.ResetCameraPosition(false);
+            ScreenManager.Camera.SetPosition(GameGlobals.Instance.DefaultAdapterViewport / 2);
         }
 
         public override void UnloadContent()
@@ -114,8 +116,9 @@ namespace Medicraft.Screens
                 case 0:
                     Vector2 logoSize = new Vector2(_logo.Width, _logo.Height) * 0.5f;
 
-                    position = new Vector2((GameGlobals.Instance.GameScreen.X - logoSize.X) / 2
-                        , (GameGlobals.Instance.GameScreen.Y - logoSize.Y) / 2);
+                    position = new Vector2(
+                        (_offSetScreen.X - logoSize.X) / 2,
+                        (_offSetScreen.Y - logoSize.Y) / 2);
 
                     spriteBatch.Draw(_logo, position, null, Color.White * _alpha, 0f, Vector2.Zero, 0.5f
                         , SpriteEffects.None, 0f);                 
@@ -133,8 +136,9 @@ namespace Medicraft.Screens
                     textSize4 = _font.MeasureString(textString4);
 
                     totalHeight = textSize1.Y + textSize2.Y + textSize3.Y + textSize4.Y;
-                    position = new Vector2((GameGlobals.Instance.GameScreen.X - textSize1.X) / 2
-                        , (GameGlobals.Instance.GameScreen.Y - totalHeight) / 2);                                    
+                    position = new Vector2(
+                        (_offSetScreen.X - textSize1.X) / 2,
+                        (_offSetScreen.Y - totalHeight) / 2);                                    
 
                     spriteBatch.DrawString(_font, textString1, position, Color.DodgerBlue * _alpha, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     position.X += (textSize1.X - _font.MeasureString(textString2).Width) / 2;
@@ -158,8 +162,9 @@ namespace Medicraft.Screens
                     textSize2 = _font.MeasureString(textString2);
 
                     totalHeight = textSize1.Y + textSize2.Y;
-                    position = new Vector2((GameGlobals.Instance.GameScreen.X - textSize1.X) / 2
-                        , (GameGlobals.Instance.GameScreen.Y - totalHeight) / 2);
+                    position = new Vector2(
+                        (_offSetScreen.X - textSize1.X) / 2,
+                        (_offSetScreen.Y - totalHeight) / 2);
           
                     spriteBatch.DrawString(_font, textString1, position, Color.DodgerBlue * _alpha, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     position.X += (textSize1.X - _font.MeasureString(textString2).Width) / 2;
