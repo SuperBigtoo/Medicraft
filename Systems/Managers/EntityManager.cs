@@ -21,7 +21,7 @@ namespace Medicraft.Systems.Managers
         private MobSpawner _mobSpawner;
         private static EntityManager instance;
 
-        private readonly float _delayCompaSpawnTime = 3f;
+        private readonly float _delayCompaSpawnTime = 2f;
         private float _delayCompaSpawnTimer = 0f;
 
         public IEnumerable<Entity> Entities => entities;

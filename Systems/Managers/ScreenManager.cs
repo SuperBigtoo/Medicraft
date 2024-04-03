@@ -68,6 +68,9 @@ namespace Medicraft.Systems.Managers
             Window = game.Window;
             Camera = new Camera(GraphicsDevice.Viewport);
 
+            // init game screen globals
+            GameGlobals.Instance.SetGameScreen(GraphicsDevice.Viewport);
+
             _spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
@@ -111,24 +114,6 @@ namespace Medicraft.Systems.Managers
             IsScreenLoaded = false;
             _transitionTimer = 0f;
             _transitionRadius = -0.01f;
-        }
-
-        public GameScreen GetPlayScreen()
-        {
-            GameScreen gameScreen = CurrentScreen;
-
-            switch (CurrentLoadMapAction)
-            {
-                case LoadMapAction.Test_to_map_1:
-                    gameScreen = GameScreen.Map1;
-                    break;
-
-                case LoadMapAction.map_1_to_Test:
-                    gameScreen = GameScreen.TestScreen;
-                    break;
-            }
-
-            return gameScreen;
         }
 
         private void LoadScreen()
@@ -454,12 +439,30 @@ namespace Medicraft.Systems.Managers
             return LoadMapAction.LoadSave;
         }
 
+        public GameScreen GetPlayScreenByLoadMapAction()
+        {
+            GameScreen gameScreen = CurrentScreen;
+
+            switch (CurrentLoadMapAction)
+            {
+                case LoadMapAction.Test_to_map_1:
+                    gameScreen = GameScreen.Map1;
+                    break;
+
+                case LoadMapAction.map_1_to_Test:
+                    gameScreen = GameScreen.TestScreen;
+                    break;
+            }
+
+            return gameScreen;
+        }
+
         public static void StartGame(bool isNewGame)
         {
             GameGlobals.Instance.IsMainBGEnding = true;
             PlayerManager.Instance.Initialize(isNewGame);
             GameGlobals.Instance.InitialCameraPos = GameGlobals.Instance.GameScreenCenter;
-            Instance.TranstisionToScreen(GameScreen.TestScreen);
+            Instance.TranstisionToScreen(GameScreen.TestScreen);  // Base on current map
         }
 
         public static void ToggleFullScreen()

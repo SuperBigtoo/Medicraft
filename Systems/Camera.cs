@@ -36,7 +36,7 @@ namespace Medicraft.Systems
         public void ResetCameraPosition(bool isPlayerPos)
         {
             // Adjust HUD and camera position
-            GameGlobals.Instance.TopLeftCornerPosition = isPlayerPos ? (PlayerManager.Instance.Player.Position - GameGlobals.Instance.GameScreenCenter) : Vector2.Zero;
+            GameGlobals.Instance.TopLeftCornerPos = isPlayerPos ? (PlayerManager.Instance.Player.Position - GameGlobals.Instance.GameScreenCenter) : Vector2.Zero;
             GameGlobals.Instance.InitialCameraPos = isPlayerPos ? PlayerManager.Instance.Player.Position : GameGlobals.Instance.GameScreenCenter;
             GameGlobals.Instance.AddingCameraPos = Vector2.Zero;
         }
@@ -49,7 +49,7 @@ namespace Medicraft.Systems
 
         public void SetZoom(float zoom, float zoomMin, float zoomMax)
         {
-            this._zoom = MathHelper.Clamp(zoom, zoomMin, zoomMax);
+            _zoom = MathHelper.Clamp(zoom, zoomMin, zoomMax);
         }
 
         public Matrix GetTransform(int screenWidth, int screenHeight)

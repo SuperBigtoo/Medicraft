@@ -41,8 +41,7 @@ namespace Medicraft.Entities.Companion
                 (int)((int)Position.X - Sprite.TextureRegion.Width / BoundingCollisionX),
                 (int)((int)Position.Y + Sprite.TextureRegion.Height / BoundingCollisionY),
                 (int)(Sprite.TextureRegion.Width / 6.5f),
-                Sprite.TextureRegion.Height / 8
-            );
+                Sprite.TextureRegion.Height / 8);
 
             BoundingHitBox = new CircleF(Position, 42f);         // Circle for Entity to hit
 

@@ -17,7 +17,6 @@ using MonoGame.Extended.Sprites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Medicraft.Systems
 {
@@ -31,7 +30,7 @@ namespace Medicraft.Systems
         public KeyboardState PrevKeyboard { set; get; }
         public KeyboardState CurKeyboard { set; get; }
         public Point2 MousePosition { private set; get; }
-        public Vector2 TopLeftCornerPosition { set; get; }
+        public Vector2 TopLeftCornerPos { set; get; }
         public Vector2 InitialCameraPos { set; get; }
         public Vector2 AddingCameraPos { set; get; }
         public Vector2 GameScreen { private set; get; }
@@ -302,9 +301,7 @@ namespace Medicraft.Systems
 
         private GameGlobals()
         {
-            GameScreen = new Vector2(1440, 900);
-            GameScreenCenter = new Vector2(1440/2, 900/2);
-            TopLeftCornerPosition = Vector2.Zero;
+            TopLeftCornerPos = Vector2.Zero;
             InitialCameraPos = Vector2.Zero;
             AddingCameraPos = Vector2.Zero;
             IsFullScreen = false;
@@ -720,6 +717,12 @@ namespace Medicraft.Systems
 
             var mouseState = Mouse.GetState();
             MousePosition = new Point2(mouseState.X, mouseState.Y);
+        }
+
+        public void SetGameScreen(Viewport viewport)
+        {
+            GameScreen = new Vector2(viewport.Width, viewport.Height);
+            GameScreenCenter = GameScreen / 2;
         }
 
         public Texture2D GetShadowTexture(ShadowTextureName shadowTextureName)

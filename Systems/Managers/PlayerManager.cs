@@ -79,7 +79,7 @@ namespace Medicraft.Systems.Managers
 
             // Other Stuff
             SetPlayerExpMaxCap(Player.Level);
-            GameGlobals.Instance.TopLeftCornerPosition = Player.Position - GameGlobals.Instance.GameScreenCenter;
+            GameGlobals.Instance.TopLeftCornerPos = Player.Position - GameGlobals.Instance.GameScreenCenter;
 
             // Initialize equipment stats
             var itemEquipmentData = InventoryManager.Instance.InventoryBag.Values.Where
@@ -482,7 +482,7 @@ namespace Medicraft.Systems.Managers
                     if (currLoadMapAction == ScreenManager.LoadMapAction.LoadSave) return;
 
                     ScreenManager.Instance.CurrentLoadMapAction = currLoadMapAction;
-                    ScreenManager.Instance.TranstisionToScreen(ScreenManager.Instance.GetPlayScreen());
+                    ScreenManager.Instance.TranstisionToScreen(ScreenManager.Instance.GetPlayScreenByLoadMapAction());
                     break;
                 }
             }
@@ -522,7 +522,7 @@ namespace Medicraft.Systems.Managers
             Player.Position = position;
 
             //// Adjust HUD and camera positions
-            GameGlobals.Instance.TopLeftCornerPosition = Player.Position - GameGlobals.Instance.GameScreenCenter;
+            GameGlobals.Instance.TopLeftCornerPos = Player.Position - GameGlobals.Instance.GameScreenCenter;
             GameGlobals.Instance.InitialCameraPos = Player.Position;
             GameGlobals.Instance.AddingCameraPos = Vector2.Zero;
         }
@@ -544,7 +544,7 @@ namespace Medicraft.Systems.Managers
                 Player.Position = position;
 
                 // Adjust HUD and camera positions
-                GameGlobals.Instance.TopLeftCornerPosition = Player.Position - GameGlobals.Instance.GameScreenCenter;
+                GameGlobals.Instance.TopLeftCornerPos = Player.Position - GameGlobals.Instance.GameScreenCenter;
                 GameGlobals.Instance.InitialCameraPos = Player.Position;
                 GameGlobals.Instance.AddingCameraPos = Vector2.Zero;
 
@@ -561,8 +561,8 @@ namespace Medicraft.Systems.Managers
 
         public void SetPlayerExpMaxCap(int level)
         {
-            var ExpCapData = GameGlobals.Instance.ExperienceCapacityDatas
-                .FirstOrDefault(expcap => expcap.Level.Equals(level));
+            var ExpCapData = GameGlobals.Instance.ExperienceCapacityDatas.FirstOrDefault
+                (expcap => expcap.Level.Equals(level));
 
             Player.EXPMaxCap = ExpCapData.MaxCap;
         }
@@ -602,6 +602,10 @@ namespace Medicraft.Systems.Managers
                 (c => c.CharId.Equals(Player.CharId));
 
             Player.SetCharacterStats(charData, Player.Level);
+
+            // Set current HP & Mana
+            Player.HP = (float)(Player.BaseMaxHP * Player.PlayerData.CurrentHPPercentage);
+            Player.Mana = (float)(Player.BaseMaxMana * Player.PlayerData.CurrentManaPercentage);
 
             // Now re-stats Equipments
             var itemEquipmentData = InventoryManager.Instance.InventoryBag.Values.Where

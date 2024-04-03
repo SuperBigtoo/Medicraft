@@ -117,11 +117,8 @@ namespace Medicraft.Entities
             BoundingAggro = new CircleF(Position + new Vector2(0f, 32f), 150);                                  // Circle for check aggro enemy mobs
 
             NormalHitEffectAttacked = "hit_effect_1";
-
             NormalSkillEffectActivated = "hit_skill_effect_3";
-
             BurstSkillEffectAttacked = "hit_effect_3";
-
             PassiveSkillEffectActivated = "hit_skill_effect_1";
 
             Sprite.Depth = 0.1f;
@@ -222,7 +219,7 @@ namespace Medicraft.Entities
             var walkSpeed = deltaSeconds * Speed;
             Velocity = Vector2.Zero;
             prevPos = Position;
-            _initHudPos = GameGlobals.Instance.TopLeftCornerPosition;
+            _initHudPos = GameGlobals.Instance.TopLeftCornerPos;
             _initCamPos = GameGlobals.Instance.AddingCameraPos;                                             
 
             if (!IsAttacking && !IsStunning && ScreenManager.Instance.IsScreenLoaded)
@@ -264,7 +261,7 @@ namespace Medicraft.Entities
                 {
                     Velocity.Normalize();
                     Position += Velocity * walkSpeed;
-                    GameGlobals.Instance.TopLeftCornerPosition += Velocity * walkSpeed;
+                    GameGlobals.Instance.TopLeftCornerPos += Velocity * walkSpeed;
                     GameGlobals.Instance.AddingCameraPos += Velocity * walkSpeed;
                     Sprite.Play(CurrentAnimation);
                 }
@@ -293,7 +290,7 @@ namespace Medicraft.Entities
                 {
                     IsDetectCollistionObject = true;
                     Position = prevPos;
-                    GameGlobals.Instance.TopLeftCornerPosition = _initHudPos;
+                    GameGlobals.Instance.TopLeftCornerPos = _initHudPos;
                     GameGlobals.Instance.AddingCameraPos = _initCamPos;
                     break;
                 }

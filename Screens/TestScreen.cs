@@ -13,39 +13,19 @@ using Medicraft.Systems.Managers;
 
 namespace Medicraft.Screens
 {
-    public class TestScreen : Screen
+    public class TestScreen : PlayScreen
     {
         public string MapName = "Test";
-
-        private TilemapOrthogonalRender _tileMapRender;
-        private TmxMap _tileMap;
-
-        private HUDSystem _hudSystem;
-        private DrawEffectSystem _drawEffectSystem;
-        
-        private List<EntityData> _entityDatas;
-        private MobSpawner _mobSpawner;
-
-        private List<ObjectData> _objectDatas;
-        private ObjectSpawner _objectSpawner;
 
         public TestScreen()
         {
             ScreenManager.Instance.CurrentMap = MapName;
             ScreenManager.Camera.ResetCameraPosition(true);
-
-            // Toggle the IsOpenMainMenu flag
-            GUIManager.Instance.CurrentGUI = GUIManager.PlayScreen;
-            GameGlobals.Instance.IsOpenMainMenu = false;
-            GameGlobals.Instance.IsRefreshPlayScreenUI = false;
         }
 
         public override void LoadContent()
         {
             base.LoadContent();
-
-            // Set player position
-            PlayerManager.Instance.SetupPlayerPosition();
 
             var tileSetsDemo = new Texture2D[]  // The maximum number of TileSet is 5
             {
@@ -98,31 +78,12 @@ namespace Medicraft.Screens
 
         public override void Update(GameTime gameTime)
         {
-            EntityManager.Instance.Update(gameTime);
-
-            ObjectManager.Instance.Update(gameTime);
-
-            _tileMapRender?.Update(gameTime);
-
-            _drawEffectSystem?.Update(gameTime);
-
-            _hudSystem?.Update(gameTime);
+            base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            EntityManager.Instance.Draw(spriteBatch);
-
-            ObjectManager.Instance.Draw(spriteBatch);
-
-            if (!GameGlobals.Instance.IsShowPath)
-            {
-                _tileMapRender?.Draw(spriteBatch);
-            }
-
-            _drawEffectSystem?.Draw(spriteBatch);
-
-            _hudSystem?.Draw(spriteBatch);
+            base.Draw(spriteBatch);
         }
     }
 }

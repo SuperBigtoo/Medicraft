@@ -29,8 +29,7 @@ namespace Medicraft.Systems
         public void Update(GameTime gameTime)
         {
             _deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            _topLeftCorner = GameGlobals.Instance.TopLeftCornerPosition;
+            _topLeftCorner = GameGlobals.Instance.TopLeftCornerPos;
 
             // Check for the next feed to roll in
             if (GameGlobals.Instance.CollectedItemFeed.Count != 0)
@@ -201,7 +200,7 @@ namespace Medicraft.Systems
                     // Selected Slot
                     var selectedSlot = GameGlobals.Instance.CurrentHotbarSelect;
                     spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.selected_slot)
-                        , new Vector2(511f + (52 * selectedSlot), 820f) + GameGlobals.Instance.TopLeftCornerPosition, null
+                        , new Vector2(511f + (52 * selectedSlot), 820f) + GameGlobals.Instance.TopLeftCornerPos, null
                         , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     break;
 
@@ -470,14 +469,14 @@ namespace Medicraft.Systems
                 DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
                     , text, positionText, Color.White, 1.5f, Color.Black, 2);
             }
-            else
+
+            // Text Burst Skill Q
             {
-                // Text Burst Skill Q
                 var text = $"Q";
                 var textSize = GameGlobals.Instance.FontTA8BitBold.MeasureString(text);
                 var positionText = new Vector2(
                     (positionBurst.X + burstTexture.Width / 2) - ((textSize.Width * 1.5f) / 2),
-                    (positionBurst.Y + burstTexture.Height / 2) - ((textSize.Height * 1.5f) / 2)) + _topLeftCorner;
+                    (positionBurst.Y + burstTexture.Height / 0.8f) - ((textSize.Height * 1.5f) / 2)) + _topLeftCorner;
 
                 DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
                     , text, positionText, Color.White, 1.5f, Color.Black, 2);
@@ -521,17 +520,17 @@ namespace Medicraft.Systems
                 DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
                     , text, positionText, Color.White, 1.25f, Color.Black, 2);
             }
-            else
+
+            // Text Noraml Skill E
             {
-                // Text Noraml Skill E
                 var text = $"E";
                 var textSize = GameGlobals.Instance.FontTA8BitBold.MeasureString(text);
                 var positionText = new Vector2(
-                    (positionNormal.X + normalTexture.Width / 2) - ((textSize.Width * 1.25f) / 2),
-                    (positionNormal.Y + normalTexture.Height / 2) - ((textSize.Height * 1.25f) / 2)) + _topLeftCorner;
+                    (positionNormal.X + normalTexture.Width / 2) - ((textSize.Width * 1.5f) / 2),
+                    (positionNormal.Y + normalTexture.Height / 0.8f) - ((textSize.Height * 1.5f) / 2)) + _topLeftCorner;
 
                 DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
-                    , text, positionText, Color.White, 1.25f, Color.Black, 2);
+                    , text, positionText, Color.White, 1.5f, Color.Black, 2);
             }
 
             spriteBatch.Draw(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.normal_skill_gui)

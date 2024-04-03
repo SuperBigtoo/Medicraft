@@ -9,8 +9,6 @@ namespace Medicraft.Screens
 {
     public class SplashScreen : Screen
     {
-        private Color _color;
-
         private Texture2D _logo;
         private BitmapFont _font;
 

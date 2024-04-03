@@ -539,7 +539,6 @@ namespace Medicraft.Systems
 
                         if (log.ElapsedTime < duration)
                         {
-                            System.Diagnostics.Debug.WriteLine($"combatLog draw! : {log.Action} by {log.Actor}");
                             spriteBatch.Draw(log.AnimatedSprite, transform);
                         }
                     }
