@@ -242,6 +242,7 @@ namespace Medicraft.Systems.Managers
                 case GUIManager.PauseMenu:
                     if (!GameGlobals.Instance.IsOpenPauseMenu)
                     {
+                        GUIManager.Instance.RefreshPauseMenu();
                         GUIManager.Instance.UpdateAfterChangeGUI();
 
                         GameGlobals.Instance.IsOpenPauseMenu = true;

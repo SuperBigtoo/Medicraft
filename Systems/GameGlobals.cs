@@ -168,8 +168,6 @@ namespace Medicraft.Systems
         public List<RectangleF> TopLayerObject { private set; get; }
         public List<RectangleF> MiddleLayerObject { private set; get; }
         public List<RectangleF> BottomLayerObject { private set; get; }
-        public List<RectangleF> CraftingTableArea { private set; get; }
-        public List<RectangleF> SavingTableArea { private set; get; }
         public List<AreaData> EnteringZoneArea { private set; get; }
         public List<AreaData> MobPartrolArea { private set; get; }
         public float TopEntityDepth { private set; get; }
@@ -229,7 +227,13 @@ namespace Medicraft.Systems
             passive_skill_pic,
             transition_texture,
             game_name,
-            skill_point
+            skill_point,
+            mob_gauge,
+            health_bar_mob,
+            arrow_right,
+            arrow_left,
+            arrow_up,
+            arrow_down
         }
         private readonly Dictionary<GuiTextureName, int> guiTextureIndices = [];
 
@@ -422,8 +426,6 @@ namespace Medicraft.Systems
             TopLayerObject = [];
             MiddleLayerObject = [];
             BottomLayerObject = [];
-            CraftingTableArea = [];
-            SavingTableArea = [];
             EnteringZoneArea = [];
             MobPartrolArea = [];
 
@@ -435,8 +437,6 @@ namespace Medicraft.Systems
             MiddleObjectDepth = 0.5f;
             BottomObjectDepth = 0.7f;
             BackgroundDepth = 0.9f;
-
-            TestInt = CraftingTableArea.Count;
         }
 
         public void Initialize(ContentManager Content)
@@ -564,6 +564,12 @@ namespace Medicraft.Systems
             GuiTextures.Add(Content.Load<Texture2D>("gui/transition_texture"));                 // 34. transition_texture
             GuiTextures.Add(Content.Load<Texture2D>("gui/game_name"));
             GuiTextures.Add(Content.Load<Texture2D>("gui/skill_point"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/mob_gauge"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/health_bar_mob"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/arrow_right"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/arrow_left"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/arrow_up"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/arrow_down"));
 
             // Load Ability Textures
             AbilityTextures.Add(Content.Load<Texture2D>("gui/ability/Ability_I've_got_the_Scent!"));

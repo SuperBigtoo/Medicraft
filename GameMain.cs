@@ -2,7 +2,7 @@
 using Medicraft.Systems.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Medicraft
 {
@@ -28,7 +28,7 @@ namespace Medicraft
             //Window.Position = new Point((GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2) - (_graphics.PreferredBackBufferWidth / 2)
             //    , (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2) - (_graphics.PreferredBackBufferHeight / 2));
             _graphics.ToggleFullScreen();
-            _graphics.ApplyChanges();
+            _graphics.ApplyChanges();     
 
             Content = new ContentManager(Content.ServiceProvider, "Content");
 

@@ -106,8 +106,6 @@ namespace Medicraft.Systems.TilemapRenderer
             GameGlobals.Instance.TopLayerObject.Clear();
             GameGlobals.Instance.MiddleLayerObject.Clear();
             GameGlobals.Instance.BottomLayerObject.Clear();
-            GameGlobals.Instance.CraftingTableArea.Clear();
-            GameGlobals.Instance.SavingTableArea.Clear();
             GameGlobals.Instance.EnteringZoneArea.Clear();
             GameGlobals.Instance.MobPartrolArea.Clear();
 
@@ -132,18 +130,6 @@ namespace Medicraft.Systems.TilemapRenderer
             foreach (var o in _tileMap.ObjectGroups["BottomLayerObject"]?.Objects)
             {
                 GameGlobals.Instance.BottomLayerObject.Add(
-                    new RectangleF((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
-            }
-
-            foreach (var o in _tileMap.ObjectGroups["CraftingTableArea"]?.Objects)
-            {
-                GameGlobals.Instance.CraftingTableArea.Add(
-                    new RectangleF((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
-            }
-
-            foreach (var o in _tileMap.ObjectGroups["SavingTableArea"]?.Objects)
-            {
-                GameGlobals.Instance.SavingTableArea.Add(
                     new RectangleF((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
             }
 

@@ -157,9 +157,9 @@ namespace Medicraft.Systems.Managers
             var mousePrev = GameGlobals.Instance.PrevMouse;
 
             // Only receive input if on PlayScreen
-            if (!ScreenManager.Instance.IsTransitioning 
-                && (ScreenManager.Instance.CurrentScreen != ScreenManager.GameScreen.SplashScreen
-                || ScreenManager.Instance.CurrentScreen != ScreenManager.GameScreen.MainMenuScreen))
+            if (!ScreenManager.Instance.IsTransitioning
+                && ScreenManager.Instance.CurrentScreen != ScreenManager.GameScreen.SplashScreen
+                && ScreenManager.Instance.CurrentScreen != ScreenManager.GameScreen.MainMenuScreen)
             {
                 // Save Game for Test
                 if (keyboardCur.IsKeyUp(Keys.M) && keyboardPrev.IsKeyDown(Keys.M))
@@ -260,7 +260,7 @@ namespace Medicraft.Systems.Managers
                     {                     
                         GUIManager.Instance.CurrentGUI = GUIManager.PlayScreen;
                         GameGlobals.Instance.IsRefreshPlayScreenUI = false;
-                        GUIManager.Instance.ClearSkillDescription();
+                        GUIManager.Instance.ClearSkillDescription("Character");
                     }
                     else GUIManager.Instance.CurrentGUI = GUIManager.InspectPanel;
                 }
@@ -444,8 +444,9 @@ namespace Medicraft.Systems.Managers
             if (Player.HP <= 0 && !IsPlayerDead)
                 IsPlayerDead = true;
 
-            if (Companions[CurrCompaIndex].HP <= 0 && !IsCompanionDead)
-                IsCompanionDead = true;
+            if (Companions.Count != 0)
+                if (Companions[CurrCompaIndex].HP <= 0 && !IsCompanionDead)
+                    IsCompanionDead = true;
 
             if (IsPlayerDead)
             {
@@ -577,6 +578,22 @@ namespace Medicraft.Systems.Managers
                     Player.Level++;
                     Player.PlayerData.SkillPoint++;
 
+                    // Increasing Companions Level too
+                    foreach (var compa in Companions)
+                    {
+                        compa.Level++;
+                        compa.CompanionData.Level++;
+
+                        if (compa.Level % 3 == 0)
+                        {
+                            compa.CompanionData.Abilities.NormalSkillLevel++;
+                            compa.CompanionData.Abilities.BurstSkillLevel++;
+                            compa.CompanionData.Abilities.PassiveSkillLevel++;
+                        }
+
+                        ReStatsCompanion(compa);
+                    }
+
                     // Re-Stats
                     ReStatsPlayer();
 
@@ -602,8 +619,8 @@ namespace Medicraft.Systems.Managers
             Player.SetCharacterStats(charData, Player.Level);
 
             // Set current HP & Mana
-            Player.HP = (float)(Player.BaseMaxHP * Player.PlayerData.CurrentHPPercentage);
-            Player.Mana = (float)(Player.BaseMaxMana * Player.PlayerData.CurrentManaPercentage);
+            Player.HP = (float)(Player.BaseMaxHP * Player.GetCurrentHealthPercentage());
+            Player.Mana = (float)(Player.BaseMaxMana * Player.GetCurrentManaPercentage());
 
             // Now re-stats Equipments
             var itemEquipmentData = InventoryManager.Instance.InventoryBag.Values.Where
@@ -611,6 +628,17 @@ namespace Medicraft.Systems.Managers
 
             foreach (var item in itemEquipmentData)
                 RefreshEquipmentStats(item, true);
+        }
+
+        private void ReStatsCompanion(Companion compa)
+        {
+            var charData = GameGlobals.Instance.CharacterDatas.FirstOrDefault
+                (c => c.CharId.Equals(compa.CharId));
+
+            compa.SetCharacterStats(charData, compa.Level);
+
+            // Set current HP
+            compa.HP = (float)(compa.BaseMaxHP * compa.GetCurrentHealthPercentage());
         }
 
         public void RefreshEquipmentStats(InventoryItemData itemEquipmentData, bool isEquip)

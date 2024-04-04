@@ -501,6 +501,8 @@ namespace Medicraft.Systems
 
         private void DrawAttackedEffectToCompanion(SpriteBatch spriteBatch)
         {
+            if (PlayerManager.Instance.Companions.Count == 0) return;
+
             var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
             var combatLog = companion.CombatLogs;
 
@@ -548,6 +550,8 @@ namespace Medicraft.Systems
 
         private void DrawCompanionAbilityAndStatusEffect(SpriteBatch spriteBatch)
         {
+            if (PlayerManager.Instance.Companions.Count == 0) return;
+
             var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
             var combatLog = companion.CombatLogs;
 

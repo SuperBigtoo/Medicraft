@@ -2203,8 +2203,6 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="19" name="CraftingTableArea"/>
- <objectgroup id="20" name="SavingTableArea"/>
  <objectgroup id="21" name="EnteringZoneArea">
   <object id="215" name="map_1_to_Test" x="961.33" y="1536" width="254.667" height="194.667"/>
  </objectgroup>

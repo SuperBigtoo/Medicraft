@@ -14,12 +14,26 @@ namespace Medicraft.Entities.Companion
     public class Companion : Entity
     {
         public CompanionData CompanionData { get; protected set; }
-
         public int CompanionId { get; protected set; }
+
+        protected float BaseCooldownNormal = 0, BaseCooldownBurst = 0, BaseCooldownPassive = 0;
+
+        // Is Skill Cooldown
+        public bool IsNormalSkillCooldown { get; protected set; }
+        public bool IsBurstSkillCooldown { get; protected set; }
+        public bool IsPassiveSkillCooldown { get; protected set; }
+
+        // Time Condition Skill
+        public float NormalCooldownTime { get; protected set; }
+        public float BurstCooldownTime { get; protected set; }
+        public float PassiveCooldownTime { get; protected set; }
+        public float NormalCooldownTimer { get; protected set; }
+        public float BurstCooldownTimer { get; protected set; }
+        public float PassiveCooldownTimer { get; protected set; }
 
         public bool isCriticalAttack, isAttackMissed;
 
-        protected float percentNormalHit;
+        protected float percentDamageNormalHit;
         protected float hitRateNormal, hitRateNormalSkill, hitRateBurstSkill;
 
         protected Companion(Vector2 scale)
@@ -37,6 +51,21 @@ namespace Medicraft.Entities.Companion
                 Rotation = 0f,
                 Position = position
             };
+        }
+
+        protected void InitialCooldownSkill()
+        {
+            IsNormalSkillCooldown = false;
+            IsBurstSkillCooldown = false;
+            IsPassiveSkillCooldown = false;
+
+            NormalCooldownTime = BaseCooldownNormal;
+            BurstCooldownTime = BaseCooldownBurst;
+            PassiveCooldownTime = BaseCooldownPassive;
+
+            NormalCooldownTimer = NormalCooldownTime;
+            BurstCooldownTimer = BurstCooldownTime;
+            PassiveCooldownTimer = PassiveCooldownTime;
         }
 
         public override void Update(GameTime gameTime, float playerDepth, float topDepth, float middleDepth, float bottomDepth)
@@ -280,7 +309,7 @@ namespace Medicraft.Entities.Companion
                 {
                     if (!isAttackCooldown)
                     {
-                        CheckAttackDetection(ATK, percentNormalHit, false, 0f, NormalHitEffectAttacked);
+                        CheckAttackDetection(ATK, percentDamageNormalHit, false, 0f, NormalHitEffectAttacked);
                         isAttackCooldown = true;
                     }
                     else

@@ -63,25 +63,28 @@ namespace Medicraft.Systems.Managers
                 PlayerManager.Instance.Update(gameTime);
                 var playerDepth = PlayerManager.Instance.Player.GetDepth();
 
-                if (!PlayerManager.Instance.IsCompanionDead && !PlayerManager.Instance.IsCompanionSummoned)
+                if (PlayerManager.Instance.Companions.Count != 0)
                 {
-                    if (_delayCompaSpawnTimer < _delayCompaSpawnTime)
+                    if (!PlayerManager.Instance.IsCompanionDead && !PlayerManager.Instance.IsCompanionSummoned)
                     {
-                        _delayCompaSpawnTimer += deltaSeconds;
-                    }
-                    else
-                    {
-                        // Summon current companion
-                        PlayerManager.Instance.SummonCurrentCompanion();
+                        if (_delayCompaSpawnTimer < _delayCompaSpawnTime)
+                        {
+                            _delayCompaSpawnTimer += deltaSeconds;
+                        }
+                        else
+                        {
+                            // Summon current companion
+                            PlayerManager.Instance.SummonCurrentCompanion();
 
-                        _delayCompaSpawnTimer = 0;
-                        PlayerManager.Instance.IsCompanionSummoned = true;
+                            _delayCompaSpawnTimer = 0;
+                            PlayerManager.Instance.IsCompanionSummoned = true;
+                        }
                     }
-                }
-                else if (!PlayerManager.Instance.IsCompanionDead && PlayerManager.Instance.IsCompanionSummoned)
-                {
-                    PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex].Update(
-                        gameTime, playerDepth, topDepth, middleDepth, bottomDepth);
+                    else if (!PlayerManager.Instance.IsCompanionDead && PlayerManager.Instance.IsCompanionSummoned)
+                    {
+                        PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex].Update(
+                            gameTime, playerDepth, topDepth, middleDepth, bottomDepth);
+                    }
                 }
 
                 // Update Mob & NPC

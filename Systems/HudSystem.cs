@@ -1,4 +1,5 @@
 ﻿using Medicraft.Data.Models;
+using Medicraft.Entities.Companion;
 using Medicraft.Systems.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -210,7 +211,7 @@ namespace Medicraft.Systems
                     if (GameGlobals.Instance.IsOpenInspectPanel && GUIManager.Instance.IsCharacterTabSelected
                         && !GUIManager.Instance.IsShowConfirmBox)
                     {
-                        var playerSprite = GUIManager.Instance.PlayerSprite;
+                        var playerSprite = GUIManager.Instance.CharacterSprite;
 
                         //playerSprite.Depth = 0.1f;
                         playerSprite.Play("default_idle");
@@ -598,21 +599,58 @@ namespace Medicraft.Systems
             }
         }
 
-        private static void DrawHealthPointMobs(SpriteBatch spriteBatch)
+        private void DrawHealthPointMobs(SpriteBatch spriteBatch)
         {
             var entities = EntityManager.Instance.Entities;
             var FontSensation = GameGlobals.Instance.FontSensation;
+            var FontTA8BitBold = GameGlobals.Instance.FontTA8BitBold;
 
             foreach (var entity in entities.Where(e => !e.IsDestroyed && e.IsAggro
                 && e.EntityType == Entities.Entity.EntityTypes.Hostile && e.HP > 0))
             {
                 var entityPos = entity.Position;
-                var text = $"{(int)entity.HP}";
-                var textSize = FontSensation.MeasureString(text);
-                var position = entityPos - new Vector2(textSize.Width / 2
-                    , (textSize.Height / 2) + (entity.Sprite.TextureRegion.Height / 2));
+                //var text = $"{(int)entity.HP}";
+                //var textSize = FontSensation.MeasureString(text);
+                //var position = entityPos - new Vector2(textSize.Width / 2
+                //    , (textSize.Height / 2) + (entity.Sprite.TextureRegion.Height / 2));
 
-                DrawTextWithStroke(spriteBatch, FontSensation, text, position, Color.DarkRed, 1f, Color.Black, 1);
+                //DrawTextWithStroke(spriteBatch, FontSensation, text, position, Color.DarkRed, 1f, Color.Black, 1);
+
+                var mobHP = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.health_bar_mob);
+                var mobGauge = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.mob_gauge);
+                var offSet = new Vector2(mobHP.Width / 2, (mobHP.Height / 2) + (entity.Sprite.TextureRegion.Height / 2));
+                var position = entityPos - offSet;
+
+                // HP gauge
+                var curHealthPoint = entity.GetCurrentHealthPercentage();
+                
+                var hpGaugeSourceRec = new Rectangle(
+                    0, 0,
+                    (int)(mobGauge.Width * curHealthPoint),
+                    mobGauge.Height);
+
+                var hpGaugeRec = new Rectangle(
+                    (int)(position.X),
+                    (int)(position.Y),
+                    (int)(mobGauge.Width * curHealthPoint),
+                    mobGauge.Height);
+
+                spriteBatch.Draw(mobGauge, hpGaugeRec, hpGaugeSourceRec
+                    , Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+
+                // Text Health Point
+                var textHP = $"{(int)entity.HP}/{(int)entity.MaxHP}";
+                var textSizeHP = FontTA8BitBold.MeasureString(textHP);
+                var positionHP = new Vector2(
+                    (position.X + mobGauge.Width / 2) - ((textSizeHP.Width * 0.8f) / 2),
+                    (position.Y + mobGauge.Height / 2) - ((textSizeHP.Height * 0.8f) / 2));
+
+                DrawTextWithStroke(spriteBatch, FontTA8BitBold
+                    , textHP, positionHP, Color.White, 0.8f, Color.Black, 2);
+
+                // Health Bar mob GUI
+                spriteBatch.Draw(mobHP, position, null
+                    , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }
         }
 

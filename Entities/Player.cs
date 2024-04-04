@@ -19,24 +19,26 @@ namespace Medicraft.Entities
         public const float NormalSkillCost = 15f, BurstSkillCost = 20f;
         public const float BaseCooldownNormal = 16f, BaseCooldownBurst = 20f, BaseCooldownPassive = 60f;
 
+        // Is Skill Cooldown
         public bool IsNormalSkillCooldown { get; private set; }
         public bool IsBurstSkillCooldown { get; private set; }
         public bool IsPassiveSkillCooldown { get; private set; }
 
+        // Time Condition Skill
         public float NormalCooldownTime { get; private set; }
         public float BurstCooldownTime { get; private set; }
         public float PassiveCooldownTime { get; private set; }
-
         public float NormalCooldownTimer { get; private set; }
         public float BurstCooldownTimer { get; private set; }
         public float PassiveCooldownTimer { get; private set; }
 
+        // Activate Skill
         public bool IsNormalSkillActivate { get; private set; }
         public bool IsPassiveSkillActivate { get; private set; }
         public float NormalActivatedTime { get; private set; }
         public float NormalActivatedTimer {  get; private set; }
         public float PassiveActivatedTime { get; private set; }
-        public float PassiveActivatedTimer { get; private set; }       
+        public float PassiveActivatedTimer { get; private set; }      
 
         public int tempSpeed;
         public float tempATK, tempHP, tempMana, tempDEF, tempCrit, tempCritDMG, tempEvasion;
@@ -851,18 +853,18 @@ namespace Medicraft.Entities
         // Crafting TBD
         private void CheckTableCraftDetection()
         {
-            if (GameGlobals.Instance.CraftingTableArea.Count != 0)
-            {
-                var TableCraft = GameGlobals.Instance.CraftingTableArea;
-                foreach (var obj in TableCraft)
-                {
-                    if (BoundingDetectCollisions.Intersects(obj))
-                    {
+            //if (GameGlobals.Instance.CraftingTableArea.Count != 0)
+            //{
+            //    var TableCraft = GameGlobals.Instance.CraftingTableArea;
+            //    foreach (var obj in TableCraft)
+            //    {
+            //        if (BoundingDetectCollisions.Intersects(obj))
+            //        {
                         
-                        break;
-                    }
-                }
-            }
+            //            break;
+            //        }
+            //    }
+            //}
         }
 
         private void ManaRegeneration(float deltaSeconds)

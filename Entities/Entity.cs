@@ -638,9 +638,12 @@ namespace Medicraft.Entities
                             PlayerManager.Instance.Player
                         };
 
-                        var compa = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
-                        if (compa != null)
-                            entities.Add(compa);
+                        if (PlayerManager.Instance.Companions.Count != 0)
+                        {
+                            var compa = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
+                            if (compa != null)
+                                entities.Add(compa);
+                        }
 
                         var closestEntity = FindClosestEntity(entities, this);
 

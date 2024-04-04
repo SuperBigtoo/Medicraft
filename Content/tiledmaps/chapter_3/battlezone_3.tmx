@@ -1183,8 +1183,6 @@
   <object id="60" name="Block" x="512" y="1918" width="128" height="97"/>
  </objectgroup>
  <objectgroup id="19" name="Points"/>
- <objectgroup id="20" name="CraftingTableArea"/>
- <objectgroup id="21" name="SavingTableArea"/>
  <objectgroup id="22" name="EnteringZoneArea"/>
  <objectgroup id="23" name="MobPartrolArea"/>
 </map>

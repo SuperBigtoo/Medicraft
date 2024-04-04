@@ -19,7 +19,7 @@ namespace Medicraft.Entities.Companion
             Level = companionData.Level;
             InitializeCharacterData(companionData.CharId, Level);
 
-            percentNormalHit = 0.5f;
+            percentDamageNormalHit = 0.5f;
             hitRateNormal = 0.5f;
             hitRateNormalSkill = 0.9f;
             hitRateBurstSkill = 0.9f;
@@ -27,6 +27,11 @@ namespace Medicraft.Entities.Companion
             attackSpeed = 0.25f;
             cooldownAttack = 0.75f;
             cooldownAttackTimer = cooldownAttack;
+
+            BaseCooldownNormal = 20f;
+            BaseCooldownBurst = 40f;
+
+            InitialCooldownSkill();
 
             AggroTime = 1f;
             DyingTime = 1.3f;
@@ -44,9 +49,7 @@ namespace Medicraft.Entities.Companion
                 Sprite.TextureRegion.Height / 8);
 
             BoundingHitBox = new CircleF(Position, 42f);         // Circle for Entity to hit
-
             BoundingDetectEntity = new CircleF(Position, 80f);   // Circle for check attacking
-
             BoundingAggro = new CircleF(Position, 50);         // Circle for check aggro enemy mobs
 
             // Set Effect

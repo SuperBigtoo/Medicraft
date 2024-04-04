@@ -4,6 +4,7 @@ using GeonBit.UI.Utils.Forms;
 using Medicraft.Data;
 using Medicraft.Data.Models;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Sprites;
 using System;
@@ -47,7 +48,11 @@ namespace Medicraft.Systems.Managers
 
         public bool IsCharacterTabSelected { get; set; } = false;
         public bool IsShowConfirmBox { get; set; } = false;
-        public AnimatedSprite PlayerSprite { get; set; }
+        public AnimatedSprite CharacterSprite { get; set; }
+
+        // Companion character
+        public int SelectedCompanion = 0;
+        public const int VioletSprite = 0;
 
         // Load Save
         public bool IsClickedLoadButton { get; private set; } = false;
@@ -57,6 +62,7 @@ namespace Medicraft.Systems.Managers
 
         // Skill selected
         public string NoahSelectedSkill { get; private set; }
+        public string CompanionSelectedSkill { get; private set; }
 
         // UI elements
         private readonly List<Panel> _mainPanels = [];
@@ -75,6 +81,29 @@ namespace Medicraft.Systems.Managers
                 panel.Visible = false;
 
             _mainPanels[CurrentGUI].Visible = true;
+        }
+
+        private void UpdateSelectedCompanion(bool isIncreasing)
+        {
+            if (isIncreasing)
+            {
+                SelectedCompanion++;
+
+                if (SelectedCompanion >= PlayerManager.Instance.Companions.Count)
+                    SelectedCompanion = 0;
+            }
+            else
+            {
+                SelectedCompanion--;
+
+                if (SelectedCompanion < 0)
+                    SelectedCompanion = PlayerManager.Instance.Companions.Count - 1;
+            }
+
+            // Refresh Companion Inspect
+            RefreshInspectCompanionDisplay();
+            ClearSkillDescription("Companion");
+            IsCharacterTabSelected = true;
         }
 
         public void InitializeThemeAndUI(BuiltinThemes theme)
@@ -450,7 +479,7 @@ namespace Medicraft.Systems.Managers
 
         public void RefreshInvenrotyItem(bool isClearLeftPanel)
         {
-            var inventoryPanel = _mainPanels.ElementAt(InventoryPanel);          
+            var inventoryPanel = _mainPanels[InventoryPanel];          
             var invenRightPanel = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenRightPanel"));
             var invenLeftPanel = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenLeftPanel"));
             var listItemPanel = invenRightPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("listItemPanel"));
@@ -479,14 +508,25 @@ namespace Medicraft.Systems.Managers
                     Texture = GameGlobals.Instance.GetItemTexture(item.Value.ItemId),
                 };
 
-                // Item Count
-                iconItem.AddChild(new Label(iconItem.Count.ToString(), Anchor.BottomRight, offset: new Vector2(-22, -35))
+                // Item text
+                var text = iconItem.Count.ToString();
+                if (item.Value.GetCategory().Equals("Equipment"))
+                {
+                    if (iconItem.Slot >= InventoryManager.Sword && iconItem.Slot <= InventoryManager.Ring)
+                    {
+                        text = "E";
+                    }
+                    else text = "";
+                }
+
+                var iconText = new Label(text, Anchor.BottomRight, offset: new Vector2(-22, -35))
                 {
                     Size = new Vector2(10, 10),
                     Scale = 1f,
                     ClickThrough = true,
-                });
+                };
 
+                iconItem.AddChild(iconText);
                 listItemPanel.AddChild(iconItem);
             }
 
@@ -500,8 +540,6 @@ namespace Medicraft.Systems.Managers
                         itemLeftPanel.Visible = true;
 
                     // Enable or Disable the button for each item icon
-                    //InventoryManager.Instance.InventoryBag.TryGetValue(iconItem.ItemId.ToString()
-                    //    , out InventoryItemData item);
                     var item = InventoryManager.Instance.InventoryBag.FirstOrDefault(i => i.Key.Equals(iconItem.KeyIndex));
 
                     InventoryManager.Instance.ItemSelected = item;
@@ -1046,7 +1084,7 @@ namespace Medicraft.Systems.Managers
                 characterTab.button.OnClick = (Entity entity) =>
                 {
                     RefreshInspectCharacterDisplay();
-                    ClearSkillDescription();
+                    ClearSkillDescription("Character");
                     
                     IsCharacterTabSelected = true;
                 };
@@ -1094,7 +1132,6 @@ namespace Medicraft.Systems.Managers
                 {
                     Identifier = "skillPoint",
                     Scale = 1.15f,
-                    Padding = new Vector2(0, -30),
                     Anchor = Anchor.AutoInlineNoBreak
                 });
 
@@ -1225,7 +1262,7 @@ namespace Medicraft.Systems.Managers
                     var levelNormal = PlayerManager.Instance.Player.PlayerData.Abilities.NormalSkillLevel;
 
                     // Refesh skill description
-                    RefreshSkillDescription(descNormal, levelNormal);
+                    RefreshSkillDescription("Character", descNormal, levelNormal);
                 };
 
                 burstSkillIcon.OnClick = (Entity entity) =>
@@ -1240,7 +1277,7 @@ namespace Medicraft.Systems.Managers
                     var levelBurst = PlayerManager.Instance.Player.PlayerData.Abilities.BurstSkillLevel;
 
                     // Refesh skill description
-                    RefreshSkillDescription(descBurst, levelBurst);
+                    RefreshSkillDescription("Character", descBurst, levelBurst);
                 };
 
                 passiveSkillIcon.OnClick = (Entity entity) =>
@@ -1255,7 +1292,7 @@ namespace Medicraft.Systems.Managers
                     var levelPassive = PlayerManager.Instance.Player.PlayerData.Abilities.PassiveSkillLevel;
 
                     // Refesh skill description
-                    RefreshSkillDescription(descPassive, levelPassive);
+                    RefreshSkillDescription("Character", descPassive, levelPassive);
                 };
 
                 upSkillButton.OnClick = (Entity entity) =>
@@ -1294,7 +1331,7 @@ namespace Medicraft.Systems.Managers
                                                     level = PlayerManager.Instance.Player.PlayerData.Abilities.PassiveSkillLevel;
                                                 }
 
-                                                RefreshSkillDescription(descSkill, level);
+                                                RefreshSkillDescription("Character", descSkill, level);
                                                 
                                                 // Set Display Skill point
                                                 var skillPoint = skillPointPanel.Children.OfType<Label>().FirstOrDefault
@@ -1571,6 +1608,432 @@ namespace Medicraft.Systems.Managers
                 });
             }
 
+            // Add tab: Companion Inspect
+            {
+                TabData companionTab = inspectTabs.AddTab("Companion");
+
+                // Set true if character tab is clicked
+                companionTab.button.OnClick = (Entity entity) =>
+                {
+                    RefreshInspectCompanionDisplay();
+                    ClearSkillDescription("Companion");
+
+                    IsCharacterTabSelected = true;
+                };
+
+                // Left Panel
+                var leftPanel = new Panel(new Vector2(450, 670), PanelSkin.None, Anchor.TopLeft)
+                {
+                    Identifier = "leftPanel"
+                };
+                companionTab.panel.AddChild(leftPanel);
+
+                // Display Character
+                var displayCharacterPanel = new Panel(new Vector2(425, 400), PanelSkin.ListBackground, Anchor.TopCenter)
+                {
+                    Identifier = "displayCharacterPanel"
+                };
+                leftPanel.AddChild(displayCharacterPanel);
+
+                displayCharacterPanel.AddChild(new Header()
+                {
+                    Identifier = "characterNameHeader",
+                    Scale = 1.5f,
+                    Anchor = Anchor.TopCenter
+                });
+
+                var prevCompanion = new Button("", ButtonSkin.Default)
+                {
+                    Identifier = "prevCompanion",
+                    Anchor = Anchor.TopLeft,
+                    Size = new Vector2(50, 50),
+                    OnClick = (btn) =>
+                    {
+                        UpdateSelectedCompanion(false);
+                    }
+                };
+                displayCharacterPanel.AddChild(prevCompanion);
+                prevCompanion.ButtonParagraph.SetAnchorAndOffset(Anchor.AutoCenter, new Vector2(0, -35));
+                prevCompanion.AddChild(new Icon(IconType.None, Anchor.AutoCenter)
+                {
+                    Texture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.arrow_left)
+                }, true);
+
+                var nextCompanion = new Button("", ButtonSkin.Default)
+                {
+                    Identifier = "nextCompanion",
+                    Anchor = Anchor.TopRight,
+                    Size = new Vector2(50, 50),
+                    OnClick = (btn) =>
+                    {
+                        UpdateSelectedCompanion(true);
+                    }
+                };
+                displayCharacterPanel.AddChild(nextCompanion);
+                nextCompanion.ButtonParagraph.SetAnchorAndOffset(Anchor.AutoCenter, new Vector2(0, -35));
+                nextCompanion.AddChild(new Icon(IconType.None, Anchor.AutoCenter)
+                {
+                    Texture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.arrow_right)
+                }, true);
+
+                //// Left Equipment Panel
+                //var leftEquipmentPanel = new Panel(new Vector2(70, 210), PanelSkin.None, Anchor.CenterLeft)
+                //{
+                //    Identifier = "leftEquipmentPanel",
+                //};
+                //displayCharacterPanel.AddChild(leftEquipmentPanel);
+
+                //// Add Slot Equipment in Left Panel
+                //for (int i = 0; i < 3; i++)
+                //{
+                //    leftEquipmentPanel.AddChild(new Icon(IconType.None, Anchor.AutoInline, 1, true)
+                //    {
+                //        Identifier = "Slot_" + i,
+                //        Offset = new Vector2(-16, 0)
+                //    });
+                //}
+
+                //// Right Equipment Panel
+                //var rightEquipmentPanel = new Panel(new Vector2(70, 210), PanelSkin.None, Anchor.CenterRight)
+                //{
+                //    Identifier = "rightEquipmentPanel"
+                //};
+                //displayCharacterPanel.AddChild(rightEquipmentPanel);
+
+                //// Add Slot Equipment in Right Panel
+                //for (int i = 3; i < 6; i++)
+                //{
+                //    rightEquipmentPanel.AddChild(new Icon(IconType.None, Anchor.AutoInline, 1, true)
+                //    {
+                //        Identifier = "Slot_" + i,
+                //        Offset = new Vector2(-16, 0)
+                //    });
+                //}
+
+                // Skill Icon Panel
+                var skillIconPanel = new Panel(new Vector2(220, 60), PanelSkin.None, Anchor.BottomCenter)
+                {
+                    Identifier = "skillIconPanel"
+                };
+                displayCharacterPanel.AddChild(skillIconPanel);
+
+                var normalSkillIcon = new Icon(IconType.None, Anchor.AutoInlineNoBreak, 1, true)
+                {
+                    Identifier = "normalSkillIcon",
+                    ToolTipText = "Normal Skill",
+                    Offset = new Vector2(0, 0)
+                };
+                skillIconPanel.AddChild(normalSkillIcon);
+                normalSkillIcon.AddChild(new Label($"", Anchor.BottomRight, offset: new Vector2(-22, -35))
+                {
+                    Identifier = "normalSkillLevel",
+                    Size = new Vector2(10, 10),
+                    Scale = 1f,
+                    ClickThrough = true,
+                });
+                var burstSkillIcon = new Icon(IconType.None, Anchor.AutoInlineNoBreak, 1, true)
+                {
+                    Identifier = "burstSkillIcon",
+                    ToolTipText = "Burst Skill",
+                    Offset = new Vector2(0, 0)
+                };
+                skillIconPanel.AddChild(burstSkillIcon);
+                burstSkillIcon.AddChild(new Label($"", Anchor.BottomRight, offset: new Vector2(-22, -35))
+                {
+                    Identifier = "burstSkillLevel",
+                    Size = new Vector2(10, 10),
+                    Scale = 1f,
+                    ClickThrough = true,
+                });
+                var passiveSkillIcon = new Icon(IconType.None, Anchor.AutoInlineNoBreak, 1, true)
+                {
+                    Identifier = "passiveSkillIcon",
+                    ToolTipText = "Passive Skill",
+                    Offset = new Vector2(0, 0)
+                };
+                skillIconPanel.AddChild(passiveSkillIcon);
+                passiveSkillIcon.AddChild(new Label($"", Anchor.BottomRight, offset: new Vector2(-22, -35))
+                {
+                    Identifier = "passiveSkillLevel",
+                    Size = new Vector2(10, 10),
+                    Scale = 1f,
+                    ClickThrough = true,
+                });
+
+                normalSkillIcon.OnClick = (Entity entity) =>
+                {
+                    entity.Enabled = false;
+                    burstSkillIcon.Enabled = true;
+                    passiveSkillIcon.Enabled = true;
+
+                    // Get Companion Selected Skill
+                    SetCompanionSelectedSkill("normal");
+
+                    var descNormal = GameGlobals.Instance.SkillDescriptionDatas.Where
+                        (s => s.Name.Equals(CompanionSelectedSkill)).ToList();
+                    var levelNormal = PlayerManager.Instance.Player.PlayerData.Abilities.NormalSkillLevel;
+
+                    // Refesh skill description
+                    RefreshSkillDescription("Companion", descNormal, levelNormal);
+                };
+
+                burstSkillIcon.OnClick = (Entity entity) =>
+                {
+                    entity.Enabled = false;
+                    normalSkillIcon.Enabled = true;
+                    passiveSkillIcon.Enabled = true;
+
+                    SetCompanionSelectedSkill("burst");
+
+                    var descBurst = GameGlobals.Instance.SkillDescriptionDatas.Where
+                        (s => s.Name.Equals(CompanionSelectedSkill)).ToList();
+                    var levelBurst = PlayerManager.Instance.Player.PlayerData.Abilities.BurstSkillLevel;
+
+                    // Refesh skill description
+                    RefreshSkillDescription("Companion", descBurst, levelBurst);
+                };
+
+                passiveSkillIcon.OnClick = (Entity entity) =>
+                {
+                    entity.Enabled = false;
+                    normalSkillIcon.Enabled = true;
+                    burstSkillIcon.Enabled = true;
+
+                    SetCompanionSelectedSkill("passive");
+
+                    var descPassive = GameGlobals.Instance.SkillDescriptionDatas.Where
+                        (s => s.Name.Equals(CompanionSelectedSkill)).ToList();
+                    var levelPassive = PlayerManager.Instance.Player.PlayerData.Abilities.PassiveSkillLevel;
+
+                    // Refesh skill description
+                    RefreshSkillDescription("Companion", descPassive, levelPassive);
+                };
+
+                leftPanel.AddChild(new LineSpace(1));
+                var selectedSkillPanel = new Panel(new Vector2(425, 210), PanelSkin.ListBackground, Anchor.AutoCenter)
+                {
+                    Identifier = "selectedSkillPanel",
+                    Offset = new Vector2(0, 0f)
+                };
+                leftPanel.AddChild(selectedSkillPanel);
+
+                var descripLeftSkill = new Paragraph(@"", Anchor.CenterLeft, Color.White, 0.9f, new Vector2(360, 250))
+                {
+                    Identifier = "descripLeftSkill",
+                    WrapWords = true,
+                    Padding = new Vector2(15, 0)
+                };
+                selectedSkillPanel.AddChild(descripLeftSkill);
+
+                // List Consumable Item
+
+                // Right Panel
+                var rightPanel = new Panel(new Vector2(375, 600), PanelSkin.None, Anchor.TopRight)
+                {
+                    Identifier = "rightPanel"
+                };
+                companionTab.panel.AddChild(rightPanel);
+
+                var statsPanel = new Panel(new Vector2(350, 400), PanelSkin.ListBackground, Anchor.TopCenter)
+                {
+                    Identifier = "statsPanel"
+                };
+                rightPanel.AddChild(statsPanel);
+
+                statsPanel.AddChild(new Button("Level", ButtonSkin.Fancy, size: new Vector2(325, 30))
+                {
+                    Identifier = "levelHeader",
+                    Locked = true,
+                    Anchor = Anchor.TopCenter
+                });
+
+                // Companion Level
+                statsPanel.AddChild(new Label()
+                {
+                    Identifier = "companionLevel",
+                    Scale = 1.5f,
+                    Anchor = Anchor.AutoCenter
+                });
+
+                statsPanel.AddChild(new Button("Attributes", ButtonSkin.Fancy, size: new Vector2(325, 30))
+                {
+                    Identifier = "attributesHeader",
+                    Locked = true,
+                    Anchor = Anchor.AutoCenter
+                });
+
+                // ATK
+                var statsATKPanel = new Panel(new Vector2(300, 15), PanelSkin.None, Anchor.AutoCenter)
+                {
+                    Identifier = "statsATKPanel",
+                };
+                statsPanel.AddChild(statsATKPanel);
+                statsATKPanel.AddChild(new Label()
+                {
+                    Text = "ATK:",
+                    Scale = 0.9f,
+                    Anchor = Anchor.CenterLeft
+                });
+                statsATKPanel.AddChild(new Label()
+                {
+                    Identifier = "statsATK",
+                    Scale = 0.9f,
+                    Anchor = Anchor.CenterRight
+                });
+
+                // HP
+                var statsHPPanel = new Panel(new Vector2(300, 15), PanelSkin.None, Anchor.AutoCenter)
+                {
+                    Identifier = "statsHPPanel",
+                };
+                statsPanel.AddChild(statsHPPanel);
+                statsHPPanel.AddChild(new Label()
+                {
+                    Text = "HP:",
+                    Scale = 0.9f,
+                    Anchor = Anchor.CenterLeft
+                });
+                statsHPPanel.AddChild(new Label()
+                {
+                    Identifier = "statsHP",
+                    Scale = 0.9f,
+                    Anchor = Anchor.CenterRight
+                });
+
+                // Mana
+                var statsManaPanel = new Panel(new Vector2(300, 15), PanelSkin.None, Anchor.AutoCenter)
+                {
+                    Identifier = "statsManaPanel",
+                };
+                statsPanel.AddChild(statsManaPanel);
+                statsManaPanel.AddChild(new Label()
+                {
+                    Text = "Mana:",
+                    Scale = 0.9f,
+                    Anchor = Anchor.CenterLeft
+                });
+                statsManaPanel.AddChild(new Label()
+                {
+                    Identifier = "statsMana",
+                    Scale = 0.9f,
+                    Anchor = Anchor.CenterRight
+                });
+
+                // ManaRegen
+                var statsManaRegenPanel = new Panel(new Vector2(300, 15), PanelSkin.None, Anchor.AutoCenter)
+                {
+                    Identifier = "statsManaRegenPanel",
+                };
+                statsPanel.AddChild(statsManaRegenPanel);
+                statsManaRegenPanel.AddChild(new Label()
+                {
+                    Text = "Mana Regen:",
+                    Scale = 0.9f,
+                    Anchor = Anchor.CenterLeft
+                });
+                statsManaRegenPanel.AddChild(new Label()
+                {
+                    Identifier = "statsManaRegen",
+                    Scale = 0.9f,
+                    Anchor = Anchor.CenterRight
+                });
+
+                // DEF
+                var statsDEFPanel = new Panel(new Vector2(300, 15), PanelSkin.None, Anchor.AutoCenter)
+                {
+                    Identifier = "statsDEFPanel",
+                };
+                statsPanel.AddChild(statsDEFPanel);
+                statsDEFPanel.AddChild(new Label()
+                {
+                    Text = "DEF:",
+                    Scale = 0.9f,
+                    Anchor = Anchor.CenterLeft
+                });
+                statsDEFPanel.AddChild(new Label()
+                {
+                    Identifier = "statsDEF",
+                    Scale = 0.9f,
+                    Anchor = Anchor.CenterRight
+                });
+
+                // Crit
+                var statsCritPanel = new Panel(new Vector2(300, 15), PanelSkin.None, Anchor.AutoCenter)
+                {
+                    Identifier = "statsCritPanel",
+                };
+                statsPanel.AddChild(statsCritPanel);
+                statsCritPanel.AddChild(new Label()
+                {
+                    Text = "Crit:",
+                    Scale = 0.9f,
+                    Anchor = Anchor.CenterLeft
+                });
+                statsCritPanel.AddChild(new Label()
+                {
+                    Identifier = "statsCrit",
+                    Scale = 0.9f,
+                    Anchor = Anchor.CenterRight
+                });
+
+                // CritDMG
+                var statsCritDMGPanel = new Panel(new Vector2(300, 15), PanelSkin.None, Anchor.AutoCenter)
+                {
+                    Identifier = "statsCritDMGPanel",
+                };
+                statsPanel.AddChild(statsCritDMGPanel);
+                statsCritDMGPanel.AddChild(new Label()
+                {
+                    Text = "CritDMG:",
+                    Scale = 0.9f,
+                    Anchor = Anchor.CenterLeft
+                });
+                statsCritDMGPanel.AddChild(new Label()
+                {
+                    Identifier = "statsCritDMG",
+                    Scale = 0.9f,
+                    Anchor = Anchor.CenterRight
+                });
+
+                // Evasion
+                var statsEvasionPanel = new Panel(new Vector2(300, 15), PanelSkin.None, Anchor.AutoCenter)
+                {
+                    Identifier = "statsEvasionPanel",
+                };
+                statsPanel.AddChild(statsEvasionPanel);
+                statsEvasionPanel.AddChild(new Label()
+                {
+                    Text = "Evasion:",
+                    Scale = 0.9f,
+                    Anchor = Anchor.CenterLeft
+                });
+                statsEvasionPanel.AddChild(new Label()
+                {
+                    Identifier = "statsEvasion",
+                    Scale = 0.9f,
+                    Anchor = Anchor.CenterRight
+                });
+
+                // Speed
+                var statsSpeedPanel = new Panel(new Vector2(300, 15), PanelSkin.None, Anchor.AutoCenter)
+                {
+                    Identifier = "statsSpeedPanel",
+                };
+                statsPanel.AddChild(statsSpeedPanel);
+                statsSpeedPanel.AddChild(new Label()
+                {
+                    Text = "Movement Speed:",
+                    Scale = 0.9f,
+                    Anchor = Anchor.CenterLeft
+                });
+                statsSpeedPanel.AddChild(new Label()
+                {
+                    Identifier = "statsSpeed",
+                    Scale = 0.9f,
+                    Anchor = Anchor.CenterRight
+                });
+            }
+
             // Add tab: Progression
             {
                 TabData progressionTab = inspectTabs.AddTab("Progression");
@@ -1609,7 +2072,7 @@ namespace Medicraft.Systems.Managers
                     Identifier = "itemIcon"
                 });
                 leftPanel.AddChild(new LineSpace(1));
-               
+
                 // Thai medicine name
                 leftPanel.AddChild(new Label("Name", Anchor.AutoCenter)
                 {
@@ -1689,11 +2152,174 @@ namespace Medicraft.Systems.Managers
             }
         }
 
+        private void SetCompanionSelectedSkill(string abilityType)
+        {
+            var companion = PlayerManager.Instance.Companions[SelectedCompanion];
+
+            switch (abilityType)
+            {
+                case "normal":
+                    switch (companion.Name)
+                    {
+                        case "Violet":
+                            CompanionSelectedSkill = "I've got the Scent!";
+                            break;
+                    }
+                    break;
+
+                case "burst":
+                    switch (companion.Name)
+                    {
+                        case "Violet":
+                            CompanionSelectedSkill = "Noah Strike";
+                            break;
+                    }
+                    break;
+
+                case "passive":
+                    switch (companion.Name)
+                    {
+                        case "Violet":
+                            CompanionSelectedSkill = "Survivalist";
+                            break;
+                    }
+                    break;
+            }
+        }
+
+        public void RefreshInspectCompanionDisplay()
+        {
+            var companion = PlayerManager.Instance.Companions[SelectedCompanion];
+
+            var inspectPanel = _mainPanels.ElementAt(InspectPanel);
+            var inspectTabs = inspectPanel.Children.OfType<PanelTabs>().FirstOrDefault
+                (t => t.Identifier.Equals("inspectTabs"));
+            inspectTabs.SelectTab("Companion");
+
+            var currentTabPanel = inspectTabs.ActiveTab.panel;
+            var leftPanel = currentTabPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("leftPanel"));
+            var displayCharacterPanel = leftPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("displayCharacterPanel"));
+
+            // Set Main Character Name
+            var characterNameHeader = displayCharacterPanel.Children.OfType<Header>().FirstOrDefault
+                (h => h.Identifier.Equals("characterNameHeader"));
+            characterNameHeader.Text = companion.Name;
+
+            var skillIconPanel = displayCharacterPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("skillIconPanel"));
+
+            // Normal Skill icon
+            var normalSkillIcon = skillIconPanel.Children.OfType<Icon>().FirstOrDefault
+                        (e => e.Identifier.Equals("normalSkillIcon"));
+            normalSkillIcon.Enabled = true;
+            normalSkillIcon.Count = companion.CompanionData.Abilities.NormalSkillLevel;
+            var normalSkillLevel = normalSkillIcon.Children.OfType<Label>().FirstOrDefault
+                        (e => e.Identifier.Equals("normalSkillLevel"));
+            normalSkillLevel.Text = $"+{normalSkillIcon.Count}";
+
+            // Burst Skill Icon
+            var burstSkillIcon = skillIconPanel.Children.OfType<Icon>().FirstOrDefault
+                        (e => e.Identifier.Equals("burstSkillIcon"));
+            burstSkillIcon.Enabled = true;
+            burstSkillIcon.Count = companion.CompanionData.Abilities.BurstSkillLevel;
+            var burstSkillLevel = burstSkillIcon.Children.OfType<Label>().FirstOrDefault
+                        (e => e.Identifier.Equals("burstSkillLevel"));
+            burstSkillLevel.Text = $"+{burstSkillIcon.Count}";
+
+            // Passive Skill Icon
+            var passiveSkillIcon = skillIconPanel.Children.OfType<Icon>().FirstOrDefault
+                        (e => e.Identifier.Equals("passiveSkillIcon"));
+            passiveSkillIcon.Enabled = true;
+            passiveSkillIcon.Count = companion.CompanionData.Abilities.PassiveSkillLevel;
+            var passiveSkillLevel = passiveSkillIcon.Children.OfType<Label>().FirstOrDefault
+                        (e => e.Identifier.Equals("passiveSkillLevel"));
+            passiveSkillLevel.Text = $"+{passiveSkillIcon.Count}";
+
+            // Check Companion
+            switch (companion.Name)
+            {
+                case "Violet":
+                    CharacterSprite = new(GameGlobals.Instance.CompanionSpriteSheet[VioletSprite]);
+                    normalSkillIcon.Texture = GameGlobals.Instance.GetAbilityTexture
+                        (GameGlobals.AbilityTextureName.Ability_Ive_got_the_Scent);
+                    burstSkillIcon.Texture = GameGlobals.Instance.GetAbilityTexture
+                        (GameGlobals.AbilityTextureName.Ability_Noah_Strike);
+                    passiveSkillIcon.Texture = GameGlobals.Instance.GetAbilityTexture
+                        (GameGlobals.AbilityTextureName.Ability_Survivalist);
+                    break;
+            }
+
+            var rightPanel = currentTabPanel.Children.FirstOrDefault(p => p.Identifier.Equals("rightPanel"));
+            var statsPanel = rightPanel.Children.FirstOrDefault(p => p.Identifier.Equals("statsPanel"));
+
+            // Player Level
+            var companionLevel = statsPanel.Children.OfType<Label>().FirstOrDefault
+                        (e => e.Identifier.Equals("companionLevel"));
+            companionLevel.Text = companion.Level.ToString();
+
+            // ATK
+            var statsATKPanel = statsPanel.Children.FirstOrDefault(p => p.Identifier.Equals("statsATKPanel"));
+            var statsATK = statsATKPanel.Children.OfType<Label>().FirstOrDefault
+                        (e => e.Identifier.Equals("statsATK"));
+            statsATK.Text = companion.ATK.ToString();
+
+            // HP
+            var statsHPPanel = statsPanel.Children.FirstOrDefault(p => p.Identifier.Equals("statsHPPanel"));
+            var statsHP = statsHPPanel.Children.OfType<Label>().FirstOrDefault
+                        (e => e.Identifier.Equals("statsHP"));
+            statsHP.Text = companion.MaxHP.ToString();
+
+            // Mana
+            var statsManaPanel = statsPanel.Children.FirstOrDefault(p => p.Identifier.Equals("statsManaPanel"));
+            var statsMana = statsManaPanel.Children.OfType<Label>().FirstOrDefault
+                        (e => e.Identifier.Equals("statsMana"));
+            statsMana.Text = ((int)companion.MaxMana).ToString();
+
+            // ManaRegen
+            var statsManaRegenPanel = statsPanel.Children.FirstOrDefault(p => p.Identifier.Equals("statsManaRegenPanel"));
+            var statsManaRegen = statsManaRegenPanel.Children.OfType<Label>().FirstOrDefault
+                        (e => e.Identifier.Equals("statsManaRegen"));
+            statsManaRegen.Text = companion.ManaRegenRate.ToString("F2") + "/s";
+
+            // DEF
+            var statsDEFPanel = statsPanel.Children.FirstOrDefault(p => p.Identifier.Equals("statsDEFPanel"));
+            var statsDEF = statsDEFPanel.Children.OfType<Label>().FirstOrDefault
+                        (e => e.Identifier.Equals("statsDEF"));
+            statsDEF.Text = (companion.DEF * 100f).ToString("F2") + "%";
+
+            // Crit
+            var statsCritPanel = statsPanel.Children.FirstOrDefault(p => p.Identifier.Equals("statsCritPanel"));
+            var statsCrit = statsCritPanel.Children.OfType<Label>().FirstOrDefault
+                        (e => e.Identifier.Equals("statsCrit"));
+            statsCrit.Text = (companion.Crit * 100f).ToString("F2") + "%";
+
+            // CritDMG
+            var statsCritDMGPanel = statsPanel.Children.FirstOrDefault(p => p.Identifier.Equals("statsCritDMGPanel"));
+            var statsCritDMG = statsCritDMGPanel.Children.OfType<Label>().FirstOrDefault
+                        (e => e.Identifier.Equals("statsCritDMG"));
+            statsCritDMG.Text = (companion.CritDMG * 100f).ToString("F2") + "%";
+
+            // Evasion
+            var statsEvasionPanel = statsPanel.Children.FirstOrDefault(p => p.Identifier.Equals("statsEvasionPanel"));
+            var statsEvasion = statsEvasionPanel.Children.OfType<Label>().FirstOrDefault
+                        (e => e.Identifier.Equals("statsEvasion"));
+            statsEvasion.Text = (companion.Evasion * 100f).ToString("F2") + "%";
+
+            // Speed
+            var statsSpeedPanel = statsPanel.Children.FirstOrDefault(p => p.Identifier.Equals("statsSpeedPanel"));
+            var statsSpeed = statsSpeedPanel.Children.OfType<Label>().FirstOrDefault
+                        (e => e.Identifier.Equals("statsSpeed"));
+            statsSpeed.Text = companion.Speed.ToString();
+        }
+
         public void RefreshMedicineProgresstion()
         {
             var inspectPanel = _mainPanels.ElementAt(InspectPanel);
             var inspectTabs = inspectPanel.Children.OfType<PanelTabs>().FirstOrDefault(t => t.Identifier.Equals("inspectTabs"));
             inspectTabs.SelectTab("Progression");
+
             var currentTabPanel = inspectTabs.ActiveTab.panel;
             var leftPanel = currentTabPanel.Children.FirstOrDefault(p => p.Identifier.Equals("leftPanel"));
             var listCraftableMedicine = currentTabPanel.Children.FirstOrDefault(p => p.Identifier.Equals("listCraftableMedicine"));
@@ -1775,10 +2401,18 @@ namespace Medicraft.Systems.Managers
 
         public void RefreshInspectCharacterDisplay()
         {
-            PlayerSprite = new(GameGlobals.Instance.PlayerSpriteSheet);
+            CharacterSprite = new(GameGlobals.Instance.PlayerSpriteSheet);
 
             var inspectPanel = _mainPanels.ElementAt(InspectPanel);
             var inspectTabs = inspectPanel.Children.OfType<PanelTabs>().FirstOrDefault(t => t.Identifier.Equals("inspectTabs"));
+
+            inspectTabs.SelectTab("Companion");
+            if (PlayerManager.Instance.Companions.Count == 0)
+            {          
+                inspectTabs.ActiveTab.button.Enabled = false;
+            }
+            else inspectTabs.ActiveTab.button.Enabled = true;
+
             inspectTabs.SelectTab("Character");
             var currentTabPanel = inspectTabs.ActiveTab.panel;
             var leftPanel = currentTabPanel.Children.FirstOrDefault(p => p.Identifier.Equals("leftPanel"));
@@ -1824,9 +2458,6 @@ namespace Medicraft.Systems.Managers
                     iconEquipmentSlot.OnClick = (Entity entity) =>
                     {
                         IsShowConfirmBox = true;
-
-                        //InventoryManager.Instance.InventoryBag.TryGetValue(iconEquipmentSlot.ItemId.ToString()
-                        //    , out InventoryItemData item);
 
                         var item = InventoryManager.Instance.InventoryBag.FirstOrDefault
                             (i => i.Key.Equals(iconEquipmentSlot.KeyIndex));
@@ -1970,52 +2601,79 @@ namespace Medicraft.Systems.Managers
             statsSpeed.Text = PlayerManager.Instance.Player.Speed.ToString();
         }
 
-        private void RefreshSkillDescription(List<SkillDescriptionData> descSkill, int level)
+        private void RefreshSkillDescription(string selectedTab, List<SkillDescriptionData> descSkill, int level)
         {
             var inspectPanel = _mainPanels.ElementAt(InspectPanel);
             var inspectTabs = inspectPanel.Children.OfType<PanelTabs>().FirstOrDefault(t => t.Identifier.Equals("inspectTabs"));
-            var currentTabPanel = inspectTabs.ActiveTab.panel;
-            var leftPanel = currentTabPanel.Children.FirstOrDefault(t => t.Identifier.Equals("leftPanel"));
-            var selectedSkillPanel = leftPanel.Children.FirstOrDefault(t => t.Identifier.Equals("selectedSkillPanel"));
-            var descripLeftSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault(t => t.Identifier.Equals("descripLeftSkill"));
-            var upSkillButton = selectedSkillPanel.Children.FirstOrDefault(t => t.Identifier.Equals("upSkillButton"));
-            var descripRightSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault(t => t.Identifier.Equals("descripRightSkill"));
-          
-            if (level < 10)
+            inspectTabs.SelectTab(selectedTab);
+
+            if (selectedTab.Equals("Character"))
             {
-                descripLeftSkill.Text = $"Lv.{level} : {NoahSelectedSkill}\n"
-                    + descSkill.FirstOrDefault(s => s.Level.Equals(level)).Description;
-                upSkillButton.Enabled = true;
-                descripRightSkill.Text = $"Lv.{level + 1} : {NoahSelectedSkill}\n"
-                    + descSkill.FirstOrDefault(s => s.Level.Equals(level + 1)).Description;
+                var currentTabPanel = inspectTabs.ActiveTab.panel;
+                var leftPanel = currentTabPanel.Children.FirstOrDefault(t => t.Identifier.Equals("leftPanel"));
+                var selectedSkillPanel = leftPanel.Children.FirstOrDefault(t => t.Identifier.Equals("selectedSkillPanel"));
+                var descripLeftSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault(t => t.Identifier.Equals("descripLeftSkill"));
+                var upSkillButton = selectedSkillPanel.Children.FirstOrDefault(t => t.Identifier.Equals("upSkillButton"));
+                var descripRightSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault(t => t.Identifier.Equals("descripRightSkill"));
+
+                if (level < 10)
+                {
+                    descripLeftSkill.Text = $"Lv.{level} : {NoahSelectedSkill}\n"
+                        + descSkill.FirstOrDefault(s => s.Level.Equals(level)).Description;
+                    upSkillButton.Enabled = true;
+                    descripRightSkill.Text = $"Lv.{level + 1} : {NoahSelectedSkill}\n"
+                        + descSkill.FirstOrDefault(s => s.Level.Equals(level + 1)).Description;
+                }
+                else
+                {
+                    descripLeftSkill.Text = $"Lv.{level} : {NoahSelectedSkill}\n"
+                        + descSkill.FirstOrDefault(s => s.Level.Equals(level)).Description;
+                    upSkillButton.Enabled = false;
+                    descripRightSkill.Text = "Skill level has reached maximum.";
+                }
             }
             else
             {
-                descripLeftSkill.Text = $"Lv.{level} : {NoahSelectedSkill}\n"
-                    + descSkill.FirstOrDefault(s => s.Level.Equals(level)).Description;
-                upSkillButton.Enabled = false;
-                descripRightSkill.Text = "Skill level has reached maximum.";
+                var currentTabPanel = inspectTabs.ActiveTab.panel;
+                var leftPanel = currentTabPanel.Children.FirstOrDefault(t => t.Identifier.Equals("leftPanel"));
+                var selectedSkillPanel = leftPanel.Children.FirstOrDefault(t => t.Identifier.Equals("selectedSkillPanel"));
+                var descripLeftSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault(t => t.Identifier.Equals("descripLeftSkill"));
+
+                descripLeftSkill.Text = $"Lv.{level} : {CompanionSelectedSkill}\n"
+                        + descSkill.FirstOrDefault(s => s.Level.Equals(level)).Description;
             }
         }
 
-        public void ClearSkillDescription()
+        public void ClearSkillDescription(string selectedTab)
         {
             IsCharacterTabSelected = false;
 
             var inspectPanel = _mainPanels.ElementAt(InspectPanel);
             var inspectTabs = inspectPanel.Children.OfType<PanelTabs>().FirstOrDefault(t => t.Identifier.Equals("inspectTabs"));
-            inspectTabs.SelectTab("Character");
+            inspectTabs.SelectTab(selectedTab);
 
-            var currentTabPanel = inspectTabs.ActiveTab.panel;
-            var leftPanel = currentTabPanel.Children.FirstOrDefault(t => t.Identifier.Equals("leftPanel"));
-            var selectedSkillPanel = leftPanel.Children.FirstOrDefault(t => t.Identifier.Equals("selectedSkillPanel"));
-            var descripLeftSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault(t => t.Identifier.Equals("descripLeftSkill"));
-            var upSkillButton = selectedSkillPanel.Children.FirstOrDefault(t => t.Identifier.Equals("upSkillButton"));
-            var descripRightSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault(t => t.Identifier.Equals("descripRightSkill"));
+            if (selectedTab.Equals("Character"))
+            {
+                var currentTabPanel = inspectTabs.ActiveTab.panel;
+                var leftPanel = currentTabPanel.Children.FirstOrDefault(t => t.Identifier.Equals("leftPanel"));
+                var selectedSkillPanel = leftPanel.Children.FirstOrDefault(t => t.Identifier.Equals("selectedSkillPanel"));
+                var descripLeftSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault(t => t.Identifier.Equals("descripLeftSkill"));
+                var upSkillButton = selectedSkillPanel.Children.FirstOrDefault(t => t.Identifier.Equals("upSkillButton"));
+                var descripRightSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault(t => t.Identifier.Equals("descripRightSkill"));
 
-            descripLeftSkill.Text = "";
-            upSkillButton.Enabled = false;
-            descripRightSkill.Text = "";
+                descripLeftSkill.Text = "";
+                upSkillButton.Enabled = false;
+                descripRightSkill.Text = "";
+            }
+            else
+            {
+                var currentTabPanel = inspectTabs.ActiveTab.panel;
+                var leftPanel = currentTabPanel.Children.FirstOrDefault(t => t.Identifier.Equals("leftPanel"));
+                var selectedSkillPanel = leftPanel.Children.FirstOrDefault(t => t.Identifier.Equals("selectedSkillPanel"));
+                var descripLeftSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault(t => t.Identifier.Equals("descripLeftSkill"));
+
+                descripLeftSkill.Text = "";
+            }
         }
 
         /// <summary>
@@ -2087,47 +2745,60 @@ namespace Medicraft.Systems.Managers
 
                 var newGameButton = new Button("New Game", ButtonSkin.Default, Anchor.AutoCenter)
                 {
-                    Identifier = "newGameButton",
-                    OnClick = (btn) =>
-                    {
-                        ScreenManager.StartGame(true);
-                    }
+                    Identifier = "newGameButton"
                 };
                 mainPanel.AddChild(newGameButton);
 
                 var loadButton = new Button("Load Save", ButtonSkin.Default, Anchor.AutoCenter)
                 {
-                    Identifier = "loadButton",
-                    OnClick = (Entity btn) =>
-                    {
-                        mainPanel.Visible = false;
-                        loadGameSavePanel.Visible = true;
-
-                        RefreshGameSave(MainMenu);
-                        IsClickedLoadButton = true;                  
-                    }
+                    Identifier = "loadButton" 
                 };
                 mainPanel.AddChild(loadButton);
 
                 var optionsButton = new Button("Options", ButtonSkin.Default, Anchor.AutoCenter)
                 {
-                    Identifier = "optionsButton",
-                    OnClick = (Entity btn) =>
-                    {
-                        mainPanel.Visible = false;
-                        optionPanel.Visible = true;
-                    }
+                    Identifier = "optionsButton"
                 };
                 mainPanel.AddChild(optionsButton);
 
                 var quitButton = new Button("Quit", ButtonSkin.Default, Anchor.AutoCenter)
                 {
-                    Identifier = "quitButton",
-                    OnClick = (Entity entity) =>
-                    {
-                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("Quit the Game!?", "Do you want to quit?"
-                            , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
-                            {
+                    Identifier = "quitButton"
+                };
+                mainPanel.AddChild(quitButton);
+
+                // Set OnClick Buttons
+                newGameButton.OnClick = (btn) =>
+                {
+                    // Disable input handling
+                    newGameButton.Locked = true;
+                    loadButton.Locked = true;
+                    optionsButton.Locked = true;
+                    quitButton.Locked = true;
+
+                    ScreenManager.StartGame(true);
+                };
+
+                loadButton.OnClick = (btn) =>
+                {
+                    mainPanel.Visible = false;
+                    loadGameSavePanel.Visible = true;
+
+                    RefreshGameSave(MainMenu);
+                    IsClickedLoadButton = true;
+                };
+
+                optionsButton.OnClick = (btn) =>
+                {
+                    mainPanel.Visible = false;
+                    optionPanel.Visible = true;
+                };
+
+                quitButton.OnClick = (btn) =>
+                {
+                    GeonBit.UI.Utils.MessageBox.ShowMsgBox("Quit the Game!?", "Do you want to quit?"
+                        , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
+                        {
                                 new("Yes", () =>
                                 {
                                     ScreenManager.Instance.Game.Exit();
@@ -2137,10 +2808,8 @@ namespace Medicraft.Systems.Managers
                                 {
                                     return true;
                                 })
-                            });
-                    }
+                        });
                 };
-                mainPanel.AddChild(quitButton);
             }
 
             // Initialize Options Menu
@@ -2224,6 +2893,12 @@ namespace Medicraft.Systems.Managers
                         {
                                 new("Yes", () =>
                                 {
+                                    // Disable input handling
+                                    playButton.Locked = true;
+                                    renameButton.Locked = true;
+                                    deleteButton.Locked = true;
+                                    backButton.Locked = true;
+
                                     ScreenManager.StartGame(false);
                                     return true;
                                 }),
@@ -2321,6 +2996,17 @@ namespace Medicraft.Systems.Managers
                     {
                         optionPanel.Visible = false;
                         graphicsSettingPanel.Visible = true;
+
+                        var radioFullScreenOn = graphicsSettingPanel.Children.OfType<RadioButton>().FirstOrDefault
+                            (e => e.Identifier.Equals("radioFullScreenOn"));
+                        var radioFullScreenOff = graphicsSettingPanel.Children.OfType<RadioButton>().FirstOrDefault
+                            (e => e.Identifier.Equals("radioFullScreenOff"));
+
+                        if (GameGlobals.Instance.IsFullScreen)
+                        {
+                            radioFullScreenOn.Checked = true;
+                        }
+                        else radioFullScreenOff.Checked = true;
                     }
                 };
                 optionPanel.AddChild(graphicsSettingsButton);
@@ -2376,12 +3062,6 @@ namespace Medicraft.Systems.Managers
                     }
                 };
                 graphicsSettingPanel.AddChild(radioFullScreenOff);
-
-                if (GameGlobals.Instance.IsFullScreen)
-                {
-                    radioFullScreenOn.Checked = true;
-                }
-                else radioFullScreenOff.Checked = true;
 
                 graphicsSettingPanel.AddChild(new LineSpace(3));
                 var backButton = new Button("Back", ButtonSkin.Default)
@@ -2527,10 +3207,17 @@ namespace Medicraft.Systems.Managers
             var soundSettingPanel = mainMenuPanel.Children.FirstOrDefault(e => e.Identifier.Equals("soundSettingPanel"));
 
             mainPanel.Visible = true;
+
+            var newGameButton = mainPanel.Children.OfType<Button>().FirstOrDefault
+                (e => e.Identifier.Equals("newGameButton"));
+            var loadButton = mainPanel.Children.OfType<Button>().FirstOrDefault
+                (e => e.Identifier.Equals("loadButton"));
+            var optionsButton = mainPanel.Children.OfType<Button>().FirstOrDefault
+                (e => e.Identifier.Equals("optionsButton"));
+            var quitButton = mainPanel.Children.OfType<Button>().FirstOrDefault
+                (e => e.Identifier.Equals("quitButton"));
+
             loadGameSavePanel.Visible = false;
-            optionPanel.Visible = false;
-            graphicsSettingPanel.Visible = false;
-            soundSettingPanel.Visible = false;
 
             var buttonPanel = loadGameSavePanel.Children.FirstOrDefault(e => e.Identifier.Equals("buttonPanel"));
             var playButton = buttonPanel.Children.OfType<Button>().FirstOrDefault
@@ -2539,9 +3226,26 @@ namespace Medicraft.Systems.Managers
                 (e => e.Identifier.Equals("renameButton"));
             var deleteButton = buttonPanel.Children.OfType<Button>().FirstOrDefault
                 (e => e.Identifier.Equals("deleteButton"));
+            var backButton = buttonPanel.Children.OfType<Button>().FirstOrDefault
+                (e => e.Identifier.Equals("backButton"));
+
+            optionPanel.Visible = false;
+            graphicsSettingPanel.Visible = false;
+            soundSettingPanel.Visible = false;
 
             // Reset Buttons
-            playButton.Enabled = false;
+            // mainPanel
+            newGameButton.Locked = false;
+            loadButton.Locked = false;
+            optionsButton.Locked = false;
+            quitButton.Locked = false;
+
+            // loadGameSavePanel
+            playButton.Locked = false;
+            renameButton.Locked = false;
+            deleteButton.Locked = false;
+            backButton.Locked = false;
+            playButton.Enabled = false;         
             renameButton.Enabled = false;
             deleteButton.Enabled = false;
 
@@ -2653,7 +3357,7 @@ namespace Medicraft.Systems.Managers
             // Pause panel
             var pausePanel = new Panel(new Vector2(520, -1), PanelSkin.None)
             {
-                Identifier = "mainPanel"
+                Identifier = "pausePanel"
             };
             pauseMenuPanel.AddChild(pausePanel);
 
@@ -2689,46 +3393,64 @@ namespace Medicraft.Systems.Managers
 
                 var resumeButton = new Button("Resume", ButtonSkin.Default)
                 {
-                    Identifier = "resumeButton",
-                    OnClick = (btn) =>
-                    {
-                        // Back to PlayScreen
-                        // Toggle Pause PlayScreen
-                        GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
-                        GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
-
-                        // Toggle the IsOpenPauseMenu flag
-                        GameGlobals.Instance.IsOpenPauseMenu = false;
-                        GameGlobals.Instance.IsRefreshPlayScreenUI = false;
-                        CurrentGUI = PlayScreen;
-                    }
+                    Identifier = "resumeButton"
                 };
                 pausePanel.AddChild(resumeButton);
 
                 var optionsButton = new Button("Options", ButtonSkin.Default)
                 {
-                    Identifier = "optionsButton",
-                    OnClick = (Entity btn) =>
-                    {
-                        pausePanel.Visible = false;
-                        optionPanel.Visible = true;
-                    }
+                    Identifier = "optionsButton"
                 };
                 pausePanel.AddChild(optionsButton);
 
                 var exitToMainButton = new Button("Exit to Main", ButtonSkin.Default)
                 {
-                    Identifier = "exitToMainButton",
-                    OnClick = (Entity btn) =>
-                    {
-                        // Exit to MainMenuScreen
-                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("Exit to Main Menu!?", "Do you want to exit to the main menu? \nDon't worry, the game will save automatically."
-                            , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
-                            {
+                    Identifier = "exitToMainButton"
+                };
+                pausePanel.AddChild(exitToMainButton);
+
+                var quitButton = new Button("Quit", ButtonSkin.Default)
+                {
+                    Identifier = "quitButton"
+                };
+                pausePanel.AddChild(quitButton);
+
+                // Set OnClick Buttons
+                resumeButton.OnClick = (btn) =>
+                {
+                    // Back to PlayScreen
+                    // Toggle Pause PlayScreen
+                    GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
+                    GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
+
+                    // Toggle the IsOpenPauseMenu flag
+                    GameGlobals.Instance.IsOpenPauseMenu = false;
+                    GameGlobals.Instance.IsRefreshPlayScreenUI = false;
+                    CurrentGUI = PlayScreen;
+                };
+
+                optionsButton.OnClick = (Entity btn) =>
+                {
+                    pausePanel.Visible = false;
+                    optionPanel.Visible = true;
+                };
+
+                exitToMainButton.OnClick = (Entity btn) =>
+                {
+                    // Exit to MainMenuScreen
+                    GeonBit.UI.Utils.MessageBox.ShowMsgBox("Exit to Main Menu!?", "Do you want to exit to the main menu?."
+                        , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
+                        {
                                 new("Yes", () =>
                                 {
+                                    // Disable input handling
+                                    resumeButton.Locked = true;
+                                    optionsButton.Locked = true;
+                                    exitToMainButton.Locked = true;
+                                    quitButton.Locked = true;
+
                                     Camera.ResetCameraPosition(true);
-                                    JsonFileManager.SaveGame(JsonFileManager.SavingPlayerData);
+                                    //JsonFileManager.SaveGame(JsonFileManager.SavingPlayerData);
                                     ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.MainMenuScreen);
                                     return true;
                                 }),
@@ -2736,22 +3458,18 @@ namespace Medicraft.Systems.Managers
                                 {
                                     return true;
                                 })
-                            });
-                    }
+                        });
                 };
-                pausePanel.AddChild(exitToMainButton);
 
-                var quitButton = new Button("Quit", ButtonSkin.Default)
+                quitButton.OnClick = (Entity entity) =>
                 {
-                    Identifier = "quitButton",
-                    OnClick = (Entity entity) => 
-                    {
-                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("Quit the Game!?", "Do you want to quit? \nDon't worry, the game will save automatically."
-                            , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
-                            {
+                    GeonBit.UI.Utils.MessageBox.ShowMsgBox("Quit the Game!?", "Do you want to quit?."
+                        , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
+                        {
                                 new("Yes", () =>
                                 {
-                                    JsonFileManager.SaveGame(JsonFileManager.SavingPlayerData);
+                                    //\nDon't worry, the game will save automatically
+                                    //JsonFileManager.SaveGame(JsonFileManager.SavingPlayerData);
                                     ScreenManager.Instance.Game.Exit();
                                     return true;
                                 }),
@@ -2759,14 +3477,33 @@ namespace Medicraft.Systems.Managers
                                 {
                                     return true;
                                 })
-                            });
-                    }
+                        });
                 };
-                pausePanel.AddChild(quitButton);
             }
 
             // Initialize Options Menu
             InitOptionMenu(pausePanel, optionPanel, graphicsSettingPanel, soundSettingPanel);
+        }
+
+        public void RefreshPauseMenu()
+        {
+            var pauseMenuPanel = _mainPanels[PauseMenu];
+            var pausePanel = pauseMenuPanel.Children.FirstOrDefault(e => e.Identifier.Equals("pausePanel"));
+
+            var resumeButton = pausePanel.Children.OfType<Button>().FirstOrDefault
+                (e => e.Identifier.Equals("exitToMainButton"));
+            var optionsButton = pausePanel.Children.OfType<Button>().FirstOrDefault
+                (e => e.Identifier.Equals("exitToMainButton"));
+            var exitToMainButton = pausePanel.Children.OfType<Button>().FirstOrDefault
+                (e => e.Identifier.Equals("exitToMainButton"));
+            var quitButton = pausePanel.Children.OfType<Button>().FirstOrDefault
+                (e => e.Identifier.Equals("exitToMainButton"));
+
+            // Reset Buttons
+            resumeButton.Locked = false;
+            optionsButton.Locked = false;
+            exitToMainButton.Locked = false;
+            quitButton.Locked = false;
         }
 
         public static GUIManager Instance
