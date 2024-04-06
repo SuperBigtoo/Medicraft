@@ -99,6 +99,7 @@ namespace Medicraft.Data
                         });
                     }
 
+                    GameGlobals.PlaySoundEffect(GameGlobals.Sound.Save);
                     break;
 
                 case RenameGameSave:
@@ -111,7 +112,6 @@ namespace Medicraft.Data
                         TotalPlayTime = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).TotalPlayTime,
                         PlayerData = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).PlayerData
                     };
-
                     break;
 
                 case DeleteGameSave:

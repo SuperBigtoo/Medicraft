@@ -127,7 +127,7 @@ namespace Medicraft.Entities.Mobs
         {
             spriteBatch.Draw(Sprite, Transform);
 
-            var shadowTexture = GameGlobals.Instance.GetShadowTexture(GameGlobals.ShadowTextureName.shadow_1);
+            var shadowTexture = GameGlobals.GetShadowTexture(GameGlobals.ShadowTextureName.shadow_1);
 
             DrawShadow(spriteBatch, shadowTexture);
 

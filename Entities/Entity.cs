@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using Medicraft.Data.Models;
 using System.Linq;
 using Medicraft.Systems.Managers;
+using static Medicraft.Systems.GameGlobals;
+using Medicraft.Entities.Companion;
 
 namespace Medicraft.Entities
 {
@@ -23,6 +25,8 @@ namespace Medicraft.Entities
         public int EXPMaxCap { get; set; }     // meant for playable
 
         // Character Stats
+        public const float baseManaRegenRate = 0.25f;
+
         public float ATK { get; set; }
         public float HP { get; set; }
         public float MaxHP { get; set; }
@@ -62,6 +66,7 @@ namespace Medicraft.Entities
         public string BurstSkillEffectActivated { get; protected set; }
         public string BurstSkillEffectAttacked { get; protected set; }
         public string PassiveSkillEffectActivated { get; protected set; }
+        public string RecoveryEffect { get; protected set; } = "hit_skill_effect_1";
 
         public Transform2 Transform { get; protected set; }
         public Vector2 Velocity, CombatNumVelocity;
@@ -69,6 +74,7 @@ namespace Medicraft.Entities
         public RectangleF BoundingDetectCollisions;      // For dectect collisions
         public CircleF BoundingHitBox;
         public CircleF BoundingDetectEntity;
+        public float BaseBoundingDetectEntityRadius;
         public CircleF BoundingCollection;
         public CircleF BoundingAggro;
 
@@ -149,6 +155,7 @@ namespace Medicraft.Entities
         public float DebuffTimer { get; set; }
 
         // Attack Control
+        protected float baseknockbackForce;
         protected float knockbackForce;
         protected float attackSpeed;
         protected float cooldownAttack;
@@ -161,6 +168,13 @@ namespace Medicraft.Entities
         protected float blinkingTimer = 0f;
 
         // Combat Nunber
+        public const int DamageDefault = 0;
+        public const int DamageCrit = 1;
+        public const int Healing = 2;
+        public const int Missed = 3;
+        public const int Buff = 4;
+        public const int ManaRestores = 5;
+        public const int Debuff = 6;
         public int CombatNumCase { get; set; }
 
         // Boolean
@@ -224,7 +238,8 @@ namespace Medicraft.Entities
             BuffTimer = 0f;
             DebuffTimer = 0f;
 
-            knockbackForce = 25f;
+            baseknockbackForce = 25f;
+            knockbackForce = baseknockbackForce;
             attackSpeed = 1f;
             cooldownAttack = 0.4f;
             cooldownAttackTimer = cooldownAttack;
@@ -292,7 +307,8 @@ namespace Medicraft.Entities
             BuffTimer = 0f;
             DebuffTimer = 0f;
 
-            knockbackForce = entity.knockbackForce;
+            baseknockbackForce = entity.baseknockbackForce;
+            knockbackForce = baseknockbackForce;
             attackSpeed = entity.attackSpeed;
             cooldownAttack = entity.cooldownAttack;
             cooldownAttackTimer = cooldownAttack;
@@ -347,7 +363,7 @@ namespace Medicraft.Entities
 
         protected virtual void InitializeCharacterData(int charId, int level)
         {
-            var charData = GameGlobals.Instance.CharacterDatas.FirstOrDefault
+            var charData = Instance.CharacterDatas.FirstOrDefault
                 (c => c.CharId.Equals(charId));
 
             CharId = charData.CharId;
@@ -407,7 +423,7 @@ namespace Medicraft.Entities
             BaseATK = ATK = (float)(charData.ATK + ((level - 1) * 2));
             BaseMaxHP = MaxHP = HP = (float)(charData.HP + ((level - 1) * (charData.HP * 0.1)));
             BaseMaxMana = MaxMana = Mana = (float)(100f + ((level - 1) * (100f * 0.05)));
-            BaseManaRegenRate = ManaRegenRate = 0.5f;
+            BaseManaRegenRate = ManaRegenRate = baseManaRegenRate;
             BaseDEF = DEF = (float)charData.DEF_Percent;
             BaseCrit = Crit = (float)charData.Crit_Percent;
             BaseCritDMG = CritDMG = (float)charData.CritDMG_Percent;
@@ -470,7 +486,7 @@ namespace Medicraft.Entities
                         Sprite.Play(CurrentAnimation);
 
                         // Check if the character has passed the next node
-                        var tileSize = GameGlobals.Instance.TILE_SIZE;
+                        var tileSize = Instance.TILE_SIZE;
                         var nextNodePosition = new Vector2(
                             pathFinding.GetPath()[currentNodeIndex + 1].Col * tileSize + tileSize / 2,
                             pathFinding.GetPath()[currentNodeIndex + 1].Row * tileSize + tileSize / 2);
@@ -491,7 +507,7 @@ namespace Medicraft.Entities
 
         protected virtual void CheckCollision()
         {
-            var ObjectOnTile = GameGlobals.Instance.CollistionObject;
+            var ObjectOnTile = Instance.CollistionObject;
             foreach (var rect in ObjectOnTile)
             {
                 if (BoundingDetectCollisions.Intersects(rect))
@@ -535,12 +551,12 @@ namespace Medicraft.Entities
                     break;
 
                 case EntityTypes.Companion:
-
-                    if (IsAggro || PlayerManager.Instance.Player.IsAttacked || PlayerManager.Instance.Player.IsAttacking)
+                    
+                    if (IsAttacked)
                     {
-                        BoundingAggro.Radius = 180f;
+                        AggroTimer = AggroTime;
+                        IsAggro = true;
                     }
-                    else BoundingAggro.Radius = 50f;
 
                     foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDying
                             && e.EntityType == EntityTypes.Hostile || e.EntityType == EntityTypes.Boss))
@@ -553,6 +569,19 @@ namespace Medicraft.Entities
                         }
                     }
 
+                    if (IsAggro || PlayerManager.Instance.Player.IsAttacked || PlayerManager.Instance.Player.IsAttacking)
+                    {
+                        BoundingAggro.Radius = 180f;
+                    }
+                    else BoundingAggro.Radius = 60f;
+
+                    if (EntityManager.Instance.ClosestEnemyToCompanion != null
+                        && EntityManager.Instance.ClosestEnemyToCompanion.IsDying)
+                    {                       
+                        IsAggro = false;
+                        AggroTimer = 0;
+                    }
+                    
                     break;
             }
         }
@@ -588,7 +617,7 @@ namespace Medicraft.Entities
                         var random = new Random();
 
                         // Define the patrol area from rectangle
-                        var recArea = GameGlobals.Instance.MobPartrolArea.FirstOrDefault
+                        var recArea = Instance.MobPartrolArea.FirstOrDefault
                             (b => b.Name.Equals(entityData.PartrolArea));
 
                         if (recArea != null)
@@ -638,7 +667,7 @@ namespace Medicraft.Entities
                             PlayerManager.Instance.Player
                         };
 
-                        if (PlayerManager.Instance.Companions.Count != 0)
+                        if (PlayerManager.Instance.Companions.Count != 0 && !PlayerManager.Instance.IsCompanionDead)
                         {
                             var compa = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
                             if (compa != null)
@@ -686,15 +715,17 @@ namespace Medicraft.Entities
                     break;
 
                 case EntityTypes.Companion:
-                    if (IsAggro && EntityManager.Instance.ClosestEnemy != null)
+                    if (!PlayerManager.Instance.IsRecallCompanion && IsAggro 
+                        && EntityManager.Instance.ClosestEnemyToCompanion != null
+                        && !EntityManager.Instance.ClosestEnemyToCompanion.IsDying)
                     {
                         currentNodeIndex = 0;
 
                         pathFinding = new AStar(
                             (int)BoundingDetectCollisions.Center.X,
                             (int)BoundingDetectCollisions.Center.Y,
-                            (int)EntityManager.Instance.ClosestEnemy.BoundingDetectCollisions.Center.X,
-                            (int)EntityManager.Instance.ClosestEnemy.BoundingDetectCollisions.Center.Y);
+                            (int)EntityManager.Instance.ClosestEnemyToCompanion.BoundingDetectCollisions.Center.X,
+                            (int)EntityManager.Instance.ClosestEnemyToCompanion.BoundingDetectCollisions.Center.Y);
                     }
                     else
                     {
@@ -855,7 +886,7 @@ namespace Medicraft.Entities
             var isPlayerDetected = BoundingDetectEntity.Intersects(PlayerManager.Instance.Player.BoundingHitBox);
 
             var isCompanionDetected = false;
-            if (PlayerManager.Instance.Companions.Count != 0)
+            if (PlayerManager.Instance.Companions.Count != 0 && !PlayerManager.Instance.IsCompanionDead)
             {
                 var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
 
@@ -888,6 +919,8 @@ namespace Medicraft.Entities
                     {
                         CheckAttackDetection();
                         isAttackCooldown = true;
+
+                        PlayMobAttackSound();
                     }
                     else
                     {
@@ -935,11 +968,21 @@ namespace Medicraft.Entities
                         , NormalHitEffectAttacked);
 
                     // In case the Attack doesn't Missed
-                    if (CombatNumCase != 3)
+                    if (CombatNumCase != Missed)
                     {
                         // Player being hit by Mob
                         PlayerManager.Instance.Player.IsAttacked = true;
                         PlayerManager.Instance.Player.HP -= totalDamage;
+
+                        if (PlayerManager.Instance.Player.IsKnockbackable)
+                        {
+                            var knockBackDirection = PlayerManager.Instance.Player.Position - Position;
+                            knockBackDirection.Normalize();
+                            PlayerManager.Instance.Player.Velocity = knockBackDirection * knockbackForce;
+
+                            PlayerManager.Instance.Player.IsKnockback = true;
+                            PlayerManager.Instance.Player.KnockbackedTimer = 0.2f;
+                        }
                     }        
                 }
             }
@@ -962,7 +1005,7 @@ namespace Medicraft.Entities
                         , NormalHitEffectAttacked);
 
                     // In case the Attack doesn't Missed
-                    if (CombatNumCase != 3)
+                    if (CombatNumCase != Missed)
                     {
                         // companion being hit by Mob
                         companion.IsAttacked = true;
@@ -995,7 +1038,7 @@ namespace Medicraft.Entities
             {
                 // if Attack Missed
                 totalDamage = 0;
-                CombatNumCase = 3;
+                CombatNumCase = Missed;
             }
             else
             {
@@ -1005,15 +1048,29 @@ namespace Medicraft.Entities
                 if (critChance <= Crit * 100)
                 {
                     totalDamage += (int)(totalDamage * CritDMG);
-                    CombatNumCase = 1;
+                    CombatNumCase = DamageCrit;
                 }
-                else CombatNumCase = 0;
+                else CombatNumCase = DamageDefault;
 
                 // Calculate DEF
                 totalDamage -= (int)(totalDamage * DefPercent);
             }
 
             return totalDamage;
+        }
+
+        protected virtual void PlayMobAttackSound()
+        {
+            switch (GetType().Name)
+            {
+                case "Slime":
+                    PlaySoundEffect([Sound.Bite, Sound.Claw]);
+                    break;
+
+                case "Goblin":
+                    PlaySoundEffect([Sound.dullSwoosh1, Sound.dullSwoosh2, Sound.dullSwoosh3, Sound.dullSwoosh4]);
+                    break;
+            }
         }
 
         protected virtual void HitBlinking(float deltaSeconds)
@@ -1053,7 +1110,7 @@ namespace Medicraft.Entities
                 else Sprite.Depth = playerDepth + 0.00001f; // Behide Player
             }
 
-            var TopLayerObject = GameGlobals.Instance.TopLayerObject;
+            var TopLayerObject = Instance.TopLayerObject;
             foreach (var obj in TopLayerObject)
             {
                 if (obj.Intersects(BoundingDetectCollisions))
@@ -1063,7 +1120,7 @@ namespace Medicraft.Entities
                 }
             }
 
-            var MiddleLayerObject = GameGlobals.Instance.MiddleLayerObject;
+            var MiddleLayerObject = Instance.MiddleLayerObject;
             foreach (var obj in MiddleLayerObject)
             {
                 if (obj.Intersects(BoundingDetectCollisions))
@@ -1073,7 +1130,7 @@ namespace Medicraft.Entities
                 }
             }
 
-            var BottomLayerObject = GameGlobals.Instance.BottomLayerObject;
+            var BottomLayerObject = Instance.BottomLayerObject;
             foreach (var obj in BottomLayerObject)
             {
                 if (obj.Intersects(BoundingDetectCollisions))
@@ -1084,7 +1141,7 @@ namespace Medicraft.Entities
             }
         }
 
-        public virtual void AddCombatLogNumbers(string ActorName, string combatNumbers, int combatCase
+        public virtual void AddCombatLogNumbers(string ActorName, string combatText, int combatCase
             , Vector2 combatNumVelocity, string effectName)
         {
             IsShowCombatNumbers = true;
@@ -1092,12 +1149,12 @@ namespace Medicraft.Entities
 
             switch (combatCase)
             {
-                case 0: // Damage Numbers Default
+                case DamageDefault: // Damage Numbers Default
                     CombatLogs.Add(new CombatNumberData
                     {
                         Actor = ActorName,
                         Action = CombatNumberData.ActionType.Attack,
-                        Value = combatNumbers,
+                        Value = combatText,
                         EffectName = effectName,
                         IsEffectPlayed = false,
                         ElapsedTime = 0,
@@ -1109,15 +1166,17 @@ namespace Medicraft.Entities
                         StrokeSize = 1,
                         AlphaColor = 1f,
                         Scaling = 0f
-                    });                  
+                    });
+
+                    PlaySoundEffect([Sound.damage01, Sound.damage02]);
                     break;
 
-                case 1: // Damage Numbers Critical | Player taken damage too
+                case DamageCrit: // Damage Numbers Critical
                     CombatLogs.Add(new CombatNumberData
                     {
                         Actor = ActorName,
                         Action = CombatNumberData.ActionType.CriticalAttack,
-                        Value = combatNumbers,
+                        Value = combatText,
                         EffectName = effectName,
                         IsEffectPlayed = false,
                         ElapsedTime = 0,
@@ -1129,15 +1188,17 @@ namespace Medicraft.Entities
                         StrokeSize = 1,
                         AlphaColor = 1f,                   
                         Scaling = 0f
-                    });                
+                    });
+
+                    PlaySoundEffect([Sound.damageCrit1, Sound.damageCrit2]);
                     break;
 
-                case 2: // Healing Numbers
+                case Healing: // Healing Numbers
                     CombatLogs.Add(new CombatNumberData
                     {
                         Actor = ActorName,
                         Action = CombatNumberData.ActionType.Recovery,
-                        Value = combatNumbers,
+                        Value = combatText,
                         EffectName = effectName,
                         IsEffectPlayed = false,
                         ElapsedTime = 0,
@@ -1149,10 +1210,12 @@ namespace Medicraft.Entities
                         StrokeSize = 1,
                         AlphaColor = 1f,                       
                         Scaling = 0f
-                    });               
+                    });
+
+                    PlaySoundEffect(Sound.Heal_Low_Base);
                     break;
 
-                case 3: // Missed
+                case Missed: // Missed
                     CombatLogs.Add(new CombatNumberData
                     {
                         Actor = ActorName,
@@ -1169,15 +1232,17 @@ namespace Medicraft.Entities
                         StrokeSize = 1,
                         AlphaColor = 1f,
                         Scaling = 0f
-                    });                  
+                    });
+
+                    PlaySoundEffect([Sound.Miss1, Sound.Miss2, Sound.Miss3]);
                     break;
 
-                case 4: // Buffing
+                case Buff: // Buff
                     CombatLogs.Add(new CombatNumberData
                     {
                         Actor = ActorName,
                         Action = CombatNumberData.ActionType.Buff,
-                        Value = combatNumbers,
+                        Value = combatText,
                         EffectName = effectName,
                         IsEffectPlayed = false,
                         ElapsedTime = 0,
@@ -1185,19 +1250,21 @@ namespace Medicraft.Entities
                         OffSet = Vector2.Zero,
                         Color = Color.DodgerBlue,
                         StrokeColor = Color.Black,
-                        Size = 1.7f,
+                        Size = 1.5f,
                         StrokeSize = 1,
                         AlphaColor = 1f,
                         Scaling = 0f
-                    });                 
+                    });
+
+                    PlaySoundEffect(Sound.Powerup);
                     break;
 
-                case 5: // Mana Restores Numbers
+                case ManaRestores: // Mana Restores Numbers
                     CombatLogs.Add(new CombatNumberData
                     {
                         Actor = ActorName,
                         Action = CombatNumberData.ActionType.Recovery,
-                        Value = combatNumbers,
+                        Value = combatText,
                         EffectName = effectName,
                         IsEffectPlayed = false,
                         ElapsedTime = 0,
@@ -1210,6 +1277,30 @@ namespace Medicraft.Entities
                         AlphaColor = 1f,
                         Scaling = 0f
                     });
+
+                    PlaySoundEffect(Sound.Recovery2);
+                    break;
+
+                case Debuff: // Debuff
+                    CombatLogs.Add(new CombatNumberData
+                    {
+                        Actor = ActorName,
+                        Action = CombatNumberData.ActionType.Debuff,
+                        Value = combatText,
+                        EffectName = effectName,
+                        IsEffectPlayed = false,
+                        ElapsedTime = 0,
+                        Velocity = combatNumVelocity,
+                        OffSet = Vector2.Zero,
+                        Color = Color.DarkViolet,
+                        StrokeColor = Color.Black,
+                        Size = 1.5f,
+                        StrokeSize = 1,
+                        AlphaColor = 1f,
+                        Scaling = 0f
+                    });
+
+                    PlaySoundEffect(Sound.Debuff1);
                     break;
             }
         }
@@ -1218,7 +1309,7 @@ namespace Medicraft.Entities
         {
             if (CombatLogs.Count != 0)
             {
-                var font = GameGlobals.Instance.FontTA16Bit;
+                var font = Instance.FontTA16Bit;
 
                 foreach (var log in CombatLogs.Where(e => e.ElapsedTime < 1f))
                 {
@@ -1263,7 +1354,12 @@ namespace Medicraft.Entities
                             break;
 
                         case CombatNumberData.ActionType.Buff:
-                            log.DrawStringPosition = new Vector2(Position.X - ((textSize.Width * 1.7f) / 2.2f)
+                            log.DrawStringPosition = new Vector2(Position.X - ((textSize.Width * 1.5f) / 2.2f)
+                                , Position.Y - (log.Velocity.Y)) - offSet;
+                            break;
+
+                        case CombatNumberData.ActionType.Debuff:
+                            log.DrawStringPosition = new Vector2(Position.X - ((textSize.Width * 1.5f) / 2.2f)
                                 , Position.Y - (log.Velocity.Y)) - offSet;
                             break;
                     }
@@ -1276,6 +1372,92 @@ namespace Medicraft.Entities
                         , log.StrokeSize);
                 }              
             }
+        }
+
+        public bool RestoresHP(string actorName, float value, bool isCheckingCap)
+        {
+            if (isCheckingCap)
+            {
+                if (HP < MaxHP)
+                {
+                    value = (value + HP) > MaxHP ? MaxHP - HP : value;
+                    HP += value;
+
+                    CombatNumCase = Healing;
+                    var combatNumVelocity = SetCombatNumDirection();
+                    AddCombatLogNumbers(actorName
+                        , ((int)value).ToString()
+                        , CombatNumCase
+                        , combatNumVelocity
+                        , RecoveryEffect);
+
+                    return true;
+                }
+            }
+            else
+            {
+                if (HP < MaxHP)
+                {
+                    value = (value + HP) > MaxHP ? MaxHP - HP : value;
+                    HP += value;
+                }
+                else value = 0;
+
+                CombatNumCase = Healing;
+                var combatNumVelocity = SetCombatNumDirection();
+                AddCombatLogNumbers(actorName
+                    , ((int)value).ToString()
+                    , CombatNumCase
+                    , combatNumVelocity
+                    , RecoveryEffect);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool RestoresMana(string actorName, float value, bool isCheckingCap)
+        {
+            if (isCheckingCap)
+            {
+                if (Mana < MaxMana)
+                {
+                    value = value + Mana > MaxMana ? MaxMana - Mana : value;
+                    Mana += value;
+
+                    CombatNumCase = ManaRestores;
+                    var combatNumVelocity = SetCombatNumDirection();
+                    AddCombatLogNumbers(actorName
+                        , ((int)value).ToString()
+                        , CombatNumCase
+                        , combatNumVelocity
+                        , RecoveryEffect);
+
+                    return true;
+                }
+            }
+            else
+            {
+                if (Mana < MaxMana)
+                {
+                    value = value + Mana > MaxMana ? MaxMana - Mana : value;
+                    Mana += value;
+                }
+                else value = 0;
+
+                CombatNumCase = ManaRestores;
+                var combatNumVelocity = SetCombatNumDirection();
+                AddCombatLogNumbers(actorName
+                    , ((int)value).ToString()
+                    , CombatNumCase
+                    , combatNumVelocity
+                    , RecoveryEffect);
+
+                return true;
+            }
+
+            return false;
         }
 
         public float GetDepth()

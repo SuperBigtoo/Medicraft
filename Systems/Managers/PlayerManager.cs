@@ -5,10 +5,12 @@ using Medicraft.Entities.Companion;
 using Medicraft.Systems.PathFinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended.Sprites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Medicraft.Systems.GameGlobals;
 
 namespace Medicraft.Systems.Managers
 {
@@ -17,22 +19,29 @@ namespace Medicraft.Systems.Managers
         // Player: Noah
         public Player Player { private set; get; }
         public bool IsPlayerDead { private set; get; }
+        private Song _dyingSong;
         
         // Companions
         public List<Companion> Companions { private set; get; }
         public int CurrCompaIndex { private set; get; }
         public bool IsCompanionSummoned { set; get; }
-        public bool IsCompanionDead { set; get; } 
+        public bool IsCompanionDead { set; get; }
+        public bool IsRecallCompanion { set; get; }
+        private const float recallTime = 3f;
+        private float _recallTimer = 0;
 
         private static PlayerManager instance;
         private PlayerManager()
         {
             IsPlayerDead = false;
+            _dyingSong = GameGlobals.Instance.Content.Load<Song>
+                (GetBackgroundMusicPath(Music.Gag_dead));
 
             Companions = [];
             CurrCompaIndex = 0;
             IsCompanionSummoned = false;
             IsCompanionDead = false;
+            IsRecallCompanion = false;
         }
 
         public void Initialize(bool isNewGame)
@@ -92,8 +101,8 @@ namespace Medicraft.Systems.Managers
             InitializeCompanion();
 
             // Initialize display inventory item after init Player's inventory data
-            GUIManager.Instance.InitInventoryItemDisplay();
-            GUIManager.Instance.InitCraftableItemDisplay();
+            UIManager.Instance.InitInventoryItemDisplay();
+            UIManager.Instance.InitCraftableItemDisplay();
         }
 
         private void InitializeCompanion()
@@ -139,11 +148,15 @@ namespace Medicraft.Systems.Managers
 
                 Companions[CurrCompaIndex].CompanionData.IsSummoned = true;
                 IsCompanionDead = false;
+
+                PlaySoundEffect(Sound.Onmtp_Inspiration08_1);
             }
         }
 
-        public static void UpdateGameController()
+        public static void UpdateGameController(GameTime gameTime)
         {
+            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             // Key Control
             GameGlobals.Instance.PrevKeyboard = GameGlobals.Instance.CurKeyboard;
             GameGlobals.Instance.CurKeyboard = Keyboard.GetState();
@@ -156,21 +169,48 @@ namespace Medicraft.Systems.Managers
             var mouseCur = GameGlobals.Instance.CurMouse;
             var mousePrev = GameGlobals.Instance.PrevMouse;
 
+            var saveGameKey = GameGlobals.Instance.SaveGameKeyForTest;
+            var recallCompaKey = GameGlobals.Instance.RecallCompanionKey;
+            var pauseMenuKey = GameGlobals.Instance.PauseMenuKey;
+            var invenKey = GameGlobals.Instance.OpenInventoryKey;
+            var craftingKey = GameGlobals.Instance.OpenCraftingKey;
+            var inspectKey = GameGlobals.Instance.OpenInspectKey;
+            var debugModeKey = GameGlobals.Instance.DebugModeKey;
+            var showPathFindingKey = GameGlobals.Instance.ShowPathFindingKey;
+
             // Only receive input if on PlayScreen
             if (!ScreenManager.Instance.IsTransitioning
                 && ScreenManager.Instance.CurrentScreen != ScreenManager.GameScreen.SplashScreen
                 && ScreenManager.Instance.CurrentScreen != ScreenManager.GameScreen.MainMenuScreen)
             {
                 // Save Game for Test
-                if (keyboardCur.IsKeyUp(Keys.M) && keyboardPrev.IsKeyDown(Keys.M))
+                if (keyboardCur.IsKeyUp(saveGameKey) && keyboardPrev.IsKeyDown(saveGameKey))
                 {
                     JsonFileManager.SaveGame(JsonFileManager.SavingPlayerData);
                 }
 
+                // Call Companion to follow Player
+                if (!GameGlobals.Instance.IsOpenGUI && keyboardCur.IsKeyDown(recallCompaKey))
+                {
+                    Instance.IsRecallCompanion = true;
+                }
+                else if (!GameGlobals.Instance.IsOpenGUI && keyboardCur.IsKeyUp(recallCompaKey))
+                {
+                    if (Instance._recallTimer < recallTime)
+                    {
+                        Instance._recallTimer += deltaSeconds;
+                    }
+                    else
+                    {
+                        Instance._recallTimer = 0;
+                        Instance.IsRecallCompanion = false;
+                    }
+                }
+
                 // Open Pause Menu
-                if (keyboardCur.IsKeyDown(Keys.Escape) && !GameGlobals.Instance.SwitchOpenPauseMenuPanel && !GameGlobals.Instance.IsOpenGUI && GameGlobals.Instance.IsPauseMenuAllowed
-                    || keyboardCur.IsKeyDown(Keys.Escape) && !GameGlobals.Instance.SwitchOpenPauseMenuPanel && GameGlobals.Instance.IsOpenGUI
-                    && GUIManager.Instance.CurrentGUI.Equals(GUIManager.PauseMenu) && GameGlobals.Instance.IsPauseMenuAllowed)
+                if (keyboardCur.IsKeyDown(pauseMenuKey) && !GameGlobals.Instance.SwitchOpenPauseMenuPanel && !GameGlobals.Instance.IsOpenGUI && GameGlobals.Instance.IsPauseMenuAllowed
+                    || keyboardCur.IsKeyDown(pauseMenuKey) && !GameGlobals.Instance.SwitchOpenPauseMenuPanel && GameGlobals.Instance.IsOpenGUI
+                    && UIManager.Instance.CurrentUI.Equals(UIManager.PauseMenu) && GameGlobals.Instance.IsPauseMenuAllowed)
                 {
                     GameGlobals.Instance.SwitchOpenPauseMenuPanel = true;
 
@@ -180,22 +220,29 @@ namespace Medicraft.Systems.Managers
 
                     // Toggle IsOpenPauseMenu              
                     GameGlobals.Instance.IsOpenPauseMenu = false;
-                    if (GUIManager.Instance.CurrentGUI.Equals(GUIManager.PauseMenu))
+                    if (UIManager.Instance.CurrentUI.Equals(UIManager.PauseMenu))
                     {
-                        GUIManager.Instance.CurrentGUI = GUIManager.PlayScreen;
+                        UIManager.Instance.CurrentUI = UIManager.PlayScreen;
                         GameGlobals.Instance.IsRefreshPlayScreenUI = false;
+
+                        PlaySoundEffect(Sound.Unpause);
                     }
-                    else GUIManager.Instance.CurrentGUI = GUIManager.PauseMenu;
+                    else
+                    {
+                        UIManager.Instance.CurrentUI = UIManager.PauseMenu;
+
+                        PlaySoundEffect(Sound.Pause);
+                    }
                 }
-                else if (keyboardCur.IsKeyUp(Keys.Escape))
+                else if (keyboardCur.IsKeyUp(pauseMenuKey))
                 {
                     GameGlobals.Instance.SwitchOpenPauseMenuPanel = false;
                 }
 
                 // Open Inventory
-                if (keyboardCur.IsKeyDown(Keys.I) && !GameGlobals.Instance.SwitchOpenInventoryPanel && !GameGlobals.Instance.IsOpenGUI
-                    || (keyboardCur.IsKeyDown(Keys.I) || keyboardCur.IsKeyDown(Keys.Escape)) && !GameGlobals.Instance.SwitchOpenInventoryPanel
-                    && GameGlobals.Instance.IsOpenGUI && GUIManager.Instance.CurrentGUI.Equals(GUIManager.InventoryPanel))
+                if (keyboardCur.IsKeyDown(invenKey) && !GameGlobals.Instance.SwitchOpenInventoryPanel && !GameGlobals.Instance.IsOpenGUI
+                    || (keyboardCur.IsKeyDown(invenKey) || keyboardCur.IsKeyDown(pauseMenuKey)) && !GameGlobals.Instance.SwitchOpenInventoryPanel
+                    && GameGlobals.Instance.IsOpenGUI && UIManager.Instance.CurrentUI.Equals(UIManager.InventoryPanel))
                 {
                     GameGlobals.Instance.SwitchOpenInventoryPanel = true;
 
@@ -205,22 +252,29 @@ namespace Medicraft.Systems.Managers
 
                     // Toggle IsOpenInvenoryPanel & refresh inventory item display              
                     GameGlobals.Instance.IsOpenInventoryPanel = false;
-                    if (GUIManager.Instance.CurrentGUI.Equals(GUIManager.InventoryPanel))
+                    if (UIManager.Instance.CurrentUI.Equals(UIManager.InventoryPanel))
                     {
-                        GUIManager.Instance.CurrentGUI = GUIManager.PlayScreen;
+                        UIManager.Instance.CurrentUI = UIManager.PlayScreen;
                         GameGlobals.Instance.IsRefreshPlayScreenUI = false;
+
+                        PlaySoundEffect(Sound.PickUpBag);
                     }
-                    else GUIManager.Instance.CurrentGUI = GUIManager.InventoryPanel;
+                    else
+                    {
+                        UIManager.Instance.CurrentUI = UIManager.InventoryPanel;
+
+                        PlaySoundEffect(Sound.PickUpBag);
+                    }
                 }
-                else if (keyboardCur.IsKeyUp(Keys.I))
+                else if (keyboardCur.IsKeyUp(invenKey))
                 {
                     GameGlobals.Instance.SwitchOpenInventoryPanel = false;
                 }
 
                 // Open Crafting Panel 
-                if (keyboardCur.IsKeyDown(Keys.O) && !GameGlobals.Instance.SwitchOpenCraftingPanel && !GameGlobals.Instance.IsOpenGUI
-                    || (keyboardCur.IsKeyDown(Keys.O) || keyboardCur.IsKeyDown(Keys.Escape)) && !GameGlobals.Instance.SwitchOpenCraftingPanel
-                    && GameGlobals.Instance.IsOpenGUI && GUIManager.Instance.CurrentGUI.Equals(GUIManager.CraftingPanel))
+                if (keyboardCur.IsKeyDown(craftingKey) && !GameGlobals.Instance.SwitchOpenCraftingPanel && !GameGlobals.Instance.IsOpenGUI
+                    || (keyboardCur.IsKeyDown(craftingKey) || keyboardCur.IsKeyDown(pauseMenuKey)) && !GameGlobals.Instance.SwitchOpenCraftingPanel
+                    && GameGlobals.Instance.IsOpenGUI && UIManager.Instance.CurrentUI.Equals(UIManager.CraftingPanel))
                 {
                     GameGlobals.Instance.SwitchOpenCraftingPanel = true;
 
@@ -230,22 +284,29 @@ namespace Medicraft.Systems.Managers
 
                     // Toggle IsOpenCraftingPanel & refresh crafting item display       
                     GameGlobals.Instance.IsOpenCraftingPanel = false;
-                    if (GUIManager.Instance.CurrentGUI.Equals(GUIManager.CraftingPanel))
+                    if (UIManager.Instance.CurrentUI.Equals(UIManager.CraftingPanel))
                     {
-                        GUIManager.Instance.CurrentGUI = GUIManager.PlayScreen;
+                        UIManager.Instance.CurrentUI = UIManager.PlayScreen;
                         GameGlobals.Instance.IsRefreshPlayScreenUI = false;
+
+                        PlaySoundEffect(Sound.Cancel1);
                     }
-                    else GUIManager.Instance.CurrentGUI = GUIManager.CraftingPanel;
+                    else
+                    {
+                        UIManager.Instance.CurrentUI = UIManager.CraftingPanel;
+
+                        PlaySoundEffect(Sound.Click1);
+                    }
                 }
-                else if (keyboardCur.IsKeyUp(Keys.O))
+                else if (keyboardCur.IsKeyUp(craftingKey))
                 {
                     GameGlobals.Instance.SwitchOpenCraftingPanel = false;
                 }
 
                 // Open Inspect Panel 
-                if (keyboardCur.IsKeyDown(Keys.C) && !GameGlobals.Instance.SwitchOpenInspectPanel && !GameGlobals.Instance.IsOpenGUI
-                    || (keyboardCur.IsKeyDown(Keys.C) || keyboardCur.IsKeyDown(Keys.Escape)) && !GameGlobals.Instance.SwitchOpenInspectPanel
-                    && GameGlobals.Instance.IsOpenGUI && GUIManager.Instance.CurrentGUI.Equals(GUIManager.InspectPanel))
+                if (keyboardCur.IsKeyDown(inspectKey) && !GameGlobals.Instance.SwitchOpenInspectPanel && !GameGlobals.Instance.IsOpenGUI
+                    || (keyboardCur.IsKeyDown(inspectKey) || keyboardCur.IsKeyDown(pauseMenuKey)) && !GameGlobals.Instance.SwitchOpenInspectPanel
+                    && GameGlobals.Instance.IsOpenGUI && UIManager.Instance.CurrentUI.Equals(UIManager.InspectPanel))
                 {
                     GameGlobals.Instance.SwitchOpenInspectPanel = true;
 
@@ -255,16 +316,23 @@ namespace Medicraft.Systems.Managers
 
                     // Toggle IsOpenInspectPanel      
                     GameGlobals.Instance.IsOpenInspectPanel = false;
-                    GUIManager.Instance.IsCharacterTabSelected = true;
-                    if (GUIManager.Instance.CurrentGUI.Equals(GUIManager.InspectPanel))
-                    {                     
-                        GUIManager.Instance.CurrentGUI = GUIManager.PlayScreen;
+                    UIManager.Instance.IsCharacterTabSelected = true;
+                    if (UIManager.Instance.CurrentUI.Equals(UIManager.InspectPanel))
+                    {
+                        UIManager.Instance.CurrentUI = UIManager.PlayScreen;
                         GameGlobals.Instance.IsRefreshPlayScreenUI = false;
-                        GUIManager.Instance.ClearSkillDescription("Character");
+                        UIManager.Instance.ClearSkillDescription("Character");
+
+                        PlaySoundEffect(Sound.Cancel1);
                     }
-                    else GUIManager.Instance.CurrentGUI = GUIManager.InspectPanel;
+                    else
+                    {
+                        UIManager.Instance.CurrentUI = UIManager.InspectPanel;
+
+                        PlaySoundEffect(Sound.Click1);
+                    }
                 }
-                else if (keyboardCur.IsKeyUp(Keys.C))
+                else if (keyboardCur.IsKeyUp(inspectKey))
                 {
                     GameGlobals.Instance.SwitchOpenInspectPanel = false;
                 }
@@ -397,7 +465,7 @@ namespace Medicraft.Systems.Managers
                 || ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.Map1))
             {
                 // Debug Mode
-                if (keyboardCur.IsKeyDown(Keys.B) && !GameGlobals.Instance.SwitchDebugMode)
+                if (keyboardCur.IsKeyDown(debugModeKey) && !GameGlobals.Instance.SwitchDebugMode)
                 {
                     // Toggle the IsShowDetectBox flag
                     GameGlobals.Instance.IsDebugMode = !GameGlobals.Instance.IsDebugMode;
@@ -405,20 +473,20 @@ namespace Medicraft.Systems.Managers
                     // Update the boolean variable to indicate that the "B" button has been pressed
                     GameGlobals.Instance.SwitchDebugMode = true;
                 }
-                else if (keyboardCur.IsKeyUp(Keys.B))
+                else if (keyboardCur.IsKeyUp(debugModeKey))
                 {
                     // Update the boolean variable to indicate that the "B" button is not currently pressed
                     GameGlobals.Instance.SwitchDebugMode = false;
                 }
 
                 // Show Path Finding of Mobs
-                if (keyboardCur.IsKeyDown(Keys.V) && !GameGlobals.Instance.SwitchShowPath)
+                if (keyboardCur.IsKeyDown(showPathFindingKey) && !GameGlobals.Instance.SwitchShowPath)
                 {
                     GameGlobals.Instance.IsShowPath = !GameGlobals.Instance.IsShowPath;
 
                     GameGlobals.Instance.SwitchShowPath = true;
                 }
-                else if (keyboardCur.IsKeyUp(Keys.V))
+                else if (keyboardCur.IsKeyUp(showPathFindingKey))
                 {
                     GameGlobals.Instance.SwitchShowPath = false;
                 }
@@ -442,10 +510,15 @@ namespace Medicraft.Systems.Managers
 
             // Check Player and Companion HP for Deadq
             if (Player.HP <= 0 && !IsPlayerDead)
+            {
                 IsPlayerDead = true;
 
+                PlaySoundEffect(Sound.Dead);
+                PlayBackgroundMusic(_dyingSong, false, 1f);
+            }
+
             if (Companions.Count != 0)
-                if (Companions[CurrCompaIndex].HP <= 0 && !IsCompanionDead)
+                if (Companions[CurrCompaIndex].IsDead && !IsCompanionDead)
                     IsCompanionDead = true;
 
             if (IsPlayerDead)
@@ -534,11 +607,13 @@ namespace Medicraft.Systems.Managers
                 Player.Mana = Player.MaxMana;
 
                 var curMap = ScreenManager.Instance.CurrentMap;
-                var mapPositionData = GameGlobals.Instance.MapLocationPointDatas.Where(m => m.Name.Equals(curMap));
-                var positionData = mapPositionData.ElementAt(0).Positions.Where(p => p.Name.Equals("Respawn"));
+                var mapPositionData = GameGlobals.Instance.MapLocationPointDatas.FirstOrDefault
+                    (m => m.Name.Equals(curMap));
+                var positionData = mapPositionData.Positions.FirstOrDefault
+                    (p => p.Name.Equals("Respawn"));
                 var position = new Vector2(
-                    (float)positionData.ElementAt(0).Value[0],
-                    (float)positionData.ElementAt(0).Value[1]);
+                    (float)positionData.Value[0],
+                    (float)positionData.Value[1]);
 
                 Player.Position = position;
 
@@ -549,12 +624,20 @@ namespace Medicraft.Systems.Managers
 
                 var entities = EntityManager.Instance.Entities;
                 foreach (var entity in entities.Where(e => !e.IsDestroyed))
-                {
                     entity.AggroTimer = 0f;
-                }
 
                 IsPlayerDead = false;
                 Player.IsDying = false;
+
+                if (Companions.Count != 0)
+                    if (!IsCompanionDead)
+                        Companions[CurrCompaIndex].Position = Player.Position;
+
+                if (GameGlobals.Instance.CurrentMapMusics.Count != 0)
+                {
+                    var mapBGMusic = GameGlobals.Instance.CurrentMapMusics.FirstOrDefault();
+                    PlayBackgroundMusic(mapBGMusic.Song, true, 1f);
+                }
             }
         }
 
@@ -577,6 +660,8 @@ namespace Medicraft.Systems.Managers
                 {
                     Player.Level++;
                     Player.PlayerData.SkillPoint++;
+
+                    PlaySoundEffect(Sound.LevelUp);
 
                     // Increasing Companions Level too
                     foreach (var compa in Companions)
@@ -637,8 +722,9 @@ namespace Medicraft.Systems.Managers
 
             compa.SetCharacterStats(charData, compa.Level);
 
-            // Set current HP
+            // Set current HP and Mana
             compa.HP = (float)(compa.BaseMaxHP * compa.GetCurrentHealthPercentage());
+            compa.Mana = (float)(compa.BaseMaxMana * compa.GetCurrentManaPercentage());
         }
 
         public void RefreshEquipmentStats(InventoryItemData itemEquipmentData, bool isEquip)
@@ -653,46 +739,46 @@ namespace Medicraft.Systems.Managers
                     switch (stats.Target)
                     {
                         case "TrueATK":
-                            var valueTrueATK = (float)stats.Value;
+                            var valueTrueATK = (float)Math.Round(stats.Value, 2);
                             Player.ATK = isEquip ? (Player.ATK + valueTrueATK) : (Player.ATK - valueTrueATK);
                             break;
 
                         case "ATK%":
-                            var valueATK = Player.BaseATK * (float)stats.Value;
+                            var valueATK = (float)Math.Round(Player.BaseATK * stats.Value, 2);
                             Player.ATK = isEquip ? (Player.ATK + valueATK) : (Player.ATK - valueATK);
                             break;
 
                         case "HP%":
-                            var valueMaxHP = Player.BaseMaxHP * (float)stats.Value;
-                            var valueHP = Player.HP * (float)stats.Value;
+                            var valueMaxHP = (float)Math.Round(Player.BaseMaxHP * stats.Value, 2);
+                            var valueHP = (float)Math.Round(Player.HP * stats.Value, 2);
                             Player.MaxHP = isEquip ? (Player.MaxHP + valueMaxHP) : (Player.MaxHP - valueMaxHP);
                             Player.HP = isEquip ? (Player.HP + valueHP) : (Player.HP - (valueHP - (int)(stats.Value * 100)));
                             break;
 
                         case "Mana%":
-                            var valueMaxMana = Player.BaseMaxMana * (float)stats.Value;
-                            var valueMana = Player.Mana * (float)stats.Value;
+                            var valueMaxMana = (float)Math.Round(Player.BaseMaxMana * stats.Value, 2);
+                            var valueMana = (float)Math.Round(Player.Mana * stats.Value, 2);
                             Player.MaxMana = isEquip ? (Player.MaxMana + valueMaxMana) : (Player.MaxMana - valueMaxMana);
                             Player.Mana = isEquip ? (Player.Mana + valueMana) : (Player.Mana - (valueMana - (int)(stats.Value * 100)));
                             break;
 
                         case "DEF%":
-                            var valueDEF = (float)stats.Value;
+                            var valueDEF = (float)Math.Round(stats.Value, 2);
                             Player.DEF = isEquip ? (Player.DEF + valueDEF) : (Player.DEF - valueDEF);
                             break;
 
                         case "Crit%":
-                            var valueCrit = (float)stats.Value;
+                            var valueCrit = (float)Math.Round(stats.Value, 2);
                             Player.Crit = isEquip ? (Player.Crit + valueCrit) : (Player.Crit - valueCrit);
                             break;
 
                         case "CritDMG%":
-                            var valueCritDMG = (float)stats.Value;
+                            var valueCritDMG = (float)Math.Round(stats.Value, 2);
                             Player.CritDMG = isEquip ? (Player.CritDMG + valueCritDMG) : (Player.CritDMG - valueCritDMG);
                             break;
 
                         case "Evasion%":
-                            var valueEvasion = (float)stats.Value;
+                            var valueEvasion = (float)Math.Round(stats.Value, 2);
                             Player.Evasion = isEquip ? (Player.Evasion + valueEvasion) : (Player.Evasion - valueEvasion);
                             break;
 

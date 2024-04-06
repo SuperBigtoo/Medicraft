@@ -16,22 +16,22 @@ namespace Medicraft.Screens
 {
     public class PlayScreen : Screen
     {
-        protected TilemapOrthogonalRender _tileMapRender;
-        protected TmxMap _tileMap;
+        protected TilemapOrthogonalRender tileMapRender;
+        protected TmxMap tileMap;
 
-        protected HUDSystem _hudSystem;
-        protected DrawEffectSystem _drawEffectSystem;
+        protected HUDSystem hudSystem;
+        protected DrawEffectSystem drawEffectSystem;
 
-        protected List<EntityData> _entityDatas;
-        protected MobSpawner _mobSpawner;
+        protected List<EntityData> entityDatas;
+        protected MobSpawner mobSpawner;
 
-        protected List<ObjectData> _objectDatas;
-        protected ObjectSpawner _objectSpawner;
+        protected List<ObjectData> objectDatas;
+        protected ObjectSpawner objectSpawner;
 
         public PlayScreen()
         {
             // Toggle the PlayScreen GUI flag
-            GUIManager.Instance.CurrentGUI = GUIManager.PlayScreen;
+            UIManager.Instance.CurrentUI = UIManager.PlayScreen;
             GameGlobals.Instance.IsOpenMainMenu = false;
             GameGlobals.Instance.IsRefreshPlayScreenUI = false;
         }
@@ -46,7 +46,7 @@ namespace Medicraft.Screens
 
         public override void UnloadContent()
         {
-            EntityManager.Instance.ClosestEnemy = null;
+            EntityManager.Instance.ClosestEnemyToCompanion = null;
 
             // Clear List Entity, GameObject and MusicBG
             EntityManager.Instance.ClearEntity();
@@ -68,11 +68,11 @@ namespace Medicraft.Screens
             ObjectManager.Instance.Update(gameTime);
 
             if (!GameGlobals.Instance.IsShowPath)
-                _tileMapRender?.Update(gameTime);
+                tileMapRender?.Update(gameTime);
 
-            _drawEffectSystem?.Update(gameTime);
+            drawEffectSystem?.Update(gameTime);
 
-            _hudSystem?.Update(gameTime);
+            hudSystem?.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -82,11 +82,11 @@ namespace Medicraft.Screens
             ObjectManager.Instance.Draw(spriteBatch);
 
             if (!GameGlobals.Instance.IsShowPath)
-                _tileMapRender?.Draw(spriteBatch);
+                tileMapRender?.Draw(spriteBatch);
 
-            _drawEffectSystem?.Draw(spriteBatch);
+            drawEffectSystem?.Draw(spriteBatch);
 
-            _hudSystem?.Draw(spriteBatch);
+            hudSystem?.Draw(spriteBatch);
         }
     }
 }

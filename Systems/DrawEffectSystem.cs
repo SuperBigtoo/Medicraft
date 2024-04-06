@@ -121,21 +121,19 @@ namespace Medicraft.Systems
         public void Draw(SpriteBatch spriteBatch)
         {
             // All Entity that initialized in Entities from EntityManager
+            // Attacked Effect
             DrawAttackedEffectToMob(spriteBatch);
-
-            DrawBossEffects(spriteBatch);
-
-            DrawMobStatusEffect(spriteBatch);
-
             DrawAttackedEffectToPlayer(spriteBatch);
-
-            DrawPlayerAbilityAndStatusEffects(spriteBatch);
-
             DrawAttackedEffectToCompanion(spriteBatch);
 
+            // Ability and Status Effect
+            DrawBossEffects(spriteBatch);
+            DrawMobStatusEffect(spriteBatch);      
+            DrawPlayerAbilityAndStatusEffects(spriteBatch);
             DrawCompanionAbilityAndStatusEffect(spriteBatch);
 
-            DrawItemParticle(spriteBatch);
+            // Object Particle
+            DrawObjectParticle(spriteBatch);
         }
 
         private void DrawAttackedEffectToMob(SpriteBatch spriteBatch)
@@ -199,6 +197,48 @@ namespace Medicraft.Systems
 
             foreach (var entity in entities.Where(e => !e.IsDestroyed && !e.IsDying))
             {
+                var combatLog = entity.CombatLogs;
+
+                if (combatLog.Count != 0)
+                {
+                    foreach (var log in combatLog.Where(l => l.ElapsedTime < 1f
+                        && (l.Action == CombatNumberData.ActionType.Buff
+                            || l.Action == CombatNumberData.ActionType.Debuff
+                            || l.Action == CombatNumberData.ActionType.Recovery)))
+                    {
+                        if (log.EffectName != null)
+                        {
+                            if (!log.IsEffectPlayed)
+                            {
+                                log.AnimatedSprite = new AnimatedSprite(_hitSpriteSheet)
+                                {
+                                    Depth = entity.Sprite.Depth - 0.00001f    // Make de effect draw on entity
+                                };
+
+                                log.AnimatedSprite.Play(log.EffectName);
+                                log.IsEffectPlayed = true;
+                            }
+
+                            var transform = new Transform2
+                            {
+                                Scale = new Vector2(3f, 3f),
+                                Rotation = 0f,
+                                Position = entity.Position
+                            };
+
+                            log.AnimatedSprite.Update(_deltaSeconds);
+
+                            var cycleEffect = _hitSpriteSheet.Cycles.FirstOrDefault(c => c.Key.Equals(log.EffectName));
+                            var duration = cycleEffect.Value.FrameDuration * cycleEffect.Value.Frames.Capacity;
+
+                            if (log.ElapsedTime < duration)
+                            {
+                                spriteBatch.Draw(log.AnimatedSprite, transform);
+                            }
+                        }
+                    }
+                }
+
                 // Stun
                 if (entity.IsStunning)
                 {
@@ -362,6 +402,7 @@ namespace Medicraft.Systems
             {
                 foreach (var log in combatLog.Where(l => l.ElapsedTime < 1f
                     && (l.Action == CombatNumberData.ActionType.Buff
+                        || l.Action == CombatNumberData.ActionType.Debuff
                         || l.Action == CombatNumberData.ActionType.Recovery)))
                 {
                     if (log.EffectName != null)
@@ -560,6 +601,7 @@ namespace Medicraft.Systems
             {
                 foreach (var log in combatLog.Where(l => l.ElapsedTime < 1f
                     && (l.Action == CombatNumberData.ActionType.Buff
+                        || l.Action == CombatNumberData.ActionType.Debuff
                         || l.Action == CombatNumberData.ActionType.Recovery)))
                 {
                     if (log.EffectName != null)
@@ -704,12 +746,12 @@ namespace Medicraft.Systems
             }
         }
 
-        private static void DrawItemParticle(SpriteBatch spriteBatch)
+        private static void DrawObjectParticle(SpriteBatch spriteBatch)
         {
-            var itemObject = ObjectManager.Instance.GameObjects;
+            var gameObject = ObjectManager.Instance.GameObjects;
 
-            if (itemObject != null || itemObject.Any())
-                foreach (var item in itemObject)
+            if (gameObject != null || gameObject.Any())
+                foreach (var item in gameObject)
                     spriteBatch.Draw(item.ParticleEffect);
         }
     }

@@ -10,6 +10,11 @@
       "isLooping": false,
       "frameDuration": 0.25
     },
+    "default_dying": {
+      "frames": [40,41,42,43],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
     "default_walking_up": {
       "frames": [32,33,34,35,36,37],
       "isLooping": false,

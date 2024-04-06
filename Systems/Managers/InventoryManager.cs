@@ -1,6 +1,7 @@
 ﻿using Medicraft.Data.Models;
 using System.Collections.Generic;
 using System.Linq;
+using static Medicraft.Systems.GameGlobals;
 
 namespace Medicraft.Systems.Managers
 {
@@ -28,7 +29,7 @@ namespace Medicraft.Systems.Managers
         public int GoldCoin { private set; get; }
         public int IdexInven { set; get; }
         public Dictionary<int, InventoryItemData> InventoryBag { private set; get; }
-        public KeyValuePair<int, InventoryItemData> ItemSelected { set; get; }
+        public KeyValuePair<int, InventoryItemData> SelectedItem { set; get; }
 
         private static InventoryManager instance;
 
@@ -73,18 +74,19 @@ namespace Medicraft.Systems.Managers
 
         public void AddItem(int itemId, int quantity)
         {
-            var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(itemId));
+            var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault
+                (i => i.ItemId.Equals(itemId));
+            var itemInBag = InventoryBag.Values.FirstOrDefault
+                (i => i.ItemId.Equals(itemId) && i.Count != MaximunCount);
 
-            var itemInBag = InventoryBag.Values.FirstOrDefault(i => i.ItemId.Equals(itemId));
-
-            if (itemInBag != null && itemInBag.IsStackable())
+            if (itemInBag != null && itemData.IsStackable)
             {
                 itemInBag.Count += quantity;
 
                 if (itemInBag.Count > MaximunCount)
                 {
                     var tempCount = itemInBag.Count - MaximunCount;
-                    itemInBag.Count -= MaximunCount;
+                    itemInBag.Count -= tempCount;
 
                     // Add new stack to Inventory
                     InventoryBag.Add(IdexInven++, new InventoryItemData()
@@ -107,12 +109,20 @@ namespace Medicraft.Systems.Managers
             }
 
             HUDSystem.AddFeedItem(itemId, quantity);
-            GUIManager.Instance.RefreshHotbar();
+            UIManager.Instance.RefreshHotbar();
+
+            if (itemId >= 0 && itemId <= 141)
+            {
+                PlaySoundEffect(Sound.PickUpHerb);
+            }
+            else PlaySoundEffect(Sound.PickUpGeneric);
         }
 
         public void AddGoldCoin(int goldCoin)
         {
             GoldCoin += goldCoin;
+
+            PlaySoundEffect(Sound.PickUpCoin);
         }
 
         public bool UseItem(int keyIndex, InventoryItemData item)
@@ -131,16 +141,17 @@ namespace Medicraft.Systems.Managers
                         if (item.Count == 0) InventoryBag.Remove(keyIndex);
 
                         // refresh display item after selectedItem has been use
-                        GUIManager.Instance.RefreshInvenrotyItem(true);
+                        UIManager.Instance.RefreshInvenrotyItem(true);
+
+                        PlaySoundEffect(Sound.UseItem);
                         return true;
                     }
                     break;
 
-                case "Equipment":
-                    
+                case "Equipment":               
                     SetEquipmentItem(item, item.EquipmentType());
 
-                    GUIManager.Instance.RefreshInvenrotyItem(true);
+                    UIManager.Instance.RefreshInvenrotyItem(true);
                     return true;
             }
 
@@ -153,7 +164,9 @@ namespace Medicraft.Systems.Managers
             {
                 // For dis one, gonna refresh da stats before changing the slot of equipment item
                 PlayerManager.Instance.RefreshEquipmentStats(equipmentItem, false);
-                equipmentItem.Slot = GameGlobals.Instance.DefaultInventorySlot;              
+                equipmentItem.Slot = GameGlobals.Instance.DefaultInventorySlot;
+
+                PlaySoundEffect(Sound.Unequip1);
                 return true;
             }
             return false;
@@ -176,6 +189,8 @@ namespace Medicraft.Systems.Managers
                     // then set player stats from player
                     PlayerManager.Instance.RefreshEquipmentStats(newItem, true);
                     newItem.Slot = selectedSlot;
+
+                    PlaySoundEffect(Sound.Equip1);
                     return true;
                 }
             }
@@ -190,7 +205,7 @@ namespace Medicraft.Systems.Managers
             if (item.IsUsable())
             {
                 UseItem(keyIndex, item);
-                GUIManager.Instance.RefreshHotbar();
+                UIManager.Instance.RefreshHotbar();
                 return true;
             }
             return false;
@@ -206,7 +221,7 @@ namespace Medicraft.Systems.Managers
 
                 newItem.Slot = selectedSlot;
 
-                GUIManager.Instance.RefreshInvenrotyItem(true);
+                UIManager.Instance.RefreshInvenrotyItem(true);
                 return true;
             }
             return false;

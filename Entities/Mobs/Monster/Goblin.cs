@@ -46,6 +46,7 @@ namespace Medicraft.Entities.Mobs.Monster
 
             BoundingCollisionX = 9;
             BoundingCollisionY = 4;
+            BaseBoundingDetectEntityRadius = 40f;
 
             // Rec for check Collision
             BoundingDetectCollisions = new RectangleF(
@@ -55,12 +56,13 @@ namespace Medicraft.Entities.Mobs.Monster
                 Sprite.TextureRegion.Height / 6);
 
             BoundingHitBox = new CircleF(Position, 25);         // Circle for Entity to hit
-            BoundingDetectEntity = new CircleF(Position, 32);   // Circle for check attacking
+            BoundingDetectEntity = new CircleF(
+                Position, BaseBoundingDetectEntityRadius);      // Circle for check attacking
             BoundingAggro = new CircleF(Position, 150);         // Circle for check aggro player        
 
             // Drops
-            itemDropId = GameGlobals.Instance.RandomItemDrop();
-            quantityDrop = GameGlobals.Instance.RandomItemQuantityDrop(itemDropId);
+            itemDropId = GameGlobals.RandomItemDrop();
+            quantityDrop = GameGlobals.RandomItemQuantityDrop(itemDropId);
             goidCoinDrop = 10;
             expDrop = 12;
 
@@ -76,15 +78,9 @@ namespace Medicraft.Entities.Mobs.Monster
             Sprite = goblin.Sprite;
             EntityData = goblin.EntityData;
 
-            EntityType = goblin.EntityType;
             Id = goblin.Id;
-            Name = goblin.Name;
-            ATK = goblin.ATK;
-            MaxHP = goblin.MaxHP;
-            HP = goblin.MaxHP;
-            DEF = goblin.DEF;
-            Speed = goblin.Speed;
-            Evasion = goblin.Evasion;
+            Level = goblin.Level;
+            InitializeCharacterData(goblin.EntityData.CharId, Level);
 
             attackSpeed = goblin.attackSpeed;
             cooldownAttack = goblin.cooldownAttack;
@@ -119,8 +115,8 @@ namespace Medicraft.Entities.Mobs.Monster
             BoundingAggro = goblin.BoundingAggro;
             BoundingDetectEntity = goblin.BoundingDetectEntity;
 
-            itemDropId = GameGlobals.Instance.RandomItemDrop();
-            quantityDrop = GameGlobals.Instance.RandomItemQuantityDrop(itemDropId);
+            itemDropId = GameGlobals.RandomItemDrop();
+            quantityDrop = GameGlobals.RandomItemQuantityDrop(itemDropId);
             goidCoinDrop = goblin.goidCoinDrop;
             expDrop = goblin.expDrop;
 

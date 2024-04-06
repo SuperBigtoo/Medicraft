@@ -55,6 +55,7 @@ namespace Medicraft.Entities.Mobs.Monster
 
             BoundingCollisionX = 4;
             BoundingCollisionY = 12;
+            BaseBoundingDetectEntityRadius = 40f;
 
             // Rec for check Collision
             BoundingDetectCollisions = new RectangleF(
@@ -64,13 +65,14 @@ namespace Medicraft.Entities.Mobs.Monster
                 Sprite.TextureRegion.Height / 6);
 
             BoundingHitBox = new CircleF(Position, 20);         // Circle for Entity to hit
-            BoundingDetectEntity = new CircleF(Position, 30);   // Circle for check attacking
+            BoundingDetectEntity = new CircleF(
+                Position, BaseBoundingDetectEntityRadius);      // Circle for check attacking
             BoundingAggro = new CircleF(Position, 150);         // Circle for check aggro player        
 
             RandomSlimeColor();
 
-            itemDropId = GameGlobals.Instance.RandomItemDrop();
-            quantityDrop = GameGlobals.Instance.RandomItemQuantityDrop(itemDropId);
+            itemDropId = GameGlobals.RandomItemDrop();
+            quantityDrop = GameGlobals.RandomItemQuantityDrop(itemDropId);
             goidCoinDrop = 5;
             expDrop = 10;
 
@@ -86,15 +88,9 @@ namespace Medicraft.Entities.Mobs.Monster
             Sprite = slime.Sprite;
             EntityData = slime.EntityData;
 
-            EntityType = slime.EntityType;
             Id = slime.Id;
-            Name = slime.Name;
-            ATK = slime.ATK;
-            MaxHP = slime.MaxHP;
-            HP = slime.MaxHP;
-            DEF = slime.DEF;
-            Speed = slime.Speed;
-            Evasion = slime.Evasion;
+            Level = slime.Level;
+            InitializeCharacterData(slime.EntityData.CharId, Level);
 
             attackSpeed = slime.attackSpeed;
             cooldownAttack = slime.cooldownAttack;
@@ -131,8 +127,8 @@ namespace Medicraft.Entities.Mobs.Monster
 
             RandomSlimeColor();
 
-            itemDropId = GameGlobals.Instance.RandomItemDrop();
-            quantityDrop = GameGlobals.Instance.RandomItemQuantityDrop(itemDropId);
+            itemDropId = GameGlobals.RandomItemDrop();
+            quantityDrop = GameGlobals.RandomItemQuantityDrop(itemDropId);
             goidCoinDrop = slime.goidCoinDrop;
             expDrop = slime.expDrop;
 

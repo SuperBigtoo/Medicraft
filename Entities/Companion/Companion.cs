@@ -7,7 +7,7 @@ using MonoGame.Extended.Sprites;
 using System.Linq;
 using Medicraft.Data.Models;
 using MonoGame.Extended;
-using Medicraft.Systems.PathFinding;
+using static Medicraft.Systems.GameGlobals;
 
 namespace Medicraft.Entities.Companion
 {
@@ -16,7 +16,8 @@ namespace Medicraft.Entities.Companion
         public CompanionData CompanionData { get; protected set; }
         public int CompanionId { get; protected set; }
 
-        protected float BaseCooldownNormal = 0, BaseCooldownBurst = 0, BaseCooldownPassive = 0;
+        // Boolean
+        public bool IsDead { get; protected set; }
 
         // Is Skill Cooldown
         public bool IsNormalSkillCooldown { get; protected set; }
@@ -31,15 +32,34 @@ namespace Medicraft.Entities.Companion
         public float BurstCooldownTimer { get; protected set; }
         public float PassiveCooldownTimer { get; protected set; }
 
+        // Activate Skill
+        public bool IsNormalSkillActivate { get; protected set; }
+        public bool IsBurstSkillActivate { get; protected set; }
+        public bool IsPassiveSkillActivate { get; protected set; }
+        public float NormalActivatedTime { get; protected set; }
+        public float NormalActivatedTimer { get; protected set; }
+        public float BurstActivatedTime { get; protected set; }
+        public float BurstActivatedTimer { get; protected set; }
+        public float PassiveActivatedTime { get; protected set; }
+        public float PassiveActivatedTimer { get; protected set; }
+
         public bool isCriticalAttack, isAttackMissed;
 
         protected float percentDamageNormalHit;
         protected float hitRateNormal, hitRateNormalSkill, hitRateBurstSkill;
+        protected float BaseCooldownNormal = 0, BaseCooldownBurst = 0, BaseCooldownPassive = 0;
 
         protected Companion(Vector2 scale)
-        {
+        {          
             stoppingNodeIndex = 2;
-            knockbackForce = 40;
+            baseknockbackForce = 40;
+            knockbackForce = baseknockbackForce;
+
+            IsDead = false;
+            AggroTime = 1f;
+            DyingTime = 3f;
+            IsAggroResettable = true;
+            IsKnockbackable = true;
 
             var position = new Vector2(
                 PlayerManager.Instance.Player.Position.X,
@@ -59,6 +79,10 @@ namespace Medicraft.Entities.Companion
             IsBurstSkillCooldown = false;
             IsPassiveSkillCooldown = false;
 
+            IsNormalSkillActivate = false;
+            IsBurstSkillActivate = false;
+            IsPassiveSkillActivate = false;
+
             NormalCooldownTime = BaseCooldownNormal;
             BurstCooldownTime = BaseCooldownBurst;
             PassiveCooldownTime = BaseCooldownPassive;
@@ -72,7 +96,7 @@ namespace Medicraft.Entities.Companion
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (!PlayerManager.Instance.IsCompanionDead)
+            if (HP > 0 && !IsDying)
             {
                 // Setup PathFinding
                 SetPathFindingNode(
@@ -83,11 +107,11 @@ namespace Medicraft.Entities.Companion
 
                 if (!PlayerManager.Instance.IsPlayerDead)
                 {
-                    // Combat Control
-                    CombatControl(deltaSeconds);
-
                     // MovementControl
                     MovementControl(deltaSeconds);
+
+                    // Combat Control
+                    CombatControl(deltaSeconds);
 
                     // Check Aggro Player
                     CheckAggro();
@@ -101,11 +125,11 @@ namespace Medicraft.Entities.Companion
                         foreach (var mob in enemyMobs)
                             if (PlayerManager.Instance.Player.BoundingAggro.Intersects(mob.BoundingHitBox))
                             {
-                                EntityManager.Instance.ClosestEnemy = FindClosestEntity(enemyMobs, this);
+                                EntityManager.Instance.ClosestEnemyToCompanion = FindClosestEntity(enemyMobs, this);
                                 break;
                             }
                     }
-                    else EntityManager.Instance.ClosestEnemy = null;
+                    else EntityManager.Instance.ClosestEnemyToCompanion = null;
                 }
 
                 // Blinking if attacked
@@ -114,32 +138,7 @@ namespace Medicraft.Entities.Companion
                 // Update layer depth
                 UpdateLayerDepth(playerDepth, topDepth, middleDepth, bottomDepth);
             }
-            else
-            {
-                if (!IsDying)
-                {
-                    IsDying = true;
-                    CurrentAnimation = SpriteCycle + "_dying";
-                    Sprite.Play(CurrentAnimation);
-
-                    isBlinkingPlayed = false;
-                    blinkingTimer = 0;
-                    Sprite.Color = Color.White;
-                }
-
-                if (DyingTimer < DyingTime && IsDying)
-                {
-                    DyingTimer += deltaSeconds;
-
-                    var blinkSpeed = 15f; // Adjust the speed of the blinking effect
-                    var alphaMultiplier = MathF.Sin(DyingTimer * blinkSpeed);
-
-                    // Ensure alphaMultiplier is within the valid range [0, 1]
-                    alphaMultiplier = MathHelper.Clamp(alphaMultiplier, 0.25f, 2f);
-
-                    Sprite.Color = Color.White * Math.Min(alphaMultiplier, 1f);
-                }
-            }
+            else UpdateDying(gameTime);
 
             if (PlayerManager.Instance.IsPlayerDead)
             {
@@ -158,19 +157,19 @@ namespace Medicraft.Entities.Companion
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (GameGlobals.Instance.IsShowPath)
+            if (Instance.IsShowPath)
             {
                 pathFinding.Draw(spriteBatch);
             }
 
             spriteBatch.Draw(Sprite, Transform);
 
-            var shadowTexture = GameGlobals.Instance.GetShadowTexture(GameGlobals.ShadowTextureName.shadow_1);
+            var shadowTexture = GetShadowTexture(ShadowTextureName.shadow_1);
 
             DrawShadow(spriteBatch, shadowTexture);
 
             // Test Draw BoundingRec for Collision
-            if (GameGlobals.Instance.IsDebugMode)
+            if (Instance.IsDebugMode)
             {
                 var pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
                 pixelTexture.SetData(new Color[] { Color.White });
@@ -256,7 +255,7 @@ namespace Medicraft.Entities.Companion
                         Sprite.Play(CurrentAnimation);
 
                         // Check if the character has passed the next node
-                        var tileSize = GameGlobals.Instance.TILE_SIZE;
+                        var tileSize = Instance.TILE_SIZE;
                         var nextNodePosition = new Vector2(
                             pathFinding.GetPath()[currentNodeIndex + 1].Col * tileSize + tileSize / 2,
                             pathFinding.GetPath()[currentNodeIndex + 1].Row * tileSize + tileSize / 2);
@@ -283,20 +282,23 @@ namespace Medicraft.Entities.Companion
         protected override void CombatControl(float deltaSeconds)
         {
             // Normal Hit
-            foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed
-                && e.EntityType == EntityTypes.Hostile || e.EntityType == EntityTypes.Boss))
+            if (IsAggro && !PlayerManager.Instance.IsRecallCompanion)
             {
-                if (BoundingDetectEntity.Intersects(entity.BoundingHitBox)
-                    && ScreenManager.Instance.IsScreenLoaded && !IsAttacking && !IsStunning)
+                foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed
+                && e.EntityType == EntityTypes.Hostile || e.EntityType == EntityTypes.Boss))
                 {
-                    CurrentAnimation = SpriteCycle + "_attacking_normal_hit";
-                    Sprite.Play(CurrentAnimation);
+                    if (BoundingDetectEntity.Intersects(entity.BoundingHitBox)
+                        && ScreenManager.Instance.IsScreenLoaded && !IsAttacking && !IsStunning)
+                    {
+                        CurrentAnimation = SpriteCycle + "_attacking_normal_hit";
+                        Sprite.Play(CurrentAnimation);
 
-                    IsAttacking = true;
-                    ActionTimer = attackSpeed;
-                    cooldownAttackTimer = cooldownAttack;
+                        IsAttacking = true;
+                        ActionTimer = attackSpeed;
+                        cooldownAttackTimer = cooldownAttack;
+                    }
                 }
-            }  
+            }
 
             if (IsAttacking)
             {
@@ -311,6 +313,8 @@ namespace Medicraft.Entities.Companion
                     {
                         CheckAttackDetection(ATK, percentDamageNormalHit, false, 0f, NormalHitEffectAttacked);
                         isAttackCooldown = true;
+
+                        PlayMobAttackSound();
                     }
                     else
                     {
@@ -326,85 +330,50 @@ namespace Medicraft.Entities.Companion
                     }
                 }
             }
-
-            //// Normal Skill
-            //if (keyboardCur.IsKeyDown(Keys.E) && !IsAttacking && !IsNormalSkillCooldown && Mana >= NormalSkillCost)
-            //{
-            //    CurrentAnimation = SpriteCycle + "_attacking_normal_skill";
-            //    Sprite.Play(CurrentAnimation);
-
-            //    IsAttacking = true;
-            //    IsNormalSkillCooldown = true;
-            //    ActionTimer = _hitRateNormalSkill;
-
-            //    // Do normal skill & effect of Sets Item
-            //    NormalSkillControl(PlayerData.Abilities.NormalSkillLevel);
-
-            //    CombatNumCase = 4;
-            //    var combatNumVelocity = SetCombatNumDirection();
-            //    AddCombatLogNumbers(Name, "POWER UP", CombatNumCase, combatNumVelocity, NormalSkillEffectActivated);
-            //}
-
-            //// Burst Skill
-            //if (keyboardCur.IsKeyDown(Keys.Q) && !IsAttacking && !IsBurstSkillCooldown && Mana >= BurstSkillCost)
-            //{
-            //    CurrentAnimation = SpriteCycle + "_attacking_burst_skill";
-            //    Sprite.Play(CurrentAnimation);
-
-            //    IsAttacking = true;
-            //    IsBurstSkillCooldown = true;
-            //    ActionTimer = _hitRateBurstSkill;
-
-            //    // Do burst skill & effect of Sets Item
-            //    BurstSkillControl(PlayerData.Abilities.BurstSkillLevel);
-            //}
         }
 
         // Check Attack
         protected void CheckAttackDetection(float atk, float percentHit, bool isUndodgeable, float stunTime, string effectAttacked)
         {
-            foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed
-                && e.EntityType == EntityTypes.Hostile || e.EntityType == EntityTypes.Boss))
+            foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed && !e.IsDying
+                && (e.EntityType == EntityTypes.Hostile || e.EntityType == EntityTypes.Boss)))
             {
                 if (entity.BoundingHitBox.Intersects(BoundingDetectEntity))
                 {
-                    if (!entity.IsDying)
+                    var totalDamage = TotalDamage(atk, percentHit, entity.DEF, entity.Evasion, isUndodgeable);
+
+                    var combatNumVelocity = entity.SetCombatNumDirection();
+                    entity.AddCombatLogNumbers(Name, ((int)totalDamage).ToString()
+                        , CombatNumCase, combatNumVelocity, effectAttacked);
+
+                    // In case the Attack doesn't Missed
+                    if (CombatNumCase != Missed)
                     {
-                        var totalDamage = TotalDamage(atk, percentHit, entity.DEF, entity.Evasion, isUndodgeable);
+                        // Mob Attacked
+                        entity.IsAttacked = true;
 
-                        var combatNumVelocity = entity.SetCombatNumDirection();
-                        entity.AddCombatLogNumbers(Name, ((int)totalDamage).ToString()
-                            , CombatNumCase, combatNumVelocity, effectAttacked);
+                        entity.HP -= totalDamage;
 
-                        // In case the Attack doesn't Missed
-                        if (CombatNumCase != 3)
+                        if (entity.IsKnockbackable)
                         {
-                            // Mob Attacked
-                            entity.IsAttacked = true;
+                            var knockBackDirection = (entity.Position - new Vector2(0, 50)) - Position;
+                            knockBackDirection.Normalize();
+                            entity.Velocity = knockBackDirection * knockbackForce;
 
-                            entity.HP -= totalDamage;
-
-                            if (entity.IsKnockbackable)
-                            {
-                                var knockBackDirection = (entity.Position - new Vector2(0, 50)) - Position;
-                                knockBackDirection.Normalize();
-                                entity.Velocity = knockBackDirection * knockbackForce;
-
-                                entity.IsKnockback = true;
-                                entity.KnockbackedTimer = 0.2f;
-                            }
-
-                            if (stunTime > 0f && entity.IsStunable)
-                            {
-                                entity.IsStunning = true;
-                                entity.StunningTimer = stunTime;
-                            }
+                            entity.IsKnockback = true;
+                            entity.KnockbackedTimer = 0.2f;
                         }
 
-                        if (entity.HP <= 0)
+                        if (stunTime > 0f && entity.IsStunable)
                         {
-                            entity.IsDying = true;
+                            entity.IsStunning = true;
+                            entity.StunningTimer = stunTime;
                         }
+                    }
+
+                    if (entity.HP <= 0)
+                    {
+                        entity.IsDying = true;
                     }
                 }
             }
@@ -423,7 +392,7 @@ namespace Medicraft.Entities.Companion
             {
                 // if Attack Missed
                 totalDamage = 0;
-                CombatNumCase = 3;
+                CombatNumCase = Missed;
                 isAttackMissed = true;
             }
             else
@@ -436,12 +405,12 @@ namespace Medicraft.Entities.Companion
                 if (critChance <= Crit * 100)
                 {
                     totalDamage += (int)(totalDamage * CritDMG);
-                    CombatNumCase = 1;
+                    CombatNumCase = DamageCrit;
                     isCriticalAttack = true;
                 }
                 else
                 {
-                    CombatNumCase = 0;
+                    CombatNumCase = DamageDefault;
                     isCriticalAttack = false;
                 }
 
@@ -452,9 +421,60 @@ namespace Medicraft.Entities.Companion
             return totalDamage;
         }
 
-        public void SetPathFinding(AStar pathFinding)
+        protected override void PlayMobAttackSound()
         {
-            this.pathFinding = pathFinding;
+            switch (GetType().Name)
+            {
+                case "Violet":
+                    PlaySoundEffect([Sound.magicSwoosh1, Sound.Slash]);
+                    break;
+            }
+        }
+
+        protected virtual void UpdateDying(GameTime gameTime)
+        {
+            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (!IsDying)
+            {
+                IsDying = true;
+                CurrentAnimation = SpriteCycle + "_dying";
+                Sprite.Play(CurrentAnimation);
+
+                isBlinkingPlayed = false;
+                blinkingTimer = 0;
+                Sprite.Color = Color.White;
+            }
+
+            if (DyingTimer < DyingTime && IsDying)
+            {
+                DyingTimer += deltaSeconds;
+
+                var blinkSpeed = 15f; // Adjust the speed of the blinking effect
+                var alphaMultiplier = MathF.Sin(DyingTimer * blinkSpeed);
+
+                // Ensure alphaMultiplier is within the valid range [0, 1]
+                alphaMultiplier = MathHelper.Clamp(alphaMultiplier, 0.25f, 2f);
+
+                Sprite.Color = Color.White * Math.Min(alphaMultiplier, 1f);
+            }
+            else if (DyingTimer >= DyingTime)
+            {
+                EntityManager.Instance.ClosestEnemyToCompanion = null;
+                IsDead = true;
+            }
+        }
+
+        public virtual void Revived()
+        {
+            IsDead = false;
+            IsDying = false;
+
+            HP = MaxHP;
+            Mana = MaxMana;
+
+            Position = PlayerManager.Instance.Player.Position;
+            PlayerManager.Instance.IsCompanionDead = false;
         }
     }
 }

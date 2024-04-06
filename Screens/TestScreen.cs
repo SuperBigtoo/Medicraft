@@ -29,41 +29,41 @@ namespace Medicraft.Screens
 
             var tileSetsDemo = new Texture2D[]  // The maximum number of TileSet is 5
             {
-                _content.Load<Texture2D>("tiledmaps/demo/rpg_maker_vx_rtp_tileset_by_telles0808"),
-                _content.Load<Texture2D>("tiledmaps/demo/homemc0"),
-                _content.Load<Texture2D>("tiledmaps/demo/TS1")
+                content.Load<Texture2D>("tiledmaps/demo/rpg_maker_vx_rtp_tileset_by_telles0808"),
+                content.Load<Texture2D>("tiledmaps/demo/homemc0"),
+                content.Load<Texture2D>("tiledmaps/demo/TS1")
             };
-            _tileMap = new TmxMap("Content/tiledmaps/demo/Demo.tmx");
-            _tileMapRender = new TilemapOrthogonalRender(_tileMap, tileSetsDemo, GameGlobals.Instance.TILE_SIZE);
+            tileMap = new TmxMap("Content/tiledmaps/demo/Demo.tmx");
+            tileMapRender = new TilemapOrthogonalRender(tileMap, tileSetsDemo, GameGlobals.Instance.TILE_SIZE);
 
             // Load GameData from JSON file, such as Mobs and Items Data 
-            _entityDatas = _content.Load<List<EntityData>>("data/TestScreen/entites_demo");
-            _objectDatas = _content.Load<List<ObjectData>>("data/TestScreen/objects_demo");
+            entityDatas = content.Load<List<EntityData>>("data/TestScreen/entites_demo");
+            objectDatas = content.Load<List<ObjectData>>("data/TestScreen/objects_demo");
 
             // Adding Mobs to MobSpawner
             Dictionary<int, SpriteSheet> entitySpriteSheets = new()
             {
-                { 100,  _content.Load<SpriteSheet>("entity/mobs/friendly/cat/cat_animation.sf", new JsonContentLoader())},
-                { 200,  _content.Load<SpriteSheet>("entity/mobs/monster/slime/slimes_animation.sf", new JsonContentLoader())},
-                { 201,  _content.Load<SpriteSheet>("entity/mobs/monster/goblin/goblin_animation.sf", new JsonContentLoader())}
+                { 100,  content.Load<SpriteSheet>("entity/mobs/friendly/cat/cat_animation.sf", new JsonContentLoader())},
+                { 200,  content.Load<SpriteSheet>("entity/mobs/monster/slime/slimes_animation.sf", new JsonContentLoader())},
+                { 201,  content.Load<SpriteSheet>("entity/mobs/monster/goblin/goblin_animation.sf", new JsonContentLoader())}
             };
 
-            _mobSpawner = new MobSpawner(GameGlobals.Instance.MobsTestSpawnTime
+            mobSpawner = new MobSpawner(GameGlobals.Instance.MobsTestSpawnTime
                 , GameGlobals.Instance.MobsTestSpawnTimer);
-            _mobSpawner.SetupSpawner(_entityDatas, entitySpriteSheets);
-            EntityManager.Instance.Initialize(_mobSpawner);
+            mobSpawner.SetupSpawner(entityDatas, entitySpriteSheets);
+            EntityManager.Instance.Initialize(mobSpawner);
 
             // Adding GameObject to ObjectSpawner
-            _objectSpawner = new ObjectSpawner(GameGlobals.Instance.ObjectTestSpawnTime
+            objectSpawner = new ObjectSpawner(GameGlobals.Instance.ObjectTestSpawnTime
                 , GameGlobals.Instance.ObjectTestSpawnTimer);
-            _objectSpawner.SetupSpawner(_objectDatas);
-            ObjectManager.Instance.Initialize(_objectSpawner);
+            objectSpawner.SetupSpawner(objectDatas);
+            ObjectManager.Instance.Initialize(objectSpawner);
 
             // Adding DrawEffectSystem
-            _drawEffectSystem = new DrawEffectSystem();
+            drawEffectSystem = new DrawEffectSystem();
 
             // Adding HUDSystem
-            _hudSystem = new HUDSystem();
+            hudSystem = new HUDSystem();
         }
 
         public override void UnloadContent()

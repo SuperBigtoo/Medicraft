@@ -25,6 +25,14 @@ namespace Medicraft.Systems
         public ContentManager Content { private set; get; }
 
         // Global Variables
+        public Keys SaveGameKeyForTest { private set; get; } = Keys.M;
+        public Keys PauseMenuKey { private set; get; } = Keys.Escape;
+        public Keys OpenInventoryKey { private set; get; } = Keys.I;
+        public Keys OpenCraftingKey { private set; get; } = Keys.O;
+        public Keys OpenInspectKey { private set; get; } = Keys.C;
+        public Keys DebugModeKey { private set; get; } = Keys.B;
+        public Keys ShowPathFindingKey { private set; get; } = Keys.V;
+        public Keys RecallCompanionKey { private set; get; } = Keys.R;
         public MouseState PrevMouse { set; get; }
         public MouseState CurMouse { set; get; }
         public KeyboardState PrevKeyboard { set; get; }
@@ -241,19 +249,79 @@ namespace Medicraft.Systems
         {
             Ability_Ive_got_the_Scent,
             Ability_Noah_Strike,
-            Ability_Survivalist
+            Ability_Survivalist,
+            Ability_FrostBolt,
+            Ability_FrostNova,
+            Ability_BrillianceAura
         }
         private readonly Dictionary<AbilityTextureName, int> abilityTextureIndices = [];
 
         public enum Sound
         {
-            Attack1,
-            Attack2,
             damage01,
             damage02,
             Dead,
             ItemPurchase1,
-            quest
+            quest,
+            Bingo,
+            Bite,
+            Cancel1,
+            Cancel2,
+            Claw,
+            Click1,
+            ClickPlayGame,
+            Crafting1,
+            CraftingPotion1,
+            CraftingPotion2,
+            CraftingPotion3,
+            CraftingPotion4,
+            damageCrit1,
+            damageCrit2,
+            Debuff1,
+            door_1,
+            door_2,
+            dullSwoosh1,
+            dullSwoosh2,
+            dullSwoosh3,
+            dullSwoosh4,
+            Equip1,
+            magicSwoosh1,
+            metalSwoosh1,
+            metalSwoosh2,
+            metalSwoosh3,
+            metalSwoosh4,
+            Miss1,
+            Miss2,
+            Miss3,
+            Onmtp_Inspiration08_1,
+            Parry,
+            Pause,
+            Powerup,
+            Recovery1,
+            Recovery2,
+            Save,
+            Skill_Fire_explosion,
+            Skill_Ice_explosion,
+            Skill_Wind,
+            Skill1,
+            Skill2,
+            Slash,
+            Step_grass,
+            Unequip1,
+            Unpause,
+            UseItem,
+            Warp,
+            ColossusSmash_Impact_01,
+            frostbolt_1,
+            FrostNova,
+            GreaterHeal_Low_Base,
+            Heal_Low_Base,
+            LevelUp,
+            Shield_Bash_04,
+            PickUpBag,
+            PickUpCoin,
+            PickUpGeneric,
+            PickUpHerb
         }
         private readonly Dictionary<Sound, int> soundEffectIndices = [];
 
@@ -291,7 +359,8 @@ namespace Medicraft.Systems
             LRPG_Tale_of_Aurora_D,
             m308_unmei,
             Morinonakanoseirei,
-            winered
+            winered,
+            Gag_dead
         }
         private readonly Dictionary<Music, int> musicBGIndices = [];
 
@@ -349,8 +418,8 @@ namespace Medicraft.Systems
             ShowInsufficientSign = false;
 
             // sound & music
-            SoundEffectVolume = 0.70f;
-            BackgroundMusicVolume = 0.70f;
+            SoundEffectVolume = 0.5f;
+            BackgroundMusicVolume = 0.5f;
             CurrentMapMusics = [];
 
             // hotbar switch
@@ -379,7 +448,7 @@ namespace Medicraft.Systems
             MobsOneSpawnTime = 60f;
             MobsOneSpawnTimer = MobsTestSpawnTime;
             IsBossOneDead = false;
-            BossOneSpawnTime = 180f;
+            BossOneSpawnTime = 300f;
             BossOneSpawnTimer = BossOneSpawnTime;
             ObjectOneSpawnTime = 180f;
             ObjectOneSpawnTimer = ObjectOneSpawnTime;
@@ -575,15 +644,75 @@ namespace Medicraft.Systems
             AbilityTextures.Add(Content.Load<Texture2D>("gui/ability/Ability_I've_got_the_Scent!"));
             AbilityTextures.Add(Content.Load<Texture2D>("gui/ability/Ability_Noah_Strike"));
             AbilityTextures.Add(Content.Load<Texture2D>("gui/ability/Ability_Survivalist"));
+            AbilityTextures.Add(Content.Load<Texture2D>("gui/ability/Ability_FrostBolt"));
+            AbilityTextures.Add(Content.Load<Texture2D>("gui/ability/Ability_FrostNova"));
+            AbilityTextures.Add(Content.Load<Texture2D>("gui/ability/Ability_BrillianceAura"));
 
             // Load Sound Effects
-            SoundEffects.Add(Content.Load<SoundEffect>("sound/Attack1"));
-            SoundEffects.Add(Content.Load<SoundEffect>("sound/Attack2"));
             SoundEffects.Add(Content.Load<SoundEffect>("sound/damage01"));
             SoundEffects.Add(Content.Load<SoundEffect>("sound/damage02"));
             SoundEffects.Add(Content.Load<SoundEffect>("sound/Dead"));
             SoundEffects.Add(Content.Load<SoundEffect>("sound/ItemPurchase1"));
             SoundEffects.Add(Content.Load<SoundEffect>("sound/quest"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Bingo"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Bite"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Cancel1"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Cancel2"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Claw"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Click1"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/ClickPlayGame"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Crafting1"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/CraftingPotion1"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/CraftingPotion2"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/CraftingPotion3"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/CraftingPotion4"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/damageCrit1"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/damageCrit2"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Debuff1"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/door_1"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/door_2"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/dullSwoosh1"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/dullSwoosh2"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/dullSwoosh3"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/dullSwoosh4"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Equip1"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/magicSwoosh1"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/metalSwoosh1"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/metalSwoosh2"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/metalSwoosh3"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/metalSwoosh4"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Miss1"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Miss2"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Miss3"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Onmtp_Inspiration08_1"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Parry"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Pause"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Powerup"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Recovery1"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Recovery2"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Save"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Skill_Fire_explosion"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Skill_Ice_explosion"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Skill_Wind"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Skill1"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Skill2"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Slash"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Step_grass"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Unequip1"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Unpause"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/UseItem"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Warp"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/ColossusSmash_Impact_01"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/frostbolt_1"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/FrostNova"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/GreaterHeal_Low_Base"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Heal_Low_Base"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/LevelUp"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/Shield_Bash_04"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/PickUpBag"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/PickUpCoin"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/PickUpGeneric"));
+            SoundEffects.Add(Content.Load<SoundEffect>("sound/PickUpHerb"));
 
             // Music Background Path
             BackgroundMusicPath.Add("music/ch-1/Town");
@@ -619,6 +748,7 @@ namespace Medicraft.Systems
             BackgroundMusicPath.Add("music/m308_unmei");
             BackgroundMusicPath.Add("music/Morinonakanoseirei");
             BackgroundMusicPath.Add("music/winered");
+            BackgroundMusicPath.Add("music/Gag_dead");
 
             // Initialize Indices
             // ShadowTextureName
@@ -652,7 +782,7 @@ namespace Medicraft.Systems
             }
 
             // Initialize GUI Panels
-            GUIManager.Instance.InitializeThemeAndUI(BuiltinTheme);
+            UIManager.Instance.InitializeThemeAndUI(BuiltinTheme);
         }
 
         // Count the number of enums
@@ -741,62 +871,86 @@ namespace Medicraft.Systems
             GameScreenCenter = GameScreen / 2;
         }
 
-        public Texture2D GetShadowTexture(ShadowTextureName shadowTextureName)
+        public static Texture2D GetShadowTexture(ShadowTextureName shadowTextureName)
         {
-            if (shadowTextureIndices.TryGetValue(shadowTextureName, out int index) && index < ShadowTextures.Count)
+            if (Instance.shadowTextureIndices.TryGetValue(shadowTextureName, out int index) && index < Instance.ShadowTextures.Count)
             {
-                return ShadowTextures.ElementAt(index);
+                return Instance.ShadowTextures.ElementAt(index);
             }
 
             return null;
         }
 
-        public Texture2D GetGuiTexture(GuiTextureName guiTextureName)
+        public static Texture2D GetGuiTexture(GuiTextureName guiTextureName)
         {
-            if (guiTextureIndices.TryGetValue(guiTextureName, out int index) && index < GuiTextures.Count)
+            if (Instance.guiTextureIndices.TryGetValue(guiTextureName, out int index) && index < Instance.GuiTextures.Count)
             {
-                return GuiTextures.ElementAt(index);
+                return Instance.GuiTextures.ElementAt(index);
             }
 
             return null;
         }
 
-        public Texture2D GetAbilityTexture(AbilityTextureName abilityTextureName)
+        public static Texture2D GetAbilityTexture(AbilityTextureName abilityTextureName)
         {
-            if (abilityTextureIndices.TryGetValue(abilityTextureName, out int index) && index < AbilityTextures.Count)
+            if (Instance.abilityTextureIndices.TryGetValue(abilityTextureName, out int index) && index < Instance.AbilityTextures.Count)
             {
-                return AbilityTextures.ElementAt(index);
+                return Instance.AbilityTextures.ElementAt(index);
             }
 
             return null;
         }
 
-        public SoundEffect GetSoundEffect(Sound soundEffectName)
+        public static SoundEffect GetSoundEffect(Sound soundEffectName)
         {
-            if (soundEffectIndices.TryGetValue(soundEffectName, out int index) && index < SoundEffects.Count)
+            if (Instance.soundEffectIndices.TryGetValue(soundEffectName, out int index) && index < Instance.SoundEffects.Count)
             {
-                return SoundEffects.ElementAt(index);
+                return Instance.SoundEffects.ElementAt(index);
             }
 
             return null;
         }
 
-        public string GetBackgroundMusicPath(Music musicBG)
+        public static void PlaySoundEffect(Sound soundEffectName)
         {
-            if (musicBGIndices.TryGetValue(musicBG, out int index) && index < BackgroundMusicPath.Count)
+            var soundEffect = GetSoundEffect(soundEffectName);
+
+            if (soundEffect == null) return;
+
+            var soundEffectInstance = soundEffect.CreateInstance();
+            soundEffectInstance.Volume = Instance.SoundEffectVolume;
+            soundEffectInstance.Play();
+        }
+
+        public static void PlaySoundEffect(Sound[] soundEffectName)
+        {
+            int randomIndex = new Random().Next(soundEffectName.Length);
+
+            var soundEffect = GetSoundEffect(soundEffectName[randomIndex]);
+
+            if (soundEffect == null) return;
+
+            var soundEffectInstance = soundEffect.CreateInstance();
+            soundEffectInstance.Volume = Instance.SoundEffectVolume;
+            soundEffectInstance.Play();
+        }
+
+        public static string GetBackgroundMusicPath(Music musicBG)
+        {
+            if (Instance.musicBGIndices.TryGetValue(musicBG, out int index) && index < Instance.BackgroundMusicPath.Count)
             {
-                return BackgroundMusicPath.ElementAt(index);
+                return Instance.BackgroundMusicPath.ElementAt(index);
             }
 
             return null;
         }
 
-        public Song AddCurrentMapMusic(Music musicBG, ContentManager content)
+        public static Song AddCurrentMapMusic(Music musicBG, ContentManager content)
         {
             var path = GetBackgroundMusicPath(musicBG);
             var song = content.Load<Song>(path);
 
-            CurrentMapMusics.Add(new MusicData()
+            Instance.CurrentMapMusics.Add(new MusicData()
             {
                 Name = musicBG,
                 Path = path,
@@ -806,14 +960,27 @@ namespace Medicraft.Systems
             return song;
         }
 
-        public Texture2D GetItemTexture(int itemId)
+        public static void PlayBackgroundMusic(Song song, bool isRepeating, float volumeScale)
+        {
+            if (song == null) return;
+
+            MediaPlayer.IsRepeating = isRepeating;
+            MediaPlayer.Volume = Instance.BackgroundMusicVolume * volumeScale;
+            MediaPlayer.Play(song);
+        }
+
+        public static void UpdateMediaPlayerVolumeScale(float volumeScale)
+        {
+            MediaPlayer.Volume = Instance.BackgroundMusicVolume * volumeScale;
+        }
+
+        public static Texture2D GetItemTexture(int itemId)
         {
             // Set item
-            var itemsSpriteSheet = ItemsPackSprites;
-            var itemSprite = new AnimatedSprite(itemsSpriteSheet);
+            var itemSprite = new AnimatedSprite(Instance.ItemsPackSprites);
 
             itemSprite.Play(itemId.ToString());
-            itemSprite.Update(_deltaSeconds);
+            itemSprite.Update(Instance._deltaSeconds);
 
             var texture = itemSprite.TextureRegion.Texture;
             var bounds = itemSprite.TextureRegion.Bounds;
@@ -831,7 +998,7 @@ namespace Medicraft.Systems
             return newTexture;
         }
 
-        public int RandomItemDrop()
+        public static int RandomItemDrop()
         {
             var currentMap = ScreenManager.Instance.CurrentMap;
 
@@ -840,7 +1007,7 @@ namespace Medicraft.Systems
             switch (currentMap)
             {
                 case "Test":
-                    chapterItemData = ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("Test"));               
+                    chapterItemData = Instance.ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("Test"));               
                     break;
 
                 case "map_1":
@@ -848,7 +1015,7 @@ namespace Medicraft.Systems
                 case "battlezone_1":
 
                 case "dungeon_1":
-                    chapterItemData = ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("chapter_1"));
+                    chapterItemData = Instance.ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("chapter_1"));
                     break;
 
                 case "map_2":
@@ -856,7 +1023,7 @@ namespace Medicraft.Systems
                 case "battlezone_2":
 
                 case "dungeon_2":
-                    chapterItemData = ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("chapter_2"));
+                    chapterItemData = Instance.ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("chapter_2"));
                     break;
 
                 case "map_3":
@@ -864,7 +1031,7 @@ namespace Medicraft.Systems
                 case "battlezone_3":
 
                 case "dungeon_3":
-                    chapterItemData = ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("chapter_3"));
+                    chapterItemData = Instance.ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("chapter_3"));
                     break;
 
                 case "map_4":
@@ -872,7 +1039,7 @@ namespace Medicraft.Systems
                 case "battlezone_4":
 
                 case "dungeon_4":
-                    chapterItemData = ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("chapter_4"));
+                    chapterItemData = Instance.ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("chapter_4"));
                     break;
 
                 case "map_5":
@@ -880,7 +1047,7 @@ namespace Medicraft.Systems
                 case "battlezone_5":
 
                 case "dungeon_5":
-                    chapterItemData = ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("chapter_5"));
+                    chapterItemData = Instance.ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("chapter_5"));
                     break;
 
                 case "map_6":
@@ -888,7 +1055,7 @@ namespace Medicraft.Systems
                 case "battlezone_6":
 
                 case "dungeon_6":
-                    chapterItemData = ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("chapter_6"));
+                    chapterItemData = Instance.ChapterItemDatas.FirstOrDefault(c => c.Name.Equals("chapter_6"));
                     break;
             }
 
@@ -897,9 +1064,9 @@ namespace Medicraft.Systems
             return chapterItemData.ItemDropId[random.Next(chapterItemData.ItemDropId.Length)];
         }
 
-        public int RandomItemQuantityDrop(int itemId)
+        public static int RandomItemQuantityDrop(int itemId)
         {
-            var itemData = ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(itemId));
+            var itemData = Instance.ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(itemId));
             int minValue = 1, maxValue = 1;
 
             if (itemData != null && itemData.QuantityDropRange != null && itemData.QuantityDropRange.Length != 0)
@@ -914,11 +1081,11 @@ namespace Medicraft.Systems
             return random.Next(minValue, maxValue + 1);
         }
 
-        public bool IsUsableItem(int itemId)
+        public static bool IsUsableItem(int itemId)
         {
-            var itemData = ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(itemId));
+            var itemData = Instance.ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(itemId));
 
-            if (!itemData.Usable)
+            if (!itemData.IsUsable)
             {
                 return false;
             }
@@ -926,16 +1093,16 @@ namespace Medicraft.Systems
             return true;
         }
 
-        public string GetItemName(int itemId)
+        public static string GetItemName(int itemId)
         {
-            var itemData = ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(itemId));
+            var itemData = Instance.ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(itemId));
 
             return itemData != null ? itemData.Name : "";
         }
 
-        public string GetItemCategory(int itemId)
+        public static string GetItemCategory(int itemId)
         {
-            var itemData = ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(itemId));
+            var itemData = Instance.ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(itemId));
 
             return itemData != null ? itemData.Category : "";
         }

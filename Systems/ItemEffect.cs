@@ -12,7 +12,8 @@ namespace Medicraft.Systems
 
         public ItemEffect(int itemEffectId)
         {
-            _itemEffectData = GameGlobals.Instance.ItemEffectDatas.FirstOrDefault(i => i.ItemEffectId.Equals(itemEffectId));
+            _itemEffectData = GameGlobals.Instance.ItemEffectDatas.FirstOrDefault
+                (i => i.ItemEffectId.Equals(itemEffectId));
             _name = _itemEffectData.Name;
             _category = _itemEffectData.Category;
             _description = _itemEffectData.Description;
@@ -45,8 +46,11 @@ namespace Medicraft.Systems
                         }
                         else if (effect.ActivationType.Equals("Periodic"))
                         {
-                            StatusEffectManager.Instance.AddStatusEffect(PlayerManager.Instance.Player
-                                , effect.EffectType + effect.Target + _name, effect);
+                            StatusEffectManager.Instance.AddStatusEffect(
+                                PlayerManager.Instance.Player,
+                                PlayerManager.Instance.Player.Name,
+                                effect.EffectType + effect.Target + _name,
+                                effect);
 
                             isItemUesd = true;
                         }
@@ -57,12 +61,14 @@ namespace Medicraft.Systems
 
                     foreach (var effect in _itemEffectData.Effects)
                     {
-                        StatusEffectManager.Instance.AddStatusEffect(PlayerManager.Instance.Player
-                            , effect.EffectType + effect.Target + _name, effect);
+                        StatusEffectManager.Instance.AddStatusEffect(
+                            PlayerManager.Instance.Player,
+                            PlayerManager.Instance.Player.Name,
+                            effect.EffectType + effect.Target + _name,
+                            effect);
 
                         isItemUesd = true;
-                    }
-                    
+                    }                    
                     break;
             }
 

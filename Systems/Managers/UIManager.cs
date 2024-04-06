@@ -4,31 +4,30 @@ using GeonBit.UI.Utils.Forms;
 using Medicraft.Data;
 using Medicraft.Data.Models;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Sprites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using static Medicraft.Systems.GameGlobals;
 
 namespace Medicraft.Systems.Managers
 {
-    public class GUIManager
+    public class UIManager
     {
-        private static GUIManager instance;
+        private static UIManager instance;
 
         private float _deltaSeconds = 0;
 
-        public int PreviosGUI {  get; private set; }
-        private int currentGUI;
-        public int CurrentGUI
+        public int PreviosUI {  get; private set; }
+        private int currentUI;
+        public int CurrentUI
         {
-            get => currentGUI;
+            get => currentUI;
             set
             {
-                PreviosGUI = currentGUI;
-                currentGUI = value;
+                PreviosUI = currentUI;
+                currentUI = value;
             }
         }
 
@@ -67,10 +66,10 @@ namespace Medicraft.Systems.Managers
         // UI elements
         private readonly List<Panel> _mainPanels = [];
 
-        private GUIManager()
+        private UIManager()
         {
-            CurrentGUI = MainMenu;
-            PreviosGUI = MainMenu;
+            CurrentUI = MainMenu;
+            PreviosUI = MainMenu;
             CurrentCraftingList = ConsumableItem;
         }
 
@@ -80,7 +79,7 @@ namespace Medicraft.Systems.Managers
             foreach (Panel panel in _mainPanels)
                 panel.Visible = false;
 
-            _mainPanels[CurrentGUI].Visible = true;
+            _mainPanels[CurrentUI].Visible = true;
         }
 
         private void UpdateSelectedCompanion(bool isIncreasing)
@@ -106,10 +105,60 @@ namespace Medicraft.Systems.Managers
             IsCharacterTabSelected = true;
         }
 
+        private void SetCompanionSelectedSkill(string abilityType)
+        {
+            var companion = PlayerManager.Instance.Companions[SelectedCompanion];
+
+            switch (abilityType)
+            {
+                case "normal":
+                    switch (companion.Name)
+                    {
+                        case "Violet":
+                            CompanionSelectedSkill = "Frost Bolt";
+                            break;
+                    }
+                    break;
+
+                case "burst":
+                    switch (companion.Name)
+                    {
+                        case "Violet":
+                            CompanionSelectedSkill = "Frost Nova";
+                            break;
+                    }
+                    break;
+
+                case "passive":
+                    switch (companion.Name)
+                    {
+                        case "Violet":
+                            CompanionSelectedSkill = "Brilliance Aura";
+                            break;
+                    }
+                    break;
+            }
+        }
+
+        private void SetCompanionSkillIconTextrue(string companionName, Icon normalSkillIcon
+            , Icon burstSkillIcon, Icon passiveSkillIcon)
+        {
+            switch (companionName)
+            {
+                case "Violet":
+                    CharacterSprite = new(GameGlobals.Instance.CompanionSpriteSheet[VioletSprite]);
+                    normalSkillIcon.Texture = GetAbilityTexture(AbilityTextureName.Ability_FrostBolt);
+                    burstSkillIcon.Texture = GetAbilityTexture(AbilityTextureName.Ability_FrostNova);
+                    passiveSkillIcon.Texture = GetAbilityTexture(AbilityTextureName.Ability_BrillianceAura);
+                    break;
+            }
+        }
+
         public void InitializeThemeAndUI(BuiltinThemes theme)
         {
             // create and init the UI manager
-            var content = new ContentManager(GameGlobals.Instance.Content.ServiceProvider, "Content");
+            var content = new ContentManager(
+                GameGlobals.Instance.Content.ServiceProvider, "Content");
             UserInterface.Initialize(content, theme);
             UserInterface.Active.UseRenderTarget = true;
 
@@ -118,6 +167,36 @@ namespace Medicraft.Systems.Managers
 
             // disable Cursor
             UserInterface.Active.ShowCursor = false;
+
+            // Set Click Button Sound
+            UserInterface.Active.OnClick = (Entity entity) =>
+            {
+                if (entity.GetType().Name.Equals("Button") || entity.GetType().Name.Equals("DropDown"))
+                {
+                    switch (entity.Identifier)
+                    {
+                        case "backButton":
+                        case "closeButton":
+                        case "Cancel":
+                        case "No":
+                            PlaySoundEffect(Sound.Cancel1);
+                            break;
+
+                        case "Yes!":
+                        case "newGameButton":
+                            PlaySoundEffect(Sound.ClickPlayGame);
+                            break;
+
+                        case "resumeButton":
+                            PlaySoundEffect(Sound.Unpause);
+                            break;
+
+                        default:
+                            PlaySoundEffect(Sound.Click1);
+                            break;
+                    }
+                }
+            };
 
             // init all ui panel
             // PlayScreen = 0
@@ -172,7 +251,8 @@ namespace Medicraft.Systems.Managers
             // Set Item
             for (int i = minSlotNum; i <= maxSlotNum; i++)
             {
-                var itemInSlot = InventoryManager.Instance.InventoryBag.FirstOrDefault(item => item.Value.Slot.Equals(i));
+                var itemInSlot = InventoryManager.Instance.InventoryBag.FirstOrDefault
+                    (item => item.Value.Slot.Equals(i));
 
                 if (itemInSlot.Value != null)
                 {
@@ -183,7 +263,7 @@ namespace Medicraft.Systems.Managers
                         Slot = itemInSlot.Value.Slot,
                         KeyIndex = itemInSlot.Key,
                         Size = new Vector2(42, 42),
-                        Texture = GameGlobals.Instance.GetItemTexture(itemInSlot.Value.ItemId),
+                        Texture = GetItemTexture(itemInSlot.Value.ItemId),
                     };
 
                     iconItem.AddChild(new Label(iconItem.Count.ToString(), Anchor.BottomRight, offset: new Vector2(-25f, -33))
@@ -308,16 +388,16 @@ namespace Medicraft.Systems.Managers
             {
                 PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll,
                 Identifier = "listItemPanel",
-                Padding = new Vector2(15, 15)
+                Padding = new Vector2(10, 10)
             };
             listItemPanel.Scrollbar.AdjustMaxAutomatically = true;
             rightInvenPanel.AddChild(listItemPanel);
 
             // add close button
-            var closeInventoryButton = new Button("Close", anchor: Anchor.BottomRight
+            var closeButton = new Button("Close", anchor: Anchor.BottomRight
                 , size: new Vector2(200, -1), offset: new Vector2(64, -100))
             {
-                Identifier = "closeInventoryButton",
+                Identifier = "closeButton",
                 Skin = ButtonSkin.Fancy,
                 OnClick = (Entity entity) =>
                 {
@@ -329,10 +409,10 @@ namespace Medicraft.Systems.Managers
                     // Toggle the IsOpenInventory flag
                     GameGlobals.Instance.IsOpenInventoryPanel = false;
                     GameGlobals.Instance.IsRefreshPlayScreenUI = false;
-                    CurrentGUI = PlayScreen;
+                    CurrentUI = PlayScreen;
                 }
             };
-            inventoryPanel.AddChild(closeInventoryButton);
+            inventoryPanel.AddChild(closeButton);
 
             var offsetX = 64;
 
@@ -358,12 +438,16 @@ namespace Medicraft.Systems.Managers
             // Set on Click use item in inventory
             useInvenItemButton.OnClick = (Entity entity) =>
             {
-                var currItemInv = InventoryManager.Instance.ItemSelected;
+                var currItemInv = InventoryManager.Instance.SelectedItem;
 
                 string notifyText = string.Empty;
                 if (currItemInv.Value.GetCategory().Equals("Equipment"))
                 {
-                    notifyText = $"Do you wanna equip '{currItemInv.Value.GetName()}'?";
+                    if (currItemInv.Value.Slot != GameGlobals.Instance.DefaultInventorySlot)
+                    {
+                        notifyText = $"Do you wanna unequip '{currItemInv.Value.GetName()}'?";
+                    }
+                    else notifyText = $"Do you wanna equip '{currItemInv.Value.GetName()}'?";
                 }
                 else notifyText = $"Do you wanna use '{currItemInv.Value.GetName()}'?";
 
@@ -374,9 +458,16 @@ namespace Medicraft.Systems.Managers
                             new("Ok", () =>
                             {
                                 // Use selected item from inventory
-                                InventoryManager.Instance.UseItem(currItemInv.Key, currItemInv.Value);
+                                if (currItemInv.Value.GetCategory().Equals("Equipment")
+                                    && currItemInv.Value.Slot != GameGlobals.Instance.DefaultInventorySlot)
+                                {
+                                    InventoryManager.Instance.UnEquip(currItemInv.Value);
+                                    
+                                    // refresh display item after selectedItem has been use
+                                    RefreshInvenrotyItem(true);
+                                }
+                                else InventoryManager.Instance.UseItem(currItemInv.Key, currItemInv.Value);
 
-                                //InventoryManager.Instance.ItemSelected = null;
                                 useInvenItemButton.Enabled = false;
                                 invenSetHotbarButton.Enabled = false;
                                 return true;
@@ -391,7 +482,7 @@ namespace Medicraft.Systems.Managers
             // Set on Click set Hotbar item
             invenSetHotbarButton.OnClick = (Entity entity) =>
             {
-                var currItemInv = InventoryManager.Instance.ItemSelected;
+                var currItemInv = InventoryManager.Instance.SelectedItem;
 
                 var hotbarSetupForm = new Form([
                     new FormFieldData(FormFieldType.DropDown, "dropdown_setup_hotbar", "Hotbar Slot")
@@ -434,10 +525,14 @@ namespace Medicraft.Systems.Managers
             RefreshInvenrotyItem(false);
 
             var inventoryPanel = _mainPanels.ElementAt(InventoryPanel);
-            var invenRightPanel = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenRightPanel"));
-            var listItemPanel = invenRightPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("listItemPanel"));
-            var invenUseItemButton = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenUseItemButton"));
-            var invenSetHotbarButton = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenSetHotbarButton"));
+            var invenRightPanel = inventoryPanel.Children?.FirstOrDefault
+                (p => p.Identifier.Equals("invenRightPanel"));
+            var listItemPanel = invenRightPanel.Children?.FirstOrDefault
+                (p => p.Identifier.Equals("listItemPanel"));
+            var invenUseItemButton = inventoryPanel.Children?.FirstOrDefault
+                (p => p.Identifier.Equals("invenUseItemButton"));
+            var invenSetHotbarButton = inventoryPanel.Children?.FirstOrDefault
+                (p => p.Identifier.Equals("invenSetHotbarButton"));
 
             if (listItemPanel.Children.Count != 0)
             {
@@ -448,15 +543,16 @@ namespace Medicraft.Systems.Managers
                 // Setup Enable or Disable the button for fisrtItem
                 //InventoryManager.Instance.InventoryBag.TryGetValue(fisrtItem.ItemId.ToString()
                 //    , out InventoryItemData item);
-                var item = InventoryManager.Instance.InventoryBag.FirstOrDefault(i => i.Key.Equals(fisrtItem.KeyIndex));
+                var item = InventoryManager.Instance.InventoryBag.FirstOrDefault
+                    (i => i.Key.Equals(fisrtItem.KeyIndex));
 
-                InventoryManager.Instance.ItemSelected = item;
+                InventoryManager.Instance.SelectedItem = item;
 
-                if (GameGlobals.Instance.IsUsableItem(fisrtItem.ItemId))
+                if (IsUsableItem(fisrtItem.ItemId))
                 {
                     invenUseItemButton.Enabled = true;
 
-                    if (!GameGlobals.Instance.GetItemCategory(fisrtItem.ItemId).Equals("Equipment"))
+                    if (!GetItemCategory(fisrtItem.ItemId).Equals("Equipment"))
                     {
                         invenSetHotbarButton.Enabled = true;
                     }
@@ -465,8 +561,8 @@ namespace Medicraft.Systems.Managers
                         // In case selected item is Equipment
                         invenSetHotbarButton.Enabled = false;
 
-                        if (!item.Value.Slot.Equals(GameGlobals.Instance.DefaultInventorySlot))
-                            invenUseItemButton.Enabled = false;
+                        //if (!item.Value.Slot.Equals(GameGlobals.Instance.DefaultInventorySlot))
+                        //    invenUseItemButton.Enabled = false;
                     }
                 }
                 else
@@ -480,12 +576,18 @@ namespace Medicraft.Systems.Managers
         public void RefreshInvenrotyItem(bool isClearLeftPanel)
         {
             var inventoryPanel = _mainPanels[InventoryPanel];          
-            var invenRightPanel = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenRightPanel"));
-            var invenLeftPanel = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenLeftPanel"));
-            var listItemPanel = invenRightPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("listItemPanel"));
-            var invenDescriptPanel = invenLeftPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenDescriptPanel"));
-            var invenUseItemButton = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenUseItemButton"));
-            var invenSetHotbarButton = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenSetHotbarButton"));
+            var invenRightPanel = inventoryPanel.Children?.FirstOrDefault
+                (p => p.Identifier.Equals("invenRightPanel"));
+            var invenLeftPanel = inventoryPanel.Children?.FirstOrDefault
+                (p => p.Identifier.Equals("invenLeftPanel"));
+            var listItemPanel = invenRightPanel.Children?.FirstOrDefault
+                (p => p.Identifier.Equals("listItemPanel"));
+            var invenDescriptPanel = invenLeftPanel.Children?.FirstOrDefault
+                (p => p.Identifier.Equals("invenDescriptPanel"));
+            var invenUseItemButton = inventoryPanel.Children?.FirstOrDefault
+                (p => p.Identifier.Equals("invenUseItemButton"));
+            var invenSetHotbarButton = inventoryPanel.Children?.FirstOrDefault
+                (p => p.Identifier.Equals("invenSetHotbarButton"));
 
             // Clear inventory display
             listItemPanel.ClearChildren();
@@ -495,7 +597,8 @@ namespace Medicraft.Systems.Managers
                 foreach (var itemLeftPanel in invenLeftPanel.Children)
                     itemLeftPanel.Visible = false;
 
-            //// Set item
+            // Set item Display
+            var tempIconItems = new List<Icon>();
             foreach (var item in InventoryManager.Instance.InventoryBag)
             {
                 // Item Icon
@@ -505,7 +608,7 @@ namespace Medicraft.Systems.Managers
                     Count = item.Value.Count,
                     Slot = item.Value.Slot,
                     KeyIndex = item.Key,
-                    Texture = GameGlobals.Instance.GetItemTexture(item.Value.ItemId),
+                    Texture = GetItemTexture(item.Value.ItemId),
                 };
 
                 // Item text
@@ -527,9 +630,15 @@ namespace Medicraft.Systems.Managers
                 };
 
                 iconItem.AddChild(iconText);
-                listItemPanel.AddChild(iconItem);
+                tempIconItems.Add(iconItem);
             }
 
+            // Sort Item Display by Id and add to listItemPanel
+            var sortedIconItems = tempIconItems.OrderBy(icon => icon.ItemId).ToList();
+            foreach (var sortediconItem in sortedIconItems)
+                listItemPanel.AddChild(sortediconItem);
+
+            // Set OnClick
             foreach (var iconItem in listItemPanel.Children.OfType<Icon>())
             {
                 iconItem.OnClick = (Entity entity) =>
@@ -540,15 +649,16 @@ namespace Medicraft.Systems.Managers
                         itemLeftPanel.Visible = true;
 
                     // Enable or Disable the button for each item icon
-                    var item = InventoryManager.Instance.InventoryBag.FirstOrDefault(i => i.Key.Equals(iconItem.KeyIndex));
+                    var item = InventoryManager.Instance.InventoryBag.FirstOrDefault
+                        (i => i.Key.Equals(iconItem.KeyIndex));
 
-                    InventoryManager.Instance.ItemSelected = item;
+                    InventoryManager.Instance.SelectedItem = item;
 
-                    if (GameGlobals.Instance.IsUsableItem(iconItem.ItemId))
+                    if (IsUsableItem(iconItem.ItemId))
                     {
                         invenUseItemButton.Enabled = true;
 
-                        if (!GameGlobals.Instance.GetItemCategory(iconItem.ItemId).Equals("Equipment"))
+                        if (!GetItemCategory(iconItem.ItemId).Equals("Equipment"))
                         {
                             invenSetHotbarButton.Enabled = true;
                         }
@@ -557,8 +667,8 @@ namespace Medicraft.Systems.Managers
                             // In case selected item is Equipment
                             invenSetHotbarButton.Enabled = false;
 
-                            if (!item.Value.Slot.Equals(GameGlobals.Instance.DefaultInventorySlot))
-                                invenUseItemButton.Enabled = false;
+                            //if (!item.Value.Slot.Equals(GameGlobals.Instance.DefaultInventorySlot))
+                            //    invenUseItemButton.Enabled = false;
                         }
                     }
                     else
@@ -566,18 +676,20 @@ namespace Medicraft.Systems.Managers
                         invenUseItemButton.Enabled = false;
                         invenSetHotbarButton.Enabled = true;
                     }
-       
                 };
             }
         }
 
         private void SetInventoryItemDisplay(Icon icon)
         {
-            var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(icon.ItemId));
+            var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault
+                (i => i.ItemId.Equals(icon.ItemId));
 
             var inventoryPanel = _mainPanels.ElementAt(InventoryPanel);
-            var invenLeftPanel = inventoryPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenLeftPanel"));
-            var invenDescriptPanel = invenLeftPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("invenDescriptPanel"));
+            var invenLeftPanel = inventoryPanel.Children?.FirstOrDefault
+                (p => p.Identifier.Equals("invenLeftPanel"));
+            var invenDescriptPanel = invenLeftPanel.Children?.FirstOrDefault
+                (p => p.Identifier.Equals("invenDescriptPanel"));
 
             // Clone the clicked icon and add it to the left panel
             var itemIcon = invenLeftPanel.Children.OfType<Icon>().FirstOrDefault
@@ -728,7 +840,6 @@ namespace Medicraft.Systems.Managers
             craftingSelectItemPanel.AddChild(rightCraftingSelectPanel);
 
             rightCraftingSelectPanel.AddChild(new Header("INGREDINES"));
-            rightCraftingSelectPanel.AddChild(new HorizontalLine());
             rightCraftingSelectPanel.AddChild(new LineSpace(1));
 
             var ingredientList = new SelectList(new Vector2(550, 530), Anchor.AutoCenter, skin: PanelSkin.ListBackground)
@@ -740,20 +851,23 @@ namespace Medicraft.Systems.Managers
 
             rightCraftingSelectPanel.AddChild(ingredientList);
 
-            var closeCraftingSelectedButton = new Button("Back", anchor: Anchor.BottomRight
-                , size: new Vector2(200, -1), offset: new Vector2(64, -100))
+            // Close Button Crafting Selected Item
             {
-                Identifier = "closeCraftingSelectButton",
-                Skin = ButtonSkin.Fancy,
-                OnClick = (Entity entity) =>
+                var closeButton = new Button("Back", anchor: Anchor.BottomRight
+                , size: new Vector2(200, -1), offset: new Vector2(64, -100))
                 {
-                    craftingPanel.Visible = !craftingPanel.Visible;
-                    craftingSelectItemPanel.Visible = !craftingSelectItemPanel.Visible;
+                    Identifier = "closeButton",
+                    Skin = ButtonSkin.Fancy,
+                    OnClick = (Entity entity) =>
+                    {
+                        craftingPanel.Visible = !craftingPanel.Visible;
+                        craftingSelectItemPanel.Visible = !craftingSelectItemPanel.Visible;
 
-                    quantitySlider.Value = 1;
-                }
-            };
-            craftingSelectItemPanel.AddChild(closeCraftingSelectedButton);
+                        quantitySlider.Value = 1;
+                    }
+                };
+                craftingSelectItemPanel.AddChild(closeButton);
+            } 
 
             var craftingSelectedButton = new Button("Craft", anchor: Anchor.BottomLeft
                 , size: new Vector2(250, -1), offset: new Vector2(200, -100))
@@ -766,7 +880,7 @@ namespace Medicraft.Systems.Managers
                     var craftingSelected = CraftingManager.Instance.CraftingItemSelected;
 
                     GeonBit.UI.Utils.MessageBox.ShowMsgBox("Crafting Item?"
-                    , $"Do ya wanna craft '{GameGlobals.Instance.GetItemName(craftingSelected.ItemId)}'?"
+                    , $"Do ya wanna craft '{GetItemName(craftingSelected.ItemId)}'?"
                     , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
                     {
                             new("Ok", () =>
@@ -776,8 +890,7 @@ namespace Medicraft.Systems.Managers
 
                                 if (craftableCount != 0 && itemQuantity <= craftableCount)
                                 {
-                                    for (int i = 0; i < itemQuantity; i++)
-                                        CraftingManager.Instance.CraftingItem(craftingSelected.ItemId);
+                                    CraftingManager.Instance.CraftingItem(craftingSelected.ItemId, itemQuantity);
                                 }
                                 else
                                 {
@@ -820,25 +933,27 @@ namespace Medicraft.Systems.Managers
 
             // CraftingPanel
             // add close button
-            var closeCraftingButton = new Button("Close", anchor: Anchor.BottomRight
-                , size: new Vector2(200, -1), offset: new Vector2(64, -100))
             {
-                Identifier = "closeCraftingButton",
-                Skin = ButtonSkin.Fancy,
-                OnClick = (Entity entity) =>
+                var closeButton = new Button("Close", anchor: Anchor.BottomRight
+                , size: new Vector2(200, -1), offset: new Vector2(64, -100))
                 {
-                    // Closing Inventory and reset current gui panel
-                    // Pause PlayScreen
-                    GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
-                    GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
+                    Identifier = "closeButton",
+                    Skin = ButtonSkin.Fancy,
+                    OnClick = (Entity entity) =>
+                    {
+                        // Closing Inventory and reset current gui panel
+                        // Pause PlayScreen
+                        GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
+                        GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
 
-                    // Toggle the IsOpenCraftingPanel flag
-                    GameGlobals.Instance.IsOpenCraftingPanel = false;
-                    GameGlobals.Instance.IsRefreshPlayScreenUI = false;
-                    CurrentGUI = PlayScreen;
-                }
-            };
-            craftingPanel.AddChild(closeCraftingButton);
+                        // Toggle the IsOpenCraftingPanel flag
+                        GameGlobals.Instance.IsOpenCraftingPanel = false;
+                        GameGlobals.Instance.IsRefreshPlayScreenUI = false;
+                        CurrentUI = PlayScreen;
+                    }
+                };
+                craftingPanel.AddChild(closeButton);
+            }   
 
             var craftingItemButton = new Button("Craft", anchor: Anchor.BottomLeft
                 , size: new Vector2(250, -1), offset: new Vector2(200, -100))
@@ -881,10 +996,14 @@ namespace Medicraft.Systems.Managers
             RefreshCraftableItem(CurrentCraftingList);
 
             var craftingPanel = _mainPanels.ElementAt(CraftingPanel);
-            var rightCraftingPanel = craftingPanel.Children?.FirstOrDefault(e => e.Identifier.Equals("rightCraftingPanel"));
-            var listCraftableItemPanel = rightCraftingPanel.Children?.FirstOrDefault(e => e.Identifier.Equals("listCraftableItemPanel"));
-            var craftingItemButton = craftingPanel.Children?.FirstOrDefault(e => e.Identifier.Equals("craftingItemButton"));
-            var leftCraftingPanel = craftingPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("leftCraftingPanel"));
+            var rightCraftingPanel = craftingPanel.Children?.FirstOrDefault
+                (e => e.Identifier.Equals("rightCraftingPanel"));
+            var listCraftableItemPanel = rightCraftingPanel.Children?.FirstOrDefault
+                (e => e.Identifier.Equals("listCraftableItemPanel"));
+            var craftingItemButton = craftingPanel.Children?.FirstOrDefault
+                (e => e.Identifier.Equals("craftingItemButton"));
+            var leftCraftingPanel = craftingPanel.Children?.FirstOrDefault
+                (p => p.Identifier.Equals("leftCraftingPanel"));
 
             List<CraftableItem> craftableItemList = [];
 
@@ -909,7 +1028,8 @@ namespace Medicraft.Systems.Managers
 
                 SetCraftableItemDisplay(fisrtItem);
 
-                var craftingItemselected = craftableItemList.FirstOrDefault(i => i.ItemId.Equals(fisrtItem.ItemId));
+                var craftingItemselected = craftableItemList.FirstOrDefault
+                    (i => i.ItemId.Equals(fisrtItem.ItemId));
                 CraftingManager.Instance.CraftingItemSelected = craftingItemselected;
 
                 // Enable or Disable the button for each item icon
@@ -920,10 +1040,14 @@ namespace Medicraft.Systems.Managers
         public void RefreshCraftableItem(string craftableType)
         {
             var craftingPanel = _mainPanels.ElementAt(CraftingPanel);
-            var rightCraftingPanel = craftingPanel.Children?.FirstOrDefault(e => e.Identifier.Equals("rightCraftingPanel"));
-            var listCraftableItemPanel = rightCraftingPanel.Children?.FirstOrDefault(e => e.Identifier.Equals("listCraftableItemPanel"));
-            var craftingItemButton = craftingPanel.Children?.FirstOrDefault(e => e.Identifier.Equals("craftingItemButton"));
-            var leftCraftingPanel = craftingPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("leftCraftingPanel"));
+            var rightCraftingPanel = craftingPanel.Children?.FirstOrDefault
+                (e => e.Identifier.Equals("rightCraftingPanel"));
+            var listCraftableItemPanel = rightCraftingPanel.Children?.FirstOrDefault
+                (e => e.Identifier.Equals("listCraftableItemPanel"));
+            var craftingItemButton = craftingPanel.Children?.FirstOrDefault
+                (e => e.Identifier.Equals("craftingItemButton"));
+            var leftCraftingPanel = craftingPanel.Children?.FirstOrDefault
+                (p => p.Identifier.Equals("leftCraftingPanel"));
 
             craftingItemButton.Enabled = false;
 
@@ -955,7 +1079,7 @@ namespace Medicraft.Systems.Managers
                 {
                     Enabled = item.IsCraftable,
                     ItemId = item.ItemId,
-                    Texture = GameGlobals.Instance.GetItemTexture(item.ItemId),
+                    Texture = GetItemTexture(item.ItemId),
                 };
 
                 listCraftableItemPanel.AddChild(iconItem);
@@ -967,7 +1091,8 @@ namespace Medicraft.Systems.Managers
                 {
                     SetCraftableItemDisplay(iconItem);
 
-                    var craftingItemselected = craftableItemList.FirstOrDefault(i => i.ItemId.Equals(iconItem.ItemId));
+                    var craftingItemselected = craftableItemList.FirstOrDefault
+                        (i => i.ItemId.Equals(iconItem.ItemId));
                     CraftingManager.Instance.CraftingItemSelected = craftingItemselected;              
 
                     // Enable or Disable the button for each item icon
@@ -978,11 +1103,14 @@ namespace Medicraft.Systems.Managers
 
         private void SetCraftableItemDisplay(Icon icon)
         {
-            var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(icon.ItemId));
+            var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault
+                (i => i.ItemId.Equals(icon.ItemId));
 
             var craftingPanel = _mainPanels.ElementAt(CraftingPanel);
-            var leftCraftingPanel = craftingPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("leftCraftingPanel"));
-            var craftingDescriptPanel = leftCraftingPanel.Children?.FirstOrDefault(p => p.Identifier.Equals("craftingDescriptPanel"));
+            var leftCraftingPanel = craftingPanel.Children?.FirstOrDefault
+                (p => p.Identifier.Equals("leftCraftingPanel"));
+            var craftingDescriptPanel = leftCraftingPanel.Children?.FirstOrDefault
+                (p => p.Identifier.Equals("craftingDescriptPanel"));
 
             // Clone the clicked icon and add it to the left panel
             var itemIcon = leftCraftingPanel.Children.OfType<Icon>().FirstOrDefault
@@ -1009,7 +1137,7 @@ namespace Medicraft.Systems.Managers
 
             var itemIcon = leftCraftingSelectItemPanel.Children.OfType<Icon>().FirstOrDefault
                 (i => i.Identifier.Equals("itemIcon"));
-            itemIcon.Texture = GameGlobals.Instance.GetItemTexture(itemCrafting.ItemId);
+            itemIcon.Texture = GetItemTexture(itemCrafting.ItemId);
         }
 
         private void SetItemIngredientDisplay(CraftableItem itemCrafting)
@@ -1031,8 +1159,6 @@ namespace Medicraft.Systems.Managers
                 // Add ingredient of selected crafting item
                 string ingLabel = "";
 
-                //var isItemFound = InventoryManager.Instance.InventoryBag.TryGetValue(
-                //    ingredient.ItemId.ToString(), out InventoryItemData itemData);
                 var items = InventoryManager.Instance.InventoryBag.Values.Where
                     (i => i.ItemId.Equals(ingredient.ItemId));
 
@@ -1053,7 +1179,7 @@ namespace Medicraft.Systems.Managers
 
                 ingredientList.AddItem(ingLabel);
                 ingredientList.IconsScale *= 1f;
-                ingredientList.SetIcon(GameGlobals.Instance.GetItemTexture(ingredient.ItemId), ingLabel);
+                ingredientList.SetIcon(GetItemTexture(ingredient.ItemId), ingLabel);
             }
         }
 
@@ -1123,7 +1249,7 @@ namespace Medicraft.Systems.Managers
                 {
                     Identifier = "SPIcon",
                     Locked = true,
-                    Texture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.skill_point),
+                    Texture = GetGuiTexture(GuiTextureName.skill_point),
                     Scale = 0.75f,
                     Offset = new Vector2(-35, -35),
                     Anchor = Anchor.AutoInlineNoBreak
@@ -1258,7 +1384,8 @@ namespace Medicraft.Systems.Managers
 
                     NoahSelectedSkill = "I've got the Scent!";
 
-                    var descNormal = GameGlobals.Instance.SkillDescriptionDatas.Where(s => s.Name.Equals(NoahSelectedSkill)).ToList();
+                    var descNormal = GameGlobals.Instance.SkillDescriptionDatas.Where
+                        (s => s.Name.Equals(NoahSelectedSkill)).ToList();
                     var levelNormal = PlayerManager.Instance.Player.PlayerData.Abilities.NormalSkillLevel;
 
                     // Refesh skill description
@@ -1273,7 +1400,8 @@ namespace Medicraft.Systems.Managers
 
                     NoahSelectedSkill = "Noah Strike";
 
-                    var descBurst = GameGlobals.Instance.SkillDescriptionDatas.Where(s => s.Name.Equals(NoahSelectedSkill)).ToList();
+                    var descBurst = GameGlobals.Instance.SkillDescriptionDatas.Where
+                        (s => s.Name.Equals(NoahSelectedSkill)).ToList();
                     var levelBurst = PlayerManager.Instance.Player.PlayerData.Abilities.BurstSkillLevel;
 
                     // Refesh skill description
@@ -1288,7 +1416,8 @@ namespace Medicraft.Systems.Managers
 
                     NoahSelectedSkill = "Survivalist";
 
-                    var descPassive = GameGlobals.Instance.SkillDescriptionDatas.Where(s => s.Name.Equals(NoahSelectedSkill)).ToList();
+                    var descPassive = GameGlobals.Instance.SkillDescriptionDatas.Where
+                        (s => s.Name.Equals(NoahSelectedSkill)).ToList();
                     var levelPassive = PlayerManager.Instance.Player.PlayerData.Abilities.PassiveSkillLevel;
 
                     // Refesh skill description
@@ -1315,7 +1444,8 @@ namespace Medicraft.Systems.Managers
                                             , onDone: () =>
                                             {                                                                                       
                                                 // Refesh skill description
-                                                var descSkill = GameGlobals.Instance.SkillDescriptionDatas.Where(s => s.Name.Equals(NoahSelectedSkill)).ToList();
+                                                var descSkill = GameGlobals.Instance.SkillDescriptionDatas.Where
+                                                    (s => s.Name.Equals(NoahSelectedSkill)).ToList();
                                                 int level = 1;
 
                                                 if (normalSkillIcon.Enabled == false)
@@ -1656,7 +1786,7 @@ namespace Medicraft.Systems.Managers
                 prevCompanion.ButtonParagraph.SetAnchorAndOffset(Anchor.AutoCenter, new Vector2(0, -35));
                 prevCompanion.AddChild(new Icon(IconType.None, Anchor.AutoCenter)
                 {
-                    Texture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.arrow_left)
+                    Texture = GetGuiTexture(GuiTextureName.arrow_left)
                 }, true);
 
                 var nextCompanion = new Button("", ButtonSkin.Default)
@@ -1673,7 +1803,7 @@ namespace Medicraft.Systems.Managers
                 nextCompanion.ButtonParagraph.SetAnchorAndOffset(Anchor.AutoCenter, new Vector2(0, -35));
                 nextCompanion.AddChild(new Icon(IconType.None, Anchor.AutoCenter)
                 {
-                    Texture = GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.arrow_right)
+                    Texture = GetGuiTexture(GuiTextureName.arrow_right)
                 }, true);
 
                 //// Left Equipment Panel
@@ -1826,6 +1956,7 @@ namespace Medicraft.Systems.Managers
                 selectedSkillPanel.AddChild(descripLeftSkill);
 
                 // List Consumable Item
+
 
                 // Right Panel
                 var rightPanel = new Panel(new Vector2(375, 600), PanelSkin.None, Anchor.TopRight)
@@ -2152,41 +2283,6 @@ namespace Medicraft.Systems.Managers
             }
         }
 
-        private void SetCompanionSelectedSkill(string abilityType)
-        {
-            var companion = PlayerManager.Instance.Companions[SelectedCompanion];
-
-            switch (abilityType)
-            {
-                case "normal":
-                    switch (companion.Name)
-                    {
-                        case "Violet":
-                            CompanionSelectedSkill = "I've got the Scent!";
-                            break;
-                    }
-                    break;
-
-                case "burst":
-                    switch (companion.Name)
-                    {
-                        case "Violet":
-                            CompanionSelectedSkill = "Noah Strike";
-                            break;
-                    }
-                    break;
-
-                case "passive":
-                    switch (companion.Name)
-                    {
-                        case "Violet":
-                            CompanionSelectedSkill = "Survivalist";
-                            break;
-                    }
-                    break;
-            }
-        }
-
         public void RefreshInspectCompanionDisplay()
         {
             var companion = PlayerManager.Instance.Companions[SelectedCompanion];
@@ -2237,19 +2333,8 @@ namespace Medicraft.Systems.Managers
                         (e => e.Identifier.Equals("passiveSkillLevel"));
             passiveSkillLevel.Text = $"+{passiveSkillIcon.Count}";
 
-            // Check Companion
-            switch (companion.Name)
-            {
-                case "Violet":
-                    CharacterSprite = new(GameGlobals.Instance.CompanionSpriteSheet[VioletSprite]);
-                    normalSkillIcon.Texture = GameGlobals.Instance.GetAbilityTexture
-                        (GameGlobals.AbilityTextureName.Ability_Ive_got_the_Scent);
-                    burstSkillIcon.Texture = GameGlobals.Instance.GetAbilityTexture
-                        (GameGlobals.AbilityTextureName.Ability_Noah_Strike);
-                    passiveSkillIcon.Texture = GameGlobals.Instance.GetAbilityTexture
-                        (GameGlobals.AbilityTextureName.Ability_Survivalist);
-                    break;
-            }
+            // Check Companion for SkillIcon Texture
+            SetCompanionSkillIconTextrue(companion.Name, normalSkillIcon, burstSkillIcon, passiveSkillIcon);
 
             var rightPanel = currentTabPanel.Children.FirstOrDefault(p => p.Identifier.Equals("rightPanel"));
             var statsPanel = rightPanel.Children.FirstOrDefault(p => p.Identifier.Equals("statsPanel"));
@@ -2317,12 +2402,14 @@ namespace Medicraft.Systems.Managers
         public void RefreshMedicineProgresstion()
         {
             var inspectPanel = _mainPanels.ElementAt(InspectPanel);
-            var inspectTabs = inspectPanel.Children.OfType<PanelTabs>().FirstOrDefault(t => t.Identifier.Equals("inspectTabs"));
+            var inspectTabs = inspectPanel.Children.OfType<PanelTabs>().FirstOrDefault
+                (t => t.Identifier.Equals("inspectTabs"));
             inspectTabs.SelectTab("Progression");
 
             var currentTabPanel = inspectTabs.ActiveTab.panel;
             var leftPanel = currentTabPanel.Children.FirstOrDefault(p => p.Identifier.Equals("leftPanel"));
-            var listCraftableMedicine = currentTabPanel.Children.FirstOrDefault(p => p.Identifier.Equals("listCraftableMedicine"));
+            var listCraftableMedicine = currentTabPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("listCraftableMedicine"));
 
             // Clear craftable item display
             listCraftableMedicine.ClearChildren();
@@ -2337,7 +2424,7 @@ namespace Medicraft.Systems.Managers
                 {
                     Enabled = item.IsCraftable,
                     ItemId = item.ItemId,
-                    Texture = GameGlobals.Instance.GetItemTexture(item.ItemId),                  
+                    Texture = GameGlobals.GetItemTexture(item.ItemId),                  
                 };
 
                 listCraftableMedicine.AddChild(iconItem);
@@ -2351,10 +2438,12 @@ namespace Medicraft.Systems.Managers
 
         private void SetMedicineDescriptionDisplay(Icon icon)
         {
-            var itemData = GameGlobals.Instance.MedicineDescriptionDatas.FirstOrDefault(i => i.ItemId.Equals(icon.ItemId));
+            var itemData = GameGlobals.Instance.MedicineDescriptionDatas.FirstOrDefault
+                (i => i.ItemId.Equals(icon.ItemId));
 
             var inspectPanel = _mainPanels.ElementAt(InspectPanel);
-            var inspectTabs = inspectPanel.Children.OfType<PanelTabs>().FirstOrDefault(t => t.Identifier.Equals("inspectTabs"));
+            var inspectTabs = inspectPanel.Children.OfType<PanelTabs>().FirstOrDefault
+                (t => t.Identifier.Equals("inspectTabs"));
             inspectTabs.SelectTab("Progression");
             var currentTabPanel = inspectTabs.ActiveTab.panel;
             var leftPanel = currentTabPanel.Children.FirstOrDefault(p => p.Identifier.Equals("leftPanel"));
@@ -2404,7 +2493,8 @@ namespace Medicraft.Systems.Managers
             CharacterSprite = new(GameGlobals.Instance.PlayerSpriteSheet);
 
             var inspectPanel = _mainPanels.ElementAt(InspectPanel);
-            var inspectTabs = inspectPanel.Children.OfType<PanelTabs>().FirstOrDefault(t => t.Identifier.Equals("inspectTabs"));
+            var inspectTabs = inspectPanel.Children.OfType<PanelTabs>().FirstOrDefault
+                (t => t.Identifier.Equals("inspectTabs"));
 
             inspectTabs.SelectTab("Companion");
             if (PlayerManager.Instance.Companions.Count == 0)
@@ -2415,11 +2505,16 @@ namespace Medicraft.Systems.Managers
 
             inspectTabs.SelectTab("Character");
             var currentTabPanel = inspectTabs.ActiveTab.panel;
-            var leftPanel = currentTabPanel.Children.FirstOrDefault(p => p.Identifier.Equals("leftPanel"));
-            var displayCharacterPanel = leftPanel.Children.FirstOrDefault(p => p.Identifier.Equals("displayCharacterPanel"));
-            var skillPointPanel = displayCharacterPanel.Children.FirstOrDefault(p => p.Identifier.Equals("skillPointPanel"));
-            var leftEquipmentPanel = displayCharacterPanel.Children.FirstOrDefault(p => p.Identifier.Equals("leftEquipmentPanel"));
-            var rightEquipmentPanel = displayCharacterPanel.Children.FirstOrDefault(p => p.Identifier.Equals("rightEquipmentPanel"));          
+            var leftPanel = currentTabPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("leftPanel"));
+            var displayCharacterPanel = leftPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("displayCharacterPanel"));
+            var skillPointPanel = displayCharacterPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("skillPointPanel"));
+            var leftEquipmentPanel = displayCharacterPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("leftEquipmentPanel"));
+            var rightEquipmentPanel = displayCharacterPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("rightEquipmentPanel"));          
 
             // Set Main Character Name
             var characterNameHeader = displayCharacterPanel.Children.OfType<Header>().FirstOrDefault
@@ -2438,7 +2533,9 @@ namespace Medicraft.Systems.Managers
             // Equipment Slot
             for (int i = 0; i < 6; i++)
             {
-                var itemEquipmentData = InventoryManager.Instance.InventoryBag.FirstOrDefault(e => e.Value.Slot.Equals(i));
+                var itemEquipmentData = InventoryManager.Instance.InventoryBag.FirstOrDefault
+                    (e => e.Value.Slot.Equals(i));
+
                 Icon iconEquipmentSlot;
 
                 if (itemEquipmentData.Value != null)
@@ -2449,7 +2546,7 @@ namespace Medicraft.Systems.Managers
                         ItemId = itemEquipmentData.Value.ItemId,
                         Slot = itemEquipmentData.Value.Slot,
                         KeyIndex = itemEquipmentData.Key, 
-                        Texture = GameGlobals.Instance.GetItemTexture(itemEquipmentData.Value.ItemId),
+                        Texture = GetItemTexture(itemEquipmentData.Value.ItemId),
                         ToolTipText = "Click to unequip",
                         Locked = false,
                         Offset = new Vector2(-16, 0),
@@ -2462,7 +2559,7 @@ namespace Medicraft.Systems.Managers
                         var item = InventoryManager.Instance.InventoryBag.FirstOrDefault
                             (i => i.Key.Equals(iconEquipmentSlot.KeyIndex));
 
-                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("Use Item?"
+                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("Unequip?"
                             , $"Do ya wanna unequip '{item.Value.GetName()}'"
                             , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
                             {
@@ -2506,13 +2603,14 @@ namespace Medicraft.Systems.Managers
                 }
             }         
 
-            var skillIconPanel = displayCharacterPanel.Children.FirstOrDefault(p => p.Identifier.Equals("skillIconPanel"));
+            var skillIconPanel = displayCharacterPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("skillIconPanel"));
 
             // Normal Skill icon
             var normalSkillIcon = skillIconPanel.Children.OfType<Icon>().FirstOrDefault
                         (e => e.Identifier.Equals("normalSkillIcon"));
             normalSkillIcon.Enabled = true;
-            normalSkillIcon.Texture = GameGlobals.Instance.GetAbilityTexture(GameGlobals.AbilityTextureName.Ability_Ive_got_the_Scent);
+            normalSkillIcon.Texture = GetAbilityTexture(AbilityTextureName.Ability_Ive_got_the_Scent);
             normalSkillIcon.Count = PlayerManager.Instance.Player.PlayerData.Abilities.NormalSkillLevel;
             var normalSkillLevel = normalSkillIcon.Children.OfType<Label>().FirstOrDefault
                         (e => e.Identifier.Equals("normalSkillLevel"));
@@ -2522,7 +2620,7 @@ namespace Medicraft.Systems.Managers
             var burstSkillIcon = skillIconPanel.Children.OfType<Icon>().FirstOrDefault
                         (e => e.Identifier.Equals("burstSkillIcon"));
             burstSkillIcon.Enabled = true;
-            burstSkillIcon.Texture = GameGlobals.Instance.GetAbilityTexture(GameGlobals.AbilityTextureName.Ability_Noah_Strike);
+            burstSkillIcon.Texture = GetAbilityTexture(AbilityTextureName.Ability_Noah_Strike);
             burstSkillIcon.Count = PlayerManager.Instance.Player.PlayerData.Abilities.BurstSkillLevel;
             var burstSkillLevel = burstSkillIcon.Children.OfType<Label>().FirstOrDefault
                         (e => e.Identifier.Equals("burstSkillLevel"));
@@ -2532,7 +2630,7 @@ namespace Medicraft.Systems.Managers
             var passiveSkillIcon = skillIconPanel.Children.OfType<Icon>().FirstOrDefault
                         (e => e.Identifier.Equals("passiveSkillIcon"));
             passiveSkillIcon.Enabled = true;
-            passiveSkillIcon.Texture = GameGlobals.Instance.GetAbilityTexture(GameGlobals.AbilityTextureName.Ability_Survivalist);
+            passiveSkillIcon.Texture = GetAbilityTexture(AbilityTextureName.Ability_Survivalist);
             passiveSkillIcon.Count = PlayerManager.Instance.Player.PlayerData.Abilities.PassiveSkillLevel;
             var passiveSkillLevel = passiveSkillIcon.Children.OfType<Label>().FirstOrDefault
                         (e => e.Identifier.Equals("passiveSkillLevel"));
@@ -2604,17 +2702,23 @@ namespace Medicraft.Systems.Managers
         private void RefreshSkillDescription(string selectedTab, List<SkillDescriptionData> descSkill, int level)
         {
             var inspectPanel = _mainPanels.ElementAt(InspectPanel);
-            var inspectTabs = inspectPanel.Children.OfType<PanelTabs>().FirstOrDefault(t => t.Identifier.Equals("inspectTabs"));
+            var inspectTabs = inspectPanel.Children.OfType<PanelTabs>().FirstOrDefault
+                (t => t.Identifier.Equals("inspectTabs"));
             inspectTabs.SelectTab(selectedTab);
 
             if (selectedTab.Equals("Character"))
             {
                 var currentTabPanel = inspectTabs.ActiveTab.panel;
-                var leftPanel = currentTabPanel.Children.FirstOrDefault(t => t.Identifier.Equals("leftPanel"));
-                var selectedSkillPanel = leftPanel.Children.FirstOrDefault(t => t.Identifier.Equals("selectedSkillPanel"));
-                var descripLeftSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault(t => t.Identifier.Equals("descripLeftSkill"));
-                var upSkillButton = selectedSkillPanel.Children.FirstOrDefault(t => t.Identifier.Equals("upSkillButton"));
-                var descripRightSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault(t => t.Identifier.Equals("descripRightSkill"));
+                var leftPanel = currentTabPanel.Children.FirstOrDefault
+                    (t => t.Identifier.Equals("leftPanel"));
+                var selectedSkillPanel = leftPanel.Children.FirstOrDefault
+                    (t => t.Identifier.Equals("selectedSkillPanel"));
+                var descripLeftSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault
+                    (t => t.Identifier.Equals("descripLeftSkill"));
+                var upSkillButton = selectedSkillPanel.Children.FirstOrDefault
+                    (t => t.Identifier.Equals("upSkillButton"));
+                var descripRightSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault
+                    (t => t.Identifier.Equals("descripRightSkill"));
 
                 if (level < 10)
                 {
@@ -2635,9 +2739,12 @@ namespace Medicraft.Systems.Managers
             else
             {
                 var currentTabPanel = inspectTabs.ActiveTab.panel;
-                var leftPanel = currentTabPanel.Children.FirstOrDefault(t => t.Identifier.Equals("leftPanel"));
-                var selectedSkillPanel = leftPanel.Children.FirstOrDefault(t => t.Identifier.Equals("selectedSkillPanel"));
-                var descripLeftSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault(t => t.Identifier.Equals("descripLeftSkill"));
+                var leftPanel = currentTabPanel.Children.FirstOrDefault
+                    (t => t.Identifier.Equals("leftPanel"));
+                var selectedSkillPanel = leftPanel.Children.FirstOrDefault
+                    (t => t.Identifier.Equals("selectedSkillPanel"));
+                var descripLeftSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault
+                    (t => t.Identifier.Equals("descripLeftSkill"));
 
                 descripLeftSkill.Text = $"Lv.{level} : {CompanionSelectedSkill}\n"
                         + descSkill.FirstOrDefault(s => s.Level.Equals(level)).Description;
@@ -2655,11 +2762,16 @@ namespace Medicraft.Systems.Managers
             if (selectedTab.Equals("Character"))
             {
                 var currentTabPanel = inspectTabs.ActiveTab.panel;
-                var leftPanel = currentTabPanel.Children.FirstOrDefault(t => t.Identifier.Equals("leftPanel"));
-                var selectedSkillPanel = leftPanel.Children.FirstOrDefault(t => t.Identifier.Equals("selectedSkillPanel"));
-                var descripLeftSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault(t => t.Identifier.Equals("descripLeftSkill"));
-                var upSkillButton = selectedSkillPanel.Children.FirstOrDefault(t => t.Identifier.Equals("upSkillButton"));
-                var descripRightSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault(t => t.Identifier.Equals("descripRightSkill"));
+                var leftPanel = currentTabPanel.Children.FirstOrDefault
+                    (t => t.Identifier.Equals("leftPanel"));
+                var selectedSkillPanel = leftPanel.Children.FirstOrDefault
+                    (t => t.Identifier.Equals("selectedSkillPanel"));
+                var descripLeftSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault
+                    (t => t.Identifier.Equals("descripLeftSkill"));
+                var upSkillButton = selectedSkillPanel.Children.FirstOrDefault
+                    (t => t.Identifier.Equals("upSkillButton"));
+                var descripRightSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault
+                    (t => t.Identifier.Equals("descripRightSkill"));
 
                 descripLeftSkill.Text = "";
                 upSkillButton.Enabled = false;
@@ -2668,9 +2780,12 @@ namespace Medicraft.Systems.Managers
             else
             {
                 var currentTabPanel = inspectTabs.ActiveTab.panel;
-                var leftPanel = currentTabPanel.Children.FirstOrDefault(t => t.Identifier.Equals("leftPanel"));
-                var selectedSkillPanel = leftPanel.Children.FirstOrDefault(t => t.Identifier.Equals("selectedSkillPanel"));
-                var descripLeftSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault(t => t.Identifier.Equals("descripLeftSkill"));
+                var leftPanel = currentTabPanel.Children.FirstOrDefault
+                    (t => t.Identifier.Equals("leftPanel"));
+                var selectedSkillPanel = leftPanel.Children.FirstOrDefault
+                    (t => t.Identifier.Equals("selectedSkillPanel"));
+                var descripLeftSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault
+                    (t => t.Identifier.Equals("descripLeftSkill"));
 
                 descripLeftSkill.Text = "";
             }
@@ -2681,7 +2796,9 @@ namespace Medicraft.Systems.Managers
         /// </summary>
         private void InitMainMenuUI()
         {
-            var mainMenuPanel = new Panel(new Vector2(GameGlobals.Instance.GameScreen.X, GameGlobals.Instance.GameScreen.Y))
+            var mainMenuPanel = new Panel(
+                new Vector2(GameGlobals.Instance.GameScreen.X,
+                GameGlobals.Instance.GameScreen.Y))
             {
                 Skin = PanelSkin.None,
                 Identifier = "mainMenuPanel"
@@ -2733,7 +2850,7 @@ namespace Medicraft.Systems.Managers
             // Main Menu
             {              
                 // add title
-                var title = new Image(GameGlobals.Instance.GetGuiTexture(GameGlobals.GuiTextureName.game_name)
+                var title = new Image(GetGuiTexture(GuiTextureName.game_name)
                     , anchor: Anchor.TopCenter, offset: new Vector2(0, -20))
                 {
                     Identifier = "title",
@@ -2881,6 +2998,8 @@ namespace Medicraft.Systems.Managers
 
                         SelectedGameSavePanel = gameSavePanel;
                         UpdateSelectedGameSave(MainMenu);
+
+                        PlaySoundEffect(Sound.Click1);
                     };
                 }
 
@@ -2891,7 +3010,7 @@ namespace Medicraft.Systems.Managers
                     GeonBit.UI.Utils.MessageBox.ShowMsgBox("Play Selected Save!", "Do you want to play the selected save?"
                         , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
                         {
-                                new("Yes", () =>
+                                new("Yes!", () =>
                                 {
                                     // Disable input handling
                                     playButton.Locked = true;
@@ -3200,11 +3319,16 @@ namespace Medicraft.Systems.Managers
         public void RefreshMainMenu()
         {
             var mainMenuPanel = _mainPanels[MainMenu];
-            var mainPanel = mainMenuPanel.Children.FirstOrDefault(e => e.Identifier.Equals("mainPanel"));
-            var loadGameSavePanel = mainMenuPanel.Children.FirstOrDefault(e => e.Identifier.Equals("loadGameSavePanel"));
-            var optionPanel = mainMenuPanel.Children.FirstOrDefault(e => e.Identifier.Equals("optionPanel"));
-            var graphicsSettingPanel = mainMenuPanel.Children.FirstOrDefault(e => e.Identifier.Equals("graphicsSettingPanel"));
-            var soundSettingPanel = mainMenuPanel.Children.FirstOrDefault(e => e.Identifier.Equals("soundSettingPanel"));
+            var mainPanel = mainMenuPanel.Children.FirstOrDefault
+                (e => e.Identifier.Equals("mainPanel"));
+            var loadGameSavePanel = mainMenuPanel.Children.FirstOrDefault
+                (e => e.Identifier.Equals("loadGameSavePanel"));
+            var optionPanel = mainMenuPanel.Children.FirstOrDefault
+                (e => e.Identifier.Equals("optionPanel"));
+            var graphicsSettingPanel = mainMenuPanel.Children.FirstOrDefault
+                (e => e.Identifier.Equals("graphicsSettingPanel"));
+            var soundSettingPanel = mainMenuPanel.Children.FirstOrDefault
+                (e => e.Identifier.Equals("soundSettingPanel"));
 
             mainPanel.Visible = true;
 
@@ -3219,7 +3343,8 @@ namespace Medicraft.Systems.Managers
 
             loadGameSavePanel.Visible = false;
 
-            var buttonPanel = loadGameSavePanel.Children.FirstOrDefault(e => e.Identifier.Equals("buttonPanel"));
+            var buttonPanel = loadGameSavePanel.Children.FirstOrDefault
+                (e => e.Identifier.Equals("buttonPanel"));
             var playButton = buttonPanel.Children.OfType<Button>().FirstOrDefault
                 (e => e.Identifier.Equals("playButton"));
             var renameButton = buttonPanel.Children.OfType<Button>().FirstOrDefault
@@ -3312,11 +3437,7 @@ namespace Medicraft.Systems.Managers
             var numberString = SelectedGameSavePanel.Identifier.Replace("gameSavePanel_", "");
 
             if (int.TryParse(numberString, out int numberIndex))
-            {
                 GameGlobals.Instance.SelectedGameSaveIndex = numberIndex;
-
-                System.Diagnostics.Debug.WriteLine($"numberIndex : {numberIndex}");
-            }
 
             List<Panel> gameSavePanels;
 
@@ -3426,7 +3547,7 @@ namespace Medicraft.Systems.Managers
                     // Toggle the IsOpenPauseMenu flag
                     GameGlobals.Instance.IsOpenPauseMenu = false;
                     GameGlobals.Instance.IsRefreshPlayScreenUI = false;
-                    CurrentGUI = PlayScreen;
+                    CurrentUI = PlayScreen;
                 };
 
                 optionsButton.OnClick = (Entity btn) =>
@@ -3506,11 +3627,11 @@ namespace Medicraft.Systems.Managers
             quitButton.Locked = false;
         }
 
-        public static GUIManager Instance
+        public static UIManager Instance
         {
             get
             {
-                instance ??= new GUIManager();
+                instance ??= new UIManager();
                 return instance;
             }
         }

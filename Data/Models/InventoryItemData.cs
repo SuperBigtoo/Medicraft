@@ -34,7 +34,7 @@ namespace Medicraft.Data.Models
         {
             var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(ItemId));
 
-            return itemData.Usable;
+            return itemData.IsUsable;
         }
 
         public int GetEffectId()
@@ -48,7 +48,7 @@ namespace Medicraft.Data.Models
         {
             var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(ItemId));
 
-            return itemData.Stackable;
+            return itemData.IsStackable;
         }
 
         public int EquipmentType()

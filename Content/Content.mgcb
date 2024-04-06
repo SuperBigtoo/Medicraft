@@ -513,6 +513,42 @@
 /processor:BitmapFontProcessor
 /build:fonts/TA_8_Bit/TA_8_Bit.fnt
 
+#begin gui/ability/Ability_BrillianceAura.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/ability/Ability_BrillianceAura.png
+
+#begin gui/ability/Ability_FrostBolt.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/ability/Ability_FrostBolt.png
+
+#begin gui/ability/Ability_FrostNova.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/ability/Ability_FrostNova.png
+
 #begin gui/ability/Ability_I've_got_the_Scent!.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1299,6 +1335,12 @@
 /processorParam:Quality=Best
 /build:music/FinalStorm.ogg
 
+#begin music/Gag_dead.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/Gag_dead.ogg
+
 #begin music/Izanai.ogg
 /importer:OggImporter
 /processor:SongProcessor
@@ -1341,17 +1383,83 @@
 /processorParam:Quality=Best
 /build:music/winered.ogg
 
-#begin sound/Attack1.wav
+#begin sound/Bingo.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:sound/Attack1.wav
+/build:sound/Bingo.wav
 
-#begin sound/Attack2.wav
+#begin sound/Bite.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:sound/Attack2.wav
+/build:sound/Bite.wav
+
+#begin sound/Cancel1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Cancel1.wav
+
+#begin sound/Cancel2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Cancel2.wav
+
+#begin sound/Claw.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Claw.wav
+
+#begin sound/Click1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Click1.wav
+
+#begin sound/ClickPlayGame.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/ClickPlayGame.wav
+
+#begin sound/ColossusSmash_Impact_01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/ColossusSmash_Impact_01.wav
+
+#begin sound/Crafting1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Crafting1.wav
+
+#begin sound/CraftingPotion1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/CraftingPotion1.wav
+
+#begin sound/CraftingPotion2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/CraftingPotion2.wav
+
+#begin sound/CraftingPotion3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/CraftingPotion3.wav
+
+#begin sound/CraftingPotion4.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/CraftingPotion4.wav
 
 #begin sound/damage01.wav
 /importer:WavImporter
@@ -1365,11 +1473,95 @@
 /processorParam:Quality=Best
 /build:sound/damage02.wav
 
+#begin sound/damageCrit1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/damageCrit1.wav
+
+#begin sound/damageCrit2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/damageCrit2.wav
+
 #begin sound/Dead.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:sound/Dead.wav
+
+#begin sound/Debuff1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Debuff1.wav
+
+#begin sound/door_1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/door_1.wav
+
+#begin sound/door_2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/door_2.wav
+
+#begin sound/dullSwoosh1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/dullSwoosh1.wav
+
+#begin sound/dullSwoosh2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/dullSwoosh2.wav
+
+#begin sound/dullSwoosh3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/dullSwoosh3.wav
+
+#begin sound/dullSwoosh4.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/dullSwoosh4.wav
+
+#begin sound/Equip1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Equip1.wav
+
+#begin sound/frostbolt_1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/frostbolt_1.wav
+
+#begin sound/FrostNova.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/FrostNova.wav
+
+#begin sound/GreaterHeal_Low_Base.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/GreaterHeal_Low_Base.wav
+
+#begin sound/Heal_Low_Base.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Heal_Low_Base.wav
 
 #begin sound/ItemPurchase1.wav
 /importer:WavImporter
@@ -1377,11 +1569,203 @@
 /processorParam:Quality=Best
 /build:sound/ItemPurchase1.wav
 
+#begin sound/LevelUp.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/LevelUp.wav
+
+#begin sound/magicSwoosh1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/magicSwoosh1.wav
+
+#begin sound/metalSwoosh1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/metalSwoosh1.wav
+
+#begin sound/metalSwoosh2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/metalSwoosh2.wav
+
+#begin sound/metalSwoosh3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/metalSwoosh3.wav
+
+#begin sound/metalSwoosh4.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/metalSwoosh4.wav
+
+#begin sound/Miss1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Miss1.wav
+
+#begin sound/Miss2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Miss2.wav
+
+#begin sound/Miss3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Miss3.wav
+
+#begin sound/Onmtp_Inspiration08_1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Onmtp_Inspiration08_1.wav
+
+#begin sound/Parry.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Parry.wav
+
+#begin sound/Pause.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Pause.wav
+
+#begin sound/PickUpBag.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/PickUpBag.wav
+
+#begin sound/PickUpCoin.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/PickUpCoin.wav
+
+#begin sound/PickUpGeneric.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/PickUpGeneric.wav
+
+#begin sound/PickUpHerb.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/PickUpHerb.wav
+
+#begin sound/Powerup.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Powerup.wav
+
 #begin sound/quest.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:sound/quest.wav
+
+#begin sound/Recovery1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Recovery1.wav
+
+#begin sound/Recovery2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Recovery2.wav
+
+#begin sound/Save.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Save.wav
+
+#begin sound/Shield_Bash_04.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Shield_Bash_04.wav
+
+#begin sound/Skill_Fire_explosion.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Skill_Fire_explosion.wav
+
+#begin sound/Skill_Ice_explosion.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Skill_Ice_explosion.wav
+
+#begin sound/Skill_Wind.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Skill_Wind.wav
+
+#begin sound/Skill1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Skill1.wav
+
+#begin sound/Skill2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Skill2.wav
+
+#begin sound/Slash.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Slash.wav
+
+#begin sound/Step_grass.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Step_grass.wav
+
+#begin sound/Unequip1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Unequip1.wav
+
+#begin sound/Unpause.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Unpause.wav
+
+#begin sound/UseItem.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/UseItem.wav
+
+#begin sound/Warp.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/Warp.wav
 
 #begin tiledmaps/chapter_1/battlezone_1.tmx
 /copy:tiledmaps/chapter_1/battlezone_1.tmx

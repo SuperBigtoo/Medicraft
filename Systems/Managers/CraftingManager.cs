@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using static Medicraft.Systems.GameGlobals;
 
 namespace Medicraft.Systems.Managers
 {
@@ -42,9 +43,6 @@ namespace Medicraft.Systems.Managers
 
             foreach (var ingredient in ingredients)
             {
-                //var isItemFound = InventoryManager.Instance.InventoryBag.TryGetValue(
-                //    ingredient.ItemId.ToString(), out InventoryItemData itemInBag);
-
                 var stackItem = InventoryManager.Instance.InventoryBag.Where
                     (i => i.Value.ItemId.Equals(ingredient.ItemId));
 
@@ -68,41 +66,47 @@ namespace Medicraft.Systems.Managers
             return craftableQuantity.Min();
         }
 
-        public void CraftingItem(int craftingItemId)
+        public void CraftingItem(int craftingItemId, int itemQuantity)
         {
-            var recipeData = _craftingRecipeDatas.FirstOrDefault(i => i.RecipeId.Equals(craftingItemId));
+            var recipeData = _craftingRecipeDatas.FirstOrDefault
+                (i => i.RecipeId.Equals(craftingItemId));
             var ingredients = recipeData.Ingredients;
+            int totalCount = 0;
 
-            foreach (var ingredient in ingredients)
+            for (int i = 0; i < itemQuantity; i++)
             {
-                //var itemInBag = InventoryManager.Instance.InventoryBag.Values.FirstOrDefault(i => i.ItemId.Equals(ingredient.ItemId));
-
-                //itemInBag.Count -= ingredient.Quantity;
-
-                //if (itemInBag.Count == 0) 
-                //    InventoryManager.Instance.InventoryBag.Remove(itemInBag.ItemId.ToString());
-
-                var stackItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
-                    (i => i.Value.ItemId.Equals(ingredient.ItemId));
-
-                stackItem.Value.Count -= ingredient.Quantity;
-
-                if (stackItem.Value.Count == 0)
+                foreach (var ingredient in ingredients)
                 {
-                    InventoryManager.Instance.InventoryBag.Remove(stackItem.Key);
-                }
-                else if (stackItem.Value.Count < 0)
-                {
-                    var tempCount = stackItem.Value.Count;
-                    InventoryManager.Instance.InventoryBag.Remove(stackItem.Key);
-
-                    var newStackItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
+                    var stackItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                         (i => i.Value.ItemId.Equals(ingredient.ItemId));
-                    newStackItem.Value.Count += tempCount; 
+
+                    stackItem.Value.Count -= ingredient.Quantity;
+
+                    if (stackItem.Value.Count == 0)
+                    {
+                        InventoryManager.Instance.InventoryBag.Remove(stackItem.Key);
+                    }
+                    else if (stackItem.Value.Count < 0)
+                    {
+                        var tempCount = stackItem.Value.Count;
+                        InventoryManager.Instance.InventoryBag.Remove(stackItem.Key);
+
+                        var newStackItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
+                            (i => i.Value.ItemId.Equals(ingredient.ItemId));
+                        newStackItem.Value.Count += tempCount;
+                    }
                 }
+
+                totalCount += recipeData.ResultQuantity;
             }
 
-            InventoryManager.Instance.AddItem(recipeData.RecipeId, recipeData.ResultQuantity);
+            InventoryManager.Instance.AddItem(recipeData.RecipeId, totalCount);
+
+            if (recipeData.Category.Equals("Thai traditional medicine"))
+            {
+                PlaySoundEffect([Sound.CraftingPotion1, Sound.CraftingPotion2, Sound.CraftingPotion3, Sound.CraftingPotion4]);
+            }
+            else PlaySoundEffect(Sound.Crafting1);
         }
 
         public void Update(GameTime gameTime)

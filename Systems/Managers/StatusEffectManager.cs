@@ -1,6 +1,7 @@
 ﻿using Medicraft.Data.Models;
 using Medicraft.Entities;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -43,6 +44,7 @@ namespace Medicraft.Systems.Managers
                 // Decreasing effect time
                 if (statusEffect.Effect.Timer <= 0)
                 {
+                    // Return Stats
                     switch (statusEffect.Effect.EffectType)
                     {
                         case "Buff":
@@ -69,14 +71,17 @@ namespace Medicraft.Systems.Managers
                         // Activate one time
                         if (!statusEffect.Effect.IsActive)
                         {
+                            // Apply Stats
                             switch (statusEffect.Effect.EffectType)
                             {
                                 case "Buff":
                                     ApplyEffect(statusEffect, true);
+                                    AddCombatNumber(statusEffect, true);
                                     break;
 
                                 case "Debuff":
                                     ApplyEffect(statusEffect, false);
+                                    AddCombatNumber(statusEffect, false);
                                     break;
                             }
 
@@ -123,81 +128,94 @@ namespace Medicraft.Systems.Managers
             EffectsToRemove.Clear();
         }
 
-        private void RegenerateEffect(StatusEffect statusEffect)
+        private static void AddCombatNumber(StatusEffect statusEffect, bool isBuff)
+        {
+            string combatText;
+            if (isBuff)
+            {
+                statusEffect.TargetEntity.CombatNumCase = Entity.Buff;
+                combatText = $"+{statusEffect.Effect.Target}";
+            }
+            else
+            {
+                statusEffect.TargetEntity.CombatNumCase = Entity.Debuff;
+                combatText = $"-{statusEffect.Effect.Target}";
+            }
+
+            var combatNumVelocity = statusEffect.TargetEntity.SetCombatNumDirection();
+            statusEffect.TargetEntity.AddCombatLogNumbers(
+                statusEffect.ActorName,
+                combatText,
+                statusEffect.TargetEntity.CombatNumCase,
+                combatNumVelocity,
+                null);
+        }
+
+        private static void RegenerateEffect(StatusEffect statusEffect)
         {
             switch (statusEffect.Effect.Target)
             {
                 case "HP":
                     var valueHP = (int)(statusEffect.TargetEntity.BaseMaxHP * statusEffect.Effect.Value);
 
-                    if (statusEffect.TargetEntity.Name.Equals("Noah"))
-                    {
-                        PlayerManager.Instance.Player.RestoresHP(statusEffect.Effect.EffectType, valueHP, false);
-                    }
-                    else statusEffect.TargetEntity.HP += valueHP;
-
+                    statusEffect.TargetEntity.RestoresHP(statusEffect.ActorName, valueHP, false);
                     break;
 
                 case "Mana":
                     var valueMana = statusEffect.TargetEntity.BaseMaxMana * (float)statusEffect.Effect.Value;
 
-                    if (statusEffect.TargetEntity.Name.Equals("Noah"))
-                    {
-                        PlayerManager.Instance.Player.RestoresMana(statusEffect.Effect.EffectType, valueMana, false);
-                    }
-                    else statusEffect.TargetEntity.Mana += valueMana;
-
+                    statusEffect.TargetEntity.RestoresMana(statusEffect.ActorName, valueMana, false);
                     break;
             }
         }
 
-        private void ApplyEffect(StatusEffect statusEffect, bool isBuff)
+        private static void ApplyEffect(StatusEffect statusEffect, bool isBuff)
         {
             // Buff Activate | Debuff Deactivate
             switch (statusEffect.Effect.Target)
             {
                 case "MaxHP":
-                    var valueMaxHP = (int)(statusEffect.TargetEntity.BaseMaxHP * statusEffect.Effect.Value);
-                    var valueHP = (int)(statusEffect.TargetEntity.HP * statusEffect.Effect.Value);
+                    var valueMaxHP = (float)Math.Round(statusEffect.TargetEntity.BaseMaxHP * statusEffect.Effect.Value, 2);
+                    var valueHP = (float)Math.Round(statusEffect.TargetEntity.HP * statusEffect.Effect.Value, 2);
 
                     statusEffect.TargetEntity.MaxHP = isBuff ? statusEffect.TargetEntity.MaxHP + valueMaxHP : statusEffect.TargetEntity.MaxHP - valueMaxHP;
                     statusEffect.TargetEntity.HP = isBuff ? statusEffect.TargetEntity.HP + valueHP : statusEffect.TargetEntity.HP - valueHP;
                     break;
 
                 case "MaxMana":
-                    var valueMaxMana = (int)(statusEffect.TargetEntity.BaseMaxMana * statusEffect.Effect.Value);
-                    var valueMana = (int)(statusEffect.TargetEntity.Mana * statusEffect.Effect.Value);
+                    var valueMaxMana = (float)Math.Round(statusEffect.TargetEntity.BaseMaxMana * statusEffect.Effect.Value, 2);
+                    var valueMana = (float)Math.Round(statusEffect.TargetEntity.Mana * statusEffect.Effect.Value, 2);
 
                     statusEffect.TargetEntity.MaxMana = isBuff ? statusEffect.TargetEntity.MaxMana + valueMaxMana : statusEffect.TargetEntity.MaxMana - valueMaxMana;
                     statusEffect.TargetEntity.Mana = isBuff ? statusEffect.TargetEntity.Mana + valueMana : statusEffect.TargetEntity.Mana - valueMana;
                     break;
 
                 case "ATK":
-                    var valueATK = (int)(statusEffect.TargetEntity.BaseATK * statusEffect.Effect.Value);
+                    var valueATK = (float)Math.Round(statusEffect.TargetEntity.BaseATK * statusEffect.Effect.Value, 2);
 
                     statusEffect.TargetEntity.ATK = isBuff ? statusEffect.TargetEntity.ATK + valueATK : statusEffect.TargetEntity.ATK - valueATK;
                     break;
 
                 case "DEF":
-                    var valueDEF = (float)statusEffect.Effect.Value;
+                    var valueDEF = (float)Math.Round(statusEffect.Effect.Value, 2);
 
                     statusEffect.TargetEntity.DEF = isBuff ? statusEffect.TargetEntity.DEF + valueDEF : statusEffect.TargetEntity.DEF - valueDEF;
                     break;
 
                 case "Crit":
-                    var valueCrit = (float)statusEffect.Effect.Value;
+                    var valueCrit = (float)Math.Round(statusEffect.Effect.Value, 2);
 
                     statusEffect.TargetEntity.Crit = isBuff ? statusEffect.TargetEntity.Crit + valueCrit : statusEffect.TargetEntity.Crit - valueCrit;
                     break;
 
                 case "CritDMG":
-                    var valueCritDMG = (float)statusEffect.Effect.Value;
+                    var valueCritDMG = (float)Math.Round(statusEffect.Effect.Value, 2);
 
                     statusEffect.TargetEntity.CritDMG = isBuff ? statusEffect.TargetEntity.CritDMG + valueCritDMG : statusEffect.TargetEntity.CritDMG - valueCritDMG;
                     break;
 
                 case "Evasion":
-                    var valueEvasion = (float)statusEffect.Effect.Value;
+                    var valueEvasion = (float)Math.Round(statusEffect.Effect.Value, 2);
 
                     statusEffect.TargetEntity.Evasion = isBuff ? statusEffect.TargetEntity.Evasion + valueEvasion : statusEffect.TargetEntity.Evasion - valueEvasion;
                     break;
@@ -210,26 +228,8 @@ namespace Medicraft.Systems.Managers
             }
         }
 
-        public void AddStatusEffect(Entity entity, string effectName, Effect effect)
+        public void AddStatusEffect(Entity entityTarget, string actorName, string effectName, Effect effect)
         {
-            //if (StatusEffects.Count != 0)
-            //{
-            //    if (StatusEffects.Any(statusEffect => statusEffect.EffectName.Equals(effectName)))
-            //    {
-            //        var statusEffect = StatusEffects.FirstOrDefault(se => se.EffectName.Equals(effectName));
-
-            //        statusEffect.Effect.Timer = statusEffect.Effect.Time;
-            //    }
-            //    else
-            //    {
-            //        StatusEffects.Add(new StatusEffect(entity, effectName, effect));
-            //    }
-            //}
-            //else
-            //{
-            //    StatusEffects.Add(new StatusEffect(entity, effectName, effect));
-            //}
-
             // Check if any status effect with the given name exists
             var existingEffect = StatusEffects.FirstOrDefault(se => se.EffectName.Equals(effectName));
 
@@ -241,17 +241,17 @@ namespace Medicraft.Systems.Managers
             else
             {
                 // Add a new status effect
-                StatusEffects.Add(new StatusEffect(entity, effectName, effect));
+                StatusEffects.Add(new StatusEffect(entityTarget, actorName, effectName, effect));
             }
 
             // Check if it a Buff or Debuff
             if (effect.EffectType.Equals("Buff"))
             {
-                entity.BuffTimer = effect.Time;
+                entityTarget.BuffTimer = effect.Time;
             }
             else if (effect.EffectType.Equals("Debuff"))
             {
-                entity.DebuffTimer = effect.Time;
+                entityTarget.DebuffTimer = effect.Time;
             }
         }
 
@@ -265,9 +265,10 @@ namespace Medicraft.Systems.Managers
         }
     }
 
-    public class StatusEffect(Entity entity, string effectName, Effect effect)
+    public class StatusEffect(Entity entityTarget, string actorName, string effectName, Effect effect)
     {
-        public Entity TargetEntity { get; set; } = entity;
+        public Entity TargetEntity { get; set; } = entityTarget;
+        public string ActorName { get; set; } = actorName;
         public string EffectName { get; set; } = effectName;
         public Effect Effect { get; set; } = effect;
     }

@@ -34,7 +34,7 @@ namespace Medicraft.GameObjects
 
             ParticleEffect = DrawEffectSystem.SetItemParticleEffect(Position);
 
-            QuantityDrop = GameGlobals.Instance.RandomItemQuantityDrop(ReferId);
+            QuantityDrop = GameGlobals.RandomItemQuantityDrop(ReferId);
 
             Sprite.Depth = 0.1f;
             Sprite.Play(ReferId.ToString());
@@ -67,7 +67,7 @@ namespace Medicraft.GameObjects
 
             ParticleEffect = item.ParticleEffect;
 
-            QuantityDrop = GameGlobals.Instance.RandomItemQuantityDrop(ReferId);
+            QuantityDrop = GameGlobals.RandomItemQuantityDrop(ReferId);
 
             Sprite.Depth = 0.1f;
             Sprite.Play(ReferId.ToString());
@@ -97,7 +97,7 @@ namespace Medicraft.GameObjects
         {
             base.Draw(spriteBatch);
 
-            var shadowTexture = GameGlobals.Instance.GetShadowTexture(GameGlobals.ShadowTextureName.shadow_1);
+            var shadowTexture = GameGlobals.GetShadowTexture(GameGlobals.ShadowTextureName.shadow_1);
 
             DrawShadow(spriteBatch, shadowTexture);
         }

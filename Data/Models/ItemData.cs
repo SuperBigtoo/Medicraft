@@ -8,9 +8,9 @@ namespace Medicraft.Data.Models
         public string Name { get; set; }
         public string Category { get; set; }
         public string Description { get; set; }
-        public bool Usable { get; set; }
+        public bool IsUsable { get; set; }
         public int Effect { get; set; }
-        public bool Stackable { get; set; }
+        public bool IsStackable { get; set; }
         public int EquipmentType { get; set; }
         public int[] QuantityDropRange { get; set; }
     }

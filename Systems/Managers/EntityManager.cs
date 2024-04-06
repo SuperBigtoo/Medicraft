@@ -5,6 +5,7 @@ using System.Linq;
 using Medicraft.Entities;
 using Medicraft.Systems.Spawners;
 using System;
+using static Medicraft.Systems.GameGlobals;
 
 namespace Medicraft.Systems.Managers
 {
@@ -21,7 +22,7 @@ namespace Medicraft.Systems.Managers
         private MobSpawner _mobSpawner;
         private static EntityManager instance;
 
-        private readonly float _delayCompaSpawnTime = 2f;
+        private readonly float _delayCompaSpawnTime = 3f;
         private float _delayCompaSpawnTimer = 0f;
 
         public IEnumerable<Entity> Entities => entities;
@@ -29,7 +30,7 @@ namespace Medicraft.Systems.Managers
         // Scale Rendering
         const float ScreenWidthFactor = 1f;
         const float ScreenHeightFactor = 1f;
-        public Entity ClosestEnemy { get; set; }
+        public Entity ClosestEnemyToCompanion { get; set; }
 
         private EntityManager()
         {

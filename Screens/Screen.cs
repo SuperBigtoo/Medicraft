@@ -16,21 +16,21 @@ namespace Medicraft.Screens
 
     public abstract class Screen : IScreen
     {
-        protected ContentManager _content;
+        protected ContentManager content;
 
         public virtual void LoadContent()
         {
-            _content = new ContentManager(GameGlobals.Instance.Content.ServiceProvider, "Content");
+            content = new ContentManager(GameGlobals.Instance.Content.ServiceProvider, "Content");
         }
 
         public virtual void UnloadContent()
         {          
-            _content?.Unload();
+            content?.Unload();
         }
 
         public virtual void Dispose()
         {
-            _content?.Dispose();
+            content?.Dispose();
         }
 
         public abstract void Update(GameTime gameTime);

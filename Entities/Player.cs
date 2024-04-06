@@ -1,7 +1,6 @@
 ﻿using Medicraft.Data.Models;
 using Medicraft.Systems;
 using Medicraft.Systems.Managers;
-using Medicraft.Systems.PathFinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -9,6 +8,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
 using System;
 using System.Linq;
+using static Medicraft.Systems.GameGlobals;
 
 namespace Medicraft.Entities
 {
@@ -44,12 +44,12 @@ namespace Medicraft.Entities
         public float tempATK, tempHP, tempMana, tempDEF, tempCrit, tempCritDMG, tempEvasion;
 
         private float _percentNormalHit;
-
         private readonly float _hitRateNormal, _hitRateNormalSkill, _hitRateBurstSkill;
-
         private bool _isCriticalAttack, _isAttackMissed;
 
         private Vector2 _initHudPos, _initCamPos;
+        private readonly float _stepSoundTime = 0.3f;
+        private float _stepSoundTimer = 0;
 
         public Player(AnimatedSprite sprite, PlayerData playerData)
         {
@@ -62,9 +62,10 @@ namespace Medicraft.Entities
             EXP = PlayerData.EXP;         
             InitializeCharacterData(playerData.CharId, Level);
                  
-            IsKnockbackable = true;            
+            IsKnockbackable = true;
 
-            knockbackForce = 50f;
+            baseknockbackForce = 50f;
+            knockbackForce = baseknockbackForce;
             _percentNormalHit = 0.5f;
 
             _hitRateNormal = 0.5f;
@@ -102,6 +103,7 @@ namespace Medicraft.Entities
 
             BoundingCollisionX = 20f;
             BoundingCollisionY = 2.6f;
+            BaseBoundingDetectEntityRadius = 80f;
 
             // Rec for check Collision
             BoundingDetectCollisions = new RectangleF(
@@ -111,12 +113,10 @@ namespace Medicraft.Entities
                 sprite.TextureRegion.Height / 8);
 
             BoundingHitBox = new CircleF(Position + new Vector2(0f, 32f), 42f);         // Circle for Entity to hit
-
-            BoundingDetectEntity = new CircleF(Position + new Vector2(0f, 32f), 80f);   // Circle for check attacking
-
+            BoundingDetectEntity = new CircleF(
+                Position + new Vector2(0f, 32f), BaseBoundingDetectEntityRadius);       // Circle for check attacking
             BoundingCollection = new CircleF(Position + new Vector2(0f, 60f), 25f);     // Circle for check interaction with GameObjects
-
-            BoundingAggro = new CircleF(Position + new Vector2(0f, 32f), 150);                                  // Circle for check aggro enemy mobs
+            BoundingAggro = new CircleF(Position + new Vector2(0f, 32f), 150);          // Circle for check aggro enemy mobs
 
             NormalHitEffectAttacked = "hit_effect_1";
             NormalSkillEffectActivated = "hit_skill_effect_3";
@@ -148,9 +148,9 @@ namespace Medicraft.Entities
                 MovementControl(deltaSeconds, keyboardCur);
 
                 // Update layer depth
-                var topDepth = GameGlobals.Instance.TopEntityDepth;
-                var middleDepth = GameGlobals.Instance.MiddleEntityDepth;
-                var bottomDepth = GameGlobals.Instance.BottomEntityDepth;
+                var topDepth = Instance.TopEntityDepth;
+                var middleDepth = Instance.MiddleEntityDepth;
+                var bottomDepth = Instance.BottomEntityDepth;
                 UpdateLayerDepth(topDepth, middleDepth, bottomDepth);
 
                 // Combat Control
@@ -193,12 +193,12 @@ namespace Medicraft.Entities
         {
             spriteBatch.Draw(Sprite, Transform);
 
-            var shadowTexture = GameGlobals.Instance.GetShadowTexture(GameGlobals.ShadowTextureName.shadow_1);
+            var shadowTexture = GetShadowTexture(ShadowTextureName.shadow_1);
 
             DrawShadow(spriteBatch, shadowTexture);
 
             // Test Draw BoundingRec for Collision Check
-            if (GameGlobals.Instance.IsDebugMode)
+            if (Instance.IsDebugMode)
             {
                 var pixelTexture = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
                 pixelTexture.SetData(new Color[] { Color.White });
@@ -221,8 +221,8 @@ namespace Medicraft.Entities
             var walkSpeed = deltaSeconds * Speed;
             Velocity = Vector2.Zero;
             prevPos = Position;
-            _initHudPos = GameGlobals.Instance.TopLeftCornerPos;
-            _initCamPos = GameGlobals.Instance.AddingCameraPos;                                             
+            _initHudPos = Instance.TopLeftCornerPos;
+            _initCamPos = Instance.AddingCameraPos;                                             
 
             if (!IsAttacking && !IsStunning && ScreenManager.Instance.IsScreenLoaded)
             {
@@ -253,6 +253,7 @@ namespace Medicraft.Entities
                     IsMoving = true;
                     Velocity += Vector2.UnitX;
 
+                    // Classic
                     //Position += new Vector2(walkSpeed, 0);
                     //Singleton.Instance.addingHudPos += new Vector2(walkSpeed, 0);
                     //Singleton.Instance.addingCameraPos += new Vector2(walkSpeed, 0);
@@ -263,9 +264,17 @@ namespace Medicraft.Entities
                 {
                     Velocity.Normalize();
                     Position += Velocity * walkSpeed;
-                    GameGlobals.Instance.TopLeftCornerPos += Velocity * walkSpeed;
-                    GameGlobals.Instance.AddingCameraPos += Velocity * walkSpeed;
+                    Instance.TopLeftCornerPos += Velocity * walkSpeed;
+                    Instance.AddingCameraPos += Velocity * walkSpeed;
                     Sprite.Play(CurrentAnimation);
+
+                    _stepSoundTimer += deltaSeconds;
+
+                    if (_stepSoundTimer > _stepSoundTime)
+                    {
+                        _stepSoundTimer = 0;
+                        PlaySoundEffect(Sound.Step_grass);
+                    }
                 }
                 else IsMoving = false;
 
@@ -285,15 +294,15 @@ namespace Medicraft.Entities
 
         protected override void CheckCollision()
         {
-            var ObjectOnTile = GameGlobals.Instance.CollistionObject;
+            var ObjectOnTile = Instance.CollistionObject;
             foreach (var rect in ObjectOnTile)
             {
                 if (BoundingDetectCollisions.Intersects(rect))
                 {
                     IsDetectCollistionObject = true;
                     Position = prevPos;
-                    GameGlobals.Instance.TopLeftCornerPos = _initHudPos;
-                    GameGlobals.Instance.AddingCameraPos = _initCamPos;
+                    Instance.TopLeftCornerPos = _initHudPos;
+                    Instance.AddingCameraPos = _initCamPos;
                     break;
                 }
                 else IsDetectCollistionObject = false;
@@ -317,6 +326,8 @@ namespace Medicraft.Entities
                 ActionTimer = _hitRateNormal;
 
                 CheckAttackDetection(ATK, _percentNormalHit, false, 0f, NormalHitEffectAttacked);
+
+                PlaySoundEffect([Sound.dullSwoosh1, Sound.dullSwoosh2, Sound.dullSwoosh3, Sound.dullSwoosh4]);
             }
 
             // Normal Skill
@@ -332,9 +343,13 @@ namespace Medicraft.Entities
                 // Do normal skill & effect of Sets Item
                 NormalSkillControl(PlayerData.Abilities.NormalSkillLevel);
 
-                CombatNumCase = 4;
+                CombatNumCase = Buff;
                 var combatNumVelocity = SetCombatNumDirection();
-                AddCombatLogNumbers(Name, "POWER UP", CombatNumCase, combatNumVelocity, NormalSkillEffectActivated);
+                AddCombatLogNumbers(Name,
+                    "POWER UP",
+                    CombatNumCase,
+                    combatNumVelocity,
+                    NormalSkillEffectActivated);
             }
 
             // Burst Skill
@@ -349,6 +364,8 @@ namespace Medicraft.Entities
 
                 // Do burst skill & effect of Sets Item
                 BurstSkillControl(PlayerData.Abilities.BurstSkillLevel);
+
+                PlaySoundEffect([Sound.ColossusSmash_Impact_01, Sound.Shield_Bash_04]);
             }
 
             // Passive Skill
@@ -357,11 +374,16 @@ namespace Medicraft.Entities
                 IsPassiveSkillCooldown = true;
 
                 // Do passive skill
-                var combatNumbers = (int)PassiveSkillControl(PlayerData.Abilities.PassiveSkillLevel);
+                var combatText = (int)PassiveSkillControl(PlayerData.Abilities.PassiveSkillLevel);
 
-                CombatNumCase = 2;
+                CombatNumCase = Healing;
                 var combatNumVelocity = SetCombatNumDirection();
-                AddCombatLogNumbers(Name, combatNumbers.ToString(), CombatNumCase, combatNumVelocity, PassiveSkillEffectActivated);
+                AddCombatLogNumbers(
+                    Name,
+                    combatText.ToString(),
+                    CombatNumCase,
+                    combatNumVelocity,
+                    PassiveSkillEffectActivated);
             }
         }
 
@@ -572,8 +594,8 @@ namespace Medicraft.Entities
                     break;
             }
 
-            BoundingDetectEntity.Radius = 80f;
-            knockbackForce = 50f;
+            BoundingDetectEntity.Radius = BaseBoundingDetectEntityRadius;
+            knockbackForce = baseknockbackForce;
             Mana -= manaCost;
         }
 
@@ -696,47 +718,44 @@ namespace Medicraft.Entities
         // Check Attack
         private void CheckAttackDetection(float atk, float percentHit, bool isUndodgeable, float stunTime, string effectAttacked)
         {
-            foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed
-                && e.EntityType == EntityTypes.Hostile || e.EntityType == EntityTypes.Boss))
+            foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed && !e.IsDying
+                && (e.EntityType == EntityTypes.Hostile || e.EntityType == EntityTypes.Boss)))
             {
                 if (entity.BoundingHitBox.Intersects(BoundingDetectEntity))
                 {
-                    if (!entity.IsDying)
+                    var totalDamage = TotalDamage(atk, percentHit, entity.DEF, entity.Evasion, isUndodgeable);
+
+                    var combatNumVelocity = entity.SetCombatNumDirection();
+                    entity.AddCombatLogNumbers(Name, ((int)totalDamage).ToString()
+                        , CombatNumCase, combatNumVelocity, effectAttacked);
+
+                    // In case the Attack doesn't Missed
+                    if (CombatNumCase != Missed)
                     {
-                        var totalDamage = TotalDamage(atk, percentHit, entity.DEF, entity.Evasion, isUndodgeable);
+                        // Mob being hit by Player
+                        entity.IsAttacked = true;
+                        entity.HP -= totalDamage;
 
-                        var combatNumVelocity = entity.SetCombatNumDirection();
-                        entity.AddCombatLogNumbers(Name, ((int)totalDamage).ToString()
-                            , CombatNumCase, combatNumVelocity, effectAttacked);
-
-                        // In case the Attack doesn't Missed
-                        if (CombatNumCase != 3)
+                        if (entity.IsKnockbackable)
                         {
-                            // Mob being hit by Player
-                            entity.IsAttacked = true;
-                            entity.HP -= totalDamage;
+                            var knockBackDirection = (entity.Position - new Vector2(0, 50)) - Position;
+                            knockBackDirection.Normalize();
+                            entity.Velocity = knockBackDirection * knockbackForce;
 
-                            if (entity.IsKnockbackable)
-                            {
-                                var knockBackDirection = (entity.Position - new Vector2(0, 50)) - Position;
-                                knockBackDirection.Normalize();
-                                entity.Velocity = knockBackDirection * knockbackForce;
-
-                                entity.IsKnockback = true;
-                                entity.KnockbackedTimer = 0.2f;
-                            }
-
-                            if (stunTime > 0f && entity.IsStunable)
-                            {
-                                entity.IsStunning = true;
-                                entity.StunningTimer = stunTime;
-                            }
+                            entity.IsKnockback = true;
+                            entity.KnockbackedTimer = 0.2f;
                         }
 
-                        if (entity.HP <= 0)
+                        if (stunTime > 0f && entity.IsStunable)
                         {
-                            entity.IsDying = true;
+                            entity.IsStunning = true;
+                            entity.StunningTimer = stunTime;
                         }
+                    }
+
+                    if (entity.HP <= 0)
+                    {
+                        entity.IsDying = true;
                     }
                 }
             }
@@ -755,7 +774,7 @@ namespace Medicraft.Entities
             {
                 // if Attack Missed
                 totalDamage = 0;
-                CombatNumCase = 3;
+                CombatNumCase = Missed;
                 _isAttackMissed = true;
             }
             else
@@ -768,12 +787,12 @@ namespace Medicraft.Entities
                 if (critChance <= Crit * 100)
                 {
                     totalDamage += (int)(totalDamage * CritDMG);
-                    CombatNumCase = 1;
+                    CombatNumCase = DamageCrit;
                     _isCriticalAttack = true;
                 }
                 else
                 {
-                    CombatNumCase = 0;
+                    CombatNumCase = DamageDefault;
                     _isCriticalAttack = false;
                 }
 
@@ -786,7 +805,7 @@ namespace Medicraft.Entities
 
         private void CheckInteraction(KeyboardState keyboardCur, KeyboardState keyboardPrev)
         {
-            GameGlobals.Instance.IsDetectedGameObject = false;
+            Instance.IsDetectedGameObject = false;
 
             // Check Item Dectection
             var GameObject = ObjectManager.Instance.GameObjects;
@@ -794,7 +813,7 @@ namespace Medicraft.Entities
             {
                 if (BoundingCollection.Intersects(gameObject.BoundingCollection))
                 {
-                    GameGlobals.Instance.IsDetectedGameObject = true;
+                    Instance.IsDetectedGameObject = true;
                     break;
                 }
             }
@@ -802,7 +821,7 @@ namespace Medicraft.Entities
             // Check Interaction
             if (keyboardCur.IsKeyUp(Keys.F) && keyboardPrev.IsKeyDown(Keys.F))
             {
-                if (GameGlobals.Instance.IsDetectedGameObject)
+                if (Instance.IsDetectedGameObject)
                 {
                     CheckGameObject();
                 }
@@ -879,7 +898,7 @@ namespace Medicraft.Entities
             // Detect for LayerDepth
             Sprite.Depth = topDepth; // Default depth
 
-            var TopLayerObject = GameGlobals.Instance.TopLayerObject;
+            var TopLayerObject = Instance.TopLayerObject;
             foreach (var obj in TopLayerObject)
             {
                 if (obj.Intersects(BoundingDetectCollisions))
@@ -889,7 +908,7 @@ namespace Medicraft.Entities
                 }
             }
 
-            var MiddleLayerObject = GameGlobals.Instance.MiddleLayerObject;
+            var MiddleLayerObject = Instance.MiddleLayerObject;
             foreach (var obj in MiddleLayerObject)
             {
                 if (obj.Intersects(BoundingDetectCollisions))
@@ -899,7 +918,7 @@ namespace Medicraft.Entities
                 }
             }
 
-            var BottomLayerObject = GameGlobals.Instance.BottomLayerObject;
+            var BottomLayerObject = Instance.BottomLayerObject;
             foreach (var obj in BottomLayerObject)
             {
                 if (obj.Intersects(BoundingDetectCollisions))
@@ -920,7 +939,7 @@ namespace Medicraft.Entities
 
         protected override void UpdateTimerConditions(float deltaSeconds)
         {
-            // Check attack timing
+            // Check attack timing for Player Character
             if (ActionTimer > 0)
             {
                 ActionTimer -= deltaSeconds;
@@ -1014,96 +1033,6 @@ namespace Medicraft.Entities
             CombatNumVelocity = numDirection * Sprite.TextureRegion.Height / 2;
 
             return CombatNumVelocity;
-        }
-
-        public bool RestoresHP(string actorName, float value, bool isCheckingCap)
-        {
-            if (isCheckingCap)
-            {
-                if (HP < MaxHP)
-                {
-                    value = (value + HP) > MaxHP ? MaxHP - HP : value;
-
-                    HP += value;
-
-                    CombatNumCase = 2;
-                    var combatNumVelocity = SetCombatNumDirection();
-                    AddCombatLogNumbers(actorName
-                        , ((int)value).ToString()
-                        , CombatNumCase
-                        , combatNumVelocity
-                        , PassiveSkillEffectActivated);
-
-                    return true;
-                }
-            }
-            else
-            {
-                if (HP < MaxHP)
-                {
-                    value = (value + HP) > MaxHP ? MaxHP - HP : value;
-
-                    HP += value;
-                }
-                else value = 0;
-
-                CombatNumCase = 2;
-                var combatNumVelocity = SetCombatNumDirection();
-                AddCombatLogNumbers(actorName
-                    , ((int)value).ToString()
-                    , CombatNumCase
-                    , combatNumVelocity
-                    , PassiveSkillEffectActivated);
-
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool RestoresMana(string actorName, float value, bool isCheckingCap)
-        {
-            if (isCheckingCap)
-            {
-                if (Mana < MaxMana)
-                {
-                    value = value + Mana > MaxMana ? MaxMana - Mana : value;
-
-                    Mana += value;
-
-                    CombatNumCase = 5;
-                    var combatNumVelocity = SetCombatNumDirection();
-                    AddCombatLogNumbers(actorName
-                        , ((int)value).ToString()
-                        , CombatNumCase
-                        , combatNumVelocity
-                        , PassiveSkillEffectActivated);
-
-                    return true;
-                }
-            }
-            else
-            {
-                if (Mana < MaxMana)
-                {
-                    value = value + Mana > MaxMana ? MaxMana - Mana : value;
-
-                    Mana += value;
-                }
-                else value = 0;
-
-                CombatNumCase = 5;
-                var combatNumVelocity = SetCombatNumDirection();
-                AddCombatLogNumbers(actorName
-                    , ((int)value).ToString()
-                    , CombatNumCase
-                    , combatNumVelocity
-                    , PassiveSkillEffectActivated);
-
-                return true;
-            }
-
-            return false;
         }
 
         public bool UpSkillLevle(string skillName)

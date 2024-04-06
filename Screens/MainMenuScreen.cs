@@ -26,7 +26,7 @@ namespace Medicraft.Screens
             // Toggle the IsOpenPauseMenu flag
             GameGlobals.Instance.IsOpenPauseMenu = false;
             GameGlobals.Instance.IsOpenMainMenu = false;
-            GUIManager.Instance.CurrentGUI = GUIManager.MainMenu;
+            UIManager.Instance.CurrentUI = UIManager.MainMenu;
 
             Camera.ResetCameraPosition(false);
             ScreenManager.Camera.SetPosition(GameGlobals.Instance.DefaultAdapterViewport / 2);
@@ -36,15 +36,13 @@ namespace Medicraft.Screens
         {
             base.LoadContent();
 
-            GUIManager.Instance.CurrentGUI = GUIManager.MainMenu;
+            UIManager.Instance.CurrentUI = UIManager.MainMenu;
 
-            _mainMenuBG = _content.Load<Texture2D>("gui/main_menu_screen");
+            _mainMenuBG = content.Load<Texture2D>("gui/main_menu_screen");
 
-            Song _bgMusic = GameGlobals.Instance.AddCurrentMapMusic(GameGlobals.Music.kokoro_hiraite, _content);
+            Song bgMusic = GameGlobals.AddCurrentMapMusic(GameGlobals.Music.kokoro_hiraite, content);
 
-            MediaPlayer.IsRepeating = true;
-            MediaPlayer.Volume = GameGlobals.Instance.BackgroundMusicVolume * _volumeScale;
-            MediaPlayer.Play(_bgMusic);
+            GameGlobals.PlayBackgroundMusic(bgMusic, true, _volumeScale);
         }
 
         public override void UnloadContent()
@@ -59,8 +57,7 @@ namespace Medicraft.Screens
 
         public override void Update(GameTime gameTime)
         {
-            MediaPlayer.Volume = GameGlobals.Instance.BackgroundMusicVolume * _volumeScale;
-
+            GameGlobals.UpdateMediaPlayerVolumeScale(_volumeScale);
 
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -96,7 +93,7 @@ namespace Medicraft.Screens
             spriteBatch.Draw(_mainMenuBG, ScreenManager.Camera.GetViewportPosition() - screenOffSet, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             var alphaColor = 0.2f;
-            if (GUIManager.Instance.IsClickedLoadButton)
+            if (UIManager.Instance.IsClickedLoadButton)
                 alphaColor = 0.8f;
 
             ScreenManager.DrawBackgound(spriteBatch, Color.Black, alphaColor);
