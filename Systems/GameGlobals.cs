@@ -134,6 +134,10 @@ namespace Medicraft.Systems
         public bool SwitchOpenInspectPanel { set; get; }
         public bool IsOpenInspectPanel { set; get; }
 
+        // Save Menu
+        public bool SwitchOpenSaveMenuPanel { set; get; }
+        public bool IsOpenSaveMenuPanel { set; get; }
+
         // Game Datas
         public PlayerData InitialPlayerData { private set; get; }
         public SpriteSheet PlayerSpriteSheet { private set; get; }
@@ -407,6 +411,10 @@ namespace Medicraft.Systems
             // inspecting
             SwitchOpenInspectPanel = false;
             IsOpenInspectPanel = false;
+
+            // save menu
+            SwitchOpenSaveMenuPanel = false;
+            IsOpenSaveMenuPanel = false;
 
             SwitchDebugMode = false;
             IsDebugMode = false;

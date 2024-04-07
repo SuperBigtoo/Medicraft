@@ -1,4 +1,5 @@
 ﻿using Medicraft.Data.Models;
+using Medicraft.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using static Medicraft.Systems.GameGlobals;
@@ -125,7 +126,7 @@ namespace Medicraft.Systems.Managers
             PlaySoundEffect(Sound.PickUpCoin);
         }
 
-        public bool UseItem(int keyIndex, InventoryItemData item)
+        public bool UseItem(Entity entityTarget, int keyIndex, InventoryItemData item)
         {
             switch (item.GetCategory())
             {
@@ -134,7 +135,7 @@ namespace Medicraft.Systems.Managers
                     var itemEffect = new ItemEffect(item.GetEffectId());
                     
                     // Activate the effect, if activated den delete 1 and if its 0 so remove item from inventory
-                    if (itemEffect.Activate())
+                    if (itemEffect.Activate(entityTarget))
                     {
                         item.Count--;
 
@@ -204,7 +205,7 @@ namespace Medicraft.Systems.Managers
             // Check if item isUsable
             if (item.IsUsable())
             {
-                UseItem(keyIndex, item);
+                UseItem(PlayerManager.Instance.Player, keyIndex, item);
                 UIManager.Instance.RefreshHotbar();
                 return true;
             }

@@ -160,7 +160,7 @@ namespace Medicraft.Entities
                 HitBlinking(deltaSeconds);
 
                 // Check interaction with GameObject
-                CheckInteraction(keyboardCur, keyboardPrev);
+                PlayerManager.Instance.CheckInteraction(keyboardCur, keyboardPrev);
 
                 // Mana regeneration
                 ManaRegeneration(deltaSeconds);
@@ -801,89 +801,6 @@ namespace Medicraft.Entities
             }                     
 
             return totalDamage;
-        }
-
-        private void CheckInteraction(KeyboardState keyboardCur, KeyboardState keyboardPrev)
-        {
-            Instance.IsDetectedGameObject = false;
-
-            // Check Item Dectection
-            var GameObject = ObjectManager.Instance.GameObjects;
-            foreach (var gameObject in GameObject)
-            {
-                if (BoundingCollection.Intersects(gameObject.BoundingCollection))
-                {
-                    Instance.IsDetectedGameObject = true;
-                    break;
-                }
-            }
-
-            // Check Interaction
-            if (keyboardCur.IsKeyUp(Keys.F) && keyboardPrev.IsKeyDown(Keys.F))
-            {
-                if (Instance.IsDetectedGameObject)
-                {
-                    CheckGameObject();
-                }
-            }
-        }
-
-        private void CheckGameObject()
-        {
-            foreach (var gameObject in ObjectManager.Instance.GameObjects)
-            {
-                if (BoundingCollection.Intersects(gameObject.BoundingCollection))
-                {                   
-                    switch (gameObject.Type)
-                    {
-                        case GameObjects.GameObject.GameObjectType.QuestItem:
-
-                        case GameObjects.GameObject.GameObjectType.Item:
-
-                            var itemId = gameObject.ReferId;
-                            var quantityDrop = gameObject.QuantityDrop;
-
-                            // Collecting Item into Player's Inventory                         
-                            if (!gameObject.IsCollected && !InventoryManager.Instance.IsInventoryFull(itemId, quantityDrop))
-                            {
-                                gameObject.IsCollected = true;
-                            }
-                            else HUDSystem.ShowInsufficientSign();
-                            break;
-
-                        case GameObjects.GameObject.GameObjectType.CraftingTable:
-                            CheckTableCraftDetection();
-                            break;
-
-                        case GameObjects.GameObject.GameObjectType.SavingTable:
-
-                            break;
-
-                        case GameObjects.GameObject.GameObjectType.WarpPoint:
-
-                            break;
-                    }
-
-                    break;
-                }
-            }
-        }
-
-        // Crafting TBD
-        private void CheckTableCraftDetection()
-        {
-            //if (GameGlobals.Instance.CraftingTableArea.Count != 0)
-            //{
-            //    var TableCraft = GameGlobals.Instance.CraftingTableArea;
-            //    foreach (var obj in TableCraft)
-            //    {
-            //        if (BoundingDetectCollisions.Intersects(obj))
-            //        {
-                        
-            //            break;
-            //        }
-            //    }
-            //}
         }
 
         private void ManaRegeneration(float deltaSeconds)

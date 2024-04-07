@@ -1,4 +1,5 @@
 ﻿using Medicraft.Data.Models;
+using Medicraft.Entities;
 using Medicraft.Systems.Managers;
 using System.Linq;
 
@@ -19,7 +20,7 @@ namespace Medicraft.Systems
             _description = _itemEffectData.Description;
         }
 
-        public bool Activate()
+        public bool Activate(Entity entityTarget)
         {
             bool isItemUesd = false;
 
@@ -33,22 +34,22 @@ namespace Medicraft.Systems
                         {
                             if (effect.Target.Equals("HP"))
                             {
-                                var valueHP = (int)(PlayerManager.Instance.Player.BaseMaxHP * effect.Value);
+                                var valueHP = (int)(entityTarget.BaseMaxHP * effect.Value);
 
-                                isItemUesd = PlayerManager.Instance.Player.RestoresHP(_name, valueHP, true);
+                                isItemUesd = entityTarget.RestoresHP(_name, valueHP, true);
                             }
                             else if (effect.Target.Equals("Mana"))
                             {
-                                var valueMana = PlayerManager.Instance.Player.BaseMaxMana * (float)effect.Value;
+                                var valueMana = entityTarget.BaseMaxMana * (float)effect.Value;
 
-                                isItemUesd = PlayerManager.Instance.Player.RestoresMana(_name, valueMana, true);
+                                isItemUesd = entityTarget.RestoresMana(_name, valueMana, true);
                             }
                         }
                         else if (effect.ActivationType.Equals("Periodic"))
                         {
                             StatusEffectManager.Instance.AddStatusEffect(
-                                PlayerManager.Instance.Player,
-                                PlayerManager.Instance.Player.Name,
+                                entityTarget,
+                                entityTarget.Name,
                                 effect.EffectType + effect.Target + _name,
                                 effect);
 
@@ -62,8 +63,8 @@ namespace Medicraft.Systems
                     foreach (var effect in _itemEffectData.Effects)
                     {
                         StatusEffectManager.Instance.AddStatusEffect(
-                            PlayerManager.Instance.Player,
-                            PlayerManager.Instance.Player.Name,
+                            entityTarget,
+                            entityTarget.Name,
                             effect.EffectType + effect.Target + _name,
                             effect);
 

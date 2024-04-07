@@ -23,6 +23,7 @@ namespace Medicraft.Systems.Managers
      
         public enum GameScreen
         {
+            None,
             TestScreen,
             SplashScreen,
             MainMenuScreen,
@@ -33,6 +34,7 @@ namespace Medicraft.Systems.Managers
 
         public enum LoadMapAction
         {
+            None,
             NewGame,
             LoadSave,
             Test_to_map_1,
@@ -86,70 +88,6 @@ namespace Medicraft.Systems.Managers
             _curScreen?.Dispose();
         }
 
-        public void TranstisionToScreen(GameScreen gameScreen)
-        {
-            switch (gameScreen)
-            {
-                case GameScreen.TestScreen:
-                    ScreenTransitioningTo = GameScreen.TestScreen;
-                    break;
-
-                case GameScreen.SplashScreen:
-                    ScreenTransitioningTo = GameScreen.SplashScreen;
-                    break;
-
-                case GameScreen.MainMenuScreen:
-                    ScreenTransitioningTo = GameScreen.MainMenuScreen;
-                    break;
-
-                case GameScreen.Map1:
-                    ScreenTransitioningTo = GameScreen.Map1;
-                    break;
-            }
-
-            IsTransitioning = true;
-            IsScreenLoaded = false;
-            _transitionTimer = 0f;
-            _transitionRadius = -0.01f;
-        }
-
-        private void LoadScreen()
-        {
-            // Reset companion summon
-            PlayerManager.Instance.IsCompanionSummoned = false;
-
-            _prevScreen = _curScreen;
-            _prevScreen?.UnloadContent();
-            _prevScreen = null;
-
-            switch (ScreenTransitioningTo)
-            {
-                case GameScreen.TestScreen:
-                    CurrentScreen = GameScreen.TestScreen;
-                    _curScreen = new TestScreen();               
-                    _curScreen.LoadContent();
-                    break;
-
-                case GameScreen.SplashScreen:
-                    CurrentScreen = GameScreen.SplashScreen;
-                    _curScreen = new SplashScreen();               
-                    _curScreen.LoadContent();
-                    break;
-
-                case GameScreen.MainMenuScreen:
-                    CurrentScreen = GameScreen.MainMenuScreen;
-                    _curScreen = new MainMenuScreen();
-                    _curScreen.LoadContent();
-                    break;
-
-                case GameScreen.Map1:
-                    CurrentScreen = GameScreen.Map1;
-                    _curScreen = new Map1();
-                    _curScreen.LoadContent();
-                    break;
-            }
-        }
-
         public void Update(GameTime gameTime)
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -164,6 +102,7 @@ namespace Medicraft.Systems.Managers
             if (CurrentScreen != GameScreen.SplashScreen)
                 UserInterface.Active.Update(gameTime);
 
+            // Update Screen
             if (!GameGlobals.Instance.IsGamePause)
                 _prevScreen?.Update(gameTime);
                 _curScreen?.Update(gameTime);
@@ -248,6 +187,16 @@ namespace Medicraft.Systems.Managers
                         GameGlobals.Instance.IsOpenPauseMenu = true;
                     }
                     break;
+
+                case UIManager.SaveMenu:
+                    if (!GameGlobals.Instance.IsOpenSaveMenuPanel)
+                    {
+                        UIManager.Instance.RefreshSaveMenu();
+                        UIManager.Instance.UpdateAfterChangeGUI();
+
+                        GameGlobals.Instance.IsOpenSaveMenuPanel = true;
+                    }
+                    break;
             }
 
             UpdateTransitionScreen(deltaSeconds);
@@ -280,9 +229,7 @@ namespace Medicraft.Systems.Managers
                 }
 
                 if (_transitionTimer >= (_transitionTime * 2) + _pauseTime)
-                {
                     IsTransitioning = false;
-                }
             }
         }
 
@@ -453,6 +400,73 @@ namespace Medicraft.Systems.Managers
             }
 
             return gameScreen;
+        }
+
+        public void TranstisionToScreen(GameScreen gameScreen)
+        {
+            switch (gameScreen)
+            {
+                case GameScreen.None:
+                    break;
+
+                case GameScreen.TestScreen:
+                    ScreenTransitioningTo = GameScreen.TestScreen;
+                    break;
+
+                case GameScreen.SplashScreen:
+                    ScreenTransitioningTo = GameScreen.SplashScreen;
+                    break;
+
+                case GameScreen.MainMenuScreen:
+                    ScreenTransitioningTo = GameScreen.MainMenuScreen;
+                    break;
+
+                case GameScreen.Map1:
+                    ScreenTransitioningTo = GameScreen.Map1;
+                    break;
+            }
+
+            IsTransitioning = true;
+            IsScreenLoaded = gameScreen == GameScreen.None;
+            _transitionTimer = 0f;
+            _transitionRadius = -0.01f;
+        }
+
+        private void LoadScreen()
+        {
+            // Reset companion summon
+            PlayerManager.Instance.IsCompanionSummoned = false;
+
+            _prevScreen = _curScreen;
+            _prevScreen?.UnloadContent();
+            _prevScreen = null;
+
+            switch (ScreenTransitioningTo)
+            {
+                case GameScreen.TestScreen:
+                    CurrentScreen = GameScreen.TestScreen;
+                    _curScreen = new TestScreen();
+                    _curScreen.LoadContent();
+                    break;
+
+                case GameScreen.SplashScreen:
+                    CurrentScreen = GameScreen.SplashScreen;
+                    _curScreen = new SplashScreen();
+                    _curScreen.LoadContent();
+                    break;
+
+                case GameScreen.MainMenuScreen:
+                    CurrentScreen = GameScreen.MainMenuScreen;
+                    _curScreen = new MainMenuScreen();
+                    _curScreen.LoadContent();
+                    break;
+
+                case GameScreen.Map1:
+                    CurrentScreen = GameScreen.Map1;
+                    _curScreen = new Map1();
+                    _curScreen.LoadContent();
+                    break;
+            }
         }
 
         public static void StartGame(bool isNewGame)

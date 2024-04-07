@@ -1,5 +1,4 @@
 ﻿using Medicraft.Data.Models;
-using Medicraft.Entities.Companion;
 using Medicraft.Systems.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,6 +6,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Sprites;
 using System.Linq;
+using static Medicraft.Systems.GameGlobals;
 
 namespace Medicraft.Systems
 {
@@ -19,7 +19,7 @@ namespace Medicraft.Systems
 
         private bool _nextFeed;
 
-        private readonly AnimatedSprite _spriteItemPack = new(GameGlobals.Instance.ItemsPackSprites);         
+        private readonly AnimatedSprite _spriteItemPack = new(Instance.ItemsPackSprites);         
             
         public HUDSystem()
         {
@@ -30,29 +30,29 @@ namespace Medicraft.Systems
         public void Update(GameTime gameTime)
         {
             _deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            _topLeftCorner = GameGlobals.Instance.TopLeftCornerPos;
+            _topLeftCorner = Instance.TopLeftCornerPos;
 
             // Check for the next feed to roll in
-            if (GameGlobals.Instance.CollectedItemFeed.Count != 0)
+            if (Instance.CollectedItemFeed.Count != 0)
             {
-                GameGlobals.Instance.DisplayFeedTime -= _deltaSeconds;
+                Instance.DisplayFeedTime -= _deltaSeconds;
 
                 if (GameGlobals.Instance.DisplayFeedTime <= 0)
                 {
                     _nextFeed = true;
-                    GameGlobals.Instance.DisplayFeedTime = GameGlobals.Instance.MaximumDisplayFeedTime;
+                    Instance.DisplayFeedTime = Instance.MaximumDisplayFeedTime;
                 }
                 else _nextFeed = false;
             }
 
             // Check for a notification 
-            if (GameGlobals.Instance.ShowInsufficientSign)
+            if (Instance.ShowInsufficientSign)
             {
                 _insufficientTimer -= _deltaSeconds;
 
                 if (_insufficientTimer <= 0)
                 {
-                    GameGlobals.Instance.ShowInsufficientSign = false;
+                    Instance.ShowInsufficientSign = false;
                     _insufficientTimer = _insufficientTime;
                 }
             }
@@ -74,7 +74,7 @@ namespace Medicraft.Systems
                     graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height)
             );
 
-            if (!GameGlobals.Instance.IsGamePause)
+            if (!Instance.IsGamePause)
             {
                 // Draw HP mobs
                 DrawHealthPointMobs(spriteBatch);
@@ -106,7 +106,7 @@ namespace Medicraft.Systems
             if (!PlayerManager.Instance.IsCompanionDead && PlayerManager.Instance.IsCompanionSummoned)
                 DrawCompanionHealthBarGUI(spriteBatch);
 
-            if (GameGlobals.Instance.IsEnteringBossFight)
+            if (Instance.IsEnteringBossFight)
                 DrawBossHealthBarGUI(spriteBatch);
 
             DrawItemBarGUI(spriteBatch);
@@ -117,21 +117,12 @@ namespace Medicraft.Systems
 
             DrawSkillGUI(spriteBatch);
 
-            // Draw Gold Coin
-            spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.gold_coin)
-                    , new Vector2(90f, 210f) + _topLeftCorner, null
-                    , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
-
-            DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
-                , $" {InventoryManager.Instance.GoldCoin}"
-                , new Vector2(90f + 32f, 205f) + _topLeftCorner, Color.Wheat, 1f, Color.Black, 2);
-
-            if (GameGlobals.Instance.IsDebugMode)
+            if (Instance.IsDebugMode)
             {
                 spriteBatch.FillRectangle(_topLeftCorner.X, _topLeftCorner.Y
                     , ScreenManager.Instance.GraphicsDevice.Viewport.Width, 26, Color.Black * 0.4f);
 
-                var FontSensation = GameGlobals.Instance.FontSensation;
+                var FontSensation = Instance.FontSensation;
 
                 spriteBatch.DrawString(FontSensation, $" Mobs: {EntityManager.Instance.entities.Count}"
                     , Vector2.Zero + _topLeftCorner, Color.White);
@@ -156,7 +147,7 @@ namespace Medicraft.Systems
 
                 var rect = new Rectangle((int)_topLeftCorner.X + 50, (int)_topLeftCorner.Y + 220, 300, 500);
 
-                var FontTA8BitBold = GameGlobals.Instance.FontTA8BitBold;
+                var FontTA8BitBold = Instance.FontTA8BitBold;
 
                 // Player Stats
                 {
@@ -201,42 +192,70 @@ namespace Medicraft.Systems
                     var closestMob = EntityManager.Instance.ClosestEnemyToCompanion;
 
                     spriteBatch.DrawString(FontTA8BitBold, $"Mob Name: {closestMob.Name}"
-                    , new Vector2(55f, 225f + 400) + _topLeftCorner, Color.Magenta);
+                    , new Vector2(55f, 225f + 250) + _topLeftCorner, Color.Magenta);
 
                     spriteBatch.DrawString(FontTA8BitBold, $"Level: {closestMob.Level}"
-                        , new Vector2(55f, 240f + 400) + _topLeftCorner, Color.Magenta);
+                        , new Vector2(55f, 240f + 250) + _topLeftCorner, Color.Magenta);
 
                     spriteBatch.DrawString(FontTA8BitBold, $"ATK: {closestMob.ATK}"
-                        , new Vector2(55f, 260f + 400) + _topLeftCorner, Color.Magenta);
+                        , new Vector2(55f, 260f + 250) + _topLeftCorner, Color.Magenta);
 
                     spriteBatch.DrawString(FontTA8BitBold, $"Crit: {closestMob.Crit}"
-                        , new Vector2(55f, 275f + 400) + _topLeftCorner, Color.Magenta);
+                        , new Vector2(55f, 275f + 250) + _topLeftCorner, Color.Magenta);
 
                     spriteBatch.DrawString(FontTA8BitBold, $"CritDMG: {closestMob.CritDMG}"
-                        , new Vector2(55f, 290f + 400) + _topLeftCorner, Color.Magenta);
+                        , new Vector2(55f, 290f + 250) + _topLeftCorner, Color.Magenta);
 
                     spriteBatch.DrawString(FontTA8BitBold, $"DEF: {closestMob.DEF}"
-                        , new Vector2(55f, 305f + 400) + _topLeftCorner, Color.Magenta);
+                        , new Vector2(55f, 305f + 250) + _topLeftCorner, Color.Magenta);
 
                     spriteBatch.DrawString(FontTA8BitBold, $"Evasion: {closestMob.Evasion}"
-                        , new Vector2(55f, 335f + 400) + _topLeftCorner, Color.Magenta);
+                        , new Vector2(55f, 335f + 250) + _topLeftCorner, Color.Magenta);
 
                     spriteBatch.DrawString(FontTA8BitBold, $"Speed: {closestMob.Speed}"
-                        , new Vector2(55f, 350f + 400) + _topLeftCorner, Color.Magenta);
+                        , new Vector2(55f, 350f + 250) + _topLeftCorner, Color.Magenta);
                 }
             }
         }
 
         public static void DrawOnTopUI(SpriteBatch spriteBatch)
         {
+            var topLeftCornerPos = Instance.TopLeftCornerPos;
+            var font = Instance.FontTA8BitBold;
+
+            // GoldCoin
+            var goldCoinTexture = GetGuiTexture(GuiTextureName.gold_coin);
+            var goldCoinText = $" {InventoryManager.Instance.GoldCoin}";
+            var goldWidth = goldCoinTexture.Width + font.MeasureString(goldCoinText).Width;
+
             switch (UIManager.Instance.CurrentUI)
             {
                 case UIManager.PlayScreen:
+                    // Draw Gold Coin
+                    spriteBatch.Draw(goldCoinTexture
+                            , new Vector2(720 - (goldWidth / 2), 40) + topLeftCornerPos, null
+                            , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
+
+                    DrawTextWithStroke(spriteBatch, font, goldCoinText
+                        , new Vector2(720 - (goldWidth / 2) + 32f, 40) + topLeftCornerPos
+                        , Color.Wheat, 1f, Color.Black, 2);
+
                     // Selected Slot
-                    var selectedSlot = GameGlobals.Instance.CurrentHotbarSelect;
-                    spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.selected_slot)
-                        , new Vector2(511f + (52 * selectedSlot), 820f) + GameGlobals.Instance.TopLeftCornerPos, null
+                    var selectedSlot = Instance.CurrentHotbarSelect;
+                    spriteBatch.Draw(GetGuiTexture(GuiTextureName.selected_slot)
+                        , new Vector2(511f + (52 * selectedSlot), 820f) + Instance.TopLeftCornerPos, null
                         , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    break;
+
+                case UIManager.InventoryPanel:
+                    // Draw Gold Coin
+                    spriteBatch.Draw(goldCoinTexture
+                            , new Vector2(720 - (goldWidth / 2), 40) + topLeftCornerPos, null
+                            , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
+
+                    DrawTextWithStroke(spriteBatch, font, goldCoinText
+                        , new Vector2(720 - (goldWidth / 2) + 32f, 40) + topLeftCornerPos
+                        , Color.Wheat, 1f, Color.Black, 2);
                     break;
 
                 case UIManager.InspectPanel:
@@ -244,19 +263,42 @@ namespace Medicraft.Systems
                     if (GameGlobals.Instance.IsOpenInspectPanel && UIManager.Instance.IsCharacterTabSelected
                         && !UIManager.Instance.IsShowConfirmBox)
                     {
-                        var playerSprite = UIManager.Instance.CharacterSprite;
+                        var charSprite = UIManager.Instance.CharacterSprite;
 
-                        //playerSprite.Depth = 0.1f;
-                        playerSprite.Play("default_idle");
-                        playerSprite.Update(_deltaSeconds);
+                        //Sprite.Depth = 0.1f;
+                        charSprite.Play("default_idle");
+                        charSprite.Update(_deltaSeconds);
 
+                        var positon = PlayerManager.Instance.Player.Position - new Vector2(200f, 50f);
                         var transform = new Transform2()
                         {
                             Scale = new Vector2(1.5f, 1.5f),
                             Rotation = 0f,
-                            Position = PlayerManager.Instance.Player.Position - new Vector2(200f, 50f)
+                            Position = positon
                         };
-                        spriteBatch.Draw(playerSprite, transform);
+                        spriteBatch.Draw(charSprite, transform);
+
+                        if (UIManager.Instance.CharacterType.Equals("Companion"))
+                        {
+                            if (UIManager.Instance.SelectedCompanion.IsDead)
+                            {
+                                var text = $"DEAD";
+                                var textSize = font.MeasureString(text);
+
+                                DrawTextWithStroke(spriteBatch, font, text
+                                    , positon - new Vector2((textSize.Width * 1.5f) / 2, (textSize.Height * 1.5f) / 2)
+                                    , Color.DarkRed, 1.5f, Color.Black, 2);
+                            }
+                            else if (!UIManager.Instance.SelectedCompanion.CompanionData.IsSummoned)
+                            {
+                                var text = $"INACTIVE";
+                                var textSize = font.MeasureString(text);
+
+                                DrawTextWithStroke(spriteBatch, font, text
+                                    , positon - new Vector2((textSize.Width * 1.5f) / 2, (textSize.Height * 1.5f) / 2)
+                                    , Color.DarkGray, 1.5f, Color.Black, 2);
+                            }
+                        }
                     }                  
                     break;
             }              
@@ -265,18 +307,18 @@ namespace Medicraft.Systems
         private void DrawHealthBarGUI(SpriteBatch spriteBatch)
         {
             // Health Bar Alpha
-            spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.health_bar_alpha)
+            spriteBatch.Draw(GetGuiTexture(GuiTextureName.health_bar_alpha)
                 , new Vector2(35f, 15f) + _topLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             // Player Profile
-            spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.noah_profile)
+            spriteBatch.Draw(GetGuiTexture(GuiTextureName.noah_profile)
                 , new Vector2(38f, 18f) + _topLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             // HP gauge
             var curHealthPoint = PlayerManager.Instance.Player.GetCurrentHealthPercentage();
-            var hpGaugeTexture = GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.healthpoints_gauge);
+            var hpGaugeTexture = GetGuiTexture(GuiTextureName.healthpoints_gauge);
             var hpGaugeSourceRec = new Rectangle(0, 0
                 , (int)(hpGaugeTexture.Width * curHealthPoint), hpGaugeTexture.Height);
             var hpGaugeRec = new Rectangle((int)(166 + _topLeftCorner.X), (int)(40 + _topLeftCorner.Y)
@@ -287,7 +329,7 @@ namespace Medicraft.Systems
 
             // Mana gauge
             var curManaPoint = PlayerManager.Instance.Player.GetCurrentManaPercentage();
-            var manaGaugeTexture = GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.mana_gauge);
+            var manaGaugeTexture = GetGuiTexture(GuiTextureName.mana_gauge);
             var manaGaugeSourceRec = new Rectangle(0, 0
                 , (int)(manaGaugeTexture.Width * curManaPoint), manaGaugeTexture.Height);
             var manaGaugeRec = new Rectangle((int)(167 + _topLeftCorner.X), (int)(84 + _topLeftCorner.Y)
@@ -297,18 +339,18 @@ namespace Medicraft.Systems
                 , Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
 
             // Health Bar GUI
-            spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.health_bar)
+            spriteBatch.Draw(GetGuiTexture(GuiTextureName.health_bar)
                 , new Vector2(35f, 15f) + _topLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             // Text Health Point
             var textHP = $"{(int)PlayerManager.Instance.Player.HP}/{(int)PlayerManager.Instance.Player.MaxHP}";
-            var textSizeHP = GameGlobals.Instance.FontTA8BitBold.MeasureString(textHP);
+            var textSizeHP = Instance.FontTA8BitBold.MeasureString(textHP);
             var positionHP = new Vector2(
                 (166f + hpGaugeTexture.Width / 2) - (textSizeHP.Width / 2),
                 (40f + hpGaugeTexture.Height / 2) - (textSizeHP.Height / 2)) + _topLeftCorner;
 
-            DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
+            DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
                 , textHP, positionHP, Color.White, 1f, Color.Black, 2);
 
             // Text Mana Point
@@ -317,27 +359,28 @@ namespace Medicraft.Systems
             var positionMana = new Vector2(
                 (166f + hpGaugeTexture.Width / 2) - (textSizeHP.Width / 2), 80f) + _topLeftCorner;
 
-            DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8Bit
+            DrawTextWithStroke(spriteBatch, Instance.FontTA8Bit
                 , textMana, positionMana, Color.White, 1f, Color.Black, 2);
         }
 
         private void DrawCompanionHealthBarGUI(SpriteBatch spriteBatch)
         {
             var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
+            var compaProfile = GetGuiTexture(GuiTextureName.companion_profile);
 
             // Health Bar Companion Alpha
-            spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.health_bar_companion_alpha)
+            spriteBatch.Draw(GetGuiTexture(GuiTextureName.health_bar_companion_alpha)
                 , new Vector2(127f, 106f) + _topLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             // Companion Profile
-            spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.companion_profile)
+            spriteBatch.Draw(compaProfile
                 , new Vector2(129f, 108f) + _topLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             // HP gauge
             var curHealthPoint = companion.GetCurrentHealthPercentage();
-            var hpGaugeTexture = GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.healthpoints_gauge_companion);
+            var hpGaugeTexture = GetGuiTexture(GuiTextureName.healthpoints_gauge_companion);
             var hpGaugeSourceRec = new Rectangle(0, 0
                 , (int)(hpGaugeTexture.Width * curHealthPoint), hpGaugeTexture.Height);
             var hpGaugeRec = new Rectangle((int)(202f + _topLeftCorner.X), (int)(124f + _topLeftCorner.Y)
@@ -348,16 +391,16 @@ namespace Medicraft.Systems
 
             // Text Health Point
             var textHP = $"{(int)companion.HP}/{(int)companion.MaxHP}";
-            var textSizeHP = GameGlobals.Instance.FontTA8BitBold.MeasureString(textHP);
+            var textSizeHP = Instance.FontTA8BitBold.MeasureString(textHP);
             var positionHP = new Vector2(
                 (202f + hpGaugeTexture.Width / 2) - ((textSizeHP.Width * 0.8f) / 2),
                 (124f + hpGaugeTexture.Height / 2) - ((textSizeHP.Height * 0.8f) / 2)) + _topLeftCorner;
 
-            DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
+            DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
                 , textHP, positionHP, Color.White, 0.8f, Color.Black, 2);
 
             // Health Bar Companion GUI
-            spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.health_bar_companion)
+            spriteBatch.Draw(GetGuiTexture(GuiTextureName.health_bar_companion)
                 , new Vector2(127f, 106f) + _topLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
@@ -365,13 +408,13 @@ namespace Medicraft.Systems
         private void DrawBossHealthBarGUI(SpriteBatch spriteBatch)
         {
             // Health Bar Boss Alpha
-            spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.health_bar_boss_alpha)
+            spriteBatch.Draw(GetGuiTexture(GuiTextureName.health_bar_boss_alpha)
                 , new Vector2(506f, 92f) + _topLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             // HP gauge
             //var curHealthPoint = PlayerManager.Instance.Player.GetCurrentHealthPercentage();
-            var hpGaugeTexture = GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.boss_gauge);
+            var hpGaugeTexture = GetGuiTexture(GuiTextureName.boss_gauge);
             var hpGaugeSourceRec = new Rectangle(0, 0
                 , (int)(hpGaugeTexture.Width * 1), hpGaugeTexture.Height);
             var hpGaugeRec = new Rectangle((int)(541 + _topLeftCorner.X), (int)(123 + _topLeftCorner.Y)
@@ -381,32 +424,32 @@ namespace Medicraft.Systems
                 , Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
 
             // Health Bar Boss GUI
-            spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.health_bar_boss)
+            spriteBatch.Draw(GetGuiTexture(GuiTextureName.health_bar_boss)
                 , new Vector2(506f, 92f) + _topLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             // Text Name
             var text = $"Boss Name is So Cool";
-            var textSize = GameGlobals.Instance.FontTA16Bit.MeasureString(text);
-            var position = new Vector2(GameGlobals.Instance.GameScreenCenter.X
+            var textSize = Instance.FontTA16Bit.MeasureString(text);
+            var position = new Vector2(Instance.GameScreenCenter.X
                 - (textSize.Width / 2), 90)
                 + _topLeftCorner;
 
-            DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA16Bit
+            DrawTextWithStroke(spriteBatch, Instance.FontTA16Bit
                 , text, position, Color.DarkRed, 1f, Color.Black, 1);
         }
 
         private void DrawItemBarGUI(SpriteBatch spriteBatch)
         {
             // Item Bar
-            spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.item_bar)
+            spriteBatch.Draw(GetGuiTexture(GuiTextureName.item_bar)
                 , new Vector2(499f, 814f) + _topLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             // Item Slot
             for (int i = 0; i < 8; i++ )
             {
-                spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.item_slot)
+                spriteBatch.Draw(GetGuiTexture(GuiTextureName.item_slot)
                     , new Vector2(515f + (52 * i), 824f) + _topLeftCorner, null
                     , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);          
             }
@@ -415,7 +458,7 @@ namespace Medicraft.Systems
         private void DrawLevelGUI(SpriteBatch spriteBatch)
         {
             // Level Gui
-            var LevelGuiTexture = GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.level_gui);
+            var LevelGuiTexture = GetGuiTexture(GuiTextureName.level_gui);
 
             spriteBatch.Draw(LevelGuiTexture
                 , new Vector2(25f, 10f) + _topLeftCorner, null
@@ -423,12 +466,12 @@ namespace Medicraft.Systems
 
             // Text Level
             var textLevel = $"{PlayerManager.Instance.Player.Level}";
-            var textSizeLevel = GameGlobals.Instance.FontTA8BitBold.MeasureString(textLevel);
+            var textSizeLevel = Instance.FontTA8BitBold.MeasureString(textLevel);
             var position = new Vector2(
                 (29f + LevelGuiTexture.Width / 2) - (textSizeLevel.Width / 2),
                 (14f + LevelGuiTexture.Height / 2) - (textSizeLevel.Height / 2)) + _topLeftCorner;
 
-            DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
+            DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
                 , textLevel, position, Color.White, 1f, Color.Black, 1);
         }
 
@@ -437,13 +480,13 @@ namespace Medicraft.Systems
             var position = new Vector2(508f, 792f);
 
             // Experience Alpha
-            spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.exp_bar_alpha)
+            spriteBatch.Draw(GetGuiTexture(GuiTextureName.exp_bar_alpha)
                 , position + _topLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             // Experience gauge
             var curEXP = PlayerManager.Instance.Player.GetCurrentEXPPercentage();
-            var expGaugeTexture = GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.exp_gauge);
+            var expGaugeTexture = GetGuiTexture(GuiTextureName.exp_gauge);
             var expGaugeSourceRec = new Rectangle(0, 0
                 , (int)(expGaugeTexture.Width * curEXP), expGaugeTexture.Height);
             var expGaugeRec = new Rectangle((int)(508f + _topLeftCorner.X), (int)(792f + _topLeftCorner.Y)
@@ -453,18 +496,18 @@ namespace Medicraft.Systems
                 , Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
 
             // Experience Bar
-            spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.exp_bar)
+            spriteBatch.Draw(GetGuiTexture(GuiTextureName.exp_bar)
                 , position + _topLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             // Text Experience Point
             var textLevel = $"{PlayerManager.Instance.Player.Level}";
-            var textSizeLevel = GameGlobals.Instance.FontTA8BitBold.MeasureString(textLevel);
+            var textSizeLevel = Instance.FontTA8BitBold.MeasureString(textLevel);
             var positionLevel = new Vector2(
                 (508f + expGaugeTexture.Width / 2) - (textSizeLevel.Width / 2),
                 (792f + expGaugeTexture.Height / 2) - (textSizeLevel.Height / 2)) + _topLeftCorner;
 
-            DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
+            DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
                 , textLevel, positionLevel, Color.White, 1f, new Color(48, 15, 61), 2);
         }
 
@@ -472,7 +515,7 @@ namespace Medicraft.Systems
         {
             //  Burst Skill
             var positionBurst = new Vector2(1282f, 726f);
-            var burstTexture = GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.burst_skill_pic);
+            var burstTexture = GetGuiTexture(GuiTextureName.burst_skill_pic);
 
             spriteBatch.Draw(burstTexture
                 , positionBurst + _topLeftCorner, null
@@ -482,7 +525,7 @@ namespace Medicraft.Systems
             {
                 // Burst Skill Cooldown
                 var cooldownPercentage = PlayerManager.Instance.Player.BurstCooldownTimer / PlayerManager.Instance.Player.BurstCooldownTime;
-                var cooldownTexture = GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.burst_skill_gui_alpha);
+                var cooldownTexture = GetGuiTexture(GuiTextureName.burst_skill_gui_alpha);
                 var cooldownSourceRec = new Rectangle(0, 0
                     , cooldownTexture.Width, (int)(cooldownTexture.Height * cooldownPercentage));
 
@@ -496,34 +539,34 @@ namespace Medicraft.Systems
 
                 // Text Burst Skill Cooldown
                 var text = $"{(int)PlayerManager.Instance.Player.BurstCooldownTimer}";
-                var textSize = GameGlobals.Instance.FontTA8BitBold.MeasureString(text);
+                var textSize = Instance.FontTA8BitBold.MeasureString(text);
                 var positionText = new Vector2(
                     (positionBurst.X + cooldownTexture.Width / 2) - ((textSize.Width * 1.5f) / 2),
                     (positionBurst.Y + cooldownTexture.Height / 2) - ((textSize.Height * 1.5f) / 2)) + _topLeftCorner;
 
-                DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
+                DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
                     , text, positionText, Color.White, 1.5f, Color.Black, 2);
             }
 
             // Text Burst Skill Q
             {
                 var text = $"Q";
-                var textSize = GameGlobals.Instance.FontTA8BitBold.MeasureString(text);
+                var textSize = Instance.FontTA8BitBold.MeasureString(text);
                 var positionText = new Vector2(
                     (positionBurst.X + burstTexture.Width / 2) - ((textSize.Width * 1.5f) / 2),
                     (positionBurst.Y + burstTexture.Height / 0.8f) - ((textSize.Height * 1.5f) / 2)) + _topLeftCorner;
 
-                DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
+                DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
                     , text, positionText, Color.White, 1.5f, Color.Black, 2);
             }
 
-            spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.burst_skill_gui)
+            spriteBatch.Draw(GetGuiTexture(GuiTextureName.burst_skill_gui)
                 , positionBurst + _topLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             // Normal Skill
             var positionNormal = new Vector2(1186f, 771f);
-            var normalTexture = GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.normal_skill_pic);
+            var normalTexture = GetGuiTexture(GuiTextureName.normal_skill_pic);
 
             spriteBatch.Draw(normalTexture
                 , positionNormal + _topLeftCorner, null
@@ -533,7 +576,7 @@ namespace Medicraft.Systems
             {
                 // Normal Skill Cooldown
                 var cooldownPercentage = PlayerManager.Instance.Player.NormalCooldownTimer / PlayerManager.Instance.Player.NormalCooldownTime;
-                var cooldownTexture = GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.normal_skill_gui_alpha);
+                var cooldownTexture = GetGuiTexture(GuiTextureName.normal_skill_gui_alpha);
                 var cooldownSourceRec = new Rectangle(0, 0
                     , cooldownTexture.Width, (int)(cooldownTexture.Height * cooldownPercentage));
 
@@ -547,35 +590,35 @@ namespace Medicraft.Systems
 
                 // Text Normal Skill Cooldown
                 var text = $"{(int)PlayerManager.Instance.Player.NormalCooldownTimer}";
-                var textSize = GameGlobals.Instance.FontTA8BitBold.MeasureString(text);
+                var textSize = Instance.FontTA8BitBold.MeasureString(text);
                 var positionText = new Vector2(
                     (positionNormal.X + cooldownTexture.Width / 2) - ((textSize.Width * 1.25f) / 2),
                     (positionNormal.Y + cooldownTexture.Height / 2) - ((textSize.Height * 1.25f) / 2)) + _topLeftCorner;
 
-                DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
+                DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
                     , text, positionText, Color.White, 1.25f, Color.Black, 2);
             }
 
             // Text Noraml Skill E
             {
                 var text = $"E";
-                var textSize = GameGlobals.Instance.FontTA8BitBold.MeasureString(text);
+                var textSize = Instance.FontTA8BitBold.MeasureString(text);
                 var positionText = new Vector2(
                     (positionNormal.X + normalTexture.Width / 2) - ((textSize.Width * 1.5f) / 2),
                     (positionNormal.Y + normalTexture.Height / 0.8f) - ((textSize.Height * 1.5f) / 2)) + _topLeftCorner;
 
-                DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
+                DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
                     , text, positionText, Color.White, 1.5f, Color.Black, 2);
             }
 
-            spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.normal_skill_gui)
+            spriteBatch.Draw(GetGuiTexture(GuiTextureName.normal_skill_gui)
                 , positionNormal + _topLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             // Passive Skill
             var positionPassive = new Vector2(1324, 653f);
 
-            spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.passive_skill_pic)
+            spriteBatch.Draw(GetGuiTexture(GuiTextureName.passive_skill_pic)
                 , positionPassive + _topLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
@@ -583,7 +626,7 @@ namespace Medicraft.Systems
             {
                 // Passive Skill Cooldown
                 var cooldownPercentage = PlayerManager.Instance.Player.PassiveCooldownTimer / PlayerManager.Instance.Player.PassiveCooldownTime;
-                var cooldownTexture = GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.passive_skill_gui_alpha);
+                var cooldownTexture = GetGuiTexture(GuiTextureName.passive_skill_gui_alpha);
                 var cooldownSourceRec = new Rectangle(0, 0
                     , cooldownTexture.Width, (int)(cooldownTexture.Height * cooldownPercentage));
 
@@ -597,25 +640,25 @@ namespace Medicraft.Systems
 
                 // Text Passive Skill Cooldown
                 var text = $"{(int)PlayerManager.Instance.Player.PassiveCooldownTimer}";
-                var textSize = GameGlobals.Instance.FontTA8BitBold.MeasureString(text);
+                var textSize = Instance.FontTA8BitBold.MeasureString(text);
                 var positionText = new Vector2(
                     (positionPassive.X + cooldownTexture.Width / 2) - (textSize.Width / 2),
                     (positionPassive.Y + cooldownTexture.Height / 2) - (textSize.Height / 2)) + _topLeftCorner;
 
-                DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8BitBold
+                DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
                     , text, positionText, Color.White, 1f, Color.Black, 2);
             }
 
-            spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.passive_skill_gui)
+            spriteBatch.Draw(GetGuiTexture(GuiTextureName.passive_skill_gui)
                 , positionPassive + _topLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
 
         private void DrawInteractionSigh(SpriteBatch spriteBatch)
         {
-            if (GameGlobals.Instance.IsDetectedGameObject)
+            if (Instance.IsDetectedGameObject)
             {
-                spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.press_f)
+                spriteBatch.Draw(GetGuiTexture(GuiTextureName.press_f)
                     , new Vector2(1055f, 560f) + _topLeftCorner, null
                     , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
             }
@@ -623,9 +666,9 @@ namespace Medicraft.Systems
 
         private static void DrawInsufficientSign(SpriteBatch spriteBatch)
         {
-            if (GameGlobals.Instance.ShowInsufficientSign)
+            if (Instance.ShowInsufficientSign)
             {
-                spriteBatch.Draw(GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.insufficient)
+                spriteBatch.Draw(GetGuiTexture(GuiTextureName.insufficient)
                     , PlayerManager.Instance.Player.Position
                     + new Vector2(25, -((PlayerManager.Instance.Player.Sprite.TextureRegion.Height / 2) + 25))
                     , null, Color.White, 0f, Vector2.Zero, 0.40f, SpriteEffects.None, 0f);
@@ -635,8 +678,8 @@ namespace Medicraft.Systems
         private void DrawHealthPointMobs(SpriteBatch spriteBatch)
         {
             var entities = EntityManager.Instance.Entities;
-            var FontSensation = GameGlobals.Instance.FontSensation;
-            var FontTA8BitBold = GameGlobals.Instance.FontTA8BitBold;
+            var FontSensation = Instance.FontSensation;
+            var FontTA8BitBold = Instance.FontTA8BitBold;
 
             foreach (var entity in entities.Where(e => !e.IsDestroyed && e.IsAggro
                 && e.EntityType == Entities.Entity.EntityTypes.Hostile && e.HP > 0))
@@ -649,8 +692,8 @@ namespace Medicraft.Systems
 
                 //DrawTextWithStroke(spriteBatch, FontSensation, text, position, Color.DarkRed, 1f, Color.Black, 1);
 
-                var mobHP = GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.health_bar_mob);
-                var mobGauge = GameGlobals.GetGuiTexture(GameGlobals.GuiTextureName.mob_gauge);
+                var mobHP = GetGuiTexture(GuiTextureName.health_bar_mob);
+                var mobGauge = GetGuiTexture(GuiTextureName.mob_gauge);
                 var offSet = new Vector2(mobHP.Width / 2, (mobHP.Height / 2) + (entity.Sprite.TextureRegion.Height / 2));
                 var position = entityPos - offSet;
 
@@ -703,23 +746,23 @@ namespace Medicraft.Systems
 
         private void DrawCollectedItem(SpriteBatch spriteBatch) 
         {
-            if (GameGlobals.Instance.CollectedItemFeed.Count != 0)
+            if (Instance.CollectedItemFeed.Count != 0)
             {
                 int n;
-                if (GameGlobals.Instance.CollectedItemFeed.Count >= GameGlobals.Instance.MaximumItemFeed)
+                if (Instance.CollectedItemFeed.Count >= Instance.MaximumItemFeed)
                 {
-                    n = GameGlobals.Instance.MaximumItemFeed;
+                    n = Instance.MaximumItemFeed;
                 }
-                else n = GameGlobals.Instance.CollectedItemFeed.Count;
+                else n = Instance.CollectedItemFeed.Count;
 
                 for (int i = 0; i < n; i++)
                 {
-                    var referId = GameGlobals.Instance.CollectedItemFeed.ElementAt(i).ItemId;
-                    var amount = GameGlobals.Instance.CollectedItemFeed.ElementAt(i).Count;
-                    var offsetX = GameGlobals.Instance.FeedPoint.X;
-                    var offsetY = GameGlobals.Instance.FeedPoint.Y;
+                    var referId = Instance.CollectedItemFeed.ElementAt(i).ItemId;
+                    var amount = Instance.CollectedItemFeed.ElementAt(i).Count;
+                    var offsetX = Instance.FeedPoint.X;
+                    var offsetY = Instance.FeedPoint.Y;
 
-                    var itemData = GameGlobals.Instance.ItemsDatas.Where(i => i.ItemId.Equals(referId));
+                    var itemData = Instance.ItemsDatas.Where(i => i.ItemId.Equals(referId));
 
                     var _transform = new Transform2
                     {
@@ -738,17 +781,17 @@ namespace Medicraft.Systems
                         offsetX + 22f,
                         (offsetY - 15f) + (i * 40)) + _topLeftCorner;
 
-                    DrawTextWithStroke(spriteBatch, GameGlobals.Instance.FontTA8Bit
+                    DrawTextWithStroke(spriteBatch, Instance.FontTA8Bit
                         , text, position, Color.White, 1f, Color.Black, 2);
                 }
 
                 if (_nextFeed)
                 {
-                    if (GameGlobals.Instance.CollectedItemFeed.Count >= GameGlobals.Instance.MaximumItemFeed)
+                    if (Instance.CollectedItemFeed.Count >= Instance.MaximumItemFeed)
                     {
-                        GameGlobals.Instance.CollectedItemFeed.RemoveRange(0, GameGlobals.Instance.MaximumItemFeed);
+                        Instance.CollectedItemFeed.RemoveRange(0, Instance.MaximumItemFeed);
                     }
-                    else GameGlobals.Instance.CollectedItemFeed.RemoveRange(0, GameGlobals.Instance.CollectedItemFeed.Count);
+                    else Instance.CollectedItemFeed.RemoveRange(0, Instance.CollectedItemFeed.Count);
                 }
             }
         }
@@ -776,17 +819,17 @@ namespace Medicraft.Systems
 
         public static void ShowInsufficientSign()
         {
-            GameGlobals.Instance.ShowInsufficientSign = true;
+            Instance.ShowInsufficientSign = true;
         }
 
         public static void AddFeedItem(int referId, int amount)
         {
-            GameGlobals.Instance.CollectedItemFeed.Add(new InventoryItemData() {
+            Instance.CollectedItemFeed.Add(new InventoryItemData() {
                 ItemId = referId,
                 Count = amount
             });
 
-            GameGlobals.Instance.DisplayFeedTime = GameGlobals.Instance.MaximumDisplayFeedTime;
+            Instance.DisplayFeedTime = Instance.MaximumDisplayFeedTime;
         }
     }
 }

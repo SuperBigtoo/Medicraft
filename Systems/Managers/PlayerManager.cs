@@ -183,10 +183,42 @@ namespace Medicraft.Systems.Managers
                 && ScreenManager.Instance.CurrentScreen != ScreenManager.GameScreen.SplashScreen
                 && ScreenManager.Instance.CurrentScreen != ScreenManager.GameScreen.MainMenuScreen)
             {
-                // Save Game for Test
-                if (keyboardCur.IsKeyUp(saveGameKey) && keyboardPrev.IsKeyDown(saveGameKey))
+                //// Save Game for Test
+                //if (keyboardCur.IsKeyUp(saveGameKey) && keyboardPrev.IsKeyDown(saveGameKey))
+                //{
+                //    JsonFileManager.SaveGame(JsonFileManager.SavingPlayerData);
+                //}
+
+                // Open SaveMenu
+                if (keyboardCur.IsKeyDown(saveGameKey) && !GameGlobals.Instance.SwitchOpenSaveMenuPanel && !GameGlobals.Instance.IsOpenGUI
+                    || (keyboardCur.IsKeyDown(saveGameKey) || keyboardCur.IsKeyDown(pauseMenuKey)) && !GameGlobals.Instance.SwitchOpenSaveMenuPanel
+                    && GameGlobals.Instance.IsOpenGUI && UIManager.Instance.CurrentUI.Equals(UIManager.SaveMenu))
                 {
-                    JsonFileManager.SaveGame(JsonFileManager.SavingPlayerData);
+                    GameGlobals.Instance.SwitchOpenSaveMenuPanel = true;
+
+                    // Toggle Pause PlayScreen
+                    GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
+                    GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
+
+                    // Toggle IsOpenSaveMenuPanel              
+                    GameGlobals.Instance.IsOpenSaveMenuPanel = false;
+                    if (UIManager.Instance.CurrentUI.Equals(UIManager.SaveMenu))
+                    {
+                        UIManager.Instance.CurrentUI = UIManager.PlayScreen;
+                        GameGlobals.Instance.IsRefreshPlayScreenUI = false;
+
+                        PlaySoundEffect(Sound.Cancel1);
+                    }
+                    else
+                    {
+                        UIManager.Instance.CurrentUI = UIManager.SaveMenu;
+
+                        PlaySoundEffect(Sound.Click1);
+                    }
+                }
+                else if (keyboardCur.IsKeyUp(saveGameKey))
+                {
+                    GameGlobals.Instance.SwitchOpenSaveMenuPanel = false;
                 }
 
                 // Call Companion to follow Player
@@ -789,6 +821,90 @@ namespace Medicraft.Systems.Managers
                     }
                 }
             }
+        }
+
+        public void CheckInteraction(KeyboardState keyboardCur, KeyboardState keyboardPrev)
+        {
+            GameGlobals.Instance.IsDetectedGameObject = false;
+
+            // Check Item Dectection
+            var GameObject = ObjectManager.Instance.GameObjects;
+            foreach (var gameObject in GameObject)
+            {
+                if (Player.BoundingCollection.Intersects(gameObject.BoundingCollection))
+                {
+                    GameGlobals.Instance.IsDetectedGameObject = true;
+                    break;
+                }
+            }
+
+            // Check Interaction
+            if (keyboardCur.IsKeyUp(Keys.F) && keyboardPrev.IsKeyDown(Keys.F))
+            {
+                if (GameGlobals.Instance.IsDetectedGameObject)
+                {
+                    CheckGameObject();
+                }
+            }
+        }
+
+        private void CheckGameObject()
+        {
+            foreach (var gameObject in ObjectManager.Instance.GameObjects)
+            {
+                if (Player.BoundingCollection.Intersects(gameObject.BoundingCollection))
+                {
+                    switch (gameObject.Type)
+                    {
+                        case GameObjects.GameObject.GameObjectType.QuestItem:
+
+                        case GameObjects.GameObject.GameObjectType.Item:
+                            // Collecting Item into Player's Inventory 
+                            var itemId = gameObject.ReferId;
+                            var quantityDrop = gameObject.QuantityDrop;
+
+                            // Check Inventory                   
+                            if (!gameObject.IsCollected
+                                && !InventoryManager.Instance.IsInventoryFull(itemId, quantityDrop))
+                            {
+                                gameObject.IsCollected = true;
+                            }
+                            else HUDSystem.ShowInsufficientSign();
+                            break;
+
+                        case GameObjects.GameObject.GameObjectType.CraftingTable:
+                            CraftingTableDetection();
+                            break;
+
+                        case GameObjects.GameObject.GameObjectType.SavingTable:
+
+                            break;
+
+                        case GameObjects.GameObject.GameObjectType.WarpPoint:
+
+                            break;
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        // Crafting TBD
+        private void CraftingTableDetection()
+        {
+            //if (GameGlobals.Instance.CraftingTableArea.Count != 0)
+            //{
+            //    var TableCraft = GameGlobals.Instance.CraftingTableArea;
+            //    foreach (var obj in TableCraft)
+            //    {
+            //        if (BoundingDetectCollisions.Intersects(obj))
+            //        {
+
+            //            break;
+            //        }
+            //    }
+            //}
         }
 
         public static PlayerManager Instance
