@@ -4,6 +4,7 @@ using GeonBit.UI.Utils.Forms;
 using Medicraft.Data;
 using Medicraft.Data.Models;
 using Medicraft.Entities.Companion;
+using Medicraft.Entities.Mobs.Friendly;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Sprites;
@@ -39,6 +40,7 @@ namespace Medicraft.Systems.Managers
         public const int MainMenu = 4;
         public const int PauseMenu = 5;
         public const int SaveMenu = 6;
+        public const int TradingPanel = 7;
 
         public string CurrentCraftingList { get; set; }
 
@@ -46,6 +48,9 @@ namespace Medicraft.Systems.Managers
         public const string ConsumableItem = "Consumable item";
         public const string Equipment = "Equipment";
 
+        public bool IsQuickMenuFocus { get; private set; } = false;
+
+        // Inspect
         public bool IsCharacterTabSelected { get; set; } = false;
         public bool IsShowConfirmBox { get; set; } = false;
         public AnimatedSprite CharacterSprite { get; set; }
@@ -61,6 +66,10 @@ namespace Medicraft.Systems.Managers
         public List<Panel> MainMenuSaveSlots { get; private set; } = [];
         public List<Panel> SaveMenuSaveSlots { get; private set; } = [];
         public Panel SelectedGameSavePanel { get; private set; }
+
+        // Trading
+        public Vendor InteractingVendor { get; private set; }
+        public Icon SelectedPurchaseItem { get; private set; }
 
         // Skill selected
         public string NoahSelectedSkill { get; private set; }
@@ -159,6 +168,11 @@ namespace Medicraft.Systems.Managers
             }
         }
 
+        public void SetInteractingVendor(Vendor vendorMob)
+        {
+            InteractingVendor = vendorMob;
+        }
+
         public void InitializeThemeAndUI(BuiltinThemes theme)
         {
             // create and init the UI manager
@@ -225,6 +239,9 @@ namespace Medicraft.Systems.Managers
             // Save Menu = 6
             InitSaveMenuUI();
 
+            // Trading Panel = 7
+            InitTradingPanel();
+
             // update ui panel
             UpdateAfterChangeGUI();
         }
@@ -235,19 +252,135 @@ namespace Medicraft.Systems.Managers
         /// </summary>
         private void InitPlayScreenUI()
         {
-            var playScreenUI = new Panel(new Vector2(500, 87), PanelSkin.None, Anchor.BottomCenter)
+            var playScreenUI = new Panel(
+                new Vector2(GameGlobals.Instance.GameScreen.X, GameGlobals.Instance.GameScreen.Y),
+                PanelSkin.None,
+                Anchor.Center)
             { 
                 Identifier = "playScreenUI"
             };
             _mainPanels.Add(playScreenUI);
             UserInterface.Active.AddEntity(playScreenUI);
+
+            var hotbarSlotPanel = new Panel(new Vector2(500, 50), PanelSkin.None, Anchor.BottomCenter)
+            {
+                Identifier = "hotbarSlotPanel",
+                Offset = new Vector2(0, -25)
+            };
+            playScreenUI.AddChild(hotbarSlotPanel);
+
+            var quickMenuPanel = new Panel(new Vector2(360, 100), PanelSkin.None, Anchor.TopRight)
+            {
+                Identifier = "quickMenuPanel"
+            };
+            playScreenUI.AddChild(quickMenuPanel);
+
+            var InspectMenuIcon = new Icon(IconType.None, Anchor.CenterLeft)
+            {
+                Identifier = "InspectMenuIcon",
+                Texture = GetGuiTexture(GuiTextureName.Inspect_Menu),
+                Size = new Vector2(64, 64),
+                OnClick = (e) =>
+                {
+                    // Toggle Pause PlayScreen
+                    GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
+                    GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
+
+                    // Toggle IsOpenInspectPanel      
+                    GameGlobals.Instance.IsOpenInspectPanel = false;
+                    IsCharacterTabSelected = true;
+                    if (CurrentUI.Equals(InspectPanel))
+                    {
+                        CurrentUI = PlayScreen;
+                        GameGlobals.Instance.IsRefreshPlayScreenUI = false;
+                        ClearSkillDescription("Character");
+
+                        PlaySoundEffect(Sound.Cancel1);
+                    }
+                    else
+                    {
+                        Instance.CurrentUI = InspectPanel;
+
+                        PlaySoundEffect(Sound.Click1);
+                    }
+                },
+                OnMouseEnter = (e) => { IsQuickMenuFocus = true; },
+                OnMouseLeave = (e) => { IsQuickMenuFocus = false; }
+            };
+            quickMenuPanel.AddChild(InspectMenuIcon);
+
+            var InventoryMenuIcon = new Icon(IconType.None, Anchor.Center)
+            {
+                Identifier = "InventoryMenuIcon",
+                Texture = GetGuiTexture(GuiTextureName.Inventory_Menu),
+                Size = new Vector2(64, 64),
+                OnClick = (e) =>
+                {
+                    // Toggle Pause PlayScreen
+                    GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
+                    GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
+
+                    // Toggle IsOpenInvenoryPanel & refresh inventory item display              
+                    GameGlobals.Instance.IsOpenInventoryPanel = false;
+                    if (CurrentUI.Equals(InventoryPanel))
+                    {
+                        CurrentUI = PlayScreen;
+                        GameGlobals.Instance.IsRefreshPlayScreenUI = false;
+
+                        PlaySoundEffect(Sound.PickUpBag);
+                    }
+                    else
+                    {
+                        CurrentUI = InventoryPanel;
+
+                        PlaySoundEffect(Sound.PickUpBag);
+                    }
+                },
+                OnMouseEnter = (e) => { IsQuickMenuFocus = true; },
+                OnMouseLeave = (e) => { IsQuickMenuFocus = false; }
+            };
+            quickMenuPanel.AddChild(InventoryMenuIcon);
+
+            var PauseMenuIcon = new Icon(IconType.None, Anchor.CenterRight)
+            {
+                Identifier = "PauseMenuIcon",
+                Texture = GetGuiTexture(GuiTextureName.Pause_Menu),
+                Size = new Vector2(64, 64),
+                OnClick = (e) =>
+                {
+                    // Toggle Pause PlayScreen
+                    GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
+                    GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
+
+                    // Toggle IsOpenPauseMenu              
+                    GameGlobals.Instance.IsOpenPauseMenu = false;
+                    if (CurrentUI.Equals(PauseMenu))
+                    {
+                        Instance.CurrentUI = PlayScreen;
+                        GameGlobals.Instance.IsRefreshPlayScreenUI = false;
+
+                        PlaySoundEffect(Sound.Unpause);
+                    }
+                    else
+                    {
+                        Instance.CurrentUI = PauseMenu;
+
+                        PlaySoundEffect(Sound.Pause);
+                    }
+                },
+                OnMouseEnter = (e) => { IsQuickMenuFocus = true; },
+                OnMouseLeave = (e) => { IsQuickMenuFocus = false; }
+            };
+            quickMenuPanel.AddChild(PauseMenuIcon);
         }
 
         public void RefreshHotbar()
         {
-            var HotbarSlot = _mainPanels.ElementAt(PlayScreen);
-            
-            HotbarSlot.ClearChildren();
+            var playScreenUI = _mainPanels.ElementAt(PlayScreen);
+            var hotbarSlotPanel = playScreenUI.Children.FirstOrDefault
+                (p => p.Identifier.Equals("hotbarSlotPanel"));
+
+            hotbarSlotPanel.ClearChildren();
 
             var minSlotNum = InventoryManager.HotbarSlot_1;
             var maxSlotNum = InventoryManager.HotbarSlot_8;
@@ -279,7 +412,7 @@ namespace Medicraft.Systems.Managers
                         ClickThrough = true,
                     });
 
-                    HotbarSlot.AddChild(iconItem);
+                    hotbarSlotPanel.AddChild(iconItem);
                 }
                 else
                 {
@@ -290,7 +423,7 @@ namespace Medicraft.Systems.Managers
                         Size = new Vector2(42, 42),
                     };
 
-                    HotbarSlot.AddChild(iconNull);
+                    hotbarSlotPanel.AddChild(iconNull);
                 }
 
                 offSetX += 47f;
@@ -314,7 +447,7 @@ namespace Medicraft.Systems.Managers
                 }
             }
 
-            foreach (var iconItem in HotbarSlot.Children.OfType<Icon>())
+            foreach (var iconItem in hotbarSlotPanel.Children.OfType<Icon>())
             {
                 iconItem.OnClick = (Entity entity) =>
                 {
@@ -338,13 +471,13 @@ namespace Medicraft.Systems.Managers
             UserInterface.Active.AddEntity(inventoryPanel);
 
             // สร้าง Panel สำหรับฝั่งซ้าย
-            var leftInvenPanel = new Panel(new Vector2(500, 600), PanelSkin.ListBackground, Anchor.TopLeft)
+            var leftInvenPanel = new Panel(new Vector2(500, 600), PanelSkin.Simple, Anchor.TopLeft)
             {
                 Identifier = "invenLeftPanel"
             };
             inventoryPanel.AddChild(leftInvenPanel);
 
-            var invenDescriptPanel = new Panel(new Vector2(450, 225), PanelSkin.Fancy, Anchor.AutoCenter)
+            var invenDescriptPanel = new Panel(new Vector2(450, 225), PanelSkin.ListBackground, Anchor.AutoCenter)
             {
                 Identifier = "invenDescriptPanel",
                 PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll
@@ -554,7 +687,7 @@ namespace Medicraft.Systems.Managers
             {
                 var fisrtItem = listItemPanel.Children.OfType<Icon>().ToList().ElementAt(0);
 
-                SetInventoryItemDisplay(fisrtItem);
+                SetIconItemInventoryDisplay(fisrtItem);
 
                 // Setup Enable or Disable the button for fisrtItem
                 var item = InventoryManager.Instance.InventoryBag.FirstOrDefault
@@ -589,15 +722,16 @@ namespace Medicraft.Systems.Managers
 
         public void RefreshInvenrotyItem(bool isClearLeftPanel)
         {
-            var inventoryPanel = _mainPanels[InventoryPanel];          
-            var invenRightPanel = inventoryPanel.Children?.FirstOrDefault
-                (p => p.Identifier.Equals("invenRightPanel"));
+            var inventoryPanel = _mainPanels[InventoryPanel];
             var invenLeftPanel = inventoryPanel.Children?.FirstOrDefault
                 (p => p.Identifier.Equals("invenLeftPanel"));
+
+            var invenRightPanel = inventoryPanel.Children?.FirstOrDefault
+                (p => p.Identifier.Equals("invenRightPanel"));
+            
             var listItemPanel = invenRightPanel.Children?.FirstOrDefault
                 (p => p.Identifier.Equals("listItemPanel"));
-            var invenDescriptPanel = invenLeftPanel.Children?.FirstOrDefault
-                (p => p.Identifier.Equals("invenDescriptPanel"));
+            
             var invenUseItemButton = inventoryPanel.Children?.FirstOrDefault
                 (p => p.Identifier.Equals("invenUseItemButton"));
             var invenSetHotbarButton = inventoryPanel.Children?.FirstOrDefault
@@ -657,7 +791,7 @@ namespace Medicraft.Systems.Managers
             {
                 iconItem.OnClick = (Entity entity) =>
                 {
-                    SetInventoryItemDisplay(iconItem);
+                    SetIconItemInventoryDisplay(iconItem);
 
                     foreach (var itemLeftPanel in invenLeftPanel.Children)
                         itemLeftPanel.Visible = true;
@@ -694,7 +828,7 @@ namespace Medicraft.Systems.Managers
             }
         }
 
-        private void SetInventoryItemDisplay(Icon icon)
+        private void SetIconItemInventoryDisplay(Icon icon)
         {
             var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault
                 (i => i.ItemId.Equals(icon.ItemId));
@@ -705,17 +839,14 @@ namespace Medicraft.Systems.Managers
             var invenDescriptPanel = invenLeftPanel.Children?.FirstOrDefault
                 (p => p.Identifier.Equals("invenDescriptPanel"));
 
-            // Clone the clicked icon and add it to the left panel
             var itemIcon = invenLeftPanel.Children.OfType<Icon>().FirstOrDefault
                 (i => i.Identifier.Equals("itemIcon"));
             itemIcon.Texture = icon.Texture;
 
-            // สร้าง Label เพื่อแสดงชื่อของไอคอน
             var iconLabel = invenDescriptPanel.Children.OfType<Label>().FirstOrDefault
                 (i => i.Identifier.Equals("iconLabel"));
             iconLabel.Text = itemData.Name;
 
-            // Description item
             var description = invenDescriptPanel.Children.OfType<Paragraph>().FirstOrDefault
                 (i => i.Identifier.Equals("description"));
             description.Text = itemData.Description;                 
@@ -737,13 +868,13 @@ namespace Medicraft.Systems.Managers
             UserInterface.Active.AddEntity(craftingPanel);
 
             // สร้าง Panel สำหรับฝั่งซ้าย
-            var leftCraftingPanel = new Panel(new Vector2(650, 660), PanelSkin.ListBackground, Anchor.TopLeft)
+            var leftCraftingPanel = new Panel(new Vector2(650, 660), PanelSkin.Simple, Anchor.TopLeft)
             {
                 Identifier = "leftCraftingPanel"
             };
             craftingPanel.AddChild(leftCraftingPanel);
 
-            var craftingDescriptPanel = new Panel(new Vector2(550, 285), PanelSkin.Fancy, Anchor.AutoCenter)
+            var craftingDescriptPanel = new Panel(new Vector2(550, 285), PanelSkin.ListBackground, Anchor.AutoCenter)
             {
                 Identifier = "craftingDescriptPanel",
                 PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll
@@ -808,7 +939,7 @@ namespace Medicraft.Systems.Managers
             };
             UserInterface.Active.AddEntity(craftingSelectItemPanel);
 
-            var leftCraftingSelectItemPanel = new Panel(new Vector2(650, 660), PanelSkin.ListBackground, Anchor.TopLeft)
+            var leftCraftingSelectItemPanel = new Panel(new Vector2(650, 660), PanelSkin.Simple, Anchor.TopLeft)
             {
                 Identifier = "leftCraftingSelectItemPanel"
             };
@@ -844,7 +975,6 @@ namespace Medicraft.Systems.Managers
 
             quantitySelectorPanel.AddChild(quantityLabel);
             quantitySelectorPanel.AddChild(quantitySlider);
-
             leftCraftingSelectItemPanel.AddChild(quantitySelectorPanel);
 
             var rightCraftingSelectPanel = new Panel(new Vector2(650, 660), PanelSkin.None, Anchor.TopRight)
@@ -1185,11 +1315,14 @@ namespace Medicraft.Systems.Managers
                     if (totalItemCount < ingredient.Quantity)
                     {
                         var count = totalItemCount - ingredient.Quantity;
-                        ingLabel = $"{ingredient.Name} x {ingredient.Quantity} ({count})";     
+                        ingLabel = $"{ingredient.Name} x {ingredient.Quantity} ({count})((Red))";
                     }
-                    else ingLabel = $"{ingredient.Name} x {ingredient.Quantity} ({totalItemCount})";
+                    else ingLabel = $"{ingredient.Name} x {ingredient.Quantity} ({totalItemCount})((White))";
                 }
-                else ingLabel = $"{ingredient.Name} x {ingredient.Quantity} (-{ingredient.Quantity})";
+                else
+                {
+                    ingLabel = $"{ingredient.Name} x {ingredient.Quantity} (-{ingredient.Quantity})((Red))";
+                }
 
                 ingredientList.AddItem(ingLabel);
                 ingredientList.IconsScale *= 1f;
@@ -1331,12 +1464,65 @@ namespace Medicraft.Systems.Managers
                 };
                 selectedSkillPanel.AddChild(descripLeftSkill);
 
-                var upSkillButton = new Button("> Lv.Up >", ButtonSkin.Alternative, size: new Vector2(140, 40))
+                // Upgrading Cost
+                var skillCostPanel = new Panel(new Vector2(200, 180), PanelSkin.None, Anchor.TopCenter)
+                {
+                    Identifier = "skillCostPanel",
+                    Offset = new Vector2(0, -25),
+                    Visible = false
+                };
+                selectedSkillPanel.AddChild(skillCostPanel);
+
+                skillCostPanel.AddChild(new Label("COST", Anchor.TopCenter)
+                {
+                    Scale = 1f,
+                    Offset = new Vector2(0, -10),
+                    FillColor = Color.Yellow,
+                });
+
+                // SkillPoint Cost
+                var SPCost = new Panel(new Vector2(150, 30), PanelSkin.None, Anchor.Center)
+                {
+                    Identifier = "SPCost",
+                    Offset = new Vector2(0, -40)
+                };
+                skillCostPanel.AddChild(SPCost);
+                SPCost.AddChild(new Image(
+                    GetGuiTexture(GuiTextureName.skill_point),
+                    new Vector2(20, 20),
+                    anchor: Anchor.AutoInlineNoBreak));
+                SPCost.AddChild(new Label("SP_Cost", Anchor.AutoInlineNoBreak)
+                {
+                    Identifier = "SPCostText",
+                    Scale = 1f,
+                    Offset = new Vector2(10, -5)
+                });
+
+                // GoldCoin Cost
+                var GoldCost = new Panel(new Vector2(150, 30), PanelSkin.None, Anchor.Center)
+                {
+                    Identifier = "GoldCost",
+                    Offset = new Vector2(0, -10)
+                };
+                skillCostPanel.AddChild(GoldCost);
+                GoldCost.AddChild(new Image(
+                    GetGuiTexture(GuiTextureName.gold_coin),
+                    new Vector2(20, 20),
+                    anchor: Anchor.AutoInlineNoBreak));
+                GoldCost.AddChild(new Label("Gold_Cost", Anchor.AutoInlineNoBreak)
+                {
+                    Identifier = "GoldCostText",
+                    Scale = 1f,
+                    Offset = new Vector2(10, -5)
+                });
+
+                // Button Upgrade Skill
+                var upSkillButton = new Button("Lv.Up", ButtonSkin.Fancy, Anchor.BottomCenter, new Vector2(120, 50))
                 {
                     Identifier = "upSkillButton",
-                    ToolTipText = "Use a 'Skill Point' to up level skill",
+                    ToolTipText = "Use a 'Skill Point' and 'Gold Coin' to up level skill",
                     Enabled = false,
-                    Anchor = Anchor.Center,                  
+                    Visible = false
                 };
                 selectedSkillPanel.AddChild(upSkillButton);
 
@@ -1441,16 +1627,37 @@ namespace Medicraft.Systems.Managers
                 upSkillButton.OnClick = (Entity entity) =>
                 {
                     IsShowConfirmBox = true;
-                    if (PlayerManager.Instance.Player.PlayerData.SkillPoint > 0)
+                    int skillLevel = 1;
+
+                    switch (NoahSelectedSkill)
                     {
-                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("Up Level Skill"
-                            , $"Do you want to level up the skill '{NoahSelectedSkill}'?"
+                        case "I've got the Scent!":
+                            skillLevel = PlayerManager.Instance.Player.PlayerData.Abilities.NormalSkillLevel;
+                            break;
+
+                        case "Noah Strike":
+                            skillLevel = PlayerManager.Instance.Player.PlayerData.Abilities.BurstSkillLevel;
+                            break;
+
+                        case "Survivalist":
+                            skillLevel = PlayerManager.Instance.Player.PlayerData.Abilities.PassiveSkillLevel;
+                            break;
+                    }
+
+                    var skillData = GameGlobals.Instance.SkillDescriptionDatas.FirstOrDefault
+                        (s => s.Name.Equals(NoahSelectedSkill) && s.Level.Equals(skillLevel));
+
+                    if (PlayerManager.Instance.Player.PlayerData.SkillPoint >= skillData.SkillPointCost
+                        && InventoryManager.Instance.GoldCoin >= skillData.GoldCoinCost)
+                    {
+                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("Up Skill Level"
+                            , $"Do you want to upgrade '{NoahSelectedSkill}'?"
                             , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
                             {
                                 new("Ok", () =>
                                 {
                                     // Do up level skill
-                                    var isUpLevelSucc = PlayerManager.Instance.Player.UpSkillLevle(NoahSelectedSkill);
+                                    var isUpLevelSucc = PlayerManager.Instance.UpSkillLevel(NoahSelectedSkill);
 
                                     if (isUpLevelSucc)
                                     {
@@ -1540,8 +1747,20 @@ namespace Medicraft.Systems.Managers
                     }
                     else
                     {
-                        GeonBit.UI.Utils.MessageBox.ShowMsgBox("Not Enough SP!", "It seems that ya don't have enough 'Skill Point' for this huhh?, go get some level up."
-                            , onDone: () => { IsShowConfirmBox = false; } );
+                        var insuffText = string.Empty;
+                        if (PlayerManager.Instance.Player.PlayerData.SkillPoint < skillData.SkillPointCost)
+                        {
+                            insuffText = "It seems that ya don't have enough 'Skill Point' for this huhh?, go get some level up.";
+                        }
+                        else if (InventoryManager.Instance.GoldCoin < skillData.GoldCoinCost)
+                        {
+                            insuffText = "It seems that ya don't have enough 'Gold Coin' for this huhh?, go get some gold.";
+                        }
+
+                        GeonBit.UI.Utils.MessageBox.ShowMsgBox(
+                            "Insufficient Resource!",
+                            insuffText,
+                            onDone: () => { IsShowConfirmBox = false; } );
                     }
                 };
 
@@ -2503,6 +2722,7 @@ namespace Medicraft.Systems.Managers
                                 }),
                                 new("Cancel", () =>
                                 {
+                                    IsShowConfirmBox = false;
                                     return true;
                                 })
                         });
@@ -2833,11 +3053,32 @@ namespace Medicraft.Systems.Managers
                 var descripRightSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault
                     (t => t.Identifier.Equals("descripRightSkill"));
 
+                var skillCostPanel = selectedSkillPanel.Children.FirstOrDefault
+                    (t => t.Identifier.Equals("skillCostPanel"));
+                skillCostPanel.Visible = true;
+
+                // SkillPoint Cost
+                var SPCost = skillCostPanel.Children.FirstOrDefault
+                    (t => t.Identifier.Equals("SPCost"));
+                var SPCostText = SPCost.Children.OfType<Label>().FirstOrDefault
+                    (t => t.Identifier.Equals("SPCostText"));
+
+                // GoldCoin Cost
+                var GoldCost = skillCostPanel.Children.FirstOrDefault
+                    (t => t.Identifier.Equals("GoldCost"));
+                var GoldCostText = GoldCost.Children.OfType<Label>().FirstOrDefault
+                    (t => t.Identifier.Equals("GoldCostText"));
+
                 if (level < 10)
                 {
                     descripLeftSkill.Text = $"Lv.{level} : {NoahSelectedSkill}\n"
                         + descSkill.FirstOrDefault(s => s.Level.Equals(level)).Description;
+
+                    SPCostText.Text = descSkill.FirstOrDefault(s => s.Level.Equals(level + 1)).SkillPointCost.ToString();
+                    GoldCostText.Text = descSkill.FirstOrDefault(s => s.Level.Equals(level + 1)).GoldCoinCost.ToString();
                     upSkillButton.Enabled = true;
+                    upSkillButton.Visible = true;
+                    
                     descripRightSkill.Text = $"Lv.{level + 1} : {NoahSelectedSkill}\n"
                         + descSkill.FirstOrDefault(s => s.Level.Equals(level + 1)).Description;
                 }
@@ -2845,12 +3086,17 @@ namespace Medicraft.Systems.Managers
                 {
                     descripLeftSkill.Text = $"Lv.{level} : {NoahSelectedSkill}\n"
                         + descSkill.FirstOrDefault(s => s.Level.Equals(level)).Description;
+
+                    SPCostText.Text = "-";
+                    GoldCostText.Text = "-";
                     upSkillButton.Enabled = false;
+                    
                     descripRightSkill.Text = "Skill level has reached maximum.";
                 }
             }
             else
             {
+                // Companion
                 var currentTabPanel = inspectTabs.ActiveTab.panel;
                 var leftPanel = currentTabPanel.Children.FirstOrDefault
                     (t => t.Identifier.Equals("leftPanel"));
@@ -2886,8 +3132,27 @@ namespace Medicraft.Systems.Managers
                 var descripRightSkill = selectedSkillPanel.Children.OfType<Paragraph>().FirstOrDefault
                     (t => t.Identifier.Equals("descripRightSkill"));
 
+                var skillCostPanel = selectedSkillPanel.Children.FirstOrDefault
+                    (t => t.Identifier.Equals("skillCostPanel"));
+                skillCostPanel.Visible = false;
+
+                // SkillPoint Cost
+                var SPCost = skillCostPanel.Children.FirstOrDefault
+                    (t => t.Identifier.Equals("SPCost"));
+                var SPCostText = SPCost.Children.OfType<Label>().FirstOrDefault
+                    (t => t.Identifier.Equals("SPCostText"));
+
+                // GoldCoin Cost
+                var GoldCost = skillCostPanel.Children.FirstOrDefault
+                    (t => t.Identifier.Equals("GoldCost"));
+                var GoldCostText = GoldCost.Children.OfType<Label>().FirstOrDefault
+                    (t => t.Identifier.Equals("GoldCostText"));
+
                 descripLeftSkill.Text = "";
+                SPCostText.Text = "-";
+                GoldCostText.Text = "-";
                 upSkillButton.Enabled = false;
+                upSkillButton.Visible = false;
                 descripRightSkill.Text = "";
             }
             else
@@ -3885,6 +4150,592 @@ namespace Medicraft.Systems.Managers
             RefreshGameSave(SaveMenu);
 
             IsClickedLoadButton = true;
+        }
+
+        private void InitTradingPanel()
+        {
+            // Main Panel
+            var tradingPanel = new Panel(new Vector2(1200, 650), PanelSkin.None, Anchor.Center)
+            {
+                Visible = true,
+                Identifier = "tradingPanel"
+            };
+            _mainPanels.Add(tradingPanel);
+            UserInterface.Active.AddEntity(tradingPanel);
+
+            // create panel tabs
+            var tradingTabs = new PanelTabs()
+            {
+                Identifier = "tradingTabs",
+                BackgroundSkin = PanelSkin.Fancy,
+                Anchor = Anchor.Center,
+                Offset = new Vector2(0, -50)
+            };
+            tradingPanel.AddChild(tradingTabs);
+
+            // Close button
+            var closeButton = new Button("Close", anchor: Anchor.BottomRight
+                , size: new Vector2(200, -1), offset: new Vector2(64, -120))
+            {
+                Identifier = "closeButton",
+                Skin = ButtonSkin.Fancy,
+                OnClick = (Entity entity) =>
+                {
+                    // Closing TradingPanel and reset current gui panel
+                    // Pause PlayScreen
+                    GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
+                    GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
+
+                    InteractingVendor.IsInteracting = !InteractingVendor.IsInteracting;
+
+                    // Toggle the IsOpenTradingPanel flag
+                    GameGlobals.Instance.IsOpenTradingPanel = false;
+                    GameGlobals.Instance.IsRefreshPlayScreenUI = false;
+                    CurrentUI = PlayScreen;
+                }
+            };
+            tradingPanel.AddChild(closeButton);
+
+            // Buy button
+            var buyButton = new Button("Buy", anchor: Anchor.BottomLeft
+                , size: new Vector2(200, -1), offset: new Vector2(64, -120))
+            {
+                Identifier = "buyButton",
+                Enabled = false,
+                Visible = false,
+                Skin = ButtonSkin.Fancy
+            };
+            tradingPanel.AddChild(buyButton);
+
+            // Sell button
+            var sellButton = new Button("Sell", anchor: Anchor.BottomLeft
+                , size: new Vector2(200, -1), offset: new Vector2(64, -120))
+            {
+                Identifier = "sellButton",
+                Enabled = false,
+                Visible = false,
+                Skin = ButtonSkin.Fancy
+            };
+            tradingPanel.AddChild(sellButton);
+
+            // selecting quantity
+            var bgPanel = new Panel()
+            {
+                Identifier = "bgPanel",
+                Size = new Vector2(
+                    GameGlobals.Instance.DefaultAdapterViewport.X,
+                    GameGlobals.Instance.DefaultAdapterViewport.Y),
+                Visible = false
+            };
+            bgPanel.SetCustomSkin(GetGuiTexture(GuiTextureName.Alpha_BG));
+            tradingPanel.AddChild(bgPanel);
+            var selectingQuantityPanel = new Panel()
+            {
+                Identifier = "selectingQuantityPanel",
+                Size = new Vector2(500, 300),
+                Visible = false,
+                AdjustHeightAutomatically = true
+            };
+            tradingPanel.AddChild(selectingQuantityPanel);
+            selectingQuantityPanel.AddChild(new Header("Select Quantity", Anchor.AutoCenter));
+            selectingQuantityPanel.AddChild(new HorizontalLine());
+            selectingQuantityPanel.AddChild(new Paragraph(
+                "Select the number of items you want to purchase.",
+                Anchor.AutoCenter)
+            {
+                Identifier = "paragraphText",
+                WrapWords = true
+            });
+            selectingQuantityPanel.AddChild(new LineSpace(1));
+            var quantitySlider = new Slider(1, 10, SliderSkin.Fancy, Anchor.AutoCenter)
+            {
+                Identifier = "quantitySlider",
+                Value = 1
+            };
+            var quantityLabel = new Paragraph("Quantity: " + quantitySlider.Min, Anchor.AutoCenter)
+            {
+                Identifier = "quantityText",
+            };
+            quantitySlider.OnValueChange = (e) =>
+            {
+                quantityLabel.Text = "Quantity: " + quantitySlider.Value;
+            };
+            selectingQuantityPanel.AddChild(quantityLabel);
+            selectingQuantityPanel.AddChild(quantitySlider);
+            selectingQuantityPanel.AddChild(new LineSpace(1));
+            var Select = new Button("Select", anchor: Anchor.AutoInline)
+            {
+                Identifier = "Select",
+                Size = new Vector2(225, -1),
+                OnClick = (e) =>
+                {
+                    PurchaseOrSell(tradingTabs, quantitySlider.Value);
+                }
+            };
+            selectingQuantityPanel.AddChild(Select);
+            var Cancel = new Button("Cancel", anchor: Anchor.AutoInlineNoBreak)
+            {
+                Identifier = "Cancel",
+                Size = new Vector2(225, -1),
+                OnClick = (e) =>
+                {
+                    buyButton.Locked = false;
+                    sellButton.Locked = false;
+                    closeButton.Locked = false;
+
+                    bgPanel.Visible = false;
+                    selectingQuantityPanel.Visible = false;
+                }
+            };
+            selectingQuantityPanel.AddChild(Cancel);
+
+            // Add tab: Buy Item
+            {
+                TabData buyItemTab = tradingTabs.AddTab("Buy Item");
+
+                // Set true if character tab is clicked
+                buyItemTab.button.OnClick = (Entity entity) =>
+                {
+                    RefreshTradingItem("Buy Item");
+
+                    buyButton.Enabled = false;             
+                    sellButton.Enabled = false;
+                };
+
+                // Left Panel
+                var leftPanel = new Panel(new Vector2(500, 600), PanelSkin.Simple, Anchor.TopLeft)
+                {
+                    Identifier = "leftPanel"
+                };
+                buyItemTab.panel.AddChild(leftPanel);
+
+                var descripPanel = new Panel(new Vector2(450, 225), PanelSkin.ListBackground, Anchor.AutoCenter)
+                {
+                    Identifier = "descripPanel",
+                    PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll
+                };
+                descripPanel.Scrollbar.AdjustMaxAutomatically = true;
+                descripPanel.OnMouseEnter = (e) =>
+                {
+                    UserInterface.Active.ActiveEntity = descripPanel;
+                };
+
+                descripPanel.AddChild(new Label("iconLabel", Anchor.AutoCenter)
+                {
+                    Scale = 1.25f,
+                    ClickThrough = true,
+                    Identifier = "iconLabel"
+                });
+                descripPanel.AddChild(new Paragraph("priceLabel", Anchor.AutoInline)
+                {
+                    Scale = 1.2f,
+                    ClickThrough = true,
+                    Identifier = "priceLabel"
+                });
+                descripPanel.AddChild(new Paragraph("description", Anchor.AutoInline)
+                {
+                    Scale = 1f,
+                    WrapWords = true,
+                    ClickThrough = true,
+                    Identifier = "description"
+                });
+                descripPanel.AddChild(new LineSpace(1));
+
+                leftPanel.AddChild(new Icon(IconType.None, Anchor.AutoCenter, 1, false)
+                {
+                    Size = new Vector2(300, 300),
+                    Locked = true,
+                    Identifier = "itemIcon"
+                });
+                leftPanel.AddChild(new LineSpace(1));
+                leftPanel.AddChild(descripPanel);
+
+                // Right Panel
+                var rightPanel = new Panel(new Vector2(600, 600), PanelSkin.None, Anchor.TopRight)
+                {
+                    Identifier = "rightPanel"
+                };
+                buyItemTab.panel.AddChild(rightPanel);
+
+                rightPanel.AddChild(new Header("BUY ITEM"));
+                rightPanel.AddChild(new LineSpace(1));
+
+                var listItemPanel = new Panel(new Vector2(550, 450), PanelSkin.ListBackground, Anchor.AutoCenter)
+                {
+                    PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll,
+                    Identifier = "listItemPanel",
+                    Padding = new Vector2(10, 10)
+                };
+                listItemPanel.Scrollbar.AdjustMaxAutomatically = true;
+                listItemPanel.OnMouseEnter = (e) =>
+                {
+                    UserInterface.Active.ActiveEntity = listItemPanel;
+                };
+                rightPanel.AddChild(listItemPanel);
+            }
+
+            // Add tab: Sell Item
+            {
+                TabData sellItemTab = tradingTabs.AddTab("Sell Item");
+
+                // Set true if character tab is clicked
+                sellItemTab.button.OnClick = (Entity entity) =>
+                {
+                    RefreshTradingItem("Sell Item");
+
+                    buyButton.Enabled = false;
+                    sellButton.Enabled = false;
+                };
+
+                // Left Panel
+                var leftPanel = new Panel(new Vector2(500, 600), PanelSkin.Simple, Anchor.TopLeft)
+                {
+                    Identifier = "leftPanel"
+                };
+                sellItemTab.panel.AddChild(leftPanel);
+
+                var descripPanel = new Panel(new Vector2(450, 250), PanelSkin.ListBackground, Anchor.AutoCenter)
+                {
+                    Identifier = "descripPanel",
+                    PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll
+                };
+                descripPanel.Scrollbar.AdjustMaxAutomatically = true;
+                descripPanel.OnMouseEnter = (e) =>
+                {
+                    UserInterface.Active.ActiveEntity = descripPanel;
+                };
+
+                descripPanel.AddChild(new Label("iconLabel", Anchor.AutoCenter)
+                {
+                    Scale = 1.25f,
+                    ClickThrough = true,
+                    Identifier = "iconLabel"
+                });
+                descripPanel.AddChild(new Paragraph("priceLabel", Anchor.AutoInline)
+                {
+                    Scale = 1.2f,
+                    ClickThrough = true,
+                    Identifier = "priceLabel"
+                });
+                descripPanel.AddChild(new Paragraph("description", Anchor.AutoInline)
+                {
+                    Scale = 1f,
+                    WrapWords = true,
+                    ClickThrough = true,
+                    Identifier = "description"
+                });
+                descripPanel.AddChild(new LineSpace(1));
+
+                leftPanel.AddChild(new Icon(IconType.None, Anchor.AutoCenter, 1, false)
+                {
+                    Size = new Vector2(300, 300),
+                    Locked = true,
+                    Identifier = "itemIcon"
+                });
+                leftPanel.AddChild(new LineSpace(1));
+                leftPanel.AddChild(descripPanel);
+
+                // Right Panel
+                var rightPanel = new Panel(new Vector2(600, 600), PanelSkin.None, Anchor.TopRight)
+                {
+                    Identifier = "rightPanel"
+                };
+                sellItemTab.panel.AddChild(rightPanel);
+
+                rightPanel.AddChild(new Header("SELL ITEM"));
+                rightPanel.AddChild(new LineSpace(1));
+
+                var listItemPanel = new Panel(new Vector2(550, 450), PanelSkin.ListBackground, Anchor.AutoCenter)
+                {
+                    PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll,
+                    Identifier = "listItemPanel",
+                    Padding = new Vector2(10, 10)
+                };
+                listItemPanel.Scrollbar.AdjustMaxAutomatically = true;
+                listItemPanel.OnMouseEnter = (e) =>
+                {
+                    UserInterface.Active.ActiveEntity = listItemPanel;
+                };
+                rightPanel.AddChild(listItemPanel);
+            }
+
+            // Set on Click Button
+            // Buy
+            buyButton.OnClick = (e) =>
+            {
+                bgPanel.Visible = true;
+                selectingQuantityPanel.Visible = true;
+
+                // Set Maximum quantity that can be purchased
+                var purchaseItemId = SelectedPurchaseItem.ItemId;
+                var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault
+                    (e => e.ItemId.Equals(purchaseItemId));
+                quantitySlider.Max = InventoryManager.Instance.GoldCoin / itemData.BuyingPrice;
+                quantitySlider.Value = quantitySlider.Min;
+
+                buyButton.Locked = true;
+                closeButton.Locked = true;
+            };
+
+            // Sell
+            sellButton.OnClick = (e) =>
+            {
+                bgPanel.Visible = true;
+                selectingQuantityPanel.Visible = true;
+
+                // Set Maximum quantity that can be sold
+                var currItemInv = InventoryManager.Instance.SelectedItem;
+                quantitySlider.Max = currItemInv.Value.Count;
+                quantitySlider.Value = quantitySlider.Min;
+
+                sellButton.Locked = true;
+                closeButton.Locked = true;
+            };
+        }
+
+        private void PurchaseOrSell(PanelTabs tradingTabs, int quantity)
+        {
+            if (tradingTabs.ActiveTab.name.Equals("Buy Item"))
+            {
+                var purchaseItemId = SelectedPurchaseItem.ItemId;
+                var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault
+                    (e => e.ItemId.Equals(purchaseItemId));
+
+                GeonBit.UI.Utils.MessageBox.ShowMsgBox("Confirm Buying Item"
+                        , $"Do you want to purchase {itemData.Name} x {quantity}?"
+                        , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
+                        {
+                                new("Yes", () =>
+                                {
+                                    InventoryManager.Instance.PurchaseItem(
+                                        itemData.ItemId,
+                                        quantity,
+                                        itemData.BuyingPrice);
+
+                                    RefreshTradingItem("Buy Item");
+                                    ClearSelectingQuantityPanel();
+                                    return true;
+                                }),
+                                new("No", () =>
+                                {
+                                    return true;
+                                })
+                        });
+            }
+            else if (tradingTabs.ActiveTab.name.Equals("Sell Item"))
+            {
+                var currItemInv = InventoryManager.Instance.SelectedItem;
+
+                GeonBit.UI.Utils.MessageBox.ShowMsgBox("Confirm Selling Item"
+                        , $"Do you want to sell {currItemInv.Value.GetName()} x {quantity}?"
+                        , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
+                        {
+                                new("Yes", () =>
+                                {
+                                    InventoryManager.Instance.SellItem(
+                                        currItemInv.Key,
+                                        currItemInv.Value,
+                                        quantity);
+
+                                    RefreshTradingItem("Sell Item");
+                                    ClearSelectingQuantityPanel();
+                                    return true;
+                                }),
+                                new("No", () =>
+                                {
+                                    return true;
+                                })
+                        });
+            }
+        }
+
+        private void ClearSelectingQuantityPanel()
+        {
+            var tradingPanel = _mainPanels[TradingPanel];
+
+            var closeButton = tradingPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("closeButton"));
+            var buyButton = tradingPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("buyButton"));
+            var sellButton = tradingPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("sellButton"));
+
+            var bgPanel = tradingPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("bgPanel"));
+            var selectingQuantityPanel = tradingPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("selectingQuantityPanel"));
+
+            buyButton.Locked = false;
+            sellButton.Locked = false;
+            closeButton.Locked = false;
+
+            bgPanel.Visible = false;
+            selectingQuantityPanel.Visible = false;
+        }
+
+        public void RefreshTradingItem(string selectedTab)
+        {
+            if (InteractingVendor == null) return;
+
+            var tradingPanel = _mainPanels[TradingPanel];
+            var tradingTabs = tradingPanel.Children.OfType<PanelTabs>().FirstOrDefault
+                (t => t.Identifier.Equals("tradingTabs"));
+            tradingTabs.SelectTab(selectedTab);
+
+            var buyButton = tradingPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("buyButton"));
+            var sellButton = tradingPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("sellButton"));
+
+            var currentTabPanel = tradingTabs.ActiveTab.panel;
+            var leftPanel = currentTabPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("leftPanel"));
+
+            var rightPanel = currentTabPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("rightPanel"));
+            var listItemPanel = rightPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("listItemPanel"));
+
+            // Clear list item display
+            listItemPanel.ClearChildren();
+
+            foreach (var itemLeftPanel in leftPanel.Children)
+                itemLeftPanel.Visible = false;
+
+            if (selectedTab.Equals("Buy Item"))
+            {
+                buyButton.Visible = true;
+                sellButton.Visible = false;
+
+                var tempIconItems = new List<Icon>();
+                foreach (var item in InteractingVendor.TradingItems)
+                {
+                    // Item Icon
+                    var iconItem = new Icon(IconType.None, Anchor.AutoInline, 1, true)
+                    {
+                        ItemId = item.ItemId,
+                        Texture = GetItemTexture(item.ItemId),
+                    };
+
+                    tempIconItems.Add(iconItem);
+                }
+
+                // Sort Item Display by Id and add to listItemPanel
+                var sortedIconItems = tempIconItems.OrderBy(icon => icon.ItemId).ToList();
+                foreach (var sortediconItem in sortedIconItems)
+                    listItemPanel.AddChild(sortediconItem);
+
+                // Set OnClick
+                foreach (var iconItem in listItemPanel.Children.OfType<Icon>())
+                {
+                    iconItem.OnClick = (e) =>
+                    {
+                        SetIconItemTradingDisplay("Buy Item", iconItem);
+
+                        foreach (var itemLeftPanel in leftPanel.Children)
+                            itemLeftPanel.Visible = true;
+
+                        buyButton.Enabled = true;
+
+                        // Set Selected Purchase Item
+                        SelectedPurchaseItem = iconItem;
+                    };
+                }
+            }
+            else if (selectedTab.Equals("Sell Item"))
+            {
+                buyButton.Visible = false;
+                sellButton.Visible = true;
+
+                // Set item Display (Only item that has Slot = DefaultInventorySlot)
+                var tempIconItems = new List<Icon>();
+                foreach (var item in InventoryManager.Instance.InventoryBag.Where
+                    (i => i.Value.Slot == GameGlobals.Instance.DefaultInventorySlot))
+                {
+                    // Item Icon
+                    var iconItem = new Icon(IconType.None, Anchor.AutoInline, 1, true)
+                    {
+                        ItemId = item.Value.ItemId,
+                        Count = item.Value.Count,
+                        Slot = item.Value.Slot,
+                        KeyIndex = item.Key,
+                        Texture = GetItemTexture(item.Value.ItemId),
+                    };
+
+                    // Item text
+                    var text = iconItem.Count.ToString();
+                    if (item.Value.GetCategory().Equals("Equipment"))
+                        text = "";
+
+                    var iconText = new Label(text, Anchor.BottomRight, offset: new Vector2(-22, -35))
+                    {
+                        Size = new Vector2(10, 10),
+                        Scale = 1f,
+                        ClickThrough = true,
+                    };
+
+                    iconItem.AddChild(iconText);
+                    tempIconItems.Add(iconItem);
+                }
+
+                // Sort Item Display by Id and add to listItemPanel
+                var sortedIconItems = tempIconItems.OrderBy(icon => icon.ItemId).ToList();
+                foreach (var sortediconItem in sortedIconItems)
+                    listItemPanel.AddChild(sortediconItem);
+
+                // Set OnClick
+                foreach (var iconItem in listItemPanel.Children.OfType<Icon>())
+                {
+                    iconItem.OnClick = (e) =>
+                    {
+                        SetIconItemTradingDisplay("Sell Item", iconItem);
+
+                        foreach (var itemLeftPanel in leftPanel.Children)
+                            itemLeftPanel.Visible = true;
+
+                        // Enable or Disable the button for each item icon
+                        var item = InventoryManager.Instance.InventoryBag.FirstOrDefault
+                            (i => i.Key.Equals(iconItem.KeyIndex));
+
+                        InventoryManager.Instance.SelectedItem = item;
+
+                        sellButton.Enabled = true;
+                    };
+                }
+            }
+        }
+
+        private void SetIconItemTradingDisplay(string selectedTab, Icon icon)
+        {
+            var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault
+                (i => i.ItemId.Equals(icon.ItemId));
+
+            var tradingPanel = _mainPanels[TradingPanel];
+            var tradingTabs = tradingPanel.Children.OfType<PanelTabs>().FirstOrDefault
+                (t => t.Identifier.Equals("tradingTabs"));
+            tradingTabs.SelectTab(selectedTab);
+
+            var currentTabPanel = tradingTabs.ActiveTab.panel;
+            var leftPanel = currentTabPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("leftPanel"));
+            var descripPanel = leftPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("descripPanel"));
+
+            var itemIcon = leftPanel.Children.OfType<Icon>().FirstOrDefault
+                (i => i.Identifier.Equals("itemIcon"));
+            itemIcon.Texture = icon.Texture;
+
+            var iconLabel = descripPanel.Children.OfType<Label>().FirstOrDefault
+                (i => i.Identifier.Equals("iconLabel"));
+            iconLabel.Text = itemData.Name;
+
+            var priceLabel = descripPanel.Children.OfType<Paragraph>().FirstOrDefault
+                (i => i.Identifier.Equals("priceLabel"));
+            priceLabel.Text = selectedTab.Equals("Buy Item") ? $"Buying Price: {itemData.BuyingPrice}" : $"Selling Price: {itemData.SellingPrice}";
+
+            var description = descripPanel.Children.OfType<Paragraph>().FirstOrDefault
+                (i => i.Identifier.Equals("description"));
+            description.Text = itemData.Description;
         }
 
         public static UIManager Instance

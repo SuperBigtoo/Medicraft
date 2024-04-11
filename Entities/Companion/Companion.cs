@@ -469,6 +469,7 @@ namespace Medicraft.Entities.Companion
         {
             IsDead = false;
             IsDying = false;
+            Sprite.Color = Color.White;
 
             HP = MaxHP;
             Mana = MaxMana;

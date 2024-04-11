@@ -13,6 +13,7 @@ using MonoGame.Extended.TextureAtlases;
 using System;
 using System.Linq;
 using MonoGame.Extended.SceneGraphs;
+using static Medicraft.GameObjects.GameObject;
 
 namespace Medicraft.Systems
 {
@@ -37,53 +38,112 @@ namespace Medicraft.Systems
             _statesSpriteSheet = GameGlobals.Instance.StatesSpriteEffect;
         }
 
-        public static ParticleEffect SetItemParticleEffect(Vector2 itemPos)
+        public static ParticleEffect SetItemParticleEffect(GameObjectType objectType, Vector2 objectPos)
         {
+            ParticleEffect particleEffect = null;
             TextureRegion2D textureRegion = new(ParticleTexture);
 
-            var particleEffect = new ParticleEffect()
+            switch (objectType)
             {
-                Position = new Vector2(itemPos.X, itemPos.Y + 5f),
-                Emitters = [
-                    new ParticleEmitter(textureRegion, 175, TimeSpan.FromSeconds(1.2)
-                            , Profile.Circle(18, Profile.CircleRadiation.In))
-                        {
-                            Parameters = new ParticleReleaseParameters
-                            {
-                                Speed = new Range<float>(0f, 12f),
-                                Quantity = 2,
-                                Rotation = new Range<float>(-0.5f, 0.5f),
-                                Scale = new Range<float>(1f, 3.2f),
-                            },
-                            Modifiers =
-                            {
-                                new AgeModifier
+                case GameObjectType.Item:
+                case GameObjectType.QuestItem:
+                    particleEffect = new ParticleEffect()
+                    {
+                        Position = new Vector2(objectPos.X, objectPos.Y + 5f),
+                        Emitters = [
+                        new ParticleEmitter(textureRegion, 175, TimeSpan.FromSeconds(1.2)
+                                , Profile.Circle(18, Profile.CircleRadiation.In))
                                 {
-                                    Interpolators =
+                                    Parameters = new ParticleReleaseParameters
                                     {
-                                        new ColorInterpolator
+                                        Speed = new Range<float>(0f, 12f),
+                                        Quantity = 2,
+                                        Rotation = new Range<float>(-0.5f, 0.5f),
+                                        Scale = new Range<float>(1f, 3.2f),
+                                    },
+                                    Modifiers =
+                                    {
+                                        new AgeModifier
                                         {
-                                            StartValue = Color.Khaki.ToHsl(),
-                                            EndValue = Color.LightGoldenrodYellow.ToHsl()
-                                        }
+                                            Interpolators =
+                                            {
+                                                new ColorInterpolator
+                                                {
+                                                    StartValue = Color.Khaki.ToHsl(),
+                                                    EndValue = Color.LightGoldenrodYellow.ToHsl()
+                                                }
+                                            }
+                                        },
+                                        new RotationModifier
+                                        {
+                                            RotationRate = 5f
+                                        },
+                                        new DragModifier
+                                        {
+                                            Density = 0.7f, DragCoefficient = 1f
+                                        },
+                                        new LinearGravityModifier
+                                        {
+                                            Direction = new Vector2(0,-1),
+                                            Strength = 70f
+                                        },
+                                        new OpacityFastFadeModifier()
                                     }
-                                },
-                                new RotationModifier
-                                {
-                                    RotationRate = 5f
-                                },
-                                new DragModifier
-                                {
-                                    Density = 0.7f, DragCoefficient = 1f
-                                },
-                                new LinearGravityModifier
-                                {
-                                    Direction = new Vector2(0,-1),
-                                    Strength = 70f
-                                }
-                            }
                         }]
-            };
+                    };
+                break;
+
+                case GameObjectType.CraftingTable:
+                case GameObjectType.SavingTable:
+                    particleEffect = new ParticleEffect()
+                    {
+                        Position = new Vector2(objectPos.X, objectPos.Y + 10f),
+                        Emitters = [
+                        new ParticleEmitter(textureRegion, 250, TimeSpan.FromSeconds(1.2)
+                                    , Profile.Circle(50, Profile.CircleRadiation.In))
+                                    {
+                                        Parameters = new ParticleReleaseParameters
+                                        {
+                                            Speed = new Range<float>(0f, 24f),
+                                            Quantity = 4,
+                                            Rotation = new Range<float>(-0.5f, 0.5f),
+                                            Scale = new Range<float>(1f, 4f),
+                                        },
+                                        Modifiers =
+                                        {
+                                            new AgeModifier
+                                            {
+                                                Interpolators =
+                                                {
+                                                    new ColorInterpolator
+                                                    {
+                                                        StartValue = Color.LightSkyBlue.ToHsl(),
+                                                        EndValue = Color.PaleTurquoise.ToHsl()
+                                                    }
+                                                }
+                                            },
+                                            new RotationModifier
+                                            {
+                                                RotationRate = 5f
+                                            },
+                                            new DragModifier
+                                            {
+                                                Density = 0.7f, DragCoefficient = 1f
+                                            },
+                                            new LinearGravityModifier
+                                            {
+                                                Direction = new Vector2(0,-1),
+                                                Strength = 150f
+                                            },
+                                            new OpacityFastFadeModifier()
+                                        }
+                            }]
+                        };
+                    break;
+
+                case GameObjectType.WarpPoint:
+                    break;
+            }         
 
             return particleEffect;
         }
@@ -103,19 +163,6 @@ namespace Medicraft.Systems
         public void Update(GameTime gameTime)
         {
             _deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            var itemObject = ObjectManager.Instance.GameObjects;
-
-            foreach (var item in itemObject)
-            {
-                foreach (var particleEmitter in item.ParticleEffect.Emitters)
-                {
-                    particleEmitter.LayerDepth = item.Sprite.Depth - 0.00001f;
-                    particleEmitter.Parameters.Opacity = new Range<float>(0.15f, 0.6f);
-                }
-
-                item.ParticleEffect.Update(_deltaSeconds);
-            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -131,9 +178,6 @@ namespace Medicraft.Systems
             DrawMobStatusEffect(spriteBatch);      
             DrawPlayerAbilityAndStatusEffects(spriteBatch);
             DrawCompanionAbilityAndStatusEffect(spriteBatch);
-
-            // Object Particle
-            DrawObjectParticle(spriteBatch);
         }
 
         private void DrawAttackedEffectToMob(SpriteBatch spriteBatch)
@@ -505,7 +549,7 @@ namespace Medicraft.Systems
                 Depth = PlayerManager.Instance.Player.Sprite.Depth - 0.0000027f
             };
 
-            // Buff
+            // Buff and Normal Skill
             if (PlayerManager.Instance.Player.IsBuffOn || PlayerManager.Instance.Player.IsNormalSkillActivate)
             {
                 PlayerManager.Instance.Player.BuffSprite.Play("effect_buff&shock");
@@ -744,15 +788,6 @@ namespace Medicraft.Systems
 
                 spriteBatch.Draw(companion.DebuffSprite, transform);
             }
-        }
-
-        private static void DrawObjectParticle(SpriteBatch spriteBatch)
-        {
-            var gameObject = ObjectManager.Instance.GameObjects;
-
-            if (gameObject != null || gameObject.Any())
-                foreach (var item in gameObject)
-                    spriteBatch.Draw(item.ParticleEffect);
         }
     }
 }

@@ -1,0 +1,34 @@
+{
+    "textureAtlas": {
+        "texture": "Civilian04_spritesheet.png",
+        "regionWidth": 86,
+        "regionHeight": 129
+    },
+    "cycles": {
+        "default_idle": {
+            "frames": [ 0, 1, 2 ],
+            "isLooping": true,
+            "frameDuration": 0.2
+        },
+        "default_walking_down": {
+            "frames": [ 3, 4, 5, 4 ],
+            "isLooping": false,
+            "frameDuration": 0.16
+        },
+        "default_walking_left": {
+            "frames": [ 6, 7, 8, 7 ],
+            "isLooping": false,
+            "frameDuration": 0.16
+        },
+        "default_walking_right": {
+            "frames": [ 9, 10, 11, 10 ],
+            "isLooping": false,
+            "frameDuration": 0.16
+        },
+        "default_walking_up": {
+            "frames": [ 12, 13, 14, 13 ],
+            "isLooping": false,
+            "frameDuration": 0.2
+        }
+    }
+}

@@ -12,7 +12,8 @@ namespace Medicraft.Data.Models
             Recovery,
             Missed,
             Buff,
-            Debuff
+            Debuff,
+            Collecting
         }
 
         public string Actor { get; set; }

@@ -3,181 +3,241 @@
         "SkillId": 0,
         "Name": "I've got the Scent!",
         "Level": 1,
-        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 15% จาก BaseATK, Crit 10% และ CritDMG 20% เป็นระยะเวลา 6 วินาที"
+        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 15% จาก BaseATK, Crit 10% และ CritDMG 20% เป็นระยะเวลา 6 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 100
     },
     {
         "SkillId": 0,
         "Name": "I've got the Scent!",
         "Level": 2,
-        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 20% จาก BaseATK, Crit 12.5% CritDMG 30% เป็นระยะเวลา 6 วินาที"
+        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 20% จาก BaseATK, Crit 12.5% CritDMG 30% เป็นระยะเวลา 6 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 300
     },
     {
         "SkillId": 0,
         "Name": "I've got the Scent!",
         "Level": 3,
-        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 25% จาก BaseATK, Crit 15% CritDMG 40% เป็นระยะเวลา 6 วินาที"
+        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 25% จาก BaseATK, Crit 15% CritDMG 40% เป็นระยะเวลา 6 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 500
     },
     {
         "SkillId": 0,
         "Name": "I've got the Scent!",
         "Level": 4,
-        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 30% จาก BaseATK, Crit 17.5% CritDMG 50% เป็นระยะเวลา 6 วินาที"
+        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 30% จาก BaseATK, Crit 17.5% CritDMG 50% เป็นระยะเวลา 6 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 750
     },
     {
         "SkillId": 0,
         "Name": "I've got the Scent!",
         "Level": 5,
-        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 35% จาก BaseATK, Crit 20% CritDMG 60% เป็นระยะเวลา 6 วินาที"
+        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 35% จาก BaseATK, Crit 20% CritDMG 60% เป็นระยะเวลา 6 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 1000
     },
     {
         "SkillId": 0,
         "Name": "I've got the Scent!",
         "Level": 6,
-        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 40% จาก BaseATK, Crit 22.5% CritDMG 70% เป็นระยะเวลา 6 วินาที"
+        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 40% จาก BaseATK, Crit 22.5% CritDMG 70% เป็นระยะเวลา 6 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 1500
     },
     {
         "SkillId": 0,
         "Name": "I've got the Scent!",
         "Level": 7,
-        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 45% จาก BaseATK, Crit 25% CritDMG 80% เป็นระยะเวลา 6 วินาที"
+        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 45% จาก BaseATK, Crit 25% CritDMG 80% เป็นระยะเวลา 6 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 2250
     },
     {
         "SkillId": 0,
         "Name": "I've got the Scent!",
         "Level": 8,
-        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 50% จาก BaseATK, Crit 27.5% CritDMG 90% เป็นระยะเวลา 6 วินาที"
+        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 50% จาก BaseATK, Crit 27.5% CritDMG 90% เป็นระยะเวลา 6 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 3000
     },
     {
         "SkillId": 0,
         "Name": "I've got the Scent!",
         "Level": 9,
-        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 55% จาก BaseATK, Crit 30% CritDMG 100% เป็นระยะเวลา 6 วินาที"
+        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 55% จาก BaseATK, Crit 30% CritDMG 100% เป็นระยะเวลา 6 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 3750
     },
     {
         "SkillId": 0,
         "Name": "I've got the Scent!",
         "Level": 10,
-        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 60% จาก BaseATK, Crit 32.5% CritDMG 110% เป็นระยะเวลา 6 วินาที"
+        "Description": "Mana Cost: 15\nเพิ่มพลังโจมตี 60% จาก BaseATK, Crit 32.5% CritDMG 110% เป็นระยะเวลา 6 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 4750
     },
     {
         "SkillId": 1,
         "Name": "Noah Strike",
         "Level": 1,
-        "Description": "Mana Cost: 20\nสร้างความเสียหาย 125% โดยรอบตัวกระเด็นศัตรูเล็กน้อย และมึนงงเป็นระยะเวลา 1 วินาที"
+        "Description": "Mana Cost: 20\nสร้างความเสียหาย 125% โดยรอบตัวกระเด็นศัตรูเล็กน้อย และมึนงงเป็นระยะเวลา 1 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 100
     },
     {
         "SkillId": 1,
         "Name": "Noah Strike",
         "Level": 2,
-        "Description": "Mana Cost: 20\nสร้างความเสียหาย 140% โดยรอบตัวกระเด็นศัตรูเล็กน้อย และมึนงงเป็นระยะเวลา 1.25 วินาที"
+        "Description": "Mana Cost: 20\nสร้างความเสียหาย 140% โดยรอบตัวกระเด็นศัตรูเล็กน้อย และมึนงงเป็นระยะเวลา 1.25 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 300
     },
     {
         "SkillId": 1,
         "Name": "Noah Strike",
         "Level": 3,
-        "Description": "Mana Cost: 20\nสร้างความเสียหาย 155% โดยรอบตัวกระเด็นศัตรูเล็กน้อย และมึนงงเป็นระยะเวลา 1.5 วินาที"
+        "Description": "Mana Cost: 20\nสร้างความเสียหาย 155% โดยรอบตัวกระเด็นศัตรูเล็กน้อย และมึนงงเป็นระยะเวลา 1.5 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 500
     },
     {
         "SkillId": 1,
         "Name": "Noah Strike",
         "Level": 4,
-        "Description": "Mana Cost: 20\nสร้างความเสียหาย 170% โดยรอบตัวกระเด็นศัตรูปานกลาง และมึนงงเป็นระยะเวลา 1.75 วินาที"
+        "Description": "Mana Cost: 20\nสร้างความเสียหาย 170% โดยรอบตัวกระเด็นศัตรูปานกลาง และมึนงงเป็นระยะเวลา 1.75 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 750
     },
     {
         "SkillId": 1,
         "Name": "Noah Strike",
         "Level": 5,
-        "Description": "Mana Cost: 20\nสร้างความเสียหาย 185% โดยรอบตัวกระเด็นศัตรูปานกลาง และมึนงงเป็นระยะเวลา 2 วินาที"
+        "Description": "Mana Cost: 20\nสร้างความเสียหาย 185% โดยรอบตัวกระเด็นศัตรูปานกลาง และมึนงงเป็นระยะเวลา 2 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 1000
     },
     {
         "SkillId": 1,
         "Name": "Noah Strike",
         "Level": 6,
-        "Description": "Mana Cost: 20\nสร้างความเสียหาย 200% โดยรอบตัวกระเด็นศัตรูปานกลาง และมึนงงเป็นระยะเวลา 2.25 วินาที"
+        "Description": "Mana Cost: 20\nสร้างความเสียหาย 200% โดยรอบตัวกระเด็นศัตรูปานกลาง และมึนงงเป็นระยะเวลา 2.25 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 1500
     },
     {
         "SkillId": 1,
         "Name": "Noah Strike",
         "Level": 7,
-        "Description": "Mana Cost: 20\nสร้างความเสียหาย 215% โดยรอบตัวกระเด็นศัตรูอย่างมาก และมึนงงเป็นระยะเวลา 2.5 วินาที"
+        "Description": "Mana Cost: 20\nสร้างความเสียหาย 215% โดยรอบตัวกระเด็นศัตรูอย่างมาก และมึนงงเป็นระยะเวลา 2.5 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 2250
     },
     {
         "SkillId": 1,
         "Name": "Noah Strike",
         "Level": 8,
-        "Description": "Mana Cost: 20\nสร้างความเสียหาย 230% โดยรอบตัวกระเด็นศัตรูอย่างมาก และมึนงงเป็นระยะเวลา 2.75 วินาที"
+        "Description": "Mana Cost: 20\nสร้างความเสียหาย 230% โดยรอบตัวกระเด็นศัตรูอย่างมาก และมึนงงเป็นระยะเวลา 2.75 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 3000
     },
     {
         "SkillId": 1,
         "Name": "Noah Strike",
         "Level": 9,
-        "Description": "Mana Cost: 20\nสร้างความเสียหาย 245% โดยรอบตัวกระเด็นศัตรูอย่างมาก และมึนงงเป็นระยะเวลา 3 วินาที"
+        "Description": "Mana Cost: 20\nสร้างความเสียหาย 245% โดยรอบตัวกระเด็นศัตรูอย่างมาก และมึนงงเป็นระยะเวลา 3 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 3750
     },
     {
         "SkillId": 1,
         "Name": "Noah Strike",
         "Level": 10,
-        "Description": "Mana Cost: 20\nสร้างความเสียหาย 260% โดยรอบตัวกระเด็นศัตรูอย่างมาก และมึนงงเป็นระยะเวลา 3.25 วินาที"
+        "Description": "Mana Cost: 20\nสร้างความเสียหาย 260% โดยรอบตัวกระเด็นศัตรูอย่างมาก และมึนงงเป็นระยะเวลา 3.25 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 4750
     },
     {
         "SkillId": 2,
         "Name": "Survivalist",
         "Level": 1,
-        "Description": "ฟื้นฟูพลัง HP 25% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 15% เป็นระยะเวลา 6 วินาที"
+        "Description": "ฟื้นฟูพลัง HP 25% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 15% เป็นระยะเวลา 6 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 100
     },
     {
         "SkillId": 2,
         "Name": "Survivalist",
         "Level": 2,
-        "Description": "ฟื้นฟูพลัง HP 27.5% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 17.5% เป็นระยะเวลา 6 วินาที"
+        "Description": "ฟื้นฟูพลัง HP 27.5% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 17.5% เป็นระยะเวลา 6 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 300
     },
     {
         "SkillId": 2,
         "Name": "Survivalist",
         "Level": 3,
-        "Description": "ฟื้นฟูพลัง HP 30% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 20% เป็นระยะเวลา 7 วินาที"
+        "Description": "ฟื้นฟูพลัง HP 30% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 20% เป็นระยะเวลา 7 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 500
     },
     {
         "SkillId": 2,
         "Name": "Survivalist",
         "Level": 4,
-        "Description": "ฟื้นฟูพลัง HP 32.5% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 22.5% เป็นระยะเวลา 7 วินาที"
+        "Description": "ฟื้นฟูพลัง HP 32.5% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 22.5% เป็นระยะเวลา 7 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 750
     },
     {
         "SkillId": 2,
         "Name": "Survivalist",
         "Level": 5,
-        "Description": "ฟื้นฟูพลัง HP 35% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 25% เป็นระยะเวลา 8 วินาที"
+        "Description": "ฟื้นฟูพลัง HP 35% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 25% เป็นระยะเวลา 8 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 1000
     },
     {
         "SkillId": 2,
         "Name": "Survivalist",
         "Level": 6,
-        "Description": "ฟื้นฟูพลัง HP 37.5% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 27.5% เป็นระยะเวลา 8 วินาที"
+        "Description": "ฟื้นฟูพลัง HP 37.5% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 27.5% เป็นระยะเวลา 8 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 1500
     },
     {
         "SkillId": 2,
         "Name": "Survivalist",
         "Level": 7,
-        "Description": "ฟื้นฟูพลัง HP 40% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 30% เป็นระยะเวลา 9 วินาที"
+        "Description": "ฟื้นฟูพลัง HP 40% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 30% เป็นระยะเวลา 9 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 2250
     },
     {
         "SkillId": 2,
         "Name": "Survivalist",
         "Level": 8,
-        "Description": "ฟื้นฟูพลัง HP 42.5% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 32.5% เป็นระยะเวลา 9 วินาที"
+        "Description": "ฟื้นฟูพลัง HP 42.5% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 32.5% เป็นระยะเวลา 9 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 3000
     },
     {
         "SkillId": 2,
         "Name": "Survivalist",
         "Level": 9,
-        "Description": "ฟื้นฟูพลัง HP 45% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 35% เป็นระยะเวลา 10 วินาที"
+        "Description": "ฟื้นฟูพลัง HP 45% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 35% เป็นระยะเวลา 10 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 3750
     },
     {
         "SkillId": 2,
         "Name": "Survivalist",
         "Level": 10,
-        "Description": "ฟื้นฟูพลัง HP 50% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 4% เป็นระยะเวลา 10 วินาที"
+        "Description": "ฟื้นฟูพลัง HP 50% จาก MaxHP ทันทีเมื่อพลัง HP ต่ำกว่า 10% และเพิ่มเกราะป้องกัน 4% เป็นระยะเวลา 10 วินาที",
+        "SkillPointCost": 1,
+        "GoldCoinCost": 4750
     },
     {
         "SkillId": 3,

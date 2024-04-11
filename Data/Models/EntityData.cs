@@ -1,4 +1,6 @@
-﻿namespace Medicraft.Data.Models
+﻿using System.Collections.Generic;
+
+namespace Medicraft.Data.Models
 {
     public class EntityData
     {
@@ -12,5 +14,6 @@
         public double[][] RoutePoint { get; set; }
         public int AggroTime { get; set; }
         public double[] Position { get; set; }
+        public List<InventoryItemData> TradingItemsData { get; set; }
     }
 }

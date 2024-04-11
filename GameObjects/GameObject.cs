@@ -20,11 +20,14 @@ namespace Medicraft.GameObjects
         public string Name { get; protected set; }
         public string Description { get; protected set; }
 
-        public AnimatedSprite Sprite;
-        public Transform2 Transform;
-        public CircleF BoundingCollection;
+        public const float InitDepth = 0.1f;
 
-        public ParticleEffect ParticleEffect;
+        public AnimatedSprite Sprite { get; protected set; }
+        public AnimatedSprite SignSprite { get; protected set; }
+        public Transform2 Transform { get; protected set; }
+        public CircleF BoundingInteraction;
+
+        public ParticleEffect ParticleEffect { get; protected set; }
 
         public Vector2 Position
         {
@@ -32,12 +35,14 @@ namespace Medicraft.GameObjects
             set
             {
                 Transform.Position = value;
-                BoundingCollection.Center = value;
+                BoundingInteraction.Center = value;
             }
         }
 
+        public bool IsDetected { get; set; }
         public bool IsRespawnable { get; protected set; }
         public bool IsCollected { get; set; }
+        public bool IsDestroyable { get; protected set; }
         public bool IsDestroyed { get; set; }
         public bool IsVisible { get; set; }
 
@@ -49,20 +54,24 @@ namespace Medicraft.GameObjects
             SavingTable,
             WarpPoint
         }
-        public GameObjectType Type { get; protected set; }
-
-        // For ItemObject
-        public int QuantityDrop { get; protected set; }    
+        public GameObjectType ObjectType { get; protected set; }  
 
         protected GameObject()
         {
+            SignSprite = new AnimatedSprite(GameGlobals.Instance.UIBooksIconHUD)
+            {
+                Depth = InitDepth
+            };
+
             Id = 0;
             ReferId = 0;
             Name = string.Empty;
             Description = string.Empty;
 
+            IsDetected = false;
             IsRespawnable = true;
             IsCollected = false;
+            IsDestroyable = false;
             IsDestroyed = false;
             IsVisible = true;
 
@@ -72,19 +81,22 @@ namespace Medicraft.GameObjects
                 Rotation = 0f,
                 Position = Vector2.Zero
             };
-
-            BoundingCollection = new CircleF(Position, 16);
         }
 
         private GameObject(GameObject gameObject)
         {
+            SignSprite = gameObject.SignSprite;
+            SignSprite.Depth = InitDepth;
+
             Id = gameObject.Id;
             ReferId = gameObject.ReferId;
             Name = gameObject.Name;
             Description = gameObject.Description;
 
+            IsDetected = false;
             IsRespawnable = gameObject.IsRespawnable;
             IsCollected = false;
+            IsDestroyable = false;
             IsDestroyed = false;
             IsVisible = true;
 
@@ -94,21 +106,50 @@ namespace Medicraft.GameObjects
                 Rotation = gameObject.Transform.Rotation,
                 Position = gameObject.Transform.Position
             };
-
-            BoundingCollection = new CircleF(Position, 16);
         }
 
         public virtual void Update(GameTime gameTime, float layerDepth) { }
 
         public virtual void Draw(SpriteBatch spriteBatch)
-        {
+        {       
             spriteBatch.Draw(Sprite, Transform);
+
+            if (ParticleEffect != null)
+                spriteBatch.Draw(ParticleEffect);
         }
 
-        public virtual void DrawShadow(SpriteBatch spriteBatch, Texture2D shadowTexture) { }
+        public virtual void DrawShadow(SpriteBatch spriteBatch, Texture2D shadowTexture)
+        {
+            var position = new Vector2(Position.X - (shadowTexture.Width * 0.5f) / 2.2f
+                , Position.Y + (shadowTexture.Height * 0.5f) / 1.8f);
+
+            spriteBatch.Draw(shadowTexture, position, null, Color.White
+                , 0f, Vector2.Zero, 0.5f, SpriteEffects.None, Sprite.Depth + 0.0000025f);
+        }
+
+        public virtual void DrawDetectedSign(SpriteBatch spriteBatch)
+        {
+            if (IsDetected)
+            {
+                var position = new Vector2(
+                    Position.X,
+                    Position.Y - ((Sprite.TextureRegion.Height / 2) + SignSprite.TextureRegion.Height));
+
+                var transform = new Transform2
+                {
+                    Scale = Vector2.One,
+                    Rotation = 0f,
+                    Position = position
+                };
+
+                spriteBatch.Draw(SignSprite, transform);
+            }
+        }
 
         public virtual void Destroy()
         {
+            if (IsDestroyable) return;
+
             IsDestroyed = true;
         }
 
@@ -121,7 +162,7 @@ namespace Medicraft.GameObjects
         {
             // Detect for LayerDepth
             Sprite.Depth = defaultDepth; // Default depth
-            if (BoundingCollection.Intersects(PlayerManager.Instance.Player.BoundingDetectEntity))
+            if (BoundingInteraction.Intersects(PlayerManager.Instance.Player.BoundingDetectEntity))
             {
                 if (Transform.Position.Y >= PlayerManager.Instance.Player.BoundingDetectCollisions.Center.Y)
                 {
@@ -134,30 +175,45 @@ namespace Medicraft.GameObjects
             }
         }
 
+        protected virtual void UpdateParticleLayerDepth(float deltaSeconds, float layerDepth)
+        {
+            if (ParticleEffect == null) return;
+
+            foreach (var particleEmitter in ParticleEffect.Emitters)
+            {
+                particleEmitter.LayerDepth = layerDepth - 0.000001f;
+                particleEmitter.Parameters.Opacity = new Range<float>(0.15f, 0.6f);
+            }
+
+            ParticleEffect.Update(deltaSeconds);
+        }
+
         protected virtual void InitializeObjectData()
         {
             SetGameObjectType(ObjectData.Category);
 
             Id = ObjectData.Id;
             ReferId = ObjectData.ReferId;
+            IsDestroyable = ObjectData.IsDestroyable;
+            IsRespawnable = ObjectData.IsRespawnable;
+            IsVisible = ObjectData.IsVisible;
 
-            switch (Type)
+            switch (ObjectType)
             {
                 case GameObjectType.Item:
-
                 case GameObjectType.QuestItem:
-                    var itemData = GameGlobals.Instance.ItemsDatas.Where(i => i.ItemId.Equals(ReferId)).ElementAt(0);
-
+                    var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault
+                        (i => i.ItemId.Equals(ReferId));
                     Name = itemData.Name;
                     Description = itemData.Description;                  
-                    break;
+                break;
 
                 case GameObjectType.CraftingTable:                  
-
                 case GameObjectType.SavingTable:                  
-
                 case GameObjectType.WarpPoint:
-                    break;
+                    Name = ObjectData.Name;
+                    Description = ObjectData.Description;
+                break;
             }          
         }
 
@@ -166,24 +222,24 @@ namespace Medicraft.GameObjects
             switch (category)
             {
                 case 0:
-                    Type = GameObjectType.Item;
-                    break;
+                    ObjectType = GameObjectType.Item;
+                break;
 
                 case 1:
-                    Type = GameObjectType.QuestItem;
-                    break;
+                    ObjectType = GameObjectType.QuestItem;
+                break;
 
                 case 2:
-                    Type = GameObjectType.CraftingTable;
-                    break;
+                    ObjectType = GameObjectType.CraftingTable;
+                break;
 
                 case 3:
-                    Type = GameObjectType.SavingTable;
-                    break;
+                    ObjectType = GameObjectType.SavingTable;
+                break;
 
                 case 4:
-                    Type = GameObjectType.WarpPoint;
-                    break;
+                    ObjectType = GameObjectType.WarpPoint;
+                break;
             }
         }
     }

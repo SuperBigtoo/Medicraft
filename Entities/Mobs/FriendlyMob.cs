@@ -5,30 +5,59 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System;
 using MonoGame.Extended.Sprites;
+using MonoGame.Extended;
 
 namespace Medicraft.Entities.Mobs
 {
     public class FriendlyMob : Entity
     {
         public EntityData EntityData { get; protected set; }
-        
-        protected bool isPlayIdle = false;
-        protected bool isQuestNPC = false;
-        protected bool isQuestGiver = false;
+        public AnimatedSprite SignSprite { get; protected set; }
 
-        protected FriendlyMob() { }
+        public enum FriendlyMobType
+        {
+            Animal,
+            Civilian,
+            Vendor,
+            QuestGiver
+        }
+        public FriendlyMobType MobType { get; protected set; }
+
+        public bool IsInteractable { get; protected set; }
+        public bool IsInteracting { get; set; }
+        public bool IsDetected { get; set; }
+        public bool IsAllwaysShowSignSprite { get; protected set; }
+
+        protected string[] idleSpriteName;
+        protected bool isPlayIdle = false;
+
+        protected FriendlyMob()
+        {
+            IsInteractable = false;
+            IsInteracting = false;
+            IsDetected = false;
+            IsAllwaysShowSignSprite = false;
+
+            SignSprite = new AnimatedSprite(GameGlobals.Instance.UIBooksIconHUD)
+            {
+                Depth = InitDepth
+            };
+        }
 
         public override void Update(GameTime gameTime, float playerDepth, float topDepth, float middleDepth, float bottomDepth)
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            UpdateTargetNode(deltaSeconds, EntityData);
-
-            // Setup PathFinding
-            SetPathFindingNode((int)EntityData.Position[0], (int)EntityData.Position[1]);
-
             if (!PlayerManager.Instance.IsPlayerDead)
             {
+                if (!IsInteracting)
+                {
+                    UpdateTargetNode(deltaSeconds, EntityData);
+
+                    // Setup PathFinding
+                    SetPathFindingNode((int)EntityData.Position[0], (int)EntityData.Position[1]);
+                }
+
                 // MovementControl
                 MovementControl(deltaSeconds);
             }
@@ -54,14 +83,14 @@ namespace Medicraft.Entities.Mobs
             if (!IsMoving && !isPlayIdle)
             {
                 isPlayIdle = true;
-                double randomValue = new Random().NextDouble();
-                string idle = (randomValue < 0.5) ? "_idle_1" : "_idle_2";
+                int randomIndex = new Random().Next(idleSpriteName.Length);
+                var idle = idleSpriteName[randomIndex];
                 CurrentAnimation = SpriteCycle + idle;
                 Sprite.Play(CurrentAnimation);
             }
 
             // Check movement according to PathFinding
-            if (ScreenManager.Instance.IsScreenLoaded)
+            if (ScreenManager.Instance.IsScreenLoaded && !IsInteracting)
             {
                 if (pathFinding != null || pathFinding.GetPath().Count != 0)
                 {
@@ -147,6 +176,25 @@ namespace Medicraft.Entities.Mobs
 
             spriteBatch.Draw(shadowTexture, position, null, Color.White
                 , 0f, Vector2.Zero, 1f, SpriteEffects.None, Sprite.Depth + 0.0000025f);
+        }
+
+        public virtual void DrawDetectedSign(SpriteBatch spriteBatch)
+        {
+            if (IsDetected || IsAllwaysShowSignSprite)
+            {
+                var position = new Vector2(
+                    Position.X,
+                    Position.Y - ((Sprite.TextureRegion.Height / 2) + SignSprite.TextureRegion.Height));
+
+                var transform = new Transform2
+                {
+                    Scale = Vector2.One,
+                    Rotation = 0f,
+                    Position = position
+                };
+
+                spriteBatch.Draw(SignSprite, transform);
+            }
         }
     }
 }

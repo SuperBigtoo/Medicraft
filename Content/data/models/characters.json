@@ -36,6 +36,18 @@
         "Evasion": 0.5
     },
     {
+        "CharId": 101,
+        "Name": "Vendor",
+        "Category": 2,
+        "ATK": 0,
+        "HP": 25,
+        "DEF_Percent": 1,
+        "Crit_Percent": 1,
+        "CritDMG_Percent": 1,
+        "Speed": 150,
+        "Evasion": 0.5
+    },
+    {
         "CharId": 200,
         "Name": "Slime",
         "Category": 3,

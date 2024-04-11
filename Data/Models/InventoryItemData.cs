@@ -7,7 +7,7 @@ namespace Medicraft.Data.Models
     {
         public int ItemId { get; set; }
         public int Count { get; set; }
-        public int Slot { get; set; }
+        public int Slot { get; set; } = GameGlobals.Instance.DefaultInventorySlot;
 
         public string GetName()
         {
@@ -56,6 +56,20 @@ namespace Medicraft.Data.Models
             var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(ItemId));
 
             return itemData.EquipmentType;
+        }
+
+        public int GetBuyingPrice()
+        {
+            var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(ItemId));
+
+            return itemData.BuyingPrice;
+        }
+
+        public int GetSellingPrice()
+        {
+            var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(ItemId));
+
+            return itemData.SellingPrice;
         }
     }
 }

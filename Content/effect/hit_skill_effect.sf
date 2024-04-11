@@ -8,25 +8,30 @@
     "hit_skill_effect_1": {
       "frames": [0,1,2,3,4],
       "isLooping": false,
-      "frameDuration": 0.13
+      "frameDuration": 0.15
     },
     "hit_skill_effect_2": {
-      "frames": [5,6,7,8,9],
+      "frames": [10,11,12,13,14],
       "isLooping": false,
       "frameDuration": 0.09
     },
     "hit_skill_effect_3": {
-      "frames": [10,11,12,13],
+      "frames": [20,21,22,23],
       "isLooping": false,
       "frameDuration": 0.1
     },
     "hit_skill_effect_4": {
-      "frames": [15,16,17,18,19],
+      "frames": [30,31,32,33,34],
       "isLooping": false,
       "frameDuration": 0.06
     },
     "hit_skill_effect_5": {
-      "frames": [20,21,22,23,24],
+      "frames": [40,41,42,43,44],
+      "isLooping": false,
+      "frameDuration": 0.1
+    },
+    "hit_skill_effect_6": {
+      "frames": [8,9,15,16,17,18,19],
       "isLooping": false,
       "frameDuration": 0.1
     }

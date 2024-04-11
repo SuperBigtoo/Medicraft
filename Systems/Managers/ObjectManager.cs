@@ -44,7 +44,7 @@ namespace Medicraft.Systems.Managers
         {
             var layerDepth = 0.85f;
 
-            foreach (var gameObject in gameObjects.Where(e => !e.IsDestroyed))
+            foreach (var gameObject in gameObjects.Where(e => !e.IsDestroyed && e.IsVisible))
             {
                 layerDepth -= 0.00001f;
                 gameObject.Update(gameTime, layerDepth);
@@ -63,7 +63,7 @@ namespace Medicraft.Systems.Managers
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (var gameObject in gameObjects.Where(e => !e.IsDestroyed))
+            foreach (var gameObject in gameObjects.Where(e => !e.IsDestroyed && e.IsVisible))
             {
                 gameObject.Draw(spriteBatch);
             }

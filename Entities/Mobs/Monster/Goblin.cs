@@ -58,18 +58,19 @@ namespace Medicraft.Entities.Mobs.Monster
             BoundingHitBox = new CircleF(Position, 25);         // Circle for Entity to hit
             BoundingDetectEntity = new CircleF(
                 Position, BaseBoundingDetectEntityRadius);      // Circle for check attacking
-            BoundingAggro = new CircleF(Position, 150);         // Circle for check aggro player        
+            BoundingAggro = new CircleF(Position, 170);         // Circle for check aggro player        
 
             // Drops
             itemDropId = GameGlobals.RandomItemDrop();
             quantityDrop = GameGlobals.RandomItemQuantityDrop(itemDropId);
             goidCoinDrop = 10;
             expDrop = 12;
+            InitEXPandGoldByLevel(); // Only call one in here
 
             // Set Effect
             NormalHitEffectAttacked = "hit_effect_1";
 
-            Sprite.Depth = 0.1f;
+            Sprite.Depth = InitDepth;
             Sprite.Play(SpriteCycle + "_idle");
         }
 
@@ -111,9 +112,13 @@ namespace Medicraft.Entities.Mobs.Monster
             BoundingCollisionY = goblin.BoundingCollisionY;
 
             BoundingDetectCollisions = goblin.BoundingDetectCollisions;
+            BoundingDetectCollisions.Position = Position;
             BoundingHitBox = goblin.BoundingHitBox;
+            BoundingHitBox.Position = Position;
             BoundingAggro = goblin.BoundingAggro;
+            BoundingAggro.Position = Position;
             BoundingDetectEntity = goblin.BoundingDetectEntity;
+            BoundingDetectCollisions.Position = Position;
 
             itemDropId = GameGlobals.RandomItemDrop();
             quantityDrop = GameGlobals.RandomItemQuantityDrop(itemDropId);
@@ -123,7 +128,7 @@ namespace Medicraft.Entities.Mobs.Monster
             NormalHitEffectAttacked = goblin.NormalHitEffectAttacked;
 
             Sprite.Color = Color.White;
-            Sprite.Depth = 0.1f;
+            Sprite.Depth = InitDepth;
             Sprite.Play(SpriteCycle + "_walking");
         }
 

@@ -174,6 +174,7 @@ namespace Medicraft.Systems.Managers
                         UIManager.Instance.RefreshMainMenu();
                         UIManager.Instance.UpdateAfterChangeGUI();
 
+                        GameGlobals.Instance.IsPauseMenuAllowed = false;
                         GameGlobals.Instance.IsOpenMainMenu = true;
                     }
                     break;
@@ -194,7 +195,19 @@ namespace Medicraft.Systems.Managers
                         UIManager.Instance.RefreshSaveMenu();
                         UIManager.Instance.UpdateAfterChangeGUI();
 
+                        GameGlobals.Instance.IsPauseMenuAllowed = false;
                         GameGlobals.Instance.IsOpenSaveMenuPanel = true;
+                    }
+                    break;
+
+                case UIManager.TradingPanel:
+                    if (!GameGlobals.Instance.IsOpenTradingPanel)
+                    {
+                        UIManager.Instance.RefreshTradingItem("Buy Item");
+                        UIManager.Instance.UpdateAfterChangeGUI();
+
+                        GameGlobals.Instance.IsPauseMenuAllowed = false;
+                        GameGlobals.Instance.IsOpenTradingPanel = true;
                     }
                     break;
             }

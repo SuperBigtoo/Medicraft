@@ -64,8 +64,9 @@ namespace Medicraft.Entities.Companion
             NormalHitEffectAttacked = "hit_effect_9";
             NormalSkillEffectAttacked = "hit_effect_8";
             BurstSkillEffectAttacked = "hit_effect_6";
+            BurstSkillEffectActivated = "hit_skill_effect_6";
 
-            Sprite.Depth = 0.1f;
+            Sprite.Depth = InitDepth;
             Sprite.Play(SpriteCycle + "_idle");
         }
 
@@ -120,6 +121,15 @@ namespace Medicraft.Entities.Companion
 
                             // Do normal skill & effect of Sets Item
                             NormalSkillControl(CompanionData.Abilities.NormalSkillLevel);
+
+                            CombatNumCase = Buff;
+                            var combatNumVelocity = SetCombatNumDirection();
+                            AddCombatLogNumbers(Name,
+                                "Freeze!",
+                                CombatNumCase,
+                                combatNumVelocity,
+                                BurstSkillEffectActivated);
+
                             PlaySoundEffect(Sound.frostbolt_1);
                             break;
                         }

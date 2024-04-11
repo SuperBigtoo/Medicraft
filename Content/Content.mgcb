@@ -149,6 +149,21 @@
 #begin effect/hit_skill_effect.sf
 /copy:effect/hit_skill_effect.sf
 
+#begin effect/Magic_Circle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:effect/Magic_Circle.png
+
+#begin effect/Magic_Circle.sf
+/copy:effect/Magic_Circle.sf
+
 #begin effect/shadow_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -323,6 +338,366 @@
 /processorParam:TextureFormat=Color
 /build:entity/mobs/friendly/cat/cat_spritesheet.png
 
+#begin entity/mobs/friendly/civilian/Civilian01_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian01_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian01_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian01_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian02_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian02_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian02_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian02_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian03_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian03_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian03_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian03_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian04_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian04_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian04_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian04_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian05_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian05_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian05_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian05_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian06_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian06_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian06_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian06_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian07_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian07_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian07_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian07_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian08_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian08_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian08_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian08_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian09_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian09_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian09_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian09_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian10_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian10_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian10_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian10_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian11_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian11_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian11_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian11_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian12_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian12_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian12_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian12_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian13_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian13_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian13_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian13_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian14_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian14_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian14_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian14_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian15_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian15_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian15_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian15_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian16_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian16_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian16_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian16_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian17_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian17_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian17_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian17_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian18_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian18_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian18_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian18_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian19_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian19_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian19_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian19_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian20_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian20_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian20_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian20_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian21_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian21_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian21_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian21_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian22_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian22_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian22_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian22_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian23_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian23_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian23_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian23_spritesheet.png
+
+#begin entity/mobs/friendly/civilian/Civilian24_animation.sf
+/copy:entity/mobs/friendly/civilian/Civilian24_animation.sf
+
+#begin entity/mobs/friendly/civilian/Civilian24_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/mobs/friendly/civilian/Civilian24_spritesheet.png
+
 #begin entity/mobs/monster/goblin/goblin_animation.sf
 /copy:entity/mobs/monster/goblin/goblin_animation.sf
 
@@ -427,6 +802,21 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:entity/mobs/monster/treant/treant_spritesheet.png
+
+#begin entity/objects/Warp_Point_animation.sf
+/copy:entity/objects/Warp_Point_animation.sf
+
+#begin entity/objects/Warp_Point.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:entity/objects/Warp_Point.png
 
 #begin fonts/Mincraft_Ten/Mincraft_Ten_0.png
 /importer:TextureImporter
@@ -621,6 +1011,18 @@
 /processorParam:TextureFormat=Color
 /build:gui/ability/passive_skill_pic.png
 
+#begin gui/Alpha_BG.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/Alpha_BG.png
+
 #begin gui/arrow_down.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -669,6 +1071,30 @@
 /processorParam:TextureFormat=Color
 /build:gui/arrow_up.png
 
+#begin gui/battlezone_map_sign.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/battlezone_map_sign.png
+
+#begin gui/book_desciption.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/book_desciption.png
+
 #begin gui/boss_gauge.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -704,6 +1130,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:gui/burst_skill_gui.png
+
+#begin gui/dialog_tmp.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/dialog_tmp.png
 
 #begin gui/exp_bar_alpha.png
 /importer:TextureImporter
@@ -885,6 +1323,18 @@
 /processorParam:TextureFormat=Color
 /build:gui/heart.png
 
+#begin gui/Inspect_Menu.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/Inspect_Menu.png
+
 #begin gui/insufficient.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -896,6 +1346,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:gui/insufficient.png
+
+#begin gui/Inventory_Menu.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/Inventory_Menu.png
 
 #begin gui/item_bar.png
 /importer:TextureImporter
@@ -1029,6 +1491,30 @@
 /processorParam:TextureFormat=Color
 /build:gui/passive_skill_gui.png
 
+#begin gui/Pause_Menu.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/Pause_Menu.png
+
+#begin gui/press_collecting.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/press_collecting.png
+
 #begin gui/press_f.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1040,6 +1526,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:gui/press_f.png
+
+#begin gui/press_interacting.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/press_interacting.png
 
 #begin gui/profile/noah_profile.png
 /importer:TextureImporter
@@ -1077,6 +1575,18 @@
 /processorParam:TextureFormat=Color
 /build:gui/quest_stamp.png
 
+#begin gui/safezone_map_sign.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/safezone_map_sign.png
+
 #begin gui/selected_slot.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1112,6 +1622,21 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:gui/transition_texture.png
+
+#begin gui/UI_books_icon_hud.sf
+/copy:gui/UI_books_icon_hud.sf
+
+#begin gui/UI_books_more.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/UI_books_more.png
 
 #begin item/drug_1.png
 /importer:TextureImporter
@@ -1868,6 +2393,18 @@
 
 #begin tiledmaps/test1/tilemap.tmx
 /copy:tiledmaps/test1/tilemap.tmx
+
+#begin tiledmaps/textures/extraobj_tile01.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:tiledmaps/textures/extraobj_tile01.png
 
 #begin tiledmaps/textures/RoomMc.png
 /importer:TextureImporter

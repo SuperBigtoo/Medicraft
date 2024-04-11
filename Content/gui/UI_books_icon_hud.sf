@@ -1,0 +1,189 @@
+{
+  "textureAtlas": {
+    "texture": "UI_books_more.png",
+    "regionWidth": 32,
+    "regionHeight": 32
+  },
+  "cycles": {
+    "interact_0": {
+      "frames": [775],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "interact_1": {
+      "frames": [827],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "interact_2": {
+      "frames": [879],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "collecting_0": {
+      "frames": [776],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "collecting_1": {
+      "frames": [828],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "collecting_2": {
+      "frames": [880],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "quest_0": {
+      "frames": [765],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "quest_1": {
+      "frames": [817],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "quest_2": {
+      "frames": [869],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "crafting_0": {
+      "frames": [768],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "crafting_1": {
+      "frames": [820],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "crafting_2": {
+      "frames": [872],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "saving_0": {
+      "frames": [764],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "saving_1": {
+      "frames": [816],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "saving_2": {
+      "frames": [868],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "pin_0": {
+      "frames": [766],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "pin_1": {
+      "frames": [818],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "pin_2": {
+      "frames": [870],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "entance_0": {
+      "frames": [772],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "skull_0": {
+      "frames": [767],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "skull_1": {
+      "frames": [819],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "skull_2": {
+      "frames": [871],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "lock_0": {
+      "frames": [771],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "lock_1": {
+      "frames": [823],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "lock_2": {
+      "frames": [875],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "entance_1": {
+      "frames": [824],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "entance_2": {
+      "frames": [876],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "trading_0": {
+      "frames": [614],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "trading_1": {
+      "frames": [666],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "trading_2": {
+      "frames": [718],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "battlezone_0": {
+      "frames": [773],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "battlezone_1": {
+      "frames": [825],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "battlezone_2": {
+      "frames": [877],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "home_0": {
+      "frames": [774],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "home_1": {
+      "frames": [826],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "home_2": {
+      "frames": [878],
+      "isLooping": false,
+      "frameDuration": 0.2
+    }
+  }
+}

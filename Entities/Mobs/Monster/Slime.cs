@@ -75,11 +75,12 @@ namespace Medicraft.Entities.Mobs.Monster
             quantityDrop = GameGlobals.RandomItemQuantityDrop(itemDropId);
             goidCoinDrop = 5;
             expDrop = 10;
+            InitEXPandGoldByLevel(); // Only call one in here
 
             // Set Effect
             NormalHitEffectAttacked = "hit_effect_1";
 
-            Sprite.Depth = 0.1f;
+            Sprite.Depth = InitDepth;
             Sprite.Play(SpriteCycle + "_walking");
         }
 
@@ -121,9 +122,13 @@ namespace Medicraft.Entities.Mobs.Monster
             BoundingCollisionY = slime.BoundingCollisionY;
 
             BoundingDetectCollisions = slime.BoundingDetectCollisions;
+            BoundingDetectCollisions.Position = Position;
             BoundingHitBox = slime.BoundingHitBox;
+            BoundingHitBox.Position = Position;
             BoundingAggro = slime.BoundingAggro;
+            BoundingAggro.Position = Position;
             BoundingDetectEntity = slime.BoundingDetectEntity;
+            BoundingDetectCollisions.Position = Position;
 
             RandomSlimeColor();
 
@@ -135,7 +140,7 @@ namespace Medicraft.Entities.Mobs.Monster
             NormalHitEffectAttacked = slime.NormalHitEffectAttacked;
 
             Sprite.Color = Color.White;
-            Sprite.Depth = 0.1f;
+            Sprite.Depth = InitDepth;
             Sprite.Play(SpriteCycle + "_walking");
         }
 

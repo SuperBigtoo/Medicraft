@@ -137,6 +137,11 @@ namespace Medicraft.Systems.Spawners
                         AddEntity(new Cat(new AnimatedSprite(spriteSheetCat), entityData, Vector2.One));
                         break;
 
+                    case 101:
+                        spriteSheets.TryGetValue(101, out SpriteSheet spriteSheetBlackSmite);
+                        AddEntity(new Vendor(new AnimatedSprite(spriteSheetBlackSmite), entityData, Vector2.One));
+                        break;
+
                     case 200:
                         spriteSheets.TryGetValue(200, out SpriteSheet spriteSheetSlime);
                         AddEntity(new Slime(new AnimatedSprite(spriteSheetSlime), entityData, Vector2.One));

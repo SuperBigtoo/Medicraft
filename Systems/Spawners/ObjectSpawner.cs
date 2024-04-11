@@ -1,5 +1,4 @@
 ﻿using Medicraft.Data.Models;
-using Medicraft.Entities;
 using Medicraft.GameObjects;
 using Medicraft.Systems.Managers;
 using Microsoft.Xna.Framework;
@@ -79,28 +78,33 @@ namespace Medicraft.Systems.Spawners
 
         public void SetupSpawner(List<ObjectData> objectDatas)
         {
-            var spriteSheets = GameGlobals.Instance.ItemsPackSprites;
-
             foreach (var gameObjectData in objectDatas)
             {
                 var category = gameObjectData.Category;
 
+                SpriteSheet spriteSheets;
                 switch (category)
                 {
-                    case 0:
+                    case 0: // Item
+                        spriteSheets = GameGlobals.Instance.ItemsPackSprites;
                         AddGameObject(new Item(new AnimatedSprite(spriteSheets), gameObjectData, Vector2.One));
                         break;
-
-                    case 1:
+                    case 1: // QuestItem
+                        spriteSheets = GameGlobals.Instance.ItemsPackSprites;
                         break;
 
-                    case 2:
+                    case 2: // CraftingTable
+                        spriteSheets = GameGlobals.Instance.UIBooksIconHUD;
+                        AddGameObject(new CraftingTable(new AnimatedSprite(spriteSheets), gameObjectData, Vector2.One));
                         break;
 
-                    case 3:
+                    case 3: // SavingTable
+                        spriteSheets = GameGlobals.Instance.UIBooksIconHUD;
+                        AddGameObject(new SavingTable(new AnimatedSprite(spriteSheets), gameObjectData, Vector2.One));
                         break;
 
-                    case 4:
+                    case 4: // WarpPoint
+                        spriteSheets = GameGlobals.Instance.WarpPointSprite;
                         break;
                 }
             }

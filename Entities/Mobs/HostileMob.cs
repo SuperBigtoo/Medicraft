@@ -77,7 +77,7 @@ namespace Medicraft.Entities.Mobs
                     // Exp & Item Drop
                     InventoryManager.Instance.AddItem(itemDropId, quantityDrop);
 
-                    InventoryManager.Instance.AddGoldCoin(goidCoinDrop);
+                    InventoryManager.Instance.AddGoldCoin(Name, goidCoinDrop);
 
                     PlayerManager.Instance.AddPlayerEXP(expDrop);
 
@@ -124,6 +124,12 @@ namespace Medicraft.Entities.Mobs
 
             spriteBatch.Draw(shadowTexture, position, null, Color.White
                 , 0f, Vector2.Zero, 1.2f, SpriteEffects.None, Sprite.Depth + 0.0000025f);
+        }
+
+        protected virtual void InitEXPandGoldByLevel()
+        {
+            expDrop = (int)(expDrop + ((Level - 1) * (expDrop * 0.25)));
+            goidCoinDrop = (int)(goidCoinDrop + ((Level - 1) * (goidCoinDrop * 0.1)));
         }
 
         public override Vector2 SetCombatNumDirection()

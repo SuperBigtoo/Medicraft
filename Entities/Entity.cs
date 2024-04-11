@@ -11,7 +11,6 @@ using Medicraft.Data.Models;
 using System.Linq;
 using Medicraft.Systems.Managers;
 using static Medicraft.Systems.GameGlobals;
-using Medicraft.Entities.Companion;
 
 namespace Medicraft.Entities
 {
@@ -25,7 +24,7 @@ namespace Medicraft.Entities
         public int EXPMaxCap { get; set; }     // meant for playable
 
         // Character Stats
-        public const float baseManaRegenRate = 0.25f;
+        public const float InitManaRegenRate = 0.50f;
 
         public float ATK { get; set; }
         public float HP { get; set; }
@@ -50,8 +49,10 @@ namespace Medicraft.Entities
         public float BaseCritDMG { get; protected set; }
         public float BaseEvasion { get; protected set; }
 
+        public const float InitDepth = 0.1f;
+
         public AnimatedSprite Sprite { get; protected set; }
-        public string SpriteCycle { get; protected set; }
+        public string SpriteCycle { get; protected set; } = "default";
         public string CurrentAnimation { get; protected set; }
         
         public AnimatedSprite StatesSprite { get; set; }
@@ -75,7 +76,7 @@ namespace Medicraft.Entities
         public CircleF BoundingHitBox;
         public CircleF BoundingDetectEntity;
         public float BaseBoundingDetectEntityRadius;
-        public CircleF BoundingCollection;
+        public CircleF BoundingInteraction;
         public CircleF BoundingAggro;
 
         protected int currentNodeIndex = 0;     // Index of the current node in the path
@@ -110,13 +111,14 @@ namespace Medicraft.Entities
                 {
                     BoundingHitBox.Center = value + new Vector2(0f, 32f);
                     BoundingDetectEntity.Center = value + new Vector2(0f, 32f);
-                    BoundingCollection.Center = value + new Vector2(0f, 60f);
+                    BoundingInteraction.Center = value + new Vector2(0f, 60f);
                     BoundingAggro.Center = value + new Vector2(0f, 32f);
                 }
                 else
                 {
                     BoundingHitBox.Center = value;
                     BoundingDetectEntity.Center = value;
+                    BoundingInteraction.Center = value;
                     BoundingAggro.Center = value;
                 }
             }
@@ -175,6 +177,7 @@ namespace Medicraft.Entities
         public const int Buff = 4;
         public const int ManaRestores = 5;
         public const int Debuff = 6;
+        public const int GoinCoinAdded = 7;
         public int CombatNumCase { get; set; }
 
         // Boolean
@@ -188,6 +191,7 @@ namespace Medicraft.Entities
         public bool IsKnockbackable { get; protected set; }
         public bool IsKnockback { get; set; }
         public bool IsDying { get; set; }
+        public bool IsDestroyable {  get; protected set; }
         public bool IsDestroyed { get; set; }
         public bool IsMoving { get; set; }
         public bool IsAttacking { get; set; }
@@ -225,7 +229,6 @@ namespace Medicraft.Entities
 
             Velocity = Vector2.Zero;
             CombatNumVelocity = Vector2.Zero;
-            SpriteCycle = "default";
 
             AggroDrawEffectTimer = 0f;
             AggroTimer = 0f;
@@ -255,6 +258,7 @@ namespace Medicraft.Entities
             IsKnockbackable = true;
             IsKnockback = false;
             IsDying = false;
+            IsDestroyable = false;
             IsDestroyed = false;
             IsMoving = false;
             IsAttacking = false;
@@ -324,6 +328,7 @@ namespace Medicraft.Entities
             IsKnockbackable = entity.IsKnockbackable;
             IsKnockback = false;
             IsDying = false;
+            IsDestroyable = entity.IsDestroyable;
             IsDestroyed = false;
             IsMoving = false;
             IsAttacking = false;
@@ -344,6 +349,8 @@ namespace Medicraft.Entities
         public virtual void DrawShadow(SpriteBatch spriteBatch, Texture2D shadowTexture) { }
         public virtual void Destroy()
         {
+            if (IsDestroyable) return;
+
             IsDestroyed = true;
         }
 
@@ -423,7 +430,7 @@ namespace Medicraft.Entities
             BaseATK = ATK = (float)(charData.ATK + ((level - 1) * 2));
             BaseMaxHP = MaxHP = HP = (float)(charData.HP + ((level - 1) * (charData.HP * 0.1)));
             BaseMaxMana = MaxMana = Mana = (float)(100f + ((level - 1) * (100f * 0.05)));
-            BaseManaRegenRate = ManaRegenRate = baseManaRegenRate;
+            BaseManaRegenRate = ManaRegenRate = InitManaRegenRate;
             BaseDEF = DEF = (float)charData.DEF_Percent;
             BaseCrit = Crit = (float)charData.Crit_Percent;
             BaseCritDMG = CritDMG = (float)charData.CritDMG_Percent;
@@ -886,7 +893,9 @@ namespace Medicraft.Entities
             var isPlayerDetected = BoundingDetectEntity.Intersects(PlayerManager.Instance.Player.BoundingHitBox);
 
             var isCompanionDetected = false;
-            if (PlayerManager.Instance.Companions.Count != 0 && !PlayerManager.Instance.IsCompanionDead)
+            if (PlayerManager.Instance.Companions.Count != 0 
+                && !PlayerManager.Instance.IsCompanionDead
+                && PlayerManager.Instance.IsCompanionSummoned)
             {
                 var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
 
@@ -1302,6 +1311,26 @@ namespace Medicraft.Entities
 
                     PlaySoundEffect(Sound.Debuff1);
                     break;
+
+                case GoinCoinAdded:
+                    CombatLogs.Add(new CombatNumberData
+                    {
+                        Actor = ActorName,
+                        Action = CombatNumberData.ActionType.Collecting,
+                        Value = combatText,
+                        EffectName = effectName,
+                        IsEffectPlayed = false,
+                        ElapsedTime = 0,
+                        Velocity = combatNumVelocity,
+                        OffSet = Vector2.Zero,
+                        Color = Color.Gold,
+                        StrokeColor = Color.Black,
+                        Size = 1.75f,
+                        StrokeSize = 1,
+                        AlphaColor = 1f,
+                        Scaling = 0f
+                    });
+                    break;
             }
         }
 
@@ -1344,22 +1373,18 @@ namespace Medicraft.Entities
                             break;
 
                         case CombatNumberData.ActionType.Recovery:
-                            log.DrawStringPosition = new Vector2(Position.X - ((textSize.Width * 2.1f) / 2.2f)
+                            log.DrawStringPosition = new Vector2(Position.X - ((textSize.Width * 2.1f) / 2.05f)
                                 , Position.Y - (log.Velocity.Y)) - offSet;
                             break;
 
                         case CombatNumberData.ActionType.Missed:
-                            log.DrawStringPosition = new Vector2(Position.X - ((textSize.Width * 1.5f) / 2.2f)
-                                , Position.Y - (log.Velocity.Y)) - offSet;
-                            break;
-
                         case CombatNumberData.ActionType.Buff:
-                            log.DrawStringPosition = new Vector2(Position.X - ((textSize.Width * 1.5f) / 2.2f)
+                        case CombatNumberData.ActionType.Debuff:
+                            log.DrawStringPosition = new Vector2(Position.X - ((textSize.Width * 1.5f) / 2.25f)
                                 , Position.Y - (log.Velocity.Y)) - offSet;
                             break;
-
-                        case CombatNumberData.ActionType.Debuff:
-                            log.DrawStringPosition = new Vector2(Position.X - ((textSize.Width * 1.5f) / 2.2f)
+                        case CombatNumberData.ActionType.Collecting:
+                            log.DrawStringPosition = new Vector2(Position.X - ((textSize.Width * 1.75f) / 2.375f)
                                 , Position.Y - (log.Velocity.Y)) - offSet;
                             break;
                     }

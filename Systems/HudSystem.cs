@@ -1,7 +1,9 @@
 ﻿using Medicraft.Data.Models;
+using Medicraft.GameObjects;
 using Medicraft.Systems.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Sprites;
@@ -12,18 +14,24 @@ namespace Medicraft.Systems
 {
     public class HUDSystem
     {
-        private Vector2 _topLeftCorner;
-        private readonly float _insufficientTime = 3f;
-        private float _insufficientTimer;
         public static float _deltaSeconds;
 
-        private bool _nextFeed;
+        private Vector2 _topLeftCorner;
+        
+        private readonly float _insufficientTime = 3f;
+        private float _insufficientTimer;
+
+        private bool _isShowMapName = true;
+        private readonly float _showMapNameTime = 7f;
+        private float _showMapNameTimer = 0;
+        private static float _alphaScale = 0;
+
+        private bool _nextFeed = false;
 
         private readonly AnimatedSprite _spriteItemPack = new(Instance.ItemsPackSprites);         
             
         public HUDSystem()
         {
-            _nextFeed = false;
             _insufficientTimer = _insufficientTime;
         }
 
@@ -37,7 +45,7 @@ namespace Medicraft.Systems
             {
                 Instance.DisplayFeedTime -= _deltaSeconds;
 
-                if (GameGlobals.Instance.DisplayFeedTime <= 0)
+                if (Instance.DisplayFeedTime <= 0)
                 {
                     _nextFeed = true;
                     Instance.DisplayFeedTime = Instance.MaximumDisplayFeedTime;
@@ -45,7 +53,7 @@ namespace Medicraft.Systems
                 else _nextFeed = false;
             }
 
-            // Check for a notification 
+            // Check for a notification InsufficientSign
             if (Instance.ShowInsufficientSign)
             {
                 _insufficientTimer -= _deltaSeconds;
@@ -54,6 +62,34 @@ namespace Medicraft.Systems
                 {
                     Instance.ShowInsufficientSign = false;
                     _insufficientTimer = _insufficientTime;
+                }
+            }
+
+            // Check for showing Map name
+            if (Instance.ShowMapNameSign)
+            {
+                if (_isShowMapName)
+                {
+                    _showMapNameTimer += _deltaSeconds;
+
+                    if (_alphaScale < 1f && _showMapNameTimer >= 2f)
+                        _alphaScale += _deltaSeconds * 0.5f;
+
+                    if (_showMapNameTimer >= _showMapNameTime)
+                        _isShowMapName = false;
+                }
+                else
+                {
+                    _showMapNameTimer -= _deltaSeconds;
+
+                    if (_alphaScale > 0f && _showMapNameTimer <= _showMapNameTime - 2f)
+                        _alphaScale -= _deltaSeconds;
+
+                    if (_showMapNameTimer <= 0f)
+                    {
+                        _isShowMapName = true;
+                        Instance.ShowMapNameSign = false;
+                    }
                 }
             }
         }
@@ -85,8 +121,9 @@ namespace Medicraft.Systems
                 // Draw Press F Sign
                 DrawInteractionSigh(spriteBatch);
 
-                // Draw Insufficient Sign
+                // Draw Sign Show
                 DrawInsufficientSign(spriteBatch);
+                DrawMapNameSign(spriteBatch);
 
                 // Draw Feed Items
                 DrawCollectedItem(spriteBatch);
@@ -226,41 +263,91 @@ namespace Medicraft.Systems
             // GoldCoin
             var goldCoinTexture = GetGuiTexture(GuiTextureName.gold_coin);
             var goldCoinText = $" {InventoryManager.Instance.GoldCoin}";
-            var goldWidth = goldCoinTexture.Width + font.MeasureString(goldCoinText).Width;
+            var goldCoinTextSize = font.MeasureString(goldCoinText);
+            var hudGoldCoinSize = new Vector2(
+                (goldCoinTexture.Width * 0.8f) + goldCoinTextSize.Width,
+                goldCoinTexture.Height * 0.8f);
 
             switch (UIManager.Instance.CurrentUI)
             {
                 case UIManager.PlayScreen:
                     // Draw Gold Coin
                     spriteBatch.Draw(goldCoinTexture
-                            , new Vector2(720 - (goldWidth / 2), 40) + topLeftCornerPos, null
-                            , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
+                            , new Vector2(
+                                720 - (hudGoldCoinSize.X / 2),
+                                80 - (hudGoldCoinSize.Y / 2)) + topLeftCornerPos, null
+                            , Color.White, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0f);
 
                     DrawTextWithStroke(spriteBatch, font, goldCoinText
-                        , new Vector2(720 - (goldWidth / 2) + 32f, 40) + topLeftCornerPos
-                        , Color.Wheat, 1f, Color.Black, 2);
+                        , new Vector2(
+                            720 - (hudGoldCoinSize.X / 2) + 32f,
+                            80 - (goldCoinTextSize.Height / 2)) + topLeftCornerPos
+                        , Color.Gold, 1f, Color.Black, 2);
 
                     // Selected Slot
                     var selectedSlot = Instance.CurrentHotbarSelect;
                     spriteBatch.Draw(GetGuiTexture(GuiTextureName.selected_slot)
                         , new Vector2(511f + (52 * selectedSlot), 820f) + Instance.TopLeftCornerPos, null
                         , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+                    // C
+                    {
+                        var text = "C";
+                        var textSize = font.MeasureString(text);
+
+                        var positionText = new Vector2(
+                            1113 - (textSize.Width * 1.1f / 2),
+                            122 - (textSize.Height * 1.1f / 2)) + topLeftCornerPos;
+
+                        DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
+                            , text, positionText, Color.White, 1.1f, Color.Black, 2);
+                    }
+
+                    // I
+                    {
+                        var text = "I";
+                        var textSize = font.MeasureString(text);
+
+                        var positionText = new Vector2(
+                            1234 - (textSize.Width * 1.1f / 2),
+                            122 - (textSize.Height * 1.1f / 2)) + topLeftCornerPos;
+
+                        DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
+                            , text, positionText, Color.White, 1.1f, Color.Black, 2);
+                    }
+
+                    // Esc
+                    {
+                        var text = "Esc";
+                        var textSize = font.MeasureString(text);
+
+                        var positionText = new Vector2(
+                            1357 - (textSize.Width * 1.1f / 2),
+                            122 - (textSize.Height * 1.1f / 2)) + topLeftCornerPos;
+
+                        DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
+                            , text, positionText, Color.White, 1.1f, Color.Black, 2);
+                    }
                     break;
 
                 case UIManager.InventoryPanel:
                     // Draw Gold Coin
                     spriteBatch.Draw(goldCoinTexture
-                            , new Vector2(720 - (goldWidth / 2), 40) + topLeftCornerPos, null
-                            , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
+                            , new Vector2(
+                                720 - (hudGoldCoinSize.X / 2),
+                                80 - (hudGoldCoinSize.Y / 2)) + topLeftCornerPos, null
+                            , Color.White, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0f);
 
                     DrawTextWithStroke(spriteBatch, font, goldCoinText
-                        , new Vector2(720 - (goldWidth / 2) + 32f, 40) + topLeftCornerPos
-                        , Color.Wheat, 1f, Color.Black, 2);
+                        , new Vector2(
+                            720 - (hudGoldCoinSize.X / 2) + 32f,
+                            80 - (goldCoinTextSize.Height / 2)) + topLeftCornerPos
+                        , Color.Gold, 1f, Color.Black, 2);
                     break;
 
                 case UIManager.InspectPanel:
                     // Character Sprite
-                    if (GameGlobals.Instance.IsOpenInspectPanel && UIManager.Instance.IsCharacterTabSelected
+                    if (Instance.IsOpenInspectPanel && UIManager.Instance.IsCharacterTabSelected
                         && !UIManager.Instance.IsShowConfirmBox)
                     {
                         var charSprite = UIManager.Instance.CharacterSprite;
@@ -656,11 +743,57 @@ namespace Medicraft.Systems
 
         private void DrawInteractionSigh(SpriteBatch spriteBatch)
         {
-            if (Instance.IsDetectedGameObject)
+            var position = new Vector2(1055f, 560f);
+
+            if (PlayerManager.Instance.IsDetectedObject)
             {
-                spriteBatch.Draw(GetGuiTexture(GuiTextureName.press_f)
-                    , new Vector2(1055f, 560f) + _topLeftCorner, null
-                    , Color.White, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
+                Texture2D texture = null;
+
+                switch (PlayerManager.Instance.DetectedObject.ObjectType)
+                {
+                    case GameObject.GameObjectType.Item:
+                    case GameObject.GameObjectType.QuestItem:
+                        texture = GetGuiTexture(GuiTextureName.press_collecting);
+                        break;
+
+                    case GameObject.GameObjectType.CraftingTable:
+                    case GameObject.GameObjectType.SavingTable:
+                    case GameObject.GameObjectType.WarpPoint:
+                        texture = GetGuiTexture(GuiTextureName.press_interacting);
+                        break;
+                }
+
+                spriteBatch.Draw(texture
+                    , position + _topLeftCorner, null
+                    , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+                var text = "F";
+                var textSize = Instance.FontTA8BitBold.MeasureString(text);
+
+                var positionText = new Vector2(
+                    (position.X + texture.Width * 0.5f) - (textSize.Width * 1.25f / 2),
+                    (position.Y + texture.Height * 1.25f) - (textSize.Height * 1.25f / 2)) + _topLeftCorner;
+
+                DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
+                    , text, positionText, Color.White, 1.25f, Color.Black, 2);
+            }
+            else if (PlayerManager.Instance.IsDetectedInteractableMob)
+            {
+                Texture2D texture = GetGuiTexture(GuiTextureName.press_interacting);
+
+                spriteBatch.Draw(texture
+                    , position + _topLeftCorner, null
+                    , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+                var text = "F";
+                var textSize = Instance.FontTA8BitBold.MeasureString(text);
+
+                var positionText = new Vector2(
+                    (position.X + texture.Width * 0.5f) - (textSize.Width * 1.25f / 2),
+                    (position.Y + texture.Height * 1.25f) - (textSize.Height * 1.25f / 2)) + _topLeftCorner;
+
+                DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
+                    , text, positionText, Color.White, 1.25f, Color.Black, 2);
             }
         }
 
@@ -670,8 +803,38 @@ namespace Medicraft.Systems
             {
                 spriteBatch.Draw(GetGuiTexture(GuiTextureName.insufficient)
                     , PlayerManager.Instance.Player.Position
-                    + new Vector2(25, -((PlayerManager.Instance.Player.Sprite.TextureRegion.Height / 2) + 25))
+                        + new Vector2(25, -((PlayerManager.Instance.Player.Sprite.TextureRegion.Height / 2) + 25))
                     , null, Color.White, 0f, Vector2.Zero, 0.40f, SpriteEffects.None, 0f);
+            }
+        }
+
+        private static void DrawMapNameSign(SpriteBatch spriteBatch)
+        {
+            if (Instance.ShowMapNameSign)
+            {
+                var topLeftCornerPos = Instance.TopLeftCornerPos;
+
+                Texture2D texture = Instance.CaseMapNameSign switch
+                {
+                    1 => GetGuiTexture(GuiTextureName.battlezone_map_sign),
+                    _ => GetGuiTexture(GuiTextureName.safezone_map_sign),
+                };
+
+                var position = new Vector2(439, 125);
+
+                spriteBatch.Draw(texture
+                    , position + topLeftCornerPos
+                    , null, Color.White * _alphaScale, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+                var text = Instance.MapNameSign;
+                var textSize = Instance.FontTA8BitBold.MeasureString(text);
+
+                var positionText = new Vector2(
+                    (position.X + texture.Width / 2) - (textSize.Width * 1.5f / 2),
+                    (position.Y + texture.Height / 1.35f) - (textSize.Height * 1.5f / 2)) + topLeftCornerPos;
+
+                DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
+                    , text, positionText, Color.White * _alphaScale, 1.5f, Color.Black * _alphaScale, 2);
             }
         }
 
@@ -822,7 +985,16 @@ namespace Medicraft.Systems
             Instance.ShowInsufficientSign = true;
         }
 
-        public static void AddFeedItem(int referId, int amount)
+        public static void ShowMapNameSign(int caseNumber, string mapName)
+        {
+            Instance.ShowMapNameSign = true;
+
+            Instance.CaseMapNameSign = caseNumber;
+
+            Instance.MapNameSign = mapName;
+        }
+
+        public static void AddFeedCollectedItem(int referId, int amount)
         {
             Instance.CollectedItemFeed.Add(new InventoryItemData() {
                 ItemId = referId,

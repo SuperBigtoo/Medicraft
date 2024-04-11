@@ -49,7 +49,7 @@ namespace GeonBit.UI.Entities
         Point _prevSize = Point.Zero;
 
         // list of paragraphs used to show the values
-        List<Paragraph> _paragraphs = new List<Paragraph>();
+        public List<Paragraph> Paragraphs { get; protected set; } = new List<Paragraph>();
 
         // scrollbar to scroll through the list
         VerticalScrollbar _scrollbar;
@@ -116,15 +116,15 @@ namespace GeonBit.UI.Entities
         public SerializableDictionary<int, bool> LockedItems = new SerializableDictionary<int, bool>();
 
         // list of values
-        List<string> _valuesList = new List<string>();
+        public List<string> ValuesList { get; protected set; } = new List<string>();
 
         /// <summary>
         /// Get / set all items.
         /// </summary>
         public string[] Items
         {
-            get { return _valuesList.ToArray(); }
-            set { _valuesList.Clear(); _valuesList.AddRange(value);  OnListChanged(); }
+            get { return ValuesList.ToArray(); }
+            set { ValuesList.Clear(); ValuesList.AddRange(value);  OnListChanged(); }
         }
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace GeonBit.UI.Entities
             }
 
             // make sure selected index is valid
-            if (SelectedIndex >= _valuesList.Count)
+            if (SelectedIndex >= ValuesList.Count)
             {
                 Unselect();
             }
@@ -213,9 +213,9 @@ namespace GeonBit.UI.Entities
         /// <param name="newValue">New value to set.</param>
         public void ChangeItem(int index, string newValue)
         {
-            if (_valuesList[index] != newValue)
+            if (ValuesList[index] != newValue)
             {
-                _valuesList[index] = newValue;
+                ValuesList[index] = newValue;
                 OnListChanged();
             }
         }
@@ -236,12 +236,12 @@ namespace GeonBit.UI.Entities
 
             // find and change value
             bool didChange = false;
-            for (var i = 0; i < _valuesList.Count; ++i)
+            for (var i = 0; i < ValuesList.Count; ++i)
             {
-                if (_valuesList[i] == oldValue)
+                if (ValuesList[i] == oldValue)
                 {
                     didChange = true;
-                    _valuesList[i] = newValue;
+                    ValuesList[i] = newValue;
                     if (onlyFirst) { break; }
                 }
             }
@@ -300,7 +300,7 @@ namespace GeonBit.UI.Entities
         public void SetIcon(string texturePath, string itemText)
         {
             var index = 0;
-            foreach (var item in _valuesList)
+            foreach (var item in ValuesList)
             {
                 if (item == itemText)
                 {
@@ -314,7 +314,7 @@ namespace GeonBit.UI.Entities
         public void SetIcon(Texture2D texture, string itemText)
         {
             var index = 0;
-            foreach (var item in _valuesList)
+            foreach (var item in ValuesList)
             {
                 if (item == itemText)
                 {
@@ -332,7 +332,7 @@ namespace GeonBit.UI.Entities
         public void AddItem(string value)
         {
             if (MaxItems != 0 && Count >= MaxItems) { return; }
-            _valuesList.Add(value);
+            ValuesList.Add(value);
             OnListChanged();
         }
 
@@ -345,7 +345,7 @@ namespace GeonBit.UI.Entities
         public void AddItem(string value, int index)
         {
             if (MaxItems != 0 && Count >= MaxItems) { return; }
-            _valuesList.Insert(index, value);
+            ValuesList.Insert(index, value);
             OnListChanged();
         }
         
@@ -355,7 +355,7 @@ namespace GeonBit.UI.Entities
         /// <param name="value">Value to remove.</param>
         public void RemoveItem(string value)
         {
-            _valuesList.Remove(value);
+            ValuesList.Remove(value);
             OnListChanged();
         }
 
@@ -365,7 +365,7 @@ namespace GeonBit.UI.Entities
         /// <param name="index">Index of the item to remove.</param>
         public void RemoveItem(int index)
         {
-            _valuesList.RemoveAt(index);
+            ValuesList.RemoveAt(index);
             OnListChanged();
         }
 
@@ -374,7 +374,7 @@ namespace GeonBit.UI.Entities
         /// </summary>
         public void ClearItems()
         {
-            _valuesList.Clear();
+            ValuesList.Clear();
             OnListChanged();
         }
 
@@ -383,7 +383,7 @@ namespace GeonBit.UI.Entities
         /// </summary>
         public int Count
         {
-            get { return _valuesList.Count; }
+            get { return ValuesList.Count; }
         }
 
         /// <summary>
@@ -391,7 +391,7 @@ namespace GeonBit.UI.Entities
         /// </summary>
         public bool Empty
         {
-            get { return _valuesList.Count == 0; }
+            get { return ValuesList.Count == 0; }
         }
 
         /// <summary>
@@ -409,23 +409,23 @@ namespace GeonBit.UI.Entities
         public void MatchHeightToList()
         {
             // no items? nothing to do
-            if (_valuesList.Count == 0) return;
+            if (ValuesList.Count == 0) return;
 
             // if there are no initialized paragraphs, build them
-            if (_paragraphs.Count == 0)
+            if (Paragraphs.Count == 0)
             {
                 // calling resize will build paragraphs list
                 OnResize();
 
                 // if still no paragraphs were created, skip
-                if (_paragraphs.Count == 0)
+                if (Paragraphs.Count == 0)
                 {
                     return;
                 }
             }
 
             // get height of a single paragraph and calculate size from it
-            var height = _valuesList.Count * (_paragraphs[0].GetCharacterActualSize().Y / GlobalScale + _paragraphs[0].SpaceAfter.Y) + Padding.Y * 2;
+            var height = ValuesList.Count * (Paragraphs[0].GetCharacterActualSize().Y / GlobalScale + Paragraphs[0].SpaceAfter.Y) + Padding.Y * 2;
             Size = new Vector2(Size.X, height);
         }
 
@@ -447,7 +447,7 @@ namespace GeonBit.UI.Entities
         {
             if (_scrollbar != null && _scrollbar.Visible)
             {
-                _scrollbar.Value = _valuesList.Count;
+                _scrollbar.Value = ValuesList.Count;
             }
         }
 
@@ -503,7 +503,7 @@ namespace GeonBit.UI.Entities
             ClearChildren();
 
             // remove previous paragraphs list
-            _paragraphs.Clear();
+            Paragraphs.Clear();
 
             // make sure destination rect is up-to-date
             UpdateDestinationRects();
@@ -533,7 +533,7 @@ namespace GeonBit.UI.Entities
                 OnCreatedListParagraph(paragraph);
 
                 // add to paragraphs list
-                _paragraphs.Add(paragraph);
+                Paragraphs.Add(paragraph);
 
                 // add callback to selection
                 paragraph.OnClick += (Entity entity) =>
@@ -552,22 +552,22 @@ namespace GeonBit.UI.Entities
                 paragraph.UpdateDestinationRects();
 
                 // if out of list bounderies remove this paragraph and stop
-                if ((paragraph.GetActualDestRect().Bottom > _destRect.Bottom - _scaledPadding.Y) || i > _valuesList.Count)
+                if ((paragraph.GetActualDestRect().Bottom > _destRect.Bottom - _scaledPadding.Y) || i > ValuesList.Count)
                 {
                     RemoveChild(paragraph);
-                    _paragraphs.Remove(paragraph);
+                    Paragraphs.Remove(paragraph);
                     break;
                 }
             }
 
             // add scrollbar last, but only if needed
-            if (_paragraphs.Count > 0 && _paragraphs.Count < _valuesList.Count)
+            if (Paragraphs.Count > 0 && Paragraphs.Count < ValuesList.Count)
             {
                 // add scrollbar to list
                 AddChild(_scrollbar, false);
 
                 // calc max scroll value
-                _scrollbar.Max = (_valuesList.Count - _paragraphs.Count);
+                _scrollbar.Max = (ValuesList.Count - Paragraphs.Count);
                 if (_scrollbar.Max < 2) { _scrollbar.Max = 2; }
                 _scrollbar.StepsCount = (uint)(_scrollbar.Max - _scrollbar.Min);
                 _scrollbar.Visible = true;
@@ -679,7 +679,7 @@ namespace GeonBit.UI.Entities
             }
 
             // find index in list
-            _index = _valuesList.IndexOf(value);
+            _index = ValuesList.IndexOf(value);
             if (_index == -1)
             {
                 _value = null;
@@ -753,14 +753,14 @@ namespace GeonBit.UI.Entities
             }
 
             // make sure legal index
-            if ((index >= -1) && (index >= _valuesList.Count))
+            if ((index >= -1) && (index >= ValuesList.Count))
             {
                 if (UserInterface.Active.SilentSoftErrors) { return; }
                 throw new Exceptions.NotFoundException("Invalid list index to select!");
             }
 
             // pick based on index
-            _value = index > -1 ? _valuesList[index] : null;
+            _value = index > -1 ? ValuesList[index] : null;
             _index = index;
 
             // call on-value-change event
@@ -793,21 +793,24 @@ namespace GeonBit.UI.Entities
             base.DrawEntity(spriteBatch, phase);
 
             // update paragraphs list values
-            for (int i = 0; i < _paragraphs.Count; ++i)
+            for (int i = 0; i < Paragraphs.Count; ++i)
             {
                 // get item index
                 int item_index = i + (int)_scrollbar.Value;
 
                 // get current paragraph
-                var par = _paragraphs[i];
+                var par = Paragraphs[i];
 
                 // if we got an item to show for this paragraph index:
-                if (item_index < _valuesList.Count)
+                if (item_index < ValuesList.Count)
                 {
                     // set paragraph text, make visible, and remove background.
-                    par.Text = _valuesList[item_index];
+                    par.Text = ValuesList[item_index];
                     par.BackgroundColor.A = 0;
                     par.Visible = true;
+
+                    // set color if it has ex.(Red) in string
+                    SetColorFromText(par);
 
                     // set icon
                     if (IconsPathTexture.Count != 0)
@@ -904,14 +907,44 @@ namespace GeonBit.UI.Entities
             if (selectedParagraphIndex != -1)
             {
                 int i = selectedParagraphIndex - _scrollbar.Value;
-                if (i >= 0 && i < _paragraphs.Count)
+                if (i >= 0 && i < Paragraphs.Count)
                 {
                     // add background to selected paragraph
-                    Paragraph paragraph = _paragraphs[i];
+                    Paragraph paragraph = Paragraphs[i];
                     paragraph.GetActualDestRect();
                     paragraph.State = EntityState.MouseDown;
                     paragraph.BackgroundColor = GetActiveStyle("SelectedHighlightColor").asColor;
                 }
+            }
+        }
+
+        public void SetColorFromText(Paragraph par)
+        {
+            if (par.Text.Contains("((Red))"))
+            {
+                var text = par.Text;
+                text = text.Replace("((Red))", "").Trim();
+
+                par.Text = text;
+                par.FillColor = Color.Red;
+            }
+            
+            if (par.Text.Contains("((Lime))"))
+            {
+                var text = par.Text;
+                text = text.Replace("((Lime))", "").Trim();
+
+                par.Text = text;
+                par.FillColor = Color.Lime;
+            }
+
+            if (par.Text.Contains("((White))"))
+            {
+                var text = par.Text;
+                text = text.Replace("((White))", "").Trim();
+
+                par.Text = text;
+                par.FillColor = Color.White;
             }
         }
     }

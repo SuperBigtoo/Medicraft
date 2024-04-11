@@ -109,7 +109,7 @@ namespace Medicraft.Systems.Managers
                 });
             }
 
-            HUDSystem.AddFeedItem(itemId, quantity);
+            HUDSystem.AddFeedCollectedItem(itemId, quantity);
             UIManager.Instance.RefreshHotbar();
 
             if (itemId >= 0 && itemId <= 141)
@@ -119,11 +119,58 @@ namespace Medicraft.Systems.Managers
             else PlaySoundEffect(Sound.PickUpGeneric);
         }
 
-        public void AddGoldCoin(int goldCoin)
+        public void AddGoldCoin(string actorName, int goldCoin)
         {
             GoldCoin += goldCoin;
 
+            PlayerManager.Instance.Player.CombatNumCase = Entity.GoinCoinAdded;
+            var combatNumVelocity = PlayerManager.Instance.Player.SetCombatNumDirection();
+            PlayerManager.Instance.Player.AddCombatLogNumbers(actorName,
+                $"+{goldCoin}",
+                PlayerManager.Instance.Player.CombatNumCase,
+                combatNumVelocity,
+                null);
+
             PlaySoundEffect(Sound.PickUpCoin);
+        }
+
+        public void ReduceGoldCoin(int goldCoin)
+        {
+            GoldCoin -= goldCoin;
+
+            PlaySoundEffect(Sound.ItemPurchase1);
+        }
+
+        public bool RemoveItem(int keyIndex, InventoryItemData item, int quantity)
+        {
+            if (quantity > item.Count) return false;
+
+            item.Count -= quantity;
+            if (item.Count == 0)
+            {
+                InventoryBag.Remove(keyIndex);
+                return true;
+            }
+
+            return false;
+        }
+
+        public void PurchaseItem(int itemId, int quantity, int pricePerUnit)
+        {           
+            var totalCost = quantity * pricePerUnit;
+
+            ReduceGoldCoin(totalCost);
+
+            AddItem(itemId, quantity);
+        }
+
+        public void SellItem(int keyIndex, InventoryItemData item, int quantity)
+        {
+            var totalGoldCoin = quantity * item.GetSellingPrice();
+
+            RemoveItem(keyIndex, item, quantity);
+
+            AddGoldCoin($"Selling Item: {item.GetName()} x {quantity}", totalGoldCoin);
         }
 
         public bool UseItem(Entity entityTarget, int keyIndex, InventoryItemData item)
@@ -137,15 +184,14 @@ namespace Medicraft.Systems.Managers
                     // Activate the effect, if activated den delete 1 and if its 0 so remove item from inventory
                     if (itemEffect.Activate(entityTarget))
                     {
-                        item.Count--;
-
-                        if (item.Count == 0) InventoryBag.Remove(keyIndex);
+                        // Remove item
+                        var isItemRemoved = RemoveItem(keyIndex, item, 1);
 
                         // refresh display item after selectedItem has been use
                         UIManager.Instance.RefreshInvenrotyItem(true);
 
                         PlaySoundEffect(Sound.UseItem);
-                        return true;
+                        return isItemRemoved;
                     }
                     break;
 

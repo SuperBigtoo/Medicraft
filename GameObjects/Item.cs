@@ -10,6 +10,8 @@ namespace Medicraft.GameObjects
 {
     public class Item : GameObject
     {
+        public int QuantityDrop { get; protected set; }
+
         public Item(AnimatedSprite sprite, ObjectData objectData, Vector2 scale)
         {
             Sprite = sprite;
@@ -18,9 +20,7 @@ namespace Medicraft.GameObjects
             InitializeObjectData();
 
             IsVisible = objectData.IsVisible;
-            IsRespawnable = objectData.IsRespawnable;
-            IsCollected = false;
-            IsDestroyed = false;        
+            IsRespawnable = objectData.IsRespawnable;    
 
             var position = new Vector2((float)objectData.Position[0], (float)objectData.Position[1]);
             Transform = new Transform2
@@ -30,13 +30,13 @@ namespace Medicraft.GameObjects
                 Position = position
             };
 
-            BoundingCollection = new CircleF(Position, 16);
+            BoundingInteraction = new CircleF(Position, 16);
 
-            ParticleEffect = DrawEffectSystem.SetItemParticleEffect(Position);
+            ParticleEffect = DrawEffectSystem.SetItemParticleEffect(ObjectType, Position);
 
             QuantityDrop = GameGlobals.RandomItemQuantityDrop(ReferId);
 
-            Sprite.Depth = 0.1f;
+            Sprite.Depth = InitDepth;
             Sprite.Play(ReferId.ToString());
         }
 
@@ -45,7 +45,7 @@ namespace Medicraft.GameObjects
             Sprite = item.Sprite;
             ObjectData = item.ObjectData;                 
 
-            Type = item.Type;
+            ObjectType = item.ObjectType;
             Id = item.Id;
             ReferId= item.ReferId;
             Name = item.Name;
@@ -55,6 +55,7 @@ namespace Medicraft.GameObjects
             IsRespawnable = item.IsRespawnable;
             IsCollected = false;
             IsDestroyed = false;
+            IsDetected = false;
 
             Transform = new Transform2
             {
@@ -63,13 +64,13 @@ namespace Medicraft.GameObjects
                 Position = item.Transform.Position
             };
 
-            BoundingCollection = item.BoundingCollection;
+            BoundingInteraction = item.BoundingInteraction;
 
             ParticleEffect = item.ParticleEffect;
 
             QuantityDrop = GameGlobals.RandomItemQuantityDrop(ReferId);
 
-            Sprite.Depth = 0.1f;
+            Sprite.Depth = InitDepth;
             Sprite.Play(ReferId.ToString());
         }
 
@@ -81,7 +82,17 @@ namespace Medicraft.GameObjects
             var playerDepth = PlayerManager.Instance.Player.GetDepth();
 
             UpdateLayerDepth(layerDepth, playerDepth);
+            UpdateParticleLayerDepth(deltaSeconds, Sprite.Depth);
 
+            // When Detected
+            if (IsDetected)
+            {
+                SignSprite.Depth = InitDepth;
+                SignSprite.Play("collecting_0");
+                SignSprite.Update(deltaSeconds);
+            }
+
+            // When Collected
             if (IsCollected)
             {
                 InventoryManager.Instance.AddItem(ReferId, QuantityDrop);
@@ -100,15 +111,8 @@ namespace Medicraft.GameObjects
             var shadowTexture = GameGlobals.GetShadowTexture(GameGlobals.ShadowTextureName.shadow_1);
 
             DrawShadow(spriteBatch, shadowTexture);
-        }
 
-        public override void DrawShadow(SpriteBatch spriteBatch, Texture2D shadowTexture)
-        {
-            var positionPlayer = new Vector2(Position.X - (shadowTexture.Width * 0.5f) / 2.2f
-                , Position.Y + (shadowTexture.Height * 0.5f) / 2f);
-
-            spriteBatch.Draw(shadowTexture, positionPlayer, null, Color.White
-                , 0f, Vector2.Zero, 0.5f, SpriteEffects.None, Sprite.Depth + 0.0000025f);
+            DrawDetectedSign(spriteBatch);
         }
 
         public override object Clone()

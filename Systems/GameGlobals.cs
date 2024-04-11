@@ -30,8 +30,8 @@ namespace Medicraft.Systems
         public Keys OpenInventoryKey { private set; get; } = Keys.I;
         public Keys OpenCraftingKey { private set; get; } = Keys.O;
         public Keys OpenInspectKey { private set; get; } = Keys.C;
-        public Keys DebugModeKey { private set; get; } = Keys.B;
-        public Keys ShowPathFindingKey { private set; get; } = Keys.V;
+        public Keys DebugModeKey { private set; get; } = Keys.F1;
+        public Keys ShowPathFindingKey { private set; get; } = Keys.F2;
         public Keys RecallCompanionKey { private set; get; } = Keys.R;
         public MouseState PrevMouse { set; get; }
         public MouseState CurMouse { set; get; }
@@ -49,8 +49,10 @@ namespace Medicraft.Systems
         public bool SwitchDebugMode { set; get; }
         public bool IsDebugMode { set; get; }
         public bool SwitchShowPath { set; get; }
-        public bool IsDetectedGameObject { set; get; }
         public bool ShowInsufficientSign { set; get; }
+        public bool ShowMapNameSign { set; get; }
+        public int CaseMapNameSign { set; get; }
+        public string MapNameSign { set; get; }
         public bool IsFullScreen { set; get; }
         public bool IsShowPath { set; get; }  
         public bool IsEnteringBossFight { set; get; }
@@ -138,6 +140,14 @@ namespace Medicraft.Systems
         public bool SwitchOpenSaveMenuPanel { set; get; }
         public bool IsOpenSaveMenuPanel { set; get; }
 
+        // Trading Menu
+        public bool SwitchOpenTradingPanel { set; get; }
+        public bool IsOpenTradingPanel { set; get; }
+
+        // Warp Menu
+        public bool SwitchOpenWarpPointPanel { set; get; }
+        public bool IsOpenWarpPointPanel { set; get; }
+
         // Game Datas
         public PlayerData InitialPlayerData { private set; get; }
         public SpriteSheet PlayerSpriteSheet { private set; get; }
@@ -159,11 +169,14 @@ namespace Medicraft.Systems
         public List<ChapterItemData> ChapterItemDatas { private set; get; }
         public List<SkillDescriptionData> SkillDescriptionDatas { private set; get; }
         public List<MedicineDescriptionData> MedicineDescriptionDatas { private set; get; }
-        public SpriteSheet ItemsPackSprites { private set; get; }                   // All Item sprite
+        public SpriteSheet ItemsPackSprites { private set; get; }   // All Item sprite
+        public SpriteSheet UIBooksIconHUD { private set; get; }
+        public SpriteSheet WarpPointSprite { private set; get; }
         public SpriteSheet HitSpriteEffect { private set; get; }
         public SpriteSheet HitSkillSpriteEffect { private set; get; }
         public SpriteSheet BossSpriteEffect { private set; get; }
         public SpriteSheet StatesSpriteEffect { private set; get; }
+        public SpriteSheet MagicCircleEffect { private set; get; }
         public List<Texture2D> ShadowTextures { private set; get; }
         public List<SoundEffect> SoundEffects { private set; get; }
         public List<string> BackgroundMusicPath { private set; get; }
@@ -205,6 +218,8 @@ namespace Medicraft.Systems
         {
             logo_wakeup,
             press_f,
+            press_interacting,
+            press_collecting,
             insufficient,
             health_bar,
             healthpoints_gauge,
@@ -245,7 +260,15 @@ namespace Medicraft.Systems
             arrow_right,
             arrow_left,
             arrow_up,
-            arrow_down
+            arrow_down,
+            Inspect_Menu,
+            Inventory_Menu,
+            Pause_Menu,
+            dialog_tmp,
+            book_desciption,
+            safezone_map_sign,
+            battlezone_map_sign,
+            Alpha_BG
         }
         private readonly Dictionary<GuiTextureName, int> guiTextureIndices = [];
 
@@ -416,14 +439,22 @@ namespace Medicraft.Systems
             SwitchOpenSaveMenuPanel = false;
             IsOpenSaveMenuPanel = false;
 
+            // trading menu
+            SwitchOpenTradingPanel = false;
+            IsOpenTradingPanel = false;
+
+            // warp menu
+            SwitchOpenWarpPointPanel = false;
+            IsOpenWarpPointPanel = false;
+
             SwitchDebugMode = false;
             IsDebugMode = false;
 
             SwitchShowPath = false;
             IsShowPath = false;
 
-            IsDetectedGameObject = false;
             ShowInsufficientSign = false;
+            ShowMapNameSign = false;
 
             // sound & music
             SoundEffectVolume = 0.5f;
@@ -531,9 +562,6 @@ namespace Medicraft.Systems
         {
             //System.Diagnostics.Debug.WriteLine($"totalFrames : {}");
 
-            // test
-            //Test();
-
             // Load GameSave and Config
             var gameSave = JsonFileManager.LoadGameSave(GameSavePath);
             if (gameSave.Count != 0)
@@ -566,8 +594,9 @@ namespace Medicraft.Systems
             // Violet = 0
             CompanionSpriteSheet.Add(Content.Load<SpriteSheet>("entity/companions/violet/violet_animation.sf", new JsonContentLoader()));
 
-            // Load Item Sprite Sheet
+            // Load Object Sprite Sheet
             ItemsPackSprites = Content.Load<SpriteSheet>("item/itemspack_spritesheet.sf", new JsonContentLoader());
+            WarpPointSprite = Content.Load<SpriteSheet>("entity/objects/Warp_Point_animation.sf", new JsonContentLoader());
 
             // Load Item Data
             ItemsDatas = Content.Load<List<ItemData>>("data/models/items");
@@ -591,6 +620,7 @@ namespace Medicraft.Systems
             HitSkillSpriteEffect = Content.Load<SpriteSheet>("effect/hit_skill_effect.sf", new JsonContentLoader());
             BossSpriteEffect = Content.Load<SpriteSheet>("effect/boss_effect.sf", new JsonContentLoader());
             StatesSpriteEffect = Content.Load<SpriteSheet>("effect/states.sf", new JsonContentLoader());
+            MagicCircleEffect = Content.Load<SpriteSheet>("effect/Magic_Circle.sf", new JsonContentLoader());
 
             // Load Bitmap Font          
             FontSensation = Content.Load<BitmapFont>("fonts/Sensation/Sensation");
@@ -604,41 +634,43 @@ namespace Medicraft.Systems
             ShadowTextures.Add(Content.Load<Texture2D>("effect/shadow_2"));
 
             // Load GUI Textures
-            GuiTextures.Add(Content.Load<Texture2D>("gui/logo_wakeup"));                        // 0. logo_wakeup
-            GuiTextures.Add(Content.Load<Texture2D>("gui/press_f"));                            // 1. press_f
-            GuiTextures.Add(Content.Load<Texture2D>("gui/insufficient"));                       // 2. insufficient
-            GuiTextures.Add(Content.Load<Texture2D>("gui/health_bar"));                         // 3. health_bar
-            GuiTextures.Add(Content.Load<Texture2D>("gui/healthpoints_gauge"));                 // 4. healthpoints_gauge
-            GuiTextures.Add(Content.Load<Texture2D>("gui/mana_gauge"));                         // 5. mana_gauge
-            GuiTextures.Add(Content.Load<Texture2D>("gui/health_bar_companion"));               // 6. health_bar_companion
-            GuiTextures.Add(Content.Load<Texture2D>("gui/healthpoints_gauge_companion"));       // 7. healthpoints_gauge_companion
-            GuiTextures.Add(Content.Load<Texture2D>("gui/profile/noah_profile"));               // 8. noah_profile
-            GuiTextures.Add(Content.Load<Texture2D>("gui/profile/violet_profile"));             // 9. violet_profile
-            GuiTextures.Add(Content.Load<Texture2D>("gui/health_bar_boss"));                    // 10. health_bar_boss
-            GuiTextures.Add(Content.Load<Texture2D>("gui/boss_gauge"));                         // 11. boss_gauge
-            GuiTextures.Add(Content.Load<Texture2D>("gui/item_bar"));                           // 12. item_bar
-            GuiTextures.Add(Content.Load<Texture2D>("gui/item_slot"));                          // 13. item_slot
-            GuiTextures.Add(Content.Load<Texture2D>("gui/gold_coin"));                          // 14. gold_coin
-            GuiTextures.Add(Content.Load<Texture2D>("gui/heart"));                              // 15. heart
-            GuiTextures.Add(Content.Load<Texture2D>("gui/selected_slot"));                      // 16. selected_slot
-            GuiTextures.Add(Content.Load<Texture2D>("gui/health_bar_alpha"));                   // 17. health_bar_alpha
-            GuiTextures.Add(Content.Load<Texture2D>("gui/health_bar_companion_alpha"));         // 18. health_bar_companion_alpha
-            GuiTextures.Add(Content.Load<Texture2D>("gui/health_bar_boss_alpha"));              // 19. health_bar_boss_alpha
-            GuiTextures.Add(Content.Load<Texture2D>("gui/quest_stamp"));                        // 20. quest_stamp
-            GuiTextures.Add(Content.Load<Texture2D>("gui/level_gui"));                          // 21. level_gui
-            GuiTextures.Add(Content.Load<Texture2D>("gui/exp_bar"));                            // 22. exp_bar
-            GuiTextures.Add(Content.Load<Texture2D>("gui/exp_bar_alpha"));                      // 23. exp_bar_alpha
-            GuiTextures.Add(Content.Load<Texture2D>("gui/exp_gauge"));                          // 24. exp_gauge
-            GuiTextures.Add(Content.Load<Texture2D>("gui/burst_skill_gui"));                    // 25. burst_skill_gui
-            GuiTextures.Add(Content.Load<Texture2D>("gui/burst_skill_gui_alpha"));              // 26. burst_skill_gui_alpha
-            GuiTextures.Add(Content.Load<Texture2D>("gui/ability/burst_skill_pic"));            // 27. burst_skill_pic
-            GuiTextures.Add(Content.Load<Texture2D>("gui/normal_skill_gui"));                   // 28. normal_skill_gui
-            GuiTextures.Add(Content.Load<Texture2D>("gui/normal_skill_gui_alpha"));             // 29. normal_skill_gui_alpha
-            GuiTextures.Add(Content.Load<Texture2D>("gui/ability/normal_skill_pic"));           // 30. normal_skill_pic
-            GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_gui"));                  // 31. passive_skill_gui
-            GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_gui_alpha"));            // 32. passive_skill_gui_alpha
-            GuiTextures.Add(Content.Load<Texture2D>("gui/ability/passive_skill_pic"));          // 33. passive_skill_pic
-            GuiTextures.Add(Content.Load<Texture2D>("gui/transition_texture"));                 // 34. transition_texture
+            GuiTextures.Add(Content.Load<Texture2D>("gui/logo_wakeup"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/press_f"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/press_interacting"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/press_collecting"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/insufficient"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/health_bar"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/healthpoints_gauge"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/mana_gauge"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/health_bar_companion"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/healthpoints_gauge_companion"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/profile/noah_profile"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/profile/violet_profile"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/health_bar_boss"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/boss_gauge"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/item_bar"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/item_slot"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/gold_coin"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/heart"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/selected_slot"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/health_bar_alpha"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/health_bar_companion_alpha"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/health_bar_boss_alpha"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/quest_stamp"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/level_gui"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/exp_bar"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/exp_bar_alpha"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/exp_gauge"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/burst_skill_gui"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/burst_skill_gui_alpha"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/ability/burst_skill_pic"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/normal_skill_gui"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/normal_skill_gui_alpha"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/ability/normal_skill_pic"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_gui"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/passive_skill_gui_alpha"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/ability/passive_skill_pic"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/transition_texture"));                 
             GuiTextures.Add(Content.Load<Texture2D>("gui/game_name"));
             GuiTextures.Add(Content.Load<Texture2D>("gui/skill_point"));
             GuiTextures.Add(Content.Load<Texture2D>("gui/mob_gauge"));
@@ -647,6 +679,17 @@ namespace Medicraft.Systems
             GuiTextures.Add(Content.Load<Texture2D>("gui/arrow_left"));
             GuiTextures.Add(Content.Load<Texture2D>("gui/arrow_up"));
             GuiTextures.Add(Content.Load<Texture2D>("gui/arrow_down"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/Inspect_Menu"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/Inventory_Menu"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/Pause_Menu"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/dialog_tmp"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/book_desciption"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/safezone_map_sign"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/battlezone_map_sign"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/Alpha_BG"));
+
+            // UI_books_icon_hud
+            UIBooksIconHUD = Content.Load<SpriteSheet>("gui/UI_books_icon_hud.sf", new JsonContentLoader());
 
             // Load Ability Textures
             AbilityTextures.Add(Content.Load<Texture2D>("gui/ability/Ability_I've_got_the_Scent!"));
@@ -791,6 +834,9 @@ namespace Medicraft.Systems
 
             // Initialize GUI Panels
             UIManager.Instance.InitializeThemeAndUI(BuiltinTheme);
+
+            // test
+            //Test();
         }
 
         // Count the number of enums
@@ -1129,30 +1175,52 @@ namespace Medicraft.Systems
 
         private void Test()
         {
-            int ROAD = 1;
-            int BLOCK = 2;
-            int WALL = 3;
 
-            int[,] originalMap = new int[,]
+            foreach (var item in CraftingRecipeDatas)
             {
-                { ROAD, ROAD, ROAD, ROAD, ROAD },
-                { ROAD, WALL, ROAD, ROAD, ROAD },
-                { ROAD, ROAD, BLOCK, ROAD, ROAD },
-                { ROAD, ROAD, ROAD, WALL, ROAD },
-                { ROAD, ROAD, ROAD, ROAD, ROAD },
-            };
+                var name = item.ResultItemName;
+                var count = item.ResultQuantity;
 
-            int centerRow = 2;
-            int centerCol = 2;
-            int radius = 1;
+                var totalCost = 0;
+                var finalPrice = 0;
 
-            int[,] clonedMap = new AStar().CloneMapAroundCenter(originalMap, centerRow, centerCol, radius);
+                foreach (var ingre in item.Ingredients)
+                {
+                    var ingreData = ItemsDatas.FirstOrDefault(e => e.ItemId.Equals(ingre.ItemId));
+                    var ingreCost = ingreData.SellingPrice * ingre.Quantity;
 
-            System.Diagnostics.Debug.WriteLine("originalMap");
-            PrintMap(originalMap);
-            System.Diagnostics.Debug.WriteLine("");
-            System.Diagnostics.Debug.WriteLine("clonedMap");
-            PrintMap(clonedMap);
+                    totalCost += ingreCost;
+                }
+
+                finalPrice = totalCost / count;
+
+                System.Diagnostics.Debug.WriteLine($"{name} : {finalPrice}");
+            }
+
+            //int ROAD = 1;
+            //int BLOCK = 2;
+            //int WALL = 3;
+
+            //int[,] originalMap = new int[,]
+            //{
+            //    { ROAD, ROAD, ROAD, ROAD, ROAD },
+            //    { ROAD, WALL, ROAD, ROAD, ROAD },
+            //    { ROAD, ROAD, BLOCK, ROAD, ROAD },
+            //    { ROAD, ROAD, ROAD, WALL, ROAD },
+            //    { ROAD, ROAD, ROAD, ROAD, ROAD },
+            //};
+
+            //int centerRow = 2;
+            //int centerCol = 2;
+            //int radius = 1;
+
+            //int[,] clonedMap = new AStar().CloneMapAroundCenter(originalMap, centerRow, centerCol, radius);
+
+            //System.Diagnostics.Debug.WriteLine("originalMap");
+            //PrintMap(originalMap);
+            //System.Diagnostics.Debug.WriteLine("");
+            //System.Diagnostics.Debug.WriteLine("clonedMap");
+            //PrintMap(clonedMap);
         }
 
         public static GameGlobals Instance

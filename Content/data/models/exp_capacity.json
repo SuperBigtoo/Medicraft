@@ -1,122 +1,122 @@
 [
     {
         "Level": 1,
-        "MaxCap": 100
+        "MaxCap": 240
     },
     {
         "Level": 2,
-        "MaxCap": 200
+        "MaxCap": 540
     },
     {
         "Level": 3,
-        "MaxCap": 300
+        "MaxCap": 840
     },
     {
         "Level": 4,
-        "MaxCap": 400
+        "MaxCap": 1260
     },
     {
         "Level": 5,
-        "MaxCap": 500
+        "MaxCap": 1680
     },
     {
         "Level": 6,
-        "MaxCap": 650
+        "MaxCap": 1800
     },
     {
         "Level": 7,
-        "MaxCap": 750
+        "MaxCap": 2250
     },
     {
         "Level": 8,
-        "MaxCap": 850
-    },
-    {
-        "Level": 9,
-        "MaxCap": 950
-    },
-    {
-        "Level": 10,
-        "MaxCap": 1050
-    },
-    {
-        "Level": 11,
-        "MaxCap": 1200
-    },
-    {
-        "Level": 12,
-        "MaxCap": 1300
-    },
-    {
-        "Level": 13,
-        "MaxCap": 1400
-    },
-    {
-        "Level": 14,
-        "MaxCap": 1500
-    },
-    {
-        "Level": 15,
-        "MaxCap": 1600
-    },
-    {
-        "Level": 16,
-        "MaxCap": 1750
-    },
-    {
-        "Level": 17,
-        "MaxCap": 1850
-    },
-    {
-        "Level": 18,
-        "MaxCap": 1950
-    },
-    {
-        "Level": 19,
-        "MaxCap": 2050
-    },
-    {
-        "Level": 20,
-        "MaxCap": 2150
-    },
-    {
-        "Level": 21,
-        "MaxCap": 2300
-    },
-    {
-        "Level": 22,
-        "MaxCap": 2400
-    },
-    {
-        "Level": 23,
-        "MaxCap": 2500
-    },
-    {
-        "Level": 24,
-        "MaxCap": 2600
-    },
-    {
-        "Level": 25,
         "MaxCap": 2700
     },
     {
+        "Level": 9,
+        "MaxCap": 3250
+    },
+    {
+        "Level": 10,
+        "MaxCap": 3800
+    },
+    {
+        "Level": 11,
+        "MaxCap": 4350
+    },
+    {
+        "Level": 12,
+        "MaxCap": 4900
+    },
+    {
+        "Level": 13,
+        "MaxCap": 5500
+    },
+    {
+        "Level": 14,
+        "MaxCap": 6150
+    },
+    {
+        "Level": 15,
+        "MaxCap": 6800
+    },
+    {
+        "Level": 16,
+        "MaxCap": 7500
+    },
+    {
+        "Level": 17,
+        "MaxCap": 8200
+    },
+    {
+        "Level": 18,
+        "MaxCap": 8900
+    },
+    {
+        "Level": 19,
+        "MaxCap": 9650
+    },
+    {
+        "Level": 20,
+        "MaxCap": 10400
+    },
+    {
+        "Level": 21,
+        "MaxCap": 11200
+    },
+    {
+        "Level": 22,
+        "MaxCap": 12000
+    },
+    {
+        "Level": 23,
+        "MaxCap": 12750
+    },
+    {
+        "Level": 24,
+        "MaxCap": 13600
+    },
+    {
+        "Level": 25,
+        "MaxCap": 14450
+    },
+    {
         "Level": 26,
-        "MaxCap": 2280
+        "MaxCap": 15250
     },
     {
         "Level": 27,
-        "MaxCap": 2950
+        "MaxCap": 16100
     },
     {
         "Level": 28,
-        "MaxCap": 3050
+        "MaxCap": 16950
     },
     {
         "Level": 29,
-        "MaxCap": 3150
+        "MaxCap": 18150
     },
     {
         "Level": 30,
-        "MaxCap": 3250
+        "MaxCap": 19400
     }
 ]

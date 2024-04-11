@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="32" tileheight="32" infinite="0" nextlayerid="21" nextobjectid="71">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="32" tileheight="32" infinite="0" nextlayerid="21" nextobjectid="76">
  <tileset firstgid="1" name="rpg_maker_vx_rtp_tileset_by_telles0808" tilewidth="32" tileheight="32" tilecount="8064" columns="64">
   <image source="rpg_maker_vx_rtp_tileset_by_telles0808.png" width="2048" height="4032"/>
   <tile id="4028">
@@ -785,6 +785,21 @@
    <point/>
   </object>
   <object id="68" name="cat_route_7" x="916" y="1000">
+   <point/>
+  </object>
+  <object id="71" name="SavingTable" x="1329.33" y="973.333">
+   <point/>
+  </object>
+  <object id="72" name="Crafting_Equipment" x="1117" y="992">
+   <point/>
+  </object>
+  <object id="73" name="Crafting_Medicine" x="1216" y="1137">
+   <point/>
+  </object>
+  <object id="74" name="Crafting_Food" x="1440" y="1122">
+   <point/>
+  </object>
+  <object id="75" name="BlackSmite" x="1441" y="1268">
    <point/>
   </object>
  </objectgroup>

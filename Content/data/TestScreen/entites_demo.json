@@ -1,75 +1,93 @@
 [
-  {
-    "Id": 0,
-    "CharId": 200,
-    "Level": 1,
-    "Name": "Slime",
-    "PathFindingType": 0,
-    "NodeCycleTime": 10,
-    "PartrolArea": "zone_1",
-    "RoutePoint": [
-      [ 736, 544 ],
-      [ 448, 545 ],
-      [ 590, 392 ],
-      [ 588, 478 ]
-    ],
-    "AggroTime": 5,
-    "Position": [ 736, 544 ]
-  },
-  {
-    "Id": 1,
-    "CharId": 200,
-    "Level": 1,
-    "Name": "Slime",
-    "PathFindingType": 1,
-    "NodeCycleTime": 10,
-    "PartrolArea": "zone_1",
-    "RoutePoint": [ [] ],
-    "AggroTime": 5,
-    "Position": [ 1096, 566 ]
-  },
-  {
-    "Id": 2,
-    "CharId": 200,
-    "Level": 1,
-    "Name": "Slime",
-    "PathFindingType": 2,
-    "NodeCycleTime": 10,
-    "PartrolArea": "zone_1",
-    "RoutePoint": [ [] ],
-    "AggroTime": 5,
-    "Position": [ 1276, 566 ]
-  },
-  {
-    "Id": 3,
-    "CharId": 100,
-    "Level": 1,
-    "Name": "Cat",
-    "PathFindingType": 0,
-    "NodeCycleTime": 10,
-    "PartrolArea": "",
-    "RoutePoint": [
-      [ 573, 1056 ],
-      [ 638, 1250 ],
-      [ 960, 1184 ],
-      [ 1273, 1272 ],
-      [ 1481, 1100 ],
-      [ 1189, 989 ],
-      [ 916, 1000 ]
-    ],
-    "AggroTime": 5,
-    "Position": [ 916, 1000 ]
-  },
-  {
-    "Id": 4,
-    "CharId": 201,
-    "Level": 1,
-    "Name": "Goblin",
-    "PathFindingType": 1,
-    "NodeCycleTime": 10,
-    "PartrolArea": "zone_2",
-    "RoutePoint": [ [] ],
-    "AggroTime": 5,
-    "Position": [ 1173, 1596 ]
-  }
+    {
+        "Id": 0,
+        "CharId": 200,
+        "Level": 1,
+        "Name": "Slime",
+        "PathFindingType": 0,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_1",
+        "RoutePoint": [
+            [ 736, 544 ],
+            [ 448, 545 ],
+            [ 590, 392 ],
+            [ 588, 478 ]
+        ],
+        "AggroTime": 5,
+        "Position": [ 736, 544 ]
+    },
+    {
+        "Id": 1,
+        "CharId": 200,
+        "Level": 1,
+        "Name": "Slime",
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_1",
+        "RoutePoint": [ [] ],
+        "AggroTime": 5,
+        "Position": [ 1096, 566 ]
+    },
+    {
+        "Id": 2,
+        "CharId": 200,
+        "Level": 1,
+        "Name": "Slime",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1276, 566 ]
+    },
+    {
+        "Id": 3,
+        "CharId": 100,
+        "Level": 1,
+        "Name": "Cat",
+        "PathFindingType": 0,
+        "NodeCycleTime": 10,
+        "PartrolArea": "",
+        "RoutePoint": [
+            [ 573, 1056 ],
+            [ 638, 1250 ],
+            [ 960, 1184 ],
+            [ 1273, 1272 ],
+            [ 1481, 1100 ],
+            [ 1189, 989 ],
+            [ 916, 1000 ]
+        ],
+        "AggroTime": 5,
+        "Position": [ 916, 1000 ]
+    },
+    {
+        "Id": 4,
+        "CharId": 201,
+        "Level": 1,
+        "Name": "Goblin",
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_2",
+        "RoutePoint": [ [] ],
+        "AggroTime": 5,
+        "Position": [ 1173, 1596 ]
+    },
+    {
+        "Id": 5,
+        "CharId": 101,
+        "Level": 1,
+        "Name": "BlackSmite",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 1441.00, 1268.00 ],
+        "TradingItemsData": [
+            {
+                "ItemId": 0
+            },
+            {
+                "ItemId": 1
+            },
+            {
+                "ItemId": 2
+            }
+        ]
+    }
 ]

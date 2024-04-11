@@ -115,15 +115,16 @@ namespace Medicraft.Entities
             BoundingHitBox = new CircleF(Position + new Vector2(0f, 32f), 42f);         // Circle for Entity to hit
             BoundingDetectEntity = new CircleF(
                 Position + new Vector2(0f, 32f), BaseBoundingDetectEntityRadius);       // Circle for check attacking
-            BoundingCollection = new CircleF(Position + new Vector2(0f, 60f), 25f);     // Circle for check interaction with GameObjects
+            BoundingInteraction = new CircleF(Position + new Vector2(0f, 60f), 32f);     // Circle for check interaction with GameObjects
             BoundingAggro = new CircleF(Position + new Vector2(0f, 32f), 150);          // Circle for check aggro enemy mobs
 
             NormalHitEffectAttacked = "hit_effect_1";
             NormalSkillEffectActivated = "hit_skill_effect_3";
             BurstSkillEffectAttacked = "hit_effect_3";
+            BurstSkillEffectActivated = "hit_skill_effect_2";
             PassiveSkillEffectActivated = "hit_skill_effect_1";
 
-            Sprite.Depth = 0.1f;
+            Sprite.Depth = InitDepth;
             Sprite.Play(SpriteCycle + "_idle");
         }
 
@@ -314,10 +315,9 @@ namespace Medicraft.Entities
             , MouseState mouseCur, MouseState mousePrev)
         {
             // Normal Hit
-            if (ScreenManager.Instance.IsScreenLoaded && !IsAttacking && !IsStunning
-                && mouseCur.LeftButton == ButtonState.Pressed
-                && mousePrev.LeftButton == ButtonState.Released
-                || !IsAttacking && keyboardCur.IsKeyDown(Keys.Space))
+            if (ScreenManager.Instance.IsScreenLoaded && (!IsAttacking && !IsStunning 
+                && !UIManager.Instance.IsQuickMenuFocus && mouseCur.LeftButton == ButtonState.Pressed
+                && mousePrev.LeftButton == ButtonState.Released || !IsAttacking && keyboardCur.IsKeyDown(Keys.Space)))
             {
                 CurrentAnimation = SpriteCycle + "_attacking_normal_hit";
                 Sprite.Play(CurrentAnimation);
@@ -364,6 +364,16 @@ namespace Medicraft.Entities
 
                 // Do burst skill & effect of Sets Item
                 BurstSkillControl(PlayerData.Abilities.BurstSkillLevel);
+
+                CombatNumCase = Buff;
+                var combatNumVelocity = SetCombatNumDirection();
+                AddCombatLogNumbers(Name,
+                    "Strike!",
+                    CombatNumCase,
+                    combatNumVelocity,
+                    BurstSkillEffectActivated);
+
+                PlaySoundEffect(Sound.frostbolt_1);
 
                 PlaySoundEffect([Sound.ColossusSmash_Impact_01, Sound.Shield_Bash_04]);
             }
@@ -950,56 +960,6 @@ namespace Medicraft.Entities
             CombatNumVelocity = numDirection * Sprite.TextureRegion.Height / 2;
 
             return CombatNumVelocity;
-        }
-
-        public bool UpSkillLevle(string skillName)
-        {
-            switch (skillName)
-            {
-                case "I've got the Scent!":
-                    if (PlayerData.Abilities.NormalSkillLevel != 10)
-                    {
-                        if (PlayerData.Abilities.NormalSkillLevel == 3 && Level < 11)
-                            return false;
-
-                        if (PlayerData.Abilities.NormalSkillLevel == 6 && Level < 21)
-                            return false;
-
-                        PlayerData.Abilities.NormalSkillLevel++;
-                        PlayerData.SkillPoint--;
-                    }
-                    return true;
-
-                case "Noah Strike":
-                    if (PlayerData.Abilities.BurstSkillLevel != 10)
-                    {
-                        if (PlayerData.Abilities.BurstSkillLevel == 3 && Level < 11)
-                            return false;
-
-                        if (PlayerData.Abilities.BurstSkillLevel == 6 && Level < 21)
-                            return false;
-
-                        PlayerData.Abilities.BurstSkillLevel++;
-                        PlayerData.SkillPoint--;
-                    }
-                    return true;
-
-                case "Survivalist":
-                    if (PlayerData.Abilities.PassiveSkillLevel != 10)
-                    {
-                        if (PlayerData.Abilities.PassiveSkillLevel == 3 && Level < 11)
-                            return false;
-
-                        if (PlayerData.Abilities.PassiveSkillLevel == 6 && Level < 21)
-                            return false;
-
-                        PlayerData.Abilities.PassiveSkillLevel++;
-                        PlayerData.SkillPoint--;
-                    }
-                    return true;
-            }
-
-            return false;
         }
 
         public float GetCurrentEXPPercentage()

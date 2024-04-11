@@ -1,7 +1,9 @@
-﻿using Medicraft.Data;
-using Medicraft.Data.Models;
+﻿using Medicraft.Data.Models;
 using Medicraft.Entities;
 using Medicraft.Entities.Companion;
+using Medicraft.Entities.Mobs;
+using Medicraft.Entities.Mobs.Friendly;
+using Medicraft.GameObjects;
 using Medicraft.Systems.PathFinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -20,7 +22,15 @@ namespace Medicraft.Systems.Managers
         public Player Player { private set; get; }
         public bool IsPlayerDead { private set; get; }
         private Song _dyingSong;
-        
+
+        // Object
+        public bool IsDetectedObject { private set; get; }
+        public GameObject DetectedObject { private set; get; }
+
+        // Mobs : Friendly
+        public bool IsDetectedInteractableMob { private set; get; }
+        public FriendlyMob DetectedInteractableMob { private set; get; }
+
         // Companions
         public List<Companion> Companions { private set; get; }
         public int CurrCompaIndex { private set; get; }
@@ -33,6 +43,7 @@ namespace Medicraft.Systems.Managers
         private static PlayerManager instance;
         private PlayerManager()
         {
+            IsDetectedObject = false;
             IsPlayerDead = false;
             _dyingSong = GameGlobals.Instance.Content.Load<Song>
                 (GetBackgroundMusicPath(Music.Gag_dead));
@@ -206,13 +217,11 @@ namespace Medicraft.Systems.Managers
                     {
                         UIManager.Instance.CurrentUI = UIManager.PlayScreen;
                         GameGlobals.Instance.IsRefreshPlayScreenUI = false;
-
                         PlaySoundEffect(Sound.Cancel1);
                     }
                     else
                     {
                         UIManager.Instance.CurrentUI = UIManager.SaveMenu;
-
                         PlaySoundEffect(Sound.Click1);
                     }
                 }
@@ -320,13 +329,11 @@ namespace Medicraft.Systems.Managers
                     {
                         UIManager.Instance.CurrentUI = UIManager.PlayScreen;
                         GameGlobals.Instance.IsRefreshPlayScreenUI = false;
-
                         PlaySoundEffect(Sound.Cancel1);
                     }
                     else
                     {
                         UIManager.Instance.CurrentUI = UIManager.CraftingPanel;
-
                         PlaySoundEffect(Sound.Click1);
                     }
                 }
@@ -354,13 +361,11 @@ namespace Medicraft.Systems.Managers
                         UIManager.Instance.CurrentUI = UIManager.PlayScreen;
                         GameGlobals.Instance.IsRefreshPlayScreenUI = false;
                         UIManager.Instance.ClearSkillDescription("Character");
-
                         PlaySoundEffect(Sound.Cancel1);
                     }
                     else
                     {
                         UIManager.Instance.CurrentUI = UIManager.InspectPanel;
-
                         PlaySoundEffect(Sound.Click1);
                     }
                 }
@@ -368,6 +373,36 @@ namespace Medicraft.Systems.Managers
                 {
                     GameGlobals.Instance.SwitchOpenInspectPanel = false;
                 }
+
+                // Open Trading Panel 
+                //if (keyboardCur.IsKeyDown(Keys.T) && !GameGlobals.Instance.SwitchOpenTradingPanel && !GameGlobals.Instance.IsOpenGUI
+                //    || (keyboardCur.IsKeyDown(Keys.T) || keyboardCur.IsKeyDown(pauseMenuKey)) && !GameGlobals.Instance.SwitchOpenTradingPanel
+                //    && GameGlobals.Instance.IsOpenGUI && UIManager.Instance.CurrentUI.Equals(UIManager.TradingPanel))
+                //{
+                //    GameGlobals.Instance.SwitchOpenTradingPanel = true;
+
+                //    // Toggle Pause PlayScreen
+                //    GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
+                //    GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
+
+                //    // Toggle IsOpenInspectPanel      
+                //    GameGlobals.Instance.IsOpenTradingPanel = false;
+                //    if (UIManager.Instance.CurrentUI.Equals(UIManager.TradingPanel))
+                //    {
+                //        UIManager.Instance.CurrentUI = UIManager.PlayScreen;
+                //        GameGlobals.Instance.IsRefreshPlayScreenUI = false;
+                //        PlaySoundEffect(Sound.Cancel1);
+                //    }
+                //    else
+                //    {
+                //        UIManager.Instance.CurrentUI = UIManager.TradingPanel;
+                //        PlaySoundEffect(Sound.Click1);
+                //    }
+                //}
+                //else if (keyboardCur.IsKeyUp(Keys.T))
+                //{
+                //    GameGlobals.Instance.SwitchOpenTradingPanel = false;
+                //}
 
                 // Select Item Bar Slot
                 if (keyboardCur.IsKeyDown(Keys.D1) && !GameGlobals.Instance.SwitchSlot_1)
@@ -656,14 +691,21 @@ namespace Medicraft.Systems.Managers
 
                 var entities = EntityManager.Instance.Entities;
                 foreach (var entity in entities.Where(e => !e.IsDestroyed))
+                {
+                    entity.IsAggro = false;
                     entity.AggroTimer = 0f;
+                }
 
                 IsPlayerDead = false;
                 Player.IsDying = false;
 
                 if (Companions.Count != 0)
                     if (!IsCompanionDead)
+                    {                     
+                        Companions[CurrCompaIndex].IsAggro = false;
+                        Companions[CurrCompaIndex].ActionTimer = 0f;
                         Companions[CurrCompaIndex].Position = Player.Position;
+                    }
 
                 if (GameGlobals.Instance.CurrentMapMusics.Count != 0)
                 {
@@ -823,88 +865,204 @@ namespace Medicraft.Systems.Managers
             }
         }
 
-        public void CheckInteraction(KeyboardState keyboardCur, KeyboardState keyboardPrev)
+        public bool UpSkillLevel(string skillName)
         {
-            GameGlobals.Instance.IsDetectedGameObject = false;
+            var normalSkillLevel = Player.PlayerData.Abilities.NormalSkillLevel;
+            var burstSkillLevel = Player.PlayerData.Abilities.BurstSkillLevel;
+            var passiveSkillLevel = Player.PlayerData.Abilities.PassiveSkillLevel;
 
-            // Check Item Dectection
-            var GameObject = ObjectManager.Instance.GameObjects;
-            foreach (var gameObject in GameObject)
+            SkillDescriptionData skillData;
+
+            switch (skillName)
             {
-                if (Player.BoundingCollection.Intersects(gameObject.BoundingCollection))
+                case "I've got the Scent!":
+                    skillData = GameGlobals.Instance.SkillDescriptionDatas.FirstOrDefault
+                        (s => s.Name.Equals(skillName) && s.Level.Equals(normalSkillLevel));
+
+                    if (normalSkillLevel != 10)
+                    {
+                        if (normalSkillLevel == 3 && Player.Level < 11)
+                            return false;
+
+                        if (normalSkillLevel == 6 && Player.Level < 21)
+                            return false;
+
+                        Player.PlayerData.Abilities.NormalSkillLevel++;
+                        Player.PlayerData.SkillPoint -= skillData.SkillPointCost;
+                        InventoryManager.Instance.ReduceGoldCoin(skillData.GoldCoinCost);
+                    }
+                    return true;
+
+                case "Noah Strike":
+                    skillData = GameGlobals.Instance.SkillDescriptionDatas.FirstOrDefault
+                        (s => s.Name.Equals(skillName) && s.Level.Equals(burstSkillLevel));
+
+                    if (burstSkillLevel != 10)
+                    {
+                        if (burstSkillLevel == 3 && Player.Level < 11)
+                            return false;
+
+                        if (burstSkillLevel == 6 && Player.Level < 21)
+                            return false;
+
+                        Player.PlayerData.Abilities.BurstSkillLevel++;
+                        Player.PlayerData.SkillPoint -= skillData.SkillPointCost;
+                        InventoryManager.Instance.ReduceGoldCoin(skillData.GoldCoinCost);
+                    }
+                    return true;
+
+                case "Survivalist":
+                    skillData = GameGlobals.Instance.SkillDescriptionDatas.FirstOrDefault
+                        (s => s.Name.Equals(skillName) && s.Level.Equals(passiveSkillLevel));
+
+                    if (passiveSkillLevel != 10)
+                    {
+                        if (passiveSkillLevel == 3 && Player.Level < 11)
+                            return false;
+
+                        if (passiveSkillLevel == 6 && Player.Level < 21)
+                            return false;
+
+                        Player.PlayerData.Abilities.PassiveSkillLevel++;
+                        Player.PlayerData.SkillPoint -= skillData.SkillPointCost;
+                        InventoryManager.Instance.ReduceGoldCoin(skillData.GoldCoinCost);
+                    }
+                    return true;
+            }
+
+            return false;
+        }
+
+        public void CheckInteraction(KeyboardState keyboardCur, KeyboardState keyboardPrev)
+        {           
+            IsDetectedObject = false;
+            IsDetectedInteractableMob = false;
+
+            // Clear IsDectected for gameObjects first
+            var gameObjects = ObjectManager.Instance.GameObjects;
+            foreach (var gameObject in gameObjects)
+            {
+                gameObject.IsDetected = false;
+            }   
+
+            // Check Dectection Object
+            foreach (var gameObject in gameObjects)
+            {
+                if (Player.BoundingInteraction.Intersects(gameObject.BoundingInteraction))
                 {
-                    GameGlobals.Instance.IsDetectedGameObject = true;
+                    IsDetectedObject = true;
+                    DetectedObject = gameObject;
+                    gameObject.IsDetected = true;
                     break;
                 }
+                else DetectedObject = null;
+            }
+
+            // Clear IsDectected for interactableMobs
+            var interactableMobs = EntityManager.Instance.Entities.Where
+                (e => e.EntityType == Entity.EntityTypes.Friendly).Cast<FriendlyMob>();
+
+            foreach (var mob in interactableMobs.Where(e => e.IsInteractable))
+            {
+                mob.IsDetected = false;
+            }
+
+            // Check Detection Interactable Mob
+            foreach (var mob in interactableMobs.Where(e => e.IsInteractable))
+            {
+                if (Player.BoundingInteraction.Intersects(mob.BoundingInteraction))
+                {
+                    IsDetectedInteractableMob = true;
+                    DetectedInteractableMob = mob;
+                    mob.IsDetected = true;
+                    break;
+                }
+                else DetectedInteractableMob = null;
             }
 
             // Check Interaction
             if (keyboardCur.IsKeyUp(Keys.F) && keyboardPrev.IsKeyDown(Keys.F))
             {
-                if (GameGlobals.Instance.IsDetectedGameObject)
+                if (IsDetectedObject && DetectedObject != null)
                 {
-                    CheckGameObject();
+                    CheckGameObject(DetectedObject);
+                }
+                else if (IsDetectedInteractableMob && DetectedInteractableMob != null)
+                {
+                    CheckFriendlyMob(DetectedInteractableMob);
                 }
             }
         }
 
-        private void CheckGameObject()
+        private void CheckGameObject(GameObject gameObject)
         {
-            foreach (var gameObject in ObjectManager.Instance.GameObjects)
+            if (Player.BoundingInteraction.Intersects(gameObject.BoundingInteraction))
             {
-                if (Player.BoundingCollection.Intersects(gameObject.BoundingCollection))
+                switch (gameObject.ObjectType)
                 {
-                    switch (gameObject.Type)
-                    {
-                        case GameObjects.GameObject.GameObjectType.QuestItem:
+                    case GameObject.GameObjectType.QuestItem:
+                        break;
 
-                        case GameObjects.GameObject.GameObjectType.Item:
-                            // Collecting Item into Player's Inventory 
-                            var itemId = gameObject.ReferId;
-                            var quantityDrop = gameObject.QuantityDrop;
+                    case GameObject.GameObjectType.Item:
+                        // Collecting Item into Player's Inventory
+                        Item item = gameObject as Item;
+                        var itemId = item.ReferId;
+                        var quantityDrop = item.QuantityDrop;
 
-                            // Check Inventory                   
-                            if (!gameObject.IsCollected
-                                && !InventoryManager.Instance.IsInventoryFull(itemId, quantityDrop))
-                            {
-                                gameObject.IsCollected = true;
-                            }
-                            else HUDSystem.ShowInsufficientSign();
-                            break;
+                        // Check Inventory                   
+                        if (!item.IsCollected
+                            && !InventoryManager.Instance.IsInventoryFull(itemId, quantityDrop))
+                        {
+                            item.IsCollected = true;
+                        }
+                        else HUDSystem.ShowInsufficientSign();
+                        break;
 
-                        case GameObjects.GameObject.GameObjectType.CraftingTable:
-                            CraftingTableDetection();
-                            break;
+                    case GameObject.GameObjectType.CraftingTable:
+                        // Open Crafting Item Panel
+                        CraftingTable craftingTable = gameObject as CraftingTable;
+                        craftingTable.OpenCraftingPanel();
+                        break;
 
-                        case GameObjects.GameObject.GameObjectType.SavingTable:
+                    case GameObject.GameObjectType.SavingTable:
+                        // Open Saving Game Panel
+                        SavingTable.OpenSavingPanel();
+                        break;
 
-                            break;
-
-                        case GameObjects.GameObject.GameObjectType.WarpPoint:
-
-                            break;
-                    }
-
-                    break;
+                    case GameObject.GameObjectType.WarpPoint:
+                        // Open WarpPoint Panel
+                        break;
                 }
             }
         }
 
-        // Crafting TBD
-        private void CraftingTableDetection()
+        private void CheckFriendlyMob(FriendlyMob friendlyMob)
         {
-            //if (GameGlobals.Instance.CraftingTableArea.Count != 0)
-            //{
-            //    var TableCraft = GameGlobals.Instance.CraftingTableArea;
-            //    foreach (var obj in TableCraft)
-            //    {
-            //        if (BoundingDetectCollisions.Intersects(obj))
-            //        {
+            if (Player.BoundingInteraction.Intersects(friendlyMob.BoundingInteraction))
+            {
+                switch (friendlyMob.MobType)
+                {
+                    case FriendlyMob.FriendlyMobType.Animal:
 
-            //            break;
-            //        }
-            //    }
-            //}
+                        break;
+
+                    case FriendlyMob.FriendlyMobType.Civilian:
+                        
+                        break;
+
+                    case FriendlyMob.FriendlyMobType.Vendor:
+                        Vendor vendorMob = friendlyMob as Vendor;
+                        vendorMob.OpenTradingPanel();
+                        break;
+
+                    case FriendlyMob.FriendlyMobType.QuestGiver:
+                        
+                        break;
+                }
+
+                // Switch interacting
+                friendlyMob.IsInteracting = !friendlyMob.IsInteracting;
+            }
         }
 
         public static PlayerManager Instance

@@ -7,7 +7,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 5 ]
+        "QuantityDropRange": [ 1, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 1,
@@ -17,7 +19,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 5 ]
+        "QuantityDropRange": [ 1, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 2,
@@ -27,7 +31,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 5 ]
+        "QuantityDropRange": [ 1, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 3,
@@ -37,7 +43,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 7, 15 ]
+        "QuantityDropRange": [ 7, 15 ],
+        "BuyingPrice": 10,
+        "SellingPrice": 8
     },
     {
         "ItemId": 4,
@@ -47,7 +55,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 7, 14 ]
+        "QuantityDropRange": [ 7, 14 ],
+        "BuyingPrice": 10,
+        "SellingPrice": 8
     },
     {
         "ItemId": 5,
@@ -57,7 +67,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 5 ]
+        "QuantityDropRange": [ 1, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 6,
@@ -67,7 +79,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 5 ]
+        "QuantityDropRange": [ 1, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 7,
@@ -77,7 +91,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 5 ]
+        "QuantityDropRange": [ 1, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 8,
@@ -87,7 +103,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 5 ]
+        "QuantityDropRange": [ 1, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 9,
@@ -97,7 +115,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 10,
@@ -107,7 +127,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 11,
@@ -117,7 +139,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 12,
@@ -127,7 +151,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 13,
@@ -137,7 +163,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 5 ]
+        "QuantityDropRange": [ 2, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 14,
@@ -147,7 +175,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 2 ]
+        "QuantityDropRange": [ 1, 2 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 15,
@@ -157,7 +187,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 16,
@@ -167,7 +199,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 6 ]
+        "QuantityDropRange": [ 3, 6 ],
+        "BuyingPrice": 25,
+        "SellingPrice": 20
     },
     {
         "ItemId": 17,
@@ -177,7 +211,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 18,
@@ -187,7 +223,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 19,
@@ -197,7 +235,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 20,
@@ -207,7 +247,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 2 ]
+        "QuantityDropRange": [ 1, 2 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 21,
@@ -217,7 +259,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 22,
@@ -227,7 +271,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 23,
@@ -237,7 +283,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 6, 12 ]
+        "QuantityDropRange": [ 6, 12 ],
+        "BuyingPrice": 12,
+        "SellingPrice": 8
     },
     {
         "ItemId": 24,
@@ -247,7 +295,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 25,
@@ -257,7 +307,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 26,
@@ -267,7 +319,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 27,
@@ -277,7 +331,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 28,
@@ -287,7 +343,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 29,
@@ -297,7 +355,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 30,
@@ -307,7 +367,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 31,
@@ -317,7 +379,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 32,
@@ -327,7 +391,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 7, 14 ]
+        "QuantityDropRange": [ 7, 14 ],
+        "BuyingPrice": 10,
+        "SellingPrice": 8
     },
     {
         "ItemId": 33,
@@ -337,7 +403,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 34,
@@ -347,7 +415,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 10, 20 ]
+        "QuantityDropRange": [ 10, 20 ],
+        "BuyingPrice": 7,
+        "SellingPrice": 5
     },
     {
         "ItemId": 35,
@@ -357,7 +427,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 6 ]
+        "QuantityDropRange": [ 3, 6 ],
+        "BuyingPrice": 25,
+        "SellingPrice": 20
     },
     {
         "ItemId": 36,
@@ -367,7 +439,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 37,
@@ -377,7 +451,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 6, 12 ]
+        "QuantityDropRange": [ 6, 12 ],
+        "BuyingPrice": 12,
+        "SellingPrice": 8
     },
     {
         "ItemId": 38,
@@ -387,7 +463,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 39,
@@ -397,7 +475,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 40,
@@ -407,7 +487,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 2 ]
+        "QuantityDropRange": [ 1, 2 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 41,
@@ -417,7 +499,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 42,
@@ -427,7 +511,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 43,
@@ -437,7 +523,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 5, 10 ]
+        "QuantityDropRange": [ 5, 10 ],
+        "BuyingPrice": 15,
+        "SellingPrice": 12
     },
     {
         "ItemId": 44,
@@ -447,7 +535,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 45,
@@ -457,7 +547,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 1 ]
+        "QuantityDropRange": [ 1, 1 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 46,
@@ -467,7 +559,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 47,
@@ -477,7 +571,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 1 ]
+        "QuantityDropRange": [ 1, 1 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 48,
@@ -487,7 +583,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 1 ]
+        "QuantityDropRange": [ 1, 1 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 49,
@@ -497,7 +595,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 1 ]
+        "QuantityDropRange": [ 1, 1 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 50,
@@ -507,7 +607,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 51,
@@ -517,7 +619,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 52,
@@ -527,7 +631,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 4, 8 ]
+        "QuantityDropRange": [ 4, 8 ],
+        "BuyingPrice": 18,
+        "SellingPrice": 14
     },
     {
         "ItemId": 53,
@@ -537,7 +643,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 6 ]
+        "QuantityDropRange": [ 3, 6 ],
+        "BuyingPrice": 25,
+        "SellingPrice": 20
     },
     {
         "ItemId": 54,
@@ -547,7 +655,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 55,
@@ -557,7 +667,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 56,
@@ -567,7 +679,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 4, 9 ]
+        "QuantityDropRange": [ 4, 9 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 57,
@@ -577,7 +691,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 58,
@@ -587,7 +703,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 2 ]
+        "QuantityDropRange": [ 1, 2 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 59,
@@ -597,7 +715,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 60,
@@ -607,7 +727,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 2 ]
+        "QuantityDropRange": [ 1, 2 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 61,
@@ -617,7 +739,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 62,
@@ -627,7 +751,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 63,
@@ -637,7 +763,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 64,
@@ -647,7 +775,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 6, 13 ]
+        "QuantityDropRange": [ 6, 13 ],
+        "BuyingPrice": 12,
+        "SellingPrice": 8
     },
     {
         "ItemId": 65,
@@ -657,7 +787,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 4, 8 ]
+        "QuantityDropRange": [ 4, 8 ],
+        "BuyingPrice": 18,
+        "SellingPrice": 15
     },
     {
         "ItemId": 66,
@@ -667,7 +799,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 4, 8 ]
+        "QuantityDropRange": [ 4, 8 ],
+        "BuyingPrice": 18,
+        "SellingPrice": 15
     },
     {
         "ItemId": 67,
@@ -677,7 +811,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 2 ]
+        "QuantityDropRange": [ 1, 2 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 68,
@@ -687,7 +823,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 69,
@@ -697,7 +835,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 70,
@@ -707,7 +847,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 71,
@@ -717,7 +859,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 72,
@@ -727,7 +871,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 73,
@@ -737,7 +883,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 74,
@@ -747,7 +895,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 75,
@@ -757,7 +907,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 76,
@@ -767,7 +919,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 77,
@@ -777,7 +931,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 78,
@@ -787,7 +943,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 79,
@@ -797,7 +955,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 80,
@@ -807,7 +967,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 6, 12 ]
+        "QuantityDropRange": [ 6, 12 ],
+        "BuyingPrice": 12,
+        "SellingPrice": 8
     },
     {
         "ItemId": 81,
@@ -817,7 +979,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 7, 14 ]
+        "QuantityDropRange": [ 7, 14 ],
+        "BuyingPrice": 10,
+        "SellingPrice": 8
     },
     {
         "ItemId": 82,
@@ -827,7 +991,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 83,
@@ -837,7 +1003,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 6, 13 ]
+        "QuantityDropRange": [ 6, 13 ],
+        "BuyingPrice": 12,
+        "SellingPrice": 8
     },
     {
         "ItemId": 84,
@@ -847,7 +1015,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 6 ]
+        "QuantityDropRange": [ 3, 6 ],
+        "BuyingPrice": 25,
+        "SellingPrice": 20
     },
     {
         "ItemId": 85,
@@ -857,7 +1027,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 4, 9 ]
+        "QuantityDropRange": [ 4, 9 ],
+        "BuyingPrice": 16,
+        "SellingPrice": 14
     },
     {
         "ItemId": 86,
@@ -867,7 +1039,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 5, 11 ]
+        "QuantityDropRange": [ 5, 11 ],
+        "BuyingPrice": 13,
+        "SellingPrice": 10
     },
     {
         "ItemId": 87,
@@ -877,7 +1051,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 5, 10 ]
+        "QuantityDropRange": [ 5, 10 ],
+        "BuyingPrice": 15,
+        "SellingPrice": 12
     },
     {
         "ItemId": 88,
@@ -887,7 +1063,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 5, 10 ]
+        "QuantityDropRange": [ 5, 10 ],
+        "BuyingPrice": 15,
+        "SellingPrice": 12
     },
     {
         "ItemId": 89,
@@ -897,7 +1075,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 5, 10 ]
+        "QuantityDropRange": [ 5, 10 ],
+        "BuyingPrice": 15,
+        "SellingPrice": 12
     },
     {
         "ItemId": 90,
@@ -907,7 +1087,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 5, 10 ]
+        "QuantityDropRange": [ 5, 10 ],
+        "BuyingPrice": 15,
+        "SellingPrice": 12
     },
     {
         "ItemId": 91,
@@ -917,7 +1099,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 6 ]
+        "QuantityDropRange": [ 3, 6 ],
+        "BuyingPrice": 25,
+        "SellingPrice": 20
     },
     {
         "ItemId": 92,
@@ -927,7 +1111,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 93,
@@ -937,7 +1123,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 94,
@@ -947,7 +1135,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 95,
@@ -957,7 +1147,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 6, 12 ]
+        "QuantityDropRange": [ 6, 12 ],
+        "BuyingPrice": 12,
+        "SellingPrice": 8
     },
     {
         "ItemId": 96,
@@ -967,7 +1159,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 4, 8 ]
+        "QuantityDropRange": [ 4, 8 ],
+        "BuyingPrice": 18,
+        "SellingPrice": 15
     },
     {
         "ItemId": 97,
@@ -977,7 +1171,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 5, 10 ]
+        "QuantityDropRange": [ 5, 10 ],
+        "BuyingPrice": 15,
+        "SellingPrice": 12
     },
     {
         "ItemId": 98,
@@ -987,7 +1183,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 99,
@@ -997,7 +1195,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 100,
@@ -1007,7 +1207,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 101,
@@ -1017,7 +1219,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 102,
@@ -1027,7 +1231,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 103,
@@ -1037,7 +1243,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 104,
@@ -1047,7 +1255,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 105,
@@ -1057,7 +1267,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 6 ]
+        "QuantityDropRange": [ 3, 6 ],
+        "BuyingPrice": 25,
+        "SellingPrice": 20
     },
     {
         "ItemId": 106,
@@ -1067,7 +1279,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 107,
@@ -1077,7 +1291,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 108,
@@ -1087,7 +1303,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 109,
@@ -1097,7 +1315,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 110,
@@ -1107,7 +1327,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 111,
@@ -1117,7 +1339,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 112,
@@ -1127,7 +1351,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 6 ]
+        "QuantityDropRange": [ 3, 6 ],
+        "BuyingPrice": 25,
+        "SellingPrice": 20
     },
     {
         "ItemId": 113,
@@ -1137,7 +1363,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 114,
@@ -1147,7 +1375,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 115,
@@ -1157,7 +1387,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 116,
@@ -1167,7 +1399,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 117,
@@ -1177,7 +1411,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 118,
@@ -1187,7 +1423,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 2 ]
+        "QuantityDropRange": [ 1, 2 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 119,
@@ -1197,7 +1435,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 2 ]
+        "QuantityDropRange": [ 1, 2 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 120,
@@ -1207,7 +1447,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 121,
@@ -1217,7 +1459,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 42
     },
     {
         "ItemId": 122,
@@ -1227,7 +1471,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 123,
@@ -1237,7 +1483,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 124,
@@ -1247,7 +1495,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 125,
@@ -1257,7 +1507,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 126,
@@ -1267,7 +1519,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 127,
@@ -1277,7 +1531,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 128,
@@ -1287,7 +1543,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 129,
@@ -1297,7 +1555,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 130,
@@ -1307,7 +1567,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 2, 4 ]
+        "QuantityDropRange": [ 2, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 131,
@@ -1317,7 +1579,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 2 ]
+        "QuantityDropRange": [ 1, 2 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 132,
@@ -1327,7 +1591,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 2 ]
+        "QuantityDropRange": [ 1, 2 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 133,
@@ -1337,7 +1603,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 1 ]
+        "QuantityDropRange": [ 1, 1 ],
+        "BuyingPrice": 70,
+        "SellingPrice": 56
     },
     {
         "ItemId": 134,
@@ -1347,7 +1615,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 135,
@@ -1357,7 +1627,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 6 ]
+        "QuantityDropRange": [ 3, 6 ],
+        "BuyingPrice": 25,
+        "SellingPrice": 20
     },
     {
         "ItemId": 136,
@@ -1367,7 +1639,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 2 ]
+        "QuantityDropRange": [ 1, 2 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 137,
@@ -1377,7 +1651,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 138,
@@ -1387,7 +1663,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 139,
@@ -1397,7 +1675,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 140,
@@ -1407,7 +1687,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 3, 5 ]
+        "QuantityDropRange": [ 3, 5 ],
+        "BuyingPrice": 30,
+        "SellingPrice": 24
     },
     {
         "ItemId": 141,
@@ -1417,7 +1699,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 1 ]
+        "QuantityDropRange": [ 1, 1 ],
+        "BuyingPrice": 70,
+        "SellingPrice": 56
     },
     {
         "ItemId": 142,
@@ -1427,7 +1711,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 4 ]
+        "QuantityDropRange": [ 1, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 143,
@@ -1437,7 +1723,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 4 ]
+        "QuantityDropRange": [ 1, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 144,
@@ -1447,7 +1735,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 4 ]
+        "QuantityDropRange": [ 1, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 145,
@@ -1457,7 +1747,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 4 ]
+        "QuantityDropRange": [ 1, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 146,
@@ -1467,7 +1759,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 4 ]
+        "QuantityDropRange": [ 1, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 147,
@@ -1477,7 +1771,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 4 ]
+        "QuantityDropRange": [ 1, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 148,
@@ -1487,7 +1783,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 4 ]
+        "QuantityDropRange": [ 1, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 149,
@@ -1497,7 +1795,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 150,
@@ -1507,7 +1807,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 151,
@@ -1517,7 +1819,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 152,
@@ -1527,7 +1831,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 153,
@@ -1537,7 +1843,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 80,
+        "SellingPrice": 64
     },
     {
         "ItemId": 154,
@@ -1547,7 +1855,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 100,
+        "SellingPrice": 80
     },
     {
         "ItemId": 155,
@@ -1557,7 +1867,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 2 ]
+        "QuantityDropRange": [ 1, 2 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 156,
@@ -1567,7 +1879,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 4 ]
+        "QuantityDropRange": [ 1, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 157,
@@ -1577,7 +1891,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 2 ]
+        "QuantityDropRange": [ 1, 2 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 158,
@@ -1587,7 +1903,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 4 ]
+        "QuantityDropRange": [ 1, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 159,
@@ -1597,7 +1915,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 2 ]
+        "QuantityDropRange": [ 1, 2 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 160,
@@ -1607,7 +1927,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 2 ]
+        "QuantityDropRange": [ 1, 2 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 161,
@@ -1617,7 +1939,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 2 ]
+        "QuantityDropRange": [ 1, 2 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 162,
@@ -1627,7 +1951,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 4 ]
+        "QuantityDropRange": [ 1, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 163,
@@ -1637,7 +1963,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 2 ]
+        "QuantityDropRange": [ 1, 2 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 164,
@@ -1647,7 +1975,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 4 ]
+        "QuantityDropRange": [ 1, 4 ],
+        "BuyingPrice": 35,
+        "SellingPrice": 28
     },
     {
         "ItemId": 200,
@@ -1657,7 +1987,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 607
     },
     {
         "ItemId": 201,
@@ -1667,7 +1999,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 606
     },
     {
         "ItemId": 202,
@@ -1677,7 +2011,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 569
     },
     {
         "ItemId": 203,
@@ -1687,7 +2023,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 416
     },
     {
         "ItemId": 204,
@@ -1697,7 +2035,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 290
     },
     {
         "ItemId": 205,
@@ -1707,7 +2047,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 635
     },
     {
         "ItemId": 206,
@@ -1717,7 +2059,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 401
     },
     {
         "ItemId": 207,
@@ -1727,7 +2071,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 585
     },
     {
         "ItemId": 208,
@@ -1737,7 +2083,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 609
     },
     {
         "ItemId": 209,
@@ -1747,7 +2095,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 650
     },
     {
         "ItemId": 210,
@@ -1757,7 +2107,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 598
     },
     {
         "ItemId": 211,
@@ -1767,7 +2119,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 350
     },
     {
         "ItemId": 212,
@@ -1777,7 +2131,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 460
     },
     {
         "ItemId": 213,
@@ -1787,7 +2143,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 646
     },
     {
         "ItemId": 214,
@@ -1797,7 +2155,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 200
     },
     {
         "ItemId": 215,
@@ -1807,7 +2167,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 316
     },
     {
         "ItemId": 216,
@@ -1817,7 +2179,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 332
     },
     {
         "ItemId": 217,
@@ -1827,7 +2191,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 385
     },
     {
         "ItemId": 218,
@@ -1837,7 +2203,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 535
     },
     {
         "ItemId": 219,
@@ -1847,7 +2215,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 445
     },
     {
         "ItemId": 220,
@@ -1857,7 +2227,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 555
     },
     {
         "ItemId": 221,
@@ -1867,7 +2239,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 635
     },
     {
         "ItemId": 222,
@@ -1877,7 +2251,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 786
     },
     {
         "ItemId": 223,
@@ -1887,7 +2263,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 539
     },
     {
         "ItemId": 224,
@@ -1897,7 +2275,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 417
     },
     {
         "ItemId": 225,
@@ -1907,7 +2287,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 392
     },
     {
         "ItemId": 226,
@@ -1917,7 +2299,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 421
     },
     {
         "ItemId": 227,
@@ -1927,7 +2311,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 525
     },
     {
         "ItemId": 228,
@@ -1937,7 +2323,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 475
     },
     {
         "ItemId": 229,
@@ -1947,7 +2335,9 @@
         "IsUsable": false,
         "Effect": 0,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 336
     },
     {
         "ItemId": 300,
@@ -1957,7 +2347,9 @@
         "IsUsable": true,
         "Effect": 1,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 301,
@@ -1967,7 +2359,9 @@
         "IsUsable": true,
         "Effect": 2,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 3 ]
+        "QuantityDropRange": [ 1, 3 ],
+        "BuyingPrice": 50,
+        "SellingPrice": 40
     },
     {
         "ItemId": 302,
@@ -1977,7 +2371,9 @@
         "IsUsable": true,
         "Effect": 3,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 168
     },
     {
         "ItemId": 303,
@@ -1987,7 +2383,9 @@
         "IsUsable": true,
         "Effect": 5,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 201
     },
     {
         "ItemId": 304,
@@ -1997,7 +2395,9 @@
         "IsUsable": true,
         "Effect": 12,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 300
     },
     {
         "ItemId": 305,
@@ -2007,7 +2407,9 @@
         "IsUsable": true,
         "Effect": 11,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 248
     },
     {
         "ItemId": 306,
@@ -2017,7 +2419,9 @@
         "IsUsable": true,
         "Effect": 8,
         "IsStackable": true,
-        "QuantityDropRange": [ 1, 2 ]
+        "QuantityDropRange": [ 1, 2 ],
+        "BuyingPrice": 60,
+        "SellingPrice": 48
     },
     {
         "ItemId": 307,
@@ -2027,7 +2431,9 @@
         "IsUsable": true,
         "Effect": 4,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 208
     },
     {
         "ItemId": 308,
@@ -2037,7 +2443,9 @@
         "IsUsable": true,
         "Effect": 7,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 160
     },
     {
         "ItemId": 309,
@@ -2047,7 +2455,9 @@
         "IsUsable": true,
         "Effect": 14,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 376
     },
     {
         "ItemId": 310,
@@ -2057,7 +2467,9 @@
         "IsUsable": true,
         "Effect": 9,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 208
     },
     {
         "ItemId": 311,
@@ -2067,7 +2479,9 @@
         "IsUsable": true,
         "Effect": 10,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 288
     },
     {
         "ItemId": 312,
@@ -2077,7 +2491,9 @@
         "IsUsable": true,
         "Effect": 6,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 228
     },
     {
         "ItemId": 313,
@@ -2087,7 +2503,9 @@
         "IsUsable": true,
         "Effect": 13,
         "IsStackable": true,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 0,
+        "SellingPrice": 288
     },
     {
         "ItemId": 400,
@@ -2098,7 +2516,9 @@
         "Effect": 0,
         "IsStackable": false,
         "EquipmentType": 0,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 2000,
+        "SellingPrice": 1600
     },
     {
         "ItemId": 401,
@@ -2109,7 +2529,9 @@
         "Effect": 0,
         "IsStackable": false,
         "EquipmentType": 1,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 1500,
+        "SellingPrice": 1200
     },
     {
         "ItemId": 402,
@@ -2120,7 +2542,9 @@
         "Effect": 0,
         "IsStackable": false,
         "EquipmentType": 2,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 2000,
+        "SellingPrice": 1600
     },
     {
         "ItemId": 403,
@@ -2131,7 +2555,9 @@
         "Effect": 0,
         "IsStackable": false,
         "EquipmentType": 3,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 1000,
+        "SellingPrice": 800
     },
     {
         "ItemId": 404,
@@ -2142,7 +2568,9 @@
         "Effect": 0,
         "IsStackable": false,
         "EquipmentType": 4,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 1000,
+        "SellingPrice": 800
     },
     {
         "ItemId": 405,
@@ -2153,6 +2581,8 @@
         "Effect": 0,
         "IsStackable": false,
         "EquipmentType": 5,
-        "QuantityDropRange": []
+        "QuantityDropRange": [],
+        "BuyingPrice": 650,
+        "SellingPrice": 520
     }
 ]

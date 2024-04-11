@@ -1,52 +1,99 @@
 ﻿[
-  {
-    "Id": 0,
-    "ReferId": 0,
-    "Category": 0,
-    "Name": "ดอกพิกุล",
-    "Description": "test herb 1",
-    "Position": [ 753, 1005 ],
-    "IsRespawnable": true,
-    "IsVisible": true
-  },
-  {
-    "Id": 1,
-    "ReferId": 400,
-    "Category": 0,
-    "Name": "ดาบ",
-    "Description": "test herb 2",
-    "Position": [ 751, 1133 ],
-    "IsRespawnable": true,
-    "IsVisible": true
-  },
-  {
-    "Id": 2,
-    "ReferId": 2,
-    "Category": 0,
-    "Name": "Meow latte",
-    "Description": "Meow Meow Meof Meog",
-    "Position": [ 750, 1262 ],
-    "IsRespawnable": true,
-    "IsVisible": true
-  },
-  {
-    "Id": 3,
-    "ReferId": 312,
-    "Category": 0,
-    "Name": "Meow latte",
-    "Description": "Meow Meow Meof Meog",
-    "Position": [ 821, 1357 ],
-    "IsRespawnable": true,
-    "IsVisible": true
-  },
-  {
-    "Id": 4,
-    "ReferId": 312,
-    "Category": 0,
-    "Name": "Meow latte",
-    "Description": "Meow Meow Meof Meog",
-    "Position": [ 785.33, 1273.33 ],
-    "IsRespawnable": true,
-    "IsVisible": true
-  }
+    {
+        "Id": 0,
+        "ReferId": 0,
+        "Category": 0,
+        "Name": "ดอกพิกุล",
+        "Description": "test herb 1",
+        "Position": [ 753, 1005 ],
+        "IsRespawnable": true,
+        "IsVisible": true
+    },
+    {
+        "Id": 1,
+        "ReferId": 400,
+        "Category": 0,
+        "Name": "ดาบ",
+        "Description": "test herb 2",
+        "Position": [ 751, 1133 ],
+        "IsRespawnable": true,
+        "IsVisible": true
+    },
+    {
+        "Id": 2,
+        "ReferId": 2,
+        "Category": 0,
+        "Name": "Meow latte",
+        "Description": "Meow Meow Meof Meog",
+        "Position": [ 750, 1262 ],
+        "IsRespawnable": true,
+        "IsVisible": true
+    },
+    {
+        "Id": 3,
+        "ReferId": 312,
+        "Category": 0,
+        "Name": "Meow latte",
+        "Description": "Meow Meow Meof Meog",
+        "Position": [ 821, 1357 ],
+        "IsRespawnable": true,
+        "IsVisible": true
+    },
+    {
+        "Id": 4,
+        "ReferId": 312,
+        "Category": 0,
+        "Name": "Meow latte",
+        "Description": "Meow Meow Meof Meog",
+        "Position": [ 785.33, 1273.33 ],
+        "IsRespawnable": true,
+        "IsVisible": true
+    },
+    {
+        "Id": 5,
+        "ReferId": -1,
+        "Category": 3,
+        "Name": "SavingTable",
+        "Description": "SavingTable test",
+        "Position": [ 1329.33, 973.33 ],
+        "IsRespawnable": true,
+        "IsVisible": true,
+        "IsDestroyable": true
+    },
+    {
+        "Id": 5,
+        "ReferId": -1,
+        "Category": 2,
+        "Name": "CraftingTable",
+        "CraftingType": 0,
+        "Description": "CraftingTable_Food",
+        "Position": [ 1440.00, 1122.00 ],
+        "IsRespawnable": true,
+        "IsVisible": true,
+        "IsDestroyable": true
+    },
+    {
+        "Id": 6,
+        "ReferId": -1,
+        "Category": 2,
+        "Name": "CraftingTable",
+        "CraftingType": 1,
+        "Description": "CraftingTable Equipment",
+        "Position": [ 1117.00, 992.00 ],
+        "IsRespawnable": true,
+        "IsVisible": true,
+        "IsDestroyable": true
+    },
+    {
+        "Id": 7,
+        "ReferId": -1,
+        "Category": 2,
+        "Name": "CraftingTable",
+        "CraftingType": 2,
+        "Description": "CraftingTable Medicine",
+        "Position": [ 1216.00, 1137.00 ],
+        "IsRespawnable": true,
+        "IsVisible": true,
+        "IsDestroyable": true
+    }
 ]

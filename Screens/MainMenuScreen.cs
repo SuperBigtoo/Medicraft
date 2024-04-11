@@ -47,6 +47,8 @@ namespace Medicraft.Screens
 
         public override void UnloadContent()
         {
+            GameGlobals.Instance.CurrentMapMusics.Clear();
+
             base.UnloadContent();
         }
 

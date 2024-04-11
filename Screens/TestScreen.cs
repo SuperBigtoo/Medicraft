@@ -44,6 +44,7 @@ namespace Medicraft.Screens
             Dictionary<int, SpriteSheet> entitySpriteSheets = new()
             {
                 { 100,  content.Load<SpriteSheet>("entity/mobs/friendly/cat/cat_animation.sf", new JsonContentLoader())},
+                { 101,  content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian09_animation.sf", new JsonContentLoader())},
                 { 200,  content.Load<SpriteSheet>("entity/mobs/monster/slime/slimes_animation.sf", new JsonContentLoader())},
                 { 201,  content.Load<SpriteSheet>("entity/mobs/monster/goblin/goblin_animation.sf", new JsonContentLoader())}
             };
@@ -64,6 +65,9 @@ namespace Medicraft.Screens
 
             // Adding HUDSystem
             hudSystem = new HUDSystem();
+
+            // Show Map Name Sign
+            HUDSystem.ShowMapNameSign(0, MapName);
         }
 
         public override void UnloadContent()

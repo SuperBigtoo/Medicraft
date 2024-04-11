@@ -13,6 +13,8 @@ namespace Medicraft.Data.Models
         public bool IsStackable { get; set; }
         public int EquipmentType { get; set; }
         public int[] QuantityDropRange { get; set; }
+        public int BuyingPrice { get; set; } = 0;
+        public int SellingPrice { get; set; } = 0;
     }
 
     public class EquipmentStatsData

@@ -1,0 +1,29 @@
+{
+  "textureAtlas": {
+    "texture": "Magic_Circle.png",
+    "regionWidth": 96,
+    "regionHeight": 96
+  },
+  "cycles": {
+    "yellow_circle": {
+      "frames": [0,1,2],
+      "isLooping": true,
+      "frameDuration": 0.2
+    },
+    "blue_circle": {
+      "frames": [3,4,5],
+      "isLooping": true,
+      "frameDuration": 0.2
+    },
+    "red_circle": {
+      "frames": [6,7,8],
+      "isLooping": true,
+      "frameDuration": 0.2
+    },
+    "green_circle": {
+      "frames": [9,10,11],
+      "isLooping": true,
+      "frameDuration": 0.2
+    }
+  }
+}

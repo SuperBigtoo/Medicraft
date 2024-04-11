@@ -1,7 +1,4 @@
 ﻿using Medicraft.Data.Models;
-using Medicraft.Systems.Managers;
-using Medicraft.Systems.PathFinding;
-using Medicraft.Systems;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
@@ -27,19 +24,24 @@ namespace Medicraft.Entities.Mobs.Friendly
         public Cat(AnimatedSprite sprite, EntityData entityData, Vector2 scale)
         {
             Sprite = sprite;
+            idleSpriteName = ["_idle_1", "_idle_2"];
             EntityData = entityData;
 
             // Initialize Character Data
             Id = entityData.Id;             // Mot to be confuse with CharId
             Level = entityData.Level;
             InitializeCharacterData(entityData.CharId, Level);
+            MobType = FriendlyMobType.Animal;
 
             IsRespawnable = true;
 
             SetPathFindingType(entityData.PathFindingType);
             NodeCycleTime = entityData.NodeCycleTime;
 
-            var position = new Vector2((float)entityData.Position[0], (float)entityData.Position[1]);
+            var position = new Vector2(
+                (float)entityData.Position[0],
+                (float)entityData.Position[1]);
+
             Transform = new Transform2
             {
                 Scale = scale,
@@ -62,13 +64,14 @@ namespace Medicraft.Entities.Mobs.Friendly
 
             RandomCatType();
 
-            Sprite.Depth = 0.1f;
+            Sprite.Depth = InitDepth;
             Sprite.Play(SpriteCycle + "_idle_1");
         }
 
         private Cat(Cat cat)
         {
             Sprite = cat.Sprite;
+            idleSpriteName = cat.idleSpriteName;
             EntityData = cat.EntityData;
 
             EntityType = cat.EntityType;
@@ -81,16 +84,22 @@ namespace Medicraft.Entities.Mobs.Friendly
             Speed = cat.Speed;
             Evasion = cat.Evasion;
 
+            MobType = FriendlyMobType.Animal;
+
             IsRespawnable = cat.IsRespawnable;
 
             PathFindingType = cat.PathFindingType;
             NodeCycleTime = cat.NodeCycleTime;
 
+            var position = new Vector2(
+                (float)cat.EntityData.Position[0],
+                (float)cat.EntityData.Position[1]);
+
             Transform = new Transform2
             {
                 Scale = cat.Transform.Scale,
                 Rotation = cat.Transform.Rotation,
-                Position = cat.Transform.Position,
+                Position = position
             };
 
             BoundingCollisionX = cat.BoundingCollisionX;
@@ -100,10 +109,17 @@ namespace Medicraft.Entities.Mobs.Friendly
             BoundingHitBox = cat.BoundingHitBox;
             BoundingDetectEntity = cat.BoundingDetectEntity;
 
+            BoundingDetectCollisions = cat.BoundingDetectCollisions;
+            BoundingDetectCollisions.Position = position;
+            BoundingHitBox = cat.BoundingHitBox;
+            BoundingHitBox.Position = position;
+            BoundingDetectEntity = cat.BoundingDetectEntity;
+            BoundingHitBox.Position = position;
+
             RandomCatType();
 
             Sprite.Color = Color.White;
-            Sprite.Depth = 0.1f;
+            Sprite.Depth = InitDepth;
             Sprite.Play(SpriteCycle + "_idle_1");
         }
 
