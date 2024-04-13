@@ -31,8 +31,9 @@ namespace Medicraft.Entities.Mobs.Friendly
             Id = entityData.Id;             // Mot to be confuse with CharId
             Level = entityData.Level;
             InitializeCharacterData(entityData.CharId, Level);
-            MobType = FriendlyMobType.Animal;
 
+            SetMobType(entityData.MobType);
+            IsInteractable = entityData.IsInteractable;
             IsRespawnable = true;
 
             SetPathFindingType(entityData.PathFindingType);
@@ -84,8 +85,9 @@ namespace Medicraft.Entities.Mobs.Friendly
             Speed = cat.Speed;
             Evasion = cat.Evasion;
 
-            MobType = FriendlyMobType.Animal;
+            MobType = cat.MobType;
 
+            IsInteractable = cat.IsInteractable;
             IsRespawnable = cat.IsRespawnable;
 
             PathFindingType = cat.PathFindingType;
@@ -104,17 +106,12 @@ namespace Medicraft.Entities.Mobs.Friendly
 
             BoundingCollisionX = cat.BoundingCollisionX;
             BoundingCollisionY = cat.BoundingCollisionY;
-
             BoundingDetectCollisions = cat.BoundingDetectCollisions;
-            BoundingHitBox = cat.BoundingHitBox;
-            BoundingDetectEntity = cat.BoundingDetectEntity;
 
-            BoundingDetectCollisions = cat.BoundingDetectCollisions;
-            BoundingDetectCollisions.Position = position;
             BoundingHitBox = cat.BoundingHitBox;
             BoundingHitBox.Position = position;
             BoundingDetectEntity = cat.BoundingDetectEntity;
-            BoundingHitBox.Position = position;
+            BoundingDetectEntity.Position = position;
 
             RandomCatType();
 

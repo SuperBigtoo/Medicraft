@@ -2372,7 +2372,7 @@
         "Effect": 3,
         "IsStackable": true,
         "QuantityDropRange": [],
-        "BuyingPrice": 0,
+        "BuyingPrice": 200,
         "SellingPrice": 168
     },
     {
@@ -2384,7 +2384,7 @@
         "Effect": 5,
         "IsStackable": true,
         "QuantityDropRange": [],
-        "BuyingPrice": 0,
+        "BuyingPrice": 250,
         "SellingPrice": 201
     },
     {
@@ -2396,7 +2396,7 @@
         "Effect": 12,
         "IsStackable": true,
         "QuantityDropRange": [],
-        "BuyingPrice": 0,
+        "BuyingPrice": 350,
         "SellingPrice": 300
     },
     {
@@ -2408,7 +2408,7 @@
         "Effect": 11,
         "IsStackable": true,
         "QuantityDropRange": [],
-        "BuyingPrice": 0,
+        "BuyingPrice": 300,
         "SellingPrice": 248
     },
     {
@@ -2432,7 +2432,7 @@
         "Effect": 4,
         "IsStackable": true,
         "QuantityDropRange": [],
-        "BuyingPrice": 0,
+        "BuyingPrice": 250,
         "SellingPrice": 208
     },
     {
@@ -2444,7 +2444,7 @@
         "Effect": 7,
         "IsStackable": true,
         "QuantityDropRange": [],
-        "BuyingPrice": 0,
+        "BuyingPrice": 200,
         "SellingPrice": 160
     },
     {
@@ -2456,7 +2456,7 @@
         "Effect": 14,
         "IsStackable": true,
         "QuantityDropRange": [],
-        "BuyingPrice": 0,
+        "BuyingPrice": 400,
         "SellingPrice": 376
     },
     {
@@ -2468,7 +2468,7 @@
         "Effect": 9,
         "IsStackable": true,
         "QuantityDropRange": [],
-        "BuyingPrice": 0,
+        "BuyingPrice": 250,
         "SellingPrice": 208
     },
     {
@@ -2480,7 +2480,7 @@
         "Effect": 10,
         "IsStackable": true,
         "QuantityDropRange": [],
-        "BuyingPrice": 0,
+        "BuyingPrice": 300,
         "SellingPrice": 288
     },
     {
@@ -2492,7 +2492,7 @@
         "Effect": 6,
         "IsStackable": true,
         "QuantityDropRange": [],
-        "BuyingPrice": 0,
+        "BuyingPrice": 250,
         "SellingPrice": 228
     },
     {
@@ -2504,7 +2504,7 @@
         "Effect": 13,
         "IsStackable": true,
         "QuantityDropRange": [],
-        "BuyingPrice": 0,
+        "BuyingPrice": 300,
         "SellingPrice": 288
     },
     {

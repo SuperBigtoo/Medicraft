@@ -6,7 +6,6 @@
         "Name": "Slime",
         "PathFindingType": 0,
         "NodeCycleTime": 10,
-        "PartrolArea": "zone_1",
         "RoutePoint": [
             [ 736, 544 ],
             [ 448, 545 ],
@@ -43,6 +42,7 @@
         "CharId": 100,
         "Level": 1,
         "Name": "Cat",
+        "MobType": "Animal",
         "PathFindingType": 0,
         "NodeCycleTime": 10,
         "PartrolArea": "",
@@ -75,8 +75,9 @@
         "CharId": 101,
         "Level": 1,
         "Name": "BlackSmite",
+        "MobType": "Vendor",
+        "IsInteractable": true,
         "PathFindingType": 2,
-        "NodeCycleTime": 10,
         "Position": [ 1441.00, 1268.00 ],
         "TradingItemsData": [
             {
@@ -87,6 +88,91 @@
             },
             {
                 "ItemId": 2
+            }
+        ]
+    },
+    {
+        "Id": 6,
+        "CharId": 102,
+        "Level": 1,
+        "Name": "Civilian_01",
+        "MobType": "QuestGiver",
+        "IsInteractable": true,
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_3",
+        "Position": [ 992.00, 1150.67 ],
+        "RoutePoint": [
+            [ 573, 1056 ],
+            [ 638, 1250 ],
+            [ 960, 1184 ],
+            [ 1273, 1272 ],
+            [ 1481, 1100 ],
+            [ 1189, 989 ],
+            [ 916, 1000 ]
+        ],
+        "DialogData": [
+            {
+                "Id": 0,
+                "Type": "Daily",
+                "Description": "Daily dialog for test",
+                "Dialogues": [
+                    "สวัสดี",
+                    "ผมชื่อ Meof",
+                    "Meof Meof Silly"
+                ]
+            },
+            {
+                "Id": 1,
+                "Type": "Quest",
+                "Description": "Quest onAccept dialog for test",
+                "QuestId": 101,
+                "ChapterId": 1,
+                "Stage": "onAccept",
+                "Dialogues": [
+                    "onAccept",
+                    "onAccept onAccept",
+                    "onAccept Meof Meof Silly"
+                ]
+            },
+            {
+                "Id": 2,
+                "Type": "Quest",
+                "Description": "Quest onGoing dialog for test",
+                "QuestId": 101,
+                "ChapterId": 1,
+                "Stage": "onGoing",
+                "Dialogues": [
+                    "onGoing",
+                    "onGoing onGoing",
+                    "onGoing Meof Meof Silly"
+                ]
+            },
+            {
+                "Id": 3,
+                "Type": "Quest",
+                "Description": "Quest onDone dialog for test",
+                "QuestId": 101,
+                "ChapterId": 1,
+                "Stage": "onDone",
+                "Dialogues": [
+                    "onDone",
+                    "onDone onDone",
+                    "onDone Meof Meof Silly"
+                ]
+            },
+            {
+                "Id": 4,
+                "Type": "Quest",
+                "Description": "Quest onClear dialog for test",
+                "QuestId": 101,
+                "ChapterId": 1,
+                "Stage": "onClear",
+                "Dialogues": [
+                    "onClear",
+                    "onClear onClear",
+                    "onClear Meof Meof Silly"
+                ]
             }
         ]
     }

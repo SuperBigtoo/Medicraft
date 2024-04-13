@@ -133,23 +133,28 @@ namespace Medicraft.Systems.Spawners
                 switch (entityData.CharId)
                 {
                     case 100:
-                        spriteSheets.TryGetValue(100, out SpriteSheet spriteSheetCat);
-                        AddEntity(new Cat(new AnimatedSprite(spriteSheetCat), entityData, Vector2.One));
+                        spriteSheets.TryGetValue(100, out SpriteSheet spriteCat);
+                        AddEntity(new Cat(new AnimatedSprite(spriteCat), entityData, Vector2.One));
                         break;
 
                     case 101:
-                        spriteSheets.TryGetValue(101, out SpriteSheet spriteSheetBlackSmite);
-                        AddEntity(new Vendor(new AnimatedSprite(spriteSheetBlackSmite), entityData, Vector2.One));
+                        spriteSheets.TryGetValue(101, out SpriteSheet spriteBlackSmite);
+                        AddEntity(new Vendor(new AnimatedSprite(spriteBlackSmite), entityData, Vector2.One));
+                        break;
+
+                    case 102: // Civilian01_NordlingenTown
+                        spriteSheets.TryGetValue(102, out SpriteSheet spriteCivilian01);
+                        AddEntity(new Civilian(new AnimatedSprite(spriteCivilian01), entityData, Vector2.One));
                         break;
 
                     case 200:
-                        spriteSheets.TryGetValue(200, out SpriteSheet spriteSheetSlime);
-                        AddEntity(new Slime(new AnimatedSprite(spriteSheetSlime), entityData, Vector2.One));
+                        spriteSheets.TryGetValue(200, out SpriteSheet spriteSlime);
+                        AddEntity(new Slime(new AnimatedSprite(spriteSlime), entityData, Vector2.One));
                         break;
 
                     case 201:
-                        spriteSheets.TryGetValue(201, out SpriteSheet spriteSheetGoblin);
-                        AddEntity(new Goblin(new AnimatedSprite(spriteSheetGoblin), entityData, Vector2.One));
+                        spriteSheets.TryGetValue(201, out SpriteSheet spriteGoblin);
+                        AddEntity(new Goblin(new AnimatedSprite(spriteGoblin), entityData, Vector2.One));
                         break;
 
                     case 202:

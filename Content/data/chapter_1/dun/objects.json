@@ -1,0 +1,372 @@
+[
+  {
+    "Id": 0,
+    "ReferId": 128,
+    "Category": 0,
+    "Name": "ว่านร่อนทอง",
+    "Description": "ส่วนเหง้าของต้นว่านร่อนทอง สามารถใช้ในการปรุงยา",
+    "Position": [ 1418, 575 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 1,
+    "ReferId": 127,
+    "Category": 0,
+    "Name": "ว่านกีบแรด",
+    "Description": "ส่วนเหง้าของต้นว่านกีบแรด สามารถใช้ในการปรุงยา",
+    "Position": [ 2445, 1330 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 2,
+    "ReferId": 125,
+    "Category": 0,
+    "Name": "มหาสดำ",
+    "Description": "ส่วนเหง้าหรือเนื้อไม้ของต้นมหาสดำ สามารถใช้ในการปรุงยา",
+    "Position": [ 2233, 566 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 3,
+    "ReferId": 124,
+    "Category": 0,
+    "Name": "พิษนาศน์",
+    "Description": "ส่วนเหง้าของต้นพิษนาศน์ สามารถใช้ในการปรุงยา",
+    "Position": [ 1742, 542 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 4,
+    "ReferId": 123,
+    "Category": 0,
+    "Name": "เนระพูสี",
+    "Description": "ส่วนเหง้าของต้นเนระพูสี สามารถใช้ในการปรุงยา",
+    "Position": [ 2457, 1730 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 5,
+    "ReferId": 108,
+    "Category": 0,
+    "Name": "ชุดเครื่องเที่ยน",
+    "Description": "ชุดรวมเทียนหรือผลแก่แห้งของพืชสมุนไพรที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยเทียนดำ เทียนแดง เทียนขาว เทียนข้าวเปลือก เทียนสัตตบุษย์ เทียนเยาวพาณี และเทียนอื่นๆอีก",
+    "Position": [ 2442, 1966 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 6,
+    "ReferId": 107,
+    "Category": 0,
+    "Name": "ชุดเครื่องโกฐ",
+    "Description": "ชุดรวมโกฐหรือรากไม้ของพืชสมุนไพรที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยโกฐสอ โกฐเขมา โกฐหัวบัว โกฐกักกรา โกฐน้ำเต้า และโกฐอื่นๆอีก",
+    "Position": [ 1339, 2142 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 7,
+    "ReferId": 101,
+    "Category": 0,
+    "Name": "รากมะนาว",
+    "Description": "รากของต้นมะนาวที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2321, 711 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 8,
+    "ReferId": 93,
+    "Category": 0,
+    "Name": "รากมะปรางหวาน",
+    "Description": "รากของต้นมะปรางหวานที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2322, 804 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 9,
+    "ReferId": 92,
+    "Category": 0,
+    "Name": "รากเหมือดคน",
+    "Description": "รากของต้นเหมือดคนที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2316, 983 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 10,
+    "ReferId": 91,
+    "Category": 0,
+    "Name": "รากปลาไหลเผือก",
+    "Description": "รากของต้นปลาไหลเผือกที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2527, 1096 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 11,
+    "ReferId": 90,
+    "Category": 0,
+    "Name": "รากไม้เท้ายายม่อม",
+    "Description": "รากของต้นเท้ายายม่อมที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2377, 1257 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 12,
+    "ReferId": 89,
+    "Category": 0,
+    "Name": "รากชิงชี่",
+    "Description": "รากของต้นชิงชี่ที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2514, 1784 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 13,
+    "ReferId": 88,
+    "Category": 0,
+    "Name": "รากมะเดื่อชุมพร",
+    "Description": "รากของต้นมะเดื่อชุมพรที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2458, 2136 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 14,
+    "ReferId": 87,
+    "Category": 0,
+    "Name": "รากคนทา",
+    "Description": "รากของต้นคนทาที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1872, 2309 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 15,
+    "ReferId": 86,
+    "Category": 0,
+    "Name": "รากย่านาง",
+    "Description": "รากของต้นย่านางที่สามารถใช้ในการปรุงยา",
+    "Position": [ 942, 2078 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 16,
+    "ReferId": 84,
+    "Category": 0,
+    "Name": "รากแฝกหอม",
+    "Description": "รากของต้นแฝกหอมที่สามารถใช้ในการปรุงยา",
+    "Position": [ 566, 1856 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 17,
+    "ReferId": 97,
+    "Category": 0,
+    "Name": "ชุดเครื่องเถา",
+    "Description": "ชุดรวมเนื้อไม้ของพืชสมุนไพรจำพวกเถาที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยเถาสะค้าน เถากำแพงเจ็ดชั้น เถาบอระเพ็ด เถามวกแดง เถามวกขาว และอื่นๆอีก",
+    "Position": [ 800, 1872 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 18,
+    "ReferId": 80,
+    "Category": 0,
+    "Name": "ชุดเครื่องเหง้า",
+    "Description": "ชุดรวมพืชสมุนไพรจำพวกที่ลงหัวหรือมีลำต้นใต้ดินที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยเหง้าขิง เหง้าไพล เหง้าว่านน้ำ เหง้าข่า เหง้าขมิ้นชัน เหง้าขมิ้นอ้อย เหง้ากระชาย และเหง้ากระทือ",
+    "Position": [ 1063, 1372 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 19,
+    "ReferId": 56,
+    "Category": 0,
+    "Name": "ชุดเครื่องแก่น",
+    "Description": "ชุดรวมแก่นหรือเนื้อไม้ชั้นในที่ถูกตัดแบ่งเป็นชิ้นแล้วสามารถใช้ในการปรุงยา|ประกอบไปด้วยแก่นฝาง แก่นแกแล แก่นขนุน แก่นจันทน์แดง-ขาว แก่นจันทน์เทศ แก่นสน และอื่นๆอีก",
+    "Position": [ 1357, 660 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 20,
+    "ReferId": 29,
+    "Category": 0,
+    "Name": "ใบสันพร้าหอม",
+    "Description": "ใบของต้นสันพร้าหอมที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1010, 1874 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 21,
+    "ReferId": 28,
+    "Category": 0,
+    "Name": "ใบหมากเมีย",
+    "Description": "ใบของต้นหมากผู้หมากเมียที่มีลักษณะใบใหญ่สีเขียวที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1244, 1086 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 22,
+    "ReferId": 27,
+    "Category": 0,
+    "Name": "ใบหมากผู้",
+    "Description": "ใบของต้นหมากผู้หมากเมียที่มีลักษณะใบแคบและยาวสามารถใช้ในการปรุงยา",
+    "Position": [ 820, 1478 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 23,
+    "ReferId": 26,
+    "Category": 0,
+    "Name": "ใบผักกระโฉม",
+    "Description": "ใบของต้นผักกระโฉมที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1172, 701 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 24,
+    "ReferId": 25,
+    "Category": 0,
+    "Name": "ใบพิมเสนต้น",
+    "Description": "ใบของต้นพิมเสนต้นที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1485, 568 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 25,
+    "ReferId": 6,
+    "Category": 0,
+    "Name": "ดอกกานพลู",
+    "Description": "ดอกตูมของต้นกานพลูที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1992, 576 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 24,
+    "ReferId": 6,
+    "Category": 0,
+    "Name": "ดอกกานพลู",
+    "Description": "ดอกตูมของต้นกานพลูที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1181, 834 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 24,
+    "ReferId": 5,
+    "Category": 0,
+    "Name": "ดอกจันทน์",
+    "Description": "รกหุ้มเมล็ดของต้นจันทร์เทศที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1668, 592 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 24,
+    "ReferId": 5,
+    "Category": 0,
+    "Name": "ดอกจันทน์",
+    "Description": "รกหุ้มเมล็ดของต้นจันทร์เทศที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2228, 632 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 24,
+    "ReferId": 4,
+    "Category": 0,
+    "Name": "ดอกมะลิ",
+    "Description": "ดอกของต้นมะลิที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1610, 790 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 24,
+    "ReferId": 4,
+    "Category": 0,
+    "Name": "ดอกมะลิ",
+    "Description": "ดอกของต้นมะลิที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2200, 1033 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 24,
+    "ReferId": 2,
+    "Category": 0,
+    "Name": "ดอกสารภี",
+    "Description": "ดอกของต้นสารภีที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1410, 1460 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 24,
+    "ReferId": 2,
+    "Category": 0,
+    "Name": "ดอกสารภี",
+    "Description": "ดอกของต้นสารภีที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2362, 1430 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 24,
+    "ReferId": 1,
+    "Category": 0,
+    "Name": "ดอกบุนนาค",
+    "Description": "ดอกของต้นบุนนาคที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2421, 1454 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 24,
+    "ReferId": 1,
+    "Category": 0,
+    "Name": "ดอกบุนนาค",
+    "Description": "ดอกของต้นบุนนาคที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2432, 1794 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 24,
+    "ReferId": 0,
+    "Category": 0,
+    "Name": "ดอกพิกุล",
+    "Description": "ดอกของต้นพิกุลที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2120, 2088 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 24,
+    "ReferId": 0,
+    "Category": 0,
+    "Name": "ดอกพิกุล",
+    "Description": "ดอกของต้นพิกุลที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1812, 2102 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  }
+]

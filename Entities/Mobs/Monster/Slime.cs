@@ -120,15 +120,14 @@ namespace Medicraft.Entities.Mobs.Monster
 
             BoundingCollisionX = slime.BoundingCollisionX;
             BoundingCollisionY = slime.BoundingCollisionY;
-
             BoundingDetectCollisions = slime.BoundingDetectCollisions;
-            BoundingDetectCollisions.Position = Position;
+
             BoundingHitBox = slime.BoundingHitBox;
             BoundingHitBox.Position = Position;
             BoundingAggro = slime.BoundingAggro;
             BoundingAggro.Position = Position;
             BoundingDetectEntity = slime.BoundingDetectEntity;
-            BoundingDetectCollisions.Position = Position;
+            BoundingDetectEntity.Position = Position;
 
             RandomSlimeColor();
 

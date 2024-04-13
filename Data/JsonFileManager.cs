@@ -46,7 +46,7 @@ namespace Medicraft.Data
                     var inventoryData = new InventoryData()
                     {
                         GoldCoin = InventoryManager.Instance.GoldCoin,
-                        Inventory = inventoryItems
+                        Items = inventoryItems
                     };
                     PlayerManager.Instance.Player.PlayerData.InventoryData = inventoryData;
 
@@ -226,6 +226,9 @@ namespace Medicraft.Data
     // Reader Character Skill Description Datas: character_skills.json
     public class SkillDescriptionDataReader : JsonContentTypeReader<List<SkillDescriptionData>> { }
 
-    //Reader Medicine Description Datas: medicine_description.json
+    // Reader Medicine Description Datas: medicine_description.json
     public class MedicineDescriptionDataReader : JsonContentTypeReader<List<MedicineDescriptionData>> { }
+
+    // Reader Quest Detail Datas: quest_details.json
+    public class QuestDetailDataReader : JsonContentTypeReader<List<QuestData>> { }
 }

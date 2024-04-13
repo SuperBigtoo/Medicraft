@@ -37,14 +37,26 @@
     },
     {
         "CharId": 101,
-        "Name": "Vendor",
+        "Name": "VendorBlackSmite",
         "Category": 2,
         "ATK": 0,
         "HP": 25,
         "DEF_Percent": 1,
         "Crit_Percent": 1,
         "CritDMG_Percent": 1,
-        "Speed": 150,
+        "Speed": 100,
+        "Evasion": 0.5
+    },
+    {
+        "CharId": 102,
+        "Name": "Civilian01_NordlingenTown",
+        "Category": 2,
+        "ATK": 0,
+        "HP": 25,
+        "DEF_Percent": 1,
+        "Crit_Percent": 1,
+        "CritDMG_Percent": 1,
+        "Speed": 100,
         "Evasion": 0.5
     },
     {

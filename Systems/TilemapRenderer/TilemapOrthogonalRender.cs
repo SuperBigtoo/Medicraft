@@ -138,6 +138,7 @@ namespace Medicraft.Systems.TilemapRenderer
                 GameGlobals.Instance.EnteringZoneArea.Add(new AreaData()
                 {
                     Name = o.Name,
+                    SpriteUI = o.Type,
                     Bounds = new RectangleF((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height)
                 });
             }

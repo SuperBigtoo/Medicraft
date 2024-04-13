@@ -1,0 +1,43 @@
+[
+  {
+    "Id": 0,
+    "CharId": 200,
+    "Level": 1,
+    "Name": "Slime",
+    "PathFindingType": 0,
+    "NodeCycleTime": 10,
+    "PartrolArea": "zone_1",
+    "RoutePoint": [
+      [ 736, 544 ],
+      [ 448, 545 ],
+      [ 590, 392 ],
+      [ 588, 478 ]
+    ],
+    "AggroTime": 5,
+    "Position": [ 736, 544 ]
+  },
+  {
+    "Id": 1,
+    "CharId": 200,
+    "Level": 1,
+    "Name": "Slime",
+    "PathFindingType": 1,
+    "NodeCycleTime": 10,
+    "PartrolArea": "zone_1",
+    "RoutePoint": [ [] ],
+    "AggroTime": 5,
+    "Position": [ 1096, 566 ]
+  },
+  {
+    "Id": 2,
+    "CharId": 200,
+    "Level": 1,
+    "Name": "Slime",
+    "PathFindingType": 2,
+    "NodeCycleTime": 10,
+    "PartrolArea": "zone_1",
+    "RoutePoint": [ [] ],
+    "AggroTime": 5,
+    "Position": [ 1276, 566 ]
+  }
+]

@@ -105,6 +105,15 @@ namespace Medicraft.Entities.Companion
 
                             // Do burst skill & effect of Sets Item
                             BurstSkillControl(CompanionData.Abilities.BurstSkillLevel);
+
+                            CombatNumCase = Buff;
+                            var combatNumVelocity = SetCombatNumDirection();
+                            AddCombatLogNumbers(Name,
+                                "Freeze!",
+                                CombatNumCase,
+                                combatNumVelocity,
+                                BurstSkillEffectActivated);
+
                             PlaySoundEffect(Sound.FrostNova);
                             break;
                         }
@@ -121,15 +130,6 @@ namespace Medicraft.Entities.Companion
 
                             // Do normal skill & effect of Sets Item
                             NormalSkillControl(CompanionData.Abilities.NormalSkillLevel);
-
-                            CombatNumCase = Buff;
-                            var combatNumVelocity = SetCombatNumDirection();
-                            AddCombatLogNumbers(Name,
-                                "Freeze!",
-                                CombatNumCase,
-                                combatNumVelocity,
-                                BurstSkillEffectActivated);
-
                             PlaySoundEffect(Sound.frostbolt_1);
                             break;
                         }

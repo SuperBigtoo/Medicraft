@@ -38,7 +38,8 @@ namespace Medicraft.Data.Models
     public class InventoryData
     {
         public int GoldCoin { get; set; }
-        public List<InventoryItemData> Inventory { get; set; }
+        public int EXPReward { get; set; }
+        public List<InventoryItemData> Items { get; set; }
     }
 
     public class CraftingProgressionData

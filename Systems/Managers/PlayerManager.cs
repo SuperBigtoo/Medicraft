@@ -4,6 +4,7 @@ using Medicraft.Entities.Companion;
 using Medicraft.Entities.Mobs;
 using Medicraft.Entities.Mobs.Friendly;
 using Medicraft.GameObjects;
+using Medicraft.Screens.chapter_1;
 using Medicraft.Systems.PathFinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -166,17 +167,17 @@ namespace Medicraft.Systems.Managers
 
         public static void UpdateGameController(GameTime gameTime)
         {
-            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;         
 
             // Key Control
             GameGlobals.Instance.PrevKeyboard = GameGlobals.Instance.CurKeyboard;
             GameGlobals.Instance.CurKeyboard = Keyboard.GetState();
-            var keyboardCur = GameGlobals.Instance.CurKeyboard;
-            var keyboardPrev = GameGlobals.Instance.PrevKeyboard;
 
             // Mouse Control
             GameGlobals.Instance.PrevMouse = GameGlobals.Instance.CurMouse;
             GameGlobals.Instance.CurMouse = Mouse.GetState();
+            var keyboardCur = GameGlobals.Instance.CurKeyboard;
+            var keyboardPrev = GameGlobals.Instance.PrevKeyboard;
             var mouseCur = GameGlobals.Instance.CurMouse;
             var mousePrev = GameGlobals.Instance.PrevMouse;
 
@@ -189,19 +190,13 @@ namespace Medicraft.Systems.Managers
             var debugModeKey = GameGlobals.Instance.DebugModeKey;
             var showPathFindingKey = GameGlobals.Instance.ShowPathFindingKey;
 
-            // Only receive input if on PlayScreen
-            if (!ScreenManager.Instance.IsTransitioning
+            // Only receive input if on PlayScreen and not showing Dialog
+            if (!ScreenManager.Instance.IsTransitioning && !UIManager.Instance.IsShowDialogUI
                 && ScreenManager.Instance.CurrentScreen != ScreenManager.GameScreen.SplashScreen
                 && ScreenManager.Instance.CurrentScreen != ScreenManager.GameScreen.MainMenuScreen)
             {
-                //// Save Game for Test
-                //if (keyboardCur.IsKeyUp(saveGameKey) && keyboardPrev.IsKeyDown(saveGameKey))
-                //{
-                //    JsonFileManager.SaveGame(JsonFileManager.SavingPlayerData);
-                //}
-
                 // Open SaveMenu
-                if (keyboardCur.IsKeyDown(saveGameKey) && !GameGlobals.Instance.SwitchOpenSaveMenuPanel && !GameGlobals.Instance.IsOpenGUI
+                if (keyboardCur.IsKeyDown(saveGameKey) && !GameGlobals.Instance.SwitchOpenSaveMenuPanel && !GameGlobals.Instance.IsOpenGUI && ScreenManager.Instance.CurrentMap.Equals("Test")
                     || (keyboardCur.IsKeyDown(saveGameKey) || keyboardCur.IsKeyDown(pauseMenuKey)) && !GameGlobals.Instance.SwitchOpenSaveMenuPanel
                     && GameGlobals.Instance.IsOpenGUI && UIManager.Instance.CurrentUI.Equals(UIManager.SaveMenu))
                 {
@@ -313,7 +308,7 @@ namespace Medicraft.Systems.Managers
                 }
 
                 // Open Crafting Panel 
-                if (keyboardCur.IsKeyDown(craftingKey) && !GameGlobals.Instance.SwitchOpenCraftingPanel && !GameGlobals.Instance.IsOpenGUI
+                if (keyboardCur.IsKeyDown(craftingKey) && !GameGlobals.Instance.SwitchOpenCraftingPanel && !GameGlobals.Instance.IsOpenGUI && ScreenManager.Instance.CurrentMap.Equals("Test")
                     || (keyboardCur.IsKeyDown(craftingKey) || keyboardCur.IsKeyDown(pauseMenuKey)) && !GameGlobals.Instance.SwitchOpenCraftingPanel
                     && GameGlobals.Instance.IsOpenGUI && UIManager.Instance.CurrentUI.Equals(UIManager.CraftingPanel))
                 {
@@ -374,35 +369,47 @@ namespace Medicraft.Systems.Managers
                     GameGlobals.Instance.SwitchOpenInspectPanel = false;
                 }
 
-                // Open Trading Panel 
-                //if (keyboardCur.IsKeyDown(Keys.T) && !GameGlobals.Instance.SwitchOpenTradingPanel && !GameGlobals.Instance.IsOpenGUI
-                //    || (keyboardCur.IsKeyDown(Keys.T) || keyboardCur.IsKeyDown(pauseMenuKey)) && !GameGlobals.Instance.SwitchOpenTradingPanel
-                //    && GameGlobals.Instance.IsOpenGUI && UIManager.Instance.CurrentUI.Equals(UIManager.TradingPanel))
-                //{
-                //    GameGlobals.Instance.SwitchOpenTradingPanel = true;
+                // Close Trading Panel
+                if ((keyboardCur.IsKeyDown(Keys.T) || keyboardCur.IsKeyDown(pauseMenuKey)) && !GameGlobals.Instance.SwitchOpenTradingPanel
+                    && GameGlobals.Instance.IsOpenGUI && UIManager.Instance.CurrentUI.Equals(UIManager.TradingPanel))
+                {
+                    GameGlobals.Instance.SwitchOpenTradingPanel = true;
 
-                //    // Toggle Pause PlayScreen
-                //    GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
-                //    GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
+                    // Toggle Pause PlayScreen
+                    GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
+                    GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
 
-                //    // Toggle IsOpenInspectPanel      
-                //    GameGlobals.Instance.IsOpenTradingPanel = false;
-                //    if (UIManager.Instance.CurrentUI.Equals(UIManager.TradingPanel))
-                //    {
-                //        UIManager.Instance.CurrentUI = UIManager.PlayScreen;
-                //        GameGlobals.Instance.IsRefreshPlayScreenUI = false;
-                //        PlaySoundEffect(Sound.Cancel1);
-                //    }
-                //    else
-                //    {
-                //        UIManager.Instance.CurrentUI = UIManager.TradingPanel;
-                //        PlaySoundEffect(Sound.Click1);
-                //    }
-                //}
-                //else if (keyboardCur.IsKeyUp(Keys.T))
-                //{
-                //    GameGlobals.Instance.SwitchOpenTradingPanel = false;
-                //}
+                    // Toggle IsOpenInspectPanel      
+                    GameGlobals.Instance.IsOpenTradingPanel = false;
+                    UIManager.Instance.CurrentUI = UIManager.PlayScreen;
+                    GameGlobals.Instance.IsRefreshPlayScreenUI = false;
+                    PlaySoundEffect(Sound.Cancel1);
+                }
+                else if (keyboardCur.IsKeyUp(Keys.T))
+                {
+                    GameGlobals.Instance.SwitchOpenTradingPanel = false;
+                }
+
+                // Close WarpPoint Panel
+                if (keyboardCur.IsKeyDown(pauseMenuKey) && !GameGlobals.Instance.SwitchOpenWarpPointPanel
+                    && GameGlobals.Instance.IsOpenGUI && UIManager.Instance.CurrentUI.Equals(UIManager.WarpPointPanel))
+                {
+                    GameGlobals.Instance.SwitchOpenWarpPointPanel = true;
+
+                    // Toggle Pause PlayScreen
+                    GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
+                    GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
+
+                    // Toggle IsOpenWarpPointPanel      
+                    GameGlobals.Instance.IsOpenWarpPointPanel = false;
+                    UIManager.Instance.CurrentUI = UIManager.PlayScreen;
+                    GameGlobals.Instance.IsRefreshPlayScreenUI = false;
+                    PlaySoundEffect(Sound.Cancel1);
+                }
+                else if (keyboardCur.IsKeyUp(Keys.T))
+                {
+                    GameGlobals.Instance.SwitchOpenWarpPointPanel = false;
+                }
 
                 // Select Item Bar Slot
                 if (keyboardCur.IsKeyDown(Keys.D1) && !GameGlobals.Instance.SwitchSlot_1)
@@ -527,7 +534,7 @@ namespace Medicraft.Systems.Managers
             }
 
             // Check if CurrentScreen is TestScreen
-            if (!ScreenManager.Instance.IsTransitioning
+            if (!ScreenManager.Instance.IsTransitioning && !UIManager.Instance.IsShowDialogUI
                 && (ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.TestScreen
                 || ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.Map1))
             {
@@ -575,6 +582,9 @@ namespace Medicraft.Systems.Managers
             // Update Crafting
             CraftingManager.Instance.Update(gameTime);
 
+            // Update Quest
+            QuestManager.Instance.Update(gameTime);
+
             // Check Player and Companion HP for Deadq
             if (Player.HP <= 0 && !IsPlayerDead)
             {
@@ -592,9 +602,10 @@ namespace Medicraft.Systems.Managers
             {
                 GameGlobals.Instance.IsEnteringBossFight = false;
 
-                if (GameGlobals.Instance.CurMouse.LeftButton == ButtonState.Pressed
+                if ((GameGlobals.Instance.CurMouse.LeftButton == ButtonState.Pressed
                     && GameGlobals.Instance.PrevMouse.LeftButton == ButtonState.Released)
-                    RespawnPlayer();
+                    || ScreenManager.Instance.IsTransitioning)
+                        RespawnPlayer();
             }
 
             if (IsCompanionDead)
@@ -636,8 +647,8 @@ namespace Medicraft.Systems.Managers
             var curMap = ScreenManager.Instance.CurrentMap;
             Player.PlayerData.CurrentMap = curMap;
 
-            var mapPositionData = GameGlobals.Instance.MapLocationPointDatas
-                .FirstOrDefault(m => m.Name.Equals(curMap));
+            var mapPositionData = GameGlobals.Instance.MapLocationPointDatas.FirstOrDefault
+                (m => m.Name.Equals(curMap));
             PositionData positionData;
             Vector2 position = Vector2.One;
 
@@ -668,49 +679,128 @@ namespace Medicraft.Systems.Managers
 
         private void RespawnPlayer()
         {
-            if (IsPlayerDead)
+            string curMap = ScreenManager.Instance.CurrentMap;
+            string diffMap = string.Empty;
+            string loadMapAction = string.Empty;
+
+            switch (ScreenManager.Instance.CurrentMap)
             {
-                Player.HP = Player.MaxHP;
-                Player.Mana = Player.MaxMana;
+                case "Test":
+                    diffMap = "Test";
+                    break;
 
-                var curMap = ScreenManager.Instance.CurrentMap;
-                var mapPositionData = GameGlobals.Instance.MapLocationPointDatas.FirstOrDefault
-                    (m => m.Name.Equals(curMap));
-                var positionData = mapPositionData.Positions.FirstOrDefault
-                    (p => p.Name.Equals("Respawn"));
-                var position = new Vector2(
-                    (float)positionData.Value[0],
-                    (float)positionData.Value[1]);
+                case "map_1":
+                case "battlezone_1":
+                case "dungeon_1":
+                    diffMap = "map_1";
+                    loadMapAction = "warp_to_map_1";
+                    break;
 
-                Player.Position = position;
+                case "map_2":
+                case "battlezone_2":
+                case "dungeon_2":
+                    diffMap = "map_2";
+                    loadMapAction = "warp_to_map_2";
+                    break;
 
-                // Adjust HUD and camera positions
-                GameGlobals.Instance.TopLeftCornerPos = Player.Position - GameGlobals.Instance.GameScreenCenter;
-                GameGlobals.Instance.InitialCameraPos = Player.Position;
-                GameGlobals.Instance.AddingCameraPos = Vector2.Zero;
+                case "map_3":
+                case "battlezone_3":
+                case "dungeon_3":
+                    diffMap = "map_3";
+                    loadMapAction = "warp_to_map_3";
+                    break;
+            }
 
-                var entities = EntityManager.Instance.Entities;
-                foreach (var entity in entities.Where(e => !e.IsDestroyed))
+            if (IsPlayerDead)
+            {               
+                if (curMap.Equals(diffMap))
                 {
-                    entity.IsAggro = false;
-                    entity.AggroTimer = 0f;
-                }
+                    if (!ScreenManager.Instance.IsTransitioning)
+                        ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.None);
 
-                IsPlayerDead = false;
-                Player.IsDying = false;
+                    if (ScreenManager.Instance.DoActionAtMidTransition)
+                    {
+                        ScreenManager.Instance.DoActionAtMidTransition = false;
 
-                if (Companions.Count != 0)
-                    if (!IsCompanionDead)
-                    {                     
-                        Companions[CurrCompaIndex].IsAggro = false;
-                        Companions[CurrCompaIndex].ActionTimer = 0f;
-                        Companions[CurrCompaIndex].Position = Player.Position;
+                        Player.HP = Player.MaxHP;
+                        Player.Mana = Player.MaxMana;
+
+                        var entities = EntityManager.Instance.Entities;
+                        foreach (var entity in entities.Where(e => !e.IsDestroyed))
+                        {
+                            entity.IsAggro = false;
+                            entity.AggroTimer = 0f;
+                        }
+
+                        IsPlayerDead = false;
+                        Player.IsDying = false;
+
+                        var mapPositionData = GameGlobals.Instance.MapLocationPointDatas.FirstOrDefault
+                            (m => m.Name.Equals(curMap));
+
+                        var positionData = mapPositionData.Positions.FirstOrDefault
+                            (p => p.Name.Equals("Respawn"));
+
+                        var position = new Vector2(
+                            (float)positionData.Value[0],
+                            (float)positionData.Value[1]);
+
+                        Player.Position = position;
+
+                        if (Companions.Count != 0)
+                            if (!IsCompanionDead)
+                            {
+                                IsCompanionSummoned = false;
+                                Companions[CurrCompaIndex].IsAggro = false;
+                                Companions[CurrCompaIndex].ActionTimer = 0f;
+                            }
+
+                        // Adjust HUD and camera positions
+                        GameGlobals.Instance.TopLeftCornerPos = Player.Position - GameGlobals.Instance.GameScreenCenter;
+                        GameGlobals.Instance.InitialCameraPos = Player.Position;
+                        GameGlobals.Instance.AddingCameraPos = Vector2.Zero;
+
+                        if (GameGlobals.Instance.CurrentMapMusics.Count != 0)
+                        {
+                            var mapBGMusic = GameGlobals.Instance.CurrentMapMusics.FirstOrDefault();
+                            PlayBackgroundMusic(mapBGMusic.Song, true, 1f);
+                        }
                     }
-
-                if (GameGlobals.Instance.CurrentMapMusics.Count != 0)
+                }
+                else
                 {
-                    var mapBGMusic = GameGlobals.Instance.CurrentMapMusics.FirstOrDefault();
-                    PlayBackgroundMusic(mapBGMusic.Song, true, 1f);
+                    if (!ScreenManager.Instance.IsTransitioning)
+                    {
+                        Player.HP = Player.MaxHP;
+                        Player.Mana = Player.MaxMana;
+
+                        var entities = EntityManager.Instance.Entities;
+                        foreach (var entity in entities.Where(e => !e.IsDestroyed))
+                        {
+                            entity.IsAggro = false;
+                            entity.AggroTimer = 0f;
+                        }
+
+                        IsPlayerDead = false;
+                        Player.IsDying = false;
+
+                        if (Companions.Count != 0)
+                            if (!IsCompanionDead)
+                            {
+                                IsCompanionSummoned = false;
+                                Companions[CurrCompaIndex].IsAggro = false;
+                                Companions[CurrCompaIndex].ActionTimer = 0f;
+                            }
+
+                        GameGlobals.Instance.InitialCameraPos = Player.Position;
+                        var currLoadMapAction = ScreenManager.GetLoadMapAction(loadMapAction);
+
+                        // if the zoneArea.Name not be found in LoadMapAction then return
+                        if (currLoadMapAction == ScreenManager.LoadMapAction.LoadSave) return;
+
+                        ScreenManager.Instance.CurrentLoadMapAction = currLoadMapAction;
+                        ScreenManager.Instance.TranstisionToScreen(ScreenManager.Instance.GetPlayScreenByLoadMapAction());
+                    }                      
                 }
             }
         }
@@ -939,7 +1029,7 @@ namespace Medicraft.Systems.Managers
             IsDetectedInteractableMob = false;
 
             // Clear IsDectected for gameObjects first
-            var gameObjects = ObjectManager.Instance.GameObjects;
+            var gameObjects = ObjectManager.Instance.GameObjects.Where(o => o.IsDetectable);
             foreach (var gameObject in gameObjects)
             {
                 gameObject.IsDetected = false;
@@ -1000,7 +1090,7 @@ namespace Medicraft.Systems.Managers
             {
                 switch (gameObject.ObjectType)
                 {
-                    case GameObject.GameObjectType.QuestItem:
+                    case GameObject.GameObjectType.QuestObject:
                         break;
 
                     case GameObject.GameObjectType.Item:
@@ -1031,6 +1121,8 @@ namespace Medicraft.Systems.Managers
 
                     case GameObject.GameObjectType.WarpPoint:
                         // Open WarpPoint Panel
+                        WarpPoint warpPoint = gameObject as WarpPoint;
+                        warpPoint.OpenWarpPointPanel();
                         break;
                 }
             }
@@ -1047,21 +1139,16 @@ namespace Medicraft.Systems.Managers
                         break;
 
                     case FriendlyMob.FriendlyMobType.Civilian:
-                        
+
+                    case FriendlyMob.FriendlyMobType.QuestGiver:
+                        friendlyMob.Interact();
                         break;
 
                     case FriendlyMob.FriendlyMobType.Vendor:
                         Vendor vendorMob = friendlyMob as Vendor;
                         vendorMob.OpenTradingPanel();
                         break;
-
-                    case FriendlyMob.FriendlyMobType.QuestGiver:
-                        
-                        break;
                 }
-
-                // Switch interacting
-                friendlyMob.IsInteracting = !friendlyMob.IsInteracting;
             }
         }
 

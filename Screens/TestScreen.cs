@@ -45,6 +45,7 @@ namespace Medicraft.Screens
             {
                 { 100,  content.Load<SpriteSheet>("entity/mobs/friendly/cat/cat_animation.sf", new JsonContentLoader())},
                 { 101,  content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian09_animation.sf", new JsonContentLoader())},
+                { 102,  content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian01_animation.sf", new JsonContentLoader())},
                 { 200,  content.Load<SpriteSheet>("entity/mobs/monster/slime/slimes_animation.sf", new JsonContentLoader())},
                 { 201,  content.Load<SpriteSheet>("entity/mobs/monster/goblin/goblin_animation.sf", new JsonContentLoader())}
             };
@@ -67,7 +68,7 @@ namespace Medicraft.Screens
             hudSystem = new HUDSystem();
 
             // Show Map Name Sign
-            HUDSystem.ShowMapNameSign(0, MapName);
+            HUDSystem.ShowMapNameSign(1, MapName);
         }
 
         public override void UnloadContent()

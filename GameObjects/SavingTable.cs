@@ -21,6 +21,7 @@ namespace Medicraft.GameObjects
             IsVisible = objectData.IsVisible;
             IsRespawnable = objectData.IsRespawnable;
             IsDestroyable = true;
+            IsDetectable = true;
 
             var position = new Vector2(
                 (float)objectData.Position[0],
@@ -55,6 +56,7 @@ namespace Medicraft.GameObjects
             IsVisible = savingTable.IsVisible;
             IsRespawnable = savingTable.IsRespawnable;
             IsDestroyable = savingTable.IsDestroyable;
+            IsDetectable = savingTable.IsDetectable;
             IsDetected = false;
 
             Transform = new Transform2
@@ -94,7 +96,7 @@ namespace Medicraft.GameObjects
                 Sprite.Play("saving_2");
 
                 SignSprite.Depth = InitDepth;
-                SignSprite.Play("collecting_0");
+                SignSprite.Play("interact_1");
                 SignSprite.Update(deltaSeconds);
             }
             else Sprite.Play("saving_1");

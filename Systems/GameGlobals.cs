@@ -30,8 +30,8 @@ namespace Medicraft.Systems
         public Keys OpenInventoryKey { private set; get; } = Keys.I;
         public Keys OpenCraftingKey { private set; get; } = Keys.O;
         public Keys OpenInspectKey { private set; get; } = Keys.C;
-        public Keys DebugModeKey { private set; get; } = Keys.F1;
-        public Keys ShowPathFindingKey { private set; get; } = Keys.F2;
+        public Keys DebugModeKey { private set; get; } = Keys.F3;
+        public Keys ShowPathFindingKey { private set; get; } = Keys.F4;
         public Keys RecallCompanionKey { private set; get; } = Keys.R;
         public MouseState PrevMouse { set; get; }
         public MouseState CurMouse { set; get; }
@@ -169,6 +169,7 @@ namespace Medicraft.Systems
         public List<ChapterItemData> ChapterItemDatas { private set; get; }
         public List<SkillDescriptionData> SkillDescriptionDatas { private set; get; }
         public List<MedicineDescriptionData> MedicineDescriptionDatas { private set; get; }
+        public List<QuestData> QuestDatas { private set; get; }
         public SpriteSheet ItemsPackSprites { private set; get; }   // All Item sprite
         public SpriteSheet UIBooksIconHUD { private set; get; }
         public SpriteSheet WarpPointSprite { private set; get; }
@@ -268,7 +269,16 @@ namespace Medicraft.Systems
             book_desciption,
             safezone_map_sign,
             battlezone_map_sign,
-            Alpha_BG
+            Alpha_BG,
+            Warp_NordlingenTown,
+            Warp_NordlingenTown_lock,
+            Warp_RothenburgTown,
+            Warp_RothenburgTown_lock,
+            Warp_TallinnTown,
+            Warp_TallinnTown_lock,
+            help,
+            drake_shop_window,
+            accept_quest
         }
         private readonly Dictionary<GuiTextureName, int> guiTextureIndices = [];
 
@@ -615,6 +625,9 @@ namespace Medicraft.Systems
             // Load Thai Traditional Medicine
             MedicineDescriptionDatas = Content.Load<List<MedicineDescriptionData>>("data/models/medicine_descriptions");
 
+            // Load Quest Datas
+            QuestDatas = Content.Load<List<QuestData>>("data/models/quest_details");
+
             // Load Effect Sprite Sheet
             HitSpriteEffect = Content.Load<SpriteSheet>("effect/hit_effect.sf", new JsonContentLoader());
             HitSkillSpriteEffect = Content.Load<SpriteSheet>("effect/hit_skill_effect.sf", new JsonContentLoader());
@@ -687,7 +700,16 @@ namespace Medicraft.Systems
             GuiTextures.Add(Content.Load<Texture2D>("gui/safezone_map_sign"));
             GuiTextures.Add(Content.Load<Texture2D>("gui/battlezone_map_sign"));
             GuiTextures.Add(Content.Load<Texture2D>("gui/Alpha_BG"));
-
+            GuiTextures.Add(Content.Load<Texture2D>("gui/warp_map/Warp_NordlingenTown"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/warp_map/Warp_NordlingenTown_lock"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/warp_map/Warp_RothenburgTown"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/warp_map/Warp_RothenburgTown_lock"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/warp_map/Warp_TallinnTown"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/warp_map/Warp_TallinnTown_lock")); 
+            GuiTextures.Add(Content.Load<Texture2D>("gui/help")); 
+            GuiTextures.Add(Content.Load<Texture2D>("gui/drake_shop_window"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/accept_quest"));
+          
             // UI_books_icon_hud
             UIBooksIconHUD = Content.Load<SpriteSheet>("gui/UI_books_icon_hud.sf", new JsonContentLoader());
 

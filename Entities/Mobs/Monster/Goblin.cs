@@ -110,15 +110,14 @@ namespace Medicraft.Entities.Mobs.Monster
 
             BoundingCollisionX = goblin.BoundingCollisionX;
             BoundingCollisionY = goblin.BoundingCollisionY;
-
             BoundingDetectCollisions = goblin.BoundingDetectCollisions;
-            BoundingDetectCollisions.Position = Position;
+
             BoundingHitBox = goblin.BoundingHitBox;
             BoundingHitBox.Position = Position;
             BoundingAggro = goblin.BoundingAggro;
             BoundingAggro.Position = Position;
             BoundingDetectEntity = goblin.BoundingDetectEntity;
-            BoundingDetectCollisions.Position = Position;
+            BoundingDetectEntity.Position = Position;
 
             itemDropId = GameGlobals.RandomItemDrop();
             quantityDrop = GameGlobals.RandomItemQuantityDrop(itemDropId);

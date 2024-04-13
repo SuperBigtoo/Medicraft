@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using System;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended;
+using System.Collections.Generic;
 
 namespace Medicraft.Entities.Mobs
 {
@@ -13,6 +14,7 @@ namespace Medicraft.Entities.Mobs
     {
         public EntityData EntityData { get; protected set; }
         public AnimatedSprite SignSprite { get; protected set; }
+        public List<DialogData> DialogData { get; protected set; }
 
         public enum FriendlyMobType
         {
@@ -42,6 +44,29 @@ namespace Medicraft.Entities.Mobs
             {
                 Depth = InitDepth
             };
+        }
+
+        protected void SetMobType(string mobType)
+        {
+            switch (mobType)
+            {
+                default:
+                case "Civilian":
+                    MobType = FriendlyMobType.Civilian;
+                    break;
+
+                case "Vendor":
+                    MobType= FriendlyMobType.Vendor;
+                    break;
+
+                case "QuestGiver":
+                    MobType = FriendlyMobType.QuestGiver;
+                    break;
+
+                case "Animal":
+                    MobType = FriendlyMobType.Animal;
+                    break;
+            }
         }
 
         public override void Update(GameTime gameTime, float playerDepth, float topDepth, float middleDepth, float bottomDepth)
@@ -130,21 +155,26 @@ namespace Medicraft.Entities.Mobs
                         // Check if the character has passed the next node
                         var tileSize = GameGlobals.Instance.TILE_SIZE;
                         var nextNodePosition = new Vector2(
-                            pathFinding.GetPath()[currentNodeIndex + 1].Col * tileSize + tileSize / 2,
-                            pathFinding.GetPath()[currentNodeIndex + 1].Row * tileSize + tileSize / 2);
+                            (pathFinding.GetPath()[currentNodeIndex + 1].Col * tileSize) + tileSize / 2,
+                            (pathFinding.GetPath()[currentNodeIndex + 1].Row * tileSize) + tileSize / 2);
 
                         var boundingCenter = new Vector2(
                             BoundingDetectCollisions.Center.X,
                             BoundingDetectCollisions.Center.Y);
-                        if ((boundingCenter - nextNodePosition).Length() < tileSize * stoppingNodeIndex + tileSize / 4)
+
+                        if ((boundingCenter - nextNodePosition).Length() < tileSize / 2)
                         {
-                            currentNodeIndex++; // Increase currentNodeIndex
+                            currentNodeIndex++;
                         }
 
-                        //System.Diagnostics.Debug.WriteLine($"currentNodeIndex : {currentNodeIndex} | {pathFinding.GetPath().Count}");
-                        //System.Diagnostics.Debug.WriteLine($"Position : {Position}");
-                        //System.Diagnostics.Debug.WriteLine($"nextNodePosition : {nextNodePosition}");
-                        //System.Diagnostics.Debug.WriteLine($"Length : {(Position - nextNodePosition).Length()}");
+                        //if (GetType().Name.Equals("Civilian"))
+                        //{
+                        //    System.Diagnostics.Debug.WriteLine($"currentNodeIndex : {currentNodeIndex} | {pathFinding.GetPath().Count}");
+                        //    System.Diagnostics.Debug.WriteLine($"Position : {boundingCenter}");
+                        //    System.Diagnostics.Debug.WriteLine($"nextNodePosition : {nextNodePosition}");
+                        //    System.Diagnostics.Debug.WriteLine($"direction : {direction}");
+                        //    System.Diagnostics.Debug.WriteLine($"Length : {(boundingCenter - nextNodePosition).Length()}");
+                        //}
                     }
                     else IsMoving = false;
                 }
@@ -152,8 +182,18 @@ namespace Medicraft.Entities.Mobs
             else IsMoving = false;
         }
 
+        public void Interact()
+        {
+            UIManager.Instance.CreateDialog(this);
+        }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
+            if (GameGlobals.Instance.IsShowPath && GetType().Name.Equals("Civilian"))
+            {
+                pathFinding.Draw(spriteBatch);
+            }
+
             spriteBatch.Draw(Sprite, Transform);
 
             var shadowTexture = GameGlobals.GetShadowTexture(GameGlobals.ShadowTextureName.shadow_1);

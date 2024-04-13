@@ -6,7 +6,6 @@ using MonoGame.Extended.Sprites;
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace Medicraft.Systems.Spawners
 {
     public class ObjectSpawner(float spawnTime, float spawnTimer) : IObjectManager
@@ -89,6 +88,7 @@ namespace Medicraft.Systems.Spawners
                         spriteSheets = GameGlobals.Instance.ItemsPackSprites;
                         AddGameObject(new Item(new AnimatedSprite(spriteSheets), gameObjectData, Vector2.One));
                         break;
+
                     case 1: // QuestItem
                         spriteSheets = GameGlobals.Instance.ItemsPackSprites;
                         break;
@@ -105,6 +105,7 @@ namespace Medicraft.Systems.Spawners
 
                     case 4: // WarpPoint
                         spriteSheets = GameGlobals.Instance.WarpPointSprite;
+                        AddGameObject(new WarpPoint(new AnimatedSprite(spriteSheets), gameObjectData, Vector2.One));
                         break;
                 }
             }

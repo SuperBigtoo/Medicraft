@@ -39,6 +39,7 @@ namespace Medicraft.GameObjects
             }
         }
 
+        public bool IsDetectable { get; protected set; }
         public bool IsDetected { get; set; }
         public bool IsRespawnable { get; protected set; }
         public bool IsCollected { get; set; }
@@ -49,7 +50,7 @@ namespace Medicraft.GameObjects
         public enum GameObjectType
         {
             Item,
-            QuestItem,
+            QuestObject,
             CraftingTable,
             SavingTable,
             WarpPoint
@@ -68,6 +69,7 @@ namespace Medicraft.GameObjects
             Name = string.Empty;
             Description = string.Empty;
 
+            IsDetectable = false;
             IsDetected = false;
             IsRespawnable = true;
             IsCollected = false;
@@ -93,6 +95,7 @@ namespace Medicraft.GameObjects
             Name = gameObject.Name;
             Description = gameObject.Description;
 
+            IsDetectable = gameObject.IsDetectable;
             IsDetected = false;
             IsRespawnable = gameObject.IsRespawnable;
             IsCollected = false;
@@ -201,7 +204,7 @@ namespace Medicraft.GameObjects
             switch (ObjectType)
             {
                 case GameObjectType.Item:
-                case GameObjectType.QuestItem:
+                case GameObjectType.QuestObject:
                     var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault
                         (i => i.ItemId.Equals(ReferId));
                     Name = itemData.Name;
@@ -226,7 +229,7 @@ namespace Medicraft.GameObjects
                 break;
 
                 case 1:
-                    ObjectType = GameObjectType.QuestItem;
+                    ObjectType = GameObjectType.QuestObject;
                 break;
 
                 case 2:

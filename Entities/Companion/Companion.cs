@@ -159,7 +159,7 @@ namespace Medicraft.Entities.Companion
         {
             if (Instance.IsShowPath)
             {
-                pathFinding.Draw(spriteBatch);
+                //pathFinding.Draw(spriteBatch);
             }
 
             spriteBatch.Draw(Sprite, Transform);
@@ -263,9 +263,10 @@ namespace Medicraft.Entities.Companion
                         var boundingCenter = new Vector2(
                             BoundingDetectCollisions.Center.X,
                             BoundingDetectCollisions.Center.Y);
-                        if ((boundingCenter - nextNodePosition).Length() < tileSize * stoppingNodeIndex + tileSize / 4)
+
+                        if ((boundingCenter - nextNodePosition).Length() < tileSize / 2)
                         {
-                            currentNodeIndex++; // Increase currentNodeIndex
+                            currentNodeIndex++;
                         }
 
                         //System.Diagnostics.Debug.WriteLine($"currentNodeIndex : {currentNodeIndex} | {pathFinding.GetPath().Count}");

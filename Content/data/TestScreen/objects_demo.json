@@ -56,7 +56,6 @@
         "Name": "SavingTable",
         "Description": "SavingTable test",
         "Position": [ 1329.33, 973.33 ],
-        "IsRespawnable": true,
         "IsVisible": true,
         "IsDestroyable": true
     },
@@ -68,7 +67,6 @@
         "CraftingType": 0,
         "Description": "CraftingTable_Food",
         "Position": [ 1440.00, 1122.00 ],
-        "IsRespawnable": true,
         "IsVisible": true,
         "IsDestroyable": true
     },
@@ -80,7 +78,6 @@
         "CraftingType": 1,
         "Description": "CraftingTable Equipment",
         "Position": [ 1117.00, 992.00 ],
-        "IsRespawnable": true,
         "IsVisible": true,
         "IsDestroyable": true
     },
@@ -92,7 +89,17 @@
         "CraftingType": 2,
         "Description": "CraftingTable Medicine",
         "Position": [ 1216.00, 1137.00 ],
-        "IsRespawnable": true,
+        "IsVisible": true,
+        "IsDestroyable": true
+    },
+    {
+        "Id": 8,
+        "ReferId": -1,
+        "Category": 4,
+        "Name": "WarpPoint",
+        "SpiteCycle": "green",
+        "Description": "WarpPoint test",
+        "Position": [ 462.00, 1106.00 ],
         "IsVisible": true,
         "IsDestroyable": true
     }

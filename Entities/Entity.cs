@@ -143,7 +143,7 @@ namespace Medicraft.Entities
         public PathFindingTypes PathFindingType { get; protected set; }
 
         // Timer Conditions
-        public float AggroTime { get; protected set; }
+        public float AggroTime { get; protected set; } = 5f;
         public float AggroTimer { get; set; }
         public float AggroDrawEffectTimer { get; set; }
         public float ActionTimer { get; set; }
@@ -220,13 +220,6 @@ namespace Medicraft.Entities
             BaseEvasion = 0;
             BaseSpeed = 0;
 
-            Transform = new Transform2
-            {
-                Scale = Vector2.One,
-                Rotation = 0f,
-                Position = Vector2.Zero
-            };
-
             Velocity = Vector2.Zero;
             CombatNumVelocity = Vector2.Zero;
 
@@ -288,13 +281,6 @@ namespace Medicraft.Entities
             BaseCritDMG = entity.BaseCritDMG;
             BaseEvasion = entity.BaseEvasion;
             BaseSpeed = entity.BaseSpeed;
-
-            Transform = new Transform2
-            {
-                Scale = Vector2.One,
-                Rotation = 0f,
-                Position = Vector2.Zero
-            };
 
             Velocity = Vector2.Zero;
             CombatNumVelocity = Vector2.Zero;
@@ -455,8 +441,8 @@ namespace Medicraft.Entities
             }
 
             // Check movement according to PathFinding
-            if (ScreenManager.Instance.IsScreenLoaded && !IsStunning 
-                && ((!IsKnockback && !IsAttacking) || (!IsAttacked && !IsAttacking)))
+            if (ScreenManager.Instance.IsScreenLoaded && !UIManager.Instance.IsShowDialogUI
+                && !IsStunning && ((!IsKnockback && !IsAttacking) || (!IsAttacked && !IsAttacking)))
             {
                 if (pathFinding != null || pathFinding.GetPath().Count != 0)
                 {
@@ -501,10 +487,15 @@ namespace Medicraft.Entities
                         var boundingCenter = new Vector2(
                             BoundingDetectCollisions.Center.X,
                             BoundingDetectCollisions.Center.Y);
+
                         if ((boundingCenter - nextNodePosition).Length() < tileSize * stoppingNodeIndex + tileSize / 4)
                         {
                             currentNodeIndex++; // Increase currentNodeIndex
                         }
+                        //if ((boundingCenter - nextNodePosition).Length() < tileSize / 2)
+                        //{
+                        //    currentNodeIndex++;
+                        //}
                     }
                     else IsMoving = false;
                 }
@@ -905,7 +896,8 @@ namespace Medicraft.Entities
 
             // Do Attack
             if ((isPlayerDetected || isCompanionDetected)
-                && ScreenManager.Instance.IsScreenLoaded && !IsAttacking && !IsStunning)
+                && ScreenManager.Instance.IsScreenLoaded && !UIManager.Instance.IsShowDialogUI
+                && !IsAttacking && !IsStunning)
             {
                 CurrentAnimation = SpriteCycle + "_attacking";
                 Sprite.Play(CurrentAnimation);

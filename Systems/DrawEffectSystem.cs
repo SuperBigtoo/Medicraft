@@ -46,7 +46,7 @@ namespace Medicraft.Systems
             switch (objectType)
             {
                 case GameObjectType.Item:
-                case GameObjectType.QuestItem:
+                case GameObjectType.QuestObject:
                     particleEffect = new ParticleEffect()
                     {
                         Position = new Vector2(objectPos.X, objectPos.Y + 5f),
@@ -117,8 +117,8 @@ namespace Medicraft.Systems
                                                 {
                                                     new ColorInterpolator
                                                     {
-                                                        StartValue = Color.LightSkyBlue.ToHsl(),
-                                                        EndValue = Color.PaleTurquoise.ToHsl()
+                                                        StartValue = Color.Aqua.ToHsl(),
+                                                        EndValue = Color.White.ToHsl()
                                                     }
                                                 }
                                             },
@@ -142,6 +142,50 @@ namespace Medicraft.Systems
                     break;
 
                 case GameObjectType.WarpPoint:
+                    particleEffect = new ParticleEffect()
+                    {
+                        Position = new Vector2(objectPos.X, objectPos.Y + 80),
+                        Emitters = [
+                        new ParticleEmitter(textureRegion, 300, TimeSpan.FromSeconds(1.2)
+                                    , Profile.Circle(60, Profile.CircleRadiation.In))
+                                    {
+                                        Parameters = new ParticleReleaseParameters
+                                        {
+                                            Speed = new Range<float>(0f, 32f),
+                                            Quantity = 6,
+                                            Rotation = new Range<float>(-0.5f, 0.5f),
+                                            Scale = new Range<float>(1f, 4f),
+                                        },
+                                        Modifiers =
+                                        {
+                                            new AgeModifier
+                                            {
+                                                Interpolators =
+                                                {
+                                                    new ColorInterpolator
+                                                    {
+                                                        StartValue = Color.LightSkyBlue.ToHsl(),
+                                                        EndValue = Color.PaleTurquoise.ToHsl()
+                                                    }
+                                                }
+                                            },
+                                            new RotationModifier
+                                            {
+                                                RotationRate = 5f
+                                            },
+                                            new DragModifier
+                                            {
+                                                Density = 0.7f, DragCoefficient = 1f
+                                            },
+                                            new LinearGravityModifier
+                                            {
+                                                Direction = new Vector2(0,-1),
+                                                Strength = 200f
+                                            },
+                                            new OpacityFastFadeModifier()
+                                        }
+                            }]
+                    };
                     break;
             }         
 

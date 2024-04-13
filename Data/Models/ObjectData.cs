@@ -12,5 +12,6 @@
         public bool IsDestroyable { get; set; } = false;
         public bool IsVisible { get; set; } = true;
         public int CraftingType { get; set; }
+        public string SpiteCycle { get; set; }
     }
 }

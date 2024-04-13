@@ -1,9 +1,11 @@
 ﻿using GeonBit.UI;
+using GeonBit.UI.Animators;
 using GeonBit.UI.Entities;
 using GeonBit.UI.Utils.Forms;
 using Medicraft.Data;
 using Medicraft.Data.Models;
 using Medicraft.Entities.Companion;
+using Medicraft.Entities.Mobs;
 using Medicraft.Entities.Mobs.Friendly;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -41,6 +43,7 @@ namespace Medicraft.Systems.Managers
         public const int PauseMenu = 5;
         public const int SaveMenu = 6;
         public const int TradingPanel = 7;
+        public const int WarpPointPanel = 8;
 
         public string CurrentCraftingList { get; set; }
 
@@ -50,6 +53,15 @@ namespace Medicraft.Systems.Managers
 
         public bool IsQuickMenuFocus { get; private set; } = false;
 
+        // Dialog
+        public bool IsShowDialogUI { get; private set; } = false;
+        public FriendlyMob InteractingMob { get; private set; }
+        public DialogData Dialog { get; private set; }
+
+        private TypeWriterAnimator _animatorDialogue;
+        private int _dialogueIndex = 0;
+        private QuestStamp _questStamp;
+
         // Inspect
         public bool IsCharacterTabSelected { get; set; } = false;
         public bool IsShowConfirmBox { get; set; } = false;
@@ -58,8 +70,12 @@ namespace Medicraft.Systems.Managers
 
         // Companion character
         public Companion SelectedCompanion { get; private set; }
-        public int SelectedCompanionId = 0;
         public const int VioletSprite = 0;
+        private int _selectedCompanionId = 0;
+
+        // Skill selected
+        public string NoahSelectedSkill { get; private set; }
+        public string CompanionSelectedSkill { get; private set; }
 
         // Load Save
         public bool IsClickedLoadButton { get; private set; } = false;
@@ -71,9 +87,12 @@ namespace Medicraft.Systems.Managers
         public Vendor InteractingVendor { get; private set; }
         public Icon SelectedPurchaseItem { get; private set; }
 
-        // Skill selected
-        public string NoahSelectedSkill { get; private set; }
-        public string CompanionSelectedSkill { get; private set; }
+        // WarpPoint
+        public const int NordlingenTown = 0;
+        public const int RothenburgTown = 1;
+        public const int TallinnTown = 2;
+        public static readonly int[] AvailableWarpPoint = [ NordlingenTown, RothenburgTown, TallinnTown ];
+        public int SelectedWarpPointId = 0;
 
         // UI elements
         private readonly List<Panel> _mainPanels = [];
@@ -94,21 +113,41 @@ namespace Medicraft.Systems.Managers
             _mainPanels[CurrentUI].Visible = true;
         }
 
-        private void UpdateSelectedCompanion(bool isIncreasing)
+        private void UpdateSelectedWarpPoint(bool isNext)
         {
-            if (isIncreasing)
+            if (isNext)
             {
-                SelectedCompanionId++;
+                SelectedWarpPointId++;
 
-                if (SelectedCompanionId >= PlayerManager.Instance.Companions.Count)
-                    SelectedCompanionId = 0;
+                if (SelectedWarpPointId >= AvailableWarpPoint.Length)
+                    SelectedWarpPointId = 0;
             }
             else
             {
-                SelectedCompanionId--;
+                SelectedWarpPointId--;
 
-                if (SelectedCompanionId < 0)
-                    SelectedCompanionId = PlayerManager.Instance.Companions.Count - 1;
+                if (SelectedWarpPointId < 0)
+                    SelectedWarpPointId = AvailableWarpPoint.Length - 1;
+            }
+
+            RefreshWarpPointUI();
+        }
+
+        private void UpdateSelectedCompanion(bool isNext)
+        {
+            if (isNext)
+            {
+                _selectedCompanionId++;
+
+                if (_selectedCompanionId >= PlayerManager.Instance.Companions.Count)
+                    _selectedCompanionId = 0;
+            }
+            else
+            {
+                _selectedCompanionId--;
+
+                if (_selectedCompanionId < 0)
+                    _selectedCompanionId = PlayerManager.Instance.Companions.Count - 1;
             }
 
             // Refresh Companion Inspect
@@ -119,7 +158,7 @@ namespace Medicraft.Systems.Managers
 
         private void SetCompanionSelectedSkill(string abilityType)
         {
-            var companion = PlayerManager.Instance.Companions[SelectedCompanionId];
+            var companion = PlayerManager.Instance.Companions[_selectedCompanionId];
 
             switch (abilityType)
             {
@@ -239,13 +278,15 @@ namespace Medicraft.Systems.Managers
             // Save Menu = 6
             InitSaveMenuUI();
 
-            // Trading Panel = 7
-            InitTradingPanel();
+            // Trading = 7
+            InitTradingUI();
+
+            // Warp Point = 8
+            InitWarpPointUI();
 
             // update ui panel
             UpdateAfterChangeGUI();
         }
-
 
         /// <summary>
         /// Item Bar and Slot Item
@@ -262,6 +303,7 @@ namespace Medicraft.Systems.Managers
             _mainPanels.Add(playScreenUI);
             UserInterface.Active.AddEntity(playScreenUI);
 
+            // Hotbar
             var hotbarSlotPanel = new Panel(new Vector2(500, 50), PanelSkin.None, Anchor.BottomCenter)
             {
                 Identifier = "hotbarSlotPanel",
@@ -269,12 +311,14 @@ namespace Medicraft.Systems.Managers
             };
             playScreenUI.AddChild(hotbarSlotPanel);
 
+            // Quick Menu
             var quickMenuPanel = new Panel(new Vector2(360, 100), PanelSkin.None, Anchor.TopRight)
             {
                 Identifier = "quickMenuPanel"
             };
             playScreenUI.AddChild(quickMenuPanel);
 
+            // Open Inspect Character
             var InspectMenuIcon = new Icon(IconType.None, Anchor.CenterLeft)
             {
                 Identifier = "InspectMenuIcon",
@@ -294,13 +338,11 @@ namespace Medicraft.Systems.Managers
                         CurrentUI = PlayScreen;
                         GameGlobals.Instance.IsRefreshPlayScreenUI = false;
                         ClearSkillDescription("Character");
-
                         PlaySoundEffect(Sound.Cancel1);
                     }
                     else
                     {
                         Instance.CurrentUI = InspectPanel;
-
                         PlaySoundEffect(Sound.Click1);
                     }
                 },
@@ -309,6 +351,7 @@ namespace Medicraft.Systems.Managers
             };
             quickMenuPanel.AddChild(InspectMenuIcon);
 
+            // Open Inventory
             var InventoryMenuIcon = new Icon(IconType.None, Anchor.Center)
             {
                 Identifier = "InventoryMenuIcon",
@@ -326,13 +369,11 @@ namespace Medicraft.Systems.Managers
                     {
                         CurrentUI = PlayScreen;
                         GameGlobals.Instance.IsRefreshPlayScreenUI = false;
-
                         PlaySoundEffect(Sound.PickUpBag);
                     }
                     else
                     {
                         CurrentUI = InventoryPanel;
-
                         PlaySoundEffect(Sound.PickUpBag);
                     }
                 },
@@ -341,6 +382,7 @@ namespace Medicraft.Systems.Managers
             };
             quickMenuPanel.AddChild(InventoryMenuIcon);
 
+            // Open Pause Menu
             var PauseMenuIcon = new Icon(IconType.None, Anchor.CenterRight)
             {
                 Identifier = "PauseMenuIcon",
@@ -358,13 +400,11 @@ namespace Medicraft.Systems.Managers
                     {
                         Instance.CurrentUI = PlayScreen;
                         GameGlobals.Instance.IsRefreshPlayScreenUI = false;
-
                         PlaySoundEffect(Sound.Unpause);
                     }
                     else
                     {
                         Instance.CurrentUI = PauseMenu;
-
                         PlaySoundEffect(Sound.Pause);
                     }
                 },
@@ -372,11 +412,287 @@ namespace Medicraft.Systems.Managers
                 OnMouseLeave = (e) => { IsQuickMenuFocus = false; }
             };
             quickMenuPanel.AddChild(PauseMenuIcon);
+
+            // Quest 
+            {
+                var questPanel = new Panel(new Vector2(310, 600), PanelSkin.Simple, Anchor.CenterRight)
+                {
+                    Identifier = "questPanel",
+                    Visible = false,
+                    Opacity = 200,
+                    Offset = new Vector2(0, -75),
+                    AdjustHeightAutomatically = true
+                };
+                questPanel.SetCustomSkin(GetGuiTexture(GuiTextureName.Alpha_BG));
+                playScreenUI.AddChild(questPanel);
+
+                var headerQuest = new Button("Quest Name", ButtonSkin.Fancy, Anchor.AutoCenter)
+                {
+                    Identifier = "headerQuest",
+                    Size = new Vector2(325, 40),
+                    Offset = new Vector2(0, -50),
+                };
+                questPanel.AddChild(headerQuest);
+
+                var questDescrip = new RichParagraph("Quest Description", Anchor.AutoCenter)
+                {
+                    Identifier = "questDescrip",
+                    WrapWords = true,
+                    Size = new Vector2(280, 550)
+                };
+                questPanel.AddChild(questDescrip);
+            }
+
+            // Dialog UI
+            {
+                var dialogPanel = new Panel(new Vector2(1200, 300), PanelSkin.None, Anchor.BottomCenter)
+                {
+                    Identifier = "dialogPanel",
+                    Visible = false
+                };
+                playScreenUI.AddChild(dialogPanel);
+
+                // BG dialog
+                var dialogTexture = GetGuiTexture(GuiTextureName.dialog_tmp);
+                var dialogImageBG = new Image(dialogTexture)
+                {
+                    Size = new Vector2(dialogTexture.Width, dialogTexture.Height)
+                };
+                dialogPanel.AddChild(dialogImageBG);
+
+                var entityNamePanel = new Panel(new Vector2(265, 85), PanelSkin.None, Anchor.TopLeft)
+                {
+                    Identifier = "entityNamePanel",
+                    Offset = new Vector2(90, -5)
+                };
+                dialogPanel.AddChild(entityNamePanel);
+
+                var textName = "TestName";
+                var entityName = new RichParagraph(textName, Anchor.Center)
+                {
+                    Identifier = "entityName",
+                    Scale = 1.3f
+                };
+                entityNamePanel.AddChild(entityName);
+
+                var dialogueText = new RichParagraph(@"", Anchor.TopLeft)
+                {
+                    Identifier = "dialogueText",
+                    WrapWords = true,
+                    Size = new Vector2(890, 170),
+                    Offset = new Vector2(80, 85)
+                };
+                dialogPanel.AddChild(dialogueText);
+
+                _animatorDialogue = (TypeWriterAnimator)dialogueText.AttachAnimator(new TypeWriterAnimator()
+                {
+                    TextToType = @"Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว"
+                });
+
+                dialogPanel.OnClick += (e) =>
+                {
+                    if (!_animatorDialogue.IsDone)
+                    {
+                        _animatorDialogue.Finish();
+                    }
+                };
+                dialogueText.OnClick += (e) =>
+                {
+                    if (!_animatorDialogue.IsDone)
+                    {
+                        _animatorDialogue.Finish();
+                    }
+                };
+
+                // Accept button
+                var acceptButton = new Button("", ButtonSkin.Default, Anchor.BottomRight)
+                {
+                    Identifier = "acceptButton",
+                    Visible = false,
+                    Enabled = false,
+                    Size = new Vector2(40, 40),
+                    Offset = new Vector2(50, 60),
+                    OnClick = (btn) =>
+                    {                       
+                        // Add Quest to List
+                        _questStamp.IsQuestAccepted = QuestManager.Instance.AddQuest(_questStamp.QuestId);
+
+                        CloseDialog();
+                    }
+                };
+                acceptButton.ButtonParagraph.SetAnchorAndOffset(Anchor.AutoCenter, new Vector2(0, -40));
+                acceptButton.AddChild(new Icon(IconType.None, Anchor.AutoCenter)
+                {
+                    Texture = GetGuiTexture(GuiTextureName.accept_quest),
+                    ClickThrough = true
+                }, true);
+                dialogPanel.AddChild(acceptButton);
+
+                // Next Dialogue button
+                var nextDialogueButton = new Button("", ButtonSkin.Default, Anchor.BottomRight)
+                {
+                    Identifier = "nextDialogueButton",
+                    Size = new Vector2(40, 40),
+                    Offset = new Vector2(50, 0),
+                    OnClick = (btn) =>
+                    {
+                        if (!_animatorDialogue.IsDone)
+                        {
+                            _animatorDialogue.Finish();
+                            return;
+                        }
+
+                        if (_dialogueIndex < Dialog.Dialogues.Count - 1)
+                        {                           
+                            _dialogueIndex++;
+                            _animatorDialogue.TextToType = Dialog.Dialogues[_dialogueIndex];
+
+                            if (_dialogueIndex == Dialog.Dialogues.Count - 1)
+                                acceptButton.Enabled = true;
+                        }
+                        else CloseDialog();
+                    }
+                };
+                nextDialogueButton.ButtonParagraph.SetAnchorAndOffset(Anchor.AutoCenter, new Vector2(0, -40));
+                nextDialogueButton.AddChild(new Icon(IconType.None, Anchor.AutoCenter)
+                {
+                    Texture = GetGuiTexture(GuiTextureName.arrow_down),
+                    ClickThrough = true
+                }, true);
+                dialogPanel.AddChild(nextDialogueButton);
+            }
+        }
+
+        public void UpdateQuestDescription()
+        {
+            var playScreenUI = _mainPanels[PlayScreen];
+
+            var questPanel = playScreenUI.Children.FirstOrDefault
+                (p => p.Identifier.Equals("questPanel"));
+            
+            var headerQuest = questPanel.Children.OfType<Button>().FirstOrDefault
+                (e => e.Identifier.Equals("headerQuest"));
+            var questDescrip = questPanel.Children.OfType<RichParagraph>().FirstOrDefault
+                (e => e.Identifier.Equals("questDescrip"));
+
+            if (QuestManager.Instance.QuestList.Count == 0)
+            {
+                questPanel.Visible = false;
+                headerQuest.Children.OfType<RichParagraph>().FirstOrDefault().Text = "";
+                questDescrip.Text = "";
+                return;
+            }
+
+            questPanel.Visible = true;
+            var quest = QuestManager.Instance.QuestList.FirstOrDefault();
+            headerQuest.Children.OfType<RichParagraph>().FirstOrDefault().Text = quest.QuestData.Name;
+            questDescrip.Text = $"{quest.QuestData.Description} - ({quest.QuestData.ObjectiveCount}/{quest.QuestData.ObjectiveValue})";
+        }
+
+        public void CreateDialog(FriendlyMob friendlyMob)
+        {
+            if (friendlyMob == null || !friendlyMob.IsInteractable) return;
+
+            InteractingMob = friendlyMob;
+            InteractingMob.IsInteracting = true;
+            IsShowDialogUI = true;
+
+            var playScreenUI = _mainPanels[PlayScreen];
+
+            var hotbarSlotPanel = playScreenUI.Children.FirstOrDefault
+                (p => p.Identifier.Equals("hotbarSlotPanel"));
+            var quickMenuPanel = playScreenUI.Children.FirstOrDefault
+                (p => p.Identifier.Equals("quickMenuPanel"));
+            var questPanel = playScreenUI.Children.FirstOrDefault
+                (p => p.Identifier.Equals("questPanel"));
+            var dialogPanel = playScreenUI.Children.FirstOrDefault
+                (p => p.Identifier.Equals("dialogPanel"));
+            var entityNamePanel = dialogPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("entityNamePanel"));
+
+            var entityName = entityNamePanel.Children.OfType<RichParagraph>().FirstOrDefault
+                (e => e.Identifier.Equals("entityName"));
+            entityName.Text = InteractingMob.Name;
+
+            var acceptButton = dialogPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("acceptButton"));
+            acceptButton.Enabled = false;
+
+            questPanel.Visible = false;
+            hotbarSlotPanel.Visible = false;
+            quickMenuPanel.Visible = false;
+            dialogPanel.Visible = true;
+
+            // Init Dialog
+            _dialogueIndex = 0;
+            var dialogList = InteractingMob.DialogData;
+
+            if (InteractingMob.MobType == FriendlyMob.FriendlyMobType.QuestGiver)
+            {
+                var dialogs = dialogList.Where(e => e.Type.Equals("Quest")).ToList();
+                var questId = dialogs.FirstOrDefault().QuestId;
+                var chapterId = dialogs.FirstOrDefault().ChapterId;
+                _questStamp = PlayerManager.Instance.Player.PlayerData.ChapterProgression.FirstOrDefault
+                    (e => e.ChapterId.Equals(chapterId)).Quests.FirstOrDefault
+                        (e => e.QuestId.Equals(questId));
+
+                if (_questStamp.IsQuestClear)
+                {
+                    acceptButton.Visible = false;
+                    Dialog = dialogs.FirstOrDefault(e => e.Stage.Equals("onClear"));                   
+                }
+                else if (!_questStamp.IsQuestAccepted && !_questStamp.IsQuestDone)
+                {
+                    acceptButton.Visible = true;
+                    Dialog = dialogs.FirstOrDefault(e => e.Stage.Equals("onAccept"));
+                }
+                else if (_questStamp.IsQuestAccepted && !_questStamp.IsQuestDone)
+                {
+                    acceptButton.Visible = false;
+                    Dialog = dialogs.FirstOrDefault(e => e.Stage.Equals("onGoing"));
+                }
+                else if (_questStamp.IsQuestAccepted && _questStamp.IsQuestDone)
+                {
+                    acceptButton.Visible = false;
+                    Dialog = dialogs.FirstOrDefault(e => e.Stage.Equals("onDone"));
+                }
+
+                _animatorDialogue.TextToType = Dialog.Dialogues[_dialogueIndex];
+            }
+            else
+            {
+                acceptButton.Visible = false;
+                Dialog = dialogList.FirstOrDefault(e => e.Type.Equals("Daily"));
+
+                _animatorDialogue.TextToType = Dialog.Dialogues[_dialogueIndex];
+            }
+        }
+
+        private void CloseDialog()
+        {
+            InteractingMob.IsInteracting = false;
+            IsShowDialogUI = false;
+
+            var playScreenUI = _mainPanels[PlayScreen];
+
+            var hotbarSlotPanel = playScreenUI.Children.FirstOrDefault
+                (p => p.Identifier.Equals("hotbarSlotPanel"));
+            var quickMenuPanel = playScreenUI.Children.FirstOrDefault
+                (p => p.Identifier.Equals("quickMenuPanel"));
+            var questPanel = playScreenUI.Children.FirstOrDefault
+                (p => p.Identifier.Equals("questPanel"));
+            var dialogPanel = playScreenUI.Children.FirstOrDefault
+                (p => p.Identifier.Equals("dialogPanel"));
+
+            hotbarSlotPanel.Visible = true;
+            quickMenuPanel.Visible = true;
+            questPanel.Visible = true;
+            dialogPanel.Visible = false;
         }
 
         public void RefreshHotbar()
         {
-            var playScreenUI = _mainPanels.ElementAt(PlayScreen);
+            var playScreenUI = _mainPanels[PlayScreen];
             var hotbarSlotPanel = playScreenUI.Children.FirstOrDefault
                 (p => p.Identifier.Equals("hotbarSlotPanel"));
 
@@ -475,6 +791,7 @@ namespace Medicraft.Systems.Managers
             {
                 Identifier = "invenLeftPanel"
             };
+            leftInvenPanel.SetCustomSkin(GetGuiTexture(GuiTextureName.drake_shop_window));
             inventoryPanel.AddChild(leftInvenPanel);
 
             var invenDescriptPanel = new Panel(new Vector2(450, 225), PanelSkin.ListBackground, Anchor.AutoCenter)
@@ -872,6 +1189,7 @@ namespace Medicraft.Systems.Managers
             {
                 Identifier = "leftCraftingPanel"
             };
+            leftCraftingPanel.SetCustomSkin(GetGuiTexture(GuiTextureName.drake_shop_window));
             craftingPanel.AddChild(leftCraftingPanel);
 
             var craftingDescriptPanel = new Panel(new Vector2(550, 285), PanelSkin.ListBackground, Anchor.AutoCenter)
@@ -943,6 +1261,7 @@ namespace Medicraft.Systems.Managers
             {
                 Identifier = "leftCraftingSelectItemPanel"
             };
+            leftCraftingSelectItemPanel.SetCustomSkin(GetGuiTexture(GuiTextureName.drake_shop_window));
             craftingSelectItemPanel.AddChild(leftCraftingSelectItemPanel);
 
             leftCraftingSelectItemPanel.AddChild(new Icon(IconType.None, Anchor.AutoCenter, 1, false)
@@ -1764,6 +2083,31 @@ namespace Medicraft.Systems.Managers
                     }
                 };
 
+                // Help Button
+                var helpButton = new Button("", ButtonSkin.Default)
+                {
+                    Identifier = "helpButton",
+                    Locked = false,
+                    Anchor = Anchor.BottomLeft,
+                    Size = new Vector2(50, 50),
+                    OnClick = (btn) =>
+                    {
+                        IsShowConfirmBox = true;
+
+                        GeonBit.UI.Utils.MessageBox.ShowMsgBox(
+                            "Upgrading Skill",
+                            "Upgrading skills uses resources such as Gold Coin and SP.\nCompanion characters will also receive skill upgrades at the same time.",
+                            onDone: () => { IsShowConfirmBox = false; });
+                    }
+                };
+                helpButton.ButtonParagraph.SetAnchorAndOffset(Anchor.AutoCenter, new Vector2(0, -35));
+                helpButton.AddChild(new Icon(IconType.None, Anchor.AutoCenter)
+                {
+                    Texture = GetGuiTexture(GuiTextureName.help),
+                    ClickThrough = true
+                }, true);
+                displayCharacterPanel.AddChild(helpButton);
+
                 // Right Panel
                 var rightPanel = new Panel(new Vector2(375, 600), PanelSkin.None, Anchor.TopRight)
                 {
@@ -2531,7 +2875,7 @@ namespace Medicraft.Systems.Managers
 
         public void RefreshInspectCompanionDisplay()
         {
-            SelectedCompanion = PlayerManager.Instance.Companions[SelectedCompanionId];
+            SelectedCompanion = PlayerManager.Instance.Companions[_selectedCompanionId];
 
             var inspectPanel = _mainPanels.ElementAt(InspectPanel);
             var inspectTabs = inspectPanel.Children.OfType<PanelTabs>().FirstOrDefault
@@ -4152,7 +4496,7 @@ namespace Medicraft.Systems.Managers
             IsClickedLoadButton = true;
         }
 
-        private void InitTradingPanel()
+        private void InitTradingUI()
         {
             // Main Panel
             var tradingPanel = new Panel(new Vector2(1200, 650), PanelSkin.None, Anchor.Center)
@@ -4307,6 +4651,7 @@ namespace Medicraft.Systems.Managers
                 {
                     Identifier = "leftPanel"
                 };
+                leftPanel.SetCustomSkin(GetGuiTexture(GuiTextureName.drake_shop_window));
                 buyItemTab.panel.AddChild(leftPanel);
 
                 var descripPanel = new Panel(new Vector2(450, 225), PanelSkin.ListBackground, Anchor.AutoCenter)
@@ -4326,12 +4671,20 @@ namespace Medicraft.Systems.Managers
                     ClickThrough = true,
                     Identifier = "iconLabel"
                 });
-                descripPanel.AddChild(new Paragraph("priceLabel", Anchor.AutoInline)
+                descripPanel.AddChild(new Image(GetGuiTexture(GuiTextureName.gold_coin))
                 {
-                    Scale = 1.2f,
+                    Size = new Vector2(24, 24),
+                    Anchor = Anchor.AutoInline,
+                    ClickThrough = true,
+                });
+                descripPanel.AddChild(new Paragraph("priceLabel", Anchor.AutoInlineNoBreak)
+                {
+                    Scale = 1.1f,
+                    Offset = new Vector2(15, 0),
                     ClickThrough = true,
                     Identifier = "priceLabel"
                 });
+                descripPanel.AddChild(new LineSpace(1));
                 descripPanel.AddChild(new Paragraph("description", Anchor.AutoInline)
                 {
                     Scale = 1f,
@@ -4392,6 +4745,7 @@ namespace Medicraft.Systems.Managers
                 {
                     Identifier = "leftPanel"
                 };
+                leftPanel.SetCustomSkin(GetGuiTexture(GuiTextureName.drake_shop_window));
                 sellItemTab.panel.AddChild(leftPanel);
 
                 var descripPanel = new Panel(new Vector2(450, 250), PanelSkin.ListBackground, Anchor.AutoCenter)
@@ -4411,12 +4765,20 @@ namespace Medicraft.Systems.Managers
                     ClickThrough = true,
                     Identifier = "iconLabel"
                 });
-                descripPanel.AddChild(new Paragraph("priceLabel", Anchor.AutoInline)
+                descripPanel.AddChild(new Image(GetGuiTexture(GuiTextureName.gold_coin))
                 {
-                    Scale = 1.2f,
+                    Size = new Vector2(24, 24),
+                    Anchor = Anchor.AutoInline,
+                    ClickThrough = true,
+                });
+                descripPanel.AddChild(new Paragraph("priceLabel", Anchor.AutoInlineNoBreak)
+                {
+                    Scale = 1.1f,
+                    Offset = new Vector2(15, 0),
                     ClickThrough = true,
                     Identifier = "priceLabel"
-                });
+                });             
+                descripPanel.AddChild(new LineSpace(1));
                 descripPanel.AddChild(new Paragraph("description", Anchor.AutoInline)
                 {
                     Scale = 1f,
@@ -4736,6 +5098,182 @@ namespace Medicraft.Systems.Managers
             var description = descripPanel.Children.OfType<Paragraph>().FirstOrDefault
                 (i => i.Identifier.Equals("description"));
             description.Text = itemData.Description;
+        }
+
+        private void InitWarpPointUI()
+        {
+            var warpPointPanel = new Panel(
+                new Vector2(GameGlobals.Instance.GameScreen.X, GameGlobals.Instance.GameScreen.X),
+                PanelSkin.None,
+                Anchor.Center)
+            {
+                Identifier = "warpPointPanel"
+            };
+            _mainPanels.Add(warpPointPanel);
+            UserInterface.Active.AddEntity(warpPointPanel);
+
+            warpPointPanel.AddChild(new Header("Warp Point", Anchor.TopCenter));
+
+            var mapImage = new Image()
+            {
+                Identifier = "mapImage",
+                Size = new Vector2(500, 500),
+                Anchor = Anchor.Center
+            };
+            warpPointPanel.AddChild(mapImage);
+
+            var prevWarpPoint = new Button("", ButtonSkin.Default)
+            {
+                Identifier = "prevWarpPoint",
+                Anchor = Anchor.CenterLeft,
+                Size = new Vector2(50, 50),
+                Offset = new Vector2(250, 0),
+                OnClick = (btn) =>
+                {
+                    UpdateSelectedWarpPoint(false);
+                }
+            };
+            warpPointPanel.AddChild(prevWarpPoint);
+            prevWarpPoint.ButtonParagraph.SetAnchorAndOffset(Anchor.AutoCenter, new Vector2(0, -35));
+            prevWarpPoint.AddChild(new Icon(IconType.None, Anchor.AutoCenter)
+            {
+                Texture = GetGuiTexture(GuiTextureName.arrow_left)
+            }, true);
+
+            var nextWarpPoint = new Button("", ButtonSkin.Default)
+            {
+                Identifier = "nextWarpPoint",
+                Anchor = Anchor.CenterRight,
+                Size = new Vector2(50, 50),
+                Offset = new Vector2(250, 0),
+                OnClick = (btn) =>
+                {
+                    UpdateSelectedWarpPoint(true);
+                }
+            };
+            warpPointPanel.AddChild(nextWarpPoint);
+            nextWarpPoint.ButtonParagraph.SetAnchorAndOffset(Anchor.AutoCenter, new Vector2(0, -35));
+            nextWarpPoint.AddChild(new Icon(IconType.None, Anchor.AutoCenter)
+            {
+                Texture = GetGuiTexture(GuiTextureName.arrow_right)
+            }, true);
+
+            // Warp Button
+            var warpButton = new Button("Warp!", anchor: Anchor.BottomCenter
+                , size: new Vector2(200, -1), offset: new Vector2(0, 300))
+            {
+                Identifier = "warpButton",
+                Enabled = false,
+                Skin = ButtonSkin.Fancy,
+                OnClick = (e) =>
+                {
+                    // Closing WarpPoint and reset current gui panel
+                    // Pause PlayScreen
+                    GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
+                    GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
+
+                    // Toggle the IsOpenWarpPointPanel flag
+                    GameGlobals.Instance.IsOpenWarpPointPanel = false;
+                    GameGlobals.Instance.IsRefreshPlayScreenUI = false;
+                    CurrentUI = PlayScreen;
+
+                    string loadMapAction = string.Empty;
+                    switch (SelectedWarpPointId)
+                    {
+                        case NordlingenTown:
+                            loadMapAction = "warp_to_map_1";
+                            break;
+
+                        case RothenburgTown:
+                            loadMapAction = "warp_to_map_2";
+                            break;
+
+                        case TallinnTown:
+                            loadMapAction = "warp_to_map_2";
+                            break;
+                    }
+
+                    GameGlobals.Instance.InitialCameraPos = PlayerManager.Instance.Player.Position;
+                    var currLoadMapAction = ScreenManager.GetLoadMapAction(loadMapAction);
+
+                    // if the zoneArea.Name not be found in LoadMapAction then return
+                    if (currLoadMapAction == ScreenManager.LoadMapAction.LoadSave) return;
+
+                    ScreenManager.Instance.CurrentLoadMapAction = currLoadMapAction;
+                    ScreenManager.Instance.TranstisionToScreen(ScreenManager.Instance.GetPlayScreenByLoadMapAction());
+
+                    PlaySoundEffect(Sound.Warp);
+                }
+            };
+            warpPointPanel.AddChild(warpButton);
+
+            // Close button
+            var closeButton = new Button("Close", anchor: Anchor.BottomRight
+                , size: new Vector2(200, -1), offset: new Vector2(64, 300))
+            {
+                Identifier = "closeButton",
+                Skin = ButtonSkin.Fancy,
+                OnClick = (e) =>
+                {
+                    // Closing WarpPoint and reset current gui panel
+                    // Pause PlayScreen
+                    GameGlobals.Instance.IsGamePause = !GameGlobals.Instance.IsGamePause;
+                    GameGlobals.Instance.IsOpenGUI = !GameGlobals.Instance.IsOpenGUI;
+
+                    // Toggle the IsOpenWarpPointPanel flag
+                    GameGlobals.Instance.IsOpenWarpPointPanel = false;
+                    GameGlobals.Instance.IsRefreshPlayScreenUI = false;
+                    CurrentUI = PlayScreen;
+                }
+            };
+            warpPointPanel.AddChild(closeButton);
+        }
+
+        public void RefreshWarpPointUI()
+        {
+            var warpPointPanel = _mainPanels[WarpPointPanel];
+
+            var mapImage = warpPointPanel.Children.OfType<Image>().FirstOrDefault
+                (e => e.Identifier.Equals("mapImage"));
+
+            var warpButton = warpPointPanel.Children.FirstOrDefault
+                (e => e.Identifier.Equals("warpButton"));
+
+            var warpPointData = PlayerManager.Instance.Player.PlayerData.ChapterProgression.FirstOrDefault
+                (c => c.ChapterId.Equals(SelectedWarpPointId + 1));
+
+            switch (warpPointData.ChapterId)
+            {
+                case 1:
+                    if (warpPointData.IsWarpPointUnlock)
+                    {
+                        mapImage.Texture = GetGuiTexture(GuiTextureName.Warp_NordlingenTown);
+                    }
+                    else mapImage.Texture = GetGuiTexture(GuiTextureName.Warp_NordlingenTown_lock);
+                    break;
+
+                case 2:
+                    if (warpPointData.IsWarpPointUnlock)
+                    {
+                        mapImage.Texture = GetGuiTexture(GuiTextureName.Warp_RothenburgTown);
+                    }
+                    else mapImage.Texture = GetGuiTexture(GuiTextureName.Warp_RothenburgTown_lock);
+                    break;
+
+                case 3:
+                    if (warpPointData.IsWarpPointUnlock)
+                    {
+                        mapImage.Texture = GetGuiTexture(GuiTextureName.Warp_TallinnTown);
+                    }
+                    else mapImage.Texture = GetGuiTexture(GuiTextureName.Warp_TallinnTown_lock);
+                    break;
+            }
+
+            if (warpPointData.IsWarpPointUnlock)
+            {
+                warpButton.Enabled = true;
+            }
+            else warpButton.Enabled = false;
         }
 
         public static UIManager Instance

@@ -38,13 +38,17 @@ namespace Medicraft.Systems.Managers
             NewGame,
             LoadSave,
             Test_to_map_1,
-            map_1_to_Test
+            warp_to_map_1,
+            map_1_to_Test,
+            warp_to_map_2,
+            warp_to_map_3
         }     
         public LoadMapAction CurrentLoadMapAction { set; get; }
         public string CurrentMap { set; get; }
 
         // For Transition Screen
         public bool IsTransitioning { private set; get; } = false;
+        public bool DoActionAtMidTransition { set; get; } = false;
         public bool IsScreenLoaded { private set; get; } = false;
 
         private readonly float _delayAllowPauseMenuTime = 0.5f;
@@ -117,7 +121,6 @@ namespace Medicraft.Systems.Managers
                         UIManager.Instance.RefreshHotbar();
                         // Quest list
                         UIManager.Instance.UpdateAfterChangeGUI();
-
                         GameGlobals.Instance.IsRefreshPlayScreenUI = true;
 
                         _delayAllowPauseMenuTimer = 0f;
@@ -138,7 +141,6 @@ namespace Medicraft.Systems.Managers
                     {
                         UIManager.Instance.RefreshInvenrotyItem(false);
                         UIManager.Instance.UpdateAfterChangeGUI();
-
                         GameGlobals.Instance.IsPauseMenuAllowed = false;
                         GameGlobals.Instance.IsOpenInventoryPanel = true;
                     }
@@ -150,7 +152,6 @@ namespace Medicraft.Systems.Managers
                     {
                         UIManager.Instance.RefreshCraftableItem(UIManager.Instance.CurrentCraftingList);
                         UIManager.Instance.UpdateAfterChangeGUI();
-
                         GameGlobals.Instance.IsPauseMenuAllowed = false;
                         GameGlobals.Instance.IsOpenCraftingPanel = true;
                     }
@@ -162,7 +163,6 @@ namespace Medicraft.Systems.Managers
                     {
                         UIManager.Instance.RefreshInspectCharacterDisplay();
                         UIManager.Instance.UpdateAfterChangeGUI();
-
                         GameGlobals.Instance.IsPauseMenuAllowed = false;
                         GameGlobals.Instance.IsOpenInspectPanel = true;
                     }
@@ -173,7 +173,6 @@ namespace Medicraft.Systems.Managers
                     {
                         UIManager.Instance.RefreshMainMenu();
                         UIManager.Instance.UpdateAfterChangeGUI();
-
                         GameGlobals.Instance.IsPauseMenuAllowed = false;
                         GameGlobals.Instance.IsOpenMainMenu = true;
                     }
@@ -184,7 +183,6 @@ namespace Medicraft.Systems.Managers
                     {
                         UIManager.Instance.RefreshPauseMenu();
                         UIManager.Instance.UpdateAfterChangeGUI();
-
                         GameGlobals.Instance.IsOpenPauseMenu = true;
                     }
                     break;
@@ -194,7 +192,6 @@ namespace Medicraft.Systems.Managers
                     {
                         UIManager.Instance.RefreshSaveMenu();
                         UIManager.Instance.UpdateAfterChangeGUI();
-
                         GameGlobals.Instance.IsPauseMenuAllowed = false;
                         GameGlobals.Instance.IsOpenSaveMenuPanel = true;
                     }
@@ -205,9 +202,18 @@ namespace Medicraft.Systems.Managers
                     {
                         UIManager.Instance.RefreshTradingItem("Buy Item");
                         UIManager.Instance.UpdateAfterChangeGUI();
-
                         GameGlobals.Instance.IsPauseMenuAllowed = false;
                         GameGlobals.Instance.IsOpenTradingPanel = true;
+                    }
+                    break;
+
+                case UIManager.WarpPointPanel:
+                    if (!GameGlobals.Instance.IsOpenWarpPointPanel)
+                    {
+                        UIManager.Instance.RefreshWarpPointUI();
+                        UIManager.Instance.UpdateAfterChangeGUI();
+                        GameGlobals.Instance.IsPauseMenuAllowed = false;
+                        GameGlobals.Instance.IsOpenWarpPointPanel = true;
                     }
                     break;
             }
@@ -228,6 +234,9 @@ namespace Medicraft.Systems.Managers
                 }
                 else if (_transitionTimer >= _transitionTime && _transitionTimer <= _transitionTime + _pauseTime)
                 {
+                    // Set IsTransitionAtMid
+                    DoActionAtMidTransition = true;
+
                     // Pause after reaching full size and load new screen                
                     if (!IsScreenLoaded)
                     {
@@ -320,7 +329,8 @@ namespace Medicraft.Systems.Managers
                         GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)
                 );
 
-                HUDSystem.DrawOnTopUI(_spriteBatch);
+                if (!UIManager.Instance.IsShowDialogUI)
+                    HUDSystem.DrawOnTopUI(_spriteBatch);
 
                 _spriteBatch.End();
             }
@@ -403,12 +413,19 @@ namespace Medicraft.Systems.Managers
 
             switch (CurrentLoadMapAction)
             {
+                case LoadMapAction.map_1_to_Test:
+                    gameScreen = GameScreen.TestScreen;
+                    break;
+
+                case LoadMapAction.warp_to_map_1:
                 case LoadMapAction.Test_to_map_1:
                     gameScreen = GameScreen.Map1;
                     break;
 
-                case LoadMapAction.map_1_to_Test:
-                    gameScreen = GameScreen.TestScreen;
+                case LoadMapAction.warp_to_map_2:
+                    break;
+
+                case LoadMapAction.warp_to_map_3:
                     break;
             }
 
@@ -440,6 +457,7 @@ namespace Medicraft.Systems.Managers
             }
 
             IsTransitioning = true;
+            DoActionAtMidTransition = false;
             IsScreenLoaded = gameScreen == GameScreen.None;
             _transitionTimer = 0f;
             _transitionRadius = -0.01f;

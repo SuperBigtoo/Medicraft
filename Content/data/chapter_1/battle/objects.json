@@ -1,0 +1,652 @@
+[
+  {
+    "Id": 0,
+    "ReferId": 306,
+    "Category": 0,
+    "Name": "นม",
+    "Description": "น้ำนมดิบบริสุทธิ์รสชาติเข้มข้นและกลมกล่อม ดื่มเย็นๆช่วยคลายความเมื่อยล้าได้",
+    "Position": [ 1788, 738 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 1,
+    "ReferId": 306,
+    "Category": 0,
+    "Name": "นม",
+    "Description": "น้ำนมดิบบริสุทธิ์รสชาติเข้มข้นและกลมกล่อม ดื่มเย็นๆช่วยคลายความเมื่อยล้าได้",
+    "Position": [ 1936, 736 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 2,
+    "ReferId": 300,
+    "Category": 0,
+    "Name": "สาบเสือ",
+    "Description": "มีสรรพคุณช่วยถอนพิษแก้อักเสบและห้ามเลิอด ใช้ในการรักษาแผลสดได้เป็นอย่างดี",
+    "Position": [ 2016, 1738 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 3,
+    "ReferId": 300,
+    "Category": 0,
+    "Name": "สาบเสือ",
+    "Description": "มีสรรพคุณช่วยถอนพิษแก้อักเสบและห้ามเลิอด ใช้ในการรักษาแผลสดได้เป็นอย่างดี",
+    "Position": [ 1966, 1800 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 4,
+    "ReferId": 164,
+    "Category": 0,
+    "Name": "เมล็ดกาแฟ",
+    "Description": "อาหารที่ปลุกให้ตื่นด้วยรสขมสำหรับผู้ที่มีอาการเหนื่อยล้าเรื้อรัง",
+    "Position": [ 1984, 2118 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 5,
+    "ReferId": 164,
+    "Category": 0,
+    "Name": "เมล็ดกาแฟ",
+    "Description": "อาหารที่ปลุกให้ตื่นด้วยรสขมสำหรับผู้ที่มีอาการเหนื่อยล้าเรื้อรัง",
+    "Position": [ 1894, 2252 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 6,
+    "ReferId": 162,
+    "Category": 0,
+    "Name": "เกลือ",
+    "Description": "เครื่องปรุงรสที่จำเป็นสำหรับการปรุงแต่งอาหาร จะทำอาหารให้เสร็จสมบูรณ์ได้เช่นไรถ้าไม่ใส่เกลือ",
+    "Position": [ 678, 2142 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 7,
+    "ReferId": 162,
+    "Category": 0,
+    "Name": "เกลือ",
+    "Description": "เครื่องปรุงรสที่จำเป็นสำหรับการปรุงแต่งอาหาร จะทำอาหารให้เสร็จสมบูรณ์ได้เช่นไรถ้าไม่ใส่เกลือ",
+    "Position": [ 1056, 2068 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 8,
+    "ReferId": 159,
+    "Category": 0,
+    "Name": "พริก",
+    "Description": "เป็นสิ่งที่ขาดไม่ได้เลย เมื่อต้องการจะเพิ่มรสชาติเผ็ดร้อนให้กับอาหาร",
+    "Position": [ 674, 2214 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 9,
+    "ReferId": 159,
+    "Category": 0,
+    "Name": "พริก",
+    "Description": "เป็นสิ่งที่ขาดไม่ได้เลย เมื่อต้องการจะเพิ่มรสชาติเผ็ดร้อนให้กับอาหาร",
+    "Position": [ 1054, 2210 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 10,
+    "ReferId": 156,
+    "Category": 0,
+    "Name": "ข้าว",
+    "Description": "เมล็ดธัญพืชหลักที่เหมาะกับอาหารทุกประเภท การกินข้าวเป็นวิธีที่ดีที่สุดที่จะทำให้คุณอิ่มท้อง",
+    "Position": [ 1440, 2102 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 11,
+    "ReferId": 156,
+    "Category": 0,
+    "Name": "ข้าว",
+    "Description": "เมล็ดธัญพืชหลักที่เหมาะกับอาหารทุกประเภท การกินข้าวเป็นวิธีที่ดีที่สุดที่จะทำให้คุณอิ่มท้อง",
+    "Position": [ 1574, 2066 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 12,
+    "ReferId": 154,
+    "Category": 0,
+    "Name": "แร่ทอง",
+    "Description": "แร่ทองจากธรรมชาตินั้นเอง สามารถสร้างวัตถุที่มีค่ามากขึ้นได้หากนำไปใช้ในการประดิษฐ์",
+    "Position": [ 1800, 2076 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 13,
+    "ReferId": 154,
+    "Category": 0,
+    "Name": "แร่ทอง",
+    "Description": "แร่ทองจากธรรมชาตินั้นเอง สามารถสร้างวัตถุที่มีค่ามากขึ้นได้หากนำไปใช้ในการประดิษฐ์",
+    "Position": [ 1330, 1814 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 14,
+    "ReferId": 153,
+    "Category": 0,
+    "Name": "แร่ทองแดง",
+    "Description": "แร่ทองแดงจากธรรมชาตินั้นเอง สามารถสร้างวัตถุที่มีค่ามากขึ้นได้หากนำไปใช้ในการประดิษฐ์",
+    "Position": [ 1226, 1734 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 15,
+    "ReferId": 153,
+    "Category": 0,
+    "Name": "แร่ทองแดง",
+    "Description": "แร่ทองแดงจากธรรมชาตินั้นเอง สามารถสร้างวัตถุที่มีค่ามากขึ้นได้หากนำไปใช้ในการประดิษฐ์",
+    "Position": [ 1754, 2188 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 16,
+    "ReferId": 152,
+    "Category": 0,
+    "Name": "แร่เหล็ก",
+    "Description": "แร่เหล็กจากธรรมชาตินั้นเอง สามารถสร้างวัตถุที่มีค่ามากขึ้นได้หากนำไปใช้ในการประดิษฐ์",
+    "Position": [ 1422, 1676 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 17,
+    "ReferId": 152,
+    "Category": 0,
+    "Name": "แร่เหล็ก",
+    "Description": "แร่เหล็กจากธรรมชาตินั้นเอง สามารถสร้างวัตถุที่มีค่ามากขึ้นได้หากนำไปใช้ในการประดิษฐ์",
+    "Position": [ 2404, 2108 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 18,
+    "ReferId": 143,
+    "Category": 0,
+    "Name": "มันฝรั่ง",
+    "Description": "พืชทนแล้งที่งอกงามได้ดีแม้ว่าจะปลูกในพื้นที่แห้งแล้ง ถ้าพวกเขาไม่มีขนมปังก็ให้กินมันฝรั่งแทนซิ!",
+    "Position": [ 1700, 1714 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 19,
+    "ReferId": 143,
+    "Category": 0,
+    "Name": "มันฝรั่ง",
+    "Description": "พืชทนแล้งที่งอกงามได้ดีแม้ว่าจะปลูกในพื้นที่แห้งแล้ง ถ้าพวกเขาไม่มีขนมปังก็ให้กินมันฝรั่งแทนซิ!",
+    "Position": [ 780, 1864 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 20,
+    "ReferId": 144,
+    "Category": 0,
+    "Name": "กะหล่ำปลี",
+    "Description": "ผักที่มีสารอาหารสูงและมีประโยชน์ต่อร่างกาย อย่าทิ้งมันไว้ละ",
+    "Position": [ 634, 1200 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 21,
+    "ReferId": 144,
+    "Category": 0,
+    "Name": "กะหล่ำปลี",
+    "Description": "ผักที่มีสารอาหารสูงและมีประโยชน์ต่อร่างกาย อย่าทิ้งมันไว้ละ",
+    "Position": [ 1466, 1028 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 22,
+    "ReferId": 145,
+    "Category": 0,
+    "Name": "มะเขือเทศ",
+    "Description": "มะเขือเทศแดงฉ่ำๆที่เต็มไปด้วยรสชาติ จะกินสดหรือทำให้สุกก็อร่อยเหมือนกัน",
+    "Position": [ 1020, 644 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 23,
+    "ReferId": 145,
+    "Category": 0,
+    "Name": "มะเขือเทศ",
+    "Description": "มะเขือเทศแดงฉ่ำๆที่เต็มไปด้วยรสชาติ จะกินสดหรือทำให้สุกก็อร่อยเหมือนกัน",
+    "Position": [ 1670, 830 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 24,
+    "ReferId": 148,
+    "Category": 0,
+    "Name": "เนื้อสัตว์",
+    "Description": "เนื้อสัตว์สดๆจากสัตว์ที่เพิ่งจับได้สดๆ เป็นแหล่งโปรตีนชั้นดีเมื่อทำให้สุกก่อน",
+    "Position": [ 722, 1328 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 25,
+    "ReferId": 148,
+    "Category": 0,
+    "Name": "เนื้อสัตว์",
+    "Description": "เนื้อสัตว์สดๆจากสัตว์ที่เพิ่งจับได้สดๆ เป็นแหล่งโปรตีนชั้นดีเมื่อทำให้สุกก่อน",
+    "Position": [ 906, 1836 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 26,
+    "ReferId": 148,
+    "Category": 0,
+    "Name": "เนื้อสัตว์",
+    "Description": "เนื้อสัตว์สดๆจากสัตว์ที่เพิ่งจับได้สดๆ เป็นแหล่งโปรตีนชั้นดีเมื่อทำให้สุกก่อน",
+    "Position": [ 1876, 1830 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 27,
+    "ReferId": 148,
+    "Category": 0,
+    "Name": "เนื้อสัตว์",
+    "Description": "เนื้อสัตว์สดๆจากสัตว์ที่เพิ่งจับได้สดๆ เป็นแหล่งโปรตีนชั้นดีเมื่อทำให้สุกก่อน",
+    "Position": [ 1690, 1144 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 28,
+    "ReferId": 149,
+    "Category": 0,
+    "Name": "ท่อนไม้",
+    "Description": "ท่อนไม้หนา ที่พึ่งตัดสดๆ ยังไม่ได้แปรรูป",
+    "Position": [ 2214, 1316 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 29,
+    "ReferId": 149,
+    "Category": 0,
+    "Name": "ท่อนไม้",
+    "Description": "ท่อนไม้หนา ที่พึ่งตัดสดๆ ยังไม่ได้แปรรูป",
+    "Position": [ 1162, 1406 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 30,
+    "ReferId": 150,
+    "Category": 0,
+    "Name": "หนังธรรมดา",
+    "Description": "หนังที่เบาและอ่อนนุ่ม ดูแลรักษาง่ายแต่ก็ชำรุดง่ายด้วยเหมือนกัน",
+    "Position": [ 652, 812 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 31,
+    "ReferId": 150,
+    "Category": 0,
+    "Name": "หนังธรรมดา",
+    "Description": "หนังที่เบาและอ่อนนุ่ม ดูแลรักษาง่ายแต่ก็ชำรุดง่ายด้วยเหมือนกัน",
+    "Position": [ 1420, 1868 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 32,
+    "ReferId": 151,
+    "Category": 0,
+    "Name": "ผ้าธรรมดา",
+    "Description": "เนื้อผ้านุ่มแต่ไม่แข็งแรงมาก แต่ก็ดีกว่าไม่มีอะไรเลย",
+    "Position": [ 1418, 600 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 33,
+    "ReferId": 151,
+    "Category": 0,
+    "Name": "ผ้าธรรมดา",
+    "Description": "เนื้อผ้านุ่มแต่ไม่แข็งแรงมาก แต่ก็ดีกว่าไม่มีอะไรเลย",
+    "Position": [ 1970, 1954 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 34,
+    "ReferId": 142,
+    "Category": 0,
+    "Name": "แครอท",
+    "Description": "แครรอทกรอบๆหวานๆสีแดงสด เป็นผักที่กินกับเมนูไหนก็อร่อย",
+    "Position": [ 636, 1398 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 35,
+    "ReferId": 142,
+    "Category": 0,
+    "Name": "แครอท",
+    "Description": "แครรอทกรอบๆหวานๆสีแดงสด เป็นผักที่กินกับเมนูไหนก็อร่อย",
+    "Position": [ 2214, 608 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 36,
+    "ReferId": 128,
+    "Category": 0,
+    "Name": "ว่านร่อนทอง",
+    "Description": "ส่วนเหง้าของต้นว่านร่อนทอง สามารถใช้ในการปรุงยา",
+    "Position": [ 1052, 1258 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 37,
+    "ReferId": 127,
+    "Category": 0,
+    "Name": "ว่านกีบแรด",
+    "Description": "ส่วนเหง้าของต้นว่านกีบแรด สามารถใช้ในการปรุงยา",
+    "Position": [ 2086, 1590 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 38,
+    "ReferId": 125,
+    "Category": 0,
+    "Name": "มหาสดำ",
+    "Description": "ส่วนเหง้าหรือเนื้อไม้ของต้นมหาสดำ สามารถใช้ในการปรุงยา",
+    "Position": [ 988, 1632 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 39,
+    "ReferId": 124,
+    "Category": 0,
+    "Name": "พิษนาศน์",
+    "Description": "ส่วนเหง้าของต้นพิษนาศน์ สามารถใช้ในการปรุงยา",
+    "Position": [ 2338, 1822 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 40,
+    "ReferId": 123,
+    "Category": 0,
+    "Name": "เนระพูสี",
+    "Description": "ส่วนเหง้าของต้นเนระพูสี สามารถใช้ในการปรุงยา",
+    "Position": [ 2428, 1284 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 41,
+    "ReferId": 108,
+    "Category": 0,
+    "Name": "ชุดเครื่องเที่ยน",
+    "Description": "ชุดรวมเทียนหรือผลแก่แห้งของพืชสมุนไพรที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยเทียนดำ เทียนแดง เทียนขาว เทียนข้าวเปลือก เทียนสัตตบุษย์ เทียนเยาวพาณี และเทียนอื่นๆอีก",
+    "Position": [ 2416, 878 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 42,
+    "ReferId": 107,
+    "Category": 0,
+    "Name": "ชุดเครื่องโกฐ",
+    "Description": "ชุดรวมโกฐหรือรากไม้ของพืชสมุนไพรที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยโกฐสอ โกฐเขมา โกฐหัวบัว โกฐกักกรา โกฐน้ำเต้า และโกฐอื่นๆอีก",
+    "Position": [ 1438, 1244 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 43,
+    "ReferId": 105,
+    "Category": 0,
+    "Name": "ลูกกระดอม",
+    "Description": "ผลอ่อนของต้นกระดอมที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1436, 790 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 44,
+    "ReferId": 105,
+    "Category": 0,
+    "Name": "ลูกกระดอม",
+    "Description": "ผลอ่อนของต้นกระดอมที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2414, 1868 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 45,
+    "ReferId": 107,
+    "Category": 0,
+    "Name": "ลูกกระวาน",
+    "Description": "ผลแก่ของต้นกระวานไทยที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1152, 1876 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 46,
+    "ReferId": 101,
+    "Category": 0,
+    "Name": "ลูกกระวาน",
+    "Description": "ผลแก่ของต้นกระวานไทยที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2434, 978 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 47,
+    "ReferId": 101,
+    "Category": 0,
+    "Name": "รากมะนาว",
+    "Description": "รากของต้นมะนาวที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2054, 1224 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 48,
+    "ReferId": 93,
+    "Category": 0,
+    "Name": "รากมะปรางหวาน",
+    "Description": "รากของต้นมะปรางหวานที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1314, 1394 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 49,
+    "ReferId": 92,
+    "Category": 0,
+    "Name": "รากเหมือดคน",
+    "Description": "รากของต้นเหมือดคนที่สามารถใช้ในการปรุงยา",
+    "Position": [ 652, 1546 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 50,
+    "ReferId": 91,
+    "Category": 0,
+    "Name": "รากปลาไหลเผือก",
+    "Description": "รากของต้นปลาไหลเผือกที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1700, 636 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 51,
+    "ReferId": 90,
+    "Category": 0,
+    "Name": "รากไม้เท้ายายม่อม",
+    "Description": "รากของต้นเท้ายายม่อมที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1056, 1504 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 52,
+    "ReferId": 89,
+    "Category": 0,
+    "Name": "รากชิงชี่",
+    "Description": "รากของต้นชิงชี่ที่สามารถใช้ในการปรุงยา",
+    "Position": [ 720, 876 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 53,
+    "ReferId": 88,
+    "Category": 0,
+    "Name": "รากมะเดื่อชุมพร",
+    "Description": "รากของต้นมะเดื่อชุมพรที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2286, 1350 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 54,
+    "ReferId": 87,
+    "Category": 0,
+    "Name": "รากคนทา",
+    "Description": "รากของต้นคนทาที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2012, 964 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 55,
+    "ReferId": 86,
+    "Category": 0,
+    "Name": "รากย่านาง",
+    "Description": "รากของต้นย่านางที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2342, 1578 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 56,
+    "ReferId": 84,
+    "Category": 0,
+    "Name": "รากแฝกหอม",
+    "Description": "รากของต้นแฝกหอมที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2072, 1046 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 57,
+    "ReferId": 97,
+    "Category": 0,
+    "Name": "ชุดเครื่องเถา",
+    "Description": "ชุดรวมเนื้อไม้ของพืชสมุนไพรจำพวกเถาที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยเถาสะค้าน เถากำแพงเจ็ดชั้น เถาบอระเพ็ด เถามวกแดง เถามวกขาว และอื่นๆอีก",
+    "Position": [ 2420, 1458 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 58,
+    "ReferId": 80,
+    "Category": 0,
+    "Name": "ชุดเครื่องเหง้า",
+    "Description": "ชุดรวมพืชสมุนไพรจำพวกที่ลงหัวหรือมีลำต้นใต้ดินที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยเหง้าขิง เหง้าไพล เหง้าว่านน้ำ เหง้าข่า เหง้าขมิ้นชัน เหง้าขมิ้นอ้อย เหง้ากระชาย และเหง้ากระทือ",
+    "Position": [ 2420, 2208 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 59,
+    "ReferId": 56,
+    "Category": 0,
+    "Name": "ชุดเครื่องแก่น",
+    "Description": "ชุดรวมแก่นหรือเนื้อไม้ชั้นในที่ถูกตัดแบ่งเป็นชิ้นแล้วสามารถใช้ในการปรุงยา|ประกอบไปด้วยแก่นฝาง แก่นแกแล แก่นขนุน แก่นจันทน์แดง-ขาว แก่นจันทน์เทศ แก่นสน และอื่นๆอีก",
+    "Position": [ 1672, 1460 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 60,
+    "ReferId": 29,
+    "Category": 0,
+    "Name": "ใบสันพร้าหอม",
+    "Description": "ใบของต้นสันพร้าหอมที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1480, 1434 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 61,
+    "ReferId": 28,
+    "Category": 0,
+    "Name": "ใบหมากเมีย",
+    "Description": "ใบของต้นหมากผู้หมากเมียที่มีลักษณะใบใหญ่สีเขียวที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1032, 766 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 62,
+    "ReferId": 27,
+    "Category": 0,
+    "Name": "ใบหมากผู้",
+    "Description": "ใบของต้นหมากผู้หมากเมียที่มีลักษณะใบแคบและยาวสามารถใช้ในการปรุงยา",
+    "Position": [ 1712, 1300 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 63,
+    "ReferId": 26,
+    "Category": 0,
+    "Name": "ใบผักกระโฉม",
+    "Description": "ใบของต้นผักกระโฉมที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1356, 1000 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 64,
+    "ReferId": 25,
+    "Category": 0,
+    "Name": "ใบพิมเสนต้น",
+    "Description": "ใบของต้นพิมเสนต้นที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1186, 570 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  }
+]

@@ -1,0 +1,582 @@
+﻿[
+  {
+    "Id": 0,
+    "ReferId": 141,
+    "Category": 0,
+    "Name": "น้ำประสานทองสะตุ",
+    "Description": "น้ำจากเกลือรูปแบบหนึ่งที่พบได้ในธรรมชาติสามารถใช้ในการปรุงยา",
+    "Position": [ 2440, 2470 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 1,
+    "ReferId": 119,
+    "Category": 0,
+    "Name": "น้ำดีวัว",
+    "Description": "น้ำดีจากถุงน้ำดีของวัวสามารถใช้ในการปรุงยาได้",
+    "Position": [ 2440, 667 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 2,
+    "ReferId": 110,
+    "Category": 0,
+    "Name": "การบูร",
+    "Description": "เครื่องยาที่ได้จากต้นการบูร สามารถใช้ในการปรุงยา",
+    "Position": [ 705, 1985 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 3,
+    "ReferId": 110,
+    "Category": 0,
+    "Name": "การบูร",
+    "Description": "เครื่องยาที่ได้จากต้นการบูร สามารถใช้ในการปรุงยา",
+    "Position": [ 614, 2083 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 4,
+    "ReferId": 109,
+    "Category": 0,
+    "Name": "พิมเสน",
+    "Description": "เครื่องยาที่ได้จากต้นพิมเสน สามารถใช้ในการปรุงยา",
+    "Position": [ 1366, 611 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 5,
+    "ReferId": 109,
+    "Category": 0,
+    "Name": "พิมเสน",
+    "Description": "เครื่องยาที่ได้จากต้นพิมเสน สามารถใช้ในการปรุงยา",
+    "Position": [ 1275, 698 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 6,
+    "ReferId": 108,
+    "Category": 0,
+    "Name": "ชุดเครื่องเที่ยน",
+    "Description": "ชุดรวมเทียนหรือผลแก่แห้งของพืชสมุนไพรที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยเทียนดำ เทียนแดง เทียนขาว เทียนข้าวเปลือก เทียนสัตตบุษย์ เทียนเยาวพาณี และเทียนอื่นๆอีก",
+    "Position": [ 2485, 1100 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 7,
+    "ReferId": 107,
+    "Category": 0,
+    "Name": "ชุดเครื่องโกฐ",
+    "Description": "ชุดรวมโกฐหรือรากไม้ของพืชสมุนไพรที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยโกฐสอ โกฐเขมา โกฐหัวบัว โกฐกักกรา โกฐน้ำเต้า และโกฐอื่นๆอีก",
+    "Position": [ 1947, 633 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 8,
+    "ReferId": 105,
+    "Category": 0,
+    "Name": "ลูกกระดอม",
+    "Description": "ผลอ่อนของต้นกระดอมที่สามารถใช้ในการปรุงยา",
+    "Position": [ 800, 626 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 9,
+    "ReferId": 105,
+    "Category": 0,
+    "Name": "ลูกกระดอม",
+    "Description": "ผลอ่อนของต้นกระดอมที่สามารถใช้ในการปรุงยา",
+    "Position": [ 903, 618 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 10,
+    "ReferId": 104,
+    "Category": 0,
+    "Name": "ลูกสารพัดพิษ",
+    "Description": "เมล็ดจากฝักของต้นสารพัดพิษที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2064, 633 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 11,
+    "ReferId": 102,
+    "Category": 0,
+    "Name": "ลูกราชดัด",
+    "Description": "ผลแก่ของต้นราชดัดที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1605, 967 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 12,
+    "ReferId": 101,
+    "Category": 0,
+    "Name": "ลูกกระวาน",
+    "Description": "ผลแก่ของต้นกระวานไทยที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2307, 2402 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 13,
+    "ReferId": 101,
+    "Category": 0,
+    "Name": "ลูกกระวาน",
+    "Description": "ผลแก่ของต้นกระวานไทยที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2201, 2478 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 14,
+    "ReferId": 100,
+    "Category": 0,
+    "Name": "ลูกจันทน์",
+    "Description": "เมล็ดแห้งจากผลสุกของต้นจันทร์เทศที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1214, 2398 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 15,
+    "ReferId": 100,
+    "Category": 0,
+    "Name": "ลูกจันทน์",
+    "Description": "เมล็ดแห้งจากผลสุกของต้นจันทร์เทศที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1138, 2501 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 16,
+    "ReferId": 99,
+    "Category": 0,
+    "Name": "ลูกผักชีลา",
+    "Description": "ผลลูกเล็กๆของต้นผักชีลาที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1859, 1916 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 17,
+    "ReferId": 99,
+    "Category": 0,
+    "Name": "ลูกผักชีลา",
+    "Description": "ผลลูกเล็กๆของต้นผักชีลาที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1802, 2034 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 18,
+    "ReferId": 98,
+    "Category": 0,
+    "Name": "ลำต้นข่าต้น",
+    "Description": "ลำต้นเนื้อไม้ของต้นข่าต้นที่สามารถใช้ในการปรุงยา",
+    "Position": [ 937, 1286 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 19,
+    "ReferId": 97,
+    "Category": 0,
+    "Name": "ชุดเครื่องเถา",
+    "Description": "ชุดรวมเนื้อไม้ของพืชสมุนไพรจำพวกเถาที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยเถาสะค้าน เถากำแพงเจ็ดชั้น เถาบอระเพ็ด เถามวกแดง เถามวกขาว และอื่นๆอีก",
+    "Position": [ 853, 1332 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 20,
+    "ReferId": 85,
+    "Category": 0,
+    "Name": "รากช้าพลู",
+    "Description": "รากของต้นช้าพลูที่สามารถใช้ในการปรุงยา",
+    "Position": [ 660, 1290 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 21,
+    "ReferId": 84,
+    "Category": 0,
+    "Name": "รากแฝกหอม",
+    "Description": "รากของต้นแฝกหอมที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2144, 1233 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 22,
+    "ReferId": 83,
+    "Category": 0,
+    "Name": "รากเจตมูลเพลิงแดง",
+    "Description": "รากของต้นเจตมูลเพลิงแดงที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1685, 1624 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 23,
+    "ReferId": 81,
+    "Category": 0,
+    "Name": "รากชะเอมเทศ",
+    "Description": "รากของต้นชะเอมเทศที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2364, 1267 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 24,
+    "ReferId": 80,
+    "Category": 0,
+    "Name": "ชุดเครื่องเหง้า",
+    "Description": "ชุดรวมพืชสมุนไพรจำพวกที่ลงหัวหรือมีลำต้นใต้ดินที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยเหง้าขิง เหง้าไพล เหง้าว่านน้ำ เหง้าข่า เหง้าขมิ้นชัน เหง้าขมิ้นอ้อย เหง้ากระชาย และเหง้ากระทือ",
+    "Position": [ 1320, 1020 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 25,
+    "ReferId": 79,
+    "Category": 0,
+    "Name": "หญ้าตีนนก",
+    "Description": "ต้นหญ้าทั่วๆ ไปที่มีดอกเป็นแฉกๆ สามารถใช้ในการปรุงยา",
+    "Position": [ 1931, 1632 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 26,
+    "ReferId": 73,
+    "Category": 0,
+    "Name": "เปลือกสมุลแว้ง",
+    "Description": "เปลือกไม้ของต้นสมุลแว้งที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1408, 1632 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 27,
+    "ReferId": 73,
+    "Category": 0,
+    "Name": "เปลือกสมุลแว้ง",
+    "Description": "เปลือกไม้ของต้นสมุลแว้งที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1317, 1669 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 28,
+    "ReferId": 72,
+    "Category": 0,
+    "Name": "เปลือกอบเชยญวน",
+    "Description": "เปลือกไม้ชั้นในของต้นอบเชยญวนที่สามารถใช้ในการปรุงยา",
+    "Position": [ 607, 1628 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 29,
+    "ReferId": 72,
+    "Category": 0,
+    "Name": "เปลือกอบเชยญวน",
+    "Description": "เปลือกไม้ชั้นในของต้นอบเชยญวนที่สามารถใช้ในการปรุงยา",
+    "Position": [ 565, 1692 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 30,
+    "ReferId": 71,
+    "Category": 0,
+    "Name": "เปลือกอบเชยเทศ",
+    "Description": "เปลือกไม้ชั้นในของต้นอบเชยเทศที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2512, 1362 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 31,
+    "ReferId": 71,
+    "Category": 0,
+    "Name": "เปลือกอบเชยเทศ",
+    "Description": "เปลือกไม้ชั้นในของต้นอบเชยเทศที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2440, 1408 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 32,
+    "ReferId": 70,
+    "Category": 0,
+    "Name": "เปลือกอบเชย",
+    "Description": "เปลือกไม้ชั้นในของต้นอบเชยที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1347, 2326 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 33,
+    "ReferId": 70,
+    "Category": 0,
+    "Name": "เปลือกอบเชย",
+    "Description": "เปลือกไม้ชั้นในของต้นอบเชยที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1389, 2463 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 34,
+    "ReferId": 69,
+    "Category": 0,
+    "Name": "เปลือกชะลูดอ",
+    "Description": "เปลือกไม้ของต้นชะลูดที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2504, 1905 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 35,
+    "ReferId": 69,
+    "Category": 0,
+    "Name": "เปลือกชะลูด",
+    "Description": "เปลือกไม้ของต้นชะลูดที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2417, 1928 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 36,
+    "ReferId": 60,
+    "Category": 0,
+    "Name": "ลำพันแดง",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1628, 2045 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 37,
+    "ReferId": 59,
+    "Category": 0,
+    "Name": "กระลำพัก",
+    "Description": "เครื่องยาที่ได้จากแก่นของต้นสลัดไดที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1396, 2015 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 38,
+    "ReferId": 59,
+    "Category": 0,
+    "Name": "กระลำพัก",
+    "Description": "เครื่องยาที่ได้จากแก่นของต้นสลัดไดที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1298, 2038 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 39,
+    "ReferId": 58,
+    "Category": 0,
+    "Name": "กำยาน",
+    "Description": "ยางหอมจากต้นกำยานที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1594, 2372 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 40,
+    "ReferId": 57,
+    "Category": 0,
+    "Name": "กฤษณา",
+    "Description": "เนื้อไม้ของต้นกฤษณาที่มีราลง สามารถใช้ในการปรุงยา",
+    "Position": [ 1571, 1222 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 41,
+    "ReferId": 57,
+    "Category": 0,
+    "Name": "กฤษณา",
+    "Description": "เนื้อไม้ของต้นกฤษณาที่มีราลง สามารถใช้ในการปรุงยา",
+    "Position": [ 1605, 1271 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 42,
+    "ReferId": 56,
+    "Category": 0,
+    "Name": "ชุดเครื่องแก่น",
+    "Description": "ชุดรวมแก่นหรือเนื้อไม้ชั้นในที่ถูกตัดแบ่งเป็นชิ้นแล้วสามารถใช้ในการปรุงยา|ประกอบไปด้วยแก่นฝาง แก่นแกแล แก่นขนุน แก่นจันทน์แดง-ขาว แก่นจันทน์เทศ แก่นสน และอื่นๆอีก",
+    "Position": [ 1973, 1408 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 43,
+    "ReferId": 55,
+    "Category": 0,
+    "Name": "กระจับ",
+    "Description": "พืชสมุนไพรที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1582, 1677 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 44,
+    "ReferId": 44,
+    "Category": 0,
+    "Name": "หัวแห้วไทย",
+    "Description": "หัวของต้นแห้วไทยที่สามารถใช้ในการปรุงยา",
+    "Position": [ 797, 1616 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 45,
+    "ReferId": 32,
+    "Category": 0,
+    "Name": "ส้มซ่า",
+    "Description": "ผลส้มซ่าที่ขนาดพอๆกับผลมะนาว สามารถใช้ในการปรุงยา",
+    "Position": [ 1222, 1453 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 46,
+    "ReferId": 22,
+    "Category": 0,
+    "Name": "ผิวส้มเขียวหวาน",
+    "Description": "ผิวชั้นนอกของส้มเขียวหวานที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1423, 1294 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 47,
+    "ReferId": 21,
+    "Category": 0,
+    "Name": "ผิวส้มโอ",
+    "Description": "ผิวชั้นนอกของส้มโอที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2482, 1639 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 48,
+    "ReferId": 20,
+    "Category": 0,
+    "Name": "ผิวส้มจีน",
+    "Description": "ผิวชั้นนอกของส้มจีนที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2110, 1768 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 49,
+    "ReferId": 20,
+    "Category": 0,
+    "Name": "ผิวส้มจีน",
+    "Description": "ผิวชั้นนอกของส้มจีนที่สามารถใช้ในการปรุงยา",
+    "Position": [ 2057, 1863 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 50,
+    "ReferId": 19,
+    "Category": 0,
+    "Name": "ผิวส้มตรังกานู",
+    "Description": "ผิวชั้นนอกของส้มตรังกานูที่สามารถใช้ในการปรุงยา",
+    "Position": [ 759, 1704 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 51,
+    "ReferId": 18,
+    "Category": 0,
+    "Name": "ผิวมะนาว",
+    "Description": "ผิวชั้นนอกของลูกมะนาวที่สามารถใช้ในการปรุงยา",
+    "Position": [ 592, 1825 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 52,
+    "ReferId": 17,
+    "Category": 0,
+    "Name": "ผิวมะงั่ว",
+    "Description": "ผิวชั้นนอกของลูกมะงั่วที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1814, 933 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 53,
+    "ReferId": 16,
+    "Category": 0,
+    "Name": "ผิวมะกรูด",
+    "Description": "ผิวชั้นนอกของลูกมะกรูดที่สามารถใช้ในการปรุงยา",
+    "Position": [ 649, 656 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 54,
+    "ReferId": 16,
+    "Category": 0,
+    "Name": "ผิวมะกรูด",
+    "Description": "ผิวชั้นนอกของลูกมะกรูดที่สามารถใช้ในการปรุงยา",
+    "Position": [ 592, 823 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 55,
+    "ReferId": 11,
+    "Category": 0,
+    "Name": "ดอกบัวจงกลนี",
+    "Description": "ดอกของบัวจงกลนีที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1058, 1624 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 56,
+    "ReferId": 8,
+    "Category": 0,
+    "Name": "ดอกบัวเผื่อน",
+    "Description": "ดอกของต้นบัวเผื่อนที่สามารถใช้ในการปรุงยา",
+    "Position": [ 1905, 861 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  },
+  {
+    "Id": 57,
+    "ReferId": 7,
+    "Category": 0,
+    "Name": "ดอกบัวขม",
+    "Description": "ดอกของต้นบัวขมที่สามารถใช้ในการปรุงยา",
+    "Position": [ 622, 971 ],
+    "IsRespawnable": true,
+    "IsVisible": true
+  }
+]

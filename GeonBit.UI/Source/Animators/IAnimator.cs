@@ -70,6 +70,8 @@ namespace GeonBit.UI.Animators
         /// </summary>
         public abstract void Reset();
 
+        public virtual void Finish() { }
+
         /// <summary>
         /// Should remove this animator when done?
         /// </summary>

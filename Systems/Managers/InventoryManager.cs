@@ -54,7 +54,7 @@ namespace Medicraft.Systems.Managers
             GoldCoin = inventoryData.GoldCoin;
 
             // Setup Item in Inventory
-            foreach (var item in inventoryData.Inventory)
+            foreach (var item in inventoryData.Items)
                 InventoryBag.Add(IdexInven++, item);
         }
 

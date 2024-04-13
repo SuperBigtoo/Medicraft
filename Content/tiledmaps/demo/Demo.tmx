@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="32" tileheight="32" infinite="0" nextlayerid="21" nextobjectid="76">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="32" tileheight="32" infinite="0" nextlayerid="21" nextobjectid="79">
  <tileset firstgid="1" name="rpg_maker_vx_rtp_tileset_by_telles0808" tilewidth="32" tileheight="32" tilecount="8064" columns="64">
   <image source="rpg_maker_vx_rtp_tileset_by_telles0808.png" width="2048" height="4032"/>
   <tile id="4028">
@@ -802,12 +802,16 @@
   <object id="75" name="BlackSmite" x="1441" y="1268">
    <point/>
   </object>
+  <object id="76" name="WarpPoint" x="462" y="1106">
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup id="19" name="EnteringZoneArea">
-  <object id="58" name="Test_to_map_1" x="1697" y="1153" width="60" height="124"/>
+  <object id="58" name="Test_to_map_1" type="entance_0" x="1697" y="1153" width="60" height="124"/>
  </objectgroup>
  <objectgroup id="20" name="MobPartrolArea">
   <object id="52" name="zone_1" x="898" y="378" width="484" height="232"/>
   <object id="69" name="zone_2" x="1090.67" y="1505.33" width="604" height="190.667"/>
+  <object id="78" name="zone_3" x="606" y="1025" width="466" height="254"/>
  </objectgroup>
 </map>

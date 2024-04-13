@@ -101,6 +101,15 @@ namespace GeonBit.UI.Animators
         }
 
         /// <summary>
+        /// Finish animation.
+        /// </summary>
+        public override void Finish()
+        {
+            _currPosition = _text.Length - 1;
+            _timeForNextChar = 1f;
+        }
+
+        /// <summary>
         /// Did this animator finish?
         /// </summary>
         public override bool IsDone

@@ -225,39 +225,43 @@ namespace Medicraft.Entities
             _initHudPos = Instance.TopLeftCornerPos;
             _initCamPos = Instance.AddingCameraPos;                                             
 
-            if (!IsAttacking && !IsStunning && ScreenManager.Instance.IsScreenLoaded)
+            if (!IsAttacking && !IsStunning
+                &&ScreenManager.Instance.IsScreenLoaded)
             {
-                if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
+                if (!UIManager.Instance.IsShowDialogUI)
                 {
-                    CurrentAnimation = SpriteCycle + "_walking_up";
-                    IsMoving = true;   
-                    Velocity -= Vector2.UnitY;
-                }
+                    if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
+                    {
+                        CurrentAnimation = SpriteCycle + "_walking_up";
+                        IsMoving = true;
+                        Velocity -= Vector2.UnitY;
+                    }
 
-                if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
-                {
-                    CurrentAnimation = SpriteCycle + "_walking_down";
-                    IsMoving = true;
-                    Velocity += Vector2.UnitY;
-                }
+                    if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
+                    {
+                        CurrentAnimation = SpriteCycle + "_walking_down";
+                        IsMoving = true;
+                        Velocity += Vector2.UnitY;
+                    }
 
-                if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
-                {
-                    CurrentAnimation = SpriteCycle + "_walking_left";
-                    IsMoving = true;
-                    Velocity -= Vector2.UnitX;
-                }
+                    if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
+                    {
+                        CurrentAnimation = SpriteCycle + "_walking_left";
+                        IsMoving = true;
+                        Velocity -= Vector2.UnitX;
+                    }
 
-                if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
-                {
-                    CurrentAnimation = SpriteCycle + "_walking_right";
-                    IsMoving = true;
-                    Velocity += Vector2.UnitX;
+                    if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
+                    {
+                        CurrentAnimation = SpriteCycle + "_walking_right";
+                        IsMoving = true;
+                        Velocity += Vector2.UnitX;
 
-                    // Classic
-                    //Position += new Vector2(walkSpeed, 0);
-                    //Singleton.Instance.addingHudPos += new Vector2(walkSpeed, 0);
-                    //Singleton.Instance.addingCameraPos += new Vector2(walkSpeed, 0);
+                        // Classic
+                        //Position += new Vector2(walkSpeed, 0);
+                        //Singleton.Instance.addingHudPos += new Vector2(walkSpeed, 0);
+                        //Singleton.Instance.addingCameraPos += new Vector2(walkSpeed, 0);
+                    }
                 }
 
                 var isPlayerMoving = Velocity != Vector2.Zero;
@@ -315,8 +319,8 @@ namespace Medicraft.Entities
             , MouseState mouseCur, MouseState mousePrev)
         {
             // Normal Hit
-            if (ScreenManager.Instance.IsScreenLoaded && (!IsAttacking && !IsStunning 
-                && !UIManager.Instance.IsQuickMenuFocus && mouseCur.LeftButton == ButtonState.Pressed
+            if (ScreenManager.Instance.IsScreenLoaded && !UIManager.Instance.IsShowDialogUI
+                && (!IsAttacking && !IsStunning && !UIManager.Instance.IsQuickMenuFocus && mouseCur.LeftButton == ButtonState.Pressed
                 && mousePrev.LeftButton == ButtonState.Released || !IsAttacking && keyboardCur.IsKeyDown(Keys.Space)))
             {
                 CurrentAnimation = SpriteCycle + "_attacking_normal_hit";

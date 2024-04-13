@@ -14,17 +14,101 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin data/chapter_1/entites.json
+#begin data/chapter_1/battle/entites.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor
 /processorParam:ContentType=Medicraft.Data.EntityDataReader, Medicraft
-/build:data/chapter_1/entites.json
+/build:data/chapter_1/battle/entites.json
 
-#begin data/chapter_1/objects.json
+#begin data/chapter_1/battle/objects.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor
 /processorParam:ContentType=Medicraft.Data.ObjectDataReader, Medicraft
-/build:data/chapter_1/objects.json
+/build:data/chapter_1/battle/objects.json
+
+#begin data/chapter_1/dun/entites.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.EntityDataReader, Medicraft
+/build:data/chapter_1/dun/entites.json
+
+#begin data/chapter_1/dun/objects.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.ObjectDataReader, Medicraft
+/build:data/chapter_1/dun/objects.json
+
+#begin data/chapter_1/town/entites.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.EntityDataReader, Medicraft
+/build:data/chapter_1/town/entites.json
+
+#begin data/chapter_1/town/objects.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.ObjectDataReader, Medicraft
+/build:data/chapter_1/town/objects.json
+
+#begin data/chapter_2/battle/entites.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.EntityDataReader, Medicraft
+/build:data/chapter_2/battle/entites.json
+
+#begin data/chapter_2/battle/objects.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.ObjectDataReader, Medicraft
+/build:data/chapter_2/battle/objects.json
+
+#begin data/chapter_2/dun/entites.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.EntityDataReader, Medicraft
+/build:data/chapter_2/dun/entites.json
+
+#begin data/chapter_2/dun/objects.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.ObjectDataReader, Medicraft
+/build:data/chapter_2/dun/objects.json
+
+#begin data/chapter_2/town/objects.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.ObjectDataReader, Medicraft
+/build:data/chapter_2/town/objects.json
+
+#begin data/chapter_3/battle/entites.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.EntityDataReader, Medicraft
+/build:data/chapter_3/battle/entites.json
+
+#begin data/chapter_3/battle/objects.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.ObjectDataReader, Medicraft
+/build:data/chapter_3/battle/objects.json
+
+#begin data/chapter_3/dun/entites.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.EntityDataReader, Medicraft
+/build:data/chapter_3/dun/entites.json
+
+#begin data/chapter_3/dun/objects.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.ObjectDataReader, Medicraft
+/build:data/chapter_3/dun/objects.json
+
+#begin data/chapter_3/town/objects.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.ObjectDataReader, Medicraft
+/build:data/chapter_3/town/objects.json
 
 #begin data/models/chapter_item.json
 /importer:JsonContentImporter
@@ -91,6 +175,12 @@
 /processor:JsonContentProcessor
 /processorParam:ContentType=Medicraft.Data.PlayerDataReader, Medicraft
 /build:data/models/playerdata.json
+
+#begin data/models/quest_details.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.QuestDetailDataReader, Medicraft
+/build:data/models/quest_details.json
 
 #begin data/TestScreen/entites_demo.json
 /importer:JsonContentImporter
@@ -339,7 +429,10 @@
 /build:entity/mobs/friendly/cat/cat_spritesheet.png
 
 #begin entity/mobs/friendly/civilian/Civilian01_animation.sf
-/copy:entity/mobs/friendly/civilian/Civilian01_animation.sf
+/importer:SpriteFactoryContentImporter
+/processor:SpriteFactoryContentProcessor
+/processorParam:ContentType=MonoGame.Extended MonoGame.Extended.Animations.SpriteFactory.SpriteFactoryFileReader, MonoGame.Extended.Animations
+/build:entity/mobs/friendly/civilian/Civilian01_animation.sf
 
 #begin entity/mobs/friendly/civilian/Civilian01_spritesheet.png
 /importer:TextureImporter
@@ -1011,6 +1104,18 @@
 /processorParam:TextureFormat=Color
 /build:gui/ability/passive_skill_pic.png
 
+#begin gui/accept_quest.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/accept_quest.png
+
 #begin gui/Alpha_BG.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1142,6 +1247,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:gui/dialog_tmp.png
+
+#begin gui/drake_shop_window.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/drake_shop_window.png
 
 #begin gui/exp_bar_alpha.png
 /importer:TextureImporter
@@ -1322,6 +1439,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:gui/heart.png
+
+#begin gui/help.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/help.png
 
 #begin gui/Inspect_Menu.png
 /importer:TextureImporter
@@ -1637,6 +1766,78 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:gui/UI_books_more.png
+
+#begin gui/warp_map/Warp_NordlingenTown_lock.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/warp_map/Warp_NordlingenTown_lock.png
+
+#begin gui/warp_map/Warp_NordlingenTown.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/warp_map/Warp_NordlingenTown.png
+
+#begin gui/warp_map/Warp_RothenburgTown_lock.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/warp_map/Warp_RothenburgTown_lock.png
+
+#begin gui/warp_map/Warp_RothenburgTown.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/warp_map/Warp_RothenburgTown.png
+
+#begin gui/warp_map/Warp_TallinnTown_lock.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/warp_map/Warp_TallinnTown_lock.png
+
+#begin gui/warp_map/Warp_TallinnTown.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/warp_map/Warp_TallinnTown.png
 
 #begin item/drug_1.png
 /importer:TextureImporter

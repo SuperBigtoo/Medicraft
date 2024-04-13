@@ -22,17 +22,21 @@ namespace Medicraft.Systems
         private float _insufficientTimer;
 
         private bool _isShowMapName = true;
-        private readonly float _showMapNameTime = 7f;
-        private float _showMapNameTimer = 0;
-        private static float _alphaScale = 0;
+        private readonly float _showMapNameTime = 6f;
+        private float _showMapNameTimer;
+        private static float _alphaScale;
 
         private bool _nextFeed = false;
 
-        private readonly AnimatedSprite _spriteItemPack = new(Instance.ItemsPackSprites);         
-            
+        private readonly AnimatedSprite _spriteItemPack = new(Instance.ItemsPackSprites);
+        private readonly AnimatedSprite _uiBooksIconHUD = new(Instance.UIBooksIconHUD);
+
         public HUDSystem()
         {
             _insufficientTimer = _insufficientTime;
+            _showMapNameTimer = 0;
+            _alphaScale = 0;
+            Instance.ShowMapNameSign = false;
         }
 
         public void Update(GameTime gameTime)
@@ -124,6 +128,7 @@ namespace Medicraft.Systems
                 // Draw Sign Show
                 DrawInsufficientSign(spriteBatch);
                 DrawMapNameSign(spriteBatch);
+                DrawEntranceMapSign(spriteBatch);
 
                 // Draw Feed Items
                 DrawCollectedItem(spriteBatch);
@@ -173,13 +178,13 @@ namespace Medicraft.Systems
                 spriteBatch.DrawString(FontSensation, $"Y: {(int)PlayerManager.Instance.Player.Position.Y}"
                     , new Vector2(320f, 0f) + _topLeftCorner, Color.White);
 
-                spriteBatch.DrawString(FontSensation, $"MouseX: {(int)GameGlobals.Instance.MousePosition.X}"
+                spriteBatch.DrawString(FontSensation, $"MouseX: {(int)Instance.MousePosition.X}"
                     , new Vector2(490f, 0f) + _topLeftCorner, Color.White);
 
-                spriteBatch.DrawString(FontSensation, $"MouseY: {(int)GameGlobals.Instance.MousePosition.Y}"
+                spriteBatch.DrawString(FontSensation, $"MouseY: {(int)Instance.MousePosition.Y}"
                     , new Vector2(610f, 0f) + _topLeftCorner, Color.White);
 
-                spriteBatch.DrawString(FontSensation, $"Total PlayTime: {(int)GameGlobals.Instance.TotalPlayTime}"
+                spriteBatch.DrawString(FontSensation, $"Total PlayTime: {(int)Instance.TotalPlayTime}"
                     , new Vector2(760f, 0f) + _topLeftCorner, Color.White);
 
                 var rect = new Rectangle((int)_topLeftCorner.X + 50, (int)_topLeftCorner.Y + 220, 300, 500);
@@ -328,6 +333,21 @@ namespace Medicraft.Systems
                         DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
                             , text, positionText, Color.White, 1.1f, Color.Black, 2);
                     }
+                    break;
+
+                case UIManager.TradingPanel:
+                    // Draw Gold Coin
+                    spriteBatch.Draw(goldCoinTexture
+                            , new Vector2(
+                                720 - (hudGoldCoinSize.X / 2),
+                                180 - (hudGoldCoinSize.Y / 2)) + topLeftCornerPos, null
+                            , Color.White, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0f);
+
+                    DrawTextWithStroke(spriteBatch, font, goldCoinText
+                        , new Vector2(
+                            720 - (hudGoldCoinSize.X / 2) + 32f,
+                            180 - (goldCoinTextSize.Height / 2)) + topLeftCornerPos
+                        , Color.Gold, 1f, Color.Black, 2);
                     break;
 
                 case UIManager.InventoryPanel:
@@ -752,7 +772,7 @@ namespace Medicraft.Systems
                 switch (PlayerManager.Instance.DetectedObject.ObjectType)
                 {
                     case GameObject.GameObjectType.Item:
-                    case GameObject.GameObjectType.QuestItem:
+                    case GameObject.GameObjectType.QuestObject:
                         texture = GetGuiTexture(GuiTextureName.press_collecting);
                         break;
 
@@ -835,6 +855,32 @@ namespace Medicraft.Systems
 
                 DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
                     , text, positionText, Color.White * _alphaScale, 1.5f, Color.Black * _alphaScale, 2);
+            }
+        }
+
+        private void DrawEntranceMapSign(SpriteBatch spriteBatch)
+        {
+            var enteringZoneArea = Instance.EnteringZoneArea;
+
+            foreach (var areaData in enteringZoneArea)
+            {
+                if (areaData.SpriteUI != string.Empty)
+                {
+                    var pos = areaData.Bounds.Center;
+
+                    var transform = new Transform2
+                    {
+                        Scale = Vector2.One,
+                        Rotation = 0f,
+                        Position = new Vector2(pos.X, pos.Y)
+                    };
+
+                    _uiBooksIconHUD.Play(areaData.SpriteUI);
+                    _uiBooksIconHUD.Depth = 0;
+                    _uiBooksIconHUD.Update(_deltaSeconds);
+
+                    spriteBatch.Draw(_uiBooksIconHUD, transform);
+                }
             }
         }
 

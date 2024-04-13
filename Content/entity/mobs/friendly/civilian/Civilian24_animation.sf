@@ -28,7 +28,7 @@
         "default_walking_up": {
             "frames": [ 12, 13, 14, 13 ],
             "isLooping": false,
-            "frameDuration": 0.2
+            "frameDuration": 0.16
         }
     }
 }

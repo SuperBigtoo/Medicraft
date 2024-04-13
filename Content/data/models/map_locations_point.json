@@ -1,6 +1,7 @@
 [
     {
         "Name": "Test",
+        "ZoneType": "BattleZone",
         "Positions": [
             {
                 "Name": "Respawn",
@@ -14,10 +15,15 @@
     },
     {
         "Name": "map_1",
+        "ZoneType": "SafeZone",
         "Positions": [
             {
                 "Name": "Respawn",
-                "Value": [ 1503, 3576 ]
+                "Value": [ 3482, 1647.91 ]
+            },
+            {
+                "Name": "warp_to_map_1",
+                "Value": [ 1503.00, 3455.00 ]
             },
             {
                 "Name": "Test_to_map_1",

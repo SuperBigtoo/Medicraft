@@ -2,11 +2,7 @@
 using Medicraft.Systems.Spawners;
 using Medicraft.Systems.TilemapRenderer;
 using Medicraft.Systems;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TiledSharp;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
@@ -53,6 +49,9 @@ namespace Medicraft.Screens
             ObjectManager.Instance.ClearGameObject();
             GameGlobals.Instance.CurrentMapMusics.Clear();
 
+            hudSystem = null;
+            drawEffectSystem = null;
+
             base.UnloadContent();
         }
 
@@ -86,7 +85,8 @@ namespace Medicraft.Screens
 
             drawEffectSystem?.Draw(spriteBatch);
 
-            hudSystem?.Draw(spriteBatch);
+            if (!UIManager.Instance.IsShowDialogUI)
+                hudSystem?.Draw(spriteBatch);
         }
     }
 }

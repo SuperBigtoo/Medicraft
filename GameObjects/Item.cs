@@ -20,7 +20,8 @@ namespace Medicraft.GameObjects
             InitializeObjectData();
 
             IsVisible = objectData.IsVisible;
-            IsRespawnable = objectData.IsRespawnable;    
+            IsRespawnable = objectData.IsRespawnable;
+            IsDetectable = true;
 
             var position = new Vector2((float)objectData.Position[0], (float)objectData.Position[1]);
             Transform = new Transform2
@@ -51,6 +52,7 @@ namespace Medicraft.GameObjects
             Name = item.Name;
             Description = item.Description;
 
+            IsDetectable= item.IsDetectable;
             IsVisible = item.IsVisible;
             IsRespawnable = item.IsRespawnable;
             IsCollected = false;
@@ -88,7 +90,7 @@ namespace Medicraft.GameObjects
             if (IsDetected)
             {
                 SignSprite.Depth = InitDepth;
-                SignSprite.Play("collecting_0");
+                SignSprite.Play("collecting_1");
                 SignSprite.Update(deltaSeconds);
             }
 

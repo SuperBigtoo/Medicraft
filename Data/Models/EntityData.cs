@@ -14,6 +14,32 @@ namespace Medicraft.Data.Models
         public double[][] RoutePoint { get; set; }
         public int AggroTime { get; set; }
         public double[] Position { get; set; }
-        public List<InventoryItemData> TradingItemsData { get; set; }
+
+        // For FriendlyMob
+        public string MobType { get; set; } = string.Empty;
+        public bool IsInteractable { get; set; } = false;
+        public List<InventoryItemData> TradingItemsData { get; set; } = null;
+        public List<DialogData> DialogData { get; set; } = null;
+    }
+
+    public class DialogData
+    {
+        public enum DialogType
+        {
+            Daily,
+            Quest   // if it quest den has 4 stage of dialog in 'Stage': onAccept, onGoing, onDone and onClear
+        }
+
+        public int Id { get; set; }
+        public string Type { get; set; }
+        public string Description { get; set; }
+
+        // For Quest Dialog
+        public int QuestId { get; set; }
+        public int ChapterId { get; set; }
+        public string Stage { get; set; }
+
+        // Dialogues
+        public List<string> Dialogues { get; set; }
     }
 }

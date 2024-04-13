@@ -5,9 +5,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
 using System.Collections.Generic;
 using Medicraft.Systems.Managers;
-using Medicraft.Systems;
 using static Medicraft.Systems.GameGlobals;
-using Medicraft.Entities.Mobs.Monster;
 
 namespace Medicraft.Entities.Mobs.Friendly
 {
@@ -27,12 +25,13 @@ namespace Medicraft.Entities.Mobs.Friendly
             InitializeCharacterData(entityData.CharId, Level);
 
             // Vendor
-            MobType = FriendlyMobType.Vendor;
+            DialogData = entityData.DialogData;
+            SetMobType(entityData.MobType);
             InitializeTradingItems(entityData.TradingItemsData);
             Name = entityData.Name;
 
             IsAllwaysShowSignSprite = true;
-            IsInteractable = true;
+            IsInteractable = entityData.IsInteractable;
             IsRespawnable = true;
             IsDestroyable = false;
 
@@ -50,8 +49,8 @@ namespace Medicraft.Entities.Mobs.Friendly
                 Position = position
             };
 
-            BoundingCollisionX = 1;
-            BoundingCollisionY = 1;
+            BoundingCollisionX = 6;
+            BoundingCollisionY = 3;
 
             // Rec for check Collision
             BoundingDetectCollisions = new Rectangle(
@@ -84,8 +83,9 @@ namespace Medicraft.Entities.Mobs.Friendly
             Speed = vendor.Speed;
             Evasion = vendor.Evasion;
 
+            DialogData = vendor.DialogData;
             InitializeTradingItems(EntityData.TradingItemsData);
-            MobType = FriendlyMobType.Vendor;
+            MobType = vendor.MobType;
 
             IsAllwaysShowSignSprite = vendor.IsAllwaysShowSignSprite;
             IsInteractable = vendor.IsInteractable;
@@ -109,13 +109,12 @@ namespace Medicraft.Entities.Mobs.Friendly
 
             BoundingCollisionX = vendor.BoundingCollisionX;
             BoundingCollisionY = vendor.BoundingCollisionY;
-
             BoundingDetectCollisions = vendor.BoundingDetectCollisions;
-            BoundingDetectCollisions.Position = position;
+
             BoundingHitBox = vendor.BoundingHitBox;
             BoundingHitBox.Position = position;
             BoundingDetectEntity = vendor.BoundingDetectEntity;
-            BoundingHitBox.Position = position;
+            BoundingDetectEntity.Position = position;
             BoundingInteraction = vendor.BoundingInteraction;
             BoundingInteraction.Position = position;
 
@@ -142,7 +141,7 @@ namespace Medicraft.Entities.Mobs.Friendly
             // Update Sign
             if (IsDetected)
             {           
-                SignSprite.Play("trading_2");              
+                SignSprite.Play("interact_1");              
             }
             else SignSprite.Play("trading_1");
 
@@ -182,7 +181,7 @@ namespace Medicraft.Entities.Mobs.Friendly
         public override void DrawShadow(SpriteBatch spriteBatch, Texture2D shadowTexture)
         {
             var position = new Vector2(Position.X - shadowTexture.Width / 2f
-                    , BoundingDetectCollisions.Bottom - Sprite.TextureRegion.Height / 10);
+                    , BoundingDetectCollisions.Bottom - Sprite.TextureRegion.Height / 9);
 
             spriteBatch.Draw(shadowTexture, position, null, Color.White
                 , 0f, Vector2.Zero, 1f, SpriteEffects.None, Sprite.Depth + 0.0000025f);

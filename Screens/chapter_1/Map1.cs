@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using Medicraft.Systems.Spawners;
 using Medicraft.Systems.TilemapRenderer;
 using Medicraft.Systems.Managers;
-using Medicraft.Entities;
 
 namespace Medicraft.Screens.chapter_1
 {
@@ -38,8 +37,8 @@ namespace Medicraft.Screens.chapter_1
             tileMapRender = new TilemapOrthogonalRender(tileMap, tileSets, GameGlobals.Instance.TILE_SIZE);
 
             // Load GameData from JSON file, such as Mobs and Items Data 
-            entityDatas = content.Load<List<EntityData>>("data/chapter_1/entites");
-            objectDatas = content.Load<List<ObjectData>>("data/chapter_1/objects");
+            entityDatas = content.Load<List<EntityData>>("data/chapter_1/town/entites");
+            objectDatas = content.Load<List<ObjectData>>("data/chapter_1/town/objects");
 
             // Adding Mobs to MobSpawner
             Dictionary<int, SpriteSheet> entitySpriteSheets = new()
@@ -65,6 +64,9 @@ namespace Medicraft.Screens.chapter_1
 
             // Adding HUDSystem
             hudSystem = new HUDSystem();
+
+            // Show Map Name Sign
+            HUDSystem.ShowMapNameSign(0, "Nordlingen Town");
         }
 
         public override void UnloadContent()
@@ -85,6 +87,11 @@ namespace Medicraft.Screens.chapter_1
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
+        }
+
+        private void CreateIntroDialog()
+        {
+            
         }
     }
 }

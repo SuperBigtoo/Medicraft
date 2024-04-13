@@ -24,6 +24,7 @@ namespace Medicraft.GameObjects
             IsVisible = objectData.IsVisible;
             IsRespawnable = objectData.IsRespawnable;
             IsDestroyable = true;
+            IsDetectable = true;
 
             var position = new Vector2(
                 (float)objectData.Position[0],
@@ -57,6 +58,7 @@ namespace Medicraft.GameObjects
 
             CraftingType = craftingTable.CraftingType;
 
+            IsDetectable = craftingTable.IsDetectable;
             IsVisible = craftingTable.IsVisible;
             IsRespawnable = craftingTable.IsRespawnable;
             IsDestroyable = craftingTable.IsDestroyable;
@@ -99,7 +101,7 @@ namespace Medicraft.GameObjects
                 Sprite.Play("crafting_2");
 
                 SignSprite.Depth = InitDepth;
-                SignSprite.Play("collecting_0");
+                SignSprite.Play("interact_1");
                 SignSprite.Update(deltaSeconds);
             }
             else Sprite.Play("crafting_1");

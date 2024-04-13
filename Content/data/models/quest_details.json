@@ -1,0 +1,278 @@
+﻿[
+    {
+        "QuestId": 101,
+        "ChapterId": 1,
+        "Name": "First Time?",
+        "Type": "StoryQuest",
+        "Description": "สำรวจหม้อปรุงยาและทำการคราฟ [ยาจันทน์ลีลา] 1 อัน",
+        "ObjectiveName": [ "ยาจันทน์ลีลา" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 50,
+            "EXPReward": 30,
+            "Items": [
+                {
+                    "ItemId": 56,
+                    "Count": 24
+                },
+                {
+                    "ItemId": 91,
+                    "Count": 12
+                },
+                {
+                    "ItemId": 97,
+                    "Count": 12
+                },
+                {
+                    "ItemId": 105,
+                    "Count": 12
+                },
+                {
+                    "ItemId": 107,
+                    "Count": 36
+                },
+                {
+                    "ItemId": 109,
+                    "Count": 3
+                }
+            ]
+        }
+    },
+    {
+        "QuestId": 102,
+        "ChapterId": 1,
+        "Name": "สำรวจแปลงผัก",
+        "Type": "StoryQuest",
+        "Description": "สำรวจตรงแปลงผักบริเวณนอกบ้าน",
+        "ObjectiveName": [ "QuestObject_102" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 50,
+            "EXPReward": 30
+        }
+    },
+    {
+        "QuestId": 103,
+        "ChapterId": 1,
+        "Name": "ไปซื้อเมล็ดพันธ์และปลูกผัก",
+        "Type": "StoryQuest",
+        "Description": "เดินเข้าไปยังเมือง และคุยกับ Vendor คนขายเมล็ดพันธุ์พืช",
+        "ObjectiveName": [ "Buying_Material" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 50,
+            "EXPReward": 30
+        }
+    },
+    {
+        "QuestId": 104,
+        "ChapterId": 1,
+        "Name": "ปลูกผักที่แปลง",
+        "Type": "StoryQuest",
+        "Description": "ทดลองปลูกผักที่แปลงผักบริเวณนอกบ้าน",
+        "ObjectiveName": [ "QuestObject_104" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 50,
+            "EXPReward": 30,
+            "Items": [
+                {
+                    "ItemId": 142,
+                    "Count": 10
+                },
+                {
+                    "ItemId": 143,
+                    "Count": 10
+                },
+                {
+                    "ItemId": 144,
+                    "Count": 10
+                },
+                {
+                    "ItemId": 145,
+                    "Count": 10
+                },
+                {
+                    "ItemId": 146,
+                    "Count": 10
+                },
+                {
+                    "ItemId": 147,
+                    "Count": 10
+                }
+            ]
+        }
+    },
+    {
+        "QuestId": 105,
+        "ChapterId": 1,
+        "Name": "เอาผักที่ปลูกเสร็จมาทำอาหารกิน",
+        "Type": "StoryQuest",
+        "Description": "ทดลองทำอาหาร 1 อัน ที่ครัวภายในบ้าน",
+        "ObjectiveName": [ "Crafting_Consumable item" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 50,
+            "EXPReward": 30
+        }
+    },
+    {
+        "QuestId": 106,
+        "ChapterId": 1,
+        "Name": "เอาผักที่เหลือไปขายที่ TOWN",
+        "Type": "StoryQuest",
+        "Description": "ทดลองนำผักไปขายกับ Vendor ที่ Town",
+        "ObjectiveName": [ "Selling_Material" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 50,
+            "EXPReward": 30
+        }
+    },
+    {
+        "QuestId": 107,
+        "ChapterId": 1,
+        "Name": "เอาเงินไปซื้ออาหาร",
+        "Type": "StoryQuest",
+        "Description": "ทดลองซื้ออาหารกับ Vendor คนขายอาหารที่ Town",
+        "ObjectiveName": [ "Buying_Consumable item" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 50,
+            "EXPReward": 30,
+            "Items": [
+                {
+                    "ItemId": 302,
+                    "Count": 5
+                },
+                {
+                    "ItemId": 307,
+                    "Count": 5
+                }
+            ]
+        }
+    },
+    {
+        "QuestId": 108,
+        "ChapterId": 1,
+        "Name": "เอาเงินไปซื้ออาวุธเริ่มต้นกับ BlackSmite",
+        "Type": "StoryQuest",
+        "Description": "ทดลองซื้ออุปกรณ์สวมใส่กับ Vendor BlackSmite ที่ Town",
+        "ObjectiveName": [ "Buying_Equipment" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 50,
+            "EXPReward": 30,
+            "Items": [
+                {
+                    "ItemId": 400,
+                    "Count": 1
+                }
+            ]
+        }
+    },
+    {
+        "QuestId": 109,
+        "ChapterId": 1,
+        "Name": "ทดลองไปโจมตีมอนสเตอร์",
+        "Type": "StoryQuest",
+        "Description": "จัดการมอนสเตอร์อย่างใดก็ได้จำนวน 10 ตัว",
+        "ObjectiveName": [ "Killing_HostileMob" ],
+        "ObjectiveValue": 10,
+        "QuestReward": {
+            "GoldCoin": 100,
+            "EXPReward": 50
+        }
+    },
+    {
+        "QuestId": 110,
+        "ChapterId": 1,
+        "Name": "กลับบ้านมานอน",
+        "Type": "StoryQuest",
+        "Description": "กลับไปยังบ้านและนอนที่เตียง",
+        "ObjectiveName": [ "QuestObject_110" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 50,
+            "EXPReward": 30
+        }
+    },
+    {
+        "QuestId": 111,
+        "ChapterId": 1,
+        "Name": "เดินไปเช็คตู้จดหมาย",
+        "Type": "StoryQuest",
+        "Description": "ตรวจสอบจดหมายที่ตู้จดหมายหน้าบ้าน",
+        "ObjectiveName": [ "QuestObject_111" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 50,
+            "EXPReward": 30
+        }
+    },
+    {
+        "QuestId": 112,
+        "ChapterId": 1,
+        "Name": "ยาเขียวหอม",
+        "Type": "SideQuest",
+        "Description": "ปรุงยาเขียวหอมและนำมารักษาผู้ป่วย",
+        "ObjectiveName": [ "ยาเขียวหอม" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 50,
+            "EXPReward": 30
+        }
+    },
+    {
+        "QuestId": 113,
+        "ChapterId": 1,
+        "Name": "ยาประสะจันทร์แดง",
+        "Type": "SideQuest",
+        "Description": "ปรุงยาประสะจันทร์แดงและนำมารักษาผู้ป่วย",
+        "ObjectiveName": [ "ยาประสะจันทร์แดง" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 50,
+            "EXPReward": 30
+        }
+    },
+    {
+        "QuestId": 114,
+        "ChapterId": 1,
+        "Name": "ยาประสะเปราะใหญ่",
+        "Type": "SideQuest",
+        "Description": "ปรุงยาประสะเปราะใหญ่และนำมารักษาผู้ป่วย",
+        "ObjectiveName": [ "ยาประสะเปราะใหญ่" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 50,
+            "EXPReward": 30
+        }
+    },
+    {
+        "QuestId": 115,
+        "ChapterId": 1,
+        "Name": "ยาห้าราก",
+        "Type": "SideQuest",
+        "Description": "ปรุงยาห้ารากและนำมารักษาผู้ป่วย",
+        "ObjectiveName": [ "ยาห้าราก" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 50,
+            "EXPReward": 30
+        }
+    },
+    {
+        "QuestId": 201,
+        "ChapterId": 2,
+        "Name": "ไปบ้านผู้ช่วย",
+        "Type": "StoryQuest",
+        "Description": "เดินทางไปบ้านผู้ช่วย Violet",
+        "ObjectiveName": [ "Violet" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 50,
+            "EXPReward": 30
+        }
+    }
+]
