@@ -9,6 +9,7 @@ using Medicraft.Entities.Mobs;
 using Medicraft.Entities.Mobs.Friendly;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using MonoGame.Extended.Gui;
 using MonoGame.Extended.Sprites;
 using System;
 using System.Collections.Generic;
@@ -88,11 +89,12 @@ namespace Medicraft.Systems.Managers
         public Icon SelectedPurchaseItem { get; private set; }
 
         // WarpPoint
+        public const int NoahHome = -1;
         public const int NordlingenTown = 0;
         public const int RothenburgTown = 1;
         public const int TallinnTown = 2;
         public static readonly int[] AvailableWarpPoint = [ NordlingenTown, RothenburgTown, TallinnTown ];
-        public int SelectedWarpPointId = 0;
+        public int _selectedWarpPointId = 0;
 
         // UI elements
         private readonly List<Panel> _mainPanels = [];
@@ -117,17 +119,17 @@ namespace Medicraft.Systems.Managers
         {
             if (isNext)
             {
-                SelectedWarpPointId++;
+                _selectedWarpPointId++;
 
-                if (SelectedWarpPointId >= AvailableWarpPoint.Length)
-                    SelectedWarpPointId = 0;
+                if (_selectedWarpPointId >= AvailableWarpPoint.Length)
+                    _selectedWarpPointId = -1;
             }
             else
             {
-                SelectedWarpPointId--;
+                _selectedWarpPointId--;
 
-                if (SelectedWarpPointId < 0)
-                    SelectedWarpPointId = AvailableWarpPoint.Length - 1;
+                if (_selectedWarpPointId < -1)
+                    _selectedWarpPointId = AvailableWarpPoint.Length - 1;
             }
 
             RefreshWarpPointUI();
@@ -414,34 +416,32 @@ namespace Medicraft.Systems.Managers
             quickMenuPanel.AddChild(PauseMenuIcon);
 
             // Quest 
+            var questPanel = new Panel(new Vector2(310, 600), PanelSkin.Simple, Anchor.CenterRight)
             {
-                var questPanel = new Panel(new Vector2(310, 600), PanelSkin.Simple, Anchor.CenterRight)
-                {
-                    Identifier = "questPanel",
-                    Visible = false,
-                    Opacity = 200,
-                    Offset = new Vector2(0, -75),
-                    AdjustHeightAutomatically = true
-                };
-                questPanel.SetCustomSkin(GetGuiTexture(GuiTextureName.Alpha_BG));
-                playScreenUI.AddChild(questPanel);
+                Identifier = "questPanel",
+                Visible = false,
+                Opacity = 200,
+                Offset = new Vector2(0, -75),
+                AdjustHeightAutomatically = true
+            };
+            questPanel.SetCustomSkin(GetGuiTexture(GuiTextureName.Alpha_BG));
+            playScreenUI.AddChild(questPanel);
 
-                var headerQuest = new Button("Quest Name", ButtonSkin.Fancy, Anchor.AutoCenter)
-                {
-                    Identifier = "headerQuest",
-                    Size = new Vector2(325, 40),
-                    Offset = new Vector2(0, -50),
-                };
-                questPanel.AddChild(headerQuest);
+            var headerQuest = new Button("Quest Name", ButtonSkin.Fancy, Anchor.AutoCenter)
+            {
+                Identifier = "headerQuest",
+                Size = new Vector2(325, 40),
+                Offset = new Vector2(0, -50),
+            };
+            questPanel.AddChild(headerQuest);
 
-                var questDescrip = new RichParagraph("Quest Description", Anchor.AutoCenter)
-                {
-                    Identifier = "questDescrip",
-                    WrapWords = true,
-                    Size = new Vector2(280, 550)
-                };
-                questPanel.AddChild(questDescrip);
-            }
+            var questDescrip = new RichParagraph("Quest Description", Anchor.AutoCenter)
+            {
+                Identifier = "questDescrip",
+                WrapWords = true,
+                Size = new Vector2(280, 550)
+            };
+            questPanel.AddChild(questDescrip);
 
             // Dialog UI
             {
@@ -486,7 +486,7 @@ namespace Medicraft.Systems.Managers
 
                 _animatorDialogue = (TypeWriterAnimator)dialogueText.AttachAnimator(new TypeWriterAnimator()
                 {
-                    TextToType = @"Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว Test Test แมว แมว"
+                    TextToType = @"Text Text"
                 });
 
                 dialogPanel.OnClick += (e) =>
@@ -561,6 +561,59 @@ namespace Medicraft.Systems.Managers
                 }, true);
                 dialogPanel.AddChild(nextDialogueButton);
             }
+
+            // DeadPanel
+            {
+                var deadPanel = new Panel()
+                {
+                    Identifier = "deadPanel",
+                    Visible = false,
+                    Skin = PanelSkin.None,
+                    Anchor = Anchor.Center
+                };
+                playScreenUI.AddChild(deadPanel);
+
+                deadPanel.AddChild(new Image(GetGuiTexture(GuiTextureName.you_die))
+                {
+                    Size = new Vector2(288, 55),
+                    Anchor = Anchor.AutoCenter
+                });
+                deadPanel.AddChild(new LineSpace(12));
+
+                var tryAgainButton = new Button("TRY AGAIN!", ButtonSkin.Default, Anchor.AutoCenter)
+                {
+                    Identifier = "tryAgainButton",
+                    Size = new Vector2(200, -1),
+                    OnClick = (e) =>
+                    {
+                        PlayerManager.Instance.IsRespawning = true;
+                        hotbarSlotPanel.Visible = true;
+                        quickMenuPanel.Visible = true;
+                        questPanel.Visible = true;
+                        deadPanel.Visible = false;
+                    }
+                };
+                deadPanel.AddChild(tryAgainButton);
+            }
+        }
+
+        public void ShowDeadPanel()
+        {
+            var playScreenUI = _mainPanels[PlayScreen];
+
+            var hotbarSlotPanel = playScreenUI.Children.FirstOrDefault
+                (p => p.Identifier.Equals("hotbarSlotPanel"));
+            var quickMenuPanel = playScreenUI.Children.FirstOrDefault
+                (p => p.Identifier.Equals("quickMenuPanel"));
+            var questPanel = playScreenUI.Children.FirstOrDefault
+                (p => p.Identifier.Equals("questPanel"));
+            var deadPanel = playScreenUI.Children.FirstOrDefault
+                (p => p.Identifier.Equals("deadPanel"));
+
+            hotbarSlotPanel.Visible = false;
+            quickMenuPanel.Visible = false;
+            questPanel.Visible = false;
+            deadPanel.Visible = true;
         }
 
         public void UpdateQuestDescription()
@@ -575,7 +628,7 @@ namespace Medicraft.Systems.Managers
             var questDescrip = questPanel.Children.OfType<RichParagraph>().FirstOrDefault
                 (e => e.Identifier.Equals("questDescrip"));
 
-            if (QuestManager.Instance.QuestList.Count == 0)
+            if (QuestManager.Instance.QuestList.Count == 0 || IsShowDialogUI)
             {
                 questPanel.Visible = false;
                 headerQuest.Children.OfType<RichParagraph>().FirstOrDefault().Text = "";
@@ -1562,6 +1615,20 @@ namespace Medicraft.Systems.Managers
                     if (iconItem.Enabled) craftingItemButton.Enabled = true;
                 };
             }
+
+            // Set Display fisrt Icon in list
+            var firstIcon = listCraftableItemPanel.Children.OfType<Icon>().FirstOrDefault();
+            SetCraftableItemDisplay(firstIcon);
+            var craftingItemselected = craftableItemList.FirstOrDefault
+                        (i => i.ItemId.Equals(firstIcon.ItemId));
+            CraftingManager.Instance.CraftingItemSelected = craftingItemselected;
+
+            // Set enable
+            if (firstIcon.Enabled)
+            {
+                craftingItemButton.Enabled = true;
+            }
+            else craftingItemButton.Enabled = false;
         }
 
         private void SetCraftableItemDisplay(Icon icon)
@@ -3559,6 +3626,15 @@ namespace Medicraft.Systems.Managers
             };
             mainMenuPanel.AddChild(soundSettingPanel);
 
+            // Add Key Binding Panel 
+            var keyBindingPanel = new Panel(new Vector2(460, 560), PanelSkin.None)
+            {
+                Identifier = "keyBindingPanel",
+                Visible = false,
+                AdjustHeightAutomatically = true
+            };
+            mainMenuPanel.AddChild(keyBindingPanel);
+
             // Load GameSave panel
             var loadGameSavePanel = new Panel(new Vector2(1200, 800))
             {
@@ -3652,7 +3728,7 @@ namespace Medicraft.Systems.Managers
             }
 
             // Initialize Options Menu
-            InitOptionMenu(mainPanel, optionPanel, graphicsSettingPanel, soundSettingPanel);
+            InitOptionMenu(mainPanel, optionPanel, graphicsSettingPanel, soundSettingPanel, keyBindingPanel);
 
             // Load GameSave: Continues
             {
@@ -3823,13 +3899,14 @@ namespace Medicraft.Systems.Managers
             }
         }
 
-        private static void InitOptionMenu(Panel mainPanel, Panel optionPanel, Panel graphicsSettingPanel, Panel soundSettingPanel)
+        private static void InitOptionMenu(Panel mainPanel, Panel optionPanel, Panel graphicsSettingPanel, Panel soundSettingPanel, Panel keyBindingPanel)
         {
             // Options Menu
             {
                 optionPanel.AddChild(new Header("Options") { Scale = 2f });
                 optionPanel.AddChild(new LineSpace(3));
 
+                // Graphic setting
                 var graphicsSettingsButton = new Button("Graphics Settings", ButtonSkin.Default)
                 {
                     Identifier = "graphicsSettingsButton",
@@ -3852,6 +3929,7 @@ namespace Medicraft.Systems.Managers
                 };
                 optionPanel.AddChild(graphicsSettingsButton);
 
+                // Sound setting
                 var soundSettingsButton = new Button("Sound Settings", ButtonSkin.Default)
                 {
                     Identifier = "soundSettingsButton",
@@ -3862,6 +3940,20 @@ namespace Medicraft.Systems.Managers
                     }
                 };
                 optionPanel.AddChild(soundSettingsButton);
+
+                // Key Binding
+                var keyBindingButton = new Button("Key Binding", ButtonSkin.Default)
+                {
+                    Identifier = "keyBindingButton",
+                    OnClick = (Entity btn) =>
+                    {
+                        optionPanel.Visible = false;
+                        graphicsSettingPanel.Visible = false;
+                        soundSettingPanel.Visible = false;
+                        keyBindingPanel.Visible = true;
+                    }
+                };
+                optionPanel.AddChild(keyBindingButton);
 
                 optionPanel.AddChild(new LineSpace(3));
                 var backButton = new Button("Back", ButtonSkin.Default)
@@ -3880,7 +3972,7 @@ namespace Medicraft.Systems.Managers
             {
                 graphicsSettingPanel.AddChild(new Header("Graphics Setting"));
                 graphicsSettingPanel.AddChild(new HorizontalLine());
-                graphicsSettingPanel.AddChild(new Label("Full Screen") { Scale = 1.25f });
+                graphicsSettingPanel.AddChild(new RichParagraph("Full Screen") { Scale = 1.25f });
 
                 var radioFullScreenOn = new RadioButton("ON", offset: new Vector2(15, 0))
                 {
@@ -3925,8 +4017,8 @@ namespace Medicraft.Systems.Managers
                 // sliders title
                 soundSettingPanel.AddChild(new Header("Sound Settings"));
                 soundSettingPanel.AddChild(new HorizontalLine());
+                soundSettingPanel.AddChild(new RichParagraph("SFX Volume") { Scale = 1.25f });
 
-                soundSettingPanel.AddChild(new Label("SFX Volume") { Scale = 1.25f });
                 {
                     var sliderSFX = soundSettingPanel.AddChild(new Slider(0, 100, SliderSkin.Default)
                     {
@@ -3944,7 +4036,7 @@ namespace Medicraft.Systems.Managers
                 }
                 soundSettingPanel.AddChild(new LineSpace(1));
 
-                soundSettingPanel.AddChild(new Label("Background Music Volume") { Scale = 1.25f });
+                soundSettingPanel.AddChild(new RichParagraph("Background Music Volume") { Scale = 1.25f });
                 {
                     var sliderBG = soundSettingPanel.AddChild(new Slider(0, 100, SliderSkin.Default)
                     {
@@ -3975,6 +4067,23 @@ namespace Medicraft.Systems.Managers
                     }
                 };
                 soundSettingPanel.AddChild(backButton);
+            }
+
+            // Key Binding
+            {
+                keyBindingPanel.AddChild(new Image(GetGuiTexture(GuiTextureName.key_binding), new Vector2(424, 645)));
+
+                keyBindingPanel.AddChild(new LineSpace(3));
+                var backButton = new Button("Back", ButtonSkin.Default)
+                {
+                    Identifier = "backButton",
+                    OnClick = (Entity btn) =>
+                    {
+                        keyBindingPanel.Visible = false;
+                        optionPanel.Visible = true;
+                    }
+                };
+                keyBindingPanel.AddChild(backButton);
             }
         }
 
@@ -4241,6 +4350,15 @@ namespace Medicraft.Systems.Managers
             };
             pauseMenuPanel.AddChild(soundSettingPanel);
 
+            // Add Key Binding Panel 
+            var keyBindingPanel = new Panel(new Vector2(460, 650), PanelSkin.None)
+            {
+                Identifier = "keyBindingPanel",
+                Visible = false,
+                AdjustHeightAutomatically = true
+            };
+            pauseMenuPanel.AddChild(keyBindingPanel);
+
             // Initialize UI Elements
             // Pause Menu
             {
@@ -4338,7 +4456,7 @@ namespace Medicraft.Systems.Managers
             }
 
             // Initialize Options Menu
-            InitOptionMenu(pausePanel, optionPanel, graphicsSettingPanel, soundSettingPanel);
+            InitOptionMenu(pausePanel, optionPanel, graphicsSettingPanel, soundSettingPanel, keyBindingPanel);
         }
 
         public void RefreshPauseMenu()
@@ -5178,8 +5296,12 @@ namespace Medicraft.Systems.Managers
                     CurrentUI = PlayScreen;
 
                     string loadMapAction = string.Empty;
-                    switch (SelectedWarpPointId)
+                    switch (_selectedWarpPointId)
                     {
+                        case NoahHome:
+                            loadMapAction = "warp_to_noah_home";
+                            break;
+
                         case NordlingenTown:
                             loadMapAction = "warp_to_map_1";
                             break;
@@ -5239,8 +5361,15 @@ namespace Medicraft.Systems.Managers
             var warpButton = warpPointPanel.Children.FirstOrDefault
                 (e => e.Identifier.Equals("warpButton"));
 
+            if (_selectedWarpPointId == -1)
+            {
+                mapImage.Texture = GetGuiTexture(GuiTextureName.Warp_NoahsHome);
+                warpButton.Enabled = true;
+                return;
+            }
+
             var warpPointData = PlayerManager.Instance.Player.PlayerData.ChapterProgression.FirstOrDefault
-                (c => c.ChapterId.Equals(SelectedWarpPointId + 1));
+                (c => c.ChapterId.Equals(_selectedWarpPointId + 1));
 
             switch (warpPointData.ChapterId)
             {

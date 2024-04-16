@@ -7,47 +7,47 @@ using Medicraft.Data.Models;
 using MonoGame.Extended.Sprites;
 using Medicraft.Entities.Mobs.Monster;
 using Medicraft.Entities.Mobs.Friendly;
+using Medicraft.Entities.Mobs.Boss;
 
 namespace Medicraft.Systems.Spawners
 {
-    public class MobSpawner(float spawnTime, float spawnTimer) : IEntityManager
+    public class MobSpawner : IEntityManager
     {
-        public float SpawnTime = spawnTime;
-        public float SpawnTimer = spawnTimer;
-        public bool IsSpawn = false;
+        public readonly SpawnerData spawnerData;
+        public readonly string currMapName;
+
+        public float SpawnTime;
+        public float SpawnTimer;
 
         private readonly List<Entity> _initialEntities = [];
         private readonly List<Entity> _destroyedEntities = [];
         private readonly List<Entity> _spawningEntities = [];
 
+        public MobSpawner(SpawnerData spawnerData, string currMapName, List<EntityData> entityDatas
+            , Dictionary<int, SpriteSheet> spriteSheets)
+        {
+            this.spawnerData = spawnerData;
+            this.currMapName = currMapName;
+
+            SetupSpawner(entityDatas, spriteSheets);
+        }
+
         public void Initialize()
         {
             foreach (var entity in _initialEntities)
             {
-                if (entity.EntityType == Entity.EntityTypes.Boss)
+                bool isFound = false;
+
+                foreach (var destroyedEntity in _destroyedEntities)
                 {
-                    Entity clonedBoss = entity.Clone() as Entity;
-
-                    switch (ScreenManager.Instance.CurrentMap)
+                    if (entity.Id.Equals(destroyedEntity.Id))
                     {
-                        case "Test":                           
-                            if (GameGlobals.Instance.IsBossTestDead)
-                            {                             
-                                _spawningEntities.Add(clonedBoss);
-                            }
-                            else EntityManager.Instance.AddEntity(clonedBoss);
-                            break;
-
-                        case "dungeon_1":
-                            if (GameGlobals.Instance.IsBossOneDead)
-                            {
-                                _spawningEntities.Add(clonedBoss);
-                            }
-                            else EntityManager.Instance.AddEntity(clonedBoss);
-                            break;
+                        isFound = true;
+                        break;
                     }
                 }
-                else
+
+                if (!isFound)
                 {
                     Entity clonedEntity = entity.Clone() as Entity;
                     EntityManager.Instance.AddEntity(clonedEntity);
@@ -63,16 +63,19 @@ namespace Medicraft.Systems.Spawners
 
         public void Update(GameTime gameTime)
         {
-            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            SpawnTimer -= deltaSeconds;
+            var mapSpawnTime = spawnerData.MapSpawnTimes.FirstOrDefault
+                (m => m.SpawnerName.Equals("Entity") && m.MapName.Equals(currMapName));
+
+            SpawnTime = mapSpawnTime.SpawnTime;
+            SpawnTimer = mapSpawnTime.SpawnTimer;
+
 
             foreach (var entity in EntityManager.Instance.Entities.Where(e => e.IsDestroyed))
             {
-                //System.Diagnostics.Debug.WriteLine($"Add Mob ID: {entity.Id} to entitiesDestroyed");
                 _destroyedEntities.Add(entity);
             }
 
-            if (SpawnTimer <= 0)
+            if (SpawnTimer < 0)
             {
                 if (_destroyedEntities.Count != 0)
                 {
@@ -81,80 +84,88 @@ namespace Medicraft.Systems.Spawners
                             initialEntity => initialEntity.Id,
                             (destroyedEntity, initialEntity) => initialEntity.Clone() as Entity).ToList();
 
-                    _spawningEntities.AddRange(clonedEntities);
-                    _destroyedEntities.Clear();
+                    _spawningEntities.AddRange(clonedEntities.Where(e => e.EntityType != Entity.EntityTypes.Boss));
+                    _destroyedEntities.RemoveAll(e => e.EntityType != Entity.EntityTypes.Boss);
                 }
 
-                IsSpawn = true;
-                SpawnTimer = SpawnTime;
+                Respawn();
+            }
+
+            // Check Respawn for Boss
+            if (!spawnerData.IsBossDead)
+            {
+                foreach (var entityBoss in _destroyedEntities.Where
+                    (e => e.IsRespawnable && e.EntityType == Entity.EntityTypes.Boss))
+                {
+                    Entity clonedEntity = entityBoss.Clone() as Entity;
+                    EntityManager.Instance.AddEntity(clonedEntity);           
+                }
+                _destroyedEntities.RemoveAll(e => e.EntityType == Entity.EntityTypes.Boss);
             }
         }
 
-        public void Spawn()
+        private void Respawn()
         {
-            if (IsSpawn)
+            foreach (var entity in _spawningEntities.Where
+                    (e => e.IsRespawnable && e.EntityType != Entity.EntityTypes.Boss))
             {
-                foreach (var entity in _spawningEntities.Where(e => e.IsRespawnable && e.EntityType != Entity.EntityTypes.Boss))
-                {
-                    EntityManager.Instance.AddEntity(entity);
-                }
-
-                IsSpawn = false;
-                _spawningEntities.RemoveAll(entity => entity.EntityType != Entity.EntityTypes.Boss);
+                EntityManager.Instance.AddEntity(entity);
             }
-
-            foreach (var entityBoss in _spawningEntities.Where(e => e.IsRespawnable && e.EntityType == Entity.EntityTypes.Boss))
-            {
-                bool isBossDead = false;
-
-                switch (ScreenManager.Instance.CurrentMap)
-                {
-                    case "Test":
-                        isBossDead = GameGlobals.Instance.IsBossTestDead;
-                        break;
-
-                    case "dungeon_1":
-                        isBossDead = GameGlobals.Instance.IsBossOneDead;
-                        break;
-                }
-
-                if (!isBossDead)
-                {
-                    EntityManager.Instance.AddEntity(entityBoss);
-                    _spawningEntities.Remove(entityBoss);
-                }
-            }
+            _spawningEntities.RemoveAll(e => e.EntityType != Entity.EntityTypes.Boss);
         }
 
         public void SetupSpawner(List<EntityData> entityDatas, Dictionary<int, SpriteSheet> spriteSheets)
         {
+            System.Diagnostics.Debug.WriteLine($"SetupSpawner");
+
             foreach (var entityData in entityDatas)
             {
+                spriteSheets.TryGetValue(entityData.CharId, out SpriteSheet spriteSheet);
+
                 switch (entityData.CharId)
                 {
-                    case 100:
-                        spriteSheets.TryGetValue(100, out SpriteSheet spriteCat);
-                        AddEntity(new Cat(new AnimatedSprite(spriteCat), entityData, Vector2.One));
+                    case 100:                    
+                        AddEntity(new Cat(new AnimatedSprite(spriteSheet), entityData, Vector2.One));
                         break;
 
                     case 101:
-                        spriteSheets.TryGetValue(101, out SpriteSheet spriteBlackSmite);
-                        AddEntity(new Vendor(new AnimatedSprite(spriteBlackSmite), entityData, Vector2.One));
+                        AddEntity(new Vendor(new AnimatedSprite(spriteSheet), entityData, Vector2.One));
                         break;
 
-                    case 102: // Civilian01_NordlingenTown
-                        spriteSheets.TryGetValue(102, out SpriteSheet spriteCivilian01);
-                        AddEntity(new Civilian(new AnimatedSprite(spriteCivilian01), entityData, Vector2.One));
+                    // Civilian01_NordlingenTown -> Civilian24_NordlingenTown
+                    case 102:
+                    case 103:
+                    case 104:
+                    case 105:
+                    case 106:
+                    case 107:
+                    case 108:
+                    case 109:
+                    case 110:
+                    case 111:
+                    case 112:
+                    case 113:
+                    case 114:
+                    case 115:
+                    case 116:
+                    case 117:
+                    case 118:
+                    case 119:
+                    case 120:
+                    case 121:
+                    case 122:
+                    case 123:
+                    case 124:
+                    case 125:
+                        AddEntity(new Civilian(new AnimatedSprite(spriteSheet), entityData, Vector2.One));
                         break;
 
                     case 200:
-                        spriteSheets.TryGetValue(200, out SpriteSheet spriteSlime);
-                        AddEntity(new Slime(new AnimatedSprite(spriteSlime), entityData, Vector2.One));
+                        AddEntity(new Slime(new AnimatedSprite(spriteSheet), entityData, Vector2.One));
                         break;
 
                     case 201:
-                        spriteSheets.TryGetValue(201, out SpriteSheet spriteGoblin);
-                        AddEntity(new Goblin(new AnimatedSprite(spriteGoblin), entityData, Vector2.One));
+                        AddEntity(new Goblin(new AnimatedSprite(spriteSheet), entityData, Vector2.One));
                         break;
 
                     case 202:
@@ -173,6 +184,7 @@ namespace Medicraft.Systems.Spawners
                         break;
 
                     case 300:
+                        AddEntity(new Minotaur(new AnimatedSprite(spriteSheet), entityData, Vector2.One));
                         break;
 
                     case 301:

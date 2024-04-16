@@ -4,9 +4,9 @@
     "EXP": 0,
     "CurrentHPPercentage": 1.0,
     "CurrentManaPercentage": 1.0,
-    "CurrentMap": "Test",
+    "CurrentMap": "noah_home",
     "Position": [ 0, 0 ],
-    "SkillPoint": 9,
+    "SkillPoint": 0,
     "Abilities": {
         "NormalSkillLevel": 1,
         "BurstSkillLevel": 1,
@@ -26,93 +26,8 @@
         }
     ],
     "InventoryData": {
-        "GoldCoin": 10,
+        "GoldCoin": 50,
         "Items": [
-            {
-                "ItemId": 0,
-                "Count": 100,
-                "Slot": 999
-            },
-            {
-                "ItemId": 1,
-                "Count": 100,
-                "Slot": 999
-            },
-            {
-                "ItemId": 2,
-                "Count": 100,
-                "Slot": 999
-            },
-            {
-                "ItemId": 15,
-                "Count": 100,
-                "Slot": 999
-            },
-            {
-                "ItemId": 25,
-                "Count": 100,
-                "Slot": 999
-            },
-            {
-                "ItemId": 26,
-                "Count": 100,
-                "Slot": 999
-            },
-            {
-                "ItemId": 27,
-                "Count": 100,
-                "Slot": 999
-            },
-            {
-                "ItemId": 28,
-                "Count": 100,
-                "Slot": 999
-            },
-            {
-                "ItemId": 29,
-                "Count": 100,
-                "Slot": 999
-            },
-            {
-                "ItemId": 52,
-                "Count": 100,
-                "Slot": 999
-            },
-            {
-                "ItemId": 56,
-                "Count": 100,
-                "Slot": 999
-            },
-            {
-                "ItemId": 84,
-                "Count": 100,
-                "Slot": 999
-            },
-            {
-                "ItemId": 123,
-                "Count": 100,
-                "Slot": 999
-            },
-            {
-                "ItemId": 124,
-                "Count": 100,
-                "Slot": 999
-            },
-            {
-                "ItemId": 125,
-                "Count": 100,
-                "Slot": 999
-            },
-            {
-                "ItemId": 127,
-                "Count": 100,
-                "Slot": 999
-            },
-            {
-                "ItemId": 128,
-                "Count": 100,
-                "Slot": 999
-            },
             {
                 "ItemId": 300,
                 "Count": 5,
@@ -122,84 +37,143 @@
                 "ItemId": 301,
                 "Count": 5,
                 "Slot": 999
-            },
-            {
-                "ItemId": 302,
-                "Count": 5,
-                "Slot": 999
-            },
-            {
-                "ItemId": 303,
-                "Count": 5,
-                "Slot": 999
-            },
-            {
-                "ItemId": 304,
-                "Count": 5,
-                "Slot": 999
-            },
-            {
-                "ItemId": 305,
-                "Count": 5,
-                "Slot": 999
-            },
-            {
-                "ItemId": 306,
-                "Count": 5,
-                "Slot": 999
-            },
-            {
-                "ItemId": 307,
-                "Count": 5,
-                "Slot": 999
-            },
-            {
-                "ItemId": 308,
-                "Count": 5,
-                "Slot": 999
-            },
-            {
-                "ItemId": 309,
-                "Count": 5,
-                "Slot": 999
-            },
-            {
-                "ItemId": 310,
-                "Count": 5,
-                "Slot": 999
-            },
-            {
-                "ItemId": 311,
-                "Count": 5,
-                "Slot": 999
-            },
-            {
-                "ItemId": 312,
-                "Count": 5,
-                "Slot": 999
-            },
-            {
-                "ItemId": 313,
-                "Count": 5,
-                "Slot": 999
-            },
-            {
-                "ItemId": 400,
-                "Count": 1,
-                "Slot": 0
-            },
-            {
-                "ItemId": 402,
-                "Count": 1,
-                "Slot": 2
-            },
-            {
-                "ItemId": 405,
-                "Count": 1,
-                "Slot": 5
             }
         ]
     },
+    "Crops": [
+        {
+            "Id": 0,
+            "ReferId": -1,
+            "Category": 5,
+            "Name": "Crop_0",
+            "CropStage": 0,
+            "GrowingTimer": 0,
+            "Description": "Crop Plate for Cropping",
+            "Position": [ 2368, 2304 ],
+            "IsVisible": true
+        },
+        {
+            "Id": 1,
+            "ReferId": -1,
+            "Category": 5,
+            "Name": "Crop_1",
+            "CropStage": 0,
+            "GrowingTimer": 0,
+            "Description": "Crop Plate for Cropping",
+            "Position": [ 2463, 2304 ],
+            "IsVisible": true
+        },
+        {
+            "Id": 2,
+            "ReferId": -1,
+            "Category": 5,
+            "Name": "Crop_2",
+            "CropStage": 0,
+            "GrowingTimer": 0,
+            "Description": "Crop Plate for Cropping",
+            "Position": [ 2559, 2304 ],
+            "IsVisible": true
+        },
+        {
+            "Id": 3,
+            "ReferId": -1,
+            "Category": 5,
+            "Name": "Crop_3",
+            "CropStage": 0,
+            "GrowingTimer": 0,
+            "Description": "Crop Plate for Cropping",
+            "Position": [ 2656, 2304 ],
+            "IsVisible": true
+        },
+        {
+            "Id": 4,
+            "ReferId": -1,
+            "Category": 5,
+            "Name": "Crop_4",
+            "CropStage": 0,
+            "GrowingTimer": 0,
+            "Description": "Crop Plate for Cropping",
+            "Position": [ 2368, 2400 ],
+            "IsVisible": true
+        },
+        {
+            "Id": 5,
+            "ReferId": -1,
+            "Category": 5,
+            "Name": "Crop_5",
+            "CropStage": 0,
+            "GrowingTimer": 0,
+            "Description": "Crop Plate for Cropping",
+            "Position": [ 2463, 2400 ],
+            "IsVisible": true
+        },
+        {
+            "Id": 6,
+            "ReferId": -1,
+            "Category": 5,
+            "Name": "Crop_6",
+            "CropStage": 0,
+            "GrowingTimer": 0,
+            "Description": "Crop Plate for Cropping",
+            "Position": [ 2559, 2400 ],
+            "IsVisible": true
+        },
+        {
+            "Id": 7,
+            "ReferId": -1,
+            "Category": 5,
+            "Name": "Crop_7",
+            "CropStage": 0,
+            "GrowingTimer": 0,
+            "Description": "Crop Plate for Cropping",
+            "Position": [ 2656, 2400 ],
+            "IsVisible": true
+        },
+        {
+            "Id": 8,
+            "ReferId": -1,
+            "Category": 5,
+            "Name": "Crop_8",
+            "CropStage": 0,
+            "GrowingTimer": 0,
+            "Description": "Crop Plate for Cropping",
+            "Position": [ 2368, 2496 ],
+            "IsVisible": true
+        },
+        {
+            "Id": 9,
+            "ReferId": -1,
+            "Category": 5,
+            "Name": "Crop_9",
+            "CropStage": 0,
+            "GrowingTimer": 0,
+            "Description": "Crop Plate for Cropping",
+            "Position": [ 2463, 2496 ],
+            "IsVisible": true
+        },
+        {
+            "Id": 10,
+            "ReferId": -1,
+            "Category": 5,
+            "Name": "Crop_10",
+            "CropStage": 0,
+            "GrowingTimer": 0,
+            "Description": "Crop Plate for Cropping",
+            "Position": [ 2559, 2496 ],
+            "IsVisible": true
+        },
+        {
+            "Id": 11,
+            "ReferId": -1,
+            "Category": 5,
+            "Name": "Crop_11",
+            "CropStage": 0,
+            "GrowingTimer": 0,
+            "Description": "Crop Plate for Cropping",
+            "Position": [ 2656, 2496 ],
+            "IsVisible": true
+        }
+    ],
     "CraftingProgression": {
         "ThaiTraditionalMedicine": [
             {
@@ -220,6 +194,106 @@
             },
             {
                 "ItemId": 204,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 205,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 206,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 207,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 208,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 209,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 210,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 211,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 212,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 213,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 214,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 215,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 216,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 217,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 218,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 219,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 220,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 221,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 222,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 223,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 224,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 225,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 226,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 227,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 228,
+                "IsCraftable": false
+            },
+            {
+                "ItemId": 229,
                 "IsCraftable": false
             }
         ],
@@ -305,105 +379,90 @@
             "Quests": [
                 {
                     "QuestId": 101,
-                    "Name": "สำรวจในบ้านและผลิตยาชนิดแรก",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 102,
-                    "Name": "สำรวจแปลงผัก",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 103,
-                    "Name": "ไปซื้อเมล็ดพันธ์และปลูกผัก TOWN",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 104,
-                    "Name": "ปลูกผักที่แปลง",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 105,
-                    "Name": "เอาผักที่ปลูกเสร็จมาทำอาหารกิน",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 106,
-                    "Name": "เอาผักที่เหลือไปขายที่ TOWN",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 107,
-                    "Name": "เอาเงินไปซื้ออาหาร",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 108,
-                    "Name": "เอาเงินไปซื้ออาวุธเริ่มต้นกับ BlackSmite",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 109,
-                    "Name": "ทดลองไปโจมตีมอนสเตอร์",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 110,
-                    "Name": "กลับบ้านมานอน",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 111,
-                    "Name": "เดินไปเช็คตู้จดหมาย",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 112,
-                    "Name": "ยาเขียวหอม",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 113,
-                    "Name": "ยาประสะจันทร์แดง",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 114,
-                    "Name": "ยาประสะเปราะใหญ่",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 115,
-                    "Name": "ยาห้าราก",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
@@ -418,105 +477,90 @@
             "Quests": [
                 {
                     "QuestId": 201,
-                    "Name": "ไปบ้านผู้ช่วย",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 202,
-                    "Name": "ออกเดินทางไป Rothenburg",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 203,
-                    "Name": "เอาชนะบอสดันเจี้ยน",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 204,
-                    "Name": "ออกเดินทางไป Rothenburg อีกครั้ง",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 205,
-                    "Name": "ปลดล็อคจุดวาร์ป",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 206,
-                    "Name": "ไปคลินิกหมู่บ้าน",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 207,
-                    "Name": "ใช้วาร์ปกลับไปเปิดร้านยา",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 208,
-                    "Name": "ไปตีมอนสเตอร์ 5 ตัว",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 209,
-                    "Name": "คุยกับอัศวินลาดตระเวน",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 210,
-                    "Name": "รักษา npc บุรษไปรษณี",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 211,
-                    "Name": "รับจดหมายจาก npc มาอ่าน",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 212,
-                    "Name": "ยาหอมเทพจิตร",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 213,
-                    "Name": "ยาหอมนวโกฐ",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 214,
-                    "Name": "ยาหอมแก้ลมวิงเวียน",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 215,
-                    "Name": "ยาหอมอินทจักร์",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
@@ -531,105 +575,90 @@
             "Quests": [
                 {
                     "QuestId": 301,
-                    "Name": "คุยกับตลคผู้ช่วยหน้าเมือง",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 302,
-                    "Name": "เตรียมออกเดินทางไป Tallinn",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 303,
-                    "Name": "เอาชนะบอสดันเจี้ยน",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 304,
-                    "Name": "ออกเดินทางไป Tallinn อีกครั้ง",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 305,
-                    "Name": "ปลดล็อคจุดวาร์ป ",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 306,
-                    "Name": "สอบถามยามหน้าเมือง",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 307,
-                    "Name": "เข้าเมืองไปหาเบาะแสเพิ่ม",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 308,
-                    "Name": "หาเบาะแสเพิ่มเติม",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 309,
-                    "Name": "ทำยา 'ยาธาตุบรรจบ'",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 310,
-                    "Name": "ต่อสู้เพื่อเอาชนะบอสมอนสเตอร์",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 311,
-                    "Name": "ตรวจสอบหนังสือโบราณ",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 312,
-                    "Name": "ยาธรณีสันฑะฆาต",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 313,
-                    "Name": "ยาเหลืองปิดสมุทร",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 314,
-                    "Name": "ยาริดสีดวงมหากาฬ",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 315,
-                    "Name": "ยาธาตุอบเชย",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
@@ -644,105 +673,90 @@
             "Quests": [
                 {
                     "QuestId": 401,
-                    "Name": "StoryQuest_401",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 402,
-                    "Name": "StoryQuest_402",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 403,
-                    "Name": "StoryQuest_403",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 404,
-                    "Name": "StoryQuest_404",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 405,
-                    "Name": "StoryQuest_405",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 406,
-                    "Name": "StoryQuest_406",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 407,
-                    "Name": "StoryQuest_407",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 408,
-                    "Name": "StoryQuest_408",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 409,
-                    "Name": "StoryQuest_409",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 410,
-                    "Name": "StoryQuest_410",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 411,
-                    "Name": "StoryQuest_411",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 412,
-                    "Name": "SideQuest_412",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 413,
-                    "Name": "SideQuest_413",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 414,
-                    "Name": "SideQuest_414",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 415,
-                    "Name": "SideQuest_415",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
@@ -757,105 +771,90 @@
             "Quests": [
                 {
                     "QuestId": 501,
-                    "Name": "StoryQuest_501",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 502,
-                    "Name": "StoryQuest_502",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 503,
-                    "Name": "StoryQuest_503",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 504,
-                    "Name": "StoryQuest_504",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 505,
-                    "Name": "StoryQuest_505",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 506,
-                    "Name": "StoryQuest_506",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 507,
-                    "Name": "StoryQuest_507",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 508,
-                    "Name": "StoryQuest_508",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 509,
-                    "Name": "StoryQuest_509",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 510,
-                    "Name": "StoryQuest_510",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 511,
-                    "Name": "StoryQuest_511",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 512,
-                    "Name": "SideQuest_512",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 513,
-                    "Name": "SideQuest_513",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 514,
-                    "Name": "SideQuest_514",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 515,
-                    "Name": "SideQuest_515",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
@@ -870,105 +869,90 @@
             "Quests": [
                 {
                     "QuestId": 601,
-                    "Name": "StoryQuest_601",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 602,
-                    "Name": "StoryQuest_602",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 603,
-                    "Name": "StoryQuest_603",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 604,
-                    "Name": "StoryQuest_604",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 605,
-                    "Name": "StoryQuest_605",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 606,
-                    "Name": "StoryQuest_606",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 607,
-                    "Name": "StoryQuest_607",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 608,
-                    "Name": "StoryQuest_608",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 609,
-                    "Name": "StoryQuest_609",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 610,
-                    "Name": "StoryQuest_610",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 611,
-                    "Name": "StoryQuest_611",
                     "Type": "StoryQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 612,
-                    "Name": "SideQuest_612",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 613,
-                    "Name": "SideQuest_613",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 614,
-                    "Name": "SideQuest_614",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 },
                 {
                     "QuestId": 615,
-                    "Name": "SideQuest_615",
                     "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false

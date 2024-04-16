@@ -8,6 +8,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Sprites;
 using System.Linq;
+using static Medicraft.GameObjects.Crop;
 using static Medicraft.Systems.GameGlobals;
 
 namespace Medicraft.Systems
@@ -122,6 +123,9 @@ namespace Medicraft.Systems
                 // Draw combat numbers mobs & player
                 DrawCombatNumbers(spriteBatch);
 
+                // Draw Crop Timer
+                DrawCropTimer(spriteBatch);
+
                 // Draw Press F Sign
                 DrawInteractionSigh(spriteBatch);
 
@@ -132,9 +136,6 @@ namespace Medicraft.Systems
 
                 // Draw Feed Items
                 DrawCollectedItem(spriteBatch);
-
-                // Draw Quest List
-                DrawQuestList(spriteBatch);
 
                 // Draw HUD Bar
                 DrawMainHUD(spriteBatch);
@@ -169,23 +170,26 @@ namespace Medicraft.Systems
                 spriteBatch.DrawString(FontSensation, $" Mobs: {EntityManager.Instance.entities.Count}"
                     , Vector2.Zero + _topLeftCorner, Color.White);
 
-                spriteBatch.DrawString(FontSensation, $"Time Spawn: {(int)EntityManager.Instance.SpawnTime}"
+                spriteBatch.DrawString(FontSensation, $"Map: {ScreenManager.Instance.CurrentMap}"
                     , new Vector2(100f, 0f) + _topLeftCorner, Color.White);
 
+                spriteBatch.DrawString(FontSensation, $"Time Spawn: {(int)EntityManager.Instance.SpawnTimer}"
+                    , new Vector2(270f, 0f) + _topLeftCorner, Color.White);
+
                 spriteBatch.DrawString(FontSensation, $"X: {(int)PlayerManager.Instance.Player.Position.X}"
-                    , new Vector2(240f, 0f) + _topLeftCorner, Color.White);
+                    , new Vector2(410f, 0f) + _topLeftCorner, Color.White);
 
                 spriteBatch.DrawString(FontSensation, $"Y: {(int)PlayerManager.Instance.Player.Position.Y}"
-                    , new Vector2(320f, 0f) + _topLeftCorner, Color.White);
-
-                spriteBatch.DrawString(FontSensation, $"MouseX: {(int)Instance.MousePosition.X}"
                     , new Vector2(490f, 0f) + _topLeftCorner, Color.White);
 
+                spriteBatch.DrawString(FontSensation, $"MouseX: {(int)Instance.MousePosition.X}"
+                    , new Vector2(600f, 0f) + _topLeftCorner, Color.White);
+
                 spriteBatch.DrawString(FontSensation, $"MouseY: {(int)Instance.MousePosition.Y}"
-                    , new Vector2(610f, 0f) + _topLeftCorner, Color.White);
+                    , new Vector2(720f, 0f) + _topLeftCorner, Color.White);
 
                 spriteBatch.DrawString(FontSensation, $"Total PlayTime: {(int)Instance.TotalPlayTime}"
-                    , new Vector2(760f, 0f) + _topLeftCorner, Color.White);
+                    , new Vector2(870f, 0f) + _topLeftCorner, Color.White);
 
                 var rect = new Rectangle((int)_topLeftCorner.X + 50, (int)_topLeftCorner.Y + 220, 300, 500);
 
@@ -260,8 +264,19 @@ namespace Medicraft.Systems
             }
         }
 
-        public static void DrawOnTopUI(SpriteBatch spriteBatch)
+        public static void DrawOnTopUI(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
+            spriteBatch.Begin
+                (
+                    SpriteSortMode.Deferred,
+                    samplerState: SamplerState.LinearClamp,
+                    blendState: BlendState.AlphaBlend,
+                    depthStencilState: DepthStencilState.None,
+                    rasterizerState: RasterizerState.CullCounterClockwise,
+                    transformMatrix: ScreenManager.Camera.GetTransform(
+                        graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height)
+                );
+
             var topLeftCornerPos = Instance.TopLeftCornerPos;
             var font = Instance.FontTA8BitBold;
 
@@ -340,13 +355,13 @@ namespace Medicraft.Systems
                     spriteBatch.Draw(goldCoinTexture
                             , new Vector2(
                                 720 - (hudGoldCoinSize.X / 2),
-                                180 - (hudGoldCoinSize.Y / 2)) + topLeftCornerPos, null
+                                200 - (hudGoldCoinSize.Y / 2)) + topLeftCornerPos, null
                             , Color.White, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0f);
 
                     DrawTextWithStroke(spriteBatch, font, goldCoinText
                         , new Vector2(
                             720 - (hudGoldCoinSize.X / 2) + 32f,
-                            180 - (goldCoinTextSize.Height / 2)) + topLeftCornerPos
+                            200 - (goldCoinTextSize.Height / 2)) + topLeftCornerPos
                         , Color.Gold, 1f, Color.Black, 2);
                     break;
 
@@ -408,7 +423,9 @@ namespace Medicraft.Systems
                         }
                     }                  
                     break;
-            }              
+            }
+
+            spriteBatch.End();
         }
 
         private void DrawHealthBarGUI(SpriteBatch spriteBatch)
@@ -514,18 +531,22 @@ namespace Medicraft.Systems
 
         private void DrawBossHealthBarGUI(SpriteBatch spriteBatch)
         {
+            if (EntityManager.Instance.Boss == null) return;
+
+            var boss = EntityManager.Instance.Boss;
+
             // Health Bar Boss Alpha
             spriteBatch.Draw(GetGuiTexture(GuiTextureName.health_bar_boss_alpha)
                 , new Vector2(506f, 92f) + _topLeftCorner, null
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             // HP gauge
-            //var curHealthPoint = PlayerManager.Instance.Player.GetCurrentHealthPercentage();
+            var curHealthPoint = boss.GetCurrentHealthPercentage();
             var hpGaugeTexture = GetGuiTexture(GuiTextureName.boss_gauge);
             var hpGaugeSourceRec = new Rectangle(0, 0
-                , (int)(hpGaugeTexture.Width * 1), hpGaugeTexture.Height);
+                , (int)(hpGaugeTexture.Width * curHealthPoint), hpGaugeTexture.Height);
             var hpGaugeRec = new Rectangle((int)(541 + _topLeftCorner.X), (int)(123 + _topLeftCorner.Y)
-                , (int)(hpGaugeTexture.Width * 1), hpGaugeTexture.Height);
+                , (int)(hpGaugeTexture.Width * curHealthPoint), hpGaugeTexture.Height);
 
             spriteBatch.Draw(hpGaugeTexture, hpGaugeRec, hpGaugeSourceRec
                 , Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
@@ -536,7 +557,7 @@ namespace Medicraft.Systems
                 , Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             // Text Name
-            var text = $"Boss Name is So Cool";
+            var text = boss.Name;
             var textSize = Instance.FontTA16Bit.MeasureString(text);
             var position = new Vector2(Instance.GameScreenCenter.X
                 - (textSize.Width / 2), 90)
@@ -768,6 +789,7 @@ namespace Medicraft.Systems
             if (PlayerManager.Instance.IsDetectedObject)
             {
                 Texture2D texture = null;
+                bool isDraw = true;
 
                 switch (PlayerManager.Instance.DetectedObject.ObjectType)
                 {
@@ -776,12 +798,31 @@ namespace Medicraft.Systems
                         texture = GetGuiTexture(GuiTextureName.press_collecting);
                         break;
 
+                    default:
                     case GameObject.GameObjectType.CraftingTable:
                     case GameObject.GameObjectType.SavingTable:
                     case GameObject.GameObjectType.WarpPoint:
+                    case GameObject.GameObjectType.RestPoint:
                         texture = GetGuiTexture(GuiTextureName.press_interacting);
                         break;
+
+                    case GameObject.GameObjectType.Crop:
+                        Crop crop = PlayerManager.Instance.DetectedObject as Crop;
+
+                        if (crop.CropStage == Crop.CropStages.Harvestable)
+                        {
+                            texture = GetGuiTexture(GuiTextureName.press_collecting);
+                        }
+                        else if (crop.CropStage == Crop.CropStages.Empty)
+                        {
+                            texture = GetGuiTexture(GuiTextureName.press_interacting);
+                        }
+                        else isDraw = false;
+
+                        break;
                 }
+
+                if (!isDraw) return;
 
                 spriteBatch.Draw(texture
                     , position + _topLeftCorner, null
@@ -953,6 +994,17 @@ namespace Medicraft.Systems
             PlayerManager.Instance.Player.DrawCombatNumbers(spriteBatch);
         }
 
+        private void DrawCropTimer(SpriteBatch spriteBatch)
+        {
+            var crops = ObjectManager.Instance.Crops.Where(e => e.IsVisible);
+
+            foreach (var crop in crops)
+            {
+                if (crop.CropStage == CropStages.Growing)
+                    crop.DrawGrowingTimer(spriteBatch);
+            }
+        }
+
         private void DrawCollectedItem(SpriteBatch spriteBatch) 
         {
             if (Instance.CollectedItemFeed.Count != 0)
@@ -1003,11 +1055,6 @@ namespace Medicraft.Systems
                     else Instance.CollectedItemFeed.RemoveRange(0, Instance.CollectedItemFeed.Count);
                 }
             }
-        }
-
-        private void DrawQuestList(SpriteBatch spriteBatch)
-        {
-            // TODO :
         }
 
         public static void DrawTextWithStroke(SpriteBatch spriteBatch, BitmapFont font, string text

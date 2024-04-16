@@ -20,6 +20,9 @@ namespace Medicraft.Data.Models
         public bool IsInteractable { get; set; } = false;
         public List<InventoryItemData> TradingItemsData { get; set; } = null;
         public List<DialogData> DialogData { get; set; } = null;
+
+        // For Boss
+        public int BossChapterId { get; set; } = 0;
     }
 
     public class DialogData

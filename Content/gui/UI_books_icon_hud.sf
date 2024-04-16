@@ -50,6 +50,16 @@
       "isLooping": false,
       "frameDuration": 0.2
     },
+    "heart_1": {
+      "frames": [821],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "heart_2": {
+      "frames": [873],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
     "crafting_0": {
       "frames": [768],
       "isLooping": false,
@@ -62,6 +72,41 @@
     },
     "crafting_2": {
       "frames": [872],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "crafting_potion_0": {
+      "frames": [619],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "crafting_potion_1": {
+      "frames": [671],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "crafting_potion_2": {
+      "frames": [723],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "cooking_0": {
+      "frames": [620],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "cooking_1": {
+      "frames": [672],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "cooking_2": {
+      "frames": [724],
+      "isLooping": false,
+      "frameDuration": 0.2
+    },
+    "blank": {
+      "frames": [931],
       "isLooping": false,
       "frameDuration": 0.2
     },

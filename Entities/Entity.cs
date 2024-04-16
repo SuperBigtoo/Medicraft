@@ -11,6 +11,7 @@ using Medicraft.Data.Models;
 using System.Linq;
 using Medicraft.Systems.Managers;
 using static Medicraft.Systems.GameGlobals;
+using Medicraft.Entities.Companion;
 
 namespace Medicraft.Entities
 {
@@ -24,6 +25,7 @@ namespace Medicraft.Entities
         public int EXPMaxCap { get; set; }     // meant for playable
 
         // Character Stats
+        public const float InitHPRegenRate = 0.25f;
         public const float InitManaRegenRate = 0.50f;
 
         public float ATK { get; set; }
@@ -78,6 +80,7 @@ namespace Medicraft.Entities
         public float BaseBoundingDetectEntityRadius;
         public CircleF BoundingInteraction;
         public CircleF BoundingAggro;
+        public Vector2 OffSetCircle = Vector2.Zero;
 
         protected int currentNodeIndex = 0;     // Index of the current node in the path
         protected int stoppingNodeIndex = 1;    // Distance index from the last node in the path for entity to stop moving
@@ -116,10 +119,10 @@ namespace Medicraft.Entities
                 }
                 else
                 {
-                    BoundingHitBox.Center = value;
-                    BoundingDetectEntity.Center = value;
-                    BoundingInteraction.Center = value;
-                    BoundingAggro.Center = value;
+                    BoundingHitBox.Center = value + OffSetCircle;
+                    BoundingDetectEntity.Center = value + OffSetCircle;
+                    BoundingInteraction.Center = value + OffSetCircle;
+                    BoundingAggro.Center = value + OffSetCircle;
                 }
             }
         }
@@ -890,7 +893,7 @@ namespace Medicraft.Entities
             {
                 var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
 
-                if (companion != null)
+                if (companion != null && !companion.IsDying)
                     isCompanionDetected = BoundingDetectEntity.Intersects(companion.BoundingHitBox);
             }
 
@@ -977,12 +980,12 @@ namespace Medicraft.Entities
 
                         if (PlayerManager.Instance.Player.IsKnockbackable)
                         {
-                            var knockBackDirection = PlayerManager.Instance.Player.Position - Position;
+                            var knockBackDirection = (PlayerManager.Instance.Player.Position + new Vector2(0f, 32f)) - Position;
                             knockBackDirection.Normalize();
                             PlayerManager.Instance.Player.Velocity = knockBackDirection * knockbackForce;
 
                             PlayerManager.Instance.Player.IsKnockback = true;
-                            PlayerManager.Instance.Player.KnockbackedTimer = 0.2f;
+                            PlayerManager.Instance.Player.KnockbackedTimer = 0.3f;
                         }
                     }        
                 }

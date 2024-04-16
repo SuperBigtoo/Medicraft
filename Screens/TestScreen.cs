@@ -10,12 +10,13 @@ using System.Collections.Generic;
 using Medicraft.Systems.Spawners;
 using Medicraft.Systems.TilemapRenderer;
 using Medicraft.Systems.Managers;
+using System.Linq;
 
 namespace Medicraft.Screens
 {
     public class TestScreen : PlayScreen
     {
-        public string MapName = "Test";
+        public string MapName { private set; get; } = "Test";
 
         public TestScreen()
         {
@@ -40,26 +41,25 @@ namespace Medicraft.Screens
             entityDatas = content.Load<List<EntityData>>("data/TestScreen/entites_demo");
             objectDatas = content.Load<List<ObjectData>>("data/TestScreen/objects_demo");
 
-            // Adding Mobs to MobSpawner
-            Dictionary<int, SpriteSheet> entitySpriteSheets = new()
+            // If there is no Spawner for the Map yet then create a new one
+            if (!GameGlobals.Instance.MobSpawners.Any(m => m.currMapName.Equals(MapName)))
             {
-                { 100,  content.Load<SpriteSheet>("entity/mobs/friendly/cat/cat_animation.sf", new JsonContentLoader())},
-                { 101,  content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian09_animation.sf", new JsonContentLoader())},
-                { 102,  content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian01_animation.sf", new JsonContentLoader())},
-                { 200,  content.Load<SpriteSheet>("entity/mobs/monster/slime/slimes_animation.sf", new JsonContentLoader())},
-                { 201,  content.Load<SpriteSheet>("entity/mobs/monster/goblin/goblin_animation.sf", new JsonContentLoader())}
-            };
+                var spawnerData = GameGlobals.Instance.SpawnerDatas.FirstOrDefault
+                    (s => s.ChapterId.Equals(0));
 
-            mobSpawner = new MobSpawner(GameGlobals.Instance.MobsTestSpawnTime
-                , GameGlobals.Instance.MobsTestSpawnTimer);
-            mobSpawner.SetupSpawner(entityDatas, entitySpriteSheets);
-            EntityManager.Instance.Initialize(mobSpawner);
+                GameGlobals.Instance.MobSpawners.Add(new MobSpawner(
+                    spawnerData, MapName, entityDatas, GameGlobals.Instance.EntitySpriteSheets));
 
-            // Adding GameObject to ObjectSpawner
-            objectSpawner = new ObjectSpawner(GameGlobals.Instance.ObjectTestSpawnTime
-                , GameGlobals.Instance.ObjectTestSpawnTimer);
-            objectSpawner.SetupSpawner(objectDatas);
-            ObjectManager.Instance.Initialize(objectSpawner);
+                GameGlobals.Instance.ObjectSpawners.Add(new ObjectSpawner(
+                    spawnerData, MapName, objectDatas));
+            }
+
+            // Adding Spawners to EntityManager & ObjectManager
+            {
+                EntityManager.Instance.Initialize(MapName);
+
+                ObjectManager.Instance.Initialize(MapName);
+            }
 
             // Adding DrawEffectSystem
             drawEffectSystem = new DrawEffectSystem();

@@ -189,11 +189,6 @@ namespace Medicraft.Entities.Mobs
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (GameGlobals.Instance.IsShowPath && GetType().Name.Equals("Civilian"))
-            {
-                pathFinding.Draw(spriteBatch);
-            }
-
             spriteBatch.Draw(Sprite, Transform);
 
             var shadowTexture = GameGlobals.GetShadowTexture(GameGlobals.ShadowTextureName.shadow_1);

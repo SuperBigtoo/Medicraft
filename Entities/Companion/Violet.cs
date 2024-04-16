@@ -37,6 +37,11 @@ namespace Medicraft.Entities.Companion
             cooldownAttackTimer = cooldownAttack;
 
             // Skill
+            var playerAbility = PlayerManager.Instance.Player.PlayerData.Abilities;
+            CompanionData.Abilities.NormalSkillLevel = playerAbility.NormalSkillLevel;
+            CompanionData.Abilities.BurstSkillLevel = playerAbility.BurstSkillLevel;
+            CompanionData.Abilities.PassiveSkillLevel = playerAbility.PassiveSkillLevel;
+
             BaseCooldownNormal = 20f;
             BaseCooldownBurst = 45f;
             InitialCooldownSkill();

@@ -33,6 +33,8 @@ namespace Medicraft.Entities.Mobs.Friendly
             InitializeCharacterData(entityData.CharId, Level);
 
             SetMobType(entityData.MobType);
+            Name = entityData.Name;
+
             IsInteractable = entityData.IsInteractable;
             IsRespawnable = true;
 

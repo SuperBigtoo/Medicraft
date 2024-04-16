@@ -98,7 +98,8 @@ namespace Medicraft.Screens
             if (UIManager.Instance.IsClickedLoadButton)
                 alphaColor = 0.8f;
 
-            ScreenManager.DrawBackgound(spriteBatch, Color.Black, alphaColor);
+            spriteBatch.End();
+            ScreenManager.DrawBackgound(spriteBatch, Color.Black, alphaColor, false);
         }
     }
 }

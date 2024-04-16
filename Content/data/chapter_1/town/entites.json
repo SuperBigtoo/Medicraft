@@ -1,13 +1,229 @@
 [
-  {
-    "Id": 0,
-    "CharId": 200,
-    "Level": 1,
-    "Name": "Slime",
-    "PathFindingType": 2,
-    "NodeCycleTime": 10,
-    "RoutePoint": [ [] ],
-    "AggroTime": 5,
-    "Position": [ 1507, 1273 ]
-  }
+    {
+        "Id": 0,
+        "CharId": 101,
+        "Level": 1,
+        "Name": "ชั่งตีเหล็ก",
+        "MobType": "Vendor",
+        "IsInteractable": true,
+        "PathFindingType": 2,
+        "Position": [ 3711.33, 3552.67 ],
+        "TradingItemsData": [
+            {
+                "ItemId": 400
+            },
+            {
+                "ItemId": 401
+            },
+            {
+                "ItemId": 402
+            },
+            {
+                "ItemId": 403
+            },
+            {
+                "ItemId": 404
+            },
+            {
+                "ItemId": 405
+            }
+        ]
+    },
+    {
+        "Id": 1,
+        "CharId": 101,
+        "Level": 1,
+        "Name": "พ่อค้าขายของสด",
+        "MobType": "Vendor",
+        "IsInteractable": true,
+        "PathFindingType": 2,
+        "Position": [ 1442.00, 1363.00 ],
+        "TradingItemsData": [
+            {
+                "ItemId": 300
+            },
+            {
+                "ItemId": 301
+            },
+            {
+                "ItemId": 142
+            },
+            {
+                "ItemId": 143
+            },
+            {
+                "ItemId": 144
+            },
+            {
+                "ItemId": 145
+            },
+            {
+                "ItemId": 146
+            },
+            {
+                "ItemId": 147
+            },
+            {
+                "ItemId": 156
+            },
+            {
+                "ItemId": 159
+            },
+            {
+                "ItemId": 162
+            },
+            {
+                "ItemId": 164
+            }
+        ]
+    },
+    {
+        "Id": 2,
+        "CharId": 102,
+        "Level": 1,
+        "Name": "Civilian_01",
+        "MobType": "Civilian",
+        "IsInteractable": true,
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_1",
+        "Position": [ 3482.79, 1647.91 ],
+        "RoutePoint": [
+            [ 573, 1056 ],
+            [ 638, 1250 ],
+            [ 960, 1184 ],
+            [ 1273, 1272 ],
+            [ 1481, 1100 ],
+            [ 1189, 989 ],
+            [ 916, 1000 ]
+        ],
+        "DialogData": [
+            {
+                "Id": 0,
+                "Type": "Daily",
+                "Description": "Daily dialog for test",
+                "Dialogues": [
+                    "สวัสดี",
+                    "ผมชื่อ Meof",
+                    "Meof Meof Silly"
+                ]
+            },
+            {
+                "Id": 1,
+                "Type": "Quest",
+                "Description": "Quest onAccept dialog for test",
+                "QuestId": 101,
+                "ChapterId": 1,
+                "Stage": "onAccept",
+                "Dialogues": [
+                    "onAccept",
+                    "onAccept onAccept",
+                    "onAccept Meof Meof Silly"
+                ]
+            },
+            {
+                "Id": 2,
+                "Type": "Quest",
+                "Description": "Quest onGoing dialog for test",
+                "QuestId": 101,
+                "ChapterId": 1,
+                "Stage": "onGoing",
+                "Dialogues": [
+                    "onGoing",
+                    "onGoing onGoing",
+                    "onGoing Meof Meof Silly"
+                ]
+            },
+            {
+                "Id": 3,
+                "Type": "Quest",
+                "Description": "Quest onDone dialog for test",
+                "QuestId": 101,
+                "ChapterId": 1,
+                "Stage": "onDone",
+                "Dialogues": [
+                    "onDone",
+                    "onDone onDone",
+                    "onDone Meof Meof Silly"
+                ]
+            },
+            {
+                "Id": 4,
+                "Type": "Quest",
+                "Description": "Quest onClear dialog for test",
+                "QuestId": 101,
+                "ChapterId": 1,
+                "Stage": "onClear",
+                "Dialogues": [
+                    "onClear",
+                    "onClear onClear",
+                    "onClear Meof Meof Silly"
+                ]
+            }
+        ]
+    },
+    {
+        "Id": 3,
+        "CharId": 103,
+        "Level": 1,
+        "Name": "Civilian_01",
+        "MobType": "QuestGiver",
+        "IsInteractable": true,
+        "PathFindingType": 2,
+        "Position": [ 3266.67, 1997.33 ],
+        "DialogData": [
+            {
+                "Id": 0,
+                "Type": "Quest",
+                "Description": "Quest onAccept dialog for test",
+                "QuestId": 101,
+                "ChapterId": 1,
+                "Stage": "onAccept",
+                "Dialogues": [
+                    "onAccept",
+                    "onAccept onAccept",
+                    "onAccept Meof Meof Silly"
+                ]
+            },
+            {
+                "Id": 1,
+                "Type": "Quest",
+                "Description": "Quest onGoing dialog for test",
+                "QuestId": 101,
+                "ChapterId": 1,
+                "Stage": "onGoing",
+                "Dialogues": [
+                    "onGoing",
+                    "onGoing onGoing",
+                    "onGoing Meof Meof Silly"
+                ]
+            },
+            {
+                "Id": 2,
+                "Type": "Quest",
+                "Description": "Quest onDone dialog for test",
+                "QuestId": 101,
+                "ChapterId": 1,
+                "Stage": "onDone",
+                "Dialogues": [
+                    "onDone",
+                    "onDone onDone",
+                    "onDone Meof Meof Silly"
+                ]
+            },
+            {
+                "Id": 3,
+                "Type": "Quest",
+                "Description": "Quest onClear dialog for test",
+                "QuestId": 101,
+                "ChapterId": 1,
+                "Stage": "onClear",
+                "Dialogues": [
+                    "onClear",
+                    "onClear onClear",
+                    "onClear Meof Meof Silly"
+                ]
+            }
+        ]
+    }
 ]

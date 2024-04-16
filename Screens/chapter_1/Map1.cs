@@ -10,12 +10,13 @@ using System.Collections.Generic;
 using Medicraft.Systems.Spawners;
 using Medicraft.Systems.TilemapRenderer;
 using Medicraft.Systems.Managers;
+using System.Linq;
 
 namespace Medicraft.Screens.chapter_1
 {
     public class Map1 : PlayScreen
     {
-        public string MapName = "map_1";
+        public string MapName { private set; get; } = "map_1";
 
         public Map1()
         {
@@ -27,37 +28,42 @@ namespace Medicraft.Screens.chapter_1
         {
             base.LoadContent();
 
-            // Load map_1
-            var tileSets = new Texture2D[]  // The maximum number of TileSet is 5
+            // New Tilemap
+            tileMap = new TmxMap("Content/tiledmaps/chapter_1/map_1.tmx");
+
+            // Load Tilesets Textures
+            var tileSets = new Texture2D[]
             {
                 content.Load<Texture2D>("tiledmaps/textures/rpg_maker_vx_rtp_tileset_by_telles0808"),
                 content.Load<Texture2D>("tiledmaps/textures/TS1")
             };
-            tileMap = new TmxMap("Content/tiledmaps/chapter_1/map_1.tmx");
+
+            // Tile Renderer
             tileMapRender = new TilemapOrthogonalRender(tileMap, tileSets, GameGlobals.Instance.TILE_SIZE);
 
             // Load GameData from JSON file, such as Mobs and Items Data 
             entityDatas = content.Load<List<EntityData>>("data/chapter_1/town/entites");
             objectDatas = content.Load<List<ObjectData>>("data/chapter_1/town/objects");
 
-            // Adding Mobs to MobSpawner
-            Dictionary<int, SpriteSheet> entitySpriteSheets = new()
+            // If there is no Spawner for the Map yet then create a new one
+            if (!GameGlobals.Instance.MobSpawners.Any(m => m.currMapName.Equals(MapName)))
             {
-                { 200,  content.Load<SpriteSheet>("entity/mobs/monster/slime/slimes_animation.sf", new JsonContentLoader())}
-            };
+                var spawnerData = GameGlobals.Instance.SpawnerDatas.FirstOrDefault
+                    (s => s.ChapterId.Equals(1));
 
-            mobSpawner = new MobSpawner(
-                GameGlobals.Instance.MobsTestSpawnTime,
-                GameGlobals.Instance.MobsTestSpawnTimer);
-            mobSpawner.SetupSpawner(entityDatas, entitySpriteSheets);
-            EntityManager.Instance.Initialize(mobSpawner);
+                GameGlobals.Instance.MobSpawners.Add(new MobSpawner(
+                    spawnerData, MapName, entityDatas, GameGlobals.Instance.EntitySpriteSheets));
 
-            //Adding GameObject to ObjectSpawner
-            objectSpawner = new ObjectSpawner(
-                GameGlobals.Instance.ObjectTestSpawnTime,
-                GameGlobals.Instance.ObjectTestSpawnTimer);
-            objectSpawner.SetupSpawner(objectDatas);
-            ObjectManager.Instance.Initialize(objectSpawner);
+                GameGlobals.Instance.ObjectSpawners.Add(new ObjectSpawner(
+                    spawnerData, MapName, objectDatas));
+            }
+
+            // Adding Spawners to EntityManager & ObjectManager
+            {
+                EntityManager.Instance.Initialize(MapName);
+
+                ObjectManager.Instance.Initialize(MapName);
+            }
 
             // Adding DrawEffectSystem
             drawEffectSystem = new DrawEffectSystem();
@@ -67,6 +73,10 @@ namespace Medicraft.Screens.chapter_1
 
             // Show Map Name Sign
             HUDSystem.ShowMapNameSign(0, "Nordlingen Town");
+
+            // Music BG
+            var bgMusic = GameGlobals.AddCurrentMapMusic(GameGlobals.Music.ch_1_Town, content);
+            GameGlobals.PlayBackgroundMusic(bgMusic, true, volumeScale);
         }
 
         public override void UnloadContent()
@@ -87,11 +97,6 @@ namespace Medicraft.Screens.chapter_1
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-        }
-
-        private void CreateIntroDialog()
-        {
-            
         }
     }
 }

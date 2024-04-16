@@ -152,14 +152,28 @@ namespace Medicraft.Entities.Companion
             // Ensure hp or mana doesn't exceed the maximum & minimum value
             MinimumCapacity();
 
+            // HP & Mana regeneration
+            HPAndManaRegeneration(deltaSeconds);
+
             Sprite.Update(deltaSeconds);
+        }
+
+        private void HPAndManaRegeneration(float deltaSeconds)
+        {
+            var manaRegenAmount = ManaRegenRate * deltaSeconds;
+
+            Mana += manaRegenAmount;
+
+            // Only Regen HP when out of combat
+            if (!IsAttacked)
+                HP += InitHPRegenRate * deltaSeconds;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (Instance.IsShowPath)
             {
-                //pathFinding.Draw(spriteBatch);
+                pathFinding.Draw(spriteBatch);
             }
 
             spriteBatch.Draw(Sprite, Transform);

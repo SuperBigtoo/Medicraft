@@ -8,22 +8,46 @@ using System.Linq;
 
 namespace Medicraft.Systems.Spawners
 {
-    public class ObjectSpawner(float spawnTime, float spawnTimer) : IObjectManager
+    public class ObjectSpawner : IObjectManager
     {
-        public float SpawnTime = spawnTime;
-        public float SpawnTimer = spawnTimer;
-        public bool IsSpawn = false;
+        public readonly SpawnerData spawnerData;
+        public readonly string currMapName;
+
+        public float SpawnTime;
+        public float SpawnTimer;
 
         private readonly List<GameObject> _initialObjects = [];
         private readonly List<GameObject> _destroyedObjects = [];
         private readonly List<GameObject> _spawningObjects = [];
 
+        public ObjectSpawner(SpawnerData spawnerData, string currMapName, List<ObjectData> objectDatas)
+        {
+            this.spawnerData = spawnerData;
+            this.currMapName = currMapName;
+
+            SetupSpawner(objectDatas);
+        }
+
         public void Initialize()
         {
             foreach (var obj in _initialObjects)
             {
-                GameObject clonedObject = obj.Clone() as GameObject;
-                ObjectManager.Instance.AddGameObject(clonedObject);
+                bool isFound = false;
+
+                foreach (var destroyedObj in _destroyedObjects)
+                {
+                    if (obj.Id.Equals(destroyedObj.Id))
+                    {
+                        isFound = true;
+                        break;
+                    }
+                }
+
+                if (!isFound)
+                {
+                    GameObject clonedObject = obj.Clone() as GameObject;
+                    ObjectManager.Instance.AddGameObject(clonedObject);
+                }
             }
         }
 
@@ -35,15 +59,19 @@ namespace Medicraft.Systems.Spawners
 
         public void Update(GameTime gameTime)
         {
-            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            SpawnTimer -= deltaSeconds;
+            var mapSpawnTime = spawnerData.MapSpawnTimes.FirstOrDefault
+                (m => m.SpawnerName.Equals("Object") && m.MapName.Equals(currMapName));
+
+            SpawnTime = mapSpawnTime.SpawnTime;
+            SpawnTimer = mapSpawnTime.SpawnTimer;
+
 
             foreach (var obj in ObjectManager.Instance.GameObjects.Where(e => e.IsDestroyed))
             {
                 _destroyedObjects.Add(obj);
             }
 
-            if (SpawnTimer <= 0)
+            if (SpawnTimer < 0)
             {
                 if (_destroyedObjects.Count != 0)
                 {
@@ -56,23 +84,17 @@ namespace Medicraft.Systems.Spawners
                     _destroyedObjects.Clear();
                 }
 
-                IsSpawn = true;
-                SpawnTimer = SpawnTime;
+                Respawn();
             }
         }
 
-        public void Spawn()
+        private void Respawn()
         {
-            if (IsSpawn)
+            foreach (var obj in _spawningObjects.Where(o => o.IsRespawnable))
             {
-                foreach (var obj in _spawningObjects.Where(o => o.IsRespawnable))
-                {
-                    ObjectManager.Instance.AddGameObject(obj);
-                }
-
-                IsSpawn = false;
-                _spawningObjects.Clear();
+                ObjectManager.Instance.AddGameObject(obj);
             }
+            _spawningObjects.Clear();
         }
 
         public void SetupSpawner(List<ObjectData> objectDatas)
@@ -89,8 +111,8 @@ namespace Medicraft.Systems.Spawners
                         AddGameObject(new Item(new AnimatedSprite(spriteSheets), gameObjectData, Vector2.One));
                         break;
 
-                    case 1: // QuestItem
-                        spriteSheets = GameGlobals.Instance.ItemsPackSprites;
+                    case 1: // QuestObject
+                        spriteSheets = GameGlobals.Instance.UIBooksIconHUD;
                         break;
 
                     case 2: // CraftingTable
@@ -106,6 +128,11 @@ namespace Medicraft.Systems.Spawners
                     case 4: // WarpPoint
                         spriteSheets = GameGlobals.Instance.WarpPointSprite;
                         AddGameObject(new WarpPoint(new AnimatedSprite(spriteSheets), gameObjectData, Vector2.One));
+                        break;
+
+                    case 6: // SavingTable
+                        spriteSheets = GameGlobals.Instance.UIBooksIconHUD;
+                        AddGameObject(new RestPoint(new AnimatedSprite(spriteSheets), gameObjectData, Vector2.One));
                         break;
                 }
             }

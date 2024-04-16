@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using static Medicraft.Systems.GameGlobals;
 
 namespace Medicraft.Systems.Managers
 {
@@ -40,7 +41,8 @@ namespace Medicraft.Systems.Managers
 
                     // Add the quest instance to the QuestList
                     QuestList.Add((Quest)questInstance);
-                    System.Diagnostics.Debug.WriteLine($"Quest Add: true");
+                    System.Diagnostics.Debug.WriteLine($"Quest {questId} Add: true");
+                    PlaySoundEffect(Sound.quest);
                     return true;
                 }
                 else
@@ -56,6 +58,16 @@ namespace Medicraft.Systems.Managers
             }
         }
 
+        private void QuestComplete(Quest quest)
+        {
+            // Reward to player
+
+
+            // Remove completed quest from list
+            QuestList.Remove(quest);
+            PlaySoundEffect(Sound.Bingo);
+        }
+
         public void Update(GameTime gameTime)
         {
             var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -67,9 +79,7 @@ namespace Medicraft.Systems.Managers
             if (QuestList.Count == 0) return;
 
             foreach (var quest in QuestList)
-            {
                 quest.Update(deltaSeconds);
-            }
         }
 
         public static QuestManager Instance
@@ -91,7 +101,7 @@ namespace Medicraft.Systems.Managers
         protected Quest(int questId)
         {
             QuestId = questId;
-            QuestData = GameGlobals.Instance.QuestDatas.FirstOrDefault
+            QuestData = Instance.QuestDatas.FirstOrDefault
                 (e => e.QuestId.Equals(QuestId));
             QuestStamp = PlayerManager.Instance.Player.PlayerData.ChapterProgression.FirstOrDefault
                 (e => e.ChapterId.Equals(QuestData.ChapterId)).Quests.FirstOrDefault
@@ -107,7 +117,7 @@ namespace Medicraft.Systems.Managers
 
         public override void Update(float deltaSeconds)
         {
-            System.Diagnostics.Debug.WriteLine($"Quest101: {QuestData.ObjectiveName}");
+            
         }
     }
 

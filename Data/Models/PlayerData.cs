@@ -15,6 +15,7 @@ namespace Medicraft.Data.Models
         public AbilityData Abilities { get; set; }
         public List<CompanionData> Companions { get; set; }
         public InventoryData InventoryData { get; set; }
+        public List<ObjectData> Crops { get; set; }
         public CraftingProgressionData CraftingProgression { get; set; }
         public List<ChapterData> ChapterProgression { get; set; }
     }

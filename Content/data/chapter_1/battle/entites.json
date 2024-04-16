@@ -1,74 +1,74 @@
 [
-  {
-    "Id": 0,
-    "CharId": 201,
-    "Level": 1,
-    "Name": "Goblin",
-    "PathFindingType": 1,
-    "NodeCycleTime": 10,
-    "PartrolArea": "zone_1",
-    "RoutePoint": [ [] ],
-    "AggroTime": 5,
-    "Position": [ 1000, 910 ]
-  },
-  {
-    "Id": 1,
-    "CharId": 201,
-    "Level": 1,
-    "Name": "Goblin",
-    "PathFindingType": 2,
-    "NodeCycleTime": 10,
-    "PartrolArea": "zone_1",
-    "RoutePoint": [ [] ],
-    "AggroTime": 5,
-    "Position": [ 850, 1128 ]
-  },
-  {
-    "Id": 2,
-    "CharId": 201,
-    "Level": 1,
-    "Name": "Goblin",
-    "PathFindingType": 1,
-    "NodeCycleTime": 10,
-    "PartrolArea": "zone_1",
-    "RoutePoint": [ [] ],
-    "AggroTime": 5,
-    "Position": [ 1256, 1510 ]
-  },
-  {
-    "Id": 3,
-    "CharId": 201,
-    "Level": 1,
-    "Name": "Goblin",
-    "PathFindingType": 2,
-    "NodeCycleTime": 10,
-    "PartrolArea": "zone_1",
-    "RoutePoint": [ [] ],
-    "AggroTime": 5,
-    "Position": [ 1824, 922 ]
-  },
-  {
-    "Id": 4,
-    "CharId": 201,
-    "Level": 1,
-    "Name": "Goblin",
-    "PathFindingType": 1,
-    "NodeCycleTime": 10,
-    "PartrolArea": "zone_1",
-    "RoutePoint": [ [] ],
-    "AggroTime": 5,
-    "Position": [ 1884, 1184 ]
-  },
-  {
-    "Id": 5,
-    "CharId": 201,
-    "Level": 1,
-    "Name": "Goblin",
-    "PathFindingType": 2,
-    "NodeCycleTime": 10,
-    "PartrolArea": "zone_1",
-    "RoutePoint": [ [] ],
-    "AggroTime": 5,
-    "Position": [ 2166, 1760 ]
-  }
+    {
+        "Id": 0,
+        "CharId": 201,
+        "Level": 1,
+        "Name": "Goblin",
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_3",
+        "RoutePoint": [ [] ],
+        "AggroTime": 5,
+        "Position": [ 1310, 1408 ]
+    },
+    {
+        "Id": 1,
+        "CharId": 201,
+        "Level": 1,
+        "Name": "Goblin",
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_3",
+        "RoutePoint": [ [] ],
+        "AggroTime": 5,
+        "Position": [ 1430, 1788 ]
+    },
+    {
+        "Id": 2,
+        "CharId": 200,
+        "Level": 1,
+        "Name": "Slime",
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_1",
+        "RoutePoint": [ [] ],
+        "AggroTime": 5,
+        "Position": [ 2262, 1560 ]
+    },
+    {
+        "Id": 3,
+        "CharId": 200,
+        "Level": 1,
+        "Name": "Slime",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_1",
+        "RoutePoint": [ [] ],
+        "AggroTime": 5,
+        "Position": [ 2630, 1980 ]
+    },
+    {
+        "Id": 4,
+        "CharId": 201,
+        "Level": 2,
+        "Name": "Goblin",
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_2",
+        "RoutePoint": [ [] ],
+        "AggroTime": 5,
+        "Position": [ 2402, 2300 ]
+    },
+    {
+        "Id": 5,
+        "CharId": 200,
+        "Level": 2,
+        "Name": "Slime",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_1",
+        "RoutePoint": [ [] ],
+        "AggroTime": 5,
+        "Position": [ 1726, 2256 ]
+    }
 ]

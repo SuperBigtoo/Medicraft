@@ -13,6 +13,8 @@ namespace Medicraft.GameObjects
     {
         public string CraftingType { get; private set; }
 
+        private string _spriteDefault, _spriteDetected;
+
         public CraftingTable(AnimatedSprite sprite, ObjectData objectData, Vector2 scale)
         {
             Sprite = sprite;
@@ -37,12 +39,12 @@ namespace Medicraft.GameObjects
                 Position = position
             };
 
-            BoundingInteraction = new CircleF(Position, 32);
+            BoundingInteraction = new CircleF(Position, 40);
 
             ParticleEffect = DrawEffectSystem.SetItemParticleEffect(ObjectType, Position);
 
             Sprite.Depth = InitDepth;
-            Sprite.Play("crafting_1");
+            Sprite.Play(_spriteDefault);
         }
 
         private CraftingTable(CraftingTable craftingTable)
@@ -57,6 +59,8 @@ namespace Medicraft.GameObjects
             Description = craftingTable.Description;
 
             CraftingType = craftingTable.CraftingType;
+            _spriteDefault = craftingTable._spriteDefault;
+            _spriteDetected = craftingTable._spriteDetected;
 
             IsDetectable = craftingTable.IsDetectable;
             IsVisible = craftingTable.IsVisible;
@@ -76,7 +80,7 @@ namespace Medicraft.GameObjects
             ParticleEffect = craftingTable.ParticleEffect;
 
             Sprite.Depth = InitDepth;
-            Sprite.Play("crafting_1");
+            Sprite.Play(_spriteDefault);
         }
 
         public override void Update(GameTime gameTime, float layerDepth)
@@ -98,13 +102,13 @@ namespace Medicraft.GameObjects
             // Update Sign
             if (IsDetected)
             {
-                Sprite.Play("crafting_2");
+                Sprite.Play(_spriteDetected);
 
                 SignSprite.Depth = InitDepth;
                 SignSprite.Play("interact_1");
                 SignSprite.Update(deltaSeconds);
             }
-            else Sprite.Play("crafting_1");
+            else Sprite.Play(_spriteDefault);
 
             Sprite.Update(deltaSeconds);
         }
@@ -115,14 +119,20 @@ namespace Medicraft.GameObjects
             {
                 case 0:
                     CraftingType = UIManager.ConsumableItem;
+                    _spriteDefault = "cooking_1";
+                    _spriteDetected = "cooking_2";
                     break;
 
                 case 1:
                     CraftingType = UIManager.Equipment;
+                    _spriteDefault = "crafting_1";
+                    _spriteDetected = "crafting_2";
                     break;
 
                 case 2:
                     CraftingType = UIManager.ThaiTraditionalMedicine;
+                    _spriteDefault = "crafting_potion_1";
+                    _spriteDetected = "crafting_potion_2";
                     break;
             }
         }

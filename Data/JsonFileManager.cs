@@ -83,7 +83,8 @@ namespace Medicraft.Data
                             CreatedTime = gameSaveData.CreatedTime,
                             LastUpdated = dateTimeString,
                             TotalPlayTime = playTime,
-                            PlayerData = PlayerManager.Instance.Player.PlayerData
+                            PlayerData = PlayerManager.Instance.Player.PlayerData,
+                            SpawnerDatas = GameGlobals.Instance.SpawnerDatas
                         };
                     }
                     catch (ArgumentOutOfRangeException)
@@ -95,7 +96,8 @@ namespace Medicraft.Data
                             CreatedTime = dateTimeString,
                             LastUpdated = dateTimeString,
                             TotalPlayTime = playTime,
-                            PlayerData = PlayerManager.Instance.Player.PlayerData
+                            PlayerData = PlayerManager.Instance.Player.PlayerData,
+                            SpawnerDatas = GameGlobals.Instance.SpawnerDatas
                         });
                     }
 
@@ -115,7 +117,8 @@ namespace Medicraft.Data
                     break;
 
                 case DeleteGameSave:
-                    GameGlobals.Instance.GameSave.Remove(GameGlobals.Instance.GameSave[GameGlobals.Instance.SelectedGameSaveIndex]);
+                    GameGlobals.Instance.GameSave.Remove(
+                        GameGlobals.Instance.GameSave[GameGlobals.Instance.SelectedGameSaveIndex]);
                     break;
             }
 
@@ -231,4 +234,7 @@ namespace Medicraft.Data
 
     // Reader Quest Detail Datas: quest_details.json
     public class QuestDetailDataReader : JsonContentTypeReader<List<QuestData>> { }
+
+    // Reader Spawner Datas: spawnersdata.json
+    public class SpawnerDataReader : JsonContentTypeReader<List<SpawnerData>> { }
 }

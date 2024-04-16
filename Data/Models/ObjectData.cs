@@ -11,7 +11,13 @@
         public bool IsRespawnable { get; set; } = true;
         public bool IsDestroyable { get; set; } = false;
         public bool IsVisible { get; set; } = true;
-        public int CraftingType { get; set; }
         public string SpiteCycle { get; set; }
+
+        // For Crafting
+        public int CraftingType { get; set; }      
+        
+        // For Crop
+        public int CropStage { get; set; }
+        public float GrowingTimer { get; set; } = 0;
     }
 }

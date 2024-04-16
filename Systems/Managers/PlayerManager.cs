@@ -4,7 +4,6 @@ using Medicraft.Entities.Companion;
 using Medicraft.Entities.Mobs;
 using Medicraft.Entities.Mobs.Friendly;
 using Medicraft.GameObjects;
-using Medicraft.Screens.chapter_1;
 using Medicraft.Systems.PathFinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -22,7 +21,8 @@ namespace Medicraft.Systems.Managers
         // Player: Noah
         public Player Player { private set; get; }
         public bool IsPlayerDead { private set; get; }
-        private Song _dyingSong;
+        public bool IsRespawning { set; get; }
+        public KeyValuePair<int, InventoryItemData> SelectedHotbarItem { private set; get; }
 
         // Object
         public bool IsDetectedObject { private set; get; }
@@ -45,9 +45,8 @@ namespace Medicraft.Systems.Managers
         private PlayerManager()
         {
             IsDetectedObject = false;
+            IsRespawning = false;
             IsPlayerDead = false;
-            _dyingSong = GameGlobals.Instance.Content.Load<Song>
-                (GetBackgroundMusicPath(Music.Gag_dead));
 
             Companions = [];
             CurrCompaIndex = 0;
@@ -61,6 +60,7 @@ namespace Medicraft.Systems.Managers
             var initialPlayerData = GameGlobals.Instance.InitialPlayerData;
             var playerSprite = new AnimatedSprite(GameGlobals.Instance.PlayerSpriteSheet);
 
+
             if (!isNewGame)
             {
                 ScreenManager.Instance.CurrentLoadMapAction = ScreenManager.LoadMapAction.LoadSave;
@@ -72,6 +72,9 @@ namespace Medicraft.Systems.Managers
                 GameGlobals.Instance.TotalPlayTime = gameSaveData.TotalPlayTime[0] * 3600 
                                                     + gameSaveData.TotalPlayTime[1] * 60
                                                     + gameSaveData.TotalPlayTime[2];
+
+                // Initialize Spawner Data
+                GameGlobals.Instance.SetSpawnerDatas(gameSaveData.SpawnerDatas);
 
                 // Initialize Player's Inventory
                 var inventoryData = gameSaveData.PlayerData.InventoryData;
@@ -85,6 +88,10 @@ namespace Medicraft.Systems.Managers
             else // In case New Game
             {
                 ScreenManager.Instance.CurrentLoadMapAction = ScreenManager.LoadMapAction.NewGame;
+
+                // Initialize Spawner Data
+                GameGlobals.Instance.SetSpawnerDatas(
+                    GameGlobals.Instance.Content.Load<List<SpawnerData>>("data/models/spawnersdata"));
 
                 // Initialize Player's Inventory
                 var inventoryData = initialPlayerData.InventoryData;
@@ -102,6 +109,9 @@ namespace Medicraft.Systems.Managers
             SetPlayerExpMaxCap(Player.Level);
             GameGlobals.Instance.TopLeftCornerPos = Player.Position - GameGlobals.Instance.GameScreenCenter;
 
+            SelectedHotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
+                (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_1));
+
             // Initialize equipment stats
             var itemEquipmentData = InventoryManager.Instance.InventoryBag.Values.Where
                 (e => e.Slot >= 0 && e.Slot < 6);
@@ -111,6 +121,9 @@ namespace Medicraft.Systems.Managers
 
             // Initialize Companion
             InitializeCompanion();
+
+            // Initialize Crop
+            ObjectManager.Instance.InitCropObject(Player.PlayerData.Crops);
 
             // Initialize display inventory item after init Player's inventory data
             UIManager.Instance.InitInventoryItemDisplay();
@@ -131,7 +144,7 @@ namespace Medicraft.Systems.Managers
                     {
                         case 1:
                             // Violet
-                            Companions.Add(new Violet(new AnimatedSprite(spriteSheet[0]), compaData, Vector2.One, indexCompa++));
+                            Companions.Add(new Violet(new AnimatedSprite(spriteSheet[indexCompa]), compaData, Vector2.One, indexCompa++));
                             break;
 
                         case 2:
@@ -417,10 +430,11 @@ namespace Medicraft.Systems.Managers
                     GameGlobals.Instance.SwitchSlot_1 = true;
                     GameGlobals.Instance.CurrentHotbarSelect = 0;
 
-                    var hotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
+                    Instance.SelectedHotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                         (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_1));
 
-                    if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
+                    if (Instance.SelectedHotbarItem.Value != null)
+                        InventoryManager.Instance.UseItemInHotbar(Instance.SelectedHotbarItem.Key);
 
                 }
                 else if (keyboardCur.IsKeyUp(Keys.D1))
@@ -433,10 +447,11 @@ namespace Medicraft.Systems.Managers
                     GameGlobals.Instance.SwitchSlot_2 = true;
                     GameGlobals.Instance.CurrentHotbarSelect = 1;
 
-                    var hotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
+                    Instance.SelectedHotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                         (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_2));
 
-                    if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
+                    if (Instance.SelectedHotbarItem.Value != null)
+                        InventoryManager.Instance.UseItemInHotbar(Instance.SelectedHotbarItem.Key);
                 }
                 else if (keyboardCur.IsKeyUp(Keys.D2))
                 {
@@ -448,10 +463,11 @@ namespace Medicraft.Systems.Managers
                     GameGlobals.Instance.SwitchSlot_3 = true;
                     GameGlobals.Instance.CurrentHotbarSelect = 2;
 
-                    var hotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
+                    Instance.SelectedHotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                         (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_3));
 
-                    if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
+                    if (Instance.SelectedHotbarItem.Value != null)
+                        InventoryManager.Instance.UseItemInHotbar(Instance.SelectedHotbarItem.Key);
                 }
                 else if (keyboardCur.IsKeyUp(Keys.D3))
                 {
@@ -463,10 +479,11 @@ namespace Medicraft.Systems.Managers
                     GameGlobals.Instance.SwitchSlot_4 = true;
                     GameGlobals.Instance.CurrentHotbarSelect = 3;
 
-                    var hotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
+                    Instance.SelectedHotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                         (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_4));
 
-                    if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
+                    if (Instance.SelectedHotbarItem.Value != null)
+                        InventoryManager.Instance.UseItemInHotbar(Instance.SelectedHotbarItem.Key);
                 }
                 else if (keyboardCur.IsKeyUp(Keys.D4))
                 {
@@ -478,10 +495,11 @@ namespace Medicraft.Systems.Managers
                     GameGlobals.Instance.SwitchSlot_5 = true;
                     GameGlobals.Instance.CurrentHotbarSelect = 4;
 
-                    var hotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
+                    Instance.SelectedHotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                         (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_5));
 
-                    if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
+                    if (Instance.SelectedHotbarItem.Value != null)
+                        InventoryManager.Instance.UseItemInHotbar(Instance.SelectedHotbarItem.Key);
                 }
                 else if (keyboardCur.IsKeyUp(Keys.D5))
                 {
@@ -493,10 +511,11 @@ namespace Medicraft.Systems.Managers
                     GameGlobals.Instance.SwitchSlot_6 = true;
                     GameGlobals.Instance.CurrentHotbarSelect = 5;
 
-                    var hotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
+                    Instance.SelectedHotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                         (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_6));
 
-                    if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
+                    if (Instance.SelectedHotbarItem.Value != null)
+                        InventoryManager.Instance.UseItemInHotbar(Instance.SelectedHotbarItem.Key);
                 }
                 else if (keyboardCur.IsKeyUp(Keys.D6))
                 {
@@ -507,10 +526,11 @@ namespace Medicraft.Systems.Managers
                 {
                     GameGlobals.Instance.SwitchSlot_7 = true;
                     GameGlobals.Instance.CurrentHotbarSelect = 6;
-                    var hotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
+                    Instance.SelectedHotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                         (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_7));
 
-                    if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
+                    if (Instance.SelectedHotbarItem.Value != null)
+                        InventoryManager.Instance.UseItemInHotbar(Instance.SelectedHotbarItem.Key);
                 }
                 else if (keyboardCur.IsKeyUp(Keys.D7))
                 {
@@ -522,22 +542,17 @@ namespace Medicraft.Systems.Managers
                     GameGlobals.Instance.SwitchSlot_8 = true;
                     GameGlobals.Instance.CurrentHotbarSelect = 7;
 
-                    var hotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
+                    Instance.SelectedHotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                         (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_8));
 
-                    if (hotbarItem.Value != null) InventoryManager.Instance.UseItemInHotbar(hotbarItem.Key);
+                    if (Instance.SelectedHotbarItem.Value != null)
+                        InventoryManager.Instance.UseItemInHotbar(Instance.SelectedHotbarItem.Key);
                 }
                 else if (keyboardCur.IsKeyUp(Keys.D8))
                 {
                     GameGlobals.Instance.SwitchSlot_8 = false;
                 }
-            }
 
-            // Check if CurrentScreen is TestScreen
-            if (!ScreenManager.Instance.IsTransitioning && !UIManager.Instance.IsShowDialogUI
-                && (ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.TestScreen
-                || ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.Map1))
-            {
                 // Debug Mode
                 if (keyboardCur.IsKeyDown(debugModeKey) && !GameGlobals.Instance.SwitchDebugMode)
                 {
@@ -565,6 +580,14 @@ namespace Medicraft.Systems.Managers
                     GameGlobals.Instance.SwitchShowPath = false;
                 }
             }
+
+            //// Check if CurrentScreen is TestScreen
+            //if (!ScreenManager.Instance.IsTransitioning && !UIManager.Instance.IsShowDialogUI
+            //    && (ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.TestScreen
+            //    || ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.Map1))
+            //{
+                
+            //}
         }
 
         public void Update(GameTime gameTime)
@@ -590,8 +613,11 @@ namespace Medicraft.Systems.Managers
             {
                 IsPlayerDead = true;
 
-                PlaySoundEffect(Sound.Dead);
-                PlayBackgroundMusic(_dyingSong, false, 1f);
+                // Show DeadPanel
+                UIManager.Instance.ShowDeadPanel();
+
+                PlaySoundEffect(Sound.Dead);        
+                PlayBackgroundMusic(GameGlobals.Instance.DyingSong, false, 1f);
             }
 
             if (Companions.Count != 0)
@@ -602,10 +628,7 @@ namespace Medicraft.Systems.Managers
             {
                 GameGlobals.Instance.IsEnteringBossFight = false;
 
-                if ((GameGlobals.Instance.CurMouse.LeftButton == ButtonState.Pressed
-                    && GameGlobals.Instance.PrevMouse.LeftButton == ButtonState.Released)
-                    || ScreenManager.Instance.IsTransitioning)
-                        RespawnPlayer();
+                if (IsRespawning) RespawnPlayer();
             }
 
             if (IsCompanionDead)
@@ -625,11 +648,15 @@ namespace Medicraft.Systems.Managers
             {
                 if (Player.BoundingDetectCollisions.Intersects(zoneArea.Bounds) && !ScreenManager.Instance.IsTransitioning)
                 {
+                    // Check if clear chapter 1?
+                    if (zoneArea.Bounds.Equals("dungeon_1_to_map_2") 
+                        && !Player.PlayerData.ChapterProgression[0].IsChapterClear) break;
+
                     GameGlobals.Instance.InitialCameraPos = Player.Position;
                     var currLoadMapAction = ScreenManager.GetLoadMapAction(zoneArea.Name);
 
                     // if the zoneArea.Name not be found in LoadMapAction then return
-                    if (currLoadMapAction == ScreenManager.LoadMapAction.LoadSave) return;
+                    if (currLoadMapAction == ScreenManager.LoadMapAction.LoadSave) break;
 
                     ScreenManager.Instance.CurrentLoadMapAction = currLoadMapAction;
                     ScreenManager.Instance.TranstisionToScreen(ScreenManager.Instance.GetPlayScreenByLoadMapAction());
@@ -645,7 +672,7 @@ namespace Medicraft.Systems.Managers
             if (loadAction == ScreenManager.LoadMapAction.LoadSave) return;
 
             var curMap = ScreenManager.Instance.CurrentMap;
-            Player.PlayerData.CurrentMap = curMap;
+            //Player.PlayerData.CurrentMap = curMap;
 
             var mapPositionData = GameGlobals.Instance.MapLocationPointDatas.FirstOrDefault
                 (m => m.Name.Equals(curMap));
@@ -712,7 +739,8 @@ namespace Medicraft.Systems.Managers
             }
 
             if (IsPlayerDead)
-            {               
+            {
+                // if died in the same map
                 if (curMap.Equals(diffMap))
                 {
                     if (!ScreenManager.Instance.IsTransitioning)
@@ -732,6 +760,7 @@ namespace Medicraft.Systems.Managers
                             entity.AggroTimer = 0f;
                         }
 
+                        IsRespawning = false;
                         IsPlayerDead = false;
                         Player.IsDying = false;
 
@@ -759,12 +788,6 @@ namespace Medicraft.Systems.Managers
                         GameGlobals.Instance.TopLeftCornerPos = Player.Position - GameGlobals.Instance.GameScreenCenter;
                         GameGlobals.Instance.InitialCameraPos = Player.Position;
                         GameGlobals.Instance.AddingCameraPos = Vector2.Zero;
-
-                        if (GameGlobals.Instance.CurrentMapMusics.Count != 0)
-                        {
-                            var mapBGMusic = GameGlobals.Instance.CurrentMapMusics.FirstOrDefault();
-                            PlayBackgroundMusic(mapBGMusic.Song, true, 1f);
-                        }
                     }
                 }
                 else
@@ -781,6 +804,7 @@ namespace Medicraft.Systems.Managers
                             entity.AggroTimer = 0f;
                         }
 
+                        IsRespawning = false;
                         IsPlayerDead = false;
                         Player.IsDying = false;
 
@@ -1036,7 +1060,7 @@ namespace Medicraft.Systems.Managers
             }   
 
             // Check Dectection Object
-            foreach (var gameObject in gameObjects)
+            foreach (var gameObject in gameObjects.Where(o => o.IsVisible))
             {
                 if (Player.BoundingInteraction.Intersects(gameObject.BoundingInteraction))
                 {
@@ -1046,6 +1070,31 @@ namespace Medicraft.Systems.Managers
                     break;
                 }
                 else DetectedObject = null;
+            }
+
+            // For Crop in NoahHome
+            if (ScreenManager.Instance.CurrentMap.Equals("noah_home"))
+            {
+                // Clear Detected
+                var crops = ObjectManager.Instance.Crops;
+                foreach (var crop in crops)
+                {
+                    crop.IsDetected = false;
+                }
+
+                // Check Dectection
+                foreach (var crop in crops.Where(o => o.IsVisible))
+                {
+                    if (Player.BoundingInteraction.Intersects(crop.BoundingInteraction))
+                    {
+                        IsDetectedObject = true;
+                        DetectedObject = crop;
+                        crop.IsDetected = true;
+                        System.Diagnostics.Debug.WriteLine($"crop : {crop.CropStage}");
+                        break;
+                    }
+                    else DetectedObject ??= null;
+                }
             }
 
             // Clear IsDectected for interactableMobs
@@ -1108,6 +1157,25 @@ namespace Medicraft.Systems.Managers
                         else HUDSystem.ShowInsufficientSign();
                         break;
 
+                    case GameObject.GameObjectType.Crop:
+                        Crop crop = gameObject as Crop;
+                        // Cropping or Collecting
+                        if (crop.CropStage == Crop.CropStages.Empty)
+                        {
+                            crop.Cropping(SelectedHotbarItem);
+                        }
+                        else if (crop.CropStage == Crop.CropStages.Harvestable)
+                        {
+                            if (!crop.IsCollected
+                                && !InventoryManager.Instance.IsInventoryFull(crop.ReferId, crop.QuantityDrop))
+                            {
+                                crop.IsCollected = true;
+                            }
+                            else HUDSystem.ShowInsufficientSign();
+                        }
+
+                        break;
+
                     case GameObject.GameObjectType.CraftingTable:
                         // Open Crafting Item Panel
                         CraftingTable craftingTable = gameObject as CraftingTable;
@@ -1124,6 +1192,12 @@ namespace Medicraft.Systems.Managers
                         WarpPoint warpPoint = gameObject as WarpPoint;
                         warpPoint.OpenWarpPointPanel();
                         break;
+
+                    case GameObject.GameObjectType.RestPoint:
+                        // Resting
+                        RestPoint restPoint = gameObject as RestPoint;
+                        restPoint.Rest();
+                        break;
                 }
             }
         }
@@ -1135,8 +1209,6 @@ namespace Medicraft.Systems.Managers
                 switch (friendlyMob.MobType)
                 {
                     case FriendlyMob.FriendlyMobType.Animal:
-
-                        break;
 
                     case FriendlyMob.FriendlyMobType.Civilian:
 

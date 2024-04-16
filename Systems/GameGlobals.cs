@@ -3,6 +3,7 @@ using Medicraft.Data;
 using Medicraft.Data.Models;
 using Medicraft.Systems.Managers;
 using Medicraft.Systems.PathFinding;
+using Medicraft.Systems.Spawners;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -17,6 +18,7 @@ using MonoGame.Extended.Sprites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 
 namespace Medicraft.Systems
 {
@@ -58,7 +60,7 @@ namespace Medicraft.Systems
         public bool IsEnteringBossFight { set; get; }
         public float TotalPlayTime { set; get; }
         public int MaxLevel { set; get; }
-
+        public Song DyingSong { private set; get; }
 
         // UI MainMenu & PlayScreen
         public BuiltinThemes BuiltinTheme { set; get; }
@@ -87,29 +89,10 @@ namespace Medicraft.Systems
         public bool SwitchSlot_7 { set; get; }
         public bool SwitchSlot_8 { set; get; }
 
-        // TestMap
-        public float MobsTestSpawnTime { private set; get; }
-        public float MobsTestSpawnTimer { set; get; }
-        public bool IsBossTestDead { set; get; }
-        public float BossTestSpawnTime { private set; get; }
-        public float BossTestSpawnTimer { set; get; }
-        public float ObjectTestSpawnTime { private set; get; }
-        public float ObjectTestSpawnTimer { set; get; }
-
-        // Chapter 1
-        public float MobsOneSpawnTime { private set; get; }
-        public float MobsOneSpawnTimer { set; get; }
-        public bool IsBossOneDead { set; get; }
-        public float BossOneSpawnTime { private set; get; }
-        public float BossOneSpawnTimer { set; get; }
-        public float ObjectOneSpawnTime { private set; get; }
-        public float ObjectOneSpawnTimer { set; get; }
-
-        // Chapter 2
-        // Chapter 3
-        // Chapter 4
-        // Chapter 5
-        // Chapter 6
+        // Spawners
+        public List<SpawnerData> SpawnerDatas { private set; get; }
+        public List<MobSpawner> MobSpawners { private set; get; } = [];
+        public List<ObjectSpawner> ObjectSpawners { private set; get; } = [];
 
         // GameSave & Config
         public int SelectedGameSaveIndex { set; get; }
@@ -157,6 +140,7 @@ namespace Medicraft.Systems
         public BitmapFont FontTA8Bit { private set; get; }
         public BitmapFont FontTA8BitBold { private set; get; }
         public BitmapFont FontTA16Bit { private set; get; }
+        public Dictionary<int, SpriteSheet> EntitySpriteSheets { private set; get; }
         public List<Texture2D> GuiTextures { private set; get; }
         public List<Texture2D> AbilityTextures { private set; get; }
         public List<ExperienceCapacityData> ExperienceCapacityDatas { private set; get; }
@@ -278,7 +262,10 @@ namespace Medicraft.Systems
             Warp_TallinnTown_lock,
             help,
             drake_shop_window,
-            accept_quest
+            accept_quest,
+            Warp_NoahsHome,
+            key_binding,
+            you_die
         }
         private readonly Dictionary<GuiTextureName, int> guiTextureIndices = [];
 
@@ -468,7 +455,7 @@ namespace Medicraft.Systems
 
             // sound & music
             SoundEffectVolume = 0.5f;
-            BackgroundMusicVolume = 0.5f;
+            BackgroundMusicVolume = 0.25f;
             CurrentMapMusics = [];
 
             // hotbar switch
@@ -483,24 +470,6 @@ namespace Medicraft.Systems
 
             // boss
             IsEnteringBossFight = false;
-
-            // TestMap
-            MobsTestSpawnTime = 10f;
-            MobsTestSpawnTimer = MobsTestSpawnTime;
-            IsBossTestDead = false;
-            BossTestSpawnTime = 15f;
-            BossTestSpawnTimer = BossTestSpawnTime;
-            ObjectTestSpawnTime = 10f;
-            ObjectTestSpawnTimer = ObjectTestSpawnTime;
-
-            // Chapter 1
-            MobsOneSpawnTime = 60f;
-            MobsOneSpawnTimer = MobsTestSpawnTime;
-            IsBossOneDead = false;
-            BossOneSpawnTime = 300f;
-            BossOneSpawnTimer = BossOneSpawnTime;
-            ObjectOneSpawnTime = 180f;
-            ObjectOneSpawnTimer = ObjectOneSpawnTime;
 
             // gamesave
             MaxLevel = 30;
@@ -646,6 +615,52 @@ namespace Medicraft.Systems
             ShadowTextures.Add(Content.Load<Texture2D>("effect/shadow_1"));
             ShadowTextures.Add(Content.Load<Texture2D>("effect/shadow_2"));
 
+            // Load Mobs Textures
+            {
+                EntitySpriteSheets = new()
+                {
+                    { 100,  Content.Load<SpriteSheet>("entity/mobs/friendly/cat/cat_animation.sf", new JsonContentLoader())},
+                    { 101,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian09_animation.sf", new JsonContentLoader())},
+                    { 102,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian01_animation.sf", new JsonContentLoader())},
+                    { 103,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian02_animation.sf", new JsonContentLoader())},
+                    { 104,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian03_animation.sf", new JsonContentLoader())},
+                    { 105,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian04_animation.sf", new JsonContentLoader())},
+                    { 106,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian05_animation.sf", new JsonContentLoader())},
+                    { 107,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian06_animation.sf", new JsonContentLoader())},
+                    { 108,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian07_animation.sf", new JsonContentLoader())},
+                    { 109,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian08_animation.sf", new JsonContentLoader())},
+                    { 110,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian09_animation.sf", new JsonContentLoader())},
+                    { 111,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian10_animation.sf", new JsonContentLoader())},
+                    { 112,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian11_animation.sf", new JsonContentLoader())},
+                    { 113,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian12_animation.sf", new JsonContentLoader())},
+                    { 114,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian13_animation.sf", new JsonContentLoader())},
+                    { 115,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian14_animation.sf", new JsonContentLoader())},
+                    { 116,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian15_animation.sf", new JsonContentLoader())},
+                    { 117,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian16_animation.sf", new JsonContentLoader())},
+                    { 118,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian17_animation.sf", new JsonContentLoader())},
+                    { 119,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian18_animation.sf", new JsonContentLoader())},
+                    { 120,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian19_animation.sf", new JsonContentLoader())},
+                    { 121,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian20_animation.sf", new JsonContentLoader())},
+                    { 122,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian21_animation.sf", new JsonContentLoader())},
+                    { 123,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian22_animation.sf", new JsonContentLoader())},
+                    { 124,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian23_animation.sf", new JsonContentLoader())},
+                    { 125,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian24_animation.sf", new JsonContentLoader())},
+                    { 200,  Content.Load<SpriteSheet>("entity/mobs/monster/slime/slimes_animation.sf", new JsonContentLoader())},
+                    { 201,  Content.Load<SpriteSheet>("entity/mobs/monster/goblin/goblin_animation.sf", new JsonContentLoader())},
+                    { 202,  Content.Load<SpriteSheet>("entity/mobs/monster/treant/treant_animation.sf", new JsonContentLoader())},
+                    { 203,  Content.Load<SpriteSheet>("entity/mobs/monster/ice_golem/ice_golem_animation.sf", new JsonContentLoader())},
+                    { 204,  Content.Load<SpriteSheet>("entity/mobs/monster/mimic/mimic_animation.sf", new JsonContentLoader())},
+                    { 205,  Content.Load<SpriteSheet>("entity/mobs/monster/ogre/ogre_animation.sf", new JsonContentLoader())},
+                    { 206,  Content.Load<SpriteSheet>("entity/mobs/monster/reaper/reaper_animation.sf", new JsonContentLoader())},
+                    { 300,  Content.Load<SpriteSheet>("entity/mobs/boss/minotaur/minotaur_animation.sf", new JsonContentLoader())},
+                    { 301,  Content.Load<SpriteSheet>("entity/mobs/boss/the_keeper/the_keeper_animation.sf", new JsonContentLoader())},
+                    { 302,  Content.Load<SpriteSheet>("entity/mobs/boss/yeti/yeti_animation.sf", new JsonContentLoader())},
+                    { 303,  Content.Load<SpriteSheet>("entity/mobs/boss/beni_kenki/beni_kenki_animation.sf", new JsonContentLoader())},
+                    { 304,  Content.Load<SpriteSheet>("entity/mobs/boss/magmalord/magmalord_animation.sf", new JsonContentLoader())},
+                    { 305,  Content.Load<SpriteSheet>("entity/mobs/boss/warlock/warlock_animation.sf", new JsonContentLoader())},
+                };
+            }
+
             // Load GUI Textures
             GuiTextures.Add(Content.Load<Texture2D>("gui/logo_wakeup"));
             GuiTextures.Add(Content.Load<Texture2D>("gui/press_f"));
@@ -709,7 +724,10 @@ namespace Medicraft.Systems
             GuiTextures.Add(Content.Load<Texture2D>("gui/help")); 
             GuiTextures.Add(Content.Load<Texture2D>("gui/drake_shop_window"));
             GuiTextures.Add(Content.Load<Texture2D>("gui/accept_quest"));
-          
+            GuiTextures.Add(Content.Load<Texture2D>("gui/warp_map/Warp_NoahsHome"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/key_binding")); 
+            GuiTextures.Add(Content.Load<Texture2D>("gui/you_die"));
+
             // UI_books_icon_hud
             UIBooksIconHUD = Content.Load<SpriteSheet>("gui/UI_books_icon_hud.sf", new JsonContentLoader());
 
@@ -857,6 +875,9 @@ namespace Medicraft.Systems
             // Initialize GUI Panels
             UIManager.Instance.InitializeThemeAndUI(BuiltinTheme);
 
+            // Player Dead BG
+            DyingSong = Content.Load<Song>(GetBackgroundMusicPath(Music.Gag_dead));
+
             // test
             //Test();
         }
@@ -888,52 +909,32 @@ namespace Medicraft.Systems
 
             TotalPlayTime += _deltaSeconds;
 
-            // Spawn Timer: Testmap
-            // Mobs
-            if (MobsTestSpawnTimer > 0)
+            // Update SpawnTimer
+            if (SpawnerDatas != null)
             {
-                MobsTestSpawnTimer -= _deltaSeconds;
-            }
-            else MobsTestSpawnTimer = MobsTestSpawnTime;
-            // Object
-            if (ObjectTestSpawnTimer > 0)
-            {
-                ObjectTestSpawnTimer -= _deltaSeconds;
-            }
-            else ObjectTestSpawnTimer = ObjectTestSpawnTime;
-            // Boss
-            if (IsBossTestDead)
-            {
-                BossTestSpawnTimer -= _deltaSeconds;
-
-                if (BossTestSpawnTimer < 0)
+                foreach (var spawnerData in SpawnerDatas)
                 {
-                    BossTestSpawnTimer = Instance.BossTestSpawnTime;
-                    Instance.IsBossTestDead = false;
-                }
-            }
-            // Spawn Timer: Chapter 1
-            // Mobs
-            if (MobsOneSpawnTimer > 0)
-            {
-                MobsOneSpawnTimer -= _deltaSeconds;
-            }
-            else MobsOneSpawnTimer = MobsOneSpawnTime;
-            // Object
-            if (ObjectOneSpawnTimer > 0)
-            {
-                ObjectOneSpawnTimer -= _deltaSeconds;
-            }
-            else ObjectOneSpawnTimer = ObjectOneSpawnTime;
-            // Boss
-            if (Instance.IsBossOneDead)
-            {
-                Instance.BossOneSpawnTimer -= _deltaSeconds;
+                    // Boss
+                    if (spawnerData.IsBossDead)
+                    {
+                        spawnerData.BossSpawnTimer -= _deltaSeconds;
 
-                if (Instance.BossOneSpawnTimer < 0)
-                {
-                    Instance.BossOneSpawnTimer = Instance.BossOneSpawnTime;
-                    Instance.IsBossOneDead = false;
+                        if (spawnerData.BossSpawnTimer < 0)
+                        {
+                            spawnerData.BossSpawnTimer = spawnerData.BossSpawnTime;
+                            spawnerData.IsBossDead = false;
+                        }
+                    }
+
+                    // Mobs and Objects in Map
+                    foreach (var map in spawnerData.MapSpawnTimes)
+                    {
+                        if (map.SpawnTimer >= 0)
+                        {
+                            map.SpawnTimer -= _deltaSeconds;
+                        }
+                        else map.SpawnTimer = map.SpawnTime;
+                    }   
                 }
             }
 
@@ -945,6 +946,11 @@ namespace Medicraft.Systems
         {
             GameScreen = new Vector2(viewport.Width, viewport.Height);
             GameScreenCenter = GameScreen / 2;
+        }
+
+        public List<SpawnerData> SetSpawnerDatas(List<SpawnerData> spawnerDatas)
+        {
+            return SpawnerDatas = spawnerDatas;
         }
 
         public static Texture2D GetShadowTexture(ShadowTextureName shadowTextureName)
@@ -1142,6 +1148,8 @@ namespace Medicraft.Systems
 
         public static int RandomItemQuantityDrop(int itemId)
         {
+            if (itemId == -1) return 0;
+
             var itemData = Instance.ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(itemId));
             int minValue = 1, maxValue = 1;
 

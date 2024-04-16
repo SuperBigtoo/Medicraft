@@ -1,43 +1,138 @@
 [
-  {
-    "Id": 0,
-    "CharId": 200,
-    "Level": 1,
-    "Name": "Slime",
-    "PathFindingType": 0,
-    "NodeCycleTime": 10,
-    "PartrolArea": "zone_1",
-    "RoutePoint": [
-      [ 736, 544 ],
-      [ 448, 545 ],
-      [ 590, 392 ],
-      [ 588, 478 ]
-    ],
-    "AggroTime": 5,
-    "Position": [ 736, 544 ]
-  },
-  {
-    "Id": 1,
-    "CharId": 200,
-    "Level": 1,
-    "Name": "Slime",
-    "PathFindingType": 1,
-    "NodeCycleTime": 10,
-    "PartrolArea": "zone_1",
-    "RoutePoint": [ [] ],
-    "AggroTime": 5,
-    "Position": [ 1096, 566 ]
-  },
-  {
-    "Id": 2,
-    "CharId": 200,
-    "Level": 1,
-    "Name": "Slime",
-    "PathFindingType": 2,
-    "NodeCycleTime": 10,
-    "PartrolArea": "zone_1",
-    "RoutePoint": [ [] ],
-    "AggroTime": 5,
-    "Position": [ 1276, 566 ]
-  }
+    {
+        "Id": 0,
+        "CharId": 200,
+        "Level": 1,
+        "Name": "Slime",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_1",
+        "RoutePoint": [
+            [ 736, 544 ],
+            [ 448, 545 ],
+            [ 590, 392 ],
+            [ 588, 478 ]
+        ],
+        "AggroTime": 5,
+        "Position": [ 1908, 2366 ]
+    },
+    {
+        "Id": 1,
+        "CharId": 200,
+        "Level": 1,
+        "Name": "Slime",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2168, 2014 ]
+    },
+    {
+        "Id": 2,
+        "CharId": 200,
+        "Level": 1,
+        "Name": "Slime",
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_2",
+        "AggroTime": 5,
+        "Position": [ 2172, 2618 ]
+    },
+    {
+        "Id": 3,
+        "CharId": 200,
+        "Level": 1,
+        "Name": "Slime",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1802, 1190 ]
+    },
+    {
+        "Id": 4,
+        "CharId": 201,
+        "Level": 1,
+        "Name": "Goblin",
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_4",
+        "AggroTime": 5,
+        "Position": [ 2522, 1514 ]
+    },
+    {
+        "Id": 5,
+        "CharId": 200,
+        "Level": 1,
+        "Name": "Slime",
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_3",
+        "AggroTime": 5,
+        "Position": [ 2852, 2316 ]
+    },
+    {
+        "Id": 6,
+        "CharId": 201,
+        "Level": 1,
+        "Name": "Goblin",
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_2",
+        "AggroTime": 5,
+        "Position": [ 2514, 2576 ]
+    },
+    {
+        "Id": 7,
+        "CharId": 200,
+        "Level": 1,
+        "Name": "Slime",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1460, 1906 ]
+    },
+    {
+        "Id": 8,
+        "CharId": 201,
+        "Level": 1,
+        "Name": "Goblin",
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_4",
+        "AggroTime": 5,
+        "Position": [ 1784, 1626 ]
+    },
+    {
+        "Id": 9,
+        "CharId": 201,
+        "Level": 1,
+        "Name": "Goblin",
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_3",
+        "AggroTime": 5,
+        "Position": [ 2600, 2208 ]
+    },
+    {
+        "Id": 10,
+        "CharId": 200,
+        "Level": 1,
+        "Name": "Slime",
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_1",
+        "AggroTime": 5,
+        "Position": [ 1442, 2374 ]
+    },
+    {
+        "Id": 11,
+        "CharId": 300,
+        "Level": 5,
+        "Name": "Minotaur",
+        "BossChapterId": 1,
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_5",
+        "AggroTime": 30,
+        "Position": [ 2302, 1168 ]
+    }
 ]

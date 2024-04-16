@@ -1,4 +1,6 @@
-﻿namespace Medicraft.Data.Models
+﻿using System.Collections.Generic;
+
+namespace Medicraft.Data.Models
 {
     public class GameSaveData
     {
@@ -8,6 +10,7 @@
         public string LastUpdated { get; set; }
         public int[] TotalPlayTime { get; set; }
         public PlayerData PlayerData { get; set; } 
+        public List<SpawnerData> SpawnerDatas { get; set; }
     }
 
     public class GameConfigData

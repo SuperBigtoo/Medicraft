@@ -7,6 +7,7 @@ using TiledSharp;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Medicraft.Systems.Managers;
+using Microsoft.Xna.Framework.Media;
 
 namespace Medicraft.Screens
 {
@@ -18,14 +19,18 @@ namespace Medicraft.Screens
         protected HUDSystem hudSystem;
         protected DrawEffectSystem drawEffectSystem;
 
-        protected List<EntityData> entityDatas;
-        protected MobSpawner mobSpawner;
+        protected List<EntityData> entityDatas = [];
+        protected List<ObjectData> objectDatas = [];
 
-        protected List<ObjectData> objectDatas;
-        protected ObjectSpawner objectSpawner;
+        protected float volumeScale;
+        public bool startingBG;
 
         public PlayScreen()
         {
+            volumeScale = 0f;
+            startingBG = true;
+            GameGlobals.Instance.IsMainBGEnding = false;
+
             // Toggle the PlayScreen GUI flag
             UIManager.Instance.CurrentUI = UIManager.PlayScreen;
             GameGlobals.Instance.IsOpenMainMenu = false;
@@ -62,6 +67,33 @@ namespace Medicraft.Screens
 
         public override void Update(GameTime gameTime)
         {
+            GameGlobals.UpdateMediaPlayerVolumeScale(volumeScale);
+
+            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (startingBG)
+            {
+                volumeScale += deltaSeconds * 0.1f;
+
+                if (volumeScale >= 1f)
+                {
+                    volumeScale = 1f;
+                    startingBG = false;
+                }
+            }
+
+            if (GameGlobals.Instance.IsMainBGEnding)
+            {
+                volumeScale -= deltaSeconds * 0.8f;
+
+                if (volumeScale <= 0f)
+                {
+                    volumeScale = 0f;
+                    MediaPlayer.Stop();
+                    GameGlobals.Instance.IsMainBGEnding = false;
+                }
+            }
+
             EntityManager.Instance.Update(gameTime);
 
             ObjectManager.Instance.Update(gameTime);
@@ -85,7 +117,7 @@ namespace Medicraft.Screens
 
             drawEffectSystem?.Draw(spriteBatch);
 
-            if (!UIManager.Instance.IsShowDialogUI)
+            if (!UIManager.Instance.IsShowDialogUI || !PlayerManager.Instance.IsPlayerDead)
                 hudSystem?.Draw(spriteBatch);
         }
     }

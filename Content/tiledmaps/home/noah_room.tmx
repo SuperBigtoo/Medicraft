@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="96" height="96" tilewidth="32" tileheight="32" infinite="0" nextlayerid="21" nextobjectid="25">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="96" height="96" tilewidth="32" tileheight="32" infinite="0" nextlayerid="21" nextobjectid="36">
  <tileset firstgid="1" name="Block" tilewidth="32" tileheight="32" tilecount="8064" columns="64">
   <image source="../textures/rpg_maker_vx_rtp_tileset_by_telles0808.png" width="2048" height="4032"/>
  </tileset>
@@ -938,7 +938,34 @@
   <object id="22" name="Block" x="1457" y="910" width="69" height="91"/>
   <object id="24" name="Block" x="1579" y="901" width="70" height="110"/>
  </objectgroup>
- <objectgroup id="16" name="Points"/>
- <objectgroup id="19" name="EnteringZoneArea"/>
+ <objectgroup id="16" name="Points">
+  <object id="25" name="Crafting_Medicine" x="2046.67" y="1321.33">
+   <point/>
+  </object>
+  <object id="26" name="Start_MiniGame" x="1520" y="1289.33">
+   <point/>
+  </object>
+  <object id="27" name="SavingTable" x="862.667" y="1320">
+   <point/>
+  </object>
+  <object id="28" name="Crafting_Equipment" x="1490" y="981">
+   <point/>
+  </object>
+  <object id="29" name="Crafting_Food" x="2081" y="1004">
+   <point/>
+  </object>
+  <object id="31" name="noah_home_to_noah_room" x="1536" y="1926">
+   <point/>
+  </object>
+  <object id="34" name="Respawn" x="960" y="1117">
+   <point/>
+  </object>
+  <object id="35" name="RestPoint" x="832" y="1053">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="19" name="EnteringZoneArea">
+  <object id="30" name="noah_room_to_noah_home" type="entance_0" x="1437.33" y="2024" width="201.333" height="52"/>
+ </objectgroup>
  <objectgroup id="20" name="MobPartrolArea"/>
 </map>

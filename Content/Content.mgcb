@@ -182,6 +182,24 @@
 /processorParam:ContentType=Medicraft.Data.QuestDetailDataReader, Medicraft
 /build:data/models/quest_details.json
 
+#begin data/models/spawnersdata.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.SpawnerDataReader, Medicraft
+/build:data/models/spawnersdata.json
+
+#begin data/noah_home/objects.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.ObjectDataReader, Medicraft
+/build:data/noah_home/objects.json
+
+#begin data/noah_room/objects.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.ObjectDataReader, Medicraft
+/build:data/noah_room/objects.json
+
 #begin data/TestScreen/entites_demo.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor
@@ -1512,6 +1530,18 @@
 /processorParam:TextureFormat=Color
 /build:gui/item_slot.png
 
+#begin gui/key_binding.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/key_binding.png
+
 #begin gui/level_gui.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1767,6 +1797,18 @@
 /processorParam:TextureFormat=Color
 /build:gui/UI_books_more.png
 
+#begin gui/warp_map/Warp_NoahsHome.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/warp_map/Warp_NoahsHome.png
+
 #begin gui/warp_map/Warp_NordlingenTown_lock.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1838,6 +1880,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:gui/warp_map/Warp_TallinnTown.png
+
+#begin gui/you_die.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/you_die.png
 
 #begin item/drug_1.png
 /importer:TextureImporter

@@ -7,6 +7,7 @@ namespace Medicraft.Data.Models
         public int ItemId { get; set; }
         public string Name { get; set; }
         public string Category { get; set; }
+        public string Tag { get; set; } = string.Empty;
         public string Description { get; set; }
         public bool IsUsable { get; set; }
         public int Effect { get; set; }

@@ -71,5 +71,12 @@ namespace Medicraft.Data.Models
 
             return itemData.SellingPrice;
         }
+
+        public string GetTag()
+        {
+            var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault(i => i.ItemId.Equals(ItemId));
+
+            return itemData.Tag;
+        }
     }
 }

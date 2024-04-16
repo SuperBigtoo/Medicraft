@@ -14,6 +14,46 @@
         ]
     },
     {
+        "Name": "noah_home",
+        "ZoneType": "SafeZone",
+        "Positions": [
+            {
+                "Name": "Respawn",
+                "Value": [ 1952.00, 2158.67 ]
+            },
+            {
+                "Name": "warp_to_noah_home",
+                "Value": [ 2490.00, 1906.00 ]
+            },
+            {
+                "Name": "battlezone_1_to_noah_home",
+                "Value": [ 1952.50, 2846.50 ]
+            },
+            {
+                "Name": "map_1_to_noah_home",
+                "Value": [ 1056.00, 1979.83 ]
+            },
+            {
+                "Name": "noah_room_to_noah_home",
+                "Value": [ 1952.00, 1888.00 ]
+            }
+        ]
+    },
+    {
+        "Name": "noah_room",
+        "ZoneType": "SafeZone",
+        "Positions": [
+            {
+                "Name": "Respawn",
+                "Value": [ 960.00, 1117.00 ]
+            },
+            {
+                "Name": "noah_home_to_noah_room",
+                "Value": [ 1536.00, 1926.00 ]
+            }
+        ]
+    },
+    {
         "Name": "map_1",
         "ZoneType": "SafeZone",
         "Positions": [
@@ -26,8 +66,52 @@
                 "Value": [ 1503.00, 3455.00 ]
             },
             {
-                "Name": "Test_to_map_1",
-                "Value": [ 1308, 1630 ]
+                "Name": "noah_home_to_map_1",
+                "Value": [ 3999.17, 2010.67 ]
+            },
+            {
+                "Name": "battlezone_1_to_map_1",
+                "Value": [ 3981.00, 3806.00 ]
+            }
+        ]
+    },
+    {
+        "Name": "battlezone_1",
+        "ZoneType": "BattleZone",
+        "Positions": [
+            {
+                "Name": "Respawn",
+                "Value": [ 1948.00, 2366.00 ]
+            },
+            {
+                "Name": "noah_home_to_battlezone_1",
+                "Value": [ 1950.67, 1032.00 ]
+            },
+            {
+                "Name": "dungeon_1_to_battlezone_1",
+                "Value": [ 2768.00, 2369.33 ]
+            },
+            {
+                "Name": "map_1_to_battlezone_1",
+                "Value": [ 1118.67, 2372.00 ]
+            }
+        ]
+    },
+    {
+        "Name": "dungeon_1",
+        "ZoneType": "BattleZone",
+        "Positions": [
+            {
+                "Name": "Respawn",
+                "Value": [ 1088.00, 2367.50 ]
+            },
+            {
+                "Name": "map_2_to_dungeon_1",
+                "Value": [ 2310.00, 1009.00 ]
+            },
+            {
+                "Name": "battlezone_1_to_dungeon_1",
+                "Value": [ 1072.00, 2365.00 ]
             }
         ]
     }

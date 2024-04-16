@@ -175,5 +175,18 @@
                 ]
             }
         ]
+    },
+    {
+        "Id": 7,
+        "CharId": 300,
+        "Level": 5,
+        "Name": "Minotaur",
+        "BossChapterId": 0,
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_4",
+        "RoutePoint": [ [] ],
+        "AggroTime": 5,
+        "Position": [ 620.00, 1483.00 ]
     }
 ]

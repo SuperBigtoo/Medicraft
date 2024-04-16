@@ -1,7 +1,7 @@
 {
   "textureAtlas": {
     "texture": "minotaur_spritesheet.png",
-    "regionWidth": 480,
+    "regionWidth": 530,
     "regionHeight": 435
   },
   "cycles": {

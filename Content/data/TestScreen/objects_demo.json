@@ -60,7 +60,7 @@
         "IsDestroyable": true
     },
     {
-        "Id": 5,
+        "Id": 6,
         "ReferId": -1,
         "Category": 2,
         "Name": "CraftingTable",
@@ -71,7 +71,7 @@
         "IsDestroyable": true
     },
     {
-        "Id": 6,
+        "Id": 7,
         "ReferId": -1,
         "Category": 2,
         "Name": "CraftingTable",
@@ -82,7 +82,7 @@
         "IsDestroyable": true
     },
     {
-        "Id": 7,
+        "Id": 8,
         "ReferId": -1,
         "Category": 2,
         "Name": "CraftingTable",
@@ -93,7 +93,7 @@
         "IsDestroyable": true
     },
     {
-        "Id": 8,
+        "Id": 9,
         "ReferId": -1,
         "Category": 4,
         "Name": "WarpPoint",

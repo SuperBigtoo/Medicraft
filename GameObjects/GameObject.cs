@@ -18,6 +18,7 @@ namespace Medicraft.GameObjects
         public int Id { get; protected set; }
         public int ReferId { get; protected set; }
         public string Name { get; protected set; }
+        public string Tag { get; protected set; }
         public string Description { get; protected set; }
 
         public const float InitDepth = 0.1f;
@@ -53,7 +54,9 @@ namespace Medicraft.GameObjects
             QuestObject,
             CraftingTable,
             SavingTable,
-            WarpPoint
+            WarpPoint,
+            Crop,
+            RestPoint
         }
         public GameObjectType ObjectType { get; protected set; }  
 
@@ -167,7 +170,7 @@ namespace Medicraft.GameObjects
             Sprite.Depth = defaultDepth; // Default depth
             if (BoundingInteraction.Intersects(PlayerManager.Instance.Player.BoundingDetectEntity))
             {
-                if (Transform.Position.Y >= PlayerManager.Instance.Player.BoundingDetectCollisions.Center.Y)
+                if (Transform.Position.Y + (Sprite.TextureRegion.Height / 3) >= PlayerManager.Instance.Player.BoundingDetectCollisions.Bottom)
                 {
                     Sprite.Depth = playerDepth - 0.00002f; // In front Player
                 }
@@ -203,17 +206,19 @@ namespace Medicraft.GameObjects
 
             switch (ObjectType)
             {
-                case GameObjectType.Item:
-                case GameObjectType.QuestObject:
+                case GameObjectType.Item:              
                     var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault
                         (i => i.ItemId.Equals(ReferId));
                     Name = itemData.Name;
-                    Description = itemData.Description;                  
+                    Description = itemData.Description;      
                 break;
 
+                case GameObjectType.QuestObject:
                 case GameObjectType.CraftingTable:                  
                 case GameObjectType.SavingTable:                  
                 case GameObjectType.WarpPoint:
+                case GameObjectType.Crop:
+                case GameObjectType.RestPoint:
                     Name = ObjectData.Name;
                     Description = ObjectData.Description;
                 break;
@@ -226,23 +231,31 @@ namespace Medicraft.GameObjects
             {
                 case 0:
                     ObjectType = GameObjectType.Item;
-                break;
+                    break;
 
                 case 1:
                     ObjectType = GameObjectType.QuestObject;
-                break;
+                    break;
 
                 case 2:
                     ObjectType = GameObjectType.CraftingTable;
-                break;
+                    break;
 
                 case 3:
                     ObjectType = GameObjectType.SavingTable;
-                break;
+                    break;
 
                 case 4:
                     ObjectType = GameObjectType.WarpPoint;
-                break;
+                    break;
+
+                case 5:
+                    ObjectType = GameObjectType.Crop;
+                    break;
+
+                case 6:
+                    ObjectType = GameObjectType.RestPoint;
+                    break;
             }
         }
     }

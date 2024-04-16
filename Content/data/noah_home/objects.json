@@ -1,0 +1,13 @@
+﻿[
+    {
+        "Id": 0,
+        "ReferId": -1,
+        "Category": 4,
+        "Name": "WarpPoint",
+        "SpiteCycle": "green",
+        "Description": "WarpPoint test",
+        "Position": [ 2490.00, 1840.00 ],
+        "IsVisible": true,
+        "IsDestroyable": true
+    }
+]

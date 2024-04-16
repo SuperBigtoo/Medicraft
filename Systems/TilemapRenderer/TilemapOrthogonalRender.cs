@@ -1,5 +1,4 @@
 ﻿using Medicraft.Data.Models;
-using Medicraft.Screens.chapter_1;
 using Medicraft.Systems.Managers;
 using Medicraft.Systems.PathFinding;
 using Microsoft.Xna.Framework;
@@ -33,13 +32,34 @@ namespace Medicraft.Systems.TilemapRenderer
         // For calcurlate the frame rate of tile animation
         private float _totalMilliseconds = 0f;
 
-        private const int BLOCK_ID = 7050;
+        private readonly int BLOCK_ID = 7050;
 
         // Scale Rendering
         const int TileRadiusFactor = 25;
 
         public TilemapOrthogonalRender(TmxMap tileMap, Texture2D[] tileSets, int tileSize)
         {
+            _tileMap = tileMap;
+            _tileSets = tileSets;
+            _tileSize = tileSize;
+            _tmxLayerTiles = [];
+
+            _firstGid = new int[tileSets.Length];
+            _tileWidth = new int[tileSets.Length];
+            _tileHeight = new int[tileSets.Length];
+            _tilesetTileWide = new int[tileSets.Length];
+            _tileAnimationsId = [];
+
+            // Initialize
+            InitializeTileSetsInfo();
+            InitializeObjectGroup();
+            MappingArray();
+        }
+
+        public TilemapOrthogonalRender(TmxMap tileMap, Texture2D[] tileSets, int tileSize, int BLOCK_ID)
+        {
+            this.BLOCK_ID = BLOCK_ID;
+
             _tileMap = tileMap;
             _tileSets = tileSets;
             _tileSize = tileSize;

@@ -1,0 +1,56 @@
+﻿[
+    {
+        "Id": 0,
+        "ReferId": -1,
+        "Category": 3,
+        "Name": "SavingTable",
+        "Description": "SavingTable",
+        "Position": [ 862.67, 1320.00 ],
+        "IsVisible": true,
+        "IsDestroyable": true
+    },
+    {
+        "Id": 1,
+        "ReferId": -1,
+        "Category": 2,
+        "Name": "CraftingTable",
+        "CraftingType": 0,
+        "Description": "CraftingTable_Food",
+        "Position": [ 2081.00, 1004.00 ],
+        "IsVisible": true,
+        "IsDestroyable": true
+    },
+    {
+        "Id": 2,
+        "ReferId": -1,
+        "Category": 2,
+        "Name": "CraftingTable",
+        "CraftingType": 1,
+        "Description": "CraftingTable Equipment",
+        "Position": [ 1490.00, 981.00 ],
+        "IsVisible": true,
+        "IsDestroyable": true
+    },
+    {
+        "Id": 3,
+        "ReferId": -1,
+        "Category": 2,
+        "Name": "CraftingTable",
+        "CraftingType": 2,
+        "Description": "CraftingTable Medicine",
+        "Position": [ 2046.67, 1321.33 ],
+        "IsVisible": true,
+        "IsDestroyable": true
+    },
+    {
+        "Id": 4,
+        "ReferId": -1,
+        "Category": 6,
+        "Name": "RestPoint",
+        "CraftingType": 2,
+        "Description": "RestPoint Bed",
+        "Position": [ 832.00, 1053.00 ],
+        "IsVisible": true,
+        "IsDestroyable": true
+    }
+]

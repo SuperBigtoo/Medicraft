@@ -163,8 +163,8 @@ namespace Medicraft.Entities
                 // Check interaction with GameObject
                 PlayerManager.Instance.CheckInteraction(keyboardCur, keyboardPrev);
 
-                // Mana regeneration
-                ManaRegeneration(deltaSeconds);
+                // HP & Mana regeneration
+                HPAndManaRegeneration(deltaSeconds);
             }
             else
             {
@@ -817,11 +817,15 @@ namespace Medicraft.Entities
             return totalDamage;
         }
 
-        private void ManaRegeneration(float deltaSeconds)
+        private void HPAndManaRegeneration(float deltaSeconds)
         {
             var manaRegenAmount = ManaRegenRate * deltaSeconds;
 
             Mana += manaRegenAmount;
+
+            // Only Regen HP when out of combat
+            if (!IsAttacked)
+                HP += InitHPRegenRate * deltaSeconds;
         }
 
         private void UpdateLayerDepth(float topDepth, float middleDepth, float bottomDepth)

@@ -14,7 +14,7 @@ namespace Medicraft.Entities.Mobs
 
         protected int goidCoinDrop, expDrop;
 
-        protected int itemDropId, quantityDrop;
+        protected int itemDropId, quantityDrop, itemDropTimes;
 
         protected HostileMob() { }
 
@@ -74,11 +74,19 @@ namespace Medicraft.Entities.Mobs
                 }
                 else
                 {
-                    // Exp & Item Drop
-                    InventoryManager.Instance.AddItem(itemDropId, quantityDrop);
+                    // Exp & Item Drop                   
+                    if (EntityType == EntityTypes.Boss)
+                    {
+                        for (int i = 0; i < itemDropTimes; i++)
+                        {
+                            itemDropId = GameGlobals.RandomItemDrop();
+                            quantityDrop = GameGlobals.RandomItemQuantityDrop(itemDropId);
+                            InventoryManager.Instance.AddItem(itemDropId, quantityDrop);
+                        }
+                    }
+                    else InventoryManager.Instance.AddItem(itemDropId, quantityDrop);
 
                     InventoryManager.Instance.AddGoldCoin(Name, goidCoinDrop);
-
                     PlayerManager.Instance.AddPlayerEXP(expDrop);
 
                     Destroy();

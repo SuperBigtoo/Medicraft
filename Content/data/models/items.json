@@ -9,7 +9,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 5 ],
         "BuyingPrice": 30,
-        "SellingPrice": 24
+        "SellingPrice": 24,
+        "Tag": "plantable"
     },
     {
         "ItemId": 1,
@@ -21,7 +22,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 5 ],
         "BuyingPrice": 30,
-        "SellingPrice": 24
+        "SellingPrice": 24,
+        "Tag": "plantable"
     },
     {
         "ItemId": 2,
@@ -33,7 +35,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 5 ],
         "BuyingPrice": 30,
-        "SellingPrice": 24
+        "SellingPrice": 24,
+        "Tag": "plantable"
     },
     {
         "ItemId": 3,
@@ -45,7 +48,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 7, 15 ],
         "BuyingPrice": 10,
-        "SellingPrice": 8
+        "SellingPrice": 8,
+        "Tag": "plantable"
     },
     {
         "ItemId": 4,
@@ -57,7 +61,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 7, 14 ],
         "BuyingPrice": 10,
-        "SellingPrice": 8
+        "SellingPrice": 8,
+        "Tag": "plantable"
     },
     {
         "ItemId": 5,
@@ -69,7 +74,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 5 ],
         "BuyingPrice": 30,
-        "SellingPrice": 24
+        "SellingPrice": 24,
+        "Tag": "plantable"
     },
     {
         "ItemId": 6,
@@ -81,7 +87,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 5 ],
         "BuyingPrice": 30,
-        "SellingPrice": 24
+        "SellingPrice": 24,
+        "Tag": "plantable"
     },
     {
         "ItemId": 7,
@@ -93,7 +100,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 5 ],
         "BuyingPrice": 30,
-        "SellingPrice": 24
+        "SellingPrice": 24,
+        "Tag": "plantable"
     },
     {
         "ItemId": 8,
@@ -105,7 +113,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 5 ],
         "BuyingPrice": 30,
-        "SellingPrice": 24
+        "SellingPrice": 24,
+        "Tag": "plantable"
     },
     {
         "ItemId": 9,
@@ -117,7 +126,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 3 ],
         "BuyingPrice": 50,
-        "SellingPrice": 40
+        "SellingPrice": 40,
+        "Tag": "plantable"
     },
     {
         "ItemId": 10,
@@ -129,7 +139,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 3 ],
         "BuyingPrice": 50,
-        "SellingPrice": 40
+        "SellingPrice": 40,
+        "Tag": "plantable"
     },
     {
         "ItemId": 11,
@@ -141,7 +152,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 2, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 12,
@@ -153,7 +165,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 3 ],
         "BuyingPrice": 50,
-        "SellingPrice": 40
+        "SellingPrice": 40,
+        "Tag": "plantable"
     },
     {
         "ItemId": 13,
@@ -165,7 +178,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 2, 5 ],
         "BuyingPrice": 30,
-        "SellingPrice": 24
+        "SellingPrice": 24,
+        "Tag": "plantable"
     },
     {
         "ItemId": 14,
@@ -177,7 +191,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 2 ],
         "BuyingPrice": 50,
-        "SellingPrice": 40
+        "SellingPrice": 40,
+        "Tag": "plantable"
     },
     {
         "ItemId": 15,
@@ -189,7 +204,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 2, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 16,
@@ -285,7 +301,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 6, 12 ],
         "BuyingPrice": 12,
-        "SellingPrice": 8
+        "SellingPrice": 8,
+        "Tag": "plantable"
     },
     {
         "ItemId": 24,
@@ -297,7 +314,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 3, 5 ],
         "BuyingPrice": 30,
-        "SellingPrice": 24
+        "SellingPrice": 24,
+        "Tag": "plantable"
     },
     {
         "ItemId": 25,
@@ -309,7 +327,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 2, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 26,
@@ -321,7 +340,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 3, 5 ],
         "BuyingPrice": 30,
-        "SellingPrice": 24
+        "SellingPrice": 24,
+        "Tag": "plantable"
     },
     {
         "ItemId": 27,
@@ -333,7 +353,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 3, 5 ],
         "BuyingPrice": 30,
-        "SellingPrice": 24
+        "SellingPrice": 24,
+        "Tag": "plantable"
     },
     {
         "ItemId": 28,
@@ -345,7 +366,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 3, 5 ],
         "BuyingPrice": 30,
-        "SellingPrice": 24
+        "SellingPrice": 24,
+        "Tag": "plantable"
     },
     {
         "ItemId": 29,
@@ -357,7 +379,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 3, 5 ],
         "BuyingPrice": 30,
-        "SellingPrice": 24
+        "SellingPrice": 24,
+        "Tag": "plantable"
     },
     {
         "ItemId": 30,
@@ -369,7 +392,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 3, 5 ],
         "BuyingPrice": 30,
-        "SellingPrice": 24
+        "SellingPrice": 24,
+        "Tag": "plantable"
     },
     {
         "ItemId": 31,
@@ -381,7 +405,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 3, 5 ],
         "BuyingPrice": 30,
-        "SellingPrice": 24
+        "SellingPrice": 24,
+        "Tag": "plantable"
     },
     {
         "ItemId": 32,
@@ -393,7 +418,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 7, 14 ],
         "BuyingPrice": 10,
-        "SellingPrice": 8
+        "SellingPrice": 8,
+        "Tag": "plantable"
     },
     {
         "ItemId": 33,
@@ -537,7 +563,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 2, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 45,
@@ -549,7 +576,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 1 ],
         "BuyingPrice": 60,
-        "SellingPrice": 48
+        "SellingPrice": 48,
+        "Tag": "plantable"
     },
     {
         "ItemId": 46,
@@ -561,7 +589,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 3, 5 ],
         "BuyingPrice": 30,
-        "SellingPrice": 24
+        "SellingPrice": 24,
+        "Tag": "plantable"
     },
     {
         "ItemId": 47,
@@ -573,7 +602,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 1 ],
         "BuyingPrice": 60,
-        "SellingPrice": 48
+        "SellingPrice": 48,
+        "Tag": "plantable"
     },
     {
         "ItemId": 48,
@@ -585,7 +615,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 1 ],
         "BuyingPrice": 60,
-        "SellingPrice": 48
+        "SellingPrice": 48,
+        "Tag": "plantable"
     },
     {
         "ItemId": 49,
@@ -597,7 +628,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 1 ],
         "BuyingPrice": 60,
-        "SellingPrice": 48
+        "SellingPrice": 48,
+        "Tag": "plantable"
     },
     {
         "ItemId": 50,
@@ -609,7 +641,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 3, 5 ],
         "BuyingPrice": 30,
-        "SellingPrice": 24
+        "SellingPrice": 24,
+        "Tag": "plantable"
     },
     {
         "ItemId": 51,
@@ -621,7 +654,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 2, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 52,
@@ -633,7 +667,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 4, 8 ],
         "BuyingPrice": 18,
-        "SellingPrice": 14
+        "SellingPrice": 14,
+        "Tag": "plantable"
     },
     {
         "ItemId": 53,
@@ -645,7 +680,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 3, 6 ],
         "BuyingPrice": 25,
-        "SellingPrice": 20
+        "SellingPrice": 20,
+        "Tag": "plantable"
     },
     {
         "ItemId": 54,
@@ -669,7 +705,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 2, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 56,
@@ -729,7 +766,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 2 ],
         "BuyingPrice": 60,
-        "SellingPrice": 48
+        "SellingPrice": 48,
+        "Tag": "plantable"
     },
     {
         "ItemId": 61,
@@ -741,7 +779,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 2, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 62,
@@ -765,7 +804,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 3 ],
         "BuyingPrice": 50,
-        "SellingPrice": 40
+        "SellingPrice": 40,
+        "Tag": "plantable"
     },
     {
         "ItemId": 64,
@@ -777,7 +817,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 6, 13 ],
         "BuyingPrice": 12,
-        "SellingPrice": 8
+        "SellingPrice": 8,
+        "Tag": "plantable"
     },
     {
         "ItemId": 65,
@@ -789,7 +830,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 4, 8 ],
         "BuyingPrice": 18,
-        "SellingPrice": 15
+        "SellingPrice": 15,
+        "Tag": "plantable"
     },
     {
         "ItemId": 66,
@@ -801,7 +843,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 4, 8 ],
         "BuyingPrice": 18,
-        "SellingPrice": 15
+        "SellingPrice": 15,
+        "Tag": "plantable"
     },
     {
         "ItemId": 67,
@@ -957,7 +1000,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 2, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 80,
@@ -1197,7 +1241,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 2, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 100,
@@ -1221,7 +1266,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 3 ],
         "BuyingPrice": 50,
-        "SellingPrice": 40
+        "SellingPrice": 40,
+        "Tag": "plantable"
     },
     {
         "ItemId": 102,
@@ -1233,7 +1279,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 2, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 103,
@@ -1245,7 +1292,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 3 ],
         "BuyingPrice": 50,
-        "SellingPrice": 40
+        "SellingPrice": 40,
+        "Tag": "plantable"
     },
     {
         "ItemId": 104,
@@ -1257,7 +1305,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 2, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 105,
@@ -1269,7 +1318,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 3, 6 ],
         "BuyingPrice": 25,
-        "SellingPrice": 20
+        "SellingPrice": 20,
+        "Tag": "plantable"
     },
     {
         "ItemId": 106,
@@ -1281,7 +1331,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 2, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 107,
@@ -1413,7 +1464,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 3 ],
         "BuyingPrice": 50,
-        "SellingPrice": 40
+        "SellingPrice": 40,
+        "Tag": "plantable"
     },
     {
         "ItemId": 118,
@@ -1461,7 +1513,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 3 ],
         "BuyingPrice": 50,
-        "SellingPrice": 42
+        "SellingPrice": 42,
+        "Tag": "plantable"
     },
     {
         "ItemId": 122,
@@ -1473,7 +1526,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 3 ],
         "BuyingPrice": 50,
-        "SellingPrice": 40
+        "SellingPrice": 40,
+        "Tag": "plantable"
     },
     {
         "ItemId": 123,
@@ -1605,7 +1659,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 1 ],
         "BuyingPrice": 70,
-        "SellingPrice": 56
+        "SellingPrice": 56,
+        "Tag": "plantable"
     },
     {
         "ItemId": 134,
@@ -1629,7 +1684,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 3, 6 ],
         "BuyingPrice": 25,
-        "SellingPrice": 20
+        "SellingPrice": 20,
+        "Tag": "plantable"
     },
     {
         "ItemId": 136,
@@ -1677,7 +1733,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 3, 5 ],
         "BuyingPrice": 30,
-        "SellingPrice": 24
+        "SellingPrice": 24,
+        "Tag": "plantable"
     },
     {
         "ItemId": 140,
@@ -1713,7 +1770,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 143,
@@ -1725,7 +1783,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 144,
@@ -1737,7 +1796,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 145,
@@ -1749,7 +1809,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 146,
@@ -1761,7 +1822,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 147,
@@ -1773,7 +1835,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 148,
@@ -1881,7 +1944,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 157,
@@ -1905,7 +1969,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 4 ],
         "BuyingPrice": 35,
-        "SellingPrice": 28
+        "SellingPrice": 28,
+        "Tag": "plantable"
     },
     {
         "ItemId": 159,
@@ -1917,7 +1982,8 @@
         "IsStackable": true,
         "QuantityDropRange": [ 1, 2 ],
         "BuyingPrice": 60,
-        "SellingPrice": 48
+        "SellingPrice": 48,
+        "Tag": "plantable"
     },
     {
         "ItemId": 160,

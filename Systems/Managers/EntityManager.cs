@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using Medicraft.Entities;
-using Medicraft.Systems.Spawners;
 using System;
 using static Medicraft.Systems.GameGlobals;
 
@@ -16,14 +15,14 @@ namespace Medicraft.Systems.Managers
 
     public class EntityManager : IEntityManager
     {
-        public float SpawnTime = 0f;
+        public float SpawnTimer { private set; get; } = 0f;
         public readonly List<Entity> entities;
 
-        private MobSpawner _mobSpawner;
         private static EntityManager instance;
 
-        private readonly float _delayCompaSpawnTime = 3f;
+        private readonly float _delayCompaSpawnTime = 2f;
         private float _delayCompaSpawnTimer = 0f;
+        private string _currMapName;
 
         public IEnumerable<Entity> Entities => entities;
 
@@ -31,6 +30,7 @@ namespace Medicraft.Systems.Managers
         const float ScreenWidthFactor = 1f;
         const float ScreenHeightFactor = 1f;
         public Entity ClosestEnemyToCompanion { get; set; }
+        public Entity Boss { get; set; }
 
         private EntityManager()
         {
@@ -43,11 +43,12 @@ namespace Medicraft.Systems.Managers
             return entity;
         }
 
-        public void Initialize(MobSpawner mobSpawner)
+        public void Initialize(string mapName)
         {
+            _currMapName = mapName;
             entities.Clear();
-            _mobSpawner = mobSpawner;
-            _mobSpawner.Initialize();
+            GameGlobals.Instance.MobSpawners.FirstOrDefault
+                (s => s.currMapName.Equals(mapName)).Initialize();
         }
 
         public void Update(GameTime gameTime)
@@ -119,14 +120,17 @@ namespace Medicraft.Systems.Managers
                 StatusEffectManager.Instance.Update(gameTime);
 
                 // Mob Spawner
-                _mobSpawner?.Update(gameTime);
+                GameGlobals.Instance.MobSpawners.FirstOrDefault
+                    (s => s.currMapName.Equals(_currMapName))?.Update(gameTime);
 
-                if (_mobSpawner != null)
-                    SpawnTime = _mobSpawner.SpawnTimer;
+                if (GameGlobals.Instance.MobSpawners.FirstOrDefault(s => s.currMapName.Equals(_currMapName)) != null)
+                {
+                    SpawnTimer = GameGlobals.Instance.MobSpawners.FirstOrDefault
+                        (s => s.currMapName.Equals(_currMapName)).SpawnTimer;
+                }
+                else SpawnTimer = 0;
 
                 entities.RemoveAll(e => e.IsDestroyed);
-
-                _mobSpawner?.Spawn();
             }
         }
 
@@ -144,7 +148,6 @@ namespace Medicraft.Systems.Managers
         public void ClearEntity()
         {
             entities.Clear();
-            _mobSpawner ??= null;
         }
 
         public int EntityCount()

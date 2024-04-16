@@ -1,0 +1,178 @@
+[
+    {
+        "ChapterId": 0,
+        "IsBossDead": false,
+        "BossSpawnTime": 30,
+        "BossSpawnTimer": 30,
+        "MapSpawnTimes": [
+            {
+                "SpawnerName": "Entity",
+                "MapName": "Test",
+                "SpawnTime": 10,
+                "SpawnTimer": 10
+            },
+            {
+                "SpawnerName": "Object",
+                "MapName": "Test",
+                "SpawnTime": 10,
+                "SpawnTimer": 10
+            }
+        ]
+    },
+    {
+        "ChapterId": 1,
+        "IsBossDead": false,
+        "BossSpawnTime": 300,
+        "BossSpawnTimer": 300,
+        "MapSpawnTimes": [
+            {
+                "SpawnerName": "Entity",
+                "MapName": "noah_home",
+                "SpawnTime": 60,
+                "SpawnTimer": 60
+            },
+            {
+                "SpawnerName": "Object",
+                "MapName": "noah_home",
+                "SpawnTime": 180,
+                "SpawnTimer": 180
+            },
+            {
+                "SpawnerName": "Entity",
+                "MapName": "noah_room",
+                "SpawnTime": 60,
+                "SpawnTimer": 60
+            },
+            {
+                "SpawnerName": "Object",
+                "MapName": "noah_room",
+                "SpawnTime": 180,
+                "SpawnTimer": 180
+            },
+            {
+                "SpawnerName": "Entity",
+                "MapName": "map_1",
+                "SpawnTime": 60,
+                "SpawnTimer": 60
+            },
+            {
+                "SpawnerName": "Object",
+                "MapName": "map_1",
+                "SpawnTime": 180,
+                "SpawnTimer": 180
+            },
+            {
+                "SpawnerName": "Entity",
+                "MapName": "battlezone_1",
+                "SpawnTime": 60,
+                "SpawnTimer": 60
+            },
+            {
+                "SpawnerName": "Object",
+                "MapName": "battlezone_1",
+                "SpawnTime": 180,
+                "SpawnTimer": 180
+            },
+            {
+                "SpawnerName": "Entity",
+                "MapName": "dungeon_1",
+                "SpawnTime": 60,
+                "SpawnTimer": 60
+            },
+            {
+                "SpawnerName": "Object",
+                "MapName": "dungeon_1",
+                "SpawnTime": 180,
+                "SpawnTimer": 180
+            }
+        ]
+    },
+    {
+        "ChapterId": 2,
+        "IsBossDead": false,
+        "BossSpawnTime": 300,
+        "BossSpawnTimer": 300,
+        "MapSpawnTimes": [
+            {
+                "SpawnerName": "Entity",
+                "MapName": "map_2",
+                "SpawnTime": 60,
+                "SpawnTimer": 60
+            },
+            {
+                "SpawnerName": "Object",
+                "MapName": "map_2",
+                "SpawnTime": 180,
+                "SpawnTimer": 180
+            },
+            {
+                "SpawnerName": "Entity",
+                "MapName": "battlezone_2",
+                "SpawnTime": 60,
+                "SpawnTimer": 60
+            },
+            {
+                "SpawnerName": "Object",
+                "MapName": "battlezone_2",
+                "SpawnTime": 180,
+                "SpawnTimer": 180
+            },
+            {
+                "SpawnerName": "Entity",
+                "MapName": "dungeon_2",
+                "SpawnTime": 60,
+                "SpawnTimer": 60
+            },
+            {
+                "SpawnerName": "Object",
+                "MapName": "dungeon_2",
+                "SpawnTime": 180,
+                "SpawnTimer": 180
+            }
+        ]
+    },
+    {
+        "ChapterId": 3,
+        "IsBossDead": false,
+        "BossSpawnTime": 300,
+        "BossSpawnTimer": 300,
+        "MapSpawnTimes": [
+            {
+                "SpawnerName": "Entity",
+                "MapName": "map_3",
+                "SpawnTime": 60,
+                "SpawnTimer": 60
+            },
+            {
+                "SpawnerName": "Object",
+                "MapName": "map_3",
+                "SpawnTime": 180,
+                "SpawnTimer": 180
+            },
+            {
+                "SpawnerName": "Entity",
+                "MapName": "battlezone_3",
+                "SpawnTime": 60,
+                "SpawnTimer": 60
+            },
+            {
+                "SpawnerName": "Object",
+                "MapName": "battlezone_3",
+                "SpawnTime": 180,
+                "SpawnTimer": 180
+            },
+            {
+                "SpawnerName": "Entity",
+                "MapName": "dungeon_3",
+                "SpawnTime": 60,
+                "SpawnTimer": 60
+            },
+            {
+                "SpawnerName": "Object",
+                "MapName": "dungeon_3",
+                "SpawnTime": 180,
+                "SpawnTimer": 180
+            }
+        ]
+    }
+]

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Medicraft.Systems.Spawners;
 using Medicraft.GameObjects;
+using Medicraft.Data.Models;
+using MonoGame.Extended.Sprites;
 
 namespace Medicraft.Systems.Managers
 {
@@ -14,13 +16,14 @@ namespace Medicraft.Systems.Managers
 
     public class ObjectManager : IObjectManager
     {
-        public float SpawnTime = 0f;
+        public float SpawnTimer { private set; get; } = 0f;
         public readonly List<GameObject> gameObjects;
 
-        private ObjectSpawner _objectSpawner;
+        private string _currMapName;
         private static ObjectManager instance;
 
         public IEnumerable<GameObject> GameObjects => gameObjects;
+        public List<Crop> Crops { get; private set; } = [];
 
         private ObjectManager()
         {
@@ -33,32 +36,67 @@ namespace Medicraft.Systems.Managers
             return gameObject;
         }
 
-        public void Initialize(ObjectSpawner objectSpawner)
+        public Crop AddCropObject(Crop crop)
         {
+            Crops.Add(crop);
+            return crop;
+        }
+
+        public void InitCropObject(List<ObjectData> objectDatas)
+        {
+            Crops.Clear();
+
+            foreach (var cropObject in objectDatas)
+            {
+                if (cropObject.Category != 5) return;
+
+                var spriteSheets = GameGlobals.Instance.ItemsPackSprites;
+                AddCropObject(new Crop(new AnimatedSprite(spriteSheets), cropObject, Vector2.One));
+            }
+        }
+
+        public void Initialize(string mapName)
+        {
+            _currMapName = mapName;
             gameObjects.Clear();
-            _objectSpawner = objectSpawner;
-            _objectSpawner.Initialize();
+            GameGlobals.Instance.ObjectSpawners.FirstOrDefault
+                (s => s.currMapName.Equals(mapName)).Initialize();
         }
 
         public void Update(GameTime gameTime)
         {
             var layerDepth = 0.85f;
 
+            // Update Object
             foreach (var gameObject in gameObjects.Where(e => !e.IsDestroyed && e.IsVisible))
             {
                 layerDepth -= 0.00001f;
                 gameObject.Update(gameTime, layerDepth);
             }
 
-            // Object Spawner
-            _objectSpawner?.Update(gameTime);
+            // Update Crop
+            foreach (var crop in Crops.Where(e => e.IsVisible))
+            {
+                if (ScreenManager.Instance.CurrentMap.Equals("noah_home"))
+                {
+                    layerDepth -= 0.00001f;
+                    crop.Update(gameTime, layerDepth);
+                }
+                else crop.UpdateCropTimer(gameTime);
+            }
 
-            if (_objectSpawner != null)
-                SpawnTime = _objectSpawner.SpawnTimer;
+            // Object Spawner
+            GameGlobals.Instance.ObjectSpawners.FirstOrDefault
+                (s => s.currMapName.Equals(_currMapName))?.Update(gameTime);
+
+            if (GameGlobals.Instance.ObjectSpawners.FirstOrDefault(s => s.currMapName.Equals(_currMapName)) != null)
+            {
+                SpawnTimer = GameGlobals.Instance.ObjectSpawners.FirstOrDefault
+                    (s => s.currMapName.Equals(_currMapName)).SpawnTimer;
+            }
+            else SpawnTimer = 0;
 
             gameObjects.RemoveAll(e => e.IsDestroyed);
-
-            _objectSpawner?.Spawn();
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -67,12 +105,17 @@ namespace Medicraft.Systems.Managers
             {
                 gameObject.Draw(spriteBatch);
             }
+
+            if (ScreenManager.Instance.CurrentMap.Equals("noah_home"))
+                foreach (var crop in Crops.Where(e => e.IsVisible))
+                {
+                    crop.Draw(spriteBatch);
+                }
         }
 
         public void ClearGameObject()
         {
             gameObjects.Clear();
-            _objectSpawner ??= null;
         }
 
         public static ObjectManager Instance

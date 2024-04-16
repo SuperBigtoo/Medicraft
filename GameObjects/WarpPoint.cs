@@ -46,7 +46,7 @@ namespace Medicraft.GameObjects
             };
 
             BoundingInteraction = new CircleF(
-                Position + new Vector2(0, 70), 32);
+                Position + new Vector2(0, 70), 40);
 
             ParticleEffect = DrawEffectSystem.SetItemParticleEffect(ObjectType, Position);
 
@@ -82,7 +82,7 @@ namespace Medicraft.GameObjects
             };
 
             BoundingInteraction = new CircleF(
-                Position + new Vector2(0, 70), 32);
+                Position + new Vector2(0, 70), 40);
 
             ParticleEffect = warpPoint.ParticleEffect;
 

@@ -5,7 +5,7 @@
     "Category": 0,
     "Name": "นม",
     "Description": "น้ำนมดิบบริสุทธิ์รสชาติเข้มข้นและกลมกล่อม ดื่มเย็นๆช่วยคลายความเมื่อยล้าได้",
-    "Position": [ 1788, 738 ],
+    "Position": [ 2204, 1154 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -15,7 +15,7 @@
     "Category": 0,
     "Name": "นม",
     "Description": "น้ำนมดิบบริสุทธิ์รสชาติเข้มข้นและกลมกล่อม ดื่มเย็นๆช่วยคลายความเมื่อยล้าได้",
-    "Position": [ 1936, 736 ],
+    "Position": [ 2352, 1152 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -25,7 +25,7 @@
     "Category": 0,
     "Name": "สาบเสือ",
     "Description": "มีสรรพคุณช่วยถอนพิษแก้อักเสบและห้ามเลิอด ใช้ในการรักษาแผลสดได้เป็นอย่างดี",
-    "Position": [ 2016, 1738 ],
+    "Position": [ 2432, 2154 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -35,7 +35,7 @@
     "Category": 0,
     "Name": "สาบเสือ",
     "Description": "มีสรรพคุณช่วยถอนพิษแก้อักเสบและห้ามเลิอด ใช้ในการรักษาแผลสดได้เป็นอย่างดี",
-    "Position": [ 1966, 1800 ],
+    "Position": [ 2382, 2216 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -45,7 +45,7 @@
     "Category": 0,
     "Name": "เมล็ดกาแฟ",
     "Description": "อาหารที่ปลุกให้ตื่นด้วยรสขมสำหรับผู้ที่มีอาการเหนื่อยล้าเรื้อรัง",
-    "Position": [ 1984, 2118 ],
+    "Position": [ 2400, 2534 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -55,7 +55,7 @@
     "Category": 0,
     "Name": "เมล็ดกาแฟ",
     "Description": "อาหารที่ปลุกให้ตื่นด้วยรสขมสำหรับผู้ที่มีอาการเหนื่อยล้าเรื้อรัง",
-    "Position": [ 1894, 2252 ],
+    "Position": [ 2310, 2668 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -65,7 +65,7 @@
     "Category": 0,
     "Name": "เกลือ",
     "Description": "เครื่องปรุงรสที่จำเป็นสำหรับการปรุงแต่งอาหาร จะทำอาหารให้เสร็จสมบูรณ์ได้เช่นไรถ้าไม่ใส่เกลือ",
-    "Position": [ 678, 2142 ],
+    "Position": [ 1094, 2558 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -75,7 +75,7 @@
     "Category": 0,
     "Name": "เกลือ",
     "Description": "เครื่องปรุงรสที่จำเป็นสำหรับการปรุงแต่งอาหาร จะทำอาหารให้เสร็จสมบูรณ์ได้เช่นไรถ้าไม่ใส่เกลือ",
-    "Position": [ 1056, 2068 ],
+    "Position": [ 1472, 2484 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -85,7 +85,7 @@
     "Category": 0,
     "Name": "พริก",
     "Description": "เป็นสิ่งที่ขาดไม่ได้เลย เมื่อต้องการจะเพิ่มรสชาติเผ็ดร้อนให้กับอาหาร",
-    "Position": [ 674, 2214 ],
+    "Position": [ 1090, 2630 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -95,7 +95,7 @@
     "Category": 0,
     "Name": "พริก",
     "Description": "เป็นสิ่งที่ขาดไม่ได้เลย เมื่อต้องการจะเพิ่มรสชาติเผ็ดร้อนให้กับอาหาร",
-    "Position": [ 1054, 2210 ],
+    "Position": [ 1470, 2626 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -105,7 +105,7 @@
     "Category": 0,
     "Name": "ข้าว",
     "Description": "เมล็ดธัญพืชหลักที่เหมาะกับอาหารทุกประเภท การกินข้าวเป็นวิธีที่ดีที่สุดที่จะทำให้คุณอิ่มท้อง",
-    "Position": [ 1440, 2102 ],
+    "Position": [ 1856, 2518 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -115,7 +115,7 @@
     "Category": 0,
     "Name": "ข้าว",
     "Description": "เมล็ดธัญพืชหลักที่เหมาะกับอาหารทุกประเภท การกินข้าวเป็นวิธีที่ดีที่สุดที่จะทำให้คุณอิ่มท้อง",
-    "Position": [ 1574, 2066 ],
+    "Position": [ 1990, 2482 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -125,7 +125,7 @@
     "Category": 0,
     "Name": "แร่ทอง",
     "Description": "แร่ทองจากธรรมชาตินั้นเอง สามารถสร้างวัตถุที่มีค่ามากขึ้นได้หากนำไปใช้ในการประดิษฐ์",
-    "Position": [ 1800, 2076 ],
+    "Position": [ 2216, 2492 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -135,7 +135,7 @@
     "Category": 0,
     "Name": "แร่ทอง",
     "Description": "แร่ทองจากธรรมชาตินั้นเอง สามารถสร้างวัตถุที่มีค่ามากขึ้นได้หากนำไปใช้ในการประดิษฐ์",
-    "Position": [ 1330, 1814 ],
+    "Position": [ 1746, 2230 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -145,7 +145,7 @@
     "Category": 0,
     "Name": "แร่ทองแดง",
     "Description": "แร่ทองแดงจากธรรมชาตินั้นเอง สามารถสร้างวัตถุที่มีค่ามากขึ้นได้หากนำไปใช้ในการประดิษฐ์",
-    "Position": [ 1226, 1734 ],
+    "Position": [ 1642, 2150 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -155,7 +155,7 @@
     "Category": 0,
     "Name": "แร่ทองแดง",
     "Description": "แร่ทองแดงจากธรรมชาตินั้นเอง สามารถสร้างวัตถุที่มีค่ามากขึ้นได้หากนำไปใช้ในการประดิษฐ์",
-    "Position": [ 1754, 2188 ],
+    "Position": [ 2170, 2604 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -165,7 +165,7 @@
     "Category": 0,
     "Name": "แร่เหล็ก",
     "Description": "แร่เหล็กจากธรรมชาตินั้นเอง สามารถสร้างวัตถุที่มีค่ามากขึ้นได้หากนำไปใช้ในการประดิษฐ์",
-    "Position": [ 1422, 1676 ],
+    "Position": [ 1838, 2092 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -175,7 +175,7 @@
     "Category": 0,
     "Name": "แร่เหล็ก",
     "Description": "แร่เหล็กจากธรรมชาตินั้นเอง สามารถสร้างวัตถุที่มีค่ามากขึ้นได้หากนำไปใช้ในการประดิษฐ์",
-    "Position": [ 2404, 2108 ],
+    "Position": [ 2820, 2524 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -185,7 +185,7 @@
     "Category": 0,
     "Name": "มันฝรั่ง",
     "Description": "พืชทนแล้งที่งอกงามได้ดีแม้ว่าจะปลูกในพื้นที่แห้งแล้ง ถ้าพวกเขาไม่มีขนมปังก็ให้กินมันฝรั่งแทนซิ!",
-    "Position": [ 1700, 1714 ],
+    "Position": [ 2116, 2130 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -195,7 +195,7 @@
     "Category": 0,
     "Name": "มันฝรั่ง",
     "Description": "พืชทนแล้งที่งอกงามได้ดีแม้ว่าจะปลูกในพื้นที่แห้งแล้ง ถ้าพวกเขาไม่มีขนมปังก็ให้กินมันฝรั่งแทนซิ!",
-    "Position": [ 780, 1864 ],
+    "Position": [ 1196, 2280 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -205,7 +205,7 @@
     "Category": 0,
     "Name": "กะหล่ำปลี",
     "Description": "ผักที่มีสารอาหารสูงและมีประโยชน์ต่อร่างกาย อย่าทิ้งมันไว้ละ",
-    "Position": [ 634, 1200 ],
+    "Position": [ 1050, 1616 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -215,7 +215,7 @@
     "Category": 0,
     "Name": "กะหล่ำปลี",
     "Description": "ผักที่มีสารอาหารสูงและมีประโยชน์ต่อร่างกาย อย่าทิ้งมันไว้ละ",
-    "Position": [ 1466, 1028 ],
+    "Position": [ 1882, 1444 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -225,7 +225,7 @@
     "Category": 0,
     "Name": "มะเขือเทศ",
     "Description": "มะเขือเทศแดงฉ่ำๆที่เต็มไปด้วยรสชาติ จะกินสดหรือทำให้สุกก็อร่อยเหมือนกัน",
-    "Position": [ 1020, 644 ],
+    "Position": [ 1436, 1060 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -235,7 +235,7 @@
     "Category": 0,
     "Name": "มะเขือเทศ",
     "Description": "มะเขือเทศแดงฉ่ำๆที่เต็มไปด้วยรสชาติ จะกินสดหรือทำให้สุกก็อร่อยเหมือนกัน",
-    "Position": [ 1670, 830 ],
+    "Position": [ 2086, 1246 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -245,7 +245,7 @@
     "Category": 0,
     "Name": "เนื้อสัตว์",
     "Description": "เนื้อสัตว์สดๆจากสัตว์ที่เพิ่งจับได้สดๆ เป็นแหล่งโปรตีนชั้นดีเมื่อทำให้สุกก่อน",
-    "Position": [ 722, 1328 ],
+    "Position": [ 1138, 1744 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -255,7 +255,7 @@
     "Category": 0,
     "Name": "เนื้อสัตว์",
     "Description": "เนื้อสัตว์สดๆจากสัตว์ที่เพิ่งจับได้สดๆ เป็นแหล่งโปรตีนชั้นดีเมื่อทำให้สุกก่อน",
-    "Position": [ 906, 1836 ],
+    "Position": [ 1322, 2252 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -265,7 +265,7 @@
     "Category": 0,
     "Name": "เนื้อสัตว์",
     "Description": "เนื้อสัตว์สดๆจากสัตว์ที่เพิ่งจับได้สดๆ เป็นแหล่งโปรตีนชั้นดีเมื่อทำให้สุกก่อน",
-    "Position": [ 1876, 1830 ],
+    "Position": [ 2292, 2246 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -275,7 +275,7 @@
     "Category": 0,
     "Name": "เนื้อสัตว์",
     "Description": "เนื้อสัตว์สดๆจากสัตว์ที่เพิ่งจับได้สดๆ เป็นแหล่งโปรตีนชั้นดีเมื่อทำให้สุกก่อน",
-    "Position": [ 1690, 1144 ],
+    "Position": [ 2106, 1560 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -285,7 +285,7 @@
     "Category": 0,
     "Name": "ท่อนไม้",
     "Description": "ท่อนไม้หนา ที่พึ่งตัดสดๆ ยังไม่ได้แปรรูป",
-    "Position": [ 2214, 1316 ],
+    "Position": [ 2630, 1732 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -295,7 +295,7 @@
     "Category": 0,
     "Name": "ท่อนไม้",
     "Description": "ท่อนไม้หนา ที่พึ่งตัดสดๆ ยังไม่ได้แปรรูป",
-    "Position": [ 1162, 1406 ],
+    "Position": [ 1578, 1822 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -305,7 +305,7 @@
     "Category": 0,
     "Name": "หนังธรรมดา",
     "Description": "หนังที่เบาและอ่อนนุ่ม ดูแลรักษาง่ายแต่ก็ชำรุดง่ายด้วยเหมือนกัน",
-    "Position": [ 652, 812 ],
+    "Position": [ 1068, 1228 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -315,7 +315,7 @@
     "Category": 0,
     "Name": "หนังธรรมดา",
     "Description": "หนังที่เบาและอ่อนนุ่ม ดูแลรักษาง่ายแต่ก็ชำรุดง่ายด้วยเหมือนกัน",
-    "Position": [ 1420, 1868 ],
+    "Position": [ 1836, 2284 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -325,7 +325,7 @@
     "Category": 0,
     "Name": "ผ้าธรรมดา",
     "Description": "เนื้อผ้านุ่มแต่ไม่แข็งแรงมาก แต่ก็ดีกว่าไม่มีอะไรเลย",
-    "Position": [ 1418, 600 ],
+    "Position": [ 1834, 1016 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -335,7 +335,7 @@
     "Category": 0,
     "Name": "ผ้าธรรมดา",
     "Description": "เนื้อผ้านุ่มแต่ไม่แข็งแรงมาก แต่ก็ดีกว่าไม่มีอะไรเลย",
-    "Position": [ 1970, 1954 ],
+    "Position": [ 2386, 2370 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -345,7 +345,7 @@
     "Category": 0,
     "Name": "แครอท",
     "Description": "แครรอทกรอบๆหวานๆสีแดงสด เป็นผักที่กินกับเมนูไหนก็อร่อย",
-    "Position": [ 636, 1398 ],
+    "Position": [ 1052, 1814 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -355,7 +355,7 @@
     "Category": 0,
     "Name": "แครอท",
     "Description": "แครรอทกรอบๆหวานๆสีแดงสด เป็นผักที่กินกับเมนูไหนก็อร่อย",
-    "Position": [ 2214, 608 ],
+    "Position": [ 2630, 1024 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -365,7 +365,7 @@
     "Category": 0,
     "Name": "ว่านร่อนทอง",
     "Description": "ส่วนเหง้าของต้นว่านร่อนทอง สามารถใช้ในการปรุงยา",
-    "Position": [ 1052, 1258 ],
+    "Position": [ 1468, 1674 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -375,7 +375,7 @@
     "Category": 0,
     "Name": "ว่านกีบแรด",
     "Description": "ส่วนเหง้าของต้นว่านกีบแรด สามารถใช้ในการปรุงยา",
-    "Position": [ 2086, 1590 ],
+    "Position": [ 2502, 2006 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -385,7 +385,7 @@
     "Category": 0,
     "Name": "มหาสดำ",
     "Description": "ส่วนเหง้าหรือเนื้อไม้ของต้นมหาสดำ สามารถใช้ในการปรุงยา",
-    "Position": [ 988, 1632 ],
+    "Position": [ 1404, 2048 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -395,7 +395,7 @@
     "Category": 0,
     "Name": "พิษนาศน์",
     "Description": "ส่วนเหง้าของต้นพิษนาศน์ สามารถใช้ในการปรุงยา",
-    "Position": [ 2338, 1822 ],
+    "Position": [ 2754, 2238 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -405,7 +405,7 @@
     "Category": 0,
     "Name": "เนระพูสี",
     "Description": "ส่วนเหง้าของต้นเนระพูสี สามารถใช้ในการปรุงยา",
-    "Position": [ 2428, 1284 ],
+    "Position": [ 2844, 1700 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -415,7 +415,7 @@
     "Category": 0,
     "Name": "ชุดเครื่องเที่ยน",
     "Description": "ชุดรวมเทียนหรือผลแก่แห้งของพืชสมุนไพรที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยเทียนดำ เทียนแดง เทียนขาว เทียนข้าวเปลือก เทียนสัตตบุษย์ เทียนเยาวพาณี และเทียนอื่นๆอีก",
-    "Position": [ 2416, 878 ],
+    "Position": [ 2832, 1294 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -425,7 +425,7 @@
     "Category": 0,
     "Name": "ชุดเครื่องโกฐ",
     "Description": "ชุดรวมโกฐหรือรากไม้ของพืชสมุนไพรที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยโกฐสอ โกฐเขมา โกฐหัวบัว โกฐกักกรา โกฐน้ำเต้า และโกฐอื่นๆอีก",
-    "Position": [ 1438, 1244 ],
+    "Position": [ 1854, 1660 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -435,7 +435,7 @@
     "Category": 0,
     "Name": "ลูกกระดอม",
     "Description": "ผลอ่อนของต้นกระดอมที่สามารถใช้ในการปรุงยา",
-    "Position": [ 1436, 790 ],
+    "Position": [ 1852, 1206 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -445,7 +445,7 @@
     "Category": 0,
     "Name": "ลูกกระดอม",
     "Description": "ผลอ่อนของต้นกระดอมที่สามารถใช้ในการปรุงยา",
-    "Position": [ 2414, 1868 ],
+    "Position": [ 2830, 2282 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -455,7 +455,7 @@
     "Category": 0,
     "Name": "ลูกกระวาน",
     "Description": "ผลแก่ของต้นกระวานไทยที่สามารถใช้ในการปรุงยา",
-    "Position": [ 1152, 1876 ],
+    "Position": [ 1568, 2292 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -465,7 +465,7 @@
     "Category": 0,
     "Name": "ลูกกระวาน",
     "Description": "ผลแก่ของต้นกระวานไทยที่สามารถใช้ในการปรุงยา",
-    "Position": [ 2434, 978 ],
+    "Position": [ 2850, 1394 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -475,7 +475,7 @@
     "Category": 0,
     "Name": "รากมะนาว",
     "Description": "รากของต้นมะนาวที่สามารถใช้ในการปรุงยา",
-    "Position": [ 2054, 1224 ],
+    "Position": [ 2470, 1640 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -485,7 +485,7 @@
     "Category": 0,
     "Name": "รากมะปรางหวาน",
     "Description": "รากของต้นมะปรางหวานที่สามารถใช้ในการปรุงยา",
-    "Position": [ 1314, 1394 ],
+    "Position": [ 1730, 1810 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -495,7 +495,7 @@
     "Category": 0,
     "Name": "รากเหมือดคน",
     "Description": "รากของต้นเหมือดคนที่สามารถใช้ในการปรุงยา",
-    "Position": [ 652, 1546 ],
+    "Position": [ 1068, 1962 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -505,7 +505,7 @@
     "Category": 0,
     "Name": "รากปลาไหลเผือก",
     "Description": "รากของต้นปลาไหลเผือกที่สามารถใช้ในการปรุงยา",
-    "Position": [ 1700, 636 ],
+    "Position": [ 2116, 1052 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -515,7 +515,7 @@
     "Category": 0,
     "Name": "รากไม้เท้ายายม่อม",
     "Description": "รากของต้นเท้ายายม่อมที่สามารถใช้ในการปรุงยา",
-    "Position": [ 1056, 1504 ],
+    "Position": [ 1472, 1920 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -525,7 +525,7 @@
     "Category": 0,
     "Name": "รากชิงชี่",
     "Description": "รากของต้นชิงชี่ที่สามารถใช้ในการปรุงยา",
-    "Position": [ 720, 876 ],
+    "Position": [ 1136, 1292 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -535,7 +535,7 @@
     "Category": 0,
     "Name": "รากมะเดื่อชุมพร",
     "Description": "รากของต้นมะเดื่อชุมพรที่สามารถใช้ในการปรุงยา",
-    "Position": [ 2286, 1350 ],
+    "Position": [ 2702, 1766 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -545,7 +545,7 @@
     "Category": 0,
     "Name": "รากคนทา",
     "Description": "รากของต้นคนทาที่สามารถใช้ในการปรุงยา",
-    "Position": [ 2012, 964 ],
+    "Position": [ 2428, 1380 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -555,7 +555,7 @@
     "Category": 0,
     "Name": "รากย่านาง",
     "Description": "รากของต้นย่านางที่สามารถใช้ในการปรุงยา",
-    "Position": [ 2342, 1578 ],
+    "Position": [ 2758, 1994 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -565,7 +565,7 @@
     "Category": 0,
     "Name": "รากแฝกหอม",
     "Description": "รากของต้นแฝกหอมที่สามารถใช้ในการปรุงยา",
-    "Position": [ 2072, 1046 ],
+    "Position": [ 2488, 1462 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -575,7 +575,7 @@
     "Category": 0,
     "Name": "ชุดเครื่องเถา",
     "Description": "ชุดรวมเนื้อไม้ของพืชสมุนไพรจำพวกเถาที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยเถาสะค้าน เถากำแพงเจ็ดชั้น เถาบอระเพ็ด เถามวกแดง เถามวกขาว และอื่นๆอีก",
-    "Position": [ 2420, 1458 ],
+    "Position": [ 2836, 1874 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -585,7 +585,7 @@
     "Category": 0,
     "Name": "ชุดเครื่องเหง้า",
     "Description": "ชุดรวมพืชสมุนไพรจำพวกที่ลงหัวหรือมีลำต้นใต้ดินที่สามารถใช้ในการปรุงยา|ประกอบไปด้วยเหง้าขิง เหง้าไพล เหง้าว่านน้ำ เหง้าข่า เหง้าขมิ้นชัน เหง้าขมิ้นอ้อย เหง้ากระชาย และเหง้ากระทือ",
-    "Position": [ 2420, 2208 ],
+    "Position": [ 2836, 2626 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -595,7 +595,7 @@
     "Category": 0,
     "Name": "ชุดเครื่องแก่น",
     "Description": "ชุดรวมแก่นหรือเนื้อไม้ชั้นในที่ถูกตัดแบ่งเป็นชิ้นแล้วสามารถใช้ในการปรุงยา|ประกอบไปด้วยแก่นฝาง แก่นแกแล แก่นขนุน แก่นจันทน์แดง-ขาว แก่นจันทน์เทศ แก่นสน และอื่นๆอีก",
-    "Position": [ 1672, 1460 ],
+    "Position": [ 2088, 1876 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -605,7 +605,7 @@
     "Category": 0,
     "Name": "ใบสันพร้าหอม",
     "Description": "ใบของต้นสันพร้าหอมที่สามารถใช้ในการปรุงยา",
-    "Position": [ 1480, 1434 ],
+    "Position": [ 1896, 1850 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -615,7 +615,7 @@
     "Category": 0,
     "Name": "ใบหมากเมีย",
     "Description": "ใบของต้นหมากผู้หมากเมียที่มีลักษณะใบใหญ่สีเขียวที่สามารถใช้ในการปรุงยา",
-    "Position": [ 1032, 766 ],
+    "Position": [ 1448, 1182 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -625,7 +625,7 @@
     "Category": 0,
     "Name": "ใบหมากผู้",
     "Description": "ใบของต้นหมากผู้หมากเมียที่มีลักษณะใบแคบและยาวสามารถใช้ในการปรุงยา",
-    "Position": [ 1712, 1300 ],
+    "Position": [ 2128, 1716 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -635,7 +635,7 @@
     "Category": 0,
     "Name": "ใบผักกระโฉม",
     "Description": "ใบของต้นผักกระโฉมที่สามารถใช้ในการปรุงยา",
-    "Position": [ 1356, 1000 ],
+    "Position": [ 1772, 1416 ],
     "IsRespawnable": true,
     "IsVisible": true
   },
@@ -645,7 +645,7 @@
     "Category": 0,
     "Name": "ใบพิมเสนต้น",
     "Description": "ใบของต้นพิมเสนต้นที่สามารถใช้ในการปรุงยา",
-    "Position": [ 1186, 570 ],
+    "Position": [ 1602, 986 ],
     "IsRespawnable": true,
     "IsVisible": true
   }

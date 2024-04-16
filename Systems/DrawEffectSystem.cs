@@ -95,6 +95,7 @@ namespace Medicraft.Systems
 
                 case GameObjectType.CraftingTable:
                 case GameObjectType.SavingTable:
+                case GameObjectType.RestPoint:
                     particleEffect = new ParticleEffect()
                     {
                         Position = new Vector2(objectPos.X, objectPos.Y + 10f),
@@ -185,6 +186,53 @@ namespace Medicraft.Systems
                                             new OpacityFastFadeModifier()
                                         }
                             }]
+                    };
+                    break;
+
+                case GameObjectType.Crop:
+                    particleEffect = new ParticleEffect()
+                    {
+                        Position = new Vector2(objectPos.X, objectPos.Y + 5f),
+                        Emitters = [
+                        new ParticleEmitter(textureRegion, 20, TimeSpan.FromSeconds(1.2)
+                                , Profile.Circle(20, Profile.CircleRadiation.In))
+                                {
+                                    Parameters = new ParticleReleaseParameters
+                                    {
+                                        Speed = new Range<float>(0f, 16f),
+                                        Quantity = 2,
+                                        Rotation = new Range<float>(-0.5f, 0.5f),
+                                        Scale = new Range<float>(1f, 3.2f),
+                                    },
+                                    Modifiers =
+                                    {
+                                        new AgeModifier
+                                        {
+                                            Interpolators =
+                                            {
+                                                new ColorInterpolator
+                                                {
+                                                    StartValue = Color.Lime.ToHsl(),
+                                                    EndValue = Color.PaleGreen.ToHsl()
+                                                }
+                                            }
+                                        },
+                                        new RotationModifier
+                                        {
+                                            RotationRate = 5f
+                                        },
+                                        new DragModifier
+                                        {
+                                            Density = 0.5f, DragCoefficient = 1f
+                                        },
+                                        new LinearGravityModifier
+                                        {
+                                            Direction = new Vector2(0,-1),
+                                            Strength = 75f
+                                        },
+                                        new OpacityFastFadeModifier()
+                                    }
+                        }]
                     };
                     break;
             }         
