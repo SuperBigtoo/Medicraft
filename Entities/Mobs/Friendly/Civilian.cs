@@ -119,16 +119,6 @@ namespace Medicraft.Entities.Mobs.Friendly
         public override void Update(GameTime gameTime, float playerDepth, float topDepth, float middleDepth, float bottomDepth)
         {
             base.Update(gameTime, playerDepth, topDepth, middleDepth, bottomDepth);
-
-            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            // Update Sign
-            if (IsInteractable || IsDetected)
-            {
-                SignSprite.Play("interact_1");
-                SignSprite.Depth = InitDepth;
-                SignSprite.Update(deltaSeconds);
-            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)

@@ -90,7 +90,7 @@ namespace Medicraft.Systems.Managers
                 }
 
                 // Update Mob & NPC
-                if (entities.Count != 0)
+                if (entities.Count != 0 && !ScreenManager.Instance.IsTransitioning)
                 {
                     foreach (var entity in entities.Where(e => !e.IsDestroyed))
                     {
@@ -143,6 +143,17 @@ namespace Medicraft.Systems.Managers
                 PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex].Draw(spriteBatch);
 
             PlayerManager.Instance.Player.Draw(spriteBatch);
+        }
+
+        public void ClearAggroMobs()
+        {
+            if (entities.Count == 0) return;
+
+            foreach (var entity in entities.Where(e => !e.IsDestroyed))
+            {
+                entity.IsAggro = false;
+                entity.AggroTimer = 0f;
+            }
         }
 
         public void ClearEntity()

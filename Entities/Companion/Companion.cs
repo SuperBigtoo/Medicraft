@@ -120,7 +120,7 @@ namespace Medicraft.Entities.Companion
                     if (IsAggro)
                     {
                         var enemyMobs = EntityManager.Instance.Entities.Where(e => !e.IsDying &&
-                            (e.EntityType == EntityTypes.Hostile || e.EntityType == EntityTypes.Boss)).ToList();
+                            (e.EntityType == EntityTypes.HostileMob || e.EntityType == EntityTypes.Boss)).ToList();
 
                         foreach (var mob in enemyMobs)
                             if (PlayerManager.Instance.Player.BoundingAggro.Intersects(mob.BoundingHitBox))
@@ -300,7 +300,7 @@ namespace Medicraft.Entities.Companion
             if (IsAggro && !PlayerManager.Instance.IsRecallCompanion)
             {
                 foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed
-                && e.EntityType == EntityTypes.Hostile || e.EntityType == EntityTypes.Boss))
+                && e.EntityType == EntityTypes.HostileMob || e.EntityType == EntityTypes.Boss))
                 {
                     if (BoundingDetectEntity.Intersects(entity.BoundingHitBox)
                         && ScreenManager.Instance.IsScreenLoaded && !IsAttacking && !IsStunning)
@@ -351,7 +351,7 @@ namespace Medicraft.Entities.Companion
         protected void CheckAttackDetection(float atk, float percentHit, bool isUndodgeable, float stunTime, string effectAttacked)
         {
             foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed && !e.IsDying
-                && (e.EntityType == EntityTypes.Hostile || e.EntityType == EntityTypes.Boss)))
+                && (e.EntityType == EntityTypes.HostileMob || e.EntityType == EntityTypes.Boss)))
             {
                 if (entity.BoundingHitBox.Intersects(BoundingDetectEntity))
                 {
@@ -386,7 +386,7 @@ namespace Medicraft.Entities.Companion
                         }
                     }
 
-                    if (entity.HP <= 0)
+                    if ((int)entity.HP <= 0)
                     {
                         entity.IsDying = true;
                     }

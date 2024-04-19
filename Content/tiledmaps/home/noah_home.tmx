@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="122" height="122" tilewidth="32" tileheight="32" infinite="0" nextlayerid="32" nextobjectid="123">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="122" height="122" tilewidth="32" tileheight="32" infinite="0" nextlayerid="32" nextobjectid="125">
  <tileset firstgid="1" name="Ts" tilewidth="32" tileheight="32" tilecount="5328" columns="74">
   <image source="../textures/TS1.png" width="2369" height="2304"/>
   <tile id="1350">
@@ -1805,6 +1805,12 @@
    <point/>
   </object>
   <object id="122" name="crop_3" x="2656" y="2306">
+   <point/>
+  </object>
+  <object id="123" name="QuestObject_102" x="2241" y="2373">
+   <point/>
+  </object>
+  <object id="124" name="QuestObject_111" x="2046" y="2113">
    <point/>
   </object>
  </objectgroup>

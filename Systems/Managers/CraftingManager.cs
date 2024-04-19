@@ -1,5 +1,6 @@
 ﻿using Medicraft.Data.Models;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using static Medicraft.Systems.GameGlobals;
@@ -100,6 +101,7 @@ namespace Medicraft.Systems.Managers
                 totalCount += recipeData.ResultQuantity;
             }
 
+            OnCraftingItem(new CraftingEventArgs(recipeData));
             InventoryManager.Instance.AddItem(recipeData.RecipeId, totalCount);
 
             if (recipeData.Category.Equals("Thai traditional medicine"))
@@ -114,6 +116,18 @@ namespace Medicraft.Systems.Managers
             _deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;    
         }
 
+        // Define a delegate for the event handler
+        public delegate void CraftingEventHandler(object sender, EventArgs e);
+
+        // Define an event based on the delegate
+        public event CraftingEventHandler EventHandler;
+
+        // Method to raise the event
+        public virtual void OnCraftingItem(CraftingEventArgs e)
+        {
+            EventHandler?.Invoke(this, e);
+        }
+
         public static CraftingManager Instance
         {
             get
@@ -122,5 +136,10 @@ namespace Medicraft.Systems.Managers
                 return instance;
             }
         }
+    }
+
+    public class CraftingEventArgs(CraftingRecipeData recipeData) : EventArgs
+    {
+        public CraftingRecipeData RecipeData { get; } = recipeData;
     }
 }

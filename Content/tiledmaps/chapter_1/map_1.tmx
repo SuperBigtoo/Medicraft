@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="162" height="162" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="258">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="162" height="162" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="280">
  <tileset firstgid="1" name="Block" tilewidth="32" tileheight="32" tilecount="8064" columns="64">
   <image source="../textures/rpg_maker_vx_rtp_tileset_by_telles0808.png" width="2048" height="4032"/>
  </tileset>
@@ -2226,10 +2226,52 @@
   <object id="253" name="Crafting_Food" x="1568" y="1223">
    <point/>
   </object>
-  <object id="256" name="Quest_1" x="3266.67" y="1997.33">
+  <object id="256" name="Adam" x="3266.67" y="1997.33">
    <point/>
   </object>
-  <object id="257" x="1993" y="3608">
+  <object id="263" name="Chris" x="1874" y="2336">
+   <point/>
+  </object>
+  <object id="264" name="toto" x="1824" y="1362">
+   <point/>
+  </object>
+  <object id="265" name="NPC-201_202" x="1844" y="3056">
+   <point/>
+  </object>
+  <object id="268" name="NPC" x="3436" y="2786">
+   <point/>
+  </object>
+  <object id="269" name="NPC" x="3574" y="2790">
+   <point/>
+  </object>
+  <object id="270" name="NPC" x="3658" y="2000">
+   <point/>
+  </object>
+  <object id="271" name="route_1" x="2151" y="2052">
+   <point/>
+  </object>
+  <object id="272" name="route_2" x="2704" y="2059">
+   <point/>
+  </object>
+  <object id="273" name="route_3" x="3555" y="2053">
+   <point/>
+  </object>
+  <object id="274" name="NPC-201_200" x="2727.27" y="3242.42">
+   <point/>
+  </object>
+  <object id="275" name="NPC-201_203" x="1424.24" y="2463.64">
+   <point/>
+  </object>
+  <object id="276" name="Vendorขายวัตถุดิบยา" x="3250" y="1622.67">
+   <point/>
+  </object>
+  <object id="277" name="VendorChef" x="2030" y="3040">
+   <point/>
+  </object>
+  <object id="278" name="NPC-201_204" x="2068" y="2420">
+   <point/>
+  </object>
+  <object id="279" name="Violet_NPC" x="3577" y="1553">
    <point/>
   </object>
  </objectgroup>
@@ -2238,6 +2280,8 @@
   <object id="242" name="map_1_to_noah_home" type="home_0" x="4079.33" y="2014.67" width="64.6667" height="111.333"/>
  </objectgroup>
  <objectgroup id="22" name="MobPartrolArea">
-  <object id="254" name="zone_1" x="3133.33" y="1504" width="514.667" height="217.333"/>
+  <object id="254" name="zone_1" x="3142.66" y="1532" width="474.667" height="164"/>
+  <object id="259" name="zone_2" x="1758" y="2224" width="206" height="274"/>
+  <object id="266" name="zone_3" x="3380" y="2714" width="244" height="162"/>
  </objectgroup>
 </map>

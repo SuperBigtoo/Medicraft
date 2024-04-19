@@ -1,0 +1,291 @@
+﻿[
+    {
+        "MedicineChapterId": 1,
+        "MiniGameCases": [
+            {
+                "CaseId": 0,
+                "QuestionText": "บรรเทาอาการไข้",
+                "TargetId": [
+                    200,
+                    201,
+                    202,
+                    203,
+                    204
+                ],
+                "Score": 100
+            },
+            {
+                "CaseId": 1,
+                "QuestionText": "บรรเทาอาการไข้ แก้พิษหัด พิษอีสุกอีใส",
+                "TargetId": [
+                    200
+                ],
+                "Score": 200
+            },
+            {
+                "CaseId": 2,
+                "QuestionText": "บรรเทาอาการไข้ตัวร้อน ไข้เปลี่ยนฤดู",
+                "TargetId": [
+                    201
+                ],
+                "Score": 200
+            },
+            {
+                "CaseId": 3,
+                "QuestionText": "บรรเทาอาการไข้ตัวร้อน แก้ร้อนในกระหายน้ำ",
+                "TargetId": [
+                    202
+                ],
+                "Score": 200
+            },
+            {
+                "CaseId": 4,
+                "QuestionText": "ถอนพิษไข้ตานซางสำหรับเด็ก",
+                "TargetId": [
+                    203
+                ],
+                "Score": 200
+            }
+        ]
+    },
+    {
+        "MedicineChapterId": 2,
+        "MiniGameCases": [
+            {
+                "CaseId": 0,
+                "QuestionText": "แก้ลมวิงเวียน ",
+                "TargetId": [
+                    205,
+                    206,
+                    207,
+                    208
+                ],
+                "Score": 100
+            },
+            {
+                "CaseId": 1,
+                "QuestionText": "แก้ลมกองละเอียด ได้แก่ อาการหน้ามืด ตาลาย สวิงสวาย",
+                "TargetId": [
+                    206,
+                    207
+                ],
+                "Score": 150
+            },
+            {
+                "CaseId": 2,
+                "QuestionText": "แก้วิงเวียน คลื่นเหียน อาเจียน (ลมจุกแน่นในอก) ในผู้สูงอายุแก้ลมปลายไข้",
+                "TargetId": [
+                    207
+                ],
+                "Score": 200
+            },
+            {
+                "CaseId": 3,
+                "QuestionText": "แก้ลมวิงเวียน อ่อนเพลีย นอนไม่หลับ",
+                "TargetId": [
+                    208
+                ],
+                "Score": 200
+            },
+            {
+                "CaseId": 4,
+                "QuestionText": "แก้ลมบาททะจิต คลื่นเหียนอาเจียน ลมจุกเสียด",
+                "TargetId": [
+                    209
+                ],
+                "Score": 200
+            }
+        ]
+    },
+    {
+        "MedicineChapterId": 3,
+        "MiniGameCases": [
+            {
+                "CaseId": 0,
+                "QuestionText": "บรรเทาอาการท้องอืด ท้องเฟ้อ",
+                "TargetId": [
+                    201,
+                    214
+                ],
+                "Score": 150
+            },
+            {
+                "CaseId": 1,
+                "QuestionText": "แก้เถาดาน ท้องผูก",
+                "TargetId": [
+                    211
+                ],
+                "Score": 200
+            },
+            {
+                "CaseId": 2,
+                "QuestionText": "อุจจาระไม่เป็นมูกหรือมีเลือดปน",
+                "TargetId": [
+                    212
+                ],
+                "Score": 200
+            },
+            {
+                "CaseId": 3,
+                "QuestionText": "บรรเทาอาการริดสีดวงทวารหนัก",
+                "TargetId": [
+                    213
+                ],
+                "Score": 200
+            },
+            {
+                "CaseId": 4,
+                "QuestionText": "บวกท้องเสียชนิดที่ไม่มีไข้",
+                "TargetId": [
+                    212
+                ],
+                "Score": 200
+            }
+        ]
+    },
+    {
+        "MedicineChapterId": 4,
+        "MiniGameCases": [
+            {
+                "CaseId": 0,
+                "QuestionText": "ขับน้ำคาวปลาในหญิงหลังคลอดบุตร",
+                "TargetId": [
+                    215,
+                    217,
+                    219
+                ],
+                "Score": 100
+            },
+            {
+                "CaseId": 1,
+                "QuestionText": "บรรเทาอาการปวดประจำเดือน",
+                "TargetId": [
+                    215,
+                    218
+                ],
+                "Score": 150
+            },
+            {
+                "CaseId": 2,
+                "QuestionText": "ช่วยให้มดลูกเข้าอู่",
+                "TargetId": [
+                    217,
+                    219
+                ],
+                "Score": 200
+            },
+            {
+                "CaseId": 3,
+                "QuestionText": "กระตุ้นน้ำนม กระจายเลือดลมในหญิงหลังคลอด",
+                "TargetId": [
+                    216
+                ],
+                "Score": 200
+            },
+            {
+                "CaseId": 4,
+                "QuestionText": "ช่วยให้ประจำเดือนมาเป็นปกติ แก้มุตกิดไม่มีไข้",
+                "TargetId": [
+                    218
+                ],
+                "Score": 200
+            }
+        ]
+    },
+    {
+        "MedicineChapterId": 5,
+        "MiniGameCases": [
+            {
+                "CaseId": 0,
+                "QuestionText": "บรรเทาอาการไอ ขับเสมหะ",
+                "TargetId": [
+                    220,
+                    221,
+                    222,
+                    224
+                ],
+                "Score": 100
+            },
+            {
+                "CaseId": 1,
+                "QuestionText": "อาการที่เกิดจากการแพ้อากาศ",
+                "TargetId": [
+                    223
+                ],
+                "Score": 200
+            },
+            {
+                "CaseId": 2,
+                "QuestionText": "บรรเทาอาการไอ อาการหวัด",
+                "TargetId": [
+                    221
+                ],
+                "Score": 200
+            },
+            {
+                "CaseId": 3,
+                "QuestionText": "อาการที่เกิดจากการแพ้อากาศ",
+                "TargetId": [
+                    223
+                ],
+                "Score": 200
+            },
+            {
+                "CaseId": 4,
+                "QuestionText": "บรรเทาอาการไอ อาการหวัด",
+                "TargetId": [
+                    221
+                ],
+                "Score": 200
+            }
+        ]
+    },
+    {
+        "MedicineChapterId": 6,
+        "MiniGameCases": [
+            {
+                "CaseId": 0,
+                "QuestionText": "บรรเทาอาการปวดเมื่อยตามร่างกาย",
+                "TargetId": [
+                    225,
+                    226,
+                    227,
+                    228
+                ],
+                "Score": 100
+            },
+            {
+                "CaseId": 1,
+                "QuestionText": "อาการที่ขับลมในเส้น แก้โรคลมกองหยาบ",
+                "TargetId": [
+                    229
+                ],
+                "Score": 200
+            },
+            {
+                "CaseId": 2,
+                "QuestionText": "บรรเทาอาการปวดตามเส้นเอ็น กล้ามเนื้อ มือ เท้า ตึงหรือชา",
+                "TargetId": [
+                    226
+                ],
+                "Score": 200
+            },
+            {
+                "CaseId": 3,
+                "QuestionText": "อาการที่ขับลมในเส้น แก้โรคลมกองหยาบ",
+                "TargetId": [
+                    229
+                ],
+                "Score": 200
+            },
+            {
+                "CaseId": 4,
+                "QuestionText": "บรรเทาอาการปวดตามเส้นเอ็น กล้ามเนื้อ มือ เท้า ตึงหรือชา",
+                "TargetId": [
+                    226
+                ],
+                "Score": 200
+            }
+        ]
+    }
+]

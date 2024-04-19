@@ -13,6 +13,10 @@
         public bool IsVisible { get; set; } = true;
         public string SpiteCycle { get; set; }
 
+        // For QuestObject
+        public bool IsShowSignInteract { get; set; } = false;
+        public bool IsAllowInteract { get; set; } = true;
+
         // For Crafting
         public int CraftingType { get; set; }      
         

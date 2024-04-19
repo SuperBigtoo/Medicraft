@@ -7,6 +7,7 @@ using System;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Medicraft.Entities.Mobs
 {
@@ -16,6 +17,9 @@ namespace Medicraft.Entities.Mobs
         public AnimatedSprite SignSprite { get; protected set; }
         public List<DialogData> DialogData { get; protected set; }
 
+        public int MiniGameQueueIndex { get; set; }
+        public MiniGameCase MiniGameCaseData { get; set; }
+
         public enum FriendlyMobType
         {
             Animal,
@@ -23,12 +27,12 @@ namespace Medicraft.Entities.Mobs
             Vendor,
             QuestGiver
         }
-        public FriendlyMobType MobType { get; protected set; }
+        public FriendlyMobType MobType { get; set; }
 
-        public bool IsInteractable { get; protected set; }
+        public bool IsInteractable { get; set; }
         public bool IsInteracting { get; set; }
         public bool IsDetected { get; set; }
-        public bool IsAllwaysShowSignSprite { get; protected set; }
+        public bool IsAllwaysShowSignSprite { get; set; }
 
         protected string[] idleSpriteName;
         protected bool isPlayIdle = false;
@@ -46,7 +50,7 @@ namespace Medicraft.Entities.Mobs
             };
         }
 
-        protected void SetMobType(string mobType)
+        public void SetMobType(string mobType)
         {
             switch (mobType)
             {
@@ -92,6 +96,49 @@ namespace Medicraft.Entities.Mobs
 
             // Update time conditions
             UpdateTimerConditions(deltaSeconds);
+
+            // Update Sign
+            if ((MobType == FriendlyMobType.Civilian || MobType == FriendlyMobType.Animal)
+                && IsInteractable)
+            {
+                if (IsDetected)
+                {
+                    SignSprite.Play("interact_1");
+                    SignSprite.Depth = InitDepth;
+                    SignSprite.Update(deltaSeconds);
+                }
+            }
+            else if (MobType == FriendlyMobType.QuestGiver)
+            {              
+                if (IsDetected)
+                {
+                    SignSprite.Play("interact_1");                  
+                }
+                else
+                {
+                    var questChapterId = GameGlobals.Instance.QuestDatas.FirstOrDefault
+                        (e => e.QuestId.Equals(EntityData.QuestId));
+
+                    var questStamp = PlayerManager.Instance.Player.PlayerData.ChapterProgression.FirstOrDefault
+                        (e => e.ChapterId.Equals(questChapterId.ChapterId)).Quests.FirstOrDefault
+                            (e => e.QuestId.Equals(questChapterId.QuestId));
+
+                    if (!questStamp.IsQuestClear)
+                    {
+                        IsAllwaysShowSignSprite = true;
+                    }
+                    else IsAllwaysShowSignSprite = false;
+
+                    if (questStamp.IsQuestDone)
+                    {
+                        SignSprite.Play("quest_2");
+                    }
+                    else SignSprite.Play("quest_1");
+                }
+
+                SignSprite.Depth = InitDepth;
+                SignSprite.Update(deltaSeconds);
+            }
 
             Sprite.Update(deltaSeconds);
         }
@@ -184,6 +231,33 @@ namespace Medicraft.Entities.Mobs
 
         public void Interact()
         {
+            if (Name.Equals("Patient"))
+            {
+                var isMedicineFound = false;
+                var medicineItem = PlayerManager.Instance.SelectedHotbarItem;
+
+                if (medicineItem.Value != null)
+                {
+                    foreach (var targetId in MiniGameCaseData.TargetId)
+                    {
+                        if (medicineItem.Value.ItemId.Equals(targetId))
+                        {
+                            GameGlobals.Instance.DequeuePatient(this);
+                            InventoryManager.Instance.RemoveItem(medicineItem.Key, medicineItem.Value, 1);
+                            UIManager.Instance.RefreshHotbar();
+                            isMedicineFound = true;
+                            break;
+                        }
+                    }
+                }          
+
+                if (isMedicineFound)
+                {
+                    return;
+                }
+                else UIManager.Instance.CreateDialog(this);
+            }
+
             UIManager.Instance.CreateDialog(this);
         }
 

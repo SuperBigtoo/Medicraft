@@ -11,7 +11,6 @@ using Medicraft.Data.Models;
 using System.Linq;
 using Medicraft.Systems.Managers;
 using static Medicraft.Systems.GameGlobals;
-using Medicraft.Entities.Companion;
 
 namespace Medicraft.Entities
 {
@@ -131,8 +130,8 @@ namespace Medicraft.Entities
         {
             Playable,
             Companion,
-            Friendly,
-            Hostile,
+            FriendlyMob,
+            HostileMob,
             Boss
         }
         public EntityTypes EntityType { get; protected set; }    
@@ -383,11 +382,11 @@ namespace Medicraft.Entities
                     break;
 
                 case 2:
-                    EntityType = EntityTypes.Friendly;
+                    EntityType = EntityTypes.FriendlyMob;
                     break;
 
                 case 3:
-                    EntityType = EntityTypes.Hostile;
+                    EntityType = EntityTypes.HostileMob;
                     break;
 
                 case 4:
@@ -526,7 +525,7 @@ namespace Medicraft.Entities
         {
             switch (EntityType)
             {
-                case EntityTypes.Hostile:
+                case EntityTypes.HostileMob:
 
                 case EntityTypes.Boss:
                     // Setup Aggrotimer if detected player or companion
@@ -537,7 +536,7 @@ namespace Medicraft.Entities
                     {
                         var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
 
-                        if (companion != null)
+                        if (companion != null && !companion.IsDying)
                             isCompanionDetected = BoundingDetectEntity.Intersects(companion.BoundingHitBox);
                     }
 
@@ -548,7 +547,7 @@ namespace Medicraft.Entities
                     }
                     break;
 
-                case EntityTypes.Friendly:
+                case EntityTypes.FriendlyMob:
                     break;
 
                 case EntityTypes.Companion:
@@ -560,7 +559,7 @@ namespace Medicraft.Entities
                     }
 
                     foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDying
-                            && e.EntityType == EntityTypes.Hostile || e.EntityType == EntityTypes.Boss))
+                            && e.EntityType == EntityTypes.HostileMob || e.EntityType == EntityTypes.Boss))
                     {
                         if (BoundingAggro.Intersects(entity.BoundingHitBox))
                         {
@@ -583,6 +582,60 @@ namespace Medicraft.Entities
                         AggroTimer = 0;
                     }
                     
+                    break;
+            }
+        }
+
+        public void UpdateNode(EntityData entityData)
+        {
+            switch (PathFindingType)
+            {
+                case PathFindingTypes.RoutePoint:
+                    // Define the current route
+                    var rountNodePoint = entityData.RoutePoint.ElementAt(routeNodeIndex);
+
+                    if (rountNodePoint != null)
+                    {
+                        var position = new Vector2((float)rountNodePoint[0], (float)rountNodePoint[1]);
+
+                        // Next route
+                        routeNodeIndex++;
+                        if (routeNodeIndex >= entityData.RoutePoint.Length)
+                            routeNodeIndex = 0;
+
+                        targetNode = position;
+                    }
+                    else targetNode = new Vector2(Position.X, Position.Y);
+
+                    break;
+
+                case PathFindingTypes.RandomPoint:
+                    var random = new Random();
+
+                    // Define the patrol area from rectangle
+                    var recArea = Instance.MobPartrolArea.FirstOrDefault
+                        (b => b.Name.Equals(entityData.PartrolArea));
+
+                    if (recArea != null)
+                    {
+                        var rectangleX = (int)recArea.Bounds.X;
+                        var rectangleY = (int)recArea.Bounds.Y;
+                        var rectangleWidth = (int)recArea.Bounds.Width;
+                        var rectangleHeight = (int)recArea.Bounds.Height;
+
+                        // Generate random X and Y within the rectangle
+                        var randomX = random.Next(rectangleX, rectangleX + rectangleWidth);
+                        var randomY = random.Next(rectangleY, rectangleY + rectangleHeight);
+
+                        targetNode = new Vector2(randomX, randomY);
+                    }
+                    else targetNode = new Vector2(Position.X, Position.Y);
+
+                    break;
+
+                case PathFindingTypes.StationaryPoint:
+                    // Its Stationary so we do nothing here
+                    targetNode = new Vector2((float)entityData.Position[0], (float)entityData.Position[1]);
                     break;
             }
         }
@@ -640,7 +693,7 @@ namespace Medicraft.Entities
 
                     case PathFindingTypes.StationaryPoint:
                         // Its Stationary so we do nothing here
-                        targetNode = new Vector2(Position.X, Position.Y);
+                        targetNode = new Vector2((float)entityData.Position[0], (float)entityData.Position[1]);
                         break;
                 }
 
@@ -653,9 +706,9 @@ namespace Medicraft.Entities
         {
             switch (EntityType)
             {
-                case EntityTypes.Friendly:
+                case EntityTypes.FriendlyMob:
 
-                case EntityTypes.Hostile:
+                case EntityTypes.HostileMob:
 
                 case EntityTypes.Boss:
                     if (IsAggro)
@@ -991,6 +1044,7 @@ namespace Medicraft.Entities
                 }
             }
 
+
             if (isCompanionDetected)
             {
                 var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
@@ -998,6 +1052,94 @@ namespace Medicraft.Entities
                 if (companion.HP > 0)
                 {
                     float totalDamage = TotalDamage(ATK
+                        , companion.DEF
+                        , companion.Evasion);
+
+                    var combatNumVelocity = companion.SetCombatNumDirection();
+                    companion.AddCombatLogNumbers(Name
+                        , ((int)totalDamage).ToString()
+                        , CombatNumCase
+                        , combatNumVelocity
+                        , NormalHitEffectAttacked);
+
+                    // In case the Attack doesn't Missed
+                    if (CombatNumCase != Missed)
+                    {
+                        // companion being hit by Mob
+                        companion.IsAttacked = true;
+                        companion.HP -= totalDamage;
+
+                        if (companion.IsKnockbackable)
+                        {
+                            var knockBackDirection = companion.Position - Position;
+                            knockBackDirection.Normalize();
+                            companion.Velocity = knockBackDirection * knockbackForce;
+
+                            companion.IsKnockback = true;
+                            companion.KnockbackedTimer = 0.2f;
+                        }
+                    }
+                }
+            }
+        }
+
+        protected virtual void CheckAttackDetection(float percentHit)
+        {
+            // Check Attacking Detection for Player and Companions
+            var isPlayerDetected = BoundingDetectEntity.Intersects(PlayerManager.Instance.Player.BoundingHitBox);
+
+            var isCompanionDetected = false;
+            if (PlayerManager.Instance.Companions.Count != 0)
+            {
+                var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
+
+                if (companion != null)
+                    isCompanionDetected = BoundingDetectEntity.Intersects(companion.BoundingHitBox);
+            }
+
+            if (isPlayerDetected)
+            {
+                if (PlayerManager.Instance.Player.HP > 0)
+                {
+                    float totalDamage = TotalDamage(ATK * percentHit
+                        , PlayerManager.Instance.Player.DEF
+                        , PlayerManager.Instance.Player.Evasion);
+
+                    var combatNumVelocity = PlayerManager.Instance.Player.SetCombatNumDirection();
+                    PlayerManager.Instance.Player.AddCombatLogNumbers(Name
+                        , ((int)totalDamage).ToString()
+                        , CombatNumCase
+                        , combatNumVelocity
+                        , NormalHitEffectAttacked);
+
+                    // In case the Attack doesn't Missed
+                    if (CombatNumCase != Missed)
+                    {
+                        // Player being hit by Mob
+                        PlayerManager.Instance.Player.IsAttacked = true;
+                        PlayerManager.Instance.Player.HP -= totalDamage;
+
+                        if (PlayerManager.Instance.Player.IsKnockbackable)
+                        {
+                            var knockBackDirection = (PlayerManager.Instance.Player.Position + new Vector2(0f, 32f)) - Position;
+                            knockBackDirection.Normalize();
+                            PlayerManager.Instance.Player.Velocity = knockBackDirection * knockbackForce;
+
+                            PlayerManager.Instance.Player.IsKnockback = true;
+                            PlayerManager.Instance.Player.KnockbackedTimer = 0.3f;
+                        }
+                    }
+                }
+            }
+
+
+            if (isCompanionDetected)
+            {
+                var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
+
+                if (companion.HP > 0)
+                {
+                    float totalDamage = TotalDamage(ATK * percentHit
                         , companion.DEF
                         , companion.Evasion);
 
@@ -1067,12 +1209,17 @@ namespace Medicraft.Entities
         {
             switch (GetType().Name)
             {
+                default:
                 case "Slime":
                     PlaySoundEffect([Sound.Bite, Sound.Claw]);
                     break;
 
                 case "Goblin":
                     PlaySoundEffect([Sound.dullSwoosh1, Sound.dullSwoosh2, Sound.dullSwoosh3, Sound.dullSwoosh4]);
+                    break;
+
+                case "Minotaur":
+                    PlaySoundEffect([Sound.metalSwoosh1, Sound.metalSwoosh2, Sound.metalSwoosh3, Sound.metalSwoosh4]);
                     break;
             }
         }

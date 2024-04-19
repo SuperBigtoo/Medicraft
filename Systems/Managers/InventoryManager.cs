@@ -1,5 +1,6 @@
 ﻿using Medicraft.Data.Models;
 using Medicraft.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using static Medicraft.Systems.GameGlobals;
@@ -108,6 +109,9 @@ namespace Medicraft.Systems.Managers
                     Slot = GameGlobals.Instance.DefaultInventorySlot
                 });
             }
+
+            // Invoke the event to notify listeners
+            OnItemAdded(new ItemAddedEventArgs(itemData));
 
             HUDSystem.AddFeedCollectedItem(itemId, quantity);
             UIManager.Instance.RefreshHotbar();
@@ -308,6 +312,18 @@ namespace Medicraft.Systems.Managers
             return GameGlobals.Instance.DefaultInventorySlot;
         }
 
+        // Define a delegate for the event handler
+        public delegate void InventoryEventHandler(object sender, EventArgs e);
+
+        // Define an event based on the delegate
+        public event InventoryEventHandler EventHandler;
+
+        // Method to raise the event
+        public virtual void OnItemAdded(ItemAddedEventArgs e)
+        {
+            EventHandler?.Invoke(this, e);
+        }
+
         public static InventoryManager Instance
         {
             get
@@ -316,5 +332,10 @@ namespace Medicraft.Systems.Managers
                 return instance;
             }
         }
+    }
+
+    public class ItemAddedEventArgs(ItemData itemData) : EventArgs
+    {
+        public ItemData ItemData { get; } = itemData;
     }
 }

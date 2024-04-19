@@ -23,7 +23,18 @@ namespace Medicraft.GameObjects
             IsRespawnable = objectData.IsRespawnable;
             IsDetectable = true;
 
-            var position = new Vector2((float)objectData.Position[0], (float)objectData.Position[1]);
+            var position = new Vector2(
+                (float)objectData.Position[0],
+                (float)objectData.Position[1]);
+
+            var currMap = ScreenManager.Instance.CurrentMap;
+            if (currMap.Equals("map_2") || currMap.Equals("battlezone_2") || currMap.Equals("dungeon_2")
+                || currMap.Equals("map_3") || currMap.Equals("battlezone_3") || currMap.Equals("dungeon_3"))
+            {
+                position.X += 480;
+                position.Y += 480;
+            }
+
             Transform = new Transform2
             {
                 Scale = scale,

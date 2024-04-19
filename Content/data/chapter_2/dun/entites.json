@@ -1,0 +1,153 @@
+[
+    {
+        "Id": 0,
+        "CharId": 301,
+        "Level": 10,
+        "Name": "The Keeper",
+        "BossChapterId": 2,
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_1",
+        "AggroTime": 60,
+        "Position": [ 1448, 1814 ]
+    },
+    {
+        "Id": 1,
+        "CharId": 200,
+        "Level": 8,
+        "Name": "Slime",
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_2",
+        "AggroTime": 5,
+        "Position": [ 1636, 2544 ]
+    },
+    {
+        "Id": 2,
+        "CharId": 200,
+        "Level": 6,
+        "Name": "Slime",
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_2",
+        "AggroTime": 5,
+        "Position": [ 1448, 1814 ]
+    },
+    {
+        "Id": 3,
+        "CharId": 202,
+        "Level": 6,
+        "Name": "Treant",
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_2",
+        "AggroTime": 5,
+        "Position": [ 2110, 2528 ]
+    },
+    {
+        "Id": 4,
+        "CharId": 202,
+        "Level": 8,
+        "Name": "Treant",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2614, 2872 ]
+    },
+    {
+        "Id": 5,
+        "CharId": 201,
+        "Level": 6,
+        "Name": "Slime",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2822, 2502 ]
+    },
+    {
+        "Id": 6,
+        "CharId": 202,
+        "Level": 7,
+        "Name": "Treant",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_3",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1882, 1954 ]
+    },
+    {
+        "Id": 7,
+        "CharId": 202,
+        "Level": 9,
+        "Name": "Treant",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_3",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2340, 2062 ]
+    },
+    {
+        "Id": 8,
+        "CharId": 202,
+        "Level": 7,
+        "Name": "Treant",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_5",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2834, 1492 ]
+    },
+    {
+        "Id": 9,
+        "CharId": 200,
+        "Level": 6,
+        "Name": "Slime",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_5",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2434, 1530 ]
+    },
+    {
+        "Id": 11,
+        "CharId": 202,
+        "Level": 6,
+        "Name": "Treant",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_4",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2096, 1330 ]
+    },
+    {
+        "Id": 12,
+        "CharId": 202,
+        "Level": 5,
+        "Name": "Treant",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_4",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1672, 1432 ]
+    },
+    {
+        "Id": 13,
+        "CharId": 202,
+        "Level": 8,
+        "Name": "Treant",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1194, 1116 ]
+    },
+    {
+        "Id": 14,
+        "CharId": 202,
+        "Level": 9,
+        "Name": "Treant",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2446, 1108 ]
+    }
+]

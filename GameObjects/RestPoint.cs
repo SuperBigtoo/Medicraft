@@ -5,9 +5,6 @@ using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
 using Medicraft.Systems.Managers;
-using static Medicraft.Systems.GameGlobals;
-using MonoGame.Extended.Particles;
-using System.Xml.Linq;
 
 namespace Medicraft.GameObjects
 {
@@ -108,7 +105,9 @@ namespace Medicraft.GameObjects
 
         public void Rest()
         {
-            ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.None);
+            PlayerManager.Instance.OnInteractWithObject(new InteractingObjectEventArgs(this));
+
+            ScreenManager.Instance.TransitionToScreen(ScreenManager.GameScreen.None);
 
             PlayerManager.Instance.Player.RestoresHP(Name, PlayerManager.Instance.Player.BaseMaxHP, true);
             PlayerManager.Instance.Player.RestoresMana(Name, PlayerManager.Instance.Player.BaseMaxMana, true);

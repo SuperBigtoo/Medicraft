@@ -31,9 +31,9 @@
     },
     {
         "Id": 1,
-        "CharId": 101,
+        "CharId": 126,
         "Level": 1,
-        "Name": "พ่อค้าขายของสด",
+        "Name": "แม่ค้าขายของสด",
         "MobType": "Vendor",
         "IsInteractable": true,
         "PathFindingType": 2,
@@ -81,7 +81,7 @@
         "Id": 2,
         "CharId": 102,
         "Level": 1,
-        "Name": "Civilian_01",
+        "Name": "Sam",
         "MobType": "Civilian",
         "IsInteractable": true,
         "PathFindingType": 1,
@@ -103,61 +103,18 @@
                 "Type": "Daily",
                 "Description": "Daily dialog for test",
                 "Dialogues": [
-                    "สวัสดี",
-                    "ผมชื่อ Meof",
-                    "Meof Meof Silly"
-                ]
-            },
-            {
-                "Id": 1,
-                "Type": "Quest",
-                "Description": "Quest onAccept dialog for test",
-                "QuestId": 101,
-                "ChapterId": 1,
-                "Stage": "onAccept",
-                "Dialogues": [
-                    "onAccept",
-                    "onAccept onAccept",
-                    "onAccept Meof Meof Silly"
-                ]
-            },
-            {
-                "Id": 2,
-                "Type": "Quest",
-                "Description": "Quest onGoing dialog for test",
-                "QuestId": 101,
-                "ChapterId": 1,
-                "Stage": "onGoing",
-                "Dialogues": [
-                    "onGoing",
-                    "onGoing onGoing",
-                    "onGoing Meof Meof Silly"
-                ]
-            },
-            {
-                "Id": 3,
-                "Type": "Quest",
-                "Description": "Quest onDone dialog for test",
-                "QuestId": 101,
-                "ChapterId": 1,
-                "Stage": "onDone",
-                "Dialogues": [
-                    "onDone",
-                    "onDone onDone",
-                    "onDone Meof Meof Silly"
-                ]
-            },
-            {
-                "Id": 4,
-                "Type": "Quest",
-                "Description": "Quest onClear dialog for test",
-                "QuestId": 101,
-                "ChapterId": 1,
-                "Stage": "onClear",
-                "Dialogues": [
-                    "onClear",
-                    "onClear onClear",
-                    "onClear Meof Meof Silly"
+                    {
+                        "Item1": "Sam",
+                        "Item2": "สวัสดี"
+                    },
+                    {
+                        "Item1": "Sam",
+                        "Item2": "ผมชื่อ Sam"
+                    },
+                    {
+                        "Item1": "Sam",
+                        "Item2": "มีอะไรให้ช่วยไหม?"
+                    }
                 ]
             }
         ]
@@ -166,62 +123,757 @@
         "Id": 3,
         "CharId": 103,
         "Level": 1,
-        "Name": "Civilian_01",
-        "MobType": "QuestGiver",
+        "Name": "Adam",
+        "MobType": "Civilian",
         "IsInteractable": true,
         "PathFindingType": 2,
-        "Position": [ 3266.67, 1997.33 ],
+        "NodeCycleTime": 10,
+        "Position": [ 3266, 1997 ],
         "DialogData": [
             {
                 "Id": 0,
-                "Type": "Quest",
-                "Description": "Quest onAccept dialog for test",
-                "QuestId": 101,
-                "ChapterId": 1,
-                "Stage": "onAccept",
+                "Type": "Daily",
+                "Description": "Daily dialog",
                 "Dialogues": [
-                    "onAccept",
-                    "onAccept onAccept",
-                    "onAccept Meof Meof Silly"
+                    {
+                        "Item1": "Adam",
+                        "Item2": "ว่าไง Noah"
+                    },
+                    {
+                        "Item1": "Adam",
+                        "Item2": "พ่อแม่เป็นไงบ้าง เดี๋ยวนี้ไม่ค่อยเห็นเลย"
+                    }
                 ]
-            },
+            }
+        ]
+    },
+    {
+        "Id": 4,
+        "CharId": 104,
+        "Level": 1,
+        "Name": "Chris",
+        "MobType": "Civilian",
+        "IsInteractable": true,
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_2",
+        "Position": [ 1874, 2336 ],
+        "DialogData": [
             {
-                "Id": 1,
-                "Type": "Quest",
-                "Description": "Quest onGoing dialog for test",
-                "QuestId": 101,
-                "ChapterId": 1,
-                "Stage": "onGoing",
+                "Id": 0,
+                "Type": "Daily",
+                "Description": "Daily dialog",
                 "Dialogues": [
-                    "onGoing",
-                    "onGoing onGoing",
-                    "onGoing Meof Meof Silly"
+                    {
+                        "Item1": "Chris",
+                        "Item2": "สวัสดี Noah"
+                    },
+                    {
+                        "Item1": "Chris",
+                        "Item2": "กินข้าวยัง?"
+                    }
                 ]
-            },
+            }
+        ]
+    },
+    {
+        "Id": 5,
+        "CharId": 100,
+        "Level": 1,
+        "Name": "Som",
+        "MobType": "Animal",
+        "IsInteractable": true,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 1824, 1362 ],
+        "DialogData": [
+            {
+                "Id": 0,
+                "Type": "Daily",
+                "Description": "Daily dialog",
+                "Dialogues": [
+                    {
+                        "Item1": "Som",
+                        "Item2": "เมี๊ยววว"
+                    },
+                    {
+                        "Item1": "Som",
+                        "Item2": "เมี๊ยว?"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Id": 6,
+        "CharId": 105,
+        "Level": 1,
+        "Name": "NPC-201_202",
+        "MobType": "Civilian",
+        "QuestId": 201,
+        "IsInteractable": false,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 1844, 3056 ],
+        "DialogData": [
             {
                 "Id": 2,
                 "Type": "Quest",
-                "Description": "Quest onDone dialog for test",
-                "QuestId": 101,
-                "ChapterId": 1,
-                "Stage": "onDone",
+                "Description": "Quest onGoing 201",
+                "QuestId": 201,
+                "ChapterId": 2,
+                "Stage": "onGoing",
                 "Dialogues": [
-                    "onDone",
-                    "onDone onDone",
-                    "onDone Meof Meof Silly"
+                    {
+                        "Item1": "Noah",
+                        "Item2": "คุณเป็นอะไรรึเปล่าครับ"
+                    },
+                    {
+                        "Item1": "Evenn",
+                        "Item2": "ผมเป็นไข้น่ะ แต่ที่บ้านไม่มีคนอยู่เลยต้องออกมาซื้อยาเอง เจอคุณหมอก็ดีเลย ช่วยจ่ายยาให้ผมหน่อยนะครับ"
+                    },
+                    {
+                        "Item1": "Noah",
+                        "Item2": "ได้ครับ เป็นไข้ตัวร้อน งั้นผมให้เป็น ‘ยาประสะจันทร์แดง’ นะ รอผมไปทำยาก่อนนะครับ"
+                    }
                 ]
+            }
+        ]
+    },
+    {
+        "Id": 7,
+        "CharId": 115,
+        "Level": 1,
+        "Name": "Civilian14",
+        "MobType": "Civilian",
+        "IsInteractable": false,
+        "PathFindingType": 1,
+        "PartrolArea": "zone_3",
+        "NodeCycleTime": 10,
+        "Position": [ 3436, 2786 ]
+    },
+    {
+        "Id": 8,
+        "CharId": 116,
+        "Level": 1,
+        "Name": "Civilian15",
+        "MobType": "Civilian",
+        "IsInteractable": false,
+        "PathFindingType": 1,
+        "PartrolArea": "zone_3",
+        "NodeCycleTime": 10,
+        "Position": [ 3574, 2790 ]
+    },
+    {
+        "Id": 9,
+        "CharId": 100,
+        "Level": 1,
+        "Name": "Cat",
+        "MobType": "Animal",
+        "IsInteractable": false,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 3685, 2000 ]
+    },
+    {
+        "Id": 10,
+        "CharId": 106,
+        "Level": 1,
+        "Name": "Civilian",
+        "MobType": "Civilian",
+        "IsInteractable": false,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 2727, 3242 ]
+    },
+    {
+        "Id": 11,
+        "CharId": 107,
+        "Level": 1,
+        "Name": "NPC-201_203",
+        "MobType": "Civilian",
+        "QuestId": 201,
+        "IsInteractable": false,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 1424, 2463 ],
+        "DialogData": [
+            {
+                "Id": 2,
+                "Type": "Quest",
+                "Description": "Quest onGoing 201",
+                "QuestId": 201,
+                "ChapterId": 2,
+                "Stage": "onGoing",
+                "Dialogues": [
+                    {
+                        "Item1": "Emma",
+                        "Item2": "กำลังจะไปหาหมอพอดีเลย ไม่รู้ลูกฉันเป็นอะไร ไม่ยอมทานนมเลยค่ะ แล้วยังท้องเสียอีกด้วย"
+                    },
+                    {
+                        "Item1": "Noah",
+                        "Item2": "ขอผมตรวจดูน้องแปปนึงนะครับ"
+                    },
+                    {
+                        "Item1": "Noah",
+                        "Item2": "มีอาการลิ้นขาวเป็นฝ้า ปากเป็นแผลด้วย ได้ให้น้องทานนมบ่อยมั้ยครับ"
+                    },
+                    {
+                        "Item1": "Emma",
+                        "Item2": "บ่อยค่ะ แต่ไม่ค่อยเป็นเวลา พอดีฉันต้องออกไปขายของด้วย"
+                    },
+                    {
+                        "Item1": "Noah",
+                        "Item2": "อาการแบบนี้น้องน่าจะเป็นตานซางนะครับ เกิดจากทานนมบ่อย ไม่เป็นเวลา หรือทานอะไรที่สกปรกเข้าไป"
+                    },
+                    {
+                        "Item1": "Noah",
+                        "Item2": "เดี๋ยวผมทำ ‘ยาประสะเปราะใหญ่’ ให้นะครับ"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Id": 12,
+        "CharId": 108,
+        "Level": 1,
+        "Name": "NPC-201_200",
+        "MobType": "Civilian",
+        "QuestId": 201,
+        "IsInteractable": false,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 2727, 3242 ],
+        "DialogData": [
+            {
+                "Id": 2,
+                "Type": "Quest",
+                "Description": "Quest onGoing 201",
+                "QuestId": 201,
+                "ChapterId": 2,
+                "Stage": "onGoing",
+                "Dialogues": [
+                    {
+                        "Item1": "Velma",
+                        "Item2": "คุณหมอช่วยทำยาแก้ไข้ให้ลูกฉันได้ไหมคะ ตอนนี้เขาตัวร้อนมากๆเลย"
+                    },
+                    {
+                        "Item1": "Noah",
+                        "Item2": "เด็กป่วยเป็นอะไรมาครับ"
+                    },
+                    {
+                        "Item1": "Velma",
+                        "Item2": "เป็นไข้จากอีสุกอีใสค่ะ"
+                    },
+                    {
+                        "Item1": "Noah",
+                        "Item2": "ได้ครับ งั้นเป็น ‘ยาเขียวหอม’ นะ ต้องออกไปหาวัตถุดิบมาทำยาก่อน รอผมซักครู่นะ"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Id": 13,
+        "CharId": 128,
+        "Level": 1,
+        "Name": "พ่อค้าวัตถุดิบยา",
+        "MobType": "Vendor",
+        "IsInteractable": true,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 3250, 1622 ],
+        "TradingItemsData": [
+            {
+                "ItemId": 0
             },
             {
-                "Id": 3,
+                "ItemId": 1
+            },
+            {
+                "ItemId": 2
+            },
+            {
+                "ItemId": 3
+            },
+            {
+                "ItemId": 4
+            },
+            {
+                "ItemId": 5
+            },
+            {
+                "ItemId": 6
+            },
+            {
+                "ItemId": 7
+            },
+            {
+                "ItemId": 8
+            },
+            {
+                "ItemId": 9
+            },
+            {
+                "ItemId": 10
+            },
+            {
+                "ItemId": 11
+            },
+            {
+                "ItemId": 12
+            },
+            {
+                "ItemId": 13
+            },
+            {
+                "ItemId": 14
+            },
+            {
+                "ItemId": 15
+            },
+            {
+                "ItemId": 16
+            },
+            {
+                "ItemId": 17
+            },
+            {
+                "ItemId": 18
+            },
+            {
+                "ItemId": 19
+            },
+            {
+                "ItemId": 20
+            },
+            {
+                "ItemId": 21
+            },
+            {
+                "ItemId": 22
+            },
+            {
+                "ItemId": 23
+            },
+            {
+                "ItemId": 24
+            },
+            {
+                "ItemId": 25
+            },
+            {
+                "ItemId": 26
+            },
+            {
+                "ItemId": 27
+            },
+            {
+                "ItemId": 28
+            },
+            {
+                "ItemId": 29
+            },
+            {
+                "ItemId": 30
+            },
+            {
+                "ItemId": 31
+            },
+            {
+                "ItemId": 32
+            },
+            {
+                "ItemId": 33
+            },
+            {
+                "ItemId": 34
+            },
+            {
+                "ItemId": 35
+            },
+            {
+                "ItemId": 36
+            },
+            {
+                "ItemId": 37
+            },
+            {
+                "ItemId": 38
+            },
+            {
+                "ItemId": 39
+            },
+            {
+                "ItemId": 40
+            },
+            {
+                "ItemId": 41
+            },
+            {
+                "ItemId": 42
+            },
+            {
+                "ItemId": 43
+            },
+            {
+                "ItemId": 44
+            },
+            {
+                "ItemId": 45
+            },
+            {
+                "ItemId": 46
+            },
+            {
+                "ItemId": 47
+            },
+            {
+                "ItemId": 48
+            },
+            {
+                "ItemId": 49
+            },
+            {
+                "ItemId": 50
+            },
+            {
+                "ItemId": 51
+            },
+            {
+                "ItemId": 52
+            },
+            {
+                "ItemId": 53
+            },
+            {
+                "ItemId": 54
+            },
+            {
+                "ItemId": 55
+            },
+            {
+                "ItemId": 56
+            },
+            {
+                "ItemId": 57
+            },
+            {
+                "ItemId": 58
+            },
+            {
+                "ItemId": 59
+            },
+            {
+                "ItemId": 60
+            },
+            {
+                "ItemId": 61
+            },
+            {
+                "ItemId": 62
+            },
+            {
+                "ItemId": 63
+            },
+            {
+                "ItemId": 64
+            },
+            {
+                "ItemId": 65
+            },
+            {
+                "ItemId": 66
+            },
+            {
+                "ItemId": 67
+            },
+            {
+                "ItemId": 68
+            },
+            {
+                "ItemId": 69
+            },
+            {
+                "ItemId": 70
+            },
+            {
+                "ItemId": 71
+            },
+            {
+                "ItemId": 72
+            },
+            {
+                "ItemId": 73
+            },
+            {
+                "ItemId": 74
+            },
+            {
+                "ItemId": 75
+            },
+            {
+                "ItemId": 76
+            },
+            {
+                "ItemId": 77
+            },
+            {
+                "ItemId": 78
+            },
+            {
+                "ItemId": 79
+            },
+            {
+                "ItemId": 80
+            },
+            {
+                "ItemId": 81
+            },
+            {
+                "ItemId": 82
+            },
+            {
+                "ItemId": 83
+            },
+            {
+                "ItemId": 84
+            },
+            {
+                "ItemId": 85
+            },
+            {
+                "ItemId": 86
+            },
+            {
+                "ItemId": 87
+            },
+            {
+                "ItemId": 88
+            },
+            {
+                "ItemId": 89
+            },
+            {
+                "ItemId": 90
+            },
+            {
+                "ItemId": 91
+            },
+            {
+                "ItemId": 92
+            },
+            {
+                "ItemId": 93
+            },
+            {
+                "ItemId": 94
+            },
+            {
+                "ItemId": 95
+            },
+            {
+                "ItemId": 96
+            },
+            {
+                "ItemId": 97
+            },
+            {
+                "ItemId": 98
+            },
+            {
+                "ItemId": 99
+            },
+            {
+                "ItemId": 100
+            },
+            {
+                "ItemId": 101
+            },
+            {
+                "ItemId": 102
+            },
+            {
+                "ItemId": 103
+            },
+            {
+                "ItemId": 104
+            },
+            {
+                "ItemId": 105
+            },
+            {
+                "ItemId": 106
+            },
+            {
+                "ItemId": 107
+            },
+            {
+                "ItemId": 108
+            },
+            {
+                "ItemId": 109
+            },
+            {
+                "ItemId": 110
+            },
+            {
+                "ItemId": 111
+            },
+            {
+                "ItemId": 112
+            },
+            {
+                "ItemId": 113
+            },
+            {
+                "ItemId": 114
+            },
+            {
+                "ItemId": 115
+            },
+            {
+                "ItemId": 116
+            },
+            {
+                "ItemId": 117
+            },
+            {
+                "ItemId": 118
+            },
+            {
+                "ItemId": 119
+            },
+            {
+                "ItemId": 120
+            },
+            {
+                "ItemId": 121
+            },
+            {
+                "ItemId": 122
+            },
+            {
+                "ItemId": 123
+            },
+            {
+                "ItemId": 124
+            },
+            {
+                "ItemId": 125
+            },
+            {
+                "ItemId": 126
+            },
+            {
+                "ItemId": 127
+            },
+            {
+                "ItemId": 128
+            },
+            {
+                "ItemId": 129
+            },
+            {
+                "ItemId": 130
+            },
+            {
+                "ItemId": 131
+            },
+            {
+                "ItemId": 132
+            },
+            {
+                "ItemId": 133
+            },
+            {
+                "ItemId": 134
+            },
+            {
+                "ItemId": 135
+            },
+            {
+                "ItemId": 136
+            },
+            {
+                "ItemId": 137
+            },
+            {
+                "ItemId": 138
+            },
+            {
+                "ItemId": 139
+            },
+            {
+                "ItemId": 140
+            },
+            {
+                "ItemId": 141
+            }
+
+        ]
+    },
+    {
+        "Id": 14,
+        "CharId": 127,
+        "Level": 1,
+        "Name": "ยายขายกับข้าว",
+        "MobType": "Vendor",
+        "IsInteractable": true,
+        "PathFindingType": 2,
+        "Position": [ 2030, 3040 ],
+        "TradingItemsData": [
+            {
+                "ItemId": 300
+            },
+            {
+                "ItemId": 301
+            },
+            {
+                "ItemId": 302
+            },
+            {
+                "ItemId": 303
+            }
+        ]
+    },
+    {
+        "Id": 15,
+        "CharId": 109,
+        "Level": 1,
+        "Name": "NPC-201_204",
+        "MobType": "Civilian",
+        "QuestId": 201,
+        "IsInteractable": false,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 2068, 2420 ],
+        "DialogData": [
+            {
+                "Id": 2,
                 "Type": "Quest",
-                "Description": "Quest onClear dialog for test",
-                "QuestId": 101,
-                "ChapterId": 1,
-                "Stage": "onClear",
+                "Description": "Quest onGoing 201",
+                "QuestId": 201,
+                "ChapterId": 2,
+                "Stage": "onGoing",
                 "Dialogues": [
-                    "onClear",
-                    "onClear onClear",
-                    "onClear Meof Meof Silly"
+                    {
+                        "Item1": "Jack",
+                        "Item2": "ปวดหัวจังเลย"
+                    },
+                    {
+                        "Item1": "Noah",
+                        "Item2": "คุณลุงเป็นอะไรรึเปล่าครับ"
+                    },
+                    {
+                        "Item1": "Jack",
+                        "Item2": "ไม่ได้เป็นอะไรมากหรอกโนอาห์ ลุงแค่เป็นไข้ธรรมดาน่ะ"
+                    },
+                    {
+                        "Item1": "Noah",
+                        "Item2": "เดี๋ยวผมให้ ‘ยาห้าราก’ นะครับ ถ้าไม่กินยาตอนนี้อาจจะเป็นไข้หนักขึ้นนะครับ"
+                    }
                 ]
             }
         ]

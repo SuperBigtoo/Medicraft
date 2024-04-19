@@ -63,13 +63,13 @@ namespace Medicraft.Systems.Managers
 
             if (!isNewGame)
             {
-                ScreenManager.Instance.CurrentLoadMapAction = ScreenManager.LoadMapAction.LoadSave;
+                ScreenManager.Instance.LoadMapByEntranceZone = ScreenManager.EntranceZoneName.LoadSave;
 
                 // Load save game according to selected index. 
                 var gameSaveData = GameGlobals.Instance.GameSave[GameGlobals.Instance.SelectedGameSaveIndex];
 
                 // Set Total Playtime
-                GameGlobals.Instance.TotalPlayTime = gameSaveData.TotalPlayTime[0] * 3600 
+                GameGlobals.Instance.TotalPlayTime = gameSaveData.TotalPlayTime[0] * 3600
                                                     + gameSaveData.TotalPlayTime[1] * 60
                                                     + gameSaveData.TotalPlayTime[2];
 
@@ -83,11 +83,11 @@ namespace Medicraft.Systems.Managers
                 // Initial Player
                 var basePlayerData = gameSaveData.PlayerData;
                 ScreenManager.Instance.CurrentMap = basePlayerData.CurrentMap;
-                Player = new Player(playerSprite, basePlayerData);            
+                Player = new Player(playerSprite, basePlayerData);
             }
             else // In case New Game
             {
-                ScreenManager.Instance.CurrentLoadMapAction = ScreenManager.LoadMapAction.NewGame;
+                ScreenManager.Instance.LoadMapByEntranceZone = ScreenManager.EntranceZoneName.NewGame;
 
                 // Initialize Spawner Data
                 GameGlobals.Instance.SetSpawnerDatas(
@@ -109,8 +109,12 @@ namespace Medicraft.Systems.Managers
             SetPlayerExpMaxCap(Player.Level);
             GameGlobals.Instance.TopLeftCornerPos = Player.Position - GameGlobals.Instance.GameScreenCenter;
 
+            // Set Hotbar item
             SelectedHotbarItem = InventoryManager.Instance.InventoryBag.FirstOrDefault
                 (i => i.Value.Slot.Equals(InventoryManager.HotbarSlot_1));
+
+            // Initialize quests
+            QuestManager.Instance.InitQuest(Player.PlayerData.ChapterProgression);
 
             // Initialize equipment stats
             var itemEquipmentData = InventoryManager.Instance.InventoryBag.Values.Where
@@ -130,7 +134,7 @@ namespace Medicraft.Systems.Managers
             UIManager.Instance.InitCraftableItemDisplay();
         }
 
-        private void InitializeCompanion()
+        public void InitializeCompanion()
         {
             Companions.Clear();
 
@@ -180,7 +184,7 @@ namespace Medicraft.Systems.Managers
 
         public static void UpdateGameController(GameTime gameTime)
         {
-            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;         
+            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // Key Control
             GameGlobals.Instance.PrevKeyboard = GameGlobals.Instance.CurKeyboard;
@@ -586,7 +590,7 @@ namespace Medicraft.Systems.Managers
             //    && (ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.TestScreen
             //    || ScreenManager.Instance.CurrentScreen == ScreenManager.GameScreen.Map1))
             //{
-                
+
             //}
         }
 
@@ -616,7 +620,7 @@ namespace Medicraft.Systems.Managers
                 // Show DeadPanel
                 UIManager.Instance.ShowDeadPanel();
 
-                PlaySoundEffect(Sound.Dead);        
+                PlaySoundEffect(Sound.Dead);
                 PlayBackgroundMusic(GameGlobals.Instance.DyingSong, false, 1f);
             }
 
@@ -646,40 +650,56 @@ namespace Medicraft.Systems.Managers
             var EnteringZoneArea = GameGlobals.Instance.EnteringZoneArea;
             foreach (var zoneArea in EnteringZoneArea)
             {
-                if (Player.BoundingDetectCollisions.Intersects(zoneArea.Bounds) && !ScreenManager.Instance.IsTransitioning)
+                if (Player.BoundingDetectCollisions.Intersects(zoneArea.Bounds) 
+                    && !ScreenManager.Instance.IsTransitioning && !GameGlobals.Instance.IsMiniGameStart)
                 {
-                    // Check if clear chapter 1?
-                    if (zoneArea.Bounds.Equals("dungeon_1_to_map_2") 
-                        && !Player.PlayerData.ChapterProgression[0].IsChapterClear) break;
+                    // Check if clear chapter 1? index 0 = chapter 1
+                    if (zoneArea.Name.Equals("dungeon_1_to_map_2")
+                        && !Player.PlayerData.ChapterProgression[1].Quests.FirstOrDefault
+                        (e => e.QuestId == 203).IsQuestClear)
+                    {
+                        return;
+                    }
+                    //else if (zoneArea.Name.Equals("dungeon_2_to_map_3")
+                    //    && !Player.PlayerData.ChapterProgression[1].IsChapterClear)
+                    //{
+                    //    return;
+                    //}
+                    //else if (zoneArea.Name.Equals("dungeon_3_to_map_4")
+                    //    && !Player.PlayerData.ChapterProgression[3].IsChapterClear)
+                    //{
+                    //    return;
+                    //}
+                    else
+                    {
+                        GameGlobals.Instance.InitialCameraPos = Player.Position;
+                        var currLoadMapAction = ScreenManager.GetLoadMapAction(zoneArea.Name);
 
-                    GameGlobals.Instance.InitialCameraPos = Player.Position;
-                    var currLoadMapAction = ScreenManager.GetLoadMapAction(zoneArea.Name);
+                        // if the zoneArea.Name not be found in LoadMapAction then return
+                        if (currLoadMapAction == ScreenManager.EntranceZoneName.LoadSave) break;
 
-                    // if the zoneArea.Name not be found in LoadMapAction then return
-                    if (currLoadMapAction == ScreenManager.LoadMapAction.LoadSave) break;
-
-                    ScreenManager.Instance.CurrentLoadMapAction = currLoadMapAction;
-                    ScreenManager.Instance.TranstisionToScreen(ScreenManager.Instance.GetPlayScreenByLoadMapAction());
-                    break;
+                        ScreenManager.Instance.LoadMapByEntranceZone = currLoadMapAction;
+                        ScreenManager.Instance.TransitionToScreen(ScreenManager.Instance.GetPlayScreenByLoadMapAction());
+                        break;
+                    }
                 }
             }
         }
 
         public void SetupPlayerPosition()
-        { 
-            var loadAction = ScreenManager.Instance.CurrentLoadMapAction;
+        {
+            var loadAction = ScreenManager.Instance.LoadMapByEntranceZone;
 
-            if (loadAction == ScreenManager.LoadMapAction.LoadSave) return;
+            if (loadAction == ScreenManager.EntranceZoneName.LoadSave) return;
 
             var curMap = ScreenManager.Instance.CurrentMap;
-            //Player.PlayerData.CurrentMap = curMap;
 
             var mapPositionData = GameGlobals.Instance.MapLocationPointDatas.FirstOrDefault
                 (m => m.Name.Equals(curMap));
             PositionData positionData;
             Vector2 position = Vector2.One;
 
-            if (loadAction == ScreenManager.LoadMapAction.NewGame)
+            if (loadAction == ScreenManager.EntranceZoneName.NewGame)
             {
                 positionData = mapPositionData.Positions.FirstOrDefault(p => p.Name.Equals("Respawn"));
                 position = new Vector2(
@@ -688,13 +708,13 @@ namespace Medicraft.Systems.Managers
             }
             else
             {
-                var loadActionString = Enum.GetName(typeof(ScreenManager.LoadMapAction), loadAction);
+                var loadActionString = Enum.GetName(typeof(ScreenManager.EntranceZoneName), loadAction);
 
                 positionData = mapPositionData.Positions.FirstOrDefault(p => p.Name.Equals(loadActionString));
                 position = new Vector2(
                     (float)positionData.Value[0],
                     (float)positionData.Value[1]);
-            }          
+            }
 
             Player.Position = position;
 
@@ -744,7 +764,7 @@ namespace Medicraft.Systems.Managers
                 if (curMap.Equals(diffMap))
                 {
                     if (!ScreenManager.Instance.IsTransitioning)
-                        ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.None);
+                        ScreenManager.Instance.TransitionToScreen(ScreenManager.GameScreen.None);
 
                     if (ScreenManager.Instance.DoActionAtMidTransition)
                     {
@@ -753,12 +773,7 @@ namespace Medicraft.Systems.Managers
                         Player.HP = Player.MaxHP;
                         Player.Mana = Player.MaxMana;
 
-                        var entities = EntityManager.Instance.Entities;
-                        foreach (var entity in entities.Where(e => !e.IsDestroyed))
-                        {
-                            entity.IsAggro = false;
-                            entity.AggroTimer = 0f;
-                        }
+                        EntityManager.Instance.ClearAggroMobs();
 
                         IsRespawning = false;
                         IsPlayerDead = false;
@@ -797,12 +812,7 @@ namespace Medicraft.Systems.Managers
                         Player.HP = Player.MaxHP;
                         Player.Mana = Player.MaxMana;
 
-                        var entities = EntityManager.Instance.Entities;
-                        foreach (var entity in entities.Where(e => !e.IsDestroyed))
-                        {
-                            entity.IsAggro = false;
-                            entity.AggroTimer = 0f;
-                        }
+                        EntityManager.Instance.ClearAggroMobs();
 
                         IsRespawning = false;
                         IsPlayerDead = false;
@@ -820,11 +830,11 @@ namespace Medicraft.Systems.Managers
                         var currLoadMapAction = ScreenManager.GetLoadMapAction(loadMapAction);
 
                         // if the zoneArea.Name not be found in LoadMapAction then return
-                        if (currLoadMapAction == ScreenManager.LoadMapAction.LoadSave) return;
+                        if (currLoadMapAction == ScreenManager.EntranceZoneName.LoadSave) return;
 
-                        ScreenManager.Instance.CurrentLoadMapAction = currLoadMapAction;
-                        ScreenManager.Instance.TranstisionToScreen(ScreenManager.Instance.GetPlayScreenByLoadMapAction());
-                    }                      
+                        ScreenManager.Instance.LoadMapByEntranceZone = currLoadMapAction;
+                        ScreenManager.Instance.TransitionToScreen(ScreenManager.Instance.GetPlayScreenByLoadMapAction());
+                    }
                 }
             }
         }
@@ -857,13 +867,6 @@ namespace Medicraft.Systems.Managers
                         compa.Level++;
                         compa.CompanionData.Level++;
 
-                        if (compa.Level % 3 == 0)
-                        {
-                            compa.CompanionData.Abilities.NormalSkillLevel++;
-                            compa.CompanionData.Abilities.BurstSkillLevel++;
-                            compa.CompanionData.Abilities.PassiveSkillLevel++;
-                        }
-
                         ReStatsCompanion(compa);
                     }
 
@@ -881,7 +884,7 @@ namespace Medicraft.Systems.Managers
                         SetPlayerExpMaxCap(Player.Level);
                     }
                 }
-            } 
+            }
         }
 
         private void ReStatsPlayer()
@@ -1004,6 +1007,12 @@ namespace Medicraft.Systems.Managers
                         Player.PlayerData.Abilities.NormalSkillLevel++;
                         Player.PlayerData.SkillPoint -= skillData.SkillPointCost;
                         InventoryManager.Instance.ReduceGoldCoin(skillData.GoldCoinCost);
+
+                        // Set Compnions Skill
+                        foreach (var compa in Companions)
+                        {
+                            compa.CompanionData.Abilities.NormalSkillLevel = Player.PlayerData.Abilities.NormalSkillLevel;
+                        }
                     }
                     return true;
 
@@ -1022,6 +1031,12 @@ namespace Medicraft.Systems.Managers
                         Player.PlayerData.Abilities.BurstSkillLevel++;
                         Player.PlayerData.SkillPoint -= skillData.SkillPointCost;
                         InventoryManager.Instance.ReduceGoldCoin(skillData.GoldCoinCost);
+
+                        // Set Compnions Skill
+                        foreach (var compa in Companions)
+                        {
+                            compa.CompanionData.Abilities.BurstSkillLevel = Player.PlayerData.Abilities.BurstSkillLevel;
+                        }
                     }
                     return true;
 
@@ -1040,6 +1055,12 @@ namespace Medicraft.Systems.Managers
                         Player.PlayerData.Abilities.PassiveSkillLevel++;
                         Player.PlayerData.SkillPoint -= skillData.SkillPointCost;
                         InventoryManager.Instance.ReduceGoldCoin(skillData.GoldCoinCost);
+
+                        // Set Compnions Skill
+                        foreach (var compa in Companions)
+                        {
+                            compa.CompanionData.Abilities.PassiveSkillLevel = Player.PlayerData.Abilities.PassiveSkillLevel;
+                        }
                     }
                     return true;
             }
@@ -1048,7 +1069,7 @@ namespace Medicraft.Systems.Managers
         }
 
         public void CheckInteraction(KeyboardState keyboardCur, KeyboardState keyboardPrev)
-        {           
+        {
             IsDetectedObject = false;
             IsDetectedInteractableMob = false;
 
@@ -1057,7 +1078,7 @@ namespace Medicraft.Systems.Managers
             foreach (var gameObject in gameObjects)
             {
                 gameObject.IsDetected = false;
-            }   
+            }
 
             // Check Dectection Object
             foreach (var gameObject in gameObjects.Where(o => o.IsVisible))
@@ -1099,7 +1120,7 @@ namespace Medicraft.Systems.Managers
 
             // Clear IsDectected for interactableMobs
             var interactableMobs = EntityManager.Instance.Entities.Where
-                (e => e.EntityType == Entity.EntityTypes.Friendly).Cast<FriendlyMob>();
+                (e => e.EntityType == Entity.EntityTypes.FriendlyMob).Cast<FriendlyMob>();
 
             foreach (var mob in interactableMobs.Where(e => e.IsInteractable))
             {
@@ -1140,6 +1161,8 @@ namespace Medicraft.Systems.Managers
                 switch (gameObject.ObjectType)
                 {
                     case GameObject.GameObjectType.QuestObject:
+                        QuestObject questObject = gameObject as QuestObject;
+                        questObject.Interact();
                         break;
 
                     case GameObject.GameObjectType.Item:
@@ -1155,6 +1178,7 @@ namespace Medicraft.Systems.Managers
                             item.IsCollected = true;
                         }
                         else HUDSystem.ShowInsufficientSign();
+                        OnInteractWithObject(new InteractingObjectEventArgs(item));
                         break;
 
                     case GameObject.GameObjectType.Crop:
@@ -1173,7 +1197,7 @@ namespace Medicraft.Systems.Managers
                             }
                             else HUDSystem.ShowInsufficientSign();
                         }
-
+                        OnInteractWithObject(new InteractingObjectEventArgs(crop));
                         break;
 
                     case GameObject.GameObjectType.CraftingTable:
@@ -1184,7 +1208,8 @@ namespace Medicraft.Systems.Managers
 
                     case GameObject.GameObjectType.SavingTable:
                         // Open Saving Game Panel
-                        SavingTable.OpenSavingPanel();
+                        SavingTable savingTable = gameObject as SavingTable;
+                        savingTable.OpenSavingPanel();
                         break;
 
                     case GameObject.GameObjectType.WarpPoint:
@@ -1213,15 +1238,41 @@ namespace Medicraft.Systems.Managers
                     case FriendlyMob.FriendlyMobType.Civilian:
 
                     case FriendlyMob.FriendlyMobType.QuestGiver:
+                        OnInteractWithFriendlyMob(new InteractingFriendlyMobEventArgs(friendlyMob));
                         friendlyMob.Interact();
                         break;
 
                     case FriendlyMob.FriendlyMobType.Vendor:
+                        OnInteractWithFriendlyMob(new InteractingFriendlyMobEventArgs(friendlyMob));
                         Vendor vendorMob = friendlyMob as Vendor;
                         vendorMob.OpenTradingPanel();
                         break;
                 }
             }
+        }
+
+        // Define a delegate for the event handler
+        public delegate void PlayerEventHandler(object sender, EventArgs e);
+
+        // Define an event based on the delegate
+        public event PlayerEventHandler ObjectEventHandler;
+        public event PlayerEventHandler InteractEventHandler;
+        public event PlayerEventHandler KillingEventHandler;
+
+        // Method to raise the event
+        public virtual void OnInteractWithObject(InteractingObjectEventArgs e)
+        {
+            ObjectEventHandler?.Invoke(this, e);
+        }
+
+        public virtual void OnInteractWithFriendlyMob(InteractingFriendlyMobEventArgs e)
+        {
+            InteractEventHandler?.Invoke(this, e);
+        }
+
+        public virtual void OnKillingMob(KillingMobEventArgs e)
+        {
+            KillingEventHandler?.Invoke(this, e);
         }
 
         public static PlayerManager Instance
@@ -1232,5 +1283,20 @@ namespace Medicraft.Systems.Managers
                 return instance;
             }
         }
+    }
+
+    public class InteractingObjectEventArgs(GameObject gameObject) : EventArgs
+    {
+        public GameObject GameObject { get; } = gameObject;
+    }
+
+    public class InteractingFriendlyMobEventArgs(FriendlyMob friendlyMob) : EventArgs
+    {
+        public FriendlyMob FriendlyMob { get; } = friendlyMob;
+    }
+
+    public class KillingMobEventArgs(HostileMob hostileMob) : EventArgs
+    {
+        public HostileMob HostileMob { get; } = hostileMob;
     }
 }

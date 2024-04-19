@@ -1,0 +1,751 @@
+[
+    {
+        "Id": 0,
+        "CharId": 101,
+        "Level": 1,
+        "Name": "ชั่งตีเหล็ก",
+        "MobType": "Vendor",
+        "IsInteractable": true,
+        "PathFindingType": 2,
+        "Position": [ 2194, 3194 ],
+        "TradingItemsData": [
+            {
+                "ItemId": 400
+            },
+            {
+                "ItemId": 401
+            },
+            {
+                "ItemId": 402
+            },
+            {
+                "ItemId": 403
+            },
+            {
+                "ItemId": 404
+            },
+            {
+                "ItemId": 405
+            }
+        ]
+    },
+    {
+        "Id": 1,
+        "CharId": 126,
+        "Level": 1,
+        "Name": "แม่ค้าขายของสด",
+        "MobType": "Vendor",
+        "IsInteractable": true,
+        "PathFindingType": 2,
+        "Position": [ 4192, 2290 ],
+        "TradingItemsData": [
+            {
+                "ItemId": 300
+            },
+            {
+                "ItemId": 301
+            },
+            {
+                "ItemId": 142
+            },
+            {
+                "ItemId": 143
+            },
+            {
+                "ItemId": 144
+            },
+            {
+                "ItemId": 145
+            },
+            {
+                "ItemId": 146
+            },
+            {
+                "ItemId": 147
+            },
+            {
+                "ItemId": 156
+            },
+            {
+                "ItemId": 159
+            },
+            {
+                "ItemId": 162
+            },
+            {
+                "ItemId": 164
+            }
+        ]
+    },
+    {
+        "Id": 2,
+        "CharId": 105,
+        "Level": 1,
+        "Name": "Thomas",
+        "MobType": "Civilian",
+        "IsInteractable": true,
+        "PathFindingType": 0,
+        "NodeCycleTime": 10,
+        "Position": [ 3392, 4040 ],
+        "RoutePoint": [
+            [ 3388, 4138 ],
+            [ 3382, 3360 ],
+            [ 2440, 3356 ],
+            [ 1748, 3352 ],
+            [ 3382, 3360 ]
+        ],
+        "DialogData": [
+            {
+                "Id": 0,
+                "Type": "Daily",
+                "Description": "Daily dialog",
+                "Dialogues": [
+                    {
+                        "Item1": "Thomas",
+                        "Item2": "โฮ่ะ มีอะหยังนิ?"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Id": 3,
+        "CharId": 117,
+        "Level": 1,
+        "Name": "Alice",
+        "MobType": "Civilian",
+        "IsInteractable": true,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 2050, 3216 ],
+        "DialogData": [
+            {
+                "Id": 0,
+                "Type": "Daily",
+                "Description": "Daily dialog",
+                "Dialogues": [
+                    {
+                        "Item1": "Alice",
+                        "Item2": "หนาวก่จ้าว"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Id": 4,
+        "CharId": 106,
+        "Level": 1,
+        "Name": "Civilian05",
+        "MobType": "Civilian",
+        "IsInteractable": false,
+        "PathFindingType": 0,
+        "NodeCycleTime": 10,
+        "Position": [ 1810, 3340 ],
+        "RoutePoint": [
+            [ 1748, 3352 ],
+            [ 2440, 3356 ],
+            [ 3382, 3360 ],
+            [ 2440, 3356 ]
+        ]
+    },
+    {
+        "Id": 5,
+        "CharId": 114,
+        "Level": 1,
+        "Name": "Illina",
+        "MobType": "Civilian",
+        "IsInteractable": true,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 2420, 4002 ],
+        "DialogData": [
+            {
+                "Id": 0,
+                "Type": "Daily",
+                "Description": "Daily dialog",
+                "Dialogues": [
+                    {
+                        "Item1": "Illina",
+                        "Item2": "โอออ!! ใจ่ปี๊หมอยาแม่นก่"
+                    },
+                    {
+                        "Item1": "Illina",
+                        "Item2": "อิอิอิ ป่อปี๊ฮักษาคนไข้เก่งขนาด"
+                    },
+                    {
+                        "Item1": "Illina",
+                        "Item2": "สุดยอดดๆ"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Id": 6,
+        "CharId": 125,
+        "Level": 1,
+        "Name": "Civilian24",
+        "MobType": "Civilian",
+        "IsInteractable": false,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 4646, 4160 ]
+    },
+    {
+        "Id": 7,
+        "CharId": 124,
+        "Level": 1,
+        "Name": "Civilian23",
+        "MobType": "Civilian",
+        "IsInteractable": false,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 4312, 4132 ]
+    },
+    {
+        "Id": 8,
+        "CharId": 100,
+        "Level": 1,
+        "Name": "Cat",
+        "MobType": "Animal",
+        "IsInteractable": false,
+        "PathFindingType": 0,
+        "NodeCycleTime": 10,
+        "Position": [ 4966, 3322 ],
+        "RoutePoint": [
+            [ 5058, 3354 ],
+            [ 4258, 3352 ],
+            [ 3382, 3360 ],
+            [ 4258, 3352 ]
+        ]
+    },
+    {
+        "Id": 9,
+        "CharId": 108,
+        "Level": 1,
+        "Name": "Civilian07",
+        "MobType": "Civilian",
+        "IsInteractable": false,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 4716, 3290 ]
+    },
+    {
+        "Id": 10,
+        "CharId": 112,
+        "Level": 1,
+        "Name": "Uncle Robert",
+        "MobType": "Civilian",
+        "IsInteractable": true,
+        "PathFindingType": 1,
+        "PartrolArea": "zone_2",
+        "NodeCycleTime": 10,
+        "Position": [ 3714, 2912 ],
+        "DialogData": [
+            {
+                "Id": 0,
+                "Type": "Daily",
+                "Description": "Daily dialog",
+                "Dialogues": [
+                    {
+                        "Item1": "Uncle Robert",
+                        "Item2": "อ่าา อ่าา พ่อหนุ่ม..ยินดีต้อนรับๆ.."
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Id": 11,
+        "CharId": 128,
+        "Level": 1,
+        "Name": "พ่อค้าวัตถุดิบยา",
+        "MobType": "Vendor",
+        "IsInteractable": true,
+        "PathFindingType": 1,
+        "PartrolArea": "zone_1",
+        "NodeCycleTime": 10,
+        "Position": [ 2970, 2880 ],
+        "TradingItemsData": [
+            {
+                "ItemId": 0
+            },
+            {
+                "ItemId": 1
+            },
+            {
+                "ItemId": 2
+            },
+            {
+                "ItemId": 3
+            },
+            {
+                "ItemId": 4
+            },
+            {
+                "ItemId": 5
+            },
+            {
+                "ItemId": 6
+            },
+            {
+                "ItemId": 7
+            },
+            {
+                "ItemId": 8
+            },
+            {
+                "ItemId": 9
+            },
+            {
+                "ItemId": 10
+            },
+            {
+                "ItemId": 11
+            },
+            {
+                "ItemId": 12
+            },
+            {
+                "ItemId": 13
+            },
+            {
+                "ItemId": 14
+            },
+            {
+                "ItemId": 15
+            },
+            {
+                "ItemId": 16
+            },
+            {
+                "ItemId": 17
+            },
+            {
+                "ItemId": 18
+            },
+            {
+                "ItemId": 19
+            },
+            {
+                "ItemId": 20
+            },
+            {
+                "ItemId": 21
+            },
+            {
+                "ItemId": 22
+            },
+            {
+                "ItemId": 23
+            },
+            {
+                "ItemId": 24
+            },
+            {
+                "ItemId": 25
+            },
+            {
+                "ItemId": 26
+            },
+            {
+                "ItemId": 27
+            },
+            {
+                "ItemId": 28
+            },
+            {
+                "ItemId": 29
+            },
+            {
+                "ItemId": 30
+            },
+            {
+                "ItemId": 31
+            },
+            {
+                "ItemId": 32
+            },
+            {
+                "ItemId": 33
+            },
+            {
+                "ItemId": 34
+            },
+            {
+                "ItemId": 35
+            },
+            {
+                "ItemId": 36
+            },
+            {
+                "ItemId": 37
+            },
+            {
+                "ItemId": 38
+            },
+            {
+                "ItemId": 39
+            },
+            {
+                "ItemId": 40
+            },
+            {
+                "ItemId": 41
+            },
+            {
+                "ItemId": 42
+            },
+            {
+                "ItemId": 43
+            },
+            {
+                "ItemId": 44
+            },
+            {
+                "ItemId": 45
+            },
+            {
+                "ItemId": 46
+            },
+            {
+                "ItemId": 47
+            },
+            {
+                "ItemId": 48
+            },
+            {
+                "ItemId": 49
+            },
+            {
+                "ItemId": 50
+            },
+            {
+                "ItemId": 51
+            },
+            {
+                "ItemId": 52
+            },
+            {
+                "ItemId": 53
+            },
+            {
+                "ItemId": 54
+            },
+            {
+                "ItemId": 55
+            },
+            {
+                "ItemId": 56
+            },
+            {
+                "ItemId": 57
+            },
+            {
+                "ItemId": 58
+            },
+            {
+                "ItemId": 59
+            },
+            {
+                "ItemId": 60
+            },
+            {
+                "ItemId": 61
+            },
+            {
+                "ItemId": 62
+            },
+            {
+                "ItemId": 63
+            },
+            {
+                "ItemId": 64
+            },
+            {
+                "ItemId": 65
+            },
+            {
+                "ItemId": 66
+            },
+            {
+                "ItemId": 67
+            },
+            {
+                "ItemId": 68
+            },
+            {
+                "ItemId": 69
+            },
+            {
+                "ItemId": 70
+            },
+            {
+                "ItemId": 71
+            },
+            {
+                "ItemId": 72
+            },
+            {
+                "ItemId": 73
+            },
+            {
+                "ItemId": 74
+            },
+            {
+                "ItemId": 75
+            },
+            {
+                "ItemId": 76
+            },
+            {
+                "ItemId": 77
+            },
+            {
+                "ItemId": 78
+            },
+            {
+                "ItemId": 79
+            },
+            {
+                "ItemId": 80
+            },
+            {
+                "ItemId": 81
+            },
+            {
+                "ItemId": 82
+            },
+            {
+                "ItemId": 83
+            },
+            {
+                "ItemId": 84
+            },
+            {
+                "ItemId": 85
+            },
+            {
+                "ItemId": 86
+            },
+            {
+                "ItemId": 87
+            },
+            {
+                "ItemId": 88
+            },
+            {
+                "ItemId": 89
+            },
+            {
+                "ItemId": 90
+            },
+            {
+                "ItemId": 91
+            },
+            {
+                "ItemId": 92
+            },
+            {
+                "ItemId": 93
+            },
+            {
+                "ItemId": 94
+            },
+            {
+                "ItemId": 95
+            },
+            {
+                "ItemId": 96
+            },
+            {
+                "ItemId": 97
+            },
+            {
+                "ItemId": 98
+            },
+            {
+                "ItemId": 99
+            },
+            {
+                "ItemId": 100
+            },
+            {
+                "ItemId": 101
+            },
+            {
+                "ItemId": 102
+            },
+            {
+                "ItemId": 103
+            },
+            {
+                "ItemId": 104
+            },
+            {
+                "ItemId": 105
+            },
+            {
+                "ItemId": 106
+            },
+            {
+                "ItemId": 107
+            },
+            {
+                "ItemId": 108
+            },
+            {
+                "ItemId": 109
+            },
+            {
+                "ItemId": 110
+            },
+            {
+                "ItemId": 111
+            },
+            {
+                "ItemId": 112
+            },
+            {
+                "ItemId": 113
+            },
+            {
+                "ItemId": 114
+            },
+            {
+                "ItemId": 115
+            },
+            {
+                "ItemId": 116
+            },
+            {
+                "ItemId": 117
+            },
+            {
+                "ItemId": 118
+            },
+            {
+                "ItemId": 119
+            },
+            {
+                "ItemId": 120
+            },
+            {
+                "ItemId": 121
+            },
+            {
+                "ItemId": 122
+            },
+            {
+                "ItemId": 123
+            },
+            {
+                "ItemId": 124
+            },
+            {
+                "ItemId": 125
+            },
+            {
+                "ItemId": 126
+            },
+            {
+                "ItemId": 127
+            },
+            {
+                "ItemId": 128
+            },
+            {
+                "ItemId": 129
+            },
+            {
+                "ItemId": 130
+            },
+            {
+                "ItemId": 131
+            },
+            {
+                "ItemId": 132
+            },
+            {
+                "ItemId": 133
+            },
+            {
+                "ItemId": 134
+            },
+            {
+                "ItemId": 135
+            },
+            {
+                "ItemId": 136
+            },
+            {
+                "ItemId": 137
+            },
+            {
+                "ItemId": 138
+            },
+            {
+                "ItemId": 139
+            },
+            {
+                "ItemId": 140
+            },
+            {
+                "ItemId": 141
+            }
+
+        ]
+    },
+    {
+        "Id": 12,
+        "CharId": 120,
+        "Level": 1,
+        "Name": "Civilian19",
+        "MobType": "Civilian",
+        "IsInteractable": false,
+        "PathFindingType": 1,
+        "PartrolArea": "zone_3",
+        "NodeCycleTime": 10,
+        "Position": [ 3398, 2380 ]
+    },
+    {
+        "Id": 13,
+        "CharId": 100,
+        "Level": 1,
+        "Name": "Cat",
+        "MobType": "Animal",
+        "IsInteractable": false,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 1898, 2334 ]
+    },
+    {
+        "Id": 14,
+        "CharId": 106,
+        "Level": 1,
+        "Name": "Baba",
+        "MobType": "Civilian",
+        "IsInteractable": true,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 3086, 1204 ],
+        "DialogData": [
+            {
+                "Id": 0,
+                "Type": "Daily",
+                "Description": "Daily dialog",
+                "Dialogues": [
+                    {
+                        "Item1": "Baba",
+                        "Item2": "โอย พ่อหนุ่มเดินทางมาจากที๋ใดเนี่ย"
+                    },
+                    {
+                        "Item1": "Baba",
+                        "Item2": "เดินทางช่วงนี้ระวังหน่อยเด้อ เจ้า Yeti มันเริ่มออกมาจากฤดูจำศีลแล้ว"
+                    }
+                ]
+            }
+        ]
+    }
+]

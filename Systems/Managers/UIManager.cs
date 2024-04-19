@@ -58,6 +58,7 @@ namespace Medicraft.Systems.Managers
         public bool IsShowDialogUI { get; private set; } = false;
         public FriendlyMob InteractingMob { get; private set; }
         public DialogData Dialog { get; private set; }
+        public bool IsForceAccepting { get; private set; } = false;
 
         private TypeWriterAnimator _animatorDialogue;
         private int _dialogueIndex = 0;
@@ -480,7 +481,7 @@ namespace Medicraft.Systems.Managers
                     Identifier = "dialogueText",
                     WrapWords = true,
                     Size = new Vector2(890, 170),
-                    Offset = new Vector2(80, 85)
+                    Offset = new Vector2(80, 100)
                 };
                 dialogPanel.AddChild(dialogueText);
 
@@ -511,14 +512,7 @@ namespace Medicraft.Systems.Managers
                     Visible = false,
                     Enabled = false,
                     Size = new Vector2(40, 40),
-                    Offset = new Vector2(50, 60),
-                    OnClick = (btn) =>
-                    {                       
-                        // Add Quest to List
-                        _questStamp.IsQuestAccepted = QuestManager.Instance.AddQuest(_questStamp.QuestId);
-
-                        CloseDialog();
-                    }
+                    Offset = new Vector2(50, 60)
                 };
                 acceptButton.ButtonParagraph.SetAnchorAndOffset(Anchor.AutoCenter, new Vector2(0, -40));
                 acceptButton.AddChild(new Icon(IconType.None, Anchor.AutoCenter)
@@ -533,25 +527,7 @@ namespace Medicraft.Systems.Managers
                 {
                     Identifier = "nextDialogueButton",
                     Size = new Vector2(40, 40),
-                    Offset = new Vector2(50, 0),
-                    OnClick = (btn) =>
-                    {
-                        if (!_animatorDialogue.IsDone)
-                        {
-                            _animatorDialogue.Finish();
-                            return;
-                        }
-
-                        if (_dialogueIndex < Dialog.Dialogues.Count - 1)
-                        {                           
-                            _dialogueIndex++;
-                            _animatorDialogue.TextToType = Dialog.Dialogues[_dialogueIndex];
-
-                            if (_dialogueIndex == Dialog.Dialogues.Count - 1)
-                                acceptButton.Enabled = true;
-                        }
-                        else CloseDialog();
-                    }
+                    Offset = new Vector2(50, 0)
                 };
                 nextDialogueButton.ButtonParagraph.SetAnchorAndOffset(Anchor.AutoCenter, new Vector2(0, -40));
                 nextDialogueButton.AddChild(new Icon(IconType.None, Anchor.AutoCenter)
@@ -560,6 +536,40 @@ namespace Medicraft.Systems.Managers
                     ClickThrough = true
                 }, true);
                 dialogPanel.AddChild(nextDialogueButton);
+
+                // Set OnClick
+                acceptButton.OnClick = (btn) =>
+                {
+                    // Add Quest to List
+                    _questStamp.IsQuestAccepted = QuestManager.Instance.AddQuest(Dialog.ChapterId, _questStamp.QuestId);
+
+                    nextDialogueButton.Enabled = true;
+
+                    CloseDialog();
+                };
+
+                nextDialogueButton.OnClick = (btn) =>
+                {
+                    if (!_animatorDialogue.IsDone)
+                    {
+                        _animatorDialogue.Finish();
+                        return;
+                    }
+
+                    if (_dialogueIndex < Dialog.Dialogues.Count - 1)
+                    {
+                        _dialogueIndex++;
+                        entityName.Text = Dialog.Dialogues[_dialogueIndex].Item1;
+                        _animatorDialogue.TextToType = Dialog.Dialogues[_dialogueIndex].Item2;
+
+                        if (_dialogueIndex == Dialog.Dialogues.Count - 1)
+                        {
+                            acceptButton.Enabled = true;
+                            if (IsForceAccepting) nextDialogueButton.Enabled = false;
+                        }
+                    }
+                    else CloseDialog();
+                };
             }
 
             // DeadPanel
@@ -634,21 +644,20 @@ namespace Medicraft.Systems.Managers
                 headerQuest.Children.OfType<RichParagraph>().FirstOrDefault().Text = "";
                 questDescrip.Text = "";
                 return;
-            }
+            }                 
 
             questPanel.Visible = true;
             var quest = QuestManager.Instance.QuestList.FirstOrDefault();
+            var questStamp = quest.QuestStamp;
+
             headerQuest.Children.OfType<RichParagraph>().FirstOrDefault().Text = quest.QuestData.Name;
-            questDescrip.Text = $"{quest.QuestData.Description} - ({quest.QuestData.ObjectiveCount}/{quest.QuestData.ObjectiveValue})";
+            questDescrip.Text = $"{quest.QuestData.Description} - ({questStamp.ObjectiveCount}/{quest.QuestData.ObjectiveValue})";
         }
 
-        public void CreateDialog(FriendlyMob friendlyMob)
+        public void CreateDialog(DialogData dialogData, string actorName, bool isForceAccepting)
         {
-            if (friendlyMob == null || !friendlyMob.IsInteractable) return;
-
-            InteractingMob = friendlyMob;
-            InteractingMob.IsInteracting = true;
             IsShowDialogUI = true;
+            IsForceAccepting = isForceAccepting;
 
             var playScreenUI = _mainPanels[PlayScreen];
 
@@ -665,7 +674,59 @@ namespace Medicraft.Systems.Managers
 
             var entityName = entityNamePanel.Children.OfType<RichParagraph>().FirstOrDefault
                 (e => e.Identifier.Equals("entityName"));
-            entityName.Text = InteractingMob.Name;
+
+            var acceptButton = dialogPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("acceptButton"));
+            acceptButton.Visible = false;
+            acceptButton.Enabled = false;
+
+            questPanel.Visible = false;
+            hotbarSlotPanel.Visible = false;
+            quickMenuPanel.Visible = false;
+            dialogPanel.Visible = true;
+
+            Dialog = dialogData;
+            _dialogueIndex = 0;
+            entityName.Text = Dialog.Dialogues[_dialogueIndex].Item1;
+            _animatorDialogue.TextToType = Dialog.Dialogues[_dialogueIndex].Item2;
+
+            if (Dialog.Type.Equals("Quest"))
+            {
+                var questId = Dialog.QuestId;
+                var chapterId = Dialog.ChapterId;
+
+                _questStamp = PlayerManager.Instance.Player.PlayerData.ChapterProgression.FirstOrDefault
+                    (e => e.ChapterId.Equals(chapterId)).Quests.FirstOrDefault
+                        (e => e.QuestId.Equals(questId));
+
+                if (Dialog.Stage.Equals("onAccept")) acceptButton.Visible = true;
+            }
+        }
+
+        public void CreateDialog(FriendlyMob friendlyMob)
+        {
+            if (friendlyMob == null || !friendlyMob.IsInteractable) return;
+
+            InteractingMob = friendlyMob;
+            InteractingMob.IsInteracting = true;
+            IsShowDialogUI = true;
+            IsForceAccepting = false;
+
+            var playScreenUI = _mainPanels[PlayScreen];
+
+            var hotbarSlotPanel = playScreenUI.Children.FirstOrDefault
+                (p => p.Identifier.Equals("hotbarSlotPanel"));
+            var quickMenuPanel = playScreenUI.Children.FirstOrDefault
+                (p => p.Identifier.Equals("quickMenuPanel"));
+            var questPanel = playScreenUI.Children.FirstOrDefault
+                (p => p.Identifier.Equals("questPanel"));
+            var dialogPanel = playScreenUI.Children.FirstOrDefault
+                (p => p.Identifier.Equals("dialogPanel"));
+            var entityNamePanel = dialogPanel.Children.FirstOrDefault
+                (p => p.Identifier.Equals("entityNamePanel"));
+
+            var entityName = entityNamePanel.Children.OfType<RichParagraph>().FirstOrDefault
+                (e => e.Identifier.Equals("entityName"));
 
             var acceptButton = dialogPanel.Children.FirstOrDefault
                 (p => p.Identifier.Equals("acceptButton"));
@@ -685,6 +746,7 @@ namespace Medicraft.Systems.Managers
                 var dialogs = dialogList.Where(e => e.Type.Equals("Quest")).ToList();
                 var questId = dialogs.FirstOrDefault().QuestId;
                 var chapterId = dialogs.FirstOrDefault().ChapterId;
+
                 _questStamp = PlayerManager.Instance.Player.PlayerData.ChapterProgression.FirstOrDefault
                     (e => e.ChapterId.Equals(chapterId)).Quests.FirstOrDefault
                         (e => e.QuestId.Equals(questId));
@@ -697,6 +759,7 @@ namespace Medicraft.Systems.Managers
                 else if (!_questStamp.IsQuestAccepted && !_questStamp.IsQuestDone)
                 {
                     acceptButton.Visible = true;
+                    IsForceAccepting = true;
                     Dialog = dialogs.FirstOrDefault(e => e.Stage.Equals("onAccept"));
                 }
                 else if (_questStamp.IsQuestAccepted && !_questStamp.IsQuestDone)
@@ -710,20 +773,25 @@ namespace Medicraft.Systems.Managers
                     Dialog = dialogs.FirstOrDefault(e => e.Stage.Equals("onDone"));
                 }
 
-                _animatorDialogue.TextToType = Dialog.Dialogues[_dialogueIndex];
+                entityName.Text = Dialog.Dialogues[_dialogueIndex].Item1;
+                _animatorDialogue.TextToType = Dialog.Dialogues[_dialogueIndex].Item2;
             }
             else
             {
                 acceptButton.Visible = false;
                 Dialog = dialogList.FirstOrDefault(e => e.Type.Equals("Daily"));
 
-                _animatorDialogue.TextToType = Dialog.Dialogues[_dialogueIndex];
+                entityName.Text = Dialog.Dialogues[_dialogueIndex].Item1;
+                _animatorDialogue.TextToType = Dialog.Dialogues[_dialogueIndex].Item2;
             }
         }
 
         private void CloseDialog()
         {
-            InteractingMob.IsInteracting = false;
+            if (InteractingMob != null)
+            {
+                InteractingMob.IsInteracting = false;
+            }
             IsShowDialogUI = false;
 
             var playScreenUI = _mainPanels[PlayScreen];
@@ -741,6 +809,9 @@ namespace Medicraft.Systems.Managers
             quickMenuPanel.Visible = true;
             questPanel.Visible = true;
             dialogPanel.Visible = false;
+
+            // Invoke the event to notify listeners that the dialog is closed
+            OnDialogClosed(new DialogClosedEventArgs(Dialog));
         }
 
         public void RefreshHotbar()
@@ -1330,7 +1401,7 @@ namespace Medicraft.Systems.Managers
                 Identifier = "quantitySelectorPanel"
             };
 
-            var quantitySlider = new Slider(1, 10, SliderSkin.Fancy, Anchor.AutoCenter)
+            var quantitySlider = new Slider(1, 10, SliderSkin.Default, Anchor.AutoCenter)
             {
                 Identifier = "quantitySlider"
             };
@@ -4425,7 +4496,10 @@ namespace Medicraft.Systems.Managers
 
                                     Camera.ResetCameraPosition(true);
                                     //JsonFileManager.SaveGame(JsonFileManager.SavingPlayerData);
-                                    ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.MainMenuScreen);
+                                    if (GameGlobals.Instance.IsMiniGameStart)
+                                        GameGlobals.Instance.EndMiniGame();
+
+                                    ScreenManager.Instance.TransitionToScreen(ScreenManager.GameScreen.MainMenuScreen);
                                     return true;
                                 }),
                                 new("No", () =>
@@ -4709,7 +4783,31 @@ namespace Medicraft.Systems.Managers
                 WrapWords = true
             });
             selectingQuantityPanel.AddChild(new LineSpace(1));
-            var quantitySlider = new Slider(1, 10, SliderSkin.Fancy, Anchor.AutoCenter)
+
+            var selectButtonPanel = new Panel(new Vector2(450, 60), PanelSkin.None, Anchor.AutoCenter)
+            {
+                Identifier = "selectButtonPanel"
+            };
+            selectingQuantityPanel.AddChild(selectButtonPanel);
+
+            var minutsButton = new Button("-", ButtonSkin.Default)
+            {
+                Identifier = "minutsButton",
+                Anchor = Anchor.TopLeft,
+                Size = new Vector2(50, 50)
+            };
+            selectButtonPanel.AddChild(minutsButton);
+
+            var plusButton = new Button("+", ButtonSkin.Default)
+            {
+                Identifier = "plusButton",
+                Anchor = Anchor.TopRight,
+                Size = new Vector2(50, 50)
+            };
+            selectButtonPanel.AddChild(plusButton);
+            selectingQuantityPanel.AddChild(new LineSpace(2));
+
+            var quantitySlider = new Slider(1, 10, SliderSkin.Default, Anchor.AutoCenter)
             {
                 Identifier = "quantitySlider",
                 Value = 1
@@ -4725,6 +4823,7 @@ namespace Medicraft.Systems.Managers
             selectingQuantityPanel.AddChild(quantityLabel);
             selectingQuantityPanel.AddChild(quantitySlider);
             selectingQuantityPanel.AddChild(new LineSpace(1));
+
             var Select = new Button("Select", anchor: Anchor.AutoInline)
             {
                 Identifier = "Select",
@@ -4735,6 +4834,17 @@ namespace Medicraft.Systems.Managers
                 }
             };
             selectingQuantityPanel.AddChild(Select);
+
+            // Set OnClick selectButtons
+            minutsButton.OnClick = (btn) =>
+            {
+                quantitySlider.Value--;
+            };
+            plusButton.OnClick = (btn) =>
+            {
+                quantitySlider.Value++;
+            };
+
             var Cancel = new Button("Cancel", anchor: Anchor.AutoInlineNoBreak)
             {
                 Identifier = "Cancel",
@@ -4992,6 +5102,7 @@ namespace Medicraft.Systems.Managers
                                         quantity,
                                         itemData.BuyingPrice);
 
+                                    OnTradingItem(new TradingItemEventArgs("Buying", itemData, quantity));
                                     RefreshTradingItem("Buy Item");
                                     ClearSelectingQuantityPanel();
                                     return true;
@@ -5005,6 +5116,8 @@ namespace Medicraft.Systems.Managers
             else if (tradingTabs.ActiveTab.name.Equals("Sell Item"))
             {
                 var currItemInv = InventoryManager.Instance.SelectedItem;
+                var itemData = GameGlobals.Instance.ItemsDatas.FirstOrDefault
+                    (e => e.ItemId.Equals(currItemInv.Value.ItemId));
 
                 GeonBit.UI.Utils.MessageBox.ShowMsgBox("Confirm Selling Item"
                         , $"Do you want to sell {currItemInv.Value.GetName()} x {quantity}?"
@@ -5017,6 +5130,7 @@ namespace Medicraft.Systems.Managers
                                         currItemInv.Value,
                                         quantity);
 
+                                    OnTradingItem(new TradingItemEventArgs("Selling", itemData, quantity));
                                     RefreshTradingItem("Sell Item");
                                     ClearSelectingQuantityPanel();
                                     return true;
@@ -5319,10 +5433,10 @@ namespace Medicraft.Systems.Managers
                     var currLoadMapAction = ScreenManager.GetLoadMapAction(loadMapAction);
 
                     // if the zoneArea.Name not be found in LoadMapAction then return
-                    if (currLoadMapAction == ScreenManager.LoadMapAction.LoadSave) return;
+                    if (currLoadMapAction == ScreenManager.EntranceZoneName.LoadSave) return;
 
-                    ScreenManager.Instance.CurrentLoadMapAction = currLoadMapAction;
-                    ScreenManager.Instance.TranstisionToScreen(ScreenManager.Instance.GetPlayScreenByLoadMapAction());
+                    ScreenManager.Instance.LoadMapByEntranceZone = currLoadMapAction;
+                    ScreenManager.Instance.TransitionToScreen(ScreenManager.Instance.GetPlayScreenByLoadMapAction());
 
                     PlaySoundEffect(Sound.Warp);
                 }
@@ -5405,6 +5519,25 @@ namespace Medicraft.Systems.Managers
             else warpButton.Enabled = false;
         }
 
+        // Define a delegate for the event handler
+        public delegate void UIEventHandler(object sender, EventArgs e);
+
+        // Define an event based on the delegate
+        public event UIEventHandler CloseDialogEventHandler;
+
+        public event UIEventHandler TradeEventHandler;
+
+        // Method to raise the DialogClosed event
+        public virtual void OnDialogClosed(DialogClosedEventArgs e)
+        {
+            CloseDialogEventHandler?.Invoke(this, e);
+        }
+
+        public virtual void OnTradingItem(TradingItemEventArgs e)
+        {
+            TradeEventHandler?.Invoke(this, e);
+        }
+
         public static UIManager Instance
         {
             get
@@ -5413,5 +5546,17 @@ namespace Medicraft.Systems.Managers
                 return instance;
             }
         }
+    }
+
+    public class DialogClosedEventArgs(DialogData DialogData) : EventArgs
+    {
+        public DialogData DialogData { get; } = DialogData;
+    }
+
+    public class TradingItemEventArgs(string action, ItemData itemData, int quantity) : EventArgs
+    {
+        public string Action { get; } = action;
+        public ItemData ItemData { get; } = itemData;
+        public int Quantity { get; } = quantity;
     }
 }

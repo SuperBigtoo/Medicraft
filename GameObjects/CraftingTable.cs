@@ -139,6 +139,8 @@ namespace Medicraft.GameObjects
 
         public void OpenCraftingPanel()
         {
+            PlayerManager.Instance.OnInteractWithObject(new InteractingObjectEventArgs(this));
+
             // Toggle Pause PlayScreen
             Instance.IsGamePause = !Instance.IsGamePause;
             Instance.IsOpenGUI = !Instance.IsOpenGUI;

@@ -76,7 +76,7 @@
         "Category": 2,
         "Name": "CraftingTable",
         "CraftingType": 1,
-        "Description": "CraftingTable Equipment",
+        "Description": "CraftingTable_Equipment",
         "Position": [ 1117.00, 992.00 ],
         "IsVisible": true,
         "IsDestroyable": true

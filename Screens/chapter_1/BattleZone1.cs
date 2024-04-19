@@ -48,14 +48,11 @@ namespace Medicraft.Screens.chapter_1
 
                 GameGlobals.Instance.ObjectSpawners.Add(new ObjectSpawner(
                     spawnerData, MapName, objectDatas));
-
-                System.Diagnostics.Debug.WriteLine($"Do");
             }
 
             // Adding Spawners to EntityManager & ObjectManager
             {
                 EntityManager.Instance.Initialize(MapName);
-
                 ObjectManager.Instance.Initialize(MapName);
             }
 

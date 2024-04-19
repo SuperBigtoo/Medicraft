@@ -104,8 +104,10 @@ namespace Medicraft.GameObjects
             Sprite.Update(deltaSeconds);
         }
 
-        public static void OpenSavingPanel()
+        public void OpenSavingPanel()
         {
+            PlayerManager.Instance.OnInteractWithObject(new InteractingObjectEventArgs(this));
+
             // Toggle Pause PlayScreen
             Instance.IsGamePause = !Instance.IsGamePause;
             Instance.IsOpenGUI = !Instance.IsOpenGUI;

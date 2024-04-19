@@ -116,8 +116,6 @@ namespace Medicraft.Systems.Spawners
 
         public void SetupSpawner(List<EntityData> entityDatas, Dictionary<int, SpriteSheet> spriteSheets)
         {
-            System.Diagnostics.Debug.WriteLine($"SetupSpawner");
-
             foreach (var entityData in entityDatas)
             {
                 spriteSheets.TryGetValue(entityData.CharId, out SpriteSheet spriteSheet);
@@ -129,6 +127,9 @@ namespace Medicraft.Systems.Spawners
                         break;
 
                     case 101:
+                    case 126:
+                    case 127:
+                    case 128:
                         AddEntity(new Vendor(new AnimatedSprite(spriteSheet), entityData, Vector2.One));
                         break;
 
@@ -169,9 +170,11 @@ namespace Medicraft.Systems.Spawners
                         break;
 
                     case 202:
+                        AddEntity(new Treant(new AnimatedSprite(spriteSheet), entityData, Vector2.One));
                         break;
 
                     case 203:
+                        AddEntity(new IceGolem(new AnimatedSprite(spriteSheet), entityData, Vector2.One));
                         break;
 
                     case 204:
@@ -188,9 +191,11 @@ namespace Medicraft.Systems.Spawners
                         break;
 
                     case 301:
+                        AddEntity(new TheKeeper(new AnimatedSprite(spriteSheet), entityData, Vector2.One));
                         break;
 
                     case 302:
+                        AddEntity(new Yeti(new AnimatedSprite(spriteSheet), entityData, Vector2.One));
                         break;
 
                     case 303:

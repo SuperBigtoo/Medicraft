@@ -336,6 +336,42 @@
         "Evasion": 0.5
     },
     {
+        "CharId": 126,
+        "Name": "VendorFemale",
+        "Category": 2,
+        "ATK": 0,
+        "HP": 25,
+        "DEF_Percent": 1,
+        "Crit_Percent": 1,
+        "CritDMG_Percent": 1,
+        "Speed": 100,
+        "Evasion": 0.5
+    },
+    {
+        "CharId": 127,
+        "Name": "VendorChef",
+        "Category": 2,
+        "ATK": 0,
+        "HP": 25,
+        "DEF_Percent": 1,
+        "Crit_Percent": 1,
+        "CritDMG_Percent": 1,
+        "Speed": 100,
+        "Evasion": 0.5
+    },
+    {
+        "CharId": 128,
+        "Name": "VendorMaterial",
+        "Category": 2,
+        "ATK": 0,
+        "HP": 25,
+        "DEF_Percent": 1,
+        "Crit_Percent": 1,
+        "CritDMG_Percent": 1,
+        "Speed": 100,
+        "Evasion": 0.5
+    },
+    {
         "CharId": 200,
         "Name": "Slime",
         "Category": 3,
@@ -380,7 +416,7 @@
         "DEF_Percent": 0.2,
         "Crit_Percent": 0.1,
         "CritDMG_Percent": 0.25,
-        "Speed": 200,
+        "Speed": 125,
         "Evasion": 0.025
     },
     {
@@ -392,7 +428,7 @@
         "DEF_Percent": 0.05,
         "Crit_Percent": 0.15,
         "CritDMG_Percent": 0.5,
-        "Speed": 350,
+        "Speed": 250,
         "Evasion": 0.25
     },
     {

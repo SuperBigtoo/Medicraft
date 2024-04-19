@@ -112,7 +112,8 @@ namespace Medicraft.Data
                         CreatedTime = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).CreatedTime,
                         LastUpdated = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).LastUpdated,
                         TotalPlayTime = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).TotalPlayTime,
-                        PlayerData = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).PlayerData
+                        PlayerData = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).PlayerData,
+                        SpawnerDatas = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).SpawnerDatas
                     };
                     break;
 
@@ -237,4 +238,7 @@ namespace Medicraft.Data
 
     // Reader Spawner Datas: spawnersdata.json
     public class SpawnerDataReader : JsonContentTypeReader<List<SpawnerData>> { }
+
+    // Reader MiniGame Datas
+    public class MiniGameDataReader : JsonContentTypeReader<List<MiniGameData>> { }
 }

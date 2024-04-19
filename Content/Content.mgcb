@@ -74,6 +74,12 @@
 /processorParam:ContentType=Medicraft.Data.ObjectDataReader, Medicraft
 /build:data/chapter_2/dun/objects.json
 
+#begin data/chapter_2/town/entites.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.EntityDataReader, Medicraft
+/build:data/chapter_2/town/entites.json
+
 #begin data/chapter_2/town/objects.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor
@@ -103,6 +109,12 @@
 /processor:JsonContentProcessor
 /processorParam:ContentType=Medicraft.Data.ObjectDataReader, Medicraft
 /build:data/chapter_3/dun/objects.json
+
+#begin data/chapter_3/town/entites.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.EntityDataReader, Medicraft
+/build:data/chapter_3/town/entites.json
 
 #begin data/chapter_3/town/objects.json
 /importer:JsonContentImporter
@@ -169,6 +181,12 @@
 /processor:JsonContentProcessor
 /processorParam:ContentType=Medicraft.Data.MedicineDescriptionDataReader, Medicraft
 /build:data/models/medicine_descriptions.json
+
+#begin data/models/minigamedata.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Medicraft.Data.MiniGameDataReader, Medicraft
+/build:data/models/minigamedata.json
 
 #begin data/models/playerdata.json
 /importer:JsonContentImporter
@@ -1134,6 +1152,66 @@
 /processorParam:TextureFormat=Color
 /build:gui/accept_quest.png
 
+#begin gui/advrankup_ranklogo_A.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/advrankup_ranklogo_A.png
+
+#begin gui/advrankup_ranklogo_B.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/advrankup_ranklogo_B.png
+
+#begin gui/advrankup_ranklogo_C.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/advrankup_ranklogo_C.png
+
+#begin gui/advrankup_ranklogo_D.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/advrankup_ranklogo_D.png
+
+#begin gui/advrankup_ranklogo_S.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/advrankup_ranklogo_S.png
+
 #begin gui/Alpha_BG.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1722,6 +1800,30 @@
 /processorParam:TextureFormat=Color
 /build:gui/profile/violet_profile.png
 
+#begin gui/quest_objective_stamp_cleared.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/quest_objective_stamp_cleared.png
+
+#begin gui/quest_objective_window.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/quest_objective_window.png
+
 #begin gui/quest_stamp.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1746,6 +1848,18 @@
 /processorParam:TextureFormat=Color
 /build:gui/safezone_map_sign.png
 
+#begin gui/scorewindow.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/scorewindow.png
+
 #begin gui/selected_slot.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1758,6 +1872,18 @@
 /processorParam:TextureFormat=Color
 /build:gui/selected_slot.png
 
+#begin gui/shop_close.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/shop_close.png
+
 #begin gui/skill_point.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1769,6 +1895,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:gui/skill_point.PNG
+
+#begin gui/timewindow.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gui/timewindow.png
 
 #begin gui/transition_texture.png
 /importer:TextureImporter

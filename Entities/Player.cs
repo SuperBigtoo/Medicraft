@@ -733,7 +733,7 @@ namespace Medicraft.Entities
         private void CheckAttackDetection(float atk, float percentHit, bool isUndodgeable, float stunTime, string effectAttacked)
         {
             foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed && !e.IsDying
-                && (e.EntityType == EntityTypes.Hostile || e.EntityType == EntityTypes.Boss)))
+                && (e.EntityType == EntityTypes.HostileMob || e.EntityType == EntityTypes.Boss)))
             {
                 if (entity.BoundingHitBox.Intersects(BoundingDetectEntity))
                 {
@@ -767,7 +767,7 @@ namespace Medicraft.Entities
                         }
                     }
 
-                    if (entity.HP <= 0)
+                    if ((int)entity.HP <= 0)
                     {
                         entity.IsDying = true;
                     }

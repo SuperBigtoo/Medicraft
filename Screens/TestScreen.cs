@@ -57,7 +57,6 @@ namespace Medicraft.Screens
             // Adding Spawners to EntityManager & ObjectManager
             {
                 EntityManager.Instance.Initialize(MapName);
-
                 ObjectManager.Instance.Initialize(MapName);
             }
 

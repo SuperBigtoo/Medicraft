@@ -1,0 +1,768 @@
+[
+    {
+        "Id": 0,
+        "CharId": 101,
+        "Level": 1,
+        "Name": "ชั่งตีเหล็ก",
+        "MobType": "Vendor",
+        "IsInteractable": true,
+        "PathFindingType": 2,
+        "Position": [ 4249, 1838 ],
+        "TradingItemsData": [
+            {
+                "ItemId": 400
+            },
+            {
+                "ItemId": 401
+            },
+            {
+                "ItemId": 402
+            },
+            {
+                "ItemId": 403
+            },
+            {
+                "ItemId": 404
+            },
+            {
+                "ItemId": 405
+            }
+        ]
+    },
+    {
+        "Id": 1,
+        "CharId": 126,
+        "Level": 1,
+        "Name": "แม่ค้าขายของสด",
+        "MobType": "Vendor",
+        "IsInteractable": true,
+        "PathFindingType": 2,
+        "Position": [ 4018, 2056 ],
+        "TradingItemsData": [
+            {
+                "ItemId": 300
+            },
+            {
+                "ItemId": 301
+            },
+            {
+                "ItemId": 142
+            },
+            {
+                "ItemId": 143
+            },
+            {
+                "ItemId": 144
+            },
+            {
+                "ItemId": 145
+            },
+            {
+                "ItemId": 146
+            },
+            {
+                "ItemId": 147
+            },
+            {
+                "ItemId": 156
+            },
+            {
+                "ItemId": 159
+            },
+            {
+                "ItemId": 162
+            },
+            {
+                "ItemId": 164
+            }
+        ]
+    },
+    {
+        "Id": 2,
+        "CharId": 119,
+        "Level": 1,
+        "Name": "Bam",
+        "MobType": "Civilian",
+        "IsInteractable": true,
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_1",
+        "Position": [ 3772, 1848 ],
+        "DialogData": [
+            {
+                "Id": 0,
+                "Type": "Daily",
+                "Description": "Daily dialog",
+                "Dialogues": [
+                    {
+                        "Item1": "Bam",
+                        "Item2": "เมื่อไหร่ Sam จะมาสักทีน่า.."
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Id": 3,
+        "CharId": 109,
+        "Level": 1,
+        "Name": "Civilian08",
+        "MobType": "Civilian",
+        "IsInteractable": false,
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_2",
+        "Position": [ 4133, 1944 ]
+    },
+    {
+        "Id": 4,
+        "CharId": 115,
+        "Level": 1,
+        "Name": "Rou",
+        "MobType": "Civilian",
+        "IsInteractable": true,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 2232, 3914 ],
+        "DialogData": [
+            {
+                "Id": 0,
+                "Type": "Daily",
+                "Description": "Daily dialog",
+                "Dialogues": [
+                    {
+                        "Item1": "Rou",
+                        "Item2": "ฮิฮิ อาไยหยอ?"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Id": 5,
+        "CharId": 111,
+        "Level": 1,
+        "Name": "Uncle Tobi",
+        "MobType": "Civilian",
+        "IsInteractable": true,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 2524, 3754 ],
+        "DialogData": [
+            {
+                "Id": 0,
+                "Type": "Daily",
+                "Description": "Daily dialog",
+                "Dialogues": [
+                    {
+                        "Item1": "Uncle Tobi",
+                        "Item2": "โอ๊ย.. ปวดหลังแท้"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Id": 6,
+        "CharId": 104,
+        "Level": 1,
+        "Name": "Civilian03",
+        "MobType": "Civilian",
+        "IsInteractable": false,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 1970, 2704 ]
+    },
+    {
+        "Id": 7,
+        "CharId": 107,
+        "Level": 1,
+        "Name": "Tom",
+        "MobType": "Civilian",
+        "IsInteractable": true,
+        "PathFindingType": 0,
+        "NodeCycleTime": 10,
+        "Position": [ 1960, 1806 ],
+        "RoutePoint": [
+            [ 1962, 1754 ],
+            [ 1968, 2158 ],
+            [ 2738, 2164 ],
+            [ 3557, 2152 ],
+            [ 2738, 2164 ],
+            [ 1968, 2158 ]
+        ],
+        "DialogData": [
+            {
+                "Id": 0,
+                "Type": "Daily",
+                "Description": "Daily dialog",
+                "Dialogues": [
+                    {
+                        "Item1": "Tom",
+                        "Item2": "สวัสดี?"
+                    },
+                    {
+                        "Item1": "Tom",
+                        "Item2": "หน้าใหม่หรอ? เราอะ"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Id": 8,
+        "CharId": 100,
+        "Level": 1,
+        "Name": "Meof?",
+        "MobType": "Animal",
+        "IsInteractable": true,
+        "PathFindingType": 0,
+        "NodeCycleTime": 10,
+        "Position": [ 3860, 4074 ],
+        "RoutePoint": [
+            [ 3860, 4214 ],
+            [ 3852, 3344 ],
+            [ 2964, 3338 ],
+            [ 3852, 3344 ]
+        ],
+        "DialogData": [
+            {
+                "Id": 0,
+                "Type": "Daily",
+                "Description": "Daily dialog",
+                "Dialogues": [
+                    {
+                        "Item1": "Meof?",
+                        "Item2": "เมี๊ยว?"
+                    },
+                    {
+                        "Item1": "Meof?",
+                        "Item2": "เมี๊ยว เมี๊ยว?"
+                    },
+                    {
+                        "Item1": "Meof?",
+                        "Item2": "เมี๊ยววว เมี๊ยว เมี๊ยว เมี๊ยว เมี๊ยวววว"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Id": 9,
+        "CharId": 123,
+        "Level": 1,
+        "Name": "Cat Lady",
+        "MobType": "Civilian",
+        "IsInteractable": true,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 4045, 3278 ],
+        "DialogData": [
+            {
+                "Id": 0,
+                "Type": "Daily",
+                "Description": "Daily dialog",
+                "Dialogues": [
+                    {
+                        "Item1": "Cat Lady",
+                        "Item2": "เมี๊ยว?"
+                    },
+                    {
+                        "Item1": "Cat Lady",
+                        "Item2": "โอ๊ะ! 55555"
+                    },
+                    {
+                        "Item1": "Cat Lady",
+                        "Item2": "เผลอตัวไปหน่อยจ๊ะ"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Id": 10,
+        "CharId": 116,
+        "Level": 1,
+        "Name": "Civilian15",
+        "MobType": "Civilian",
+        "IsInteractable": false,
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_3",
+        "Position": [ 2454, 2434 ]
+    },
+    {
+        "Id": 11,
+        "CharId": 117,
+        "Level": 1,
+        "Name": "Civilian16",
+        "MobType": "Civilian",
+        "IsInteractable": false,
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_4",
+        "Position": [ 2732, 3052 ]
+    },
+    {
+        "Id": 12,
+        "CharId": 100,
+        "Level": 1,
+        "Name": "Cat",
+        "MobType": "Animal",
+        "IsInteractable": false,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 3156, 2516 ]
+    },
+    {
+        "Id": 13,
+        "CharId": 100,
+        "Level": 1,
+        "Name": "Cat",
+        "MobType": "Animal",
+        "IsInteractable": false,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 4010, 3344 ]
+    },
+    {
+        "Id": 14,
+        "CharId": 128,
+        "Level": 1,
+        "Name": "พ่อค้าวัตถุดิบยา",
+        "MobType": "Vendor",
+        "IsInteractable": true,
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "Position": [ 3720, 1988 ],
+        "TradingItemsData": [
+            {
+                "ItemId": 0
+            },
+            {
+                "ItemId": 1
+            },
+            {
+                "ItemId": 2
+            },
+            {
+                "ItemId": 3
+            },
+            {
+                "ItemId": 4
+            },
+            {
+                "ItemId": 5
+            },
+            {
+                "ItemId": 6
+            },
+            {
+                "ItemId": 7
+            },
+            {
+                "ItemId": 8
+            },
+            {
+                "ItemId": 9
+            },
+            {
+                "ItemId": 10
+            },
+            {
+                "ItemId": 11
+            },
+            {
+                "ItemId": 12
+            },
+            {
+                "ItemId": 13
+            },
+            {
+                "ItemId": 14
+            },
+            {
+                "ItemId": 15
+            },
+            {
+                "ItemId": 16
+            },
+            {
+                "ItemId": 17
+            },
+            {
+                "ItemId": 18
+            },
+            {
+                "ItemId": 19
+            },
+            {
+                "ItemId": 20
+            },
+            {
+                "ItemId": 21
+            },
+            {
+                "ItemId": 22
+            },
+            {
+                "ItemId": 23
+            },
+            {
+                "ItemId": 24
+            },
+            {
+                "ItemId": 25
+            },
+            {
+                "ItemId": 26
+            },
+            {
+                "ItemId": 27
+            },
+            {
+                "ItemId": 28
+            },
+            {
+                "ItemId": 29
+            },
+            {
+                "ItemId": 30
+            },
+            {
+                "ItemId": 31
+            },
+            {
+                "ItemId": 32
+            },
+            {
+                "ItemId": 33
+            },
+            {
+                "ItemId": 34
+            },
+            {
+                "ItemId": 35
+            },
+            {
+                "ItemId": 36
+            },
+            {
+                "ItemId": 37
+            },
+            {
+                "ItemId": 38
+            },
+            {
+                "ItemId": 39
+            },
+            {
+                "ItemId": 40
+            },
+            {
+                "ItemId": 41
+            },
+            {
+                "ItemId": 42
+            },
+            {
+                "ItemId": 43
+            },
+            {
+                "ItemId": 44
+            },
+            {
+                "ItemId": 45
+            },
+            {
+                "ItemId": 46
+            },
+            {
+                "ItemId": 47
+            },
+            {
+                "ItemId": 48
+            },
+            {
+                "ItemId": 49
+            },
+            {
+                "ItemId": 50
+            },
+            {
+                "ItemId": 51
+            },
+            {
+                "ItemId": 52
+            },
+            {
+                "ItemId": 53
+            },
+            {
+                "ItemId": 54
+            },
+            {
+                "ItemId": 55
+            },
+            {
+                "ItemId": 56
+            },
+            {
+                "ItemId": 57
+            },
+            {
+                "ItemId": 58
+            },
+            {
+                "ItemId": 59
+            },
+            {
+                "ItemId": 60
+            },
+            {
+                "ItemId": 61
+            },
+            {
+                "ItemId": 62
+            },
+            {
+                "ItemId": 63
+            },
+            {
+                "ItemId": 64
+            },
+            {
+                "ItemId": 65
+            },
+            {
+                "ItemId": 66
+            },
+            {
+                "ItemId": 67
+            },
+            {
+                "ItemId": 68
+            },
+            {
+                "ItemId": 69
+            },
+            {
+                "ItemId": 70
+            },
+            {
+                "ItemId": 71
+            },
+            {
+                "ItemId": 72
+            },
+            {
+                "ItemId": 73
+            },
+            {
+                "ItemId": 74
+            },
+            {
+                "ItemId": 75
+            },
+            {
+                "ItemId": 76
+            },
+            {
+                "ItemId": 77
+            },
+            {
+                "ItemId": 78
+            },
+            {
+                "ItemId": 79
+            },
+            {
+                "ItemId": 80
+            },
+            {
+                "ItemId": 81
+            },
+            {
+                "ItemId": 82
+            },
+            {
+                "ItemId": 83
+            },
+            {
+                "ItemId": 84
+            },
+            {
+                "ItemId": 85
+            },
+            {
+                "ItemId": 86
+            },
+            {
+                "ItemId": 87
+            },
+            {
+                "ItemId": 88
+            },
+            {
+                "ItemId": 89
+            },
+            {
+                "ItemId": 90
+            },
+            {
+                "ItemId": 91
+            },
+            {
+                "ItemId": 92
+            },
+            {
+                "ItemId": 93
+            },
+            {
+                "ItemId": 94
+            },
+            {
+                "ItemId": 95
+            },
+            {
+                "ItemId": 96
+            },
+            {
+                "ItemId": 97
+            },
+            {
+                "ItemId": 98
+            },
+            {
+                "ItemId": 99
+            },
+            {
+                "ItemId": 100
+            },
+            {
+                "ItemId": 101
+            },
+            {
+                "ItemId": 102
+            },
+            {
+                "ItemId": 103
+            },
+            {
+                "ItemId": 104
+            },
+            {
+                "ItemId": 105
+            },
+            {
+                "ItemId": 106
+            },
+            {
+                "ItemId": 107
+            },
+            {
+                "ItemId": 108
+            },
+            {
+                "ItemId": 109
+            },
+            {
+                "ItemId": 110
+            },
+            {
+                "ItemId": 111
+            },
+            {
+                "ItemId": 112
+            },
+            {
+                "ItemId": 113
+            },
+            {
+                "ItemId": 114
+            },
+            {
+                "ItemId": 115
+            },
+            {
+                "ItemId": 116
+            },
+            {
+                "ItemId": 117
+            },
+            {
+                "ItemId": 118
+            },
+            {
+                "ItemId": 119
+            },
+            {
+                "ItemId": 120
+            },
+            {
+                "ItemId": 121
+            },
+            {
+                "ItemId": 122
+            },
+            {
+                "ItemId": 123
+            },
+            {
+                "ItemId": 124
+            },
+            {
+                "ItemId": 125
+            },
+            {
+                "ItemId": 126
+            },
+            {
+                "ItemId": 127
+            },
+            {
+                "ItemId": 128
+            },
+            {
+                "ItemId": 129
+            },
+            {
+                "ItemId": 130
+            },
+            {
+                "ItemId": 131
+            },
+            {
+                "ItemId": 132
+            },
+            {
+                "ItemId": 133
+            },
+            {
+                "ItemId": 134
+            },
+            {
+                "ItemId": 135
+            },
+            {
+                "ItemId": 136
+            },
+            {
+                "ItemId": 137
+            },
+            {
+                "ItemId": 138
+            },
+            {
+                "ItemId": 139
+            },
+            {
+                "ItemId": 140
+            },
+            {
+                "ItemId": 141
+            }
+
+        ]
+    }
+]

@@ -113,6 +113,7 @@ namespace Medicraft.Systems.Spawners
 
                     case 1: // QuestObject
                         spriteSheets = GameGlobals.Instance.UIBooksIconHUD;
+                        AddGameObject(new QuestObject(new AnimatedSprite(spriteSheets), gameObjectData, Vector2.One));
                         break;
 
                     case 2: // CraftingTable

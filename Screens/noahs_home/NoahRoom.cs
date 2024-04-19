@@ -8,6 +8,8 @@ using Medicraft.Systems.Spawners;
 using Medicraft.Systems.TilemapRenderer;
 using Medicraft.Systems.Managers;
 using System.Linq;
+using System;
+using static Medicraft.Systems.GameGlobals;
 
 namespace Medicraft.Screens.noahs_home
 {
@@ -89,6 +91,63 @@ namespace Medicraft.Screens.noahs_home
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
+        }
+
+        protected override void TransitionScreenHandler(object sender, EventArgs e)
+        {
+            TransitionScreenEventArgs eventArgs = (TransitionScreenEventArgs)e;
+
+            var questStamp_101 = PlayerManager.Instance.Player.PlayerData.ChapterProgression.FirstOrDefault
+                    (e => e.ChapterId.Equals(1)).Quests.FirstOrDefault
+                        (e => e.QuestId.Equals(101));
+
+            // Quest 101: onGoing
+            {            
+                if (questStamp_101 != null && questStamp_101.IsQuestAccepted && !questStamp_101.IsQuestDone)
+                {
+                    UIManager.Instance.CreateDialog(new DialogData()
+                    {
+                        Id = 2,
+                        Type = "Quest",
+                        Description = "Show 'onGoing' Quest: First Time?",
+                        QuestId = 101,
+                        ChapterId = 1,
+                        Stage = "onGoing",
+                        Dialogues = [
+                            ("Noah" , "มาลองทำ ‘ยาจันทน์ลีลา’ สำหรับบรรเทาอาการไข้ตัวร้อน ไข้เปลี่ยนฤดู ดูกันเถอะ!!")
+                        ]
+                    }, PlayerManager.Instance.Player.Name, false);
+                }
+            }
+
+            // Quest 207
+            {
+                var questStamp_207 = PlayerManager.Instance.Player.PlayerData.ChapterProgression.FirstOrDefault
+                        (e => e.ChapterId.Equals(2)).Quests.FirstOrDefault
+                            (e => e.QuestId.Equals(207));
+
+                var startMiniGame = ObjectManager.Instance.GameObjects.FirstOrDefault
+                        (e => e.Name.Equals("Start_MiniGame"));
+
+                if (startMiniGame == null) return;
+
+                if (questStamp_207.IsQuestClear)
+                {                
+                    startMiniGame.IsVisible = true;
+                }
+                else startMiniGame.IsVisible = false;
+            }
+        }
+
+        protected override void GameObjectInteractingHandler(object sender, EventArgs e)
+        {
+            InteractingObjectEventArgs eventArgs = (InteractingObjectEventArgs)e;
+
+            if (eventArgs.GameObject.Name.Equals("Start_MiniGame") && !Instance.IsMiniGameStart)
+            {
+                // Start MiniGame
+                Instance.StartMiniGame();
+            }
         }
     }
 }

@@ -93,7 +93,7 @@ namespace Medicraft.Entities.Companion
                 && !PlayerManager.Instance.IsRecallCompanion)
             {
                 foreach (var entity in EntityManager.Instance.Entities.Where(e => !e.IsDestroyed
-                && e.EntityType == EntityTypes.Hostile || e.EntityType == EntityTypes.Boss))
+                && e.EntityType == EntityTypes.HostileMob || e.EntityType == EntityTypes.Boss))
                 {
                     if (BoundingDetectEntity.Intersects(entity.BoundingHitBox)
                         && ScreenManager.Instance.IsScreenLoaded && !IsAttacking && !IsStunning)

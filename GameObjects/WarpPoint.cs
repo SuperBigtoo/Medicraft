@@ -6,7 +6,6 @@ using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
 using Medicraft.Systems.Managers;
 using static Medicraft.Systems.GameGlobals;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace Medicraft.GameObjects
 {
@@ -132,7 +131,7 @@ namespace Medicraft.GameObjects
         }
 
         public void OpenWarpPointPanel()
-        {
+        {           
             // Toggle Pause PlayScreen
             Instance.IsGamePause = !Instance.IsGamePause;
             Instance.IsOpenGUI = !Instance.IsOpenGUI;
@@ -151,6 +150,8 @@ namespace Medicraft.GameObjects
                 UIManager.Instance.CurrentUI = UIManager.WarpPointPanel;
                 PlaySoundEffect(Sound.Click1);
             }
+
+            PlayerManager.Instance.OnInteractWithObject(new InteractingObjectEventArgs(this));
         }
 
         public override void Draw(SpriteBatch spriteBatch)

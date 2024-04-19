@@ -2,9 +2,6 @@
 using Medicraft.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Serialization;
-using MonoGame.Extended.Sprites;
-using MonoGame.Extended.Content;
 using TiledSharp;
 using System.Collections.Generic;
 using Medicraft.Systems.Spawners;

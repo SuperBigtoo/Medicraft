@@ -1,6 +1,8 @@
 ﻿using GeonBit.UI;
 using Medicraft.Data;
 using Medicraft.Data.Models;
+using Medicraft.Entities.Mobs;
+using Medicraft.Entities.Mobs.Friendly;
 using Medicraft.Systems.Managers;
 using Medicraft.Systems.PathFinding;
 using Medicraft.Systems.Spawners;
@@ -61,6 +63,12 @@ namespace Medicraft.Systems
         public float TotalPlayTime { set; get; }
         public int MaxLevel { set; get; }
         public Song DyingSong { private set; get; }
+
+        // Quest
+        public bool ShowQuestComplete { set; get; } = false;
+        public bool ShowQuestObjectiveDescription { set; get; } = false;
+        public string QuestObjectiveDescription { set; get; } = string.Empty;
+        public bool ShowQuestObjectiveClear { set; get; } = false;
 
         // UI MainMenu & PlayScreen
         public BuiltinThemes BuiltinTheme { set; get; }
@@ -265,7 +273,17 @@ namespace Medicraft.Systems
             accept_quest,
             Warp_NoahsHome,
             key_binding,
-            you_die
+            you_die,
+            timewindow,
+            scorewindow,
+            shop_close,
+            quest_objective_window,
+            quest_objective_stamp_cleared,
+            advrankup_ranklogo_S,
+            advrankup_ranklogo_A,
+            advrankup_ranklogo_B,
+            advrankup_ranklogo_C,
+            advrankup_ranklogo_D,
         }
         private readonly Dictionary<GuiTextureName, int> guiTextureIndices = [];
 
@@ -455,7 +473,7 @@ namespace Medicraft.Systems
 
             // sound & music
             SoundEffectVolume = 0.5f;
-            BackgroundMusicVolume = 0.25f;
+            BackgroundMusicVolume = 0.10f;
             CurrentMapMusics = [];
 
             // hotbar switch
@@ -597,6 +615,9 @@ namespace Medicraft.Systems
             // Load Quest Datas
             QuestDatas = Content.Load<List<QuestData>>("data/models/quest_details");
 
+            // Mini Game Data
+            MiniGameDatas = Content.Load<List<MiniGameData>>("data/models/minigamedata");
+
             // Load Effect Sprite Sheet
             HitSpriteEffect = Content.Load<SpriteSheet>("effect/hit_effect.sf", new JsonContentLoader());
             HitSkillSpriteEffect = Content.Load<SpriteSheet>("effect/hit_skill_effect.sf", new JsonContentLoader());
@@ -645,6 +666,9 @@ namespace Medicraft.Systems
                     { 123,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian22_animation.sf", new JsonContentLoader())},
                     { 124,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian23_animation.sf", new JsonContentLoader())},
                     { 125,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian24_animation.sf", new JsonContentLoader())},
+                    { 126,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian21_animation.sf", new JsonContentLoader())},
+                    { 127,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian22_animation.sf", new JsonContentLoader())},
+                    { 128,  Content.Load<SpriteSheet>("entity/mobs/friendly/civilian/Civilian08_animation.sf", new JsonContentLoader())},
                     { 200,  Content.Load<SpriteSheet>("entity/mobs/monster/slime/slimes_animation.sf", new JsonContentLoader())},
                     { 201,  Content.Load<SpriteSheet>("entity/mobs/monster/goblin/goblin_animation.sf", new JsonContentLoader())},
                     { 202,  Content.Load<SpriteSheet>("entity/mobs/monster/treant/treant_animation.sf", new JsonContentLoader())},
@@ -727,6 +751,17 @@ namespace Medicraft.Systems
             GuiTextures.Add(Content.Load<Texture2D>("gui/warp_map/Warp_NoahsHome"));
             GuiTextures.Add(Content.Load<Texture2D>("gui/key_binding")); 
             GuiTextures.Add(Content.Load<Texture2D>("gui/you_die"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/timewindow"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/scorewindow")); 
+            GuiTextures.Add(Content.Load<Texture2D>("gui/shop_close"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/quest_objective_window"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/quest_objective_stamp_cleared"));
+
+            GuiTextures.Add(Content.Load<Texture2D>("gui/advrankup_ranklogo_S"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/advrankup_ranklogo_A"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/advrankup_ranklogo_B"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/advrankup_ranklogo_C"));
+            GuiTextures.Add(Content.Load<Texture2D>("gui/advrankup_ranklogo_D"));
 
             // UI_books_icon_hud
             UIBooksIconHUD = Content.Load<SpriteSheet>("gui/UI_books_icon_hud.sf", new JsonContentLoader());
@@ -936,6 +971,12 @@ namespace Medicraft.Systems
                         else map.SpawnTimer = map.SpawnTime;
                     }   
                 }
+            }
+
+            // UpdateMiniGame
+            if (IsMiniGameStart)
+            {
+                UpdateMiniGame(_deltaSeconds);
             }
 
             var mouseState = Mouse.GetState();
@@ -1200,6 +1241,188 @@ namespace Medicraft.Systems
                     System.Diagnostics.Debug.Write(map[i, j] + " ");
                 }
                 System.Diagnostics.Debug.WriteLine(" ");
+            }
+        }
+
+        // MiniGame Control
+        // MiniGame
+        public List<MiniGameData> MiniGameDatas { get; set; }
+        public bool ShowMiniGameScoreEnd { get; set; } = false;
+        public int ScoreCase { get; set; } 
+        public bool IsMiniGameStart { get; set; } = false;
+        public float MiniGameTime { get; private set; } = 180f;
+        public float MiniGameTimer { get; set; }
+        public float MiniGameQueueTime { get; private set; } = 15f;
+        public float MiniGameQueueTimer { get; set; }
+        public int MiniGameMaxPatient { get; private set; } = 4;
+        public int QueueCount { get; private set; } = 0;
+        public int MiniGameScore { get; set; } = 0;
+        public Vector2[] MiniGameRoutePoint { get; private set; } = [
+            new Vector2(1524, 1501),
+            new Vector2(1524, 1647),
+            new Vector2(1524, 1790),
+            new Vector2(1524, 1921)
+        ];
+
+        public Queue<FriendlyMob> Patients { get; private set; } = new();
+
+        public void StartMiniGame()
+        {
+            ScreenManager.Instance.TransitionToScreen(ScreenManager.GameScreen.None);
+
+            IsMiniGameStart = true;
+            MiniGameTimer = MiniGameTime;
+            MiniGameQueueTimer = 8;
+            QueueCount = 0;
+            MiniGameScore = 0;
+            Patients.Clear();
+        }
+
+        public void EndMiniGame()
+        {
+            System.Diagnostics.Debug.WriteLine($"MiniGameEnd");
+
+            IsMiniGameStart = false;
+
+            // Cound Score
+            if (MiniGameScore <= 600)
+            {
+                // D
+                PlayerManager.Instance.AddPlayerEXP(MiniGameScore);
+                InventoryManager.Instance.AddGoldCoin("MiniGame", MiniGameScore);
+                ScoreCase = 5;
+            }
+            else if (MiniGameScore <= 1200)
+            {
+                // C
+                PlayerManager.Instance.AddPlayerEXP((int)(MiniGameScore * 1.1f));
+                InventoryManager.Instance.AddGoldCoin("MiniGame", (int)(MiniGameScore * 1.1f));
+                ScoreCase = 4;
+            }
+            else if (MiniGameScore <= 1500)
+            {
+                // B
+                PlayerManager.Instance.AddPlayerEXP((int)(MiniGameScore * 1.2f));
+                InventoryManager.Instance.AddGoldCoin("MiniGame", (int)(MiniGameScore * 1.2f));
+                ScoreCase = 3;
+            }
+            else if (MiniGameScore <= 1800)
+            {
+                // A
+                PlayerManager.Instance.AddPlayerEXP((int)(MiniGameScore * 1.3f));
+                InventoryManager.Instance.AddGoldCoin("MiniGame", (int)(MiniGameScore * 1.3f));
+                ScoreCase = 2;
+            }
+            else if (MiniGameScore <= 2100)
+            {
+                // S
+                PlayerManager.Instance.AddPlayerEXP((int)(MiniGameScore * 1.4f));
+                InventoryManager.Instance.AddGoldCoin("MiniGame", (int)(MiniGameScore * 1.4f));
+                ScoreCase = 1;
+            }
+            else
+            {
+                // SS
+                PlayerManager.Instance.AddPlayerEXP((int)(MiniGameScore * 1.5f));
+                InventoryManager.Instance.AddGoldCoin("MiniGame", (int)(MiniGameScore * 1.5f));
+                ScoreCase = 1;
+            }
+
+            MiniGameTimer = 0;
+            MiniGameQueueTimer = 0;
+            QueueCount = 0;
+            MiniGameScore = 0;
+
+            foreach (var patient in Patients)
+            {
+                EntityManager.Instance.entities.Remove(patient);
+            }
+            Patients.Clear();
+
+            HUDSystem.ShowMiniGameScoreEnd();
+        }
+
+        public void DequeuePatient(FriendlyMob friendlyMob)
+        {
+            // Add Score & Dequeue
+            var miniGameData = friendlyMob.MiniGameCaseData;
+            MiniGameScore += miniGameData.Score;
+
+            EntityManager.Instance.entities.Remove(Patients.Dequeue());
+            var newPosIndex = 0;
+
+            foreach (var patient in Patients)
+            {
+                var route = MiniGameRoutePoint[newPosIndex];
+                patient.EntityData.Position[0] = route.X;
+                patient.EntityData.Position[1] = route.Y;
+                patient.UpdateNode(patient.EntityData);
+                newPosIndex++;
+            }
+
+            QueueCount--;
+        }
+
+        public void UpdateMiniGame(float deltaSeconds)
+        {
+            MiniGameTimer -= deltaSeconds;
+
+            if (MiniGameTimer <= 0)
+                EndMiniGame();
+
+            MiniGameQueueTimer -= deltaSeconds;
+
+            if (MiniGameQueueTimer <= 0)
+            {
+                MiniGameQueueTimer = MiniGameQueueTime;
+
+                if (QueueCount < 4)
+                {
+                    // Add Queue Patient
+                    var randomChapter = new Random().Next(6);
+                    var randomCase = new Random().Next(5);
+                    var miniGameCase = MiniGameDatas[randomChapter].MiniGameCases[randomCase];
+                    var route = MiniGameRoutePoint[QueueCount];
+
+                    var name = "Patient";
+                    var randomNumSprite = new Random().Next(102, 125);
+                    var EntityData = new EntityData()
+                    {
+                        Id = EntityManager.Instance.EntityCount() + 1,
+                        CharId = randomNumSprite,
+                        Name = name,
+                        MobType = "Civilian",
+                        IsInteractable = true,
+                        PathFindingType = 2,
+                        NodeCycleTime = 10,
+                        Position = [route.X, route.Y],
+                        DialogData = [
+                            new DialogData() {
+                                Id = 0,
+                                Type = "Daily",
+                                Description = "QuestionText",
+                                Dialogues = [
+                                    (name, miniGameCase.QuestionText)
+                                ]
+                            }
+                        ]
+                    };
+
+                    Instance.EntitySpriteSheets.TryGetValue(randomNumSprite, out SpriteSheet spriteSheet);             
+                    Patients.Enqueue(EntityManager.Instance.AddEntity(
+                        new Civilian(new AnimatedSprite(spriteSheet), EntityData, Vector2.One)
+                        {
+                            MiniGameQueueIndex = QueueCount,
+                            MiniGameCaseData = miniGameCase,
+                        }));
+
+                    QueueCount++;
+
+                    foreach (var patient in Patients)
+                    {
+                        patient.UpdateNode(patient.EntityData);
+                    }
+                }
             }
         }
 

@@ -13,20 +13,9 @@
         "PassiveSkillLevel": 1
     },
     "Companions": [
-        {
-            "CharId": 1,
-            "Level": 1,
-            "CurrentHPPercentage": 1.0,
-            "Abilities": {
-                "NormalSkillLevel": 1,
-                "BurstSkillLevel": 1,
-                "PassiveSkillLevel": 1
-            },
-            "IsSummoned": false
-        }
     ],
     "InventoryData": {
-        "GoldCoin": 50,
+        "GoldCoin": 100,
         "Items": [
             {
                 "ItemId": 300,
@@ -36,6 +25,36 @@
             {
                 "ItemId": 301,
                 "Count": 5,
+                "Slot": 999
+            },
+            {
+                "ItemId": 56,
+                "Count": 24,
+                "Slot": 999
+            },
+            {
+                "ItemId": 91,
+                "Count": 12,
+                "Slot": 999
+            },
+            {
+                "ItemId": 97,
+                "Count": 12,
+                "Slot": 999
+            },
+            {
+                "ItemId": 105,
+                "Count": 12,
+                "Slot": 999
+            },
+            {
+                "ItemId": 107,
+                "Count": 36,
+                "Slot": 999
+            },
+            {
+                "ItemId": 109,
+                "Count": 3,
                 "Slot": 999
             }
         ]
@@ -440,30 +459,6 @@
                 {
                     "QuestId": 111,
                     "Type": "StoryQuest",
-                    "IsQuestAccepted": false,
-                    "IsQuestClear": false
-                },
-                {
-                    "QuestId": 112,
-                    "Type": "SideQuest",
-                    "IsQuestAccepted": false,
-                    "IsQuestClear": false
-                },
-                {
-                    "QuestId": 113,
-                    "Type": "SideQuest",
-                    "IsQuestAccepted": false,
-                    "IsQuestClear": false
-                },
-                {
-                    "QuestId": 114,
-                    "Type": "SideQuest",
-                    "IsQuestAccepted": false,
-                    "IsQuestClear": false
-                },
-                {
-                    "QuestId": 115,
-                    "Type": "SideQuest",
                     "IsQuestAccepted": false,
                     "IsQuestClear": false
                 }

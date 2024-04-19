@@ -12,6 +12,15 @@ namespace Medicraft.Entities.Mobs.Boss
 {
     public class Minotaur : HostileMob
     {
+        public bool IsSkillCooldown { get; protected set; } = false;
+        public bool IsSkillActivated { get; protected set; } = false;
+        public float SkillCooldownTime { get; protected set; } = 20f;
+        public float SkillCooldownTimer { get; protected set; }
+
+        private float _skillTimer = 0f, _baseSkillHit = 1.5f;
+        private int _hitFrameIndex = 0;
+        private float[] _hitFrame = [ 0.7f ];
+
         public Minotaur(AnimatedSprite sprite, EntityData entityData, Vector2 scale)
         {
             Sprite = sprite;
@@ -49,8 +58,8 @@ namespace Medicraft.Entities.Mobs.Boss
             };
 
             BoundingCollisionX = 10;
-            BoundingCollisionY = 3;
-            BaseBoundingDetectEntityRadius = 60f;
+            BoundingCollisionY = 2.8f;
+            BaseBoundingDetectEntityRadius = 80f;
             OffSetCircle = new Vector2(0, 100);
 
             // Rec for check Collision
@@ -162,6 +171,96 @@ namespace Medicraft.Entities.Mobs.Boss
             }
         }
 
+        protected override void CombatControl(float deltaSeconds)
+        {
+            // Check Dectected
+            var isPlayerDetected = BoundingDetectEntity.Intersects(PlayerManager.Instance.Player.BoundingHitBox);
+
+            var isCompanionDetected = false;
+            if (PlayerManager.Instance.Companions.Count != 0
+                && !PlayerManager.Instance.IsCompanionDead
+                && PlayerManager.Instance.IsCompanionSummoned)
+            {
+                var companion = PlayerManager.Instance.Companions[PlayerManager.Instance.CurrCompaIndex];
+
+                if (companion != null && !companion.IsDying)
+                    isCompanionDetected = BoundingDetectEntity.Intersects(companion.BoundingHitBox);
+            }
+
+            // Do Skill Attack
+            if ((isPlayerDetected || isCompanionDetected)
+                && ScreenManager.Instance.IsScreenLoaded && !UIManager.Instance.IsShowDialogUI
+                && !IsAttacking && !IsStunning && !IsSkillCooldown)
+            {
+                CurrentAnimation = SpriteCycle + "_skill";
+                Sprite.Play(CurrentAnimation);
+
+                IsAttacking = true;
+                IsSkillCooldown = true;
+                IsSkillActivated = true;
+                SkillCooldownTimer = SkillCooldownTime;
+
+                BoundingDetectEntity.Radius = 120f;
+
+                var spriteSheet = GameGlobals.Instance.EntitySpriteSheets.FirstOrDefault
+                    (e => e.Key.Equals(CharId)).Value;
+                var cycleEffect = spriteSheet.Cycles.FirstOrDefault(c => c.Key.Equals("default_skill"));
+                ActionTimer = (cycleEffect.Value.FrameDuration * cycleEffect.Value.Frames.Capacity);
+
+                _hitFrameIndex = 0;
+                _skillTimer = _hitFrame[_hitFrameIndex];
+            }
+
+            if (IsAttacking && IsSkillActivated)
+            {
+                if (ActionTimer > 0)
+                {
+                    ActionTimer -= deltaSeconds;
+                }
+                else
+                {
+                    IsAttacking = false;
+                    IsSkillActivated = false;
+                    BoundingDetectEntity.Radius = BaseBoundingDetectEntityRadius;
+                }
+
+                // do attack
+                {
+                    if (_skillTimer > 0)
+                    {
+                        _skillTimer -= deltaSeconds;
+                    }
+                    else if (_hitFrameIndex < _hitFrame.Length)
+                    {
+                        CheckAttackDetection(_baseSkillHit);
+                        PlayMobAttackSound();
+
+                        _hitFrameIndex++;
+
+                        if (_hitFrameIndex < _hitFrame.Length)
+                        {
+                            _skillTimer = _hitFrame[_hitFrameIndex];
+                        }
+                        else _skillTimer = 10f;
+                    }
+                }
+            }
+
+            if (IsSkillCooldown)
+            {
+                SkillCooldownTimer -= deltaSeconds;
+
+                if (SkillCooldownTimer < 0)
+                {
+                    IsSkillCooldown = false;
+                }
+            }
+
+            if (IsSkillActivated) return;
+
+            base.CombatControl(deltaSeconds);
+        }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
@@ -171,7 +270,7 @@ namespace Medicraft.Entities.Mobs.Boss
         {
             var position = new Vector2(
                 (Position.X + 10f) - shadowTexture.Width * 2f / 2f,
-                BoundingDetectCollisions.Bottom);
+                BoundingDetectCollisions.Center.Y);
 
             spriteBatch.Draw(shadowTexture, position, null, Color.White
                 , 0f, Vector2.Zero, 2f, SpriteEffects.None, Sprite.Depth + 0.0000025f);

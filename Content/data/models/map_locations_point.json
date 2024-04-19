@@ -114,5 +114,117 @@
                 "Value": [ 1072.00, 2365.00 ]
             }
         ]
+    },
+    {
+        "Name": "map_2",
+        "ZoneType": "SafeZone",
+        "Positions": [
+            {
+                "Name": "Respawn",
+                "Value": [ 1952, 3840 ]
+            },
+            {
+                "Name": "warp_to_map_2",
+                "Value": [ 2965, 3938 ]
+            },
+            {
+                "Name": "dungeon_1_to_map_2",
+                "Value": [ 2368, 4706 ]
+            },
+            {
+                "Name": "battlezone_2_to_map_2",
+                "Value": [ 3777, 1107 ]
+            }
+        ]
+    },
+    {
+        "Name": "battlezone_2",
+        "ZoneType": "BattleZone",
+        "Positions": [
+            {
+                "Name": "Respawn",
+                "Value": [ 1982, 2913 ]
+            },
+            {
+                "Name": "map_2_to_battlezone_2",
+                "Value": [ 1982, 2913 ]
+            },
+            {
+                "Name": "dungeon_2_to_battlezone_2",
+                "Value": [ 1105, 1985 ]
+            }
+        ]
+    },
+    {
+        "Name": "dungeon_2",
+        "ZoneType": "BattleZone",
+        "Positions": [
+            {
+                "Name": "Respawn",
+                "Value": [ 2878, 1983 ]
+            },
+            {
+                "Name": "battlezone_2_to_dungeon_2",
+                "Value": [ 2878, 1983 ]
+            },
+            {
+                "Name": "map_3_to_dungeon_2",
+                "Value": [ 1949, 1105 ]
+            }
+        ]
+    },
+    {
+        "Name": "map_3",
+        "ZoneType": "SafeZone",
+        "Positions": [
+            {
+                "Name": "Respawn",
+                "Value": [ 3394, 3208 ]
+            },
+            {
+                "Name": "warp_to_map_3",
+                "Value": [ 3862, 3306 ]
+            },
+            {
+                "Name": "dungeon_2_to_map_3",
+                "Value": [ 3391, 5649 ]
+            },
+            {
+                "Name": "battlezone_3_to_map_3",
+                "Value": [ 3392, 1122 ]
+            }
+        ]
+    },
+    {
+        "Name": "battlezone_3",
+        "ZoneType": "BattleZone",
+        "Positions": [
+            {
+                "Name": "Respawn",
+                "Value": [ 1987, 2883 ]
+            },
+            {
+                "Name": "map_3_to_battlezone_3",
+                "Value": [ 1987, 2883 ]
+            },
+            {
+                "Name": "dungeon_3_to_battlezone_3",
+                "Value": [ 2918, 2318 ]
+            }
+        ]
+    },
+    {
+        "Name": "dungeon_3",
+        "ZoneType": "BattleZone",
+        "Positions": [
+            {
+                "Name": "Respawn",
+                "Value": [ 1105, 2351 ]
+            },
+            {
+                "Name": "battlezone_3_to_dungeon_3",
+                "Value": [ 1105, 2351 ]
+            }
+        ]
     }
 ]

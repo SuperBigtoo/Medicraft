@@ -814,6 +814,6 @@
   <object id="52" name="zone_1" x="898" y="378" width="484" height="232"/>
   <object id="69" name="zone_2" x="1090.67" y="1505.33" width="604" height="190.667"/>
   <object id="78" name="zone_3" x="606" y="1025" width="466" height="254"/>
-  <object id="80" name="zone_4" x="369" y="1322" width="499" height="373"/>
+  <object id="80" name="zone_4" x="478.333" y="1378" width="263" height="217"/>
  </objectgroup>
 </map>

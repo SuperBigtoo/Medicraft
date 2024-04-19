@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Medicraft.Data.Models
 {
@@ -20,6 +21,9 @@ namespace Medicraft.Data.Models
         public bool IsInteractable { get; set; } = false;
         public List<InventoryItemData> TradingItemsData { get; set; } = null;
         public List<DialogData> DialogData { get; set; } = null;
+
+        // For Quest Giver
+        public int QuestId { get; set; }
 
         // For Boss
         public int BossChapterId { get; set; } = 0;
@@ -43,6 +47,6 @@ namespace Medicraft.Data.Models
         public string Stage { get; set; }
 
         // Dialogues
-        public List<string> Dialogues { get; set; }
+        public List<(string, string)> Dialogues { get; set; }
     }
 }

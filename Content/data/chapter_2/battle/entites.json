@@ -1,0 +1,150 @@
+[
+    {
+        "Id": 0,
+        "CharId": 200,
+        "Level": 6,
+        "Name": "Slime",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1748, 2630 ]
+    },
+    {
+        "Id": 1,
+        "CharId": 200,
+        "Level": 6,
+        "Name": "Slime",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_4",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1224, 2162 ]
+    },
+    {
+        "Id": 2,
+        "CharId": 200,
+        "Level": 9,
+        "Name": "Slime",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1204, 1116 ]
+    },
+    {
+        "Id": 3,
+        "CharId": 200,
+        "Level": 6,
+        "Name": "Slime",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_5",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1940, 1680 ]
+    },
+    {
+        "Id": 4,
+        "CharId": 200,
+        "Level": 6,
+        "Name": "Slime",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2936, 1828 ]
+    },
+    {
+        "Id": 5,
+        "CharId": 200,
+        "Level": 7,
+        "Name": "Slime",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2950, 1974 ]
+    },
+    {
+        "Id": 6,
+        "CharId": 200,
+        "Level": 5,
+        "Name": "Slime",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2798, 1884 ]
+    },
+    {
+        "Id": 7,
+        "CharId": 200,
+        "Level": 6,
+        "Name": "Slime",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_2",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2432, 2404 ]
+    },
+    {
+        "Id": 8,
+        "CharId": 202,
+        "Level": 7,
+        "Name": "Treant",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2542, 1226 ]
+    },
+    {
+        "Id": 9,
+        "CharId": 202,
+        "Level": 5,
+        "Name": "Treant",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_2",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2352, 2572 ]
+    },
+    {
+        "Id": 10,
+        "CharId": 202,
+        "Level": 6,
+        "Name": "Treant",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_4",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1900, 2134 ]
+    },
+    {
+        "Id": 11,
+        "CharId": 202,
+        "Level": 5,
+        "Name": "Treant",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_4",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1518, 2304 ]
+    },
+    {
+        "Id": 12,
+        "CharId": 202,
+        "Level": 5,
+        "Name": "Treant",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_1",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2294, 1610 ]
+    },
+    {
+        "Id": 13,
+        "CharId": 202,
+        "Level": 5,
+        "Name": "Treant",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_3",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1594, 1462 ]
+    }
+]

@@ -4,12 +4,12 @@
         "ChapterId": 1,
         "Name": "First Time?",
         "Type": "StoryQuest",
-        "Description": "สำรวจหม้อปรุงยาและทำการคราฟ [ยาจันทน์ลีลา] 1 อัน",
-        "ObjectiveName": [ "ยาจันทน์ลีลา" ],
+        "Description": "สำรวจหม้อปรุงยาภายในบ้านของ Noah และทำการคราฟ [ยาจันทน์ลีลา] 1 อัน",
+        "ObjectiveName": [ "201" ],
         "ObjectiveValue": 1,
         "QuestReward": {
-            "GoldCoin": 50,
-            "EXPReward": 30,
+            "GoldCoin": 100,
+            "EXPReward": 50,
             "Items": [
                 {
                     "ItemId": 56,
@@ -47,8 +47,8 @@
         "ObjectiveName": [ "QuestObject_102" ],
         "ObjectiveValue": 1,
         "QuestReward": {
-            "GoldCoin": 50,
-            "EXPReward": 30
+            "GoldCoin": 100,
+            "EXPReward": 50
         }
     },
     {
@@ -60,8 +60,8 @@
         "ObjectiveName": [ "Buying_Material" ],
         "ObjectiveValue": 1,
         "QuestReward": {
-            "GoldCoin": 50,
-            "EXPReward": 30
+            "GoldCoin": 100,
+            "EXPReward": 50
         }
     },
     {
@@ -73,8 +73,8 @@
         "ObjectiveName": [ "QuestObject_104" ],
         "ObjectiveValue": 1,
         "QuestReward": {
-            "GoldCoin": 50,
-            "EXPReward": 30,
+            "GoldCoin": 100,
+            "EXPReward": 50,
             "Items": [
                 {
                     "ItemId": 142,
@@ -99,6 +99,10 @@
                 {
                     "ItemId": 147,
                     "Count": 10
+                },
+                {
+                    "ItemId": 162,
+                    "Count": 10
                 }
             ]
         }
@@ -112,8 +116,8 @@
         "ObjectiveName": [ "Crafting_Consumable item" ],
         "ObjectiveValue": 1,
         "QuestReward": {
-            "GoldCoin": 50,
-            "EXPReward": 30
+            "GoldCoin": 100,
+            "EXPReward": 50
         }
     },
     {
@@ -121,12 +125,12 @@
         "ChapterId": 1,
         "Name": "เอาผักที่เหลือไปขายที่ TOWN",
         "Type": "StoryQuest",
-        "Description": "ทดลองนำผักไปขายกับ Vendor ที่ Town",
+        "Description": "ทดลองนำไอเทมไปขายกับ Vendor ที่ Town",
         "ObjectiveName": [ "Selling_Material" ],
         "ObjectiveValue": 1,
         "QuestReward": {
-            "GoldCoin": 50,
-            "EXPReward": 30
+            "GoldCoin": 100,
+            "EXPReward": 50
         }
     },
     {
@@ -138,15 +142,15 @@
         "ObjectiveName": [ "Buying_Consumable item" ],
         "ObjectiveValue": 1,
         "QuestReward": {
-            "GoldCoin": 50,
-            "EXPReward": 30,
+            "GoldCoin": 1000,
+            "EXPReward": 50,
             "Items": [
                 {
                     "ItemId": 302,
                     "Count": 5
                 },
                 {
-                    "ItemId": 307,
+                    "ItemId": 303,
                     "Count": 5
                 }
             ]
@@ -161,14 +165,8 @@
         "ObjectiveName": [ "Buying_Equipment" ],
         "ObjectiveValue": 1,
         "QuestReward": {
-            "GoldCoin": 50,
-            "EXPReward": 30,
-            "Items": [
-                {
-                    "ItemId": 400,
-                    "Count": 1
-                }
-            ]
+            "GoldCoin": 100,
+            "EXPReward": 50
         }
     },
     {
@@ -193,8 +191,8 @@
         "ObjectiveName": [ "QuestObject_110" ],
         "ObjectiveValue": 1,
         "QuestReward": {
-            "GoldCoin": 50,
-            "EXPReward": 30
+            "GoldCoin": 100,
+            "EXPReward": 50
         }
     },
     {
@@ -206,73 +204,203 @@
         "ObjectiveName": [ "QuestObject_111" ],
         "ObjectiveValue": 1,
         "QuestReward": {
-            "GoldCoin": 50,
-            "EXPReward": 30
-        }
-    },
-    {
-        "QuestId": 112,
-        "ChapterId": 1,
-        "Name": "ยาเขียวหอม",
-        "Type": "SideQuest",
-        "Description": "ปรุงยาเขียวหอมและนำมารักษาผู้ป่วย",
-        "ObjectiveName": [ "ยาเขียวหอม" ],
-        "ObjectiveValue": 1,
-        "QuestReward": {
-            "GoldCoin": 50,
-            "EXPReward": 30
-        }
-    },
-    {
-        "QuestId": 113,
-        "ChapterId": 1,
-        "Name": "ยาประสะจันทร์แดง",
-        "Type": "SideQuest",
-        "Description": "ปรุงยาประสะจันทร์แดงและนำมารักษาผู้ป่วย",
-        "ObjectiveName": [ "ยาประสะจันทร์แดง" ],
-        "ObjectiveValue": 1,
-        "QuestReward": {
-            "GoldCoin": 50,
-            "EXPReward": 30
-        }
-    },
-    {
-        "QuestId": 114,
-        "ChapterId": 1,
-        "Name": "ยาประสะเปราะใหญ่",
-        "Type": "SideQuest",
-        "Description": "ปรุงยาประสะเปราะใหญ่และนำมารักษาผู้ป่วย",
-        "ObjectiveName": [ "ยาประสะเปราะใหญ่" ],
-        "ObjectiveValue": 1,
-        "QuestReward": {
-            "GoldCoin": 50,
-            "EXPReward": 30
-        }
-    },
-    {
-        "QuestId": 115,
-        "ChapterId": 1,
-        "Name": "ยาห้าราก",
-        "Type": "SideQuest",
-        "Description": "ปรุงยาห้ารากและนำมารักษาผู้ป่วย",
-        "ObjectiveName": [ "ยาห้าราก" ],
-        "ObjectiveValue": 1,
-        "QuestReward": {
-            "GoldCoin": 50,
-            "EXPReward": 30
+            "GoldCoin": 250,
+            "EXPReward": 100
         }
     },
     {
         "QuestId": 201,
         "ChapterId": 2,
-        "Name": "ไปบ้านผู้ช่วย",
+        "Name": "ช่วยชาวบ้าน",
         "Type": "StoryQuest",
-        "Description": "เดินทางไปบ้านผู้ช่วย Violet",
-        "ObjectiveName": [ "Violet" ],
+        "Description": "ช่วย Violet รักษาชาวบ้านที่เจ็บป่วย",
+        "ObjectiveName": [ "NPC-201_200", "NPC-201_202", "NPC-201_203", "NPC-201_204" ],
+        "ObjectiveValue": 4,
+        "QuestReward": {
+            "GoldCoin": 1000,
+            "EXPReward": 250
+        }
+    },
+    {
+        "QuestId": 202,
+        "ChapterId": 2,
+        "Name": "ออกเดินทางไป Rothenburg",
+        "Type": "StoryQuest",
+        "Description": "เริ่มออกเดินทางไปยังเมือง Rothenburg",
+        "ObjectiveName": [ "dungeon_1" ],
         "ObjectiveValue": 1,
         "QuestReward": {
-            "GoldCoin": 50,
-            "EXPReward": 30
+            "GoldCoin": 100,
+            "EXPReward": 50
+        }
+    },
+    {
+        "QuestId": 203,
+        "ChapterId": 2,
+        "Name": "เอาชนะบอสดันเจี้ยน",
+        "Type": "StoryQuest",
+        "Description": "จัดการบอสดันเจี้ยนสำเร็จ",
+        "ObjectiveName": [ "Killing_Minotaur" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 100,
+            "EXPReward": 50
+        }
+    },
+    {
+        "QuestId": 204,
+        "ChapterId": 2,
+        "Name": "ออกเดินทางไป Rothenburg อีกครั้ง",
+        "Type": "StoryQuest",
+        "Description": "เริ่มออกเดินทางไปยังเมือง Rothenburg อีกครั้ง",
+        "ObjectiveName": [ "Rothenburg" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 100,
+            "EXPReward": 50
+        }
+    },
+    {
+        "QuestId": 205,
+        "ChapterId": 2,
+        "Name": "ปลดล็อคจุดวาร์ป",
+        "Type": "StoryQuest",
+        "Description": "ทำความรู้จักกับระบบวาร์ปเพื่อการเดินทางที่สะดวกขึ้น",
+        "ObjectiveName": [ "QuestObject_205" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 100,
+            "EXPReward": 50
+        }
+    },
+    {
+        "QuestId": 206,
+        "ChapterId": 2,
+        "Name": "ไปคลินิกหมู่บ้าน",
+        "Type": "StoryQuest",
+        "Description": "ออกเดินทางไปหาแม่ที่คลินิกของหมู่บ้าน",
+        "ObjectiveName": [ "noah_room" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 100,
+            "EXPReward": 50
+        }
+    },
+    {
+        "QuestId": 207,
+        "ChapterId": 2,
+        "Name": "ใช้วาร์ปกลับไปเปิดร้านยา",
+        "Type": "StoryQuest",
+        "Description": "ใช้ระบบวาร์ปเพื่อเดินทางไปเปิดร้านขายยา",
+        "ObjectiveName": [ "noah_room" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 100,
+            "EXPReward": 50
+        }
+    },
+    {
+        "QuestId": 208,
+        "ChapterId": 2,
+        "Name": "ไปตีมอนสเตอร์ 5 ตัว",
+        "Type": "StoryQuest",
+        "Description": "จัดการมอนสเตอร์จำนวน 5 ตัว",
+        "ObjectiveName": [ "Killing_HostileMob" ],
+        "ObjectiveValue": 5,
+        "QuestReward": {
+            "GoldCoin": 100,
+            "EXPReward": 50
+        }
+    },
+    {
+        "QuestId": 209,
+        "ChapterId": 2,
+        "Name": "คุยกับอัศวินลาดตระเวน",
+        "Type": "StoryQuest",
+        "Description": "พูดคุยกับผู้ช่วยอัศวินลาดตระเวน Kol",
+        "ObjectiveName": [ "Kol" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 100,
+            "EXPReward": 50
+        }
+    },
+    {
+        "QuestId": 210,
+        "ChapterId": 2,
+        "Name": "รักษา npc บุรษไปรษณีย์",
+        "Type": "StoryQuest",
+        "Description": "ปรุงยาหอมทิพโอสถและนำมารักษาผู้ป่วย",
+        "ObjectiveName": [ "ยาหอมทิพโอสถ" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 100,
+            "EXPReward": 50
+        }
+    },
+    {
+        "QuestId": 211,
+        "ChapterId": 2,
+        "Name": "รับจดหมายจาก npc มาอ่าน",
+        "Type": "StoryQuest",
+        "Description": "รับและอ่านจดหมายจากพ่อ",
+        "ObjectiveName": [ "QuestObject_211" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 100,
+            "EXPReward": 50
+        }
+    },
+    {
+        "QuestId": 212,
+        "ChapterId": 2,
+        "Name": "ยาหอมเทพจิตร",
+        "Type": "SideQuest",
+        "Description": "ปรุงยาหอมเทพจิตรและนำมารักษาผู้ป่วย",
+        "ObjectiveName": [ "ยาหอมเทพจิตร" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 100,
+            "EXPReward": 50
+        }
+    },
+    {
+        "QuestId": 213,
+        "ChapterId": 2,
+        "Name": "ยาหอมนวโกฐ",
+        "Type": "SideQuest",
+        "Description": "ปรุงยาหอมนวโกฐและนำมารักษาผู้ป่วย",
+        "ObjectiveName": [ "ยาหอมนวโกฐ" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 100,
+            "EXPReward": 50
+        }
+    },
+    {
+        "QuestId": 214,
+        "ChapterId": 2,
+        "Name": "ยาหอมแก้ลมวิงเวียน",
+        "Type": "SideQuest",
+        "Description": "ปรุงยาหอมแก้ลมวิงเวียนและนำมารักษาผู้ป่วย",
+        "ObjectiveName": [ "ยาหอมแก้ลมวิงเวียน" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 100,
+            "EXPReward": 50
+        }
+    },
+    {
+        "QuestId": 215,
+        "ChapterId": 2,
+        "Name": "ยาหอมอินทจักร์",
+        "Type": "SideQuest",
+        "Description": "ปรุงยาหอมอินทจักร์และนำมารักษาผู้ป่วย",
+        "ObjectiveName": [ "ยาหอมอินทจักร์" ],
+        "ObjectiveValue": 1,
+        "QuestReward": {
+            "GoldCoin": 100,
+            "EXPReward": 50
         }
     }
 ]

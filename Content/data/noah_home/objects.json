@@ -9,5 +9,29 @@
         "Position": [ 2490.00, 1840.00 ],
         "IsVisible": true,
         "IsDestroyable": true
+    },
+    {
+        "Id": 1,
+        "ReferId": -1,
+        "Category": 1,
+        "Name": "QuestObject_102",
+        "Description": "QuestObject_102",
+        "Position": [ 2241, 2373 ],
+        "IsShowSignInteract": true,
+        "IsAllowInteract": true,
+        "IsVisible": false,
+        "IsDestroyable": true
+    },
+    {
+        "Id": 2,
+        "ReferId": -1,
+        "Category": 1,
+        "Name": "QuestObject_111",
+        "Description": "QuestObject_111",
+        "Position": [ 2046, 2113 ],
+        "IsShowSignInteract": true,
+        "IsAllowInteract": true,
+        "IsVisible": false,
+        "IsDestroyable": true
     }
 ]

@@ -1,0 +1,99 @@
+[
+    {
+        "Id": 0,
+        "CharId": 302,
+        "Level": 15,
+        "Name": "Yeti",
+        "BossChapterId": 3,
+        "PathFindingType": 1,
+        "NodeCycleTime": 10,
+        "PartrolArea": "zone_1",
+        "AggroTime": 60,
+        "Position": [ 1376, 1354 ]
+    },
+    {
+        "Id": 1,
+        "CharId": 200,
+        "Level": 13,
+        "Name": "Slime",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1700, 2696 ]
+    },
+    {
+        "Id": 2,
+        "CharId": 200,
+        "Level": 12,
+        "Name": "Slime",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1160, 1872 ]
+    },
+    {
+        "Id": 3,
+        "CharId": 200,
+        "Level": 11,
+        "Name": "Slime",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_2",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2092, 1904 ]
+    },
+    {
+        "Id": 4,
+        "CharId": 203,
+        "Level": 13,
+        "Name": "Ice Golem",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_2",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1624, 2442 ]
+    },
+    {
+        "Id": 5,
+        "CharId": 203,
+        "Level": 14,
+        "Name": "Ice Golem",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_6",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2254, 2466 ]
+    },
+    {
+        "Id": 6,
+        "CharId": 203,
+        "Level": 14,
+        "Name": "Ice Golem",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1618, 1920 ]
+    },
+    {
+        "Id": 7,
+        "CharId": 203,
+        "Level": 13,
+        "Name": "Ice Golem",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_2",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1926, 1626 ]
+    },
+    {
+        "Id": 8,
+        "CharId": 203,
+        "Level": 14,
+        "Name": "Ice Golem",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_4",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2416, 2070 ]
+    }
+]

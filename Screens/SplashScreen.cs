@@ -73,7 +73,7 @@ namespace Medicraft.Screens
 
                     if (_index == 3)
                     {
-                        ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.MainMenuScreen);
+                        ScreenManager.Instance.TransitionToScreen(ScreenManager.GameScreen.MainMenuScreen);
                     }
                 }
             }
@@ -94,7 +94,7 @@ namespace Medicraft.Screens
                 && !_index.Equals(3) && !_isClicked)
             {
                 _isClicked = true;
-                ScreenManager.Instance.TranstisionToScreen(ScreenManager.GameScreen.MainMenuScreen);
+                ScreenManager.Instance.TransitionToScreen(ScreenManager.GameScreen.MainMenuScreen);
             }
         }
 

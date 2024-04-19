@@ -1,6 +1,8 @@
 ﻿using GeonBit.UI;
 using Medicraft.Screens;
 using Medicraft.Screens.chapter_1;
+using Medicraft.Screens.chapter_2;
+using Medicraft.Screens.chapter_3;
 using Medicraft.Screens.noahs_home;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -35,12 +37,18 @@ namespace Medicraft.Systems.Managers
             NoahRoom,
             Map1,
             BattleZone1,
-            Dungeon1
+            Dungeon1,
+            Map2,
+            BattleZone2,
+            Dungeon2,
+            Map3,
+            BattleZone3,
+            Dungeon3
         }
         public GameScreen CurrentScreen { private set; get; }
         public GameScreen ScreenTransitioningTo { private set; get; }
 
-        public enum LoadMapAction
+        public enum EntranceZoneName
         {
             None,
             NewGame,
@@ -59,9 +67,20 @@ namespace Medicraft.Systems.Managers
             dungeon_1_to_map_2,
             dungeon_1_to_battlezone_1,
             warp_to_map_2,
-            warp_to_map_3
+            map_2_to_dungeon_1,
+            map_2_to_battlezone_2,
+            battlezone_2_to_map_2,
+            battlezone_2_to_dungeon_2,
+            dungeon_2_to_battlezone_2,
+            dungeon_2_to_map_3,
+            warp_to_map_3,
+            map_3_to_dungeon_2,
+            map_3_to_battlezone_3,
+            battlezone_3_to_map_3,
+            battlezone_3_to_dungeon_3,
+            dungeon_3_to_battlezone_3
         }     
-        public LoadMapAction CurrentLoadMapAction { set; get; }
+        public EntranceZoneName LoadMapByEntranceZone { set; get; }
         public string CurrentMap { set; get; }
 
         // For Transition Screen
@@ -292,7 +311,12 @@ namespace Medicraft.Systems.Managers
                 }
 
                 if (_transitionTimer >= (_transitionTime * 2) + _pauseTime)
+                {
                     IsTransitioning = false;
+
+                    // Invoke the event to notify listeners
+                    OnTransitionScreen(new TransitionScreenEventArgs(ScreenTransitioningTo));
+                }
             }
         }
 
@@ -435,66 +459,95 @@ namespace Medicraft.Systems.Managers
                 spriteBatch.End();
         }
 
-        public static LoadMapAction GetLoadMapAction(string zoneName)
+        public static EntranceZoneName GetLoadMapAction(string zoneName)
         {
-            if (Enum.TryParse(zoneName, true, out LoadMapAction enumValue))
+            if (Enum.TryParse(zoneName, true, out EntranceZoneName enumValue))
                 return enumValue;
 
-            return LoadMapAction.LoadSave;
+            return EntranceZoneName.LoadSave;
         }
-
+            
         public GameScreen GetPlayScreenByLoadMapAction()
         {
             GameScreen gameScreen = CurrentScreen;
 
-            switch (CurrentLoadMapAction)
+            switch (LoadMapByEntranceZone)
             {
-                case LoadMapAction.warp_to_noah_home:
-                case LoadMapAction.battlezone_1_to_noah_home:
-                case LoadMapAction.noah_room_to_noah_home:
-                case LoadMapAction.map_1_to_noah_home:
+                case EntranceZoneName.warp_to_noah_home:
+                case EntranceZoneName.battlezone_1_to_noah_home:
+                case EntranceZoneName.noah_room_to_noah_home:
+                case EntranceZoneName.map_1_to_noah_home:
                     // NoahHome
                     gameScreen = GameScreen.NoahHome;
                     break;
 
-                case LoadMapAction.noah_home_to_noah_room:
+                case EntranceZoneName.noah_home_to_noah_room:
                     // NoahRoom
                     gameScreen = GameScreen.NoahRoom;
                     break;
 
-                case LoadMapAction.warp_to_map_1:
-                case LoadMapAction.noah_home_to_map_1:
-                case LoadMapAction.battlezone_1_to_map_1:
+                case EntranceZoneName.warp_to_map_1:
+                case EntranceZoneName.noah_home_to_map_1:
+                case EntranceZoneName.battlezone_1_to_map_1:
                     // Map1
                     gameScreen = GameScreen.Map1;
                     break;
 
-                case LoadMapAction.noah_home_to_battlezone_1:
-                case LoadMapAction.map_1_to_battlezone_1:
-                case LoadMapAction.dungeon_1_to_battlezone_1:
+                case EntranceZoneName.noah_home_to_battlezone_1:
+                case EntranceZoneName.map_1_to_battlezone_1:
+                case EntranceZoneName.dungeon_1_to_battlezone_1:
                     // Battle Zone 1
                     gameScreen = GameScreen.BattleZone1;
                     break;
 
-                case LoadMapAction.battlezone_1_to_dungeon_1:
+                case EntranceZoneName.battlezone_1_to_dungeon_1:
+                case EntranceZoneName.map_2_to_dungeon_1:
                     // Dungeon 1
                     gameScreen = GameScreen.Dungeon1;
                     break;
 
-                case LoadMapAction.warp_to_map_2:
-                case LoadMapAction.dungeon_1_to_map_2:
+                case EntranceZoneName.warp_to_map_2:
+                case EntranceZoneName.dungeon_1_to_map_2:
+                case EntranceZoneName.battlezone_2_to_map_2:
                     // Map2
+                    gameScreen = GameScreen.Map2;
                     break;
 
-                case LoadMapAction.warp_to_map_3:
+                case EntranceZoneName.map_2_to_battlezone_2:
+                case EntranceZoneName.dungeon_2_to_battlezone_2:
+                    // Battle Zone 2
+                    gameScreen = GameScreen.BattleZone2;
+                    break;
+
+                case EntranceZoneName.battlezone_2_to_dungeon_2:
+                case EntranceZoneName.map_3_to_dungeon_2:
+                    // Dungeon 2
+                    gameScreen = GameScreen.Dungeon2;
+                    break;
+
+                case EntranceZoneName.warp_to_map_3:
+                case EntranceZoneName.dungeon_2_to_map_3:
+                case EntranceZoneName.battlezone_3_to_map_3:
                     // Map3
+                    gameScreen = GameScreen.Map3;
+                    break;
+
+                case EntranceZoneName.map_3_to_battlezone_3:
+                case EntranceZoneName.dungeon_3_to_battlezone_3:
+                    // Battle Zone 3
+                    gameScreen = GameScreen.BattleZone3;
+                    break;
+
+                case EntranceZoneName.battlezone_3_to_dungeon_3:
+                    // Dungeon 3
+                    gameScreen = GameScreen.Dungeon3;
                     break;
             }
 
             return gameScreen;
         }
 
-        public void TranstisionToScreen(GameScreen gameScreen)
+        public void TransitionToScreen(GameScreen gameScreen)
         {
             switch (gameScreen)
             {
@@ -532,8 +585,33 @@ namespace Medicraft.Systems.Managers
                 case GameScreen.Dungeon1:
                     ScreenTransitioningTo = GameScreen.Dungeon1;
                     break;
+
+                case GameScreen.Map2:
+                    ScreenTransitioningTo = GameScreen.Map2;
+                    break;
+
+                case GameScreen.BattleZone2:
+                    ScreenTransitioningTo = GameScreen.BattleZone2;
+                    break;
+
+                case GameScreen.Dungeon2:
+                    ScreenTransitioningTo = GameScreen.Dungeon2;
+                    break;
+
+                case GameScreen.Map3:
+                    ScreenTransitioningTo = GameScreen.Map3;
+                    break;
+
+                case GameScreen.BattleZone3:
+                    ScreenTransitioningTo = GameScreen.BattleZone3;
+                    break;
+
+                case GameScreen.Dungeon3:
+                    ScreenTransitioningTo = GameScreen.Dungeon3;
+                    break;
             }
 
+            EntityManager.Instance.ClearAggroMobs();
             GameGlobals.Instance.IsMainBGEnding = true;
             IsTransitioning = true;
             DoActionAtMidTransition = false;
@@ -600,6 +678,42 @@ namespace Medicraft.Systems.Managers
                     _curScreen = new Dungeon1();
                     _curScreen.LoadContent();
                     break;
+
+                case GameScreen.Map2:
+                    CurrentScreen = GameScreen.Map2;
+                    _curScreen = new Map2();
+                    _curScreen.LoadContent();
+                    break;
+
+                case GameScreen.BattleZone2:
+                    CurrentScreen = GameScreen.BattleZone2;
+                    _curScreen = new BattleZone2();
+                    _curScreen.LoadContent();
+                    break;
+
+                case GameScreen.Dungeon2:
+                    CurrentScreen = GameScreen.Dungeon2;
+                    _curScreen = new Dungeon2();
+                    _curScreen.LoadContent();
+                    break;
+
+                case GameScreen.Map3:
+                    CurrentScreen = GameScreen.Map3;
+                    _curScreen = new Map3();
+                    _curScreen.LoadContent();
+                    break;
+
+                case GameScreen.BattleZone3:
+                    CurrentScreen = GameScreen.BattleZone3;
+                    _curScreen = new BattleZone3();
+                    _curScreen.LoadContent();
+                    break;
+
+                case GameScreen.Dungeon3:
+                    CurrentScreen = GameScreen.Dungeon3;
+                    _curScreen = new Dungeon3();
+                    _curScreen.LoadContent();
+                    break;
             }
         }
 
@@ -611,27 +725,51 @@ namespace Medicraft.Systems.Managers
             switch (PlayerManager.Instance.Player.PlayerData.CurrentMap)
             {
                 case "Test":
-                    Instance.TranstisionToScreen(GameScreen.TestScreen);
+                    Instance.TransitionToScreen(GameScreen.TestScreen);
                     break;
 
                 case "noah_home":
-                    Instance.TranstisionToScreen(GameScreen.NoahHome);
+                    Instance.TransitionToScreen(GameScreen.NoahHome);
                     break;
 
                 case "noah_room":
-                    Instance.TranstisionToScreen(GameScreen.NoahRoom);
+                    Instance.TransitionToScreen(GameScreen.NoahRoom);
                     break;
 
                 case "map_1":
-                    Instance.TranstisionToScreen(GameScreen.Map1);
+                    Instance.TransitionToScreen(GameScreen.Map1);
                     break;
 
                 case "battlezone_1":
-                    Instance.TranstisionToScreen(GameScreen.BattleZone1);
+                    Instance.TransitionToScreen(GameScreen.BattleZone1);
                     break;
 
                 case "dungeon_1":
-                    Instance.TranstisionToScreen(GameScreen.Dungeon1);
+                    Instance.TransitionToScreen(GameScreen.Dungeon1);
+                    break;
+
+                case "map_2":
+                    Instance.TransitionToScreen(GameScreen.Map2);
+                    break;
+
+                case "battlezone_2":
+                    Instance.TransitionToScreen(GameScreen.BattleZone2);
+                    break;
+
+                case "dungeon_2":
+                    Instance.TransitionToScreen(GameScreen.Dungeon2);
+                    break;
+
+                case "map_3":
+                    Instance.TransitionToScreen(GameScreen.Map3);
+                    break;
+
+                case "battlezone_3":
+                    Instance.TransitionToScreen(GameScreen.BattleZone3);
+                    break;
+
+                case "dungeon_3":
+                    Instance.TransitionToScreen(GameScreen.Dungeon3);
                     break;
             }
         }
@@ -653,6 +791,18 @@ namespace Medicraft.Systems.Managers
             }
         }
 
+        // Define a delegate for the event handler
+        public delegate void ScreenEventHandler(object sender, EventArgs e);
+
+        // Define an event based on the delegate
+        public event ScreenEventHandler EventHandler;
+
+        // Method to raise the event
+        public virtual void OnTransitionScreen(TransitionScreenEventArgs e)
+        {
+            EventHandler?.Invoke(this, e);
+        }
+
         public static ScreenManager Instance
         {
             get
@@ -661,5 +811,10 @@ namespace Medicraft.Systems.Managers
                 return instance;
             }
         }
+    }
+
+    public class TransitionScreenEventArgs(ScreenManager.GameScreen gameScreen) : EventArgs
+    {
+        public ScreenManager.GameScreen GameScreen { get; } = gameScreen;
     }
 }

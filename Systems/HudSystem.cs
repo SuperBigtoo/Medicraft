@@ -10,6 +10,7 @@ using MonoGame.Extended.Sprites;
 using System.Linq;
 using static Medicraft.GameObjects.Crop;
 using static Medicraft.Systems.GameGlobals;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Medicraft.Systems
 {
@@ -22,9 +23,9 @@ namespace Medicraft.Systems
         private readonly float _insufficientTime = 3f;
         private float _insufficientTimer;
 
-        private bool _isShowMapName = true;
-        private readonly float _showMapNameTime = 6f;
-        private float _showMapNameTimer;
+        private static bool _isAlphaScaleIncrease = true;
+        private readonly float _showSignTime = 6f;
+        private static float _showSignTimer;
         private static float _alphaScale;
 
         private bool _nextFeed = false;
@@ -35,7 +36,7 @@ namespace Medicraft.Systems
         public HUDSystem()
         {
             _insufficientTimer = _insufficientTime;
-            _showMapNameTimer = 0;
+            _showSignTimer = 0;
             _alphaScale = 0;
             Instance.ShowMapNameSign = false;
         }
@@ -73,27 +74,121 @@ namespace Medicraft.Systems
             // Check for showing Map name
             if (Instance.ShowMapNameSign)
             {
-                if (_isShowMapName)
+                if (_isAlphaScaleIncrease)
                 {
-                    _showMapNameTimer += _deltaSeconds;
+                    _showSignTimer += _deltaSeconds;
 
-                    if (_alphaScale < 1f && _showMapNameTimer >= 2f)
+                    if (_alphaScale < 1f && _showSignTimer >= 2f)
                         _alphaScale += _deltaSeconds * 0.5f;
 
-                    if (_showMapNameTimer >= _showMapNameTime)
-                        _isShowMapName = false;
+                    if (_showSignTimer >= _showSignTime)
+                        _isAlphaScaleIncrease = false;
                 }
                 else
                 {
-                    _showMapNameTimer -= _deltaSeconds;
+                    _showSignTimer -= _deltaSeconds;
 
-                    if (_alphaScale > 0f && _showMapNameTimer <= _showMapNameTime - 2f)
+                    if (_alphaScale > 0f && _showSignTimer <= _showSignTime - 2f)
                         _alphaScale -= _deltaSeconds;
 
-                    if (_showMapNameTimer <= 0f)
+                    if (_showSignTimer <= 0f)
                     {
-                        _isShowMapName = true;
+                        _alphaScale = 0f;
+                        _showSignTimer = 0f;
+                        _isAlphaScaleIncrease = true;
                         Instance.ShowMapNameSign = false;
+                    }
+                }
+            }
+
+            if (Instance.ShowQuestObjectiveDescription)
+            {
+                if (_isAlphaScaleIncrease)
+                {
+                    _showSignTimer += _deltaSeconds;
+
+                    if (_alphaScale < 1f)
+                        _alphaScale += _deltaSeconds * 3f;
+
+                    if (_showSignTimer >= _showSignTime - 3f)
+                        _isAlphaScaleIncrease = false;
+                }
+                else
+                {
+                    _showSignTimer -= _deltaSeconds;
+
+                    if (_alphaScale > 0f && _showSignTimer <= _showSignTime - 4f)
+                    {
+                        _alphaScale -= _deltaSeconds;
+                    }
+                    else if(_alphaScale <= 0f)
+                    {
+                        _alphaScale = 0f;
+                        _showSignTimer = 0f;
+                        _isAlphaScaleIncrease = true;
+                        Instance.ShowQuestObjectiveDescription = false;
+                    }
+                }
+            }
+
+            // Check for showing Quest stamp
+            if (Instance.ShowQuestComplete)
+            {
+                if (_isAlphaScaleIncrease)
+                {
+                    _showSignTimer += _deltaSeconds;
+
+                    if (_alphaScale < 1f)
+                        _alphaScale += _deltaSeconds * 5f;
+
+                    if (_showSignTimer >= _showSignTime - 3.5f)
+                        _isAlphaScaleIncrease = false;
+                }
+                else
+                {
+                    _showSignTimer -= _deltaSeconds;
+
+                    if (_alphaScale > 0f && _showSignTimer <= _showSignTime - 5f)
+                    {
+                        _alphaScale -= _deltaSeconds * 0.5f;
+                    }
+                    else if (_alphaScale <= 0f)
+                    {
+                        _alphaScale = 0f;
+                        _showSignTimer = 0f;
+                        _isAlphaScaleIncrease = true;
+                        Instance.ShowQuestComplete = false;
+                    }
+                }
+            }
+
+            // ShowMiniGameScoreEnd
+            if (Instance.ShowMiniGameScoreEnd)
+            {
+                if (_isAlphaScaleIncrease)
+                {
+                    _showSignTimer += _deltaSeconds;
+
+                    if (_alphaScale < 1f)
+                        _alphaScale += _deltaSeconds * 5f;
+
+                    if (_showSignTimer >= _showSignTime - 3.5f)
+                        _isAlphaScaleIncrease = false;
+                }
+                else
+                {
+                    _showSignTimer -= _deltaSeconds;
+
+                    if (_alphaScale > 0f && _showSignTimer <= _showSignTime - 5f)
+                    {
+                        _alphaScale -= _deltaSeconds * 0.75f;
+                    }
+                    else if (_alphaScale <= 0f)
+                    {
+                        _alphaScale = 0f;
+                        _showSignTimer = 0f;
+                        _isAlphaScaleIncrease = true;
+                        Instance.ShowMiniGameScoreEnd = false;
                     }
                 }
             }
@@ -132,7 +227,11 @@ namespace Medicraft.Systems
                 // Draw Sign Show
                 DrawInsufficientSign(spriteBatch);
                 DrawMapNameSign(spriteBatch);
+                DrawQuestSign(spriteBatch);
+                DrawQuestComplete(spriteBatch);
                 DrawEntranceMapSign(spriteBatch);
+                DrawMiniGameScoreEnd(spriteBatch);
+                DrawMiniGameScoreUI(spriteBatch);
 
                 // Draw Feed Items
                 DrawCollectedItem(spriteBatch);
@@ -347,6 +446,11 @@ namespace Medicraft.Systems
 
                         DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
                             , text, positionText, Color.White, 1.1f, Color.Black, 2);
+                    }
+
+                    // Show Quest Objective Clear
+                    {
+                        DrawQuestObjectiveClearStamp(spriteBatch);
                     }
                     break;
 
@@ -858,47 +962,6 @@ namespace Medicraft.Systems
             }
         }
 
-        private static void DrawInsufficientSign(SpriteBatch spriteBatch)
-        {
-            if (Instance.ShowInsufficientSign)
-            {
-                spriteBatch.Draw(GetGuiTexture(GuiTextureName.insufficient)
-                    , PlayerManager.Instance.Player.Position
-                        + new Vector2(25, -((PlayerManager.Instance.Player.Sprite.TextureRegion.Height / 2) + 25))
-                    , null, Color.White, 0f, Vector2.Zero, 0.40f, SpriteEffects.None, 0f);
-            }
-        }
-
-        private static void DrawMapNameSign(SpriteBatch spriteBatch)
-        {
-            if (Instance.ShowMapNameSign)
-            {
-                var topLeftCornerPos = Instance.TopLeftCornerPos;
-
-                Texture2D texture = Instance.CaseMapNameSign switch
-                {
-                    1 => GetGuiTexture(GuiTextureName.battlezone_map_sign),
-                    _ => GetGuiTexture(GuiTextureName.safezone_map_sign),
-                };
-
-                var position = new Vector2(439, 125);
-
-                spriteBatch.Draw(texture
-                    , position + topLeftCornerPos
-                    , null, Color.White * _alphaScale, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-
-                var text = Instance.MapNameSign;
-                var textSize = Instance.FontTA8BitBold.MeasureString(text);
-
-                var positionText = new Vector2(
-                    (position.X + texture.Width / 2) - (textSize.Width * 1.5f / 2),
-                    (position.Y + texture.Height / 1.35f) - (textSize.Height * 1.5f / 2)) + topLeftCornerPos;
-
-                DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
-                    , text, positionText, Color.White * _alphaScale, 1.5f, Color.Black * _alphaScale, 2);
-            }
-        }
-
         private void DrawEntranceMapSign(SpriteBatch spriteBatch)
         {
             var enteringZoneArea = Instance.EnteringZoneArea;
@@ -932,7 +995,7 @@ namespace Medicraft.Systems
             var FontTA8BitBold = Instance.FontTA8BitBold;
 
             foreach (var entity in entities.Where(e => !e.IsDestroyed && e.IsAggro
-                && e.EntityType == Entities.Entity.EntityTypes.Hostile && e.HP > 0))
+                && e.EntityType == Entities.Entity.EntityTypes.HostileMob && e.HP > 0))
             {
                 var entityPos = entity.Position;
                 //var text = $"{(int)entity.HP}";
@@ -1057,6 +1120,17 @@ namespace Medicraft.Systems
             }
         }
 
+        public static void AddFeedCollectedItem(int referId, int amount)
+        {
+            Instance.CollectedItemFeed.Add(new InventoryItemData()
+            {
+                ItemId = referId,
+                Count = amount
+            });
+
+            Instance.DisplayFeedTime = Instance.MaximumDisplayFeedTime;
+        }
+
         public static void DrawTextWithStroke(SpriteBatch spriteBatch, BitmapFont font, string text
             , Vector2 position, Color textColor, float textScale, Color strokeColor, int strokeWidth)
         {
@@ -1073,28 +1147,228 @@ namespace Medicraft.Systems
             spriteBatch.DrawString(font, text, position, textColor, 0f, Vector2.Zero, textScale, SpriteEffects.None, 0f);
         }
 
+        private static void DrawInsufficientSign(SpriteBatch spriteBatch)
+        {
+            if (Instance.ShowInsufficientSign)
+            {
+                spriteBatch.Draw(GetGuiTexture(GuiTextureName.insufficient)
+                    , PlayerManager.Instance.Player.Position
+                        + new Vector2(25, -((PlayerManager.Instance.Player.Sprite.TextureRegion.Height / 2) + 25))
+                    , null, Color.White, 0f, Vector2.Zero, 0.40f, SpriteEffects.None, 0f);
+            }
+        }
+
+        private static void DrawMapNameSign(SpriteBatch spriteBatch)
+        {
+            if (Instance.ShowMapNameSign)
+            {
+                var topLeftCornerPos = Instance.TopLeftCornerPos;
+
+                Texture2D texture = Instance.CaseMapNameSign switch
+                {
+                    1 => GetGuiTexture(GuiTextureName.battlezone_map_sign),
+                    _ => GetGuiTexture(GuiTextureName.safezone_map_sign),
+                };
+
+                var position = new Vector2(439, 125);
+
+                spriteBatch.Draw(texture
+                    , position + topLeftCornerPos
+                    , null, Color.White * _alphaScale, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+                var text = Instance.MapNameSign;
+                var textSize = Instance.FontTA8BitBold.MeasureString(text);
+
+                var positionText = new Vector2(
+                    (position.X + texture.Width / 2) - (textSize.Width * 1.5f / 2),
+                    (position.Y + texture.Height / 1.35f) - (textSize.Height * 1.5f / 2)) + topLeftCornerPos;
+
+                DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
+                    , text, positionText, Color.White * _alphaScale, 1.5f, Color.Black * _alphaScale, 2);
+            }
+        }
+
+        private void DrawMiniGameScoreUI(SpriteBatch spriteBatch)
+        {
+            if (Instance.IsMiniGameStart)
+            {
+                var topLeftCornerPos = Instance.TopLeftCornerPos;
+
+                Texture2D textureTime = GetGuiTexture(GuiTextureName.timewindow);
+
+                var position = new Vector2(500, 100);
+
+                spriteBatch.Draw(textureTime
+                    , position + topLeftCornerPos
+                    , null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+                var text = $"{(int)Instance.MiniGameTimer}";
+                var textSize = Instance.FontTA8BitBold.MeasureString(text);
+                var positionText = new Vector2(
+                    (position.X + textureTime.Width / 2) - (textSize.Width  / 2),
+                    (position.Y + textureTime.Height / 2f) - (textSize.Height / 2)) + topLeftCornerPos;
+
+                DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
+                    , text, positionText, Color.White, 1f, Color.Black, 2);
+
+                // Score
+                Texture2D textureScore = GetGuiTexture(GuiTextureName.scorewindow);
+
+                position = new Vector2(740, 100);
+
+                spriteBatch.Draw(textureScore
+                    , position + topLeftCornerPos
+                    , null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+                text = $"{Instance.MiniGameScore}";
+                textSize = Instance.FontTA8BitBold.MeasureString(text);
+                positionText = new Vector2(
+                    (position.X + textureScore.Width / 2) - (textSize.Width / 2),
+                    (position.Y + textureScore.Height / 2f) - (textSize.Height / 2)) + topLeftCornerPos;
+
+                DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
+                    , text, positionText, Color.White, 1f, Color.Black, 2);
+            }
+        }
+
+        private static void DrawMiniGameScoreEnd(SpriteBatch spriteBatch)
+        {
+            if (Instance.ShowMiniGameScoreEnd)
+            {
+                Texture2D texture = null;
+
+                switch (Instance.ScoreCase)
+                {
+                    case 1:
+                        texture = GetGuiTexture(GuiTextureName.advrankup_ranklogo_S);
+                        break;
+
+                    case 2:
+                        texture = GetGuiTexture(GuiTextureName.advrankup_ranklogo_A);
+                        break;
+
+                    case 3:
+                        texture = GetGuiTexture(GuiTextureName.advrankup_ranklogo_B);
+                        break;
+
+                    case 4:
+                        texture = GetGuiTexture(GuiTextureName.advrankup_ranklogo_C);
+                        break;
+
+                    case 5:
+                        texture = GetGuiTexture(GuiTextureName.advrankup_ranklogo_D);
+                        break;
+                }               
+
+                var position = PlayerManager.Instance.Player.Position - new Vector2(
+                    texture.Width / 2, texture.Height * 1.25f);
+
+                spriteBatch.Draw(texture, position
+                    , null, Color.White * _alphaScale, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            }
+        }
+
+        private static void DrawQuestSign(SpriteBatch spriteBatch)
+        {
+            if (Instance.ShowQuestObjectiveDescription)
+            {
+                var topLeftCornerPos = Instance.TopLeftCornerPos;
+
+                Texture2D texture = GetGuiTexture(GuiTextureName.quest_objective_window);
+
+                var position = new Vector2(
+                    Instance.GameScreenCenter.X - texture.Width / 2,
+                    150);
+
+                spriteBatch.Draw(texture
+                    , position + topLeftCornerPos
+                    , null, Color.White * _alphaScale, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+                var text = Instance.QuestObjectiveDescription;
+                var textSize = Instance.FontTA8BitBold.MeasureString(text);
+
+                var positionText = new Vector2(
+                    (position.X + texture.Width / 2) - (textSize.Width * 1.25f / 2),
+                    (position.Y + texture.Height / 2) - (textSize.Height * 1.25f / 2));
+
+                DrawTextWithStroke(spriteBatch, Instance.FontTA8BitBold
+                    , text, positionText, Color.White * _alphaScale, 1.25f, Color.Black * _alphaScale, 2);
+            }
+        }
+
+        private static void DrawQuestComplete(SpriteBatch spriteBatch)
+        {
+            if (Instance.ShowQuestComplete)
+            {
+                Texture2D texture = GetGuiTexture(GuiTextureName.quest_stamp);
+
+                var position = PlayerManager.Instance.Player.Position - new Vector2(
+                    texture.Width / 2, texture.Height * 1.25f);
+
+                spriteBatch.Draw(texture, position
+                    , null, Color.White * _alphaScale, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            }
+        }
+
+        private static void DrawQuestObjectiveClearStamp(SpriteBatch spriteBatch)
+        {
+            if (Instance.ShowQuestObjectiveClear)
+            {
+                var topLeftCornerPos = Instance.TopLeftCornerPos;
+
+                Texture2D texture = GetGuiTexture(GuiTextureName.quest_objective_stamp_cleared);
+
+                var position = new Vector2(1140, 250);
+
+                spriteBatch.Draw(texture, position + topLeftCornerPos
+                    , null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            }
+        }
+
         public static void ShowInsufficientSign()
         {
             Instance.ShowInsufficientSign = true;
         }
 
+        public static void ShowMiniGameScoreEnd()
+        {
+            Instance.ShowMiniGameScoreEnd = true;
+        }
+
         public static void ShowMapNameSign(int caseNumber, string mapName)
         {
             Instance.ShowMapNameSign = true;
-
             Instance.CaseMapNameSign = caseNumber;
-
             Instance.MapNameSign = mapName;
+
+            Instance.ShowQuestObjectiveDescription = false;
+            Instance.ShowQuestComplete = false;
+            _alphaScale = 0f;
+            _showSignTimer = 0f;
+            _isAlphaScaleIncrease = true;
         }
 
-        public static void AddFeedCollectedItem(int referId, int amount)
+        public static void ShowQuestObjective(string description)
         {
-            Instance.CollectedItemFeed.Add(new InventoryItemData() {
-                ItemId = referId,
-                Count = amount
-            });
+            Instance.ShowQuestObjectiveDescription = true;
+            Instance.QuestObjectiveDescription = description;
 
-            Instance.DisplayFeedTime = Instance.MaximumDisplayFeedTime;
+            Instance.ShowMapNameSign = false;
+            Instance.ShowQuestComplete = false;
+            _alphaScale = 0f;
+            _showSignTimer = 0f;
+            _isAlphaScaleIncrease = true;
+        }
+
+        public static void ShowQuestComplete()
+        {
+            Instance.ShowQuestComplete = true;
+
+            Instance.ShowMapNameSign = false;
+            Instance.ShowQuestObjectiveDescription = false;
+            _alphaScale = 0f;
+            _showSignTimer = 0f;
+            _isAlphaScaleIncrease = true;
         }
     }
 }

@@ -52,5 +52,17 @@
         "Position": [ 832.00, 1053.00 ],
         "IsVisible": true,
         "IsDestroyable": true
+    },
+    {
+        "Id": 5,
+        "ReferId": -1,
+        "Category": 1,
+        "Name": "Start_MiniGame",
+        "Description": "Start_MiniGame",
+        "Position": [ 1520, 1289 ],
+        "IsShowSignInteract": true,
+        "IsAllowInteract": true,
+        "IsVisible": false,
+        "IsDestroyable": true
     }
 ]

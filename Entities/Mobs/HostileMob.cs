@@ -89,6 +89,7 @@ namespace Medicraft.Entities.Mobs
                     InventoryManager.Instance.AddGoldCoin(Name, goidCoinDrop);
                     PlayerManager.Instance.AddPlayerEXP(expDrop);
 
+                    PlayerManager.Instance.OnKillingMob(new KillingMobEventArgs(this));
                     Destroy();
                 }
             }

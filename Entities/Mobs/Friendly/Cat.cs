@@ -32,6 +32,7 @@ namespace Medicraft.Entities.Mobs.Friendly
             Level = entityData.Level;
             InitializeCharacterData(entityData.CharId, Level);
 
+            DialogData = entityData.DialogData;
             SetMobType(entityData.MobType);
             Name = entityData.Name;
 
@@ -87,6 +88,7 @@ namespace Medicraft.Entities.Mobs.Friendly
             Speed = cat.Speed;
             Evasion = cat.Evasion;
 
+            DialogData = cat.DialogData;
             MobType = cat.MobType;
 
             IsInteractable = cat.IsInteractable;

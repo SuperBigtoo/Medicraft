@@ -1,0 +1,110 @@
+[
+    {
+        "Id": 0,
+        "CharId": 200,
+        "Level": 11,
+        "Name": "Slime",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2318, 2606 ]
+    },
+    {
+        "Id": 1,
+        "CharId": 200,
+        "Level": 10,
+        "Name": "Slime",
+        "PathFindingType": 2,
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1840, 2470 ]
+    },
+    {
+        "Id": 2,
+        "CharId": 200,
+        "Level": 12,
+        "Name": "Slime",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_1",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1128, 1722 ]
+    },
+    {
+        "Id": 3,
+        "CharId": 200,
+        "Level": 10,
+        "Name": "Slime",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_1",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1138, 1324 ]
+    },
+    {
+        "Id": 4,
+        "CharId": 200,
+        "Level": 11,
+        "Name": "Slime",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_4",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1716, 1206 ]
+    },
+    {
+        "Id": 5,
+        "CharId": 200,
+        "Level": 9,
+        "Name": "Slime",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_5",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2364, 1712 ]
+    },
+    {
+        "Id": 6,
+        "CharId": 203,
+        "Level": 13,
+        "Name": "Ice Golem",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_3",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1356, 2576 ]
+    },
+    {
+        "Id": 7,
+        "CharId": 203,
+        "Level": 12,
+        "Name": "Ice Golem",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_2",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 1530, 2126 ]
+    },
+    {
+        "Id": 8,
+        "CharId": 203,
+        "Level": 11,
+        "Name": "Ice Golem",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_5",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2126, 1418 ]
+    },
+    {
+        "Id": 9,
+        "CharId": 203,
+        "Level": 13,
+        "Name": "Ice Golem",
+        "PathFindingType": 1,
+        "PartrolArea": "zone_6",
+        "NodeCycleTime": 10,
+        "AggroTime": 5,
+        "Position": [ 2746, 1712 ]
+    }
+]
