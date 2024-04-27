@@ -38,6 +38,7 @@ namespace Medicraft.Systems.Managers
         public bool IsCompanionSummoned { set; get; }
         public bool IsCompanionDead { set; get; }
         public bool IsRecallCompanion { set; get; }
+
         private const float recallTime = 3f;
         private float _recallTimer = 0;
 
@@ -55,18 +56,23 @@ namespace Medicraft.Systems.Managers
             IsRecallCompanion = false;
         }
 
+        public void Clear()
+        {
+            Player = null;
+            Companions.Clear();
+        }
+
         public void Initialize(bool isNewGame)
         {
             var initialPlayerData = GameGlobals.Instance.InitialPlayerData;
             var playerSprite = new AnimatedSprite(GameGlobals.Instance.PlayerSpriteSheet);
-
 
             if (!isNewGame)
             {
                 ScreenManager.Instance.LoadMapByEntranceZone = ScreenManager.EntranceZoneName.LoadSave;
 
                 // Load save game according to selected index. 
-                var gameSaveData = GameGlobals.Instance.GameSave[GameGlobals.Instance.SelectedGameSaveIndex];
+                var gameSaveData = GameGlobals.Instance.GameSaves[GameGlobals.Instance.SelectedGameSaveIndex];
 
                 // Set Total Playtime
                 GameGlobals.Instance.TotalPlayTime = gameSaveData.TotalPlayTime[0] * 3600

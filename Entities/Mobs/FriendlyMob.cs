@@ -17,7 +17,7 @@ namespace Medicraft.Entities.Mobs
         public AnimatedSprite SignSprite { get; protected set; }
         public List<DialogData> DialogData { get; protected set; }
 
-        public int MiniGameQueueIndex { get; set; }
+        public int MiniGameQueueIndex { get; set; } = 0;
         public MiniGameCase MiniGameCaseData { get; set; }
 
         public enum FriendlyMobType
@@ -98,6 +98,16 @@ namespace Medicraft.Entities.Mobs
             UpdateTimerConditions(deltaSeconds);
 
             // Update Sign
+            // Mini Game Case
+            if (Name.Equals("Patient") && MiniGameQueueIndex == -1)
+            {
+                // heart_1
+                SignSprite.Play("heart_1");
+                SignSprite.Depth = InitDepth;
+                SignSprite.Update(deltaSeconds);
+            }
+
+            // Noraml Case
             if ((MobType == FriendlyMobType.Civilian || MobType == FriendlyMobType.Animal)
                 && IsInteractable)
             {
@@ -289,7 +299,7 @@ namespace Medicraft.Entities.Mobs
 
         public virtual void DrawDetectedSign(SpriteBatch spriteBatch)
         {
-            if (IsDetected || IsAllwaysShowSignSprite)
+            if (IsDetected || IsAllwaysShowSignSprite || (Name.Equals("Patient") && MiniGameQueueIndex == -1))
             {
                 var position = new Vector2(
                     Position.X,

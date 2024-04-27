@@ -4,7 +4,6 @@ using Medicraft.Data.Models;
 using Medicraft.Entities.Mobs;
 using Medicraft.Entities.Mobs.Friendly;
 using Medicraft.Systems.Managers;
-using Medicraft.Systems.PathFinding;
 using Medicraft.Systems.Spawners;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -20,7 +19,6 @@ using MonoGame.Extended.Sprites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
 
 namespace Medicraft.Systems
 {
@@ -106,7 +104,7 @@ namespace Medicraft.Systems
         public int SelectedGameSaveIndex { set; get; }
         public int MaxGameSaveSlot { private set; get; }
         public string GameSavePath { private set; get; }
-        public List<GameSaveData> GameSave { private set; get; }
+        public List<GameSaveData> GameSaves { private set; get; }
         public string GameConfigPath { private set; get; }
         public GameConfigData GameConfig { private set; get; }
 
@@ -493,7 +491,7 @@ namespace Medicraft.Systems
             MaxLevel = 30;
             TotalPlayTime = 0;
             CompanionSpriteSheet = [];
-            GameSave = [];
+            GameSaves = [];
             SelectedGameSaveIndex = 0;
             MaxGameSaveSlot = 4;
             GameSavePath = "save/gamesaves.json";
@@ -553,11 +551,11 @@ namespace Medicraft.Systems
                 GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
 
             DefaultAdapterViewport = new Vector2(viewport.X, viewport.Y);
-        }  
+        }
 
-        public void LoadContent()
+        public void InitGameSave()
         {
-            //System.Diagnostics.Debug.WriteLine($"totalFrames : {}");
+            GameSaves.Clear();
 
             // Load GameSave and Config
             var gameSave = JsonFileManager.LoadGameSave(GameSavePath);
@@ -565,9 +563,16 @@ namespace Medicraft.Systems
             {
                 foreach (var save in gameSave)
                 {
-                    GameSave.Add(save);
+                    GameSaves.Add(save);
                 }
             }
+        }
+
+        public void LoadContent()
+        {
+            //System.Diagnostics.Debug.WriteLine($"totalFrames : {}");
+
+            InitGameSave();
             GameConfig = JsonFileManager.LoadGameConfig(GameConfigPath);
             IsFullScreen = GameConfig.IsFullScreen;
             ScreenManager.ToggleFullScreen();
@@ -1250,6 +1255,7 @@ namespace Medicraft.Systems
         public bool ShowMiniGameScoreEnd { get; set; } = false;
         public int ScoreCase { get; set; } 
         public bool IsMiniGameStart { get; set; } = false;
+        public bool IsAllowNextQueue { get; set; } = false;
         public float MiniGameTime { get; private set; } = 180f;
         public float MiniGameTimer { get; set; }
         public float MiniGameQueueTime { get; private set; } = 15f;
@@ -1265,17 +1271,16 @@ namespace Medicraft.Systems
         ];
 
         public Queue<FriendlyMob> Patients { get; private set; } = new();
+        private FriendlyMob _dequeuePatientMob;
 
         public void StartMiniGame()
         {
-            ScreenManager.Instance.TransitionToScreen(ScreenManager.GameScreen.None);
+            ScreenManager.Instance.TransitionToScreen(ScreenManager.GameScreen.StartMiniGame);
 
-            IsMiniGameStart = true;
             MiniGameTimer = MiniGameTime;
-            MiniGameQueueTimer = 8;
+            MiniGameQueueTimer = 3;
             QueueCount = 0;
             MiniGameScore = 0;
-            Patients.Clear();
         }
 
         public void EndMiniGame()
@@ -1283,6 +1288,7 @@ namespace Medicraft.Systems
             System.Diagnostics.Debug.WriteLine($"MiniGameEnd");
 
             IsMiniGameStart = false;
+            IsAllowNextQueue = false;
 
             // Cound Score
             if (MiniGameScore <= 600)
@@ -1333,13 +1339,10 @@ namespace Medicraft.Systems
             QueueCount = 0;
             MiniGameScore = 0;
 
-            foreach (var patient in Patients)
-            {
-                EntityManager.Instance.entities.Remove(patient);
-            }
-            Patients.Clear();
-
+            UIManager.Instance.CloseDialog();
+            EntityManager.Instance.ClearEntity();
             HUDSystem.ShowMiniGameScoreEnd();
+            Patients.Clear();
         }
 
         public void DequeuePatient(FriendlyMob friendlyMob)
@@ -1347,24 +1350,48 @@ namespace Medicraft.Systems
             // Add Score & Dequeue
             var miniGameData = friendlyMob.MiniGameCaseData;
             MiniGameScore += miniGameData.Score;
+            _dequeuePatientMob = Patients.Dequeue();
+            _dequeuePatientMob.IsInteractable = false;
+            _dequeuePatientMob.EntityData.Position[0] = 1524;
+            _dequeuePatientMob.EntityData.Position[1] = 2050;
+            _dequeuePatientMob.MiniGameQueueIndex = -1;
+            _dequeuePatientMob.UpdateNode(_dequeuePatientMob.EntityData);
 
-            EntityManager.Instance.entities.Remove(Patients.Dequeue());
             var newPosIndex = 0;
+            IsAllowNextQueue = false;
 
             foreach (var patient in Patients)
             {
                 var route = MiniGameRoutePoint[newPosIndex];
                 patient.EntityData.Position[0] = route.X;
                 patient.EntityData.Position[1] = route.Y;
+                patient.MiniGameQueueIndex = newPosIndex;
                 patient.UpdateNode(patient.EntityData);
                 newPosIndex++;
+
+                if (patient.MiniGameQueueIndex == 0)
+                    patient.IsInteractable = true;
             }
 
             QueueCount--;
+            IsAllowNextQueue = true;
         }
 
         public void UpdateMiniGame(float deltaSeconds)
         {
+            // Check DequeueMob
+            if (_dequeuePatientMob != null)
+            {
+                var zoneArea = Instance.EnteringZoneArea.FirstOrDefault
+                    (zone => zone.Name.Equals("noah_room_to_noah_home"));
+
+                if (_dequeuePatientMob.BoundingDetectCollisions.Intersects(zoneArea.Bounds))
+                {
+                    EntityManager.Instance.entities.Remove(_dequeuePatientMob);
+                    _dequeuePatientMob = null;
+                }
+            }
+
             MiniGameTimer -= deltaSeconds;
 
             if (MiniGameTimer <= 0)
@@ -1373,11 +1400,11 @@ namespace Medicraft.Systems
             MiniGameQueueTimer -= deltaSeconds;
 
             if (MiniGameQueueTimer <= 0)
-            {
-                MiniGameQueueTimer = MiniGameQueueTime;
-
-                if (QueueCount < 4)
+            {              
+                if (QueueCount < MiniGameMaxPatient && IsAllowNextQueue)
                 {
+                    MiniGameQueueTimer = MiniGameQueueTime;
+
                     // Add Queue Patient
                     var randomChapter = new Random().Next(6);
                     var randomCase = new Random().Next(5);
@@ -1388,13 +1415,13 @@ namespace Medicraft.Systems
                     var randomNumSprite = new Random().Next(102, 125);
                     var EntityData = new EntityData()
                     {
-                        Id = EntityManager.Instance.EntityCount() + 1,
+                        Id = EntityManager.Instance.EntityCount() - 1,
                         CharId = randomNumSprite,
                         Name = name,
                         MobType = "Civilian",
-                        IsInteractable = true,
+                        IsInteractable = false,
                         PathFindingType = 2,
-                        NodeCycleTime = 10,
+                        NodeCycleTime = 1,
                         Position = [route.X, route.Y],
                         DialogData = [
                             new DialogData() {
@@ -1421,6 +1448,9 @@ namespace Medicraft.Systems
                     foreach (var patient in Patients)
                     {
                         patient.UpdateNode(patient.EntityData);
+
+                        if (patient.MiniGameQueueIndex == 0)
+                            patient.IsInteractable = true;
                     }
                 }
             }

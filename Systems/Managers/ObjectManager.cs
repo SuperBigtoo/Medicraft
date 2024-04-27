@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
-using Medicraft.Systems.Spawners;
 using Medicraft.GameObjects;
 using Medicraft.Data.Models;
 using MonoGame.Extended.Sprites;

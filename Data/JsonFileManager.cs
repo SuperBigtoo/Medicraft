@@ -74,9 +74,9 @@ namespace Medicraft.Data
 
                     try
                     {
-                        var gameSaveData = GameGlobals.Instance.GameSave[GameGlobals.Instance.SelectedGameSaveIndex];
+                        var gameSaveData = GameGlobals.Instance.GameSaves[GameGlobals.Instance.SelectedGameSaveIndex];
 
-                        GameGlobals.Instance.GameSave[GameGlobals.Instance.SelectedGameSaveIndex] = new GameSaveData()
+                        GameGlobals.Instance.GameSaves[GameGlobals.Instance.SelectedGameSaveIndex] = new GameSaveData()
                         {
                             SaveId = gameSaveData.SaveId,
                             Name = gameSaveData.Name,
@@ -89,9 +89,9 @@ namespace Medicraft.Data
                     }
                     catch (ArgumentOutOfRangeException)
                     {
-                        GameGlobals.Instance.GameSave.Add(new GameSaveData()
+                        GameGlobals.Instance.GameSaves.Add(new GameSaveData()
                         {
-                            SaveId = GameGlobals.Instance.GameSave.Count,
+                            SaveId = GameGlobals.Instance.GameSaves.Count,
                             Name = saveName,
                             CreatedTime = dateTimeString,
                             LastUpdated = dateTimeString,
@@ -105,25 +105,25 @@ namespace Medicraft.Data
                     break;
 
                 case RenameGameSave:
-                    GameGlobals.Instance.GameSave[GameGlobals.Instance.SelectedGameSaveIndex] = new GameSaveData()
+                    GameGlobals.Instance.GameSaves[GameGlobals.Instance.SelectedGameSaveIndex] = new GameSaveData()
                     {
-                        SaveId = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).SaveId,
-                        Name = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).Name,
-                        CreatedTime = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).CreatedTime,
-                        LastUpdated = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).LastUpdated,
-                        TotalPlayTime = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).TotalPlayTime,
-                        PlayerData = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).PlayerData,
-                        SpawnerDatas = GameGlobals.Instance.GameSave.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).SpawnerDatas
+                        SaveId = GameGlobals.Instance.GameSaves.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).SaveId,
+                        Name = GameGlobals.Instance.GameSaves.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).Name,
+                        CreatedTime = GameGlobals.Instance.GameSaves.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).CreatedTime,
+                        LastUpdated = GameGlobals.Instance.GameSaves.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).LastUpdated,
+                        TotalPlayTime = GameGlobals.Instance.GameSaves.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).TotalPlayTime,
+                        PlayerData = GameGlobals.Instance.GameSaves.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).PlayerData,
+                        SpawnerDatas = GameGlobals.Instance.GameSaves.ElementAt(GameGlobals.Instance.SelectedGameSaveIndex).SpawnerDatas
                     };
                     break;
 
                 case DeleteGameSave:
-                    GameGlobals.Instance.GameSave.Remove(
-                        GameGlobals.Instance.GameSave[GameGlobals.Instance.SelectedGameSaveIndex]);
+                    GameGlobals.Instance.GameSaves.Remove(
+                        GameGlobals.Instance.GameSaves[GameGlobals.Instance.SelectedGameSaveIndex]);
                     break;
             }
 
-            SaveGameFile(GameGlobals.Instance.GameSave, GameGlobals.Instance.GameSavePath);
+            SaveGameFile(GameGlobals.Instance.GameSaves, GameGlobals.Instance.GameSavePath);
 
             // Game Config
             SaveConfig();

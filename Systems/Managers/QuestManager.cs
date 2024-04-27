@@ -1,7 +1,6 @@
 ﻿using Medicraft.Data.Models;
 using Medicraft.Entities.Mobs;
 using Medicraft.Entities.Mobs.Friendly;
-using Medicraft.Screens;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Sprites;
 using System;

@@ -786,13 +786,16 @@ namespace Medicraft.Systems.Managers
             }
         }
 
-        private void CloseDialog()
+        public void CloseDialog()
         {
-            if (InteractingMob != null)
+            if (IsShowDialogUI)
             {
-                InteractingMob.IsInteracting = false;
+                IsShowDialogUI = false;
             }
-            IsShowDialogUI = false;
+            else return;
+
+            if (InteractingMob != null)
+                InteractingMob.IsInteracting = false;
 
             var playScreenUI = _mainPanels[PlayScreen];
 
@@ -812,6 +815,15 @@ namespace Medicraft.Systems.Managers
 
             // Invoke the event to notify listeners that the dialog is closed
             OnDialogClosed(new DialogClosedEventArgs(Dialog));
+        }
+
+        public void ClearHotbar()
+        {
+            var playScreenUI = _mainPanels[PlayScreen];
+            var hotbarSlotPanel = playScreenUI.Children.FirstOrDefault
+                (p => p.Identifier.Equals("hotbarSlotPanel"));
+
+            hotbarSlotPanel.ClearChildren();
         }
 
         public void RefreshHotbar()
@@ -961,7 +973,7 @@ namespace Medicraft.Systems.Managers
             };
             inventoryPanel.AddChild(rightInvenPanel);
 
-            rightInvenPanel.AddChild(new Header("IVENTORY"));
+            rightInvenPanel.AddChild(new Header("INVENTORY"));
             rightInvenPanel.AddChild(new LineSpace(1));
 
             var listItemPanel = new Panel(new Vector2(550, 450), PanelSkin.ListBackground, Anchor.AutoCenter)
@@ -1024,20 +1036,31 @@ namespace Medicraft.Systems.Managers
             {
                 var currItemInv = InventoryManager.Instance.SelectedItem;
 
-                string notifyText = string.Empty;
+                string boxHeader = string.Empty;
+                string boxText = string.Empty;
                 if (currItemInv.Value.GetCategory().Equals("Equipment"))
                 {
                     if (currItemInv.Value.Slot != GameGlobals.Instance.DefaultInventorySlot)
                     {
-                        notifyText = $"Do you wanna unequip '{currItemInv.Value.GetName()}'?";
+                        boxHeader = $"Unequip Item";
+                        boxText = $"Do you wanna unequip '{currItemInv.Value.GetName()}'?";
                     }
-                    else notifyText = $"Do you wanna equip '{currItemInv.Value.GetName()}'?";
+                    else
+                    {
+                        boxHeader = $"Equip Item";
+                        boxText = $"Do you wanna equip '{currItemInv.Value.GetName()}'?";
+                    }
                 }
-                else notifyText = $"Do you wanna use '{currItemInv.Value.GetName()}'?";
+                else
+                {
+                    boxHeader = $"Use Item";
+                    boxText = $"Do you wanna use '{currItemInv.Value.GetName()}'?";
+                }
 
-                GeonBit.UI.Utils.MessageBox.ShowMsgBox("Use Item?"
-                    , notifyText
-                    , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
+                GeonBit.UI.Utils.MessageBox.ShowMsgBox(
+                    boxHeader,
+                    boxText,
+                    new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
                     {
                             new("Ok", () =>
                             {
@@ -1148,9 +1171,6 @@ namespace Medicraft.Systems.Managers
                     {
                         // In case selected item is Equipment
                         invenSetHotbarButton.Enabled = false;
-
-                        //if (!item.Value.Slot.Equals(GameGlobals.Instance.DefaultInventorySlot))
-                        //    invenUseItemButton.Enabled = false;
                     }
                 }
                 else
@@ -1426,7 +1446,7 @@ namespace Medicraft.Systems.Managers
             };
             craftingSelectItemPanel.AddChild(rightCraftingSelectPanel);
 
-            rightCraftingSelectPanel.AddChild(new Header("INGREDINES"));
+            rightCraftingSelectPanel.AddChild(new Header("INGREDIENTS"));
             rightCraftingSelectPanel.AddChild(new LineSpace(1));
 
             var ingredientList = new SelectList(new Vector2(550, 530), Anchor.AutoCenter, skin: PanelSkin.ListBackground)
@@ -1466,10 +1486,10 @@ namespace Medicraft.Systems.Managers
                 {
                     var craftingSelected = CraftingManager.Instance.CraftingItemSelected;
 
-                    GeonBit.UI.Utils.MessageBox.ShowMsgBox("Crafting Item?"
-                    , $"Do ya wanna craft '{GetItemName(craftingSelected.ItemId)}'?"
-                    , new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
-                    {
+                    GeonBit.UI.Utils.MessageBox.ShowMsgBox("Crafting Item?",
+                        $"Do ya wanna craft '{GetItemName(craftingSelected.ItemId)}'?",
+                        new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
+                        {
                             new("Ok", () =>
                             {
                                 var itemQuantity = quantitySlider.Value;
@@ -3900,7 +3920,7 @@ namespace Medicraft.Systems.Managers
                 // Rename
                 renameButton.OnClick = (Entity btn) =>
                 {
-                    var gameSaveData = GameGlobals.Instance.GameSave[GameGlobals.Instance.SelectedGameSaveIndex];
+                    var gameSaveData = GameGlobals.Instance.GameSaves[GameGlobals.Instance.SelectedGameSaveIndex];
 
                     var textInput = new TextInput(false)
                     {
@@ -4308,7 +4328,7 @@ namespace Medicraft.Systems.Managers
                 
                 try
                 {
-                    var gameSaveData = GameGlobals.Instance.GameSave[i];
+                    var gameSaveData = GameGlobals.Instance.GameSaves[i];
 
                     saveName.Text = gameSaveData.Name;
                     playTime.Text = $"Total PlayTime: {gameSaveData.TotalPlayTime[0]}h | {gameSaveData.TotalPlayTime[1]}m | {gameSaveData.TotalPlayTime[2]}s";

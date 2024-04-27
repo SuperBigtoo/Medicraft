@@ -31,6 +31,7 @@ namespace Medicraft.Systems.Managers
         {
             None,
             TestScreen,
+            StartMiniGame,
             SplashScreen,
             MainMenuScreen,
             NoahHome,
@@ -146,7 +147,6 @@ namespace Medicraft.Systems.Managers
                 GameGlobals.Instance.CurMouse = new MouseState();
                 GameGlobals.Instance.CurKeyboard = new KeyboardState();
             }
-
 
             // Update UI
             if (CurrentScreen != GameScreen.SplashScreen)
@@ -314,8 +314,23 @@ namespace Medicraft.Systems.Managers
                 {
                     IsTransitioning = false;
 
-                    // Invoke the event to notify listeners
-                    OnTransitionScreen(new TransitionScreenEventArgs(ScreenTransitioningTo));
+                    if (ScreenTransitioningTo == GameScreen.MainMenuScreen)
+                    {
+                        EntityManager.Instance.ClearEntity();
+                        ObjectManager.Instance.ClearGameObject();
+                        QuestManager.Instance.QuestList.Clear();
+                        InventoryManager.Instance.InventoryBag.Clear();
+                        UIManager.Instance.ClearHotbar();
+                        PlayerManager.Instance.Clear();                    
+                        StatusEffectManager.Instance.StatusEffects.Clear();
+                        StatusEffectManager.Instance.EffectsToRemove.Clear();
+                        GameGlobals.Instance.InitGameSave();
+                    }
+                    else
+                    {
+                        // Invoke the event to notify listeners
+                        OnTransitionScreen(new TransitionScreenEventArgs(ScreenTransitioningTo));
+                    }
                 }
             }
         }
@@ -552,6 +567,11 @@ namespace Medicraft.Systems.Managers
             switch (gameScreen)
             {
                 case GameScreen.None:
+                    ScreenTransitioningTo = GameScreen.None;
+                    break;
+
+                case GameScreen.StartMiniGame:
+                    ScreenTransitioningTo = GameScreen.StartMiniGame;
                     break;
 
                 case GameScreen.TestScreen:
@@ -615,7 +635,7 @@ namespace Medicraft.Systems.Managers
             GameGlobals.Instance.IsMainBGEnding = true;
             IsTransitioning = true;
             DoActionAtMidTransition = false;
-            IsScreenLoaded = gameScreen == GameScreen.None;
+            IsScreenLoaded = gameScreen == GameScreen.None || gameScreen == GameScreen.StartMiniGame;
             _transitionTimer = 0f;
             _transitionRadius = -0.01f;
         }

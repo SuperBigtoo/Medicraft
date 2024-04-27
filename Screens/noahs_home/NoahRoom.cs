@@ -10,6 +10,8 @@ using Medicraft.Systems.Managers;
 using System.Linq;
 using System;
 using static Medicraft.Systems.GameGlobals;
+using System.Reflection.PortableExecutable;
+using System.Xml.Linq;
 
 namespace Medicraft.Screens.noahs_home
 {
@@ -97,6 +99,13 @@ namespace Medicraft.Screens.noahs_home
         {
             TransitionScreenEventArgs eventArgs = (TransitionScreenEventArgs)e;
 
+            // Check for MiniGame
+            if (eventArgs.GameScreen == ScreenManager.GameScreen.StartMiniGame)
+            {
+                Instance.IsMiniGameStart = true;
+                Instance.IsAllowNextQueue = true;
+            }
+
             var questStamp_101 = PlayerManager.Instance.Player.PlayerData.ChapterProgression.FirstOrDefault
                     (e => e.ChapterId.Equals(1)).Quests.FirstOrDefault
                         (e => e.QuestId.Equals(101));
@@ -147,6 +156,24 @@ namespace Medicraft.Screens.noahs_home
             {
                 // Start MiniGame
                 Instance.StartMiniGame();
+            }
+            else if (eventArgs.GameObject.Name.Equals("Start_MiniGame") && Instance.IsMiniGameStart)
+            {
+                GeonBit.UI.Utils.MessageBox.ShowMsgBox(
+                    "Do you want to end Mini Game",
+                    "",
+                    new GeonBit.UI.Utils.MessageBox.MsgBoxOption[]
+                    {
+                            new("Ok", () =>
+                            {
+                                Instance.EndMiniGame();   
+                                return true;
+                            }),
+                            new("Cancel", () =>
+                            {
+                                return true;
+                            })
+                    });
             }
         }
     }
